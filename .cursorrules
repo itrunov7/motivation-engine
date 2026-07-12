@@ -1,0 +1,74 @@
+# .cursorrules — Motivation Engine
+# Place in the repo root as `.cursorrules`.
+# This is the project constitution for the AI assistant. Rules are not negotiable
+# within a task — if a rule gets in the way, that's a reason for a decisions.json
+# entry, not for a workaround.
+
+## What this project is
+Motivation Engine — Ventora's knowledge layer: an ontology of human motivation
+mechanisms (science → mechanisms → interface implementations) + the Control Center
+showcase. Current stage: BASELINE — shelves and showcase. NO engine, NO LLM calls,
+NO database.
+
+## Architectural invariants (violation = stop and ask the owner)
+1. SOURCE OF TRUTH — files in the repo. Data lives ONLY in:
+   /registry/**.json, /sources/sources.json, /decisions/decisions.json,
+   /dossiers/**, /docs/**.md. No data inside components, no databases.
+2. HONEST STATUSES — statuses in the showcase are COMPUTED from data.
+   Hardcoding a status ("live", "connected", coverage numbers) in JSX/TS is
+   forbidden. No data → show an honest empty state explaining what will appear
+   here and when.
+3. /cards/ is generated output only. Never create or edit by hand; it changes
+   via render-cards.ts from the registry.
+4. A mechanism record missing `metrics` or `constraints.hard_rules` is invalid.
+   The validator must reject it. Do not weaken the schema for convenience.
+5. NO premature infrastructure: do not add Postgres, Redis, queues, vector
+   databases, microservices, docker-compose. Escalation triggers are described
+   in docs/architecture.md — until they fire, the baseline stays file-based.
+6. AUTH — single password: middleware + httpOnly HMAC cookie + ACCESS_PASSWORD
+   from env. Do not add: accounts, roles, OAuth, magic links, session DBs,
+   analytics, trackers.
+7. Every architectural decision (stack, data structure, deviation from the plan)
+   gets an entry in decisions.json (id D-XXX, date, essence, rationale) in the
+   same PR.
+
+## Content rules (critical)
+8. DO NOT INVENT SCIENCE OR MECHANISMS. Cursor writes code, schemas, UI. The
+   content of mechanisms, evidence grades, scientific claims, and dossier texts
+   are entered only by the owner (Igor) or arrive from the future derivation
+   pipeline. If a record example is needed for layout work — use the existing
+   LA-01, do not generate new "plausible" mechanisms.
+9. Seed mechanisms (11 items) have lifecycle_status: "candidate" and contain
+   only: id, name, grade (draft), oneliner, parent. Do not flesh them out.
+10. Language: everything is in English — data content, UI copy, documents, code,
+    identifiers, commits.
+
+## Stack and code conventions
+11. Next.js 14 App Router + TypeScript strict + Tailwind. Server Components by
+    default; client components only where interactivity is required.
+12. Data reading: fs in server components / static generation. No external API
+    fetches at this stage.
+13. Data types are generated from JSON schemas (or declared in /lib/types.ts
+    mirroring the schemas). `any` is forbidden.
+14. Design tokens — from the Control Center v0.1 reference: dark background
+    #0E1512, panels #151F1A, emerald accent #34D399, statuses: live=emerald,
+    wip=amber #E4B54E, plan=#7C93A8. Fonts: Space Grotesk (display), Inter
+    (body), JetBrains Mono (data, ids, statuses). Do not invent a new palette.
+15. Every screen must have a designed empty state (what will appear here, from
+    which file/pipeline, and when).
+16. Commits: conventional commits (feat:, fix:, data:, docs:, chore:).
+    Changes to /registry, /sources, /decisions use the data: prefix.
+
+## Definition of Done for any task
+- npm run validate — green
+- npm run build — no errors, no type warnings
+- No status in the showcase is hardcoded (grep check for status string literals
+  in app/)
+- If the data structure changed — schema updated, validator updated, and a
+  decisions.json entry added
+
+## Never do at the Baseline stage
+- Do not connect LLM APIs (OpenRouter/Anthropic/OpenAI) — there is no engine yet
+- Do not build scrapers or source connectors
+- Do not build data-editing forms in the UI (data is edited in git)
+- Do not add dependencies "for the future"
