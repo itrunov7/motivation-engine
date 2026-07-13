@@ -26,8 +26,15 @@ import {
   loadFullMechanisms,
   loadSeedStubs,
   loadSources,
+  loadTaxonomy,
 } from "./data";
-import type { LifecycleStatus, Mechanism, SourceClassId } from "./types";
+import type {
+  LifecycleStatus,
+  Mechanism,
+  SeedStub,
+  SourceClassId,
+  TaxonomyNode,
+} from "./types";
 
 // ---------- Status vocabulary ----------
 
@@ -44,6 +51,39 @@ export const STATUS_META: Record<BlockStatus, StatusMeta> = {
   in_progress: { label: "in progress", color: "#E4B54E" },
   planned: { label: "planned", color: "#7C93A8" },
 };
+
+// ---------- Lifecycle vocabulary (SPEC §2, L1 lifecycle) ----------
+
+export interface LifecycleMeta {
+  label: string;
+  /** Design-token color: core=emerald, incubating=amber, candidate=slate. */
+  color: string;
+}
+
+/**
+ * Presentation metadata for L1 lifecycle statuses, in lifecycle order:
+ * candidate → incubating → core (side exits: deprecated, rejected).
+ * Components map lifecycle values through this table, never via literals.
+ */
+export const LIFECYCLE_META: Record<LifecycleStatus, LifecycleMeta> = {
+  candidate: { label: "candidate", color: "#7C93A8" },
+  incubating: { label: "incubating", color: "#E4B54E" },
+  core: { label: "core", color: "#34D399" },
+  deprecated: { label: "deprecated", color: "#8CA495" },
+  rejected: { label: "rejected", color: "#8CA495" },
+};
+
+/**
+ * Lifecycle order: the first three form the promotion path
+ * (candidate → incubating → core); the last two are side exits.
+ */
+export const LIFECYCLE_ORDER: LifecycleStatus[] = [
+  "candidate",
+  "incubating",
+  "core",
+  "deprecated",
+  "rejected",
+];
 
 // ---------- Block model ----------
 
@@ -118,6 +158,66 @@ function isValidFullRecord(record: Mechanism): boolean {
     Array.isArray(record.constraints?.hard_rules) &&
     record.constraints.hard_rules.length > 0;
   return implsOk && rulesOk;
+}
+
+// ---------- Registry tree (SPEC §3.1: coverage is COMPUTED in the app) ----------
+
+export type RegistryChild =
+  | { kind: "full"; record: Mechanism; valid: boolean }
+  | { kind: "stub"; stub: SeedStub };
+
+export interface RegistryNode {
+  node: TaxonomyNode;
+  /** L1 children (full records + seed stubs) with parent === node.id, by id. */
+  children: RegistryChild[];
+  /** Coverage counts by lifecycle status, in lifecycle order. */
+  coverage: { status: LifecycleStatus; count: number }[];
+}
+
+/**
+ * Joins the L0 taxonomy with L1 mechanisms into the /registry tree.
+ * Every count is derived from the files on disk — never asserted.
+ */
+export function computeRegistryTree(): RegistryNode[] {
+  const fullRecords = loadFullMechanisms();
+  const seedStubs = loadSeedStubs();
+
+  return loadTaxonomy().nodes.map((node) => {
+    const children: RegistryChild[] = [
+      ...fullRecords
+        .filter((record) => record.parent === node.id)
+        .map((record): RegistryChild => ({
+          kind: "full",
+          record,
+          valid: isValidFullRecord(record),
+        })),
+      ...seedStubs
+        .filter((stub) => stub.parent === node.id)
+        .map((stub): RegistryChild => ({ kind: "stub", stub })),
+    ].sort((a, b) => {
+      const idOf = (c: RegistryChild) =>
+        c.kind === "full" ? c.record.id : c.stub.id;
+      return idOf(a).localeCompare(idOf(b));
+    });
+
+    const counts = new Map<LifecycleStatus, number>();
+    for (const child of children) {
+      const status =
+        child.kind === "full"
+          ? child.record.lifecycle_status
+          : child.stub.lifecycle_status;
+      counts.set(status, (counts.get(status) ?? 0) + 1);
+    }
+
+    return {
+      node,
+      children,
+      coverage: LIFECYCLE_ORDER.filter((s) => counts.has(s)).map((status) => ({
+        status,
+        count: counts.get(status)!,
+      })),
+    };
+  });
 }
 
 // ---------- The seven system blocks ----------
@@ -302,14 +402,6 @@ export interface SystemCounts {
   sourcesTotal: number;
   decisionsCount: number;
 }
-
-const LIFECYCLE_ORDER: LifecycleStatus[] = [
-  "candidate",
-  "incubating",
-  "core",
-  "deprecated",
-  "rejected",
-];
 
 export function computeCounts(): SystemCounts {
   const fullRecords = loadFullMechanisms();

@@ -1,9 +1,15 @@
+import Link from "next/link";
 import {
   computeCounts,
   computeSystemBlocks,
   STATUS_META,
   type SystemBlock,
 } from "@/lib/status";
+
+/** Blocks that already have a showcase page. */
+const BLOCK_ROUTES: Record<string, string> = {
+  registry: "/registry",
+};
 
 function StatusPill({ status }: { status: SystemBlock["status"] }) {
   const meta = STATUS_META[status];
@@ -22,11 +28,18 @@ function StatusPill({ status }: { status: SystemBlock["status"] }) {
 }
 
 function BlockCard({ block }: { block: SystemBlock }) {
+  const route = BLOCK_ROUTES[block.id];
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-[#243329] bg-[#151F1A] p-5">
       <div className="flex items-start justify-between gap-3">
         <h3 className="font-display text-base font-medium text-[#E6EFE8]">
-          {block.name}
+          {route ? (
+            <Link href={route} className="hover:text-[#34D399]">
+              {block.name} <span className="text-[#7C93A8]">→</span>
+            </Link>
+          ) : (
+            block.name
+          )}
         </h3>
         <StatusPill status={block.status} />
       </div>
