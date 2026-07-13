@@ -6,9 +6,10 @@
  */
 
 import { readFileSync, readdirSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 import type {
   DecisionsLog,
+  Dossier,
   Mechanism,
   SeedStub,
   SourcesRegistry,
@@ -26,6 +27,7 @@ export const DATA_PATHS = {
   dossiersDir: join(ROOT, "dossiers"),
   sources: join(ROOT, "sources", "sources.json"),
   decisions: join(ROOT, "decisions", "decisions.json"),
+  docsDir: join(ROOT, "docs"),
   cardsDir: join(ROOT, "cards"),
   corporaDir: join(ROOT, "corpora"),
   runtimeDir: join(ROOT, "runtime"),
@@ -69,4 +71,64 @@ export function loadSources(): SourcesRegistry {
 
 export function loadDecisions(): DecisionsLog {
   return readJson<DecisionsLog>(DATA_PATHS.decisions);
+}
+
+/**
+ * Dossier records from /dossiers — every .json except the schema itself.
+ * Returns [] at baseline (the folder holds only the schema and README),
+ * so the /dossiers empty state is computed, never assumed.
+ */
+export function loadDossiers(): Dossier[] {
+  return listJsonFiles(DATA_PATHS.dossiersDir)
+    .filter((file) => basename(file) !== "dossier.schema.json")
+    .map((file) => readJson<Dossier>(file));
+}
+
+// ---------- Foundation documents (/docs, SPEC §3.6) ----------
+
+/** The five foundation documents, in sidebar order (SPEC §3.6). */
+export const DOC_SLUGS = [
+  "manifesto",
+  "ontology-as-science",
+  "architecture",
+  "runtime-flow",
+  "roadmap",
+] as const;
+
+export type DocSlug = (typeof DOC_SLUGS)[number];
+
+export interface DocEntry {
+  slug: DocSlug;
+  /** First `# heading` of the file (the docs carry no frontmatter). */
+  title: string;
+}
+
+export interface Doc extends DocEntry {
+  markdown: string;
+}
+
+export function isDocSlug(slug: string): slug is DocSlug {
+  return (DOC_SLUGS as readonly string[]).includes(slug);
+}
+
+function extractTitle(markdown: string, fallback: string): string {
+  const match = markdown.match(/^#\s+(.+)$/m);
+  return match ? match[1].trim() : fallback;
+}
+
+/** Load one foundation document by slug; null for unknown slugs. */
+export function loadDoc(slug: string): Doc | null {
+  if (!isDocSlug(slug)) return null;
+  const file = join(DATA_PATHS.docsDir, `${slug}.md`);
+  if (!existsSync(file)) return null;
+  const markdown = readFileSync(file, "utf-8");
+  return { slug, title: extractTitle(markdown, slug), markdown };
+}
+
+/** All five documents (slug + title) for the sidebar nav. */
+export function listDocs(): DocEntry[] {
+  return DOC_SLUGS.flatMap((slug) => {
+    const doc = loadDoc(slug);
+    return doc ? [{ slug: doc.slug, title: doc.title }] : [];
+  });
 }

@@ -33,6 +33,7 @@ import type {
   Mechanism,
   SeedStub,
   SourceClassId,
+  SourceStatus,
   TaxonomyNode,
 } from "./types";
 
@@ -51,6 +52,22 @@ export const STATUS_META: Record<BlockStatus, StatusMeta> = {
   in_progress: { label: "in progress", color: "#E4B54E" },
   planned: { label: "planned", color: "#7C93A8" },
 };
+
+/**
+ * Presentation metadata for source statuses (/sources page). Statuses come
+ * from sources.json only (SPEC §4); components map presentation through this
+ * table, never via literals. connected=emerald, not_connected=slate.
+ */
+export const SOURCE_STATUS_META: Record<SourceStatus, StatusMeta> = {
+  connected: { label: "connected", color: "#34D399" },
+  not_connected: { label: "not connected", color: "#7C93A8" },
+};
+
+/** Source statuses in display order for filter chips and legends. */
+export const SOURCE_STATUS_ORDER: SourceStatus[] = [
+  "connected",
+  "not_connected",
+];
 
 // ---------- Lifecycle vocabulary (SPEC §2, L1 lifecycle) ----------
 

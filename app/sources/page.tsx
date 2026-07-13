@@ -1,0 +1,349 @@
+import Link from "next/link";
+import { loadSources } from "@/lib/data";
+import { SOURCE_STATUS_META, SOURCE_STATUS_ORDER } from "@/lib/status";
+import type {
+  Source,
+  SourceClassId,
+  SourcePriority,
+  SourceStatus,
+} from "@/lib/types";
+
+export const metadata = {
+  title: "Sources — Motivation Engine",
+};
+
+// ---------- Filter model (URL searchParams — no client JS) ----------
+
+interface Filters {
+  class?: SourceClassId;
+  priority?: SourcePriority;
+  status?: SourceStatus;
+}
+
+type FilterKey = keyof Filters;
+
+/** Build a /sources href from the current filters with one key changed. */
+function filterHref(filters: Filters, key: FilterKey, value?: string): string {
+  const next: Record<string, string> = {};
+  for (const k of ["class", "priority", "status"] as const) {
+    const v = k === key ? value : filters[k];
+    if (v) next[k] = v;
+  }
+  const query = new URLSearchParams(next).toString();
+  return query ? `/sources?${query}` : "/sources";
+}
+
+interface FlatSource extends Source {
+  classId: SourceClassId;
+  className: string;
+}
+
+// ---------- Small presentational pieces ----------
+
+function SourceStatusPill({ status }: { status: SourceStatus }) {
+  const meta = SOURCE_STATUS_META[status];
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider"
+      style={{ color: meta.color, borderColor: `${meta.color}40` }}
+    >
+      <span
+        className="h-1.5 w-1.5 rounded-full"
+        style={{ backgroundColor: meta.color }}
+      />
+      {meta.label}
+    </span>
+  );
+}
+
+function Tag({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="rounded border border-[#243329] bg-[#1A2620] px-1.5 py-0.5 font-mono text-[11px] text-[#8CA495]">
+      {children}
+    </span>
+  );
+}
+
+function FilterChip({
+  href,
+  active,
+  children,
+}: {
+  href: string;
+  active: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={
+        active
+          ? "rounded-full border border-[#34D399]/40 bg-[#1A2620] px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-[#34D399]"
+          : "rounded-full border border-[#243329] bg-[#151F1A] px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-[#8CA495] hover:border-[#34D399]/40 hover:text-[#E6EFE8]"
+      }
+    >
+      {children}
+    </Link>
+  );
+}
+
+function FilterGroup({
+  label,
+  filters,
+  filterKey,
+  options,
+}: {
+  label: string;
+  filters: Filters;
+  filterKey: FilterKey;
+  options: { value: string; label: string }[];
+}) {
+  const current = filters[filterKey];
+  return (
+    <div className="flex flex-wrap items-center gap-1.5">
+      <span className="mr-1 font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">
+        {label}
+      </span>
+      <FilterChip href={filterHref(filters, filterKey, undefined)} active={!current}>
+        all
+      </FilterChip>
+      {options.map((option) => (
+        <FilterChip
+          key={option.value}
+          href={filterHref(
+            filters,
+            filterKey,
+            current === option.value ? undefined : option.value,
+          )}
+          active={current === option.value}
+        >
+          {option.label}
+        </FilterChip>
+      ))}
+    </div>
+  );
+}
+
+// ---------- Table ----------
+
+const TABLE_HEADERS = [
+  "source",
+  "class",
+  "access",
+  "cost",
+  "priority",
+  "phase",
+  "feeds",
+  "status",
+];
+
+function SourceRow({ source }: { source: FlatSource }) {
+  return (
+    <tr className="border-b border-[#243329] align-top last:border-b-0">
+      <td className="min-w-[220px] px-3 py-2.5">
+        <div className="flex items-baseline gap-2">
+          <span className="font-mono text-xs text-[#7C93A8]">{source.id}</span>
+          <span className="font-display text-sm font-medium text-[#E6EFE8]">
+            {source.name}
+          </span>
+        </div>
+        <p className="mt-1 text-xs leading-relaxed text-[#8CA495]">
+          {source.what}
+        </p>
+        {source.legal_note && (
+          <p className="mt-1.5 text-xs leading-relaxed text-[#E4B54E]">
+            <span className="font-mono text-[10px] uppercase tracking-wider">
+              legal ·{" "}
+            </span>
+            {source.legal_note}
+          </p>
+        )}
+      </td>
+      <td className="whitespace-nowrap px-3 py-2.5 font-mono text-xs text-[#8CA495]">
+        {source.classId} · {source.className}
+      </td>
+      <td className="whitespace-nowrap px-3 py-2.5">
+        <span className="font-mono text-xs text-[#E6EFE8]">
+          {source.access}
+        </span>
+        {source.api && (
+          <span className="ml-1.5 rounded border border-[#34D399]/40 px-1 py-px font-mono text-[10px] uppercase tracking-wider text-[#34D399]">
+            api
+          </span>
+        )}
+      </td>
+      <td className="px-3 py-2.5 font-mono text-xs text-[#8CA495]">
+        {source.cost}
+      </td>
+      <td className="whitespace-nowrap px-3 py-2.5 font-mono text-xs text-[#E6EFE8]">
+        {source.priority}
+      </td>
+      <td className="whitespace-nowrap px-3 py-2.5 font-mono text-xs text-[#8CA495]">
+        {source.phase}
+      </td>
+      <td className="px-3 py-2.5">
+        <div className="flex flex-wrap gap-1">
+          {source.feeds.map((feed) => (
+            <Tag key={feed}>{feed}</Tag>
+          ))}
+        </div>
+      </td>
+      <td className="px-3 py-2.5">
+        <SourceStatusPill status={source.status} />
+      </td>
+    </tr>
+  );
+}
+
+// ---------- Page ----------
+
+export default function SourcesPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const registry = loadSources();
+  const all: FlatSource[] = registry.classes.flatMap((cls) =>
+    cls.sources.map((source) => ({
+      ...source,
+      classId: cls.id,
+      className: cls.name,
+    })),
+  );
+
+  const param = (key: string) => {
+    const value = searchParams[key];
+    return typeof value === "string" ? value : undefined;
+  };
+
+  // Only accept values that actually exist in the vocabulary — anything else
+  // is treated as "no filter".
+  const classIds = registry.classes.map((cls) => cls.id);
+  const priorities = Array.from(new Set(all.map((s) => s.priority))).sort();
+  const filters: Filters = {
+    class: classIds.find((id) => id === param("class")),
+    priority: priorities.find((p) => p === param("priority")),
+    status: SOURCE_STATUS_ORDER.find((s) => s === param("status")),
+  };
+
+  const filtered = all.filter(
+    (source) =>
+      (!filters.class || source.classId === filters.class) &&
+      (!filters.priority || source.priority === filters.priority) &&
+      (!filters.status || source.status === filters.status),
+  );
+
+  const statusCounts = SOURCE_STATUS_ORDER.map((status) => ({
+    status,
+    count: all.filter((source) => source.status === status).length,
+  }));
+
+  return (
+    <main className="mx-auto max-w-6xl px-6 py-10">
+      <header className="flex flex-wrap items-baseline justify-between gap-3">
+        <div>
+          <Link
+            href="/"
+            className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8] hover:text-[#34D399]"
+          >
+            ← control center
+          </Link>
+          <h1 className="mt-2 font-display text-2xl font-semibold tracking-tight text-[#E6EFE8]">
+            Sources — the intake registry
+          </h1>
+          <p className="mt-1 text-sm text-[#8CA495]">
+            {all.length} sources across {registry.classes.length} classes, read
+            from /sources/sources.json. Statuses come from that file only —
+            nothing is connected until a connector lands and flips it.
+          </p>
+        </div>
+        <span className="rounded-full border border-[#243329] bg-[#1A2620] px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-[#8CA495]">
+          {statusCounts
+            .map(
+              ({ status, count }) =>
+                `${count} ${SOURCE_STATUS_META[status].label}`,
+            )
+            .join(" · ")}
+        </span>
+      </header>
+
+      <section className="mt-6 flex flex-col gap-2.5 rounded-lg border border-[#243329] bg-[#151F1A] p-4">
+        <FilterGroup
+          label="class"
+          filters={filters}
+          filterKey="class"
+          options={registry.classes.map((cls) => ({
+            value: cls.id,
+            label: `${cls.id} · ${cls.name}`,
+          }))}
+        />
+        <FilterGroup
+          label="priority"
+          filters={filters}
+          filterKey="priority"
+          options={priorities.map((priority) => ({
+            value: priority,
+            label: priority,
+          }))}
+        />
+        <FilterGroup
+          label="status"
+          filters={filters}
+          filterKey="status"
+          options={SOURCE_STATUS_ORDER.map((status) => ({
+            value: status,
+            label: SOURCE_STATUS_META[status].label,
+          }))}
+        />
+      </section>
+
+      <section className="mt-6">
+        <p className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8]">
+          {filtered.length} of {all.length} sources
+        </p>
+        {filtered.length === 0 ? (
+          <div className="mt-3 rounded-md border border-dashed border-[#243329] bg-[#1A2620] px-4 py-5">
+            <p className="text-sm leading-relaxed text-[#8CA495]">
+              <span className="text-[#E6EFE8]">
+                No sources match this filter combination.
+              </span>{" "}
+              The registry in /sources/sources.json holds {all.length} sources;
+              loosen a filter above to see them.
+            </p>
+          </div>
+        ) : (
+          <div className="mt-3 overflow-x-auto rounded-lg border border-[#243329] bg-[#151F1A]">
+            <table className="w-full min-w-[960px] border-collapse text-left">
+              <thead>
+                <tr className="border-b border-[#243329] bg-[#1A2620]">
+                  {TABLE_HEADERS.map((header) => (
+                    <th
+                      key={header}
+                      className="px-3 py-2 font-mono text-[10px] font-normal uppercase tracking-wider text-[#7C93A8]"
+                    >
+                      {header}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((source) => (
+                  <SourceRow key={source.id} source={source} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      <p className="mt-6 text-xs leading-relaxed text-[#8CA495]">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
+          feeds legend ·{" "}
+        </span>
+        L0–L3 are ontology levels (brain systems → mechanisms → effects →
+        implementations); dossiers, effects, weights, and constraints are the
+        loop artifacts a source feeds.
+      </p>
+    </main>
+  );
+}

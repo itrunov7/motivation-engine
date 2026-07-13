@@ -9,7 +9,20 @@ import {
 /** Blocks that already have a showcase page. */
 const BLOCK_ROUTES: Record<string, string> = {
   registry: "/registry",
+  // The corpora will be harvested from the sources registry — until then the
+  // /sources page is where these blocks' intake lives.
+  "corpus-interfaces-science": "/sources",
+  "corpus-reviews": "/sources",
 };
+
+/** Every room of the Control Center, in tour order. */
+const ROOMS: { href: string; label: string }[] = [
+  { href: "/registry", label: "registry" },
+  { href: "/sources", label: "sources" },
+  { href: "/dossiers", label: "dossiers" },
+  { href: "/decisions", label: "decisions" },
+  { href: "/docs", label: "docs" },
+];
 
 function StatusPill({ status }: { status: SystemBlock["status"] }) {
   const meta = STATUS_META[status];
@@ -65,15 +78,23 @@ function CountPanel({
   title,
   rows,
   footer,
+  href,
 }: {
   title: string;
   rows: { label: string; count: number }[];
   footer: string;
+  href?: string;
 }) {
   return (
     <div className="flex flex-col rounded-lg border border-[#243329] bg-[#151F1A] p-5">
       <h3 className="font-display text-sm font-medium text-[#E6EFE8]">
-        {title}
+        {href ? (
+          <Link href={href} className="hover:text-[#34D399]">
+            {title} <span className="text-[#7C93A8]">→</span>
+          </Link>
+        ) : (
+          title
+        )}
       </h3>
       <dl className="mt-3 flex flex-col gap-1.5">
         {rows.map((row) => (
@@ -114,6 +135,18 @@ export default function Overview() {
         </span>
       </header>
 
+      <nav className="mt-4 flex flex-wrap items-center gap-2">
+        {ROOMS.map((room) => (
+          <Link
+            key={room.href}
+            href={room.href}
+            className="rounded-full border border-[#243329] bg-[#151F1A] px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-[#8CA495] hover:border-[#34D399]/40 hover:text-[#34D399]"
+          >
+            {room.label}
+          </Link>
+        ))}
+      </nav>
+
       <div className="mt-6 rounded-lg border border-[#34D399]/25 bg-[#1A2620] px-4 py-3">
         <p className="text-sm leading-relaxed text-[#8CA495]">
           <span className="font-mono text-xs uppercase tracking-wider text-[#34D399]">
@@ -149,6 +182,7 @@ export default function Overview() {
               count: r.count,
             }))}
             footer={`${counts.mechanismsTotal} total · /registry/mechanisms`}
+            href="/registry"
           />
           <CountPanel
             title="Sources by status"
@@ -157,11 +191,13 @@ export default function Overview() {
               count: r.count,
             }))}
             footer={`${counts.sourcesTotal} total · /sources/sources.json`}
+            href="/sources"
           />
           <CountPanel
             title="Decisions"
             rows={[{ label: "logged", count: counts.decisionsCount }]}
             footer="/decisions/decisions.json"
+            href="/decisions"
           />
         </div>
       </section>
