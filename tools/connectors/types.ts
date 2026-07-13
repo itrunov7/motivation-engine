@@ -55,11 +55,17 @@ export interface RunContext {
 
 /** The single interface every connector implements. */
 export interface Connector {
-  /** CLI id, e.g. "openalex". */
+  /** CLI id, e.g. "evidence". */
   id: string;
-  /** Target corpus dir name. Matches an id in sources/sources.json,
-   *  or is "_"-prefixed for internal connectors (ignored by the app). */
+  /** Target corpus dir name (the corpus id). "_"-prefixed for internal
+   *  connectors (ignored by the app). A connector is not a source: the
+   *  sources it harvests are declared in `sourceIds` (D-014). */
   sourceId: string;
+  /** The sources/sources.json ids this connector harvests. Empty for
+   *  internal connectors. Source connectivity in the showcase is computed
+   *  from this field: a source is connected iff ANY corpus manifest lists
+   *  it in source_ids with last_run.status "success" (D-014). */
+  sourceIds: string[];
   /** Bumped when the connector's output shape or behavior changes. */
   connectorVersion: string;
   description: string;
@@ -89,7 +95,10 @@ export interface ManifestDataFile {
 }
 
 export interface Manifest {
+  /** The corpus id — equals the directory name under /corpora. */
   source_id: string;
+  /** The sources/sources.json ids this corpus harvests (D-014). */
+  source_ids: string[];
   connector_version: string;
   last_run: ManifestRun;
   /** Newest first, capped at 20 entries. */

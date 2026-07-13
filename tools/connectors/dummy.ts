@@ -20,6 +20,7 @@ interface DummyRecord {
 export const dummyConnector: Connector = {
   id: "dummy",
   sourceId: "_dummy",
+  sourceIds: [],
   connectorVersion: "1.0.0",
   description: "Smoke-test connector: writes 3 fake records, no network calls.",
 

@@ -279,11 +279,14 @@ export interface SourcesRegistry {
 
 /**
  * Minimal manifest shape the showcase needs to compute source states from
- * /corpora/{source_id}/manifest.json. The full contract (and its writer)
+ * /corpora/{corpus}/manifest.json. The full contract (and its writer)
  * lives in tools/connectors/types.ts; lib/ never imports from tools/.
+ * A connector is not a source (D-014): `source_ids` lists the sources.json
+ * ids the corpus harvests; source states are computed from that field.
  */
 export interface CorpusManifest {
   source_id: string;
+  source_ids: string[];
   last_run: {
     status: "success" | "partial" | "failed";
   };

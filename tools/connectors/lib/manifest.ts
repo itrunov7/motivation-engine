@@ -75,6 +75,7 @@ export function writeManifest(
 
   const manifest: Manifest = {
     source_id: connector.sourceId,
+    source_ids: connector.sourceIds,
     connector_version: connector.connectorVersion,
     last_run: run,
     run_history: [run, ...(previous?.run_history ?? [])].slice(0, RUN_HISTORY_LIMIT),

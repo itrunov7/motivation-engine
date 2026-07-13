@@ -8,7 +8,9 @@
 
 import type { Connector } from "./types";
 import { dummyConnector } from "./dummy";
+import { evidenceConnector } from "./evidence";
 
 export const CONNECTORS: Record<string, Connector> = {
   [dummyConnector.id]: dummyConnector,
+  [evidenceConnector.id]: evidenceConnector,
 };

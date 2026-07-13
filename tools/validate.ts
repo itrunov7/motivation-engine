@@ -8,10 +8,11 @@
  *   empty/missing implementations[].metrics or constraints.hard_rules FAILS
  * - /registry/taxonomy.json, /sources/sources.json, /decisions/decisions.json
  * - /dossiers/dossier.schema.json integrity + any dossier records
- * - /corpora/{source_id}/manifest.json against the connector manifest
+ * - /corpora/{corpus}/manifest.json against the connector manifest
  *   contract (tools/connectors/types.ts): dir name = source_id,
- *   run_history ≤ 20, data_files exist on disk, non-"_" dirs match a
- *   source id in sources.json
+ *   run_history ≤ 20, data_files exist on disk, every source_ids entry
+ *   matches a source id in sources.json, non-"_" dirs harvest ≥1 source
+ *   (D-014)
  * - Cross-references: filename = id, unique ids, parent in taxonomy,
  *   relations[].target in the mechanism roster
  *
@@ -212,6 +213,10 @@ const corpusManifestSchema = {
   type: "object",
   properties: {
     source_id: { type: "string", pattern: "^_?[a-z0-9-]+$" },
+    source_ids: {
+      type: "array",
+      items: { type: "string", pattern: "^[a-z0-9-]+$" },
+    },
     connector_version: { type: "string", pattern: "^\\d+\\.\\d+\\.\\d+$" },
     last_run: manifestRunSchema,
     run_history: { type: "array", minItems: 1, maxItems: 20, items: manifestRunSchema },
@@ -229,7 +234,7 @@ const corpusManifestSchema = {
       },
     },
   },
-  required: ["source_id", "connector_version", "last_run", "run_history", "data_files"],
+  required: ["source_id", "source_ids", "connector_version", "last_run", "run_history", "data_files"],
   additionalProperties: false,
 } as const;
 
@@ -460,15 +465,27 @@ function main(): void {
     let ok = validateAgainst(validateManifest, manifestFile, data);
     const manifest = data as {
       source_id?: string;
+      source_ids?: string[];
       data_files?: { path: string }[];
     };
     if (typeof manifest.source_id === "string" && manifest.source_id !== dirName) {
       fail(manifestFile, `source_id "${manifest.source_id}" does not match directory name "${dirName}"`);
       ok = false;
     }
-    if (!dirName.startsWith("_") && sourceIds.size > 0 && !sourceIds.has(dirName)) {
-      fail(manifestFile, `corpus directory "${dirName}" is not a source id in sources.json`);
+    // D-014: a connector is not a source — the manifest declares the sources
+    // it harvests in source_ids; every entry must exist in sources.json, and
+    // a non-internal corpus must harvest at least one source.
+    if (!dirName.startsWith("_") && (manifest.source_ids ?? []).length === 0) {
+      fail(manifestFile, `non-internal corpus "${dirName}" has empty source_ids — a corpus must harvest at least one source (D-014)`);
       ok = false;
+    }
+    if (sourceIds.size > 0) {
+      for (const id of manifest.source_ids ?? []) {
+        if (!sourceIds.has(id)) {
+          fail(manifestFile, `source_ids entry "${id}" is not a source id in sources.json`);
+          ok = false;
+        }
+      }
     }
     for (const file of manifest.data_files ?? []) {
       if (!existsSync(join(corpusDir, file.path))) {

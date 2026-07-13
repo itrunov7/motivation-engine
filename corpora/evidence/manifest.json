@@ -1,0 +1,163 @@
+{
+  "source_id": "evidence",
+  "source_ids": [
+    "openalex",
+    "semantic-scholar"
+  ],
+  "connector_version": "1.0.0",
+  "last_run": {
+    "timestamp": "2026-07-13T14:58:38.379Z",
+    "status": "success",
+    "params": {
+      "mechanism": "VR-02",
+      "terms": "variable ratio reinforcement;reward prediction error"
+    },
+    "records_fetched": 79,
+    "files_written": 1,
+    "duration_s": 8.26
+  },
+  "run_history": [
+    {
+      "timestamp": "2026-07-13T14:58:38.379Z",
+      "status": "success",
+      "params": {
+        "mechanism": "VR-02",
+        "terms": "variable ratio reinforcement;reward prediction error"
+      },
+      "records_fetched": 79,
+      "files_written": 1,
+      "duration_s": 8.26
+    },
+    {
+      "timestamp": "2026-07-13T14:54:52.607Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "VR-02",
+        "terms": "variable ratio reinforcement;reward prediction error"
+      },
+      "records_fetched": 50,
+      "files_written": 1,
+      "duration_s": 135.53,
+      "error": "semantic-scholar \"variable ratio reinforcement\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"reward prediction error\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
+    },
+    {
+      "timestamp": "2026-07-13T14:49:08.067Z",
+      "status": "failed",
+      "params": {
+        "mechanism": "VR-02",
+        "terms": "variable ratio reinforcement;reward prediction error"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 254.3,
+      "error": "All queries failed — openalex \"variable ratio reinforcement\": Request failed after 3 attempts: HTTP 503 Service Unavailable for api.openalex.org/works · openalex \"reward prediction error\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · semantic-scholar \"variable ratio reinforcement\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"reward prediction error\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
+    },
+    {
+      "timestamp": "2026-07-13T14:46:28.258Z",
+      "status": "success",
+      "params": {
+        "mechanism": "LA-01",
+        "terms": "loss aversion;prospect theory meta-analysis"
+      },
+      "records_fetched": 69,
+      "files_written": 1,
+      "duration_s": 12.43
+    },
+    {
+      "timestamp": "2026-07-13T14:42:56.934Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "LA-01",
+        "terms": "loss aversion;prospect theory meta-analysis"
+      },
+      "records_fetched": 57,
+      "files_written": 1,
+      "duration_s": 121.09,
+      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
+    },
+    {
+      "timestamp": "2026-07-13T14:40:30.090Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "LA-01",
+        "terms": "loss aversion;prospect theory meta-analysis"
+      },
+      "records_fetched": 57,
+      "files_written": 1,
+      "duration_s": 122.88,
+      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
+    },
+    {
+      "timestamp": "2026-07-13T14:37:36.735Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "LA-01",
+        "terms": "loss aversion;prospect theory meta-analysis"
+      },
+      "records_fetched": 50,
+      "files_written": 1,
+      "duration_s": 134.08,
+      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"prospect theory meta-analysis\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
+    },
+    {
+      "timestamp": "2026-07-13T14:32:21.052Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "LA-01",
+        "terms": "loss aversion;prospect theory meta-analysis"
+      },
+      "records_fetched": 57,
+      "files_written": 1,
+      "duration_s": 129.56,
+      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
+    },
+    {
+      "timestamp": "2026-07-13T14:30:35.796Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "LA-01",
+        "terms": "loss aversion;prospect theory meta-analysis"
+      },
+      "records_fetched": 57,
+      "files_written": 1,
+      "duration_s": 47.91,
+      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
+    },
+    {
+      "timestamp": "2026-07-13T14:29:15.258Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "LA-01",
+        "terms": "loss aversion;prospect theory meta-analysis"
+      },
+      "records_fetched": 62,
+      "files_written": 1,
+      "duration_s": 11.13,
+      "error": "semantic-scholar \"prospect theory meta-analysis\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
+    },
+    {
+      "timestamp": "2026-07-13T14:27:30.558Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "LA-01",
+        "terms": "loss aversion;prospect theory meta-analysis"
+      },
+      "records_fetched": 50,
+      "files_written": 1,
+      "duration_s": 15.28,
+      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"prospect theory meta-analysis\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
+    }
+  ],
+  "data_files": [
+    {
+      "path": "LA-01.json",
+      "records": 69,
+      "bytes": 219672
+    },
+    {
+      "path": "VR-02.json",
+      "records": 79,
+      "bytes": 109643
+    }
+  ]
+}

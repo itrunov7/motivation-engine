@@ -16,11 +16,13 @@
  * - Runtime / corpora / telemetry: planned while their folders hold no data.
  *   README.md, dotfiles, and .gitkeep are never data; a corpus subfolder
  *   only counts if it contains a manifest.json (contract in corpora/README).
- * - Source states (D-013): computed per connection_mode from
- *   /corpora/{source_id}/manifest.json — api sources are connected iff
- *   last_run.status === "success"; report sources are ingested iff
- *   additionally a data file exists on disk; manual and deferred sources
- *   show their mode, never a fake connectivity status.
+ * - Source states (D-013, D-014): computed per connection_mode from the
+ *   corpus manifests. A connector is not a source: each manifest lists the
+ *   sources it harvests in source_ids. An api source is connected iff ANY
+ *   /corpora/{dir}/manifest.json lists it in source_ids with
+ *   last_run.status === "success"; a report source is ingested iff
+ *   additionally that corpus has a data file on disk; manual and deferred
+ *   sources show their mode, never a fake connectivity status.
  */
 
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -113,9 +115,9 @@ export const SOURCE_STATE_ORDER: ComputedSourceState[] = [
   "deferred",
 ];
 
-/** Parsed /corpora/{source_id}/manifest.json, or undefined if absent/broken. */
-function readCorpusManifest(sourceId: string): CorpusManifest | undefined {
-  const file = join(DATA_PATHS.corporaDir, sourceId, "manifest.json");
+/** Parsed /corpora/{dir}/manifest.json, or undefined if absent/broken. */
+function readCorpusManifest(dirName: string): CorpusManifest | undefined {
+  const file = join(DATA_PATHS.corporaDir, dirName, "manifest.json");
   if (!existsSync(file)) return undefined;
   try {
     return JSON.parse(readFileSync(file, "utf-8")) as CorpusManifest;
@@ -125,11 +127,40 @@ function readCorpusManifest(sourceId: string): CorpusManifest | undefined {
 }
 
 /**
- * Computes a source's state from its mode and the file system (SPEC §4):
- * - api: connected iff /corpora/{id}/manifest.json exists with
- *   last_run.status === "success"
- * - report: ingested iff additionally at least one data_files entry exists
- *   on disk
+ * Every /corpora/{dir}/manifest.json keyed by corpus directory name.
+ * "_"-prefixed dirs are internal (framework smoke tests) and excluded.
+ */
+function readAllCorpusManifests(): Map<string, CorpusManifest> {
+  const manifests = new Map<string, CorpusManifest>();
+  if (!existsSync(DATA_PATHS.corporaDir)) return manifests;
+  for (const entry of readdirSync(DATA_PATHS.corporaDir, { withFileTypes: true })) {
+    if (!entry.isDirectory() || entry.name.startsWith("_")) continue;
+    const manifest = readCorpusManifest(entry.name);
+    if (manifest) manifests.set(entry.name, manifest);
+  }
+  return manifests;
+}
+
+/**
+ * Manifests whose source_ids list the given source, keyed by corpus dir.
+ * A connector is not a source (D-014): one corpus may harvest several
+ * sources, and a source may be harvested by any corpus.
+ */
+function manifestsForSource(
+  sourceId: string,
+): { dirName: string; manifest: CorpusManifest }[] {
+  return Array.from(readAllCorpusManifests().entries())
+    .filter(([, manifest]) => (manifest.source_ids ?? []).includes(sourceId))
+    .map(([dirName, manifest]) => ({ dirName, manifest }));
+}
+
+/**
+ * Computes a source's state from its mode and the file system (SPEC §4,
+ * D-014):
+ * - api: connected iff ANY /corpora/{dir}/manifest.json lists the source in
+ *   source_ids with last_run.status === "success"
+ * - report: ingested iff additionally that corpus has at least one
+ *   data_files entry existing on disk
  * - manual / deferred: the mode itself — a connectivity status would be fake
  */
 export function computeSourceState(source: Source): ComputedSourceState {
@@ -139,19 +170,20 @@ export function computeSourceState(source: Source): ComputedSourceState {
     case "deferred":
       return "deferred";
     case "api": {
-      const manifest = readCorpusManifest(source.id);
-      return manifest?.last_run?.status === "success"
-        ? "connected"
-        : "not_connected";
+      const connected = manifestsForSource(source.id).some(
+        ({ manifest }) => manifest.last_run?.status === "success",
+      );
+      return connected ? "connected" : "not_connected";
     }
     case "report": {
-      const manifest = readCorpusManifest(source.id);
-      const hasDataFile = (manifest?.data_files ?? []).some((file) =>
-        existsSync(join(DATA_PATHS.corporaDir, source.id, file.path)),
+      const ingested = manifestsForSource(source.id).some(
+        ({ dirName, manifest }) =>
+          manifest.last_run?.status === "success" &&
+          (manifest.data_files ?? []).some((file) =>
+            existsSync(join(DATA_PATHS.corporaDir, dirName, file.path)),
+          ),
       );
-      return manifest?.last_run?.status === "success" && hasDataFile
-        ? "ingested"
-        : "not_ingested";
+      return ingested ? "ingested" : "not_ingested";
     }
   }
 }
@@ -269,25 +301,22 @@ function hasDataFiles(dir: string): boolean {
 }
 
 /**
- * Corpus subfolders that satisfy the /corpora contract: named after a source
- * id from the given classes AND containing a manifest.json.
+ * Corpus subfolders that satisfy the /corpora contract and harvest at least
+ * one source from the given classes: membership is computed from the
+ * manifest's source_ids (D-014), not from the directory name.
  */
 function harvestedCorpora(classIds: SourceClassId[]): string[] {
-  const dir = DATA_PATHS.corporaDir;
-  if (!existsSync(dir)) return [];
-  const sourceIds = new Set(
+  const classSourceIds = new Set(
     loadSources()
       .classes.filter((c) => classIds.includes(c.id))
       .flatMap((c) => c.sources.map((s) => s.id)),
   );
-  return readdirSync(dir, { withFileTypes: true })
-    .filter(
-      (entry) =>
-        entry.isDirectory() &&
-        sourceIds.has(entry.name) &&
-        existsSync(join(dir, entry.name, "manifest.json")),
+  return Array.from(readAllCorpusManifests().entries())
+    .filter(([, manifest]) =>
+      (manifest.source_ids ?? []).some((id) => classSourceIds.has(id)),
     )
-    .map((entry) => entry.name);
+    .map(([dirName]) => dirName)
+    .sort();
 }
 
 // ---------- Mechanism validity (hard rules, D-003) ----------
