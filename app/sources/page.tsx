@@ -1,11 +1,20 @@
 import Link from "next/link";
 import { loadSources } from "@/lib/data";
-import { SOURCE_STATUS_META, SOURCE_STATUS_ORDER } from "@/lib/status";
+import {
+  CONNECTION_MODE_META,
+  CONNECTION_MODE_ORDER,
+  SOURCE_STATE_META,
+  SOURCE_STATE_ORDER,
+  computeSourceModeCounts,
+  computeSourceState,
+  formatModeCount,
+} from "@/lib/status";
 import type {
+  ComputedSourceState,
+  ConnectionMode,
   Source,
   SourceClassId,
   SourcePriority,
-  SourceStatus,
 } from "@/lib/types";
 
 export const metadata = {
@@ -17,7 +26,8 @@ export const metadata = {
 interface Filters {
   class?: SourceClassId;
   priority?: SourcePriority;
-  status?: SourceStatus;
+  mode?: ConnectionMode;
+  status?: ComputedSourceState;
 }
 
 type FilterKey = keyof Filters;
@@ -25,7 +35,7 @@ type FilterKey = keyof Filters;
 /** Build a /sources href from the current filters with one key changed. */
 function filterHref(filters: Filters, key: FilterKey, value?: string): string {
   const next: Record<string, string> = {};
-  for (const k of ["class", "priority", "status"] as const) {
+  for (const k of ["class", "priority", "mode", "status"] as const) {
     const v = k === key ? value : filters[k];
     if (v) next[k] = v;
   }
@@ -36,12 +46,14 @@ function filterHref(filters: Filters, key: FilterKey, value?: string): string {
 interface FlatSource extends Source {
   classId: SourceClassId;
   className: string;
+  /** Computed from /corpora/{id}/manifest.json — never stored (D-013). */
+  state: ComputedSourceState;
 }
 
 // ---------- Small presentational pieces ----------
 
-function SourceStatusPill({ status }: { status: SourceStatus }) {
-  const meta = SOURCE_STATUS_META[status];
+function SourceStatePill({ state }: { state: ComputedSourceState }) {
+  const meta = SOURCE_STATE_META[state];
   return (
     <span
       className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider"
@@ -134,6 +146,7 @@ const TABLE_HEADERS = [
   "priority",
   "phase",
   "feeds",
+  "mode",
   "status",
 ];
 
@@ -150,6 +163,14 @@ function SourceRow({ source }: { source: FlatSource }) {
         <p className="mt-1 text-xs leading-relaxed text-[#8CA495]">
           {source.what}
         </p>
+        {source.mode_note && (
+          <p className="mt-1.5 text-xs leading-relaxed text-[#7C93A8]">
+            <span className="font-mono text-[10px] uppercase tracking-wider">
+              mode ·{" "}
+            </span>
+            {source.mode_note}
+          </p>
+        )}
         {source.legal_note && (
           <p className="mt-1.5 text-xs leading-relaxed text-[#E4B54E]">
             <span className="font-mono text-[10px] uppercase tracking-wider">
@@ -188,8 +209,11 @@ function SourceRow({ source }: { source: FlatSource }) {
           ))}
         </div>
       </td>
+      <td className="whitespace-nowrap px-3 py-2.5 font-mono text-xs text-[#E6EFE8]">
+        {CONNECTION_MODE_META[source.connection_mode].label}
+      </td>
       <td className="px-3 py-2.5">
-        <SourceStatusPill status={source.status} />
+        <SourceStatePill state={source.state} />
       </td>
     </tr>
   );
@@ -208,6 +232,7 @@ export default function SourcesPage({
       ...source,
       classId: cls.id,
       className: cls.name,
+      state: computeSourceState(source),
     })),
   );
 
@@ -223,20 +248,19 @@ export default function SourcesPage({
   const filters: Filters = {
     class: classIds.find((id) => id === param("class")),
     priority: priorities.find((p) => p === param("priority")),
-    status: SOURCE_STATUS_ORDER.find((s) => s === param("status")),
+    mode: CONNECTION_MODE_ORDER.find((m) => m === param("mode")),
+    status: SOURCE_STATE_ORDER.find((s) => s === param("status")),
   };
 
   const filtered = all.filter(
     (source) =>
       (!filters.class || source.classId === filters.class) &&
       (!filters.priority || source.priority === filters.priority) &&
-      (!filters.status || source.status === filters.status),
+      (!filters.mode || source.connection_mode === filters.mode) &&
+      (!filters.status || source.state === filters.status),
   );
 
-  const statusCounts = SOURCE_STATUS_ORDER.map((status) => ({
-    status,
-    count: all.filter((source) => source.status === status).length,
-  }));
+  const modeCounts = computeSourceModeCounts();
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
@@ -253,15 +277,16 @@ export default function SourcesPage({
           </h1>
           <p className="mt-1 text-sm text-[#8CA495]">
             {all.length} sources across {registry.classes.length} classes, read
-            from /sources/sources.json. Statuses come from that file only —
-            nothing is connected until a connector lands and flips it.
+            from /sources/sources.json. Each source has a connection mode;
+            statuses are computed from /corpora/&#123;id&#125;/manifest.json —
+            nothing turns green until a run actually succeeds.
           </p>
         </div>
         <span className="rounded-full border border-[#243329] bg-[#1A2620] px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-[#8CA495]">
-          {statusCounts
+          {modeCounts
             .map(
-              ({ status, count }) =>
-                `${count} ${SOURCE_STATUS_META[status].label}`,
+              (count) =>
+                `${CONNECTION_MODE_META[count.mode].label} ${formatModeCount(count)}`,
             )
             .join(" · ")}
         </span>
@@ -287,12 +312,21 @@ export default function SourcesPage({
           }))}
         />
         <FilterGroup
+          label="mode"
+          filters={filters}
+          filterKey="mode"
+          options={CONNECTION_MODE_ORDER.map((mode) => ({
+            value: mode,
+            label: CONNECTION_MODE_META[mode].label,
+          }))}
+        />
+        <FilterGroup
           label="status"
           filters={filters}
           filterKey="status"
-          options={SOURCE_STATUS_ORDER.map((status) => ({
-            value: status,
-            label: SOURCE_STATUS_META[status].label,
+          options={SOURCE_STATE_ORDER.map((state) => ({
+            value: state,
+            label: SOURCE_STATE_META[state].label,
           }))}
         />
       </section>
@@ -313,7 +347,7 @@ export default function SourcesPage({
           </div>
         ) : (
           <div className="mt-3 overflow-x-auto rounded-lg border border-[#243329] bg-[#151F1A]">
-            <table className="w-full min-w-[960px] border-collapse text-left">
+            <table className="w-full min-w-[1020px] border-collapse text-left">
               <thead>
                 <tr className="border-b border-[#243329] bg-[#1A2620]">
                   {TABLE_HEADERS.map((header) => (
@@ -337,6 +371,17 @@ export default function SourcesPage({
       </section>
 
       <p className="mt-6 text-xs leading-relaxed text-[#8CA495]">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
+          mode legend ·{" "}
+        </span>
+        {CONNECTION_MODE_ORDER.map(
+          (mode) =>
+            `${CONNECTION_MODE_META[mode].label} = ${CONNECTION_MODE_META[mode].description}`,
+        ).join(" · ")}
+        .
+      </p>
+
+      <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">
         <span className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
           feeds legend ·{" "}
         </span>

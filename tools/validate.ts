@@ -136,7 +136,11 @@ const sourcesSchema = {
                 cost: { type: "string", minLength: 1 },
                 priority: { type: "string", enum: ["P0", "P1", "P2"] },
                 phase: { type: "string", minLength: 1 },
-                status: { type: "string", enum: ["not_connected", "connected"] },
+                connection_mode: {
+                  type: "string",
+                  enum: ["api", "report", "manual", "deferred"],
+                },
+                mode_note: { type: "string", minLength: 1 },
                 feeds: {
                   type: "array",
                   minItems: 1,
@@ -147,7 +151,7 @@ const sourcesSchema = {
                 },
                 legal_note: { type: "string", minLength: 1 },
               },
-              required: ["id", "name", "what", "access", "api", "cost", "priority", "phase", "status", "feeds"],
+              required: ["id", "name", "what", "access", "api", "cost", "priority", "phase", "connection_mode", "feeds"],
               additionalProperties: false,
             },
           },

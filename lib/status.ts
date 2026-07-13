@@ -16,9 +16,14 @@
  * - Runtime / corpora / telemetry: planned while their folders hold no data.
  *   README.md, dotfiles, and .gitkeep are never data; a corpus subfolder
  *   only counts if it contains a manifest.json (contract in corpora/README).
+ * - Source states (D-013): computed per connection_mode from
+ *   /corpora/{source_id}/manifest.json — api sources are connected iff
+ *   last_run.status === "success"; report sources are ingested iff
+ *   additionally a data file exists on disk; manual and deferred sources
+ *   show their mode, never a fake connectivity status.
  */
 
-import { existsSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import {
   DATA_PATHS,
@@ -29,11 +34,14 @@ import {
   loadTaxonomy,
 } from "./data";
 import type {
+  ComputedSourceState,
+  ConnectionMode,
+  CorpusManifest,
   LifecycleStatus,
   Mechanism,
   SeedStub,
+  Source,
   SourceClassId,
-  SourceStatus,
   TaxonomyNode,
 } from "./types";
 
@@ -53,21 +61,141 @@ export const STATUS_META: Record<BlockStatus, StatusMeta> = {
   planned: { label: "planned", color: "#7C93A8" },
 };
 
+// ---------- Source connection modes and computed states (D-013) ----------
+
 /**
- * Presentation metadata for source statuses (/sources page). Statuses come
- * from sources.json only (SPEC §4); components map presentation through this
- * table, never via literals. connected=emerald, not_connected=slate.
+ * Presentation metadata for connection modes (/sources page, Overview).
+ * Modes come from sources.json; components map presentation through this
+ * table, never via literals.
  */
-export const SOURCE_STATUS_META: Record<SourceStatus, StatusMeta> = {
-  connected: { label: "connected", color: "#34D399" },
-  not_connected: { label: "not connected", color: "#7C93A8" },
+export const CONNECTION_MODE_META: Record<
+  ConnectionMode,
+  { label: string; description: string }
+> = {
+  api: { label: "api", description: "automated connector" },
+  report: { label: "report", description: "one-off ingested artifact" },
+  manual: {
+    label: "manual",
+    description: "licensed human curation, never machine-harvested",
+  },
+  deferred: { label: "deferred", description: "P2, not planned this phase" },
 };
 
-/** Source statuses in display order for filter chips and legends. */
-export const SOURCE_STATUS_ORDER: SourceStatus[] = [
+/** Connection modes in display order for filters, legends, and counts. */
+export const CONNECTION_MODE_ORDER: ConnectionMode[] = [
+  "api",
+  "report",
+  "manual",
+  "deferred",
+];
+
+/**
+ * Presentation metadata for COMPUTED source states (never stored):
+ * connected/ingested = emerald, not yet = slate, manual = amber (a mode, not
+ * a connectivity claim), deferred = muted slate.
+ */
+export const SOURCE_STATE_META: Record<ComputedSourceState, StatusMeta> = {
+  connected: { label: "connected", color: "#34D399" },
+  not_connected: { label: "not connected", color: "#7C93A8" },
+  ingested: { label: "ingested", color: "#34D399" },
+  not_ingested: { label: "not ingested", color: "#7C93A8" },
+  manual: { label: "manual curation", color: "#E4B54E" },
+  deferred: { label: "deferred", color: "#8CA495" },
+};
+
+/** Computed source states in display order for filter chips and legends. */
+export const SOURCE_STATE_ORDER: ComputedSourceState[] = [
   "connected",
   "not_connected",
+  "ingested",
+  "not_ingested",
+  "manual",
+  "deferred",
 ];
+
+/** Parsed /corpora/{source_id}/manifest.json, or undefined if absent/broken. */
+function readCorpusManifest(sourceId: string): CorpusManifest | undefined {
+  const file = join(DATA_PATHS.corporaDir, sourceId, "manifest.json");
+  if (!existsSync(file)) return undefined;
+  try {
+    return JSON.parse(readFileSync(file, "utf-8")) as CorpusManifest;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Computes a source's state from its mode and the file system (SPEC §4):
+ * - api: connected iff /corpora/{id}/manifest.json exists with
+ *   last_run.status === "success"
+ * - report: ingested iff additionally at least one data_files entry exists
+ *   on disk
+ * - manual / deferred: the mode itself — a connectivity status would be fake
+ */
+export function computeSourceState(source: Source): ComputedSourceState {
+  switch (source.connection_mode) {
+    case "manual":
+      return "manual";
+    case "deferred":
+      return "deferred";
+    case "api": {
+      const manifest = readCorpusManifest(source.id);
+      return manifest?.last_run?.status === "success"
+        ? "connected"
+        : "not_connected";
+    }
+    case "report": {
+      const manifest = readCorpusManifest(source.id);
+      const hasDataFile = (manifest?.data_files ?? []).some((file) =>
+        existsSync(join(DATA_PATHS.corporaDir, source.id, file.path)),
+      );
+      return manifest?.last_run?.status === "success" && hasDataFile
+        ? "ingested"
+        : "not_ingested";
+    }
+  }
+}
+
+/** Per-mode aggregate: done = connected (api) / ingested (report). */
+export interface SourceModeCount {
+  mode: ConnectionMode;
+  total: number;
+  /** null for manual/deferred — those modes have no completion fraction. */
+  done: number | null;
+}
+
+/** Groups all sources by connection mode with computed completion counts. */
+export function computeSourceModeCounts(): SourceModeCount[] {
+  const sources = loadSources().classes.flatMap((c) => c.sources);
+  return CONNECTION_MODE_ORDER.map((mode) => {
+    const ofMode = sources.filter((s) => s.connection_mode === mode);
+    const done =
+      mode === "api"
+        ? ofMode.filter((s) => computeSourceState(s) === "connected").length
+        : mode === "report"
+          ? ofMode.filter((s) => computeSourceState(s) === "ingested").length
+          : null;
+    return { mode, total: ofMode.length, done };
+  });
+}
+
+/**
+ * One-line summary for a mode count, shown next to the mode label:
+ * "0/7 connected", "0/5 ingested", "9 curation", "10". Lives here so state
+ * words stay out of app/.
+ */
+export function formatModeCount(count: SourceModeCount): string {
+  switch (count.mode) {
+    case "api":
+      return `${count.done}/${count.total} connected`;
+    case "report":
+      return `${count.done}/${count.total} ingested`;
+    case "manual":
+      return `${count.total} curation`;
+    case "deferred":
+      return `${count.total}`;
+  }
+}
 
 // ---------- Lifecycle vocabulary (SPEC §2, L1 lifecycle) ----------
 
@@ -415,7 +543,7 @@ export function computeSystemBlocks(): SystemBlock[] {
 export interface SystemCounts {
   mechanismsByLifecycle: { status: LifecycleStatus; count: number }[];
   mechanismsTotal: number;
-  sourcesByStatus: { status: string; count: number }[];
+  sourcesByMode: SourceModeCount[];
   sourcesTotal: number;
   decisionsCount: number;
 }
@@ -432,22 +560,13 @@ export function computeCounts(): SystemCounts {
   }
 
   const sources = loadSources().classes.flatMap((c) => c.sources);
-  const sourceCounts = new Map<string, number>();
-  for (const source of sources) {
-    sourceCounts.set(source.status, (sourceCounts.get(source.status) ?? 0) + 1);
-  }
 
   return {
     mechanismsByLifecycle: LIFECYCLE_ORDER.filter((s) =>
       lifecycleCounts.has(s),
     ).map((status) => ({ status, count: lifecycleCounts.get(status)! })),
     mechanismsTotal: fullRecords.length + seedStubs.length,
-    sourcesByStatus: Array.from(sourceCounts.entries())
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([status, count]) => ({
-        status: status.replace(/_/g, " "),
-        count,
-      })),
+    sourcesByMode: computeSourceModeCounts(),
     sourcesTotal: sources.length,
     decisionsCount: loadDecisions().decisions.length,
   };

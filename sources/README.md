@@ -9,15 +9,36 @@
 - **C — Analytics & effect sizes** (RevenueCat, Baymard, GoodUI, benchmarks, …)
 - **D — Non-obvious** (SEC EDGAR, Google Patents, FTC/EU enforcement, …)
 
-Each source records access type, cost, priority (P0–P2), phase, status,
-which L-levels it feeds, and legal notes. At baseline every status is
-`not_connected` — that is the honest truth; no scrapers or connectors exist yet.
+Each source records access type, cost, priority (P0–P2), phase, connection
+mode, which L-levels it feeds, and legal notes.
+
+## Connection modes (D-013)
+
+Sources differ by nature, so each carries a `connection_mode`:
+
+- **api** — automated connector against a public API
+- **report** — one-off ingested artifact (published report / dataset)
+- **manual** — licensed human curation, never machine-harvested
+- **deferred** — P2, not planned this phase (`mode_note` records why)
+
+## Statuses are computed, never stored
+
+There is no status field in this file. The showcase computes each source's
+state from `/corpora/{source_id}/manifest.json` (written by connector runs,
+contract in /corpora/README.md):
+
+- an **api** source is *connected* iff its manifest exists with
+  `last_run.status = "success"`
+- a **report** source is *ingested* iff additionally at least one
+  `data_files` entry exists on disk
+- **manual** and **deferred** sources show their mode — a connectivity
+  status for them would be fake in either direction
 
 ## Filled by
 
-Owner-provided source registry, ported during the data step. Statuses change
-only when a connector actually ships.
+Owner-provided source registry, ported during the data step. States change
+only when a connector run actually writes a successful manifest.
 
 ## Phase
 
-Registry file: July (baseline). Connectors: out of scope for baseline.
+Registry file: July (baseline). Connectors: August–September (Phase 2).

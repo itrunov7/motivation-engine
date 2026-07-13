@@ -207,8 +207,28 @@ export type SourceClassId = "A" | "B" | "C" | "D";
 
 export type SourcePriority = "P0" | "P1" | "P2";
 
-/** At baseline every source is `not_connected` — the honest truth. */
-export type SourceStatus = "not_connected" | "connected";
+/**
+ * How a source gets into the knowledge layer (D-013):
+ * - api — automated connector against a public API
+ * - report — one-off ingested artifact (published report / dataset)
+ * - manual — licensed human curation, never machine-harvested
+ * - deferred — P2 / not planned this phase
+ */
+export type ConnectionMode = "api" | "report" | "manual" | "deferred";
+
+/**
+ * Computed source state (never stored): api sources are connected iff their
+ * corpus manifest reports a successful last run; report sources are ingested
+ * iff additionally a data file is present on disk; manual and deferred
+ * sources show their mode — a connectivity claim would be a lie.
+ */
+export type ComputedSourceState =
+  | "connected"
+  | "not_connected"
+  | "ingested"
+  | "not_ingested"
+  | "manual"
+  | "deferred";
 
 export type SourceAccess =
   | "open"
@@ -238,7 +258,9 @@ export interface Source {
   cost: string;
   priority: SourcePriority;
   phase: string;
-  status: SourceStatus;
+  connection_mode: ConnectionMode;
+  /** Rationale for the mode where it is not obvious (mostly deferred). */
+  mode_note?: string;
   feeds: SourceFeed[];
   legal_note?: string;
 }
@@ -251,6 +273,23 @@ export interface SourceClass {
 
 export interface SourcesRegistry {
   classes: SourceClass[];
+}
+
+// ---------- Corpus manifest (read-only mirror of tools/connectors/types.ts) ----------
+
+/**
+ * Minimal manifest shape the showcase needs to compute source states from
+ * /corpora/{source_id}/manifest.json. The full contract (and its writer)
+ * lives in tools/connectors/types.ts; lib/ never imports from tools/.
+ */
+export interface CorpusManifest {
+  source_id: string;
+  last_run: {
+    status: "success" | "partial" | "failed";
+  };
+  data_files: {
+    path: string;
+  }[];
 }
 
 // ---------- Decision log (§3.5) ----------

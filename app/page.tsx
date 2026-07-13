@@ -1,7 +1,9 @@
 import Link from "next/link";
 import {
+  CONNECTION_MODE_META,
   computeCounts,
   computeSystemBlocks,
+  formatModeCount,
   STATUS_META,
   type SystemBlock,
 } from "@/lib/status";
@@ -81,7 +83,7 @@ function CountPanel({
   href,
 }: {
   title: string;
-  rows: { label: string; count: number }[];
+  rows: { label: string; value: string | number }[];
   footer: string;
   href?: string;
 }) {
@@ -103,7 +105,7 @@ function CountPanel({
             className="flex items-baseline justify-between gap-4"
           >
             <dt className="font-mono text-xs text-[#8CA495]">{row.label}</dt>
-            <dd className="font-mono text-sm text-[#E6EFE8]">{row.count}</dd>
+            <dd className="font-mono text-sm text-[#E6EFE8]">{row.value}</dd>
           </div>
         ))}
       </dl>
@@ -179,23 +181,23 @@ export default function Overview() {
             title="Mechanisms by lifecycle"
             rows={counts.mechanismsByLifecycle.map((r) => ({
               label: r.status,
-              count: r.count,
+              value: r.count,
             }))}
             footer={`${counts.mechanismsTotal} total · /registry/mechanisms`}
             href="/registry"
           />
           <CountPanel
-            title="Sources by status"
-            rows={counts.sourcesByStatus.map((r) => ({
-              label: r.status,
-              count: r.count,
+            title="Sources by mode"
+            rows={counts.sourcesByMode.map((count) => ({
+              label: CONNECTION_MODE_META[count.mode].label,
+              value: formatModeCount(count),
             }))}
             footer={`${counts.sourcesTotal} total · /sources/sources.json`}
             href="/sources"
           />
           <CountPanel
             title="Decisions"
-            rows={[{ label: "logged", count: counts.decisionsCount }]}
+            rows={[{ label: "logged", value: counts.decisionsCount }]}
             footer="/decisions/decisions.json"
             href="/decisions"
           />

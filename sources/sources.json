@@ -13,7 +13,7 @@
           "cost": "$120–300/yr",
           "priority": "P0",
           "phase": "July",
-          "status": "not_connected",
+          "connection_mode": "manual",
           "feeds": ["L3"],
           "legal_note": "license terms — human curation only"
         },
@@ -26,7 +26,7 @@
           "cost": "~$200/yr",
           "priority": "P1",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "manual",
           "feeds": ["L3"],
           "legal_note": "license terms — human curation only"
         },
@@ -39,7 +39,7 @@
           "cost": "~$100–200/yr",
           "priority": "P1",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "manual",
           "feeds": ["L3"],
           "legal_note": "license terms — human curation only"
         },
@@ -52,7 +52,7 @@
           "cost": "$0",
           "priority": "P1",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "manual",
           "feeds": ["L3"],
           "legal_note": "per-gallery terms vary — check before bulk use"
         },
@@ -65,7 +65,7 @@
           "cost": "$0",
           "priority": "P0",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "api",
           "feeds": ["L3"],
           "legal_note": "open API — respect rate limits"
         },
@@ -78,7 +78,8 @@
           "cost": "varies by provider",
           "priority": "P2",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "deferred",
+          "mode_note": "paid subscription; activated by a purchase decision later, not by a connector",
           "feeds": ["L3"],
           "legal_note": "grey area — buy-vs-build check with data vendors first"
         },
@@ -91,7 +92,7 @@
           "cost": "$0",
           "priority": "P1",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "manual",
           "feeds": ["L2", "L3"],
           "legal_note": "editorial content — cite, do not scrape"
         },
@@ -104,7 +105,7 @@
           "cost": "$0–100/yr",
           "priority": "P2",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "manual",
           "feeds": ["L2", "L3"],
           "legal_note": "editorial content — cite, do not scrape"
         },
@@ -117,7 +118,7 @@
           "cost": "$0 (free vault subset)",
           "priority": "P2",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "manual",
           "feeds": ["L2", "L3"]
         }
       ]
@@ -135,7 +136,7 @@
           "cost": "$0",
           "priority": "P0",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "api",
           "feeds": ["L1", "dossiers"],
           "legal_note": "CC0 data"
         },
@@ -148,7 +149,7 @@
           "cost": "$0 (API key)",
           "priority": "P0",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "api",
           "feeds": ["L1", "dossiers"],
           "legal_note": "API terms — attribution required"
         },
@@ -161,7 +162,7 @@
           "cost": "$0",
           "priority": "P0",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "api",
           "feeds": ["L1", "dossiers"]
         },
         {
@@ -173,7 +174,8 @@
           "cost": "$0",
           "priority": "P1",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "deferred",
+          "mode_note": "indexed via OpenAlex evidence connector — separate connector would duplicate",
           "feeds": ["L1", "dossiers"],
           "legal_note": "preprints — not peer-reviewed, grade accordingly"
         },
@@ -186,7 +188,8 @@
           "cost": "$0",
           "priority": "P1",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "report",
+          "mode_note": "downloadable replication dataset — ingested via ingest-report; feeds the dossier evidence axis and deprecation monitoring",
           "feeds": ["dossiers"],
           "legal_note": "community resource — cite"
         },
@@ -199,7 +202,7 @@
           "cost": "$0 (academic)",
           "priority": "P1",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "deferred",
           "feeds": ["L1", "dossiers"],
           "legal_note": "terms of use — research purposes"
         },
@@ -212,7 +215,7 @@
           "cost": "$0",
           "priority": "P1",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "deferred",
           "feeds": ["L1", "dossiers"]
         },
         {
@@ -224,7 +227,7 @@
           "cost": "$0 (abstracts free)",
           "priority": "P2",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "deferred",
           "feeds": ["dossiers"]
         },
         {
@@ -236,7 +239,8 @@
           "cost": "$0",
           "priority": "P2",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "deferred",
+          "mode_note": "activate for L0 coverage audit, September",
           "feeds": ["L0", "L1"]
         },
         {
@@ -248,7 +252,7 @@
           "cost": "$0",
           "priority": "P2",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "deferred",
           "feeds": ["L0", "L1"]
         }
       ]
@@ -266,7 +270,7 @@
           "cost": "$0",
           "priority": "P0",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "report",
           "feeds": ["effects", "weights"],
           "legal_note": "published report — cite"
         },
@@ -279,7 +283,7 @@
           "cost": "$0–300/yr",
           "priority": "P0",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "manual",
           "feeds": ["effects", "L3"],
           "legal_note": "license terms — no redistribution of premium content"
         },
@@ -292,7 +296,7 @@
           "cost": "$0–200/yr",
           "priority": "P1",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "report",
           "feeds": ["effects", "L3"],
           "legal_note": "license terms — human curation only"
         },
@@ -305,7 +309,7 @@
           "cost": "$0",
           "priority": "P1",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "report",
           "feeds": ["effects"],
           "legal_note": "published report — cite"
         },
@@ -318,9 +322,22 @@
           "cost": "$0 (gated downloads)",
           "priority": "P1",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "report",
           "feeds": ["effects", "weights"],
           "legal_note": "published reports — cite"
+        },
+        {
+          "id": "app-store-reviews",
+          "name": "App Store / Google Play reviews",
+          "what": "Review texts as emotional labels mapped to product elements and versions ('love it because…' / 'deleted because…')",
+          "access": "open",
+          "api": true,
+          "cost": "$0",
+          "priority": "P1",
+          "phase": "August",
+          "connection_mode": "api",
+          "feeds": ["L2", "L3"],
+          "legal_note": "public review data via public APIs / RSS feeds; respect platform rate limits"
         },
         {
           "id": "engineering-blogs",
@@ -331,7 +348,7 @@
           "cost": "$0",
           "priority": "P2",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "manual",
           "feeds": ["effects", "L3"],
           "legal_note": "editorial content — cite, do not scrape"
         },
@@ -344,7 +361,7 @@
           "cost": "enterprise pricing (quote)",
           "priority": "P2",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "deferred",
           "feeds": ["effects"],
           "legal_note": "license terms — no redistribution"
         }
@@ -363,7 +380,7 @@
           "cost": "$0",
           "priority": "P0",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "api",
           "feeds": ["L2", "effects"],
           "legal_note": "public domain — fair-access rate limits"
         },
@@ -376,7 +393,7 @@
           "cost": "$0 (BigQuery public dataset)",
           "priority": "P2",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "api",
           "feeds": ["L3"]
         },
         {
@@ -388,7 +405,7 @@
           "cost": "$0",
           "priority": "P1",
           "phase": "August",
-          "status": "not_connected",
+          "connection_mode": "deferred",
           "feeds": ["constraints"],
           "legal_note": "public records — feeds hard_rules and compliance_refs"
         },
@@ -401,7 +418,7 @@
           "cost": "$0",
           "priority": "P2",
           "phase": "September",
-          "status": "not_connected",
+          "connection_mode": "deferred",
           "feeds": ["L2", "L3"],
           "legal_note": "per-handbook licenses vary — cite"
         }
