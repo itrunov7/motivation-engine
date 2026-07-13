@@ -131,7 +131,18 @@ const sourcesSchema = {
                 what: { type: "string", minLength: 1 },
                 access: {
                   type: "string",
-                  enum: ["open", "free", "freemium", "registration", "subscription", "mixed"],
+                  enum: [
+                    "open",
+                    "free",
+                    "freemium",
+                    "registration",
+                    "subscription",
+                    "mixed",
+                    "internal (Amplitude export)",
+                    "public archives (failure story collections, Indie Hackers)",
+                    "subscription/free galleries",
+                    "academic literature via evidence connector + curated reports",
+                  ],
                 },
                 api: { type: "boolean" },
                 cost: { type: "string", minLength: 1 },
@@ -139,7 +150,7 @@ const sourcesSchema = {
                 phase: { type: "string", minLength: 1 },
                 connection_mode: {
                   type: "string",
-                  enum: ["api", "report", "manual", "deferred"],
+                  enum: ["api", "internal", "report", "manual", "deferred"],
                 },
                 mode_note: { type: "string", minLength: 1 },
                 feeds: {

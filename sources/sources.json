@@ -120,6 +120,18 @@
           "phase": "September",
           "connection_mode": "manual",
           "feeds": ["L2", "L3"]
+        },
+        {
+          "id": "email-flow-galleries",
+          "name": "Email & push flow galleries",
+          "what": "Curated libraries of lifecycle emails and push sequences (ReallyGoodEmails-class) — covers email/retention_push artifact types that screen libraries miss",
+          "access": "subscription/free galleries",
+          "api": false,
+          "cost": "$0–100/yr",
+          "priority": "P2",
+          "phase": "September",
+          "connection_mode": "manual",
+          "feeds": ["L3"]
         }
       ]
     },
@@ -254,6 +266,19 @@
           "phase": "September",
           "connection_mode": "deferred",
           "feeds": ["L0", "L1"]
+        },
+        {
+          "id": "cultural-ux-variation",
+          "name": "Cross-cultural UX research",
+          "what": "Research on geo/cultural variation of interface surfaces (density, formality, imagery, color) — parameterizes L3 culture notes; mechanisms are universal, surfaces are not",
+          "access": "academic literature via evidence connector + curated reports",
+          "api": false,
+          "cost": "$0",
+          "priority": "P2",
+          "phase": "October",
+          "connection_mode": "deferred",
+          "feeds": ["L3"],
+          "legal_note": "placeholder to keep the gap visible; activation is a separate decision"
         }
       ]
     },
@@ -364,6 +389,19 @@
           "connection_mode": "deferred",
           "feeds": ["effects"],
           "legal_note": "license terms — no redistribution"
+        },
+        {
+          "id": "ventora-telemetry",
+          "name": "Ventora product telemetry",
+          "what": "Amplitude events from Ventora-built products carrying mechanism_tags — the only source that fills observed_effects and promotes mechanisms to CORE",
+          "access": "internal (Amplitude export)",
+          "api": true,
+          "cost": "$0",
+          "priority": "P0",
+          "phase": "September",
+          "connection_mode": "internal",
+          "feeds": ["L2", "L3", "effects"],
+          "legal_note": "internal data; no engineering capacity before September — do not schedule earlier"
         }
       ]
     },
@@ -421,6 +459,19 @@
           "connection_mode": "deferred",
           "feeds": ["L2", "L3"],
           "legal_note": "per-handbook licenses vary — cite"
+        },
+        {
+          "id": "failure-postmortems",
+          "name": "Product failure post-mortems",
+          "what": "Startup autopsies and failed-product teardowns — the anti-survivorship corpus: patterns present in dead products discount patterns found in survivors",
+          "access": "public archives (failure story collections, Indie Hackers)",
+          "api": false,
+          "cost": "$0",
+          "priority": "P2",
+          "phase": "September",
+          "connection_mode": "manual",
+          "feeds": ["L2", "L3"],
+          "legal_note": "public content; curation only"
         }
       ]
     }

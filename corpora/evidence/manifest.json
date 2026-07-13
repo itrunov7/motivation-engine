@@ -4,19 +4,39 @@
     "openalex",
     "semantic-scholar"
   ],
-  "connector_version": "1.0.0",
+  "connector_version": "1.1.0",
   "last_run": {
-    "timestamp": "2026-07-13T14:58:38.379Z",
+    "timestamp": "2026-07-13T16:06:05.120Z",
     "status": "success",
     "params": {
-      "mechanism": "VR-02",
-      "terms": "variable ratio reinforcement;reward prediction error"
+      "mechanism": "LA-01"
     },
-    "records_fetched": 79,
+    "records_fetched": 206,
     "files_written": 1,
-    "duration_s": 8.26
+    "duration_s": 166.24
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-13T16:06:05.120Z",
+      "status": "success",
+      "params": {
+        "mechanism": "LA-01"
+      },
+      "records_fetched": 206,
+      "files_written": 1,
+      "duration_s": 166.24
+    },
+    {
+      "timestamp": "2026-07-13T16:00:54.366Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "LA-01"
+      },
+      "records_fetched": 177,
+      "files_written": 1,
+      "duration_s": 220.54,
+      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss aversion moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss of loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
+    },
     {
       "timestamp": "2026-07-13T14:58:38.379Z",
       "status": "success",
@@ -151,8 +171,8 @@
   "data_files": [
     {
       "path": "LA-01.json",
-      "records": 69,
-      "bytes": 219672
+      "records": 206,
+      "bytes": 544438
     },
     {
       "path": "VR-02.json",

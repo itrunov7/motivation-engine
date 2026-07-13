@@ -12,11 +12,12 @@
 Each source records access type, cost, priority (P0–P2), phase, connection
 mode, which L-levels it feeds, and legal notes.
 
-## Connection modes (D-013)
+## Connection modes (D-013, D-016)
 
 Sources differ by nature, so each carries a `connection_mode`:
 
 - **api** — automated connector against a public API
+- **internal** — data produced by our own platform, not an external source
 - **report** — one-off ingested artifact (published report / dataset)
 - **manual** — licensed human curation, never machine-harvested
 - **deferred** — P2, not planned this phase (`mode_note` records why)
@@ -27,8 +28,8 @@ There is no status field in this file. The showcase computes each source's
 state from `/corpora/{source_id}/manifest.json` (written by connector runs,
 contract in /corpora/README.md):
 
-- an **api** source is *connected* iff its manifest exists with
-  `last_run.status = "success"`
+- an **api** or **internal** source is *connected* iff its manifest exists
+  with `last_run.status = "success"`
 - a **report** source is *ingested* iff additionally at least one
   `data_files` entry exists on disk
 - **manual** and **deferred** sources show their mode — a connectivity

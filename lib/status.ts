@@ -75,6 +75,10 @@ export const CONNECTION_MODE_META: Record<
   { label: string; description: string }
 > = {
   api: { label: "api", description: "automated connector" },
+  internal: {
+    label: "internal",
+    description: "data produced by our own platform",
+  },
   report: { label: "report", description: "one-off ingested artifact" },
   manual: {
     label: "manual",
@@ -86,6 +90,7 @@ export const CONNECTION_MODE_META: Record<
 /** Connection modes in display order for filters, legends, and counts. */
 export const CONNECTION_MODE_ORDER: ConnectionMode[] = [
   "api",
+  "internal",
   "report",
   "manual",
   "deferred",
@@ -157,8 +162,10 @@ function manifestsForSource(
 /**
  * Computes a source's state from its mode and the file system (SPEC §4,
  * D-014):
- * - api: connected iff ANY /corpora/{dir}/manifest.json lists the source in
- *   source_ids with last_run.status === "success"
+ * - api / internal: connected iff ANY /corpora/{dir}/manifest.json lists the
+ *   source in source_ids with last_run.status === "success" (internal data
+ *   arrives via our own export pipeline, but connectivity is proven the same
+ *   way — by a successful run, D-016)
  * - report: ingested iff additionally that corpus has at least one
  *   data_files entry existing on disk
  * - manual / deferred: the mode itself — a connectivity status would be fake
@@ -169,7 +176,8 @@ export function computeSourceState(source: Source): ComputedSourceState {
       return "manual";
     case "deferred":
       return "deferred";
-    case "api": {
+    case "api":
+    case "internal": {
       const connected = manifestsForSource(source.id).some(
         ({ manifest }) => manifest.last_run?.status === "success",
       );
@@ -202,7 +210,7 @@ export function computeSourceModeCounts(): SourceModeCount[] {
   return CONNECTION_MODE_ORDER.map((mode) => {
     const ofMode = sources.filter((s) => s.connection_mode === mode);
     const done =
-      mode === "api"
+      mode === "api" || mode === "internal"
         ? ofMode.filter((s) => computeSourceState(s) === "connected").length
         : mode === "report"
           ? ofMode.filter((s) => computeSourceState(s) === "ingested").length
@@ -219,6 +227,7 @@ export function computeSourceModeCounts(): SourceModeCount[] {
 export function formatModeCount(count: SourceModeCount): string {
   switch (count.mode) {
     case "api":
+    case "internal":
       return `${count.done}/${count.total} connected`;
     case "report":
       return `${count.done}/${count.total} ingested`;

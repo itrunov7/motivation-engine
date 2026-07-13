@@ -6,8 +6,15 @@
  * readable evidence file: /corpora/evidence/{mechanism_id}.json.
  *
  * Usage:
- *   npm run connector -- evidence mechanism=LA-01 \
- *     terms="loss aversion;prospect theory meta-analysis"
+ *   npm run connector -- evidence mechanism=LA-01
+ *   npm run connector -- evidence mechanism=LA-01 terms="loss aversion;endowment effect"
+ *
+ * Search terms are per-mechanism DATA, not hardcoded params (D-015): the
+ * connector reads them from the record's evidence_terms[], falling back to
+ * [name] for records without the field. A generic term harvests only
+ * confirming mainstream literature; dissent and boundary-condition papers
+ * require targeted terms — a corpus that can only confirm is broken. An
+ * optional terms="a;b" param overrides the record for ad-hoc runs.
  *
  * Per search term:
  * - OpenAlex /works: title/abstract match, sorted by cited_by_count, top 25.
@@ -19,12 +26,13 @@
  *   public rate limits otherwise. The keyless pool is shared and 429s in
  *   bursts, so failed terms get up to 3 retry passes with 30s cooldowns.
  *
- * Records are deduplicated by DOI (fallback: normalized title). Fetch and
- * structure ONLY — no scoring, no "quality" filtering, no summaries. What
- * the canon says is for the dossier process to weigh, not this script.
+ * Records are deduplicated by DOI AND normalized title (lowercase, punctuation
+ * and asterisks stripped), keeping the highest-citation variant of each paper.
+ * Fetch and structure ONLY — no scoring, no "quality" filtering, no summaries.
+ * What the canon says is for the dossier process to weigh, not this script.
  */
 
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Connector, PoliteFetch, RunResult } from "./types";
 
@@ -61,9 +69,15 @@ interface QueryMeta {
   returned: number;
 }
 
+type TermsSource = "param" | "record" | "name";
+
 interface EvidenceFile {
   mechanism_id: string;
   fetched_at: string;
+  /** Where the search terms came from: the record's evidence_terms, the
+   *  record name fallback, or a terms= param override. */
+  terms_source: TermsSource;
+  terms: string[];
   queries: QueryMeta[];
   records: EvidenceRecord[];
 }
@@ -104,10 +118,9 @@ function normalizeDoi(raw: string | null | undefined): string | null {
   return doi.startsWith("10.") ? doi : null;
 }
 
-/** Dedup key: DOI when present, else lowercase-alphanumeric title. */
-function dedupKey(record: EvidenceRecord): string {
-  if (record.doi) return `doi:${record.doi}`;
-  return `title:${record.title.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim()}`;
+/** Normalized title: lowercase, punctuation and asterisks stripped. */
+function titleKey(record: EvidenceRecord): string {
+  return record.title.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
 /** OpenAlex ships abstracts as {word: [positions]}; rebuild the text. */
@@ -123,14 +136,76 @@ function reconstructAbstract(
   return text.length > 0 ? text : null;
 }
 
-/** First-seen record wins; the duplicate only fills fields the winner lacks. */
-function mergeInto(target: EvidenceRecord, duplicate: EvidenceRecord): void {
-  target.doi = target.doi ?? duplicate.doi;
-  target.year = target.year ?? duplicate.year;
-  target.venue = target.venue ?? duplicate.venue;
-  target.citations = target.citations ?? duplicate.citations;
-  target.abstract = target.abstract ?? duplicate.abstract;
-  if (target.authors.length === 0) target.authors = duplicate.authors;
+/**
+ * Collapse one cluster of duplicate records (same DOI or same normalized
+ * title) into one: the highest-citation variant is the base, and any field
+ * it is missing is filled from the others.
+ */
+function mergeCluster(group: EvidenceRecord[]): EvidenceRecord {
+  const cites = (r: EvidenceRecord): number => r.citations ?? -1;
+  const base: EvidenceRecord = {
+    ...group.reduce((best, r) => {
+      if (cites(r) > cites(best)) return r;
+      if (cites(r) === cites(best) && !best.doi && r.doi) return r;
+      return best;
+    }),
+  };
+  for (const r of group) {
+    base.doi = base.doi ?? r.doi;
+    base.year = base.year ?? r.year;
+    base.venue = base.venue ?? r.venue;
+    base.citations = base.citations ?? r.citations;
+    base.abstract = base.abstract ?? r.abstract;
+    if (base.authors.length === 0) base.authors = r.authors;
+  }
+  return base;
+}
+
+/**
+ * Deduplicate by DOI AND normalized title, keeping the highest-citation
+ * variant of each paper. Two records are the same paper if they share a DOI
+ * or a normalized title; union-find groups the transitive clusters (a paper
+ * seen with a DOI on one API and without on another still collapses).
+ */
+function dedupeRecords(raw: EvidenceRecord[]): EvidenceRecord[] {
+  const parent = raw.map((_, i) => i);
+  const find = (x: number): number => {
+    let root = x;
+    while (parent[root] !== root) root = parent[root];
+    while (parent[x] !== root) [x, parent[x]] = [parent[x], root];
+    return root;
+  };
+  const union = (a: number, b: number): void => {
+    const ra = find(a);
+    const rb = find(b);
+    if (ra !== rb) parent[ra] = rb;
+  };
+
+  const firstByDoi = new Map<string, number>();
+  const firstByTitle = new Map<string, number>();
+  raw.forEach((record, i) => {
+    if (record.doi) {
+      const seen = firstByDoi.get(record.doi);
+      if (seen !== undefined) union(seen, i);
+      else firstByDoi.set(record.doi, i);
+    }
+    const key = titleKey(record);
+    if (key) {
+      const seen = firstByTitle.get(key);
+      if (seen !== undefined) union(seen, i);
+      else firstByTitle.set(key, i);
+    }
+  });
+
+  const clusters = new Map<number, EvidenceRecord[]>();
+  raw.forEach((record, i) => {
+    const root = find(i);
+    const group = clusters.get(root) ?? [];
+    group.push(record);
+    clusters.set(root, group);
+  });
+
+  return Array.from(clusters.values()).map(mergeCluster);
 }
 
 // ---------- Per-API fetchers ----------
@@ -214,33 +289,52 @@ async function searchSemanticScholar(
 
 // ---------- Params ----------
 
-function parseTerms(raw: string | undefined): string[] {
-  const terms = (raw ?? "")
-    .split(";")
-    .map((t) => t.trim())
-    .filter((t) => t.length > 0);
-  if (terms.length === 0) {
-    throw new Error(
-      'Missing search terms. Usage: npm run connector -- evidence mechanism=LA-01 terms="loss aversion;prospect theory meta-analysis"',
-    );
-  }
-  return terms;
+interface MechanismRecord {
+  name?: string;
+  evidence_terms?: string[];
 }
 
-function assertKnownMechanism(mechanismId: string | undefined): string {
+function loadMechanism(mechanismId: string | undefined): MechanismRecord {
   if (!mechanismId) {
     throw new Error(
-      'Missing mechanism id. Usage: npm run connector -- evidence mechanism=LA-01 terms="…;…"',
+      "Missing mechanism id. Usage: npm run connector -- evidence mechanism=LA-01",
     );
   }
   const asFull = join(MECHANISMS_DIR, `${mechanismId}.json`);
   const asSeed = join(MECHANISMS_DIR, "_seed", `${mechanismId}.json`);
-  if (!existsSync(asFull) && !existsSync(asSeed)) {
+  const path = existsSync(asFull) ? asFull : existsSync(asSeed) ? asSeed : null;
+  if (!path) {
     throw new Error(
       `Mechanism "${mechanismId}" is not in the registry (/registry/mechanisms) — no corpora for phantom mechanisms.`,
     );
   }
-  return mechanismId;
+  return JSON.parse(readFileSync(path, "utf-8")) as MechanismRecord;
+}
+
+function splitTerms(raw: string | undefined): string[] {
+  return (raw ?? "")
+    .split(";")
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0);
+}
+
+/**
+ * Terms are per-mechanism data (D-015): prefer the record's evidence_terms,
+ * fall back to [name]; an explicit terms= param overrides for ad-hoc runs.
+ */
+function resolveTerms(
+  record: MechanismRecord,
+  paramTerms: string | undefined,
+): { terms: string[]; source: TermsSource } {
+  const override = splitTerms(paramTerms);
+  if (override.length > 0) return { terms: override, source: "param" };
+  if (record.evidence_terms && record.evidence_terms.length > 0) {
+    return { terms: record.evidence_terms, source: "record" };
+  }
+  if (record.name && record.name.length > 0) {
+    return { terms: [record.name], source: "name" };
+  }
+  throw new Error("No search terms: record has no evidence_terms and no name.");
 }
 
 // ---------- The connector ----------
@@ -249,15 +343,15 @@ export const evidenceConnector: Connector = {
   id: "evidence",
   sourceId: "evidence",
   sourceIds: ["openalex", "semantic-scholar"],
-  connectorVersion: "1.0.0",
+  connectorVersion: "1.1.0",
   description:
-    "Evidence harvester: OpenAlex + Semantic Scholar literature for one mechanism → {mechanism_id}.json. Fetch and structure only.",
+    "Evidence harvester: OpenAlex + Semantic Scholar literature for one mechanism → {mechanism_id}.json. Terms from the record's evidence_terms. Fetch and structure only.",
 
   async run(ctx, params): Promise<RunResult> {
-    const mechanismId = assertKnownMechanism(params.mechanism);
-    const terms = parseTerms(params.terms);
-
-    const deduped = new Map<string, EvidenceRecord>();
+    const mechanismId = params.mechanism;
+    const record = loadMechanism(mechanismId);
+    const { terms, source: termsSource } = resolveTerms(record, params.terms);
+    ctx.log(`terms (${termsSource}): ${terms.join(" · ")}`);
 
     interface QueryTask {
       api: SourceApi;
@@ -265,6 +359,7 @@ export const evidenceConnector: Connector = {
       requested: number;
       search: (term: string) => Promise<EvidenceRecord[]>;
       meta: QueryMeta;
+      records: EvidenceRecord[];
       error?: string;
     }
 
@@ -276,6 +371,7 @@ export const evidenceConnector: Connector = {
         ...s,
         term,
         meta: { api: s.api, term, requested: s.requested, returned: 0 },
+        records: [],
       })),
     );
 
@@ -283,13 +379,8 @@ export const evidenceConnector: Connector = {
       try {
         const records = await task.search(task.term);
         task.meta.returned = records.length;
+        task.records = records;
         task.error = undefined;
-        for (const record of records) {
-          const key = dedupKey(record);
-          const existing = deduped.get(key);
-          if (existing) mergeInto(existing, record);
-          else deduped.set(key, record);
-        }
         ctx.log(`${task.api} "${task.term}": ${records.length} records`);
       } catch (err) {
         task.error = `${task.api} "${task.term}": ${(err as Error).message}`;
@@ -316,14 +407,16 @@ export const evidenceConnector: Connector = {
       throw new Error(`All queries failed — ${failures.join(" · ")}`);
     }
 
-    // Presentation order only (readability), not a quality judgment.
-    const records = Array.from(deduped.values()).sort(
+    const records = dedupeRecords(tasks.flatMap((t) => t.records)).sort(
+      // Presentation order only (readability), not a quality judgment.
       (a, b) => (b.citations ?? -1) - (a.citations ?? -1) || a.title.localeCompare(b.title),
     );
 
     const file: EvidenceFile = {
-      mechanism_id: mechanismId,
+      mechanism_id: mechanismId as string,
       fetched_at: new Date().toISOString(),
+      terms_source: termsSource,
+      terms,
       queries,
       records,
     };

@@ -142,6 +142,9 @@ export interface Mechanism {
   dossier_ref: string | null;
   provenance: Provenance;
   evidence: Evidence;
+  /** Owner-provided search terms for the evidence connector (D-015); must
+   *  include disconfirming/boundary terms, not only confirming ones. */
+  evidence_terms?: string[];
   /** 0–1 */
   prior_weight: number;
   mechanism_summary_for_context: string;
@@ -208,13 +211,14 @@ export type SourceClassId = "A" | "B" | "C" | "D";
 export type SourcePriority = "P0" | "P1" | "P2";
 
 /**
- * How a source gets into the knowledge layer (D-013):
+ * How a source gets into the knowledge layer (D-013, D-016):
  * - api — automated connector against a public API
+ * - internal — data produced by our own platform, not an external source
  * - report — one-off ingested artifact (published report / dataset)
  * - manual — licensed human curation, never machine-harvested
  * - deferred — P2 / not planned this phase
  */
-export type ConnectionMode = "api" | "report" | "manual" | "deferred";
+export type ConnectionMode = "api" | "internal" | "report" | "manual" | "deferred";
 
 /**
  * Computed source state (never stored): api sources are connected iff their
@@ -236,7 +240,11 @@ export type SourceAccess =
   | "freemium"
   | "registration"
   | "subscription"
-  | "mixed";
+  | "mixed"
+  | "internal (Amplitude export)"
+  | "public archives (failure story collections, Indie Hackers)"
+  | "subscription/free galleries"
+  | "academic literature via evidence connector + curated reports";
 
 /** What a source feeds: ontology levels or loop artifacts. */
 export type SourceFeed =
