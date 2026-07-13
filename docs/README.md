@@ -15,8 +15,8 @@ it never edits their content.
 
 ## Filled by
 
-Ported from owner-provided English versions (currently staged in
-`content-inbox/`) during the data step of the baseline build.
+Ported unchanged from the owner-provided English versions during the data
+step of the baseline build. Content changes come only from the owner.
 
 ## Phase
 

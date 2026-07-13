@@ -1,6 +1,41 @@
 {
   "decisions": [
     {
+      "id": "D-001",
+      "date": "2026-07-12",
+      "title": "JSON files in git are the single source of truth",
+      "body": "All project data lives exclusively in versioned files in the repo: /registry/**.json, /sources/sources.json, /decisions/decisions.json, /dossiers/**, /docs/**.md. No databases, no data inside components, no external stores at baseline. Versioning, review, and status history come from git itself. Escalation away from files happens only when the triggers in docs/architecture.md fire (corpora arrive, >500 implementations, etc.).",
+      "area": "architecture"
+    },
+    {
+      "id": "D-002",
+      "date": "2026-07-12",
+      "title": "/cards are generated projections, never hand-edited",
+      "body": "Human-readable mechanism cards in /cards/{id}.md are output only, rendered from registry JSON by tools/render-cards.ts (npm run cards). They are never created or edited by hand; any change to a card goes through its source record in /registry/mechanisms and a regeneration. This keeps exactly one editable representation of each mechanism.",
+      "area": "process"
+    },
+    {
+      "id": "D-003",
+      "date": "2026-07-12",
+      "title": "A mechanism without metrics or hard constraints is invalid",
+      "body": "A full L1 record must have non-empty implementations[].metrics and non-empty constraints.hard_rules, otherwise the validator rejects it. Rationale: a mechanism we cannot measure is not knowledge, and a mechanism without guardrails is a dark-pattern risk. The schema is not weakened for convenience; seed stubs use a separate reduced sub-schema in /registry/mechanisms/_seed/ instead.",
+      "area": "data"
+    },
+    {
+      "id": "D-004",
+      "date": "2026-07-12",
+      "title": "Core roster is seed v0.9 — candidates until dossiers pass",
+      "body": "The 12-mechanism roster (LA-01 plus 11 stubs) is a seed hypothesis, not a settled core. All stubs carry lifecycle_status 'candidate' and contain only id, name, grade_draft, oneliner, parent. Promotion to incubating/core happens exclusively through scored dossiers (5 axes, thresholds per /dossiers/dossier.schema.json), entered by the owner or the future derivation pipeline — never by fleshing out stubs in code.",
+      "area": "data"
+    },
+    {
+      "id": "D-005",
+      "date": "2026-07-12",
+      "title": "Showcase honesty contract: every status computed from files on disk",
+      "body": "Every status shown in the Control Center (live / in progress / planned, counts, coverage) is computed at render time from actual data files. Hardcoding a status or a number in JSX/TS is forbidden. Where no data exists yet, the UI shows a designed empty state naming the file or pipeline that will fill it and the phase. The showcase may never look more finished than the shelves actually are.",
+      "area": "architecture"
+    },
+    {
       "id": "D-006",
       "date": "2026-07-13",
       "title": "Single-password auth via HMAC cookie and middleware",

@@ -1,0 +1,411 @@
+{
+  "classes": [
+    {
+      "id": "A",
+      "name": "Interfaces",
+      "sources": [
+        {
+          "id": "mobbin",
+          "name": "Mobbin",
+          "what": "400K+ screens, flow libraries",
+          "access": "subscription",
+          "api": false,
+          "cost": "$120–300/yr",
+          "priority": "P0",
+          "phase": "July",
+          "status": "not_connected",
+          "feeds": ["L3"],
+          "legal_note": "license terms — human curation only"
+        },
+        {
+          "id": "screensdesign",
+          "name": "ScreensDesign",
+          "what": "iOS app video walkthroughs, paywall and onboarding flows",
+          "access": "subscription",
+          "api": false,
+          "cost": "~$200/yr",
+          "priority": "P1",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["L3"],
+          "legal_note": "license terms — human curation only"
+        },
+        {
+          "id": "pageflows",
+          "name": "Page Flows",
+          "what": "recorded user flow videos for web and mobile products",
+          "access": "subscription",
+          "api": false,
+          "cost": "~$100–200/yr",
+          "priority": "P1",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["L3"],
+          "legal_note": "license terms — human curation only"
+        },
+        {
+          "id": "paywall-galleries",
+          "name": "Paywall galleries",
+          "what": "curated paywall screenshot collections (Paywall Screens and similar)",
+          "access": "free",
+          "api": false,
+          "cost": "$0",
+          "priority": "P1",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["L3"],
+          "legal_note": "per-gallery terms vary — check before bulk use"
+        },
+        {
+          "id": "wayback-cdx",
+          "name": "Wayback CDX",
+          "what": "Internet Archive CDX API — interface evolution over time",
+          "access": "open",
+          "api": true,
+          "cost": "$0",
+          "priority": "P0",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["L3"],
+          "legal_note": "open API — respect rate limits"
+        },
+        {
+          "id": "appstore-screenshot-history",
+          "name": "App-store screenshot history",
+          "what": "historical app store screenshots — paywall and onboarding changes over versions",
+          "access": "mixed",
+          "api": false,
+          "cost": "varies by provider",
+          "priority": "P2",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["L3"],
+          "legal_note": "grey area — buy-vs-build check with data vendors first"
+        },
+        {
+          "id": "growth-design",
+          "name": "growth.design",
+          "what": "annotated product psychology case studies",
+          "access": "free",
+          "api": false,
+          "cost": "$0",
+          "priority": "P1",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["L2", "L3"],
+          "legal_note": "editorial content — cite, do not scrape"
+        },
+        {
+          "id": "built-for-mars",
+          "name": "Built for Mars",
+          "what": "long-form UX case studies and behavioral teardown notes",
+          "access": "freemium",
+          "api": false,
+          "cost": "$0–100/yr",
+          "priority": "P2",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["L2", "L3"],
+          "legal_note": "editorial content — cite, do not scrape"
+        },
+        {
+          "id": "gdc",
+          "name": "GDC talks",
+          "what": "GDC Vault talks on retention, monetization, and engagement design",
+          "access": "freemium",
+          "api": false,
+          "cost": "$0 (free vault subset)",
+          "priority": "P2",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["L2", "L3"]
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Science",
+      "sources": [
+        {
+          "id": "openalex",
+          "name": "OpenAlex",
+          "what": "open catalog of scholarly works, authors, and citations",
+          "access": "open",
+          "api": true,
+          "cost": "$0",
+          "priority": "P0",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["L1", "dossiers"],
+          "legal_note": "CC0 data"
+        },
+        {
+          "id": "semantic-scholar",
+          "name": "Semantic Scholar",
+          "what": "paper search, citation graph, TLDRs, influence metrics",
+          "access": "open",
+          "api": true,
+          "cost": "$0 (API key)",
+          "priority": "P0",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["L1", "dossiers"],
+          "legal_note": "API terms — attribution required"
+        },
+        {
+          "id": "pubmed-europepmc",
+          "name": "PubMed / Europe PMC",
+          "what": "biomedical and psychology literature, full-text open-access subset",
+          "access": "open",
+          "api": true,
+          "cost": "$0",
+          "priority": "P0",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["L1", "dossiers"]
+        },
+        {
+          "id": "psyarxiv-osf",
+          "name": "PsyArXiv / OSF",
+          "what": "psychology preprints, registered reports, open data and materials",
+          "access": "open",
+          "api": true,
+          "cost": "$0",
+          "priority": "P1",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["L1", "dossiers"],
+          "legal_note": "preprints — not peer-reviewed, grade accordingly"
+        },
+        {
+          "id": "forrt",
+          "name": "FORRT",
+          "what": "replication and reversal tracker for psychology effects",
+          "access": "open",
+          "api": false,
+          "cost": "$0",
+          "priority": "P1",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["dossiers"],
+          "legal_note": "community resource — cite"
+        },
+        {
+          "id": "metabus",
+          "name": "metaBUS",
+          "what": "curated database of applied-psychology effect sizes",
+          "access": "registration",
+          "api": false,
+          "cost": "$0 (academic)",
+          "priority": "P1",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["L1", "dossiers"],
+          "legal_note": "terms of use — research purposes"
+        },
+        {
+          "id": "psychopen-cama",
+          "name": "PsychOpen CAMA",
+          "what": "community-augmented meta-analyses, updatable effect sizes",
+          "access": "open",
+          "api": false,
+          "cost": "$0",
+          "priority": "P1",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["L1", "dossiers"]
+        },
+        {
+          "id": "cochrane",
+          "name": "Cochrane",
+          "what": "systematic reviews — gold-standard evidence synthesis method reference",
+          "access": "mixed",
+          "api": false,
+          "cost": "$0 (abstracts free)",
+          "priority": "P2",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["dossiers"]
+        },
+        {
+          "id": "neurosynth",
+          "name": "NeuroSynth",
+          "what": "large-scale automated meta-analysis of fMRI activation data",
+          "access": "open",
+          "api": true,
+          "cost": "$0",
+          "priority": "P2",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["L0", "L1"]
+        },
+        {
+          "id": "neurovault",
+          "name": "NeuroVault",
+          "what": "repository of statistical neuroimaging maps",
+          "access": "open",
+          "api": true,
+          "cost": "$0",
+          "priority": "P2",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["L0", "L1"]
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Analytics & effect sizes",
+      "sources": [
+        {
+          "id": "revenuecat-report",
+          "name": "RevenueCat State of Subscription Apps",
+          "what": "annual subscription-app benchmarks: conversion, churn, pricing",
+          "access": "free",
+          "api": false,
+          "cost": "$0",
+          "priority": "P0",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["effects", "weights"],
+          "legal_note": "published report — cite"
+        },
+        {
+          "id": "baymard",
+          "name": "Baymard",
+          "what": "e-commerce UX research, checkout abandonment benchmarks",
+          "access": "freemium",
+          "api": false,
+          "cost": "$0–300/yr",
+          "priority": "P0",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["effects", "L3"],
+          "legal_note": "license terms — no redistribution of premium content"
+        },
+        {
+          "id": "goodui",
+          "name": "GoodUI",
+          "what": "aggregated A/B test patterns with reported win rates",
+          "access": "freemium",
+          "api": false,
+          "cost": "$0–200/yr",
+          "priority": "P1",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["effects", "L3"],
+          "legal_note": "license terms — human curation only"
+        },
+        {
+          "id": "unbounce-benchmarks",
+          "name": "Unbounce conversion benchmarks",
+          "what": "landing-page conversion benchmarks by industry",
+          "access": "free",
+          "api": false,
+          "cost": "$0",
+          "priority": "P1",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["effects"],
+          "legal_note": "published report — cite"
+        },
+        {
+          "id": "product-analytics-benchmarks",
+          "name": "Amplitude / Mixpanel / Adjust benchmarks",
+          "what": "retention, engagement, and mobile-attribution benchmark reports",
+          "access": "free",
+          "api": false,
+          "cost": "$0 (gated downloads)",
+          "priority": "P1",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["effects", "weights"],
+          "legal_note": "published reports — cite"
+        },
+        {
+          "id": "engineering-blogs",
+          "name": "Engineering blogs",
+          "what": "company growth/engineering blog posts with published experiment results",
+          "access": "free",
+          "api": false,
+          "cost": "$0",
+          "priority": "P2",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["effects", "L3"],
+          "legal_note": "editorial content — cite, do not scrape"
+        },
+        {
+          "id": "sensor-tower",
+          "name": "Sensor Tower",
+          "what": "app market intelligence: downloads, revenue estimates, category trends",
+          "access": "subscription",
+          "api": true,
+          "cost": "enterprise pricing (quote)",
+          "priority": "P2",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["effects"],
+          "legal_note": "license terms — no redistribution"
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "name": "Non-obvious",
+      "sources": [
+        {
+          "id": "sec-edgar",
+          "name": "SEC EDGAR earnings calls",
+          "what": "public-company filings and earnings-call transcripts — retention and monetization language",
+          "access": "open",
+          "api": true,
+          "cost": "$0",
+          "priority": "P0",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["L2", "effects"],
+          "legal_note": "public domain — fair-access rate limits"
+        },
+        {
+          "id": "google-patents",
+          "name": "Google Patents",
+          "what": "patent corpus — engagement/retention system designs disclosed by companies",
+          "access": "open",
+          "api": true,
+          "cost": "$0 (BigQuery public dataset)",
+          "priority": "P2",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["L3"]
+        },
+        {
+          "id": "ftc-eu-enforcement",
+          "name": "FTC / EU enforcement corpus",
+          "what": "dark-pattern enforcement actions and rulings — boundary of the acceptable",
+          "access": "open",
+          "api": false,
+          "cost": "$0",
+          "priority": "P1",
+          "phase": "August",
+          "status": "not_connected",
+          "feeds": ["constraints"],
+          "legal_note": "public records — feeds hard_rules and compliance_refs"
+        },
+        {
+          "id": "company-handbooks",
+          "name": "Company handbooks",
+          "what": "public product/growth playbooks and internal handbooks (GitLab-style)",
+          "access": "free",
+          "api": false,
+          "cost": "$0",
+          "priority": "P2",
+          "phase": "September",
+          "status": "not_connected",
+          "feeds": ["L2", "L3"],
+          "legal_note": "per-handbook licenses vary — cite"
+        }
+      ]
+    }
+  ]
+}

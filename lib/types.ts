@@ -4,6 +4,8 @@
  * - /registry/mechanism.schema.json (full L1 record + seed stub sub-schema)
  * - /registry/taxonomy.json shape (SPEC.md §3.1)
  * - /dossiers/dossier.schema.json (SPEC.md §3.3)
+ * - /sources/sources.json shape (SPEC.md §3.4)
+ * - /decisions/decisions.json shape (SPEC.md §3.5)
  */
 
 // ---------- Shared unions ----------
@@ -197,4 +199,79 @@ export interface Dossier {
   /** ISO date, YYYY-MM-DD */
   date: string;
   notes: string;
+}
+
+// ---------- Data-source registry (§3.4) ----------
+
+export type SourceClassId = "A" | "B" | "C" | "D";
+
+export type SourcePriority = "P0" | "P1" | "P2";
+
+/** At baseline every source is `not_connected` — the honest truth. */
+export type SourceStatus = "not_connected" | "connected";
+
+export type SourceAccess =
+  | "open"
+  | "free"
+  | "freemium"
+  | "registration"
+  | "subscription"
+  | "mixed";
+
+/** What a source feeds: ontology levels or loop artifacts. */
+export type SourceFeed =
+  | "L0"
+  | "L1"
+  | "L2"
+  | "L3"
+  | "dossiers"
+  | "effects"
+  | "weights"
+  | "constraints";
+
+export interface Source {
+  id: string;
+  name: string;
+  what: string;
+  access: SourceAccess;
+  api: boolean;
+  cost: string;
+  priority: SourcePriority;
+  phase: string;
+  status: SourceStatus;
+  feeds: SourceFeed[];
+  legal_note?: string;
+}
+
+export interface SourceClass {
+  id: SourceClassId;
+  name: string;
+  sources: Source[];
+}
+
+export interface SourcesRegistry {
+  classes: SourceClass[];
+}
+
+// ---------- Decision log (§3.5) ----------
+
+export type DecisionArea =
+  | "architecture"
+  | "data"
+  | "process"
+  | "stack"
+  | "operations";
+
+export interface Decision {
+  /** Pattern: D-\d{3} */
+  id: string;
+  /** ISO date, YYYY-MM-DD */
+  date: string;
+  title: string;
+  body: string;
+  area: DecisionArea;
+}
+
+export interface DecisionsLog {
+  decisions: Decision[];
 }
