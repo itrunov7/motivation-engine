@@ -1,0 +1,11 @@
+{
+  "decisions": [
+    {
+      "id": "D-006",
+      "date": "2026-07-13",
+      "title": "Single-password auth via HMAC cookie and middleware",
+      "body": "Auth per SPEC §5: middleware.ts guards all routes except /login and static assets. /login posts to a server action that compares the submitted password against env ACCESS_PASSWORD (constant-time) and, on success, sets an httpOnly cookie 'me_session' containing '<expiresAtMs>.<hmac>' signed with HMAC-SHA256(env SESSION_SECRET), maxAge 30 days, sameSite lax, secure in production. In-memory sliding-window rate limit: 5 attempts/min per IP (x-forwarded-for), resets on server restart — acceptable at baseline (single instance). No auth libraries; Web Crypto in middleware (Edge) and node:crypto timingSafeEqual in the action. No accounts, roles, OAuth, session DB, or analytics. IDs D-001–D-005 are reserved for the owner-specified baseline decisions (SPEC §3.5).",
+      "area": "architecture"
+    }
+  ]
+}
