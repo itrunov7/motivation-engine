@@ -7,8 +7,8 @@
 ## What this project is
 Motivation Engine — Ventora's knowledge layer: an ontology of human motivation
 mechanisms (science → mechanisms → interface implementations) + the Control Center
-showcase. Current stage: BASELINE — shelves and showcase. NO engine, NO LLM calls,
-NO database.
+showcase. Current stage: PHASE 2 — shelves, showcase, and tools-level source
+fetching from a whitelist of public APIs. NO engine, NO LLM calls, NO database.
 
 ## Architectural invariants (violation = stop and ask the owner)
 1. SOURCE OF TRUTH — files in the repo. Data lives ONLY in:
@@ -46,8 +46,13 @@ NO database.
 ## Stack and code conventions
 11. Next.js 14 App Router + TypeScript strict + Tailwind. Server Components by
     default; client components only where interactivity is required.
-12. Data reading: fs in server components / static generation. No external API
-    fetches at this stage.
+12. Data reading in the app: fs in server components / static generation. The
+    Next.js app remains file-based — no runtime external fetches from app/
+    (including middleware and server actions). Scripts under tools/ MAY call
+    ONLY these public APIs: api.openalex.org, api.semanticscholar.org, PubMed
+    E-utilities (eutils.ncbi.nlm.nih.gov), web.archive.org (CDX API). Any other
+    external endpoint requires a new decisions.json entry first. LLM API calls
+    remain forbidden everywhere in this repo.
 13. Data types are generated from JSON schemas (or declared in /lib/types.ts
     mirroring the schemas). `any` is forbidden.
 14. Design tokens — from the Control Center v0.1 reference: dark background
@@ -67,8 +72,9 @@ NO database.
 - If the data structure changed — schema updated, validator updated, and a
   decisions.json entry added
 
-## Never do at the Baseline stage
+## Never do at the current stage (Phase 2)
 - Do not connect LLM APIs (OpenRouter/Anthropic/OpenAI) — there is no engine yet
-- Do not build scrapers or source connectors
+- Do not build general scrapers; source connectors are allowed ONLY as scripts
+  under tools/ calling the whitelisted APIs in rule 12
 - Do not build data-editing forms in the UI (data is edited in git)
 - Do not add dependencies "for the future"

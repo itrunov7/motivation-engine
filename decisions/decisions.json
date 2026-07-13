@@ -69,6 +69,13 @@
       "title": "Docs render via react-markdown; /sources filters via URL searchParams",
       "body": "The remaining showcase pages stay Server Components end to end. /docs/[slug] renders the five foundation documents with react-markdown + remark-gfm (the first runtime dependencies beyond Next itself) — server-compatible, no dangerouslySetInnerHTML, GFM tables supported; slugs are allowlisted in lib/data.ts (DOC_SLUGS) and unknown slugs 404. /sources filters (class A–D, priority P0–P2, status) are plain links that toggle URL searchParams and the table is filtered server-side — zero client JS, shareable filter URLs. /dossiers reads /dossiers/*.json via loadDossiers() (excluding the schema), so its empty state is computed from the folder being empty, never asserted; source status presentation lives in SOURCE_STATUS_META in lib/status.ts, keeping status literals out of app/ (D-005, D-009).",
       "area": "stack"
+    },
+    {
+      "id": "D-011",
+      "date": "2026-07-13",
+      "title": "Constitution amendment: controlled external-API whitelist for tools/ scripts (Phase 2)",
+      "body": "Baseline forbade all external fetches (former rule 12 in .cursorrules). Phase 2 opens a controlled whitelist: scripts under tools/ MAY call exactly four public APIs — api.openalex.org, api.semanticscholar.org, PubMed E-utilities (eutils.ncbi.nlm.nih.gov), and web.archive.org (CDX API). Any other external endpoint requires a new decisions.json entry first. The Next.js app remains file-based with zero runtime external calls from app/ (including middleware and server actions); data reading stays fs-only. LLM API calls remain forbidden everywhere in the repo. General scrapers stay forbidden; source connectors exist only as tools/ scripts against the whitelisted APIs.",
+      "area": "architecture"
     }
   ]
 }
