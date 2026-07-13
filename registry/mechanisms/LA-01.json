@@ -1,0 +1,98 @@
+{
+  "$schema": "../mechanism.schema.json",
+  "id": "LA-01",
+  "slug": "loss_aversion",
+  "name": "Loss aversion",
+  "version": "1.1.0",
+  "level": "L1",
+  "parent": "S1",
+  "lifecycle_status": "incubating",
+  "dossier_ref": null,
+  "provenance": { "proposed_by": "owner", "date": "2026-07-12" },
+  "evidence": {
+    "grade": "A",
+    "basis": "Prospect theory (Kahneman & Tversky 1979); Nobel Prize 2002; cross-cultural replications over 45 years",
+    "effect_size_note": "Losses weigh ~1.8–2.25x equivalent gains; weakens on small stakes",
+    "caveats": ["weak_on_small_stakes", "requires_perceived_ownership"]
+  },
+  "prior_weight": 0.9,
+  "mechanism_summary_for_context": "A loss is experienced ~2x more intensely than an equivalent gain. Users are more strongly motivated NOT TO LOSE what they have accumulated (streak, projects, status, discount) than to gain something new. 'Keep / don't lose' framing outperforms 'get / buy' framing.",
+  "applicability": {
+    "funnel_stages": ["activation", "conversion", "retention", "reactivation"],
+    "excluded_stages": ["cold_acquisition"],
+    "artifact_types": ["paywall", "cancellation_flow", "retention_push", "checkout", "email", "pricing_page", "dashboard_widget"],
+    "preconditions": [
+      { "predicate": "user.accumulated_value_score > 0", "reason": "you cannot lose what you do not have; blocked for brand-new users" }
+    ],
+    "culture_note": "The mechanism is universal; what varies culturally is WHAT is valuable to lose (status vs. savings vs. time)"
+  },
+  "implementations": [
+    {
+      "id": "LA-01-streak",
+      "artifact_types": ["retention_push", "dashboard_widget"],
+      "product_requirements": ["has_recurring_user_action"],
+      "generation_directive": "Frame the user's recurring action as a streak with a visible counter. Push/widget triggers on the RISK of the streak resetting; framing is preservation ('Don't lose your 12 days'), not achievement.",
+      "copy_formulas": ["Don't lose your {n}-day streak!", "{n} days in a row — {h} hours left to keep it going"],
+      "metrics": ["d7_retention", "d30_retention", "push_return_rate_vs_baseline"],
+      "observed_effects": []
+    },
+    {
+      "id": "LA-01-trial-ownership",
+      "artifact_types": ["paywall"],
+      "product_requirements": ["has_trial", "user_creates_artifacts"],
+      "generation_directive": "The paywall shows what the user has CREATED (previews of their projects/results) and frames payment as keeping access to what is theirs, not as a purchase. State a concrete number and deadline: 'Your {n} projects will be deleted in {d} days'.",
+      "copy_formulas": ["Your {n} projects will be deleted in {d} days", "Keep access to your work"],
+      "metrics": ["trial_to_paid_cvr_vs_neutral_paywall"],
+      "observed_effects": []
+    },
+    {
+      "id": "LA-01-cancel-inventory",
+      "artifact_types": ["cancellation_flow"],
+      "product_requirements": ["has_subscription"],
+      "generation_directive": "The cancellation screen lists the user's concrete accumulated value (history, status, discount, created objects) with numbers. Neutral tone, no pleading, no shame. Cancel and keep buttons are equally visible.",
+      "copy_formulas": ["If you cancel, you will lose: {value_items}"],
+      "metrics": ["cancel_save_rate"],
+      "observed_effects": []
+    },
+    {
+      "id": "LA-01-expiring-value",
+      "artifact_types": ["email", "retention_push"],
+      "product_requirements": ["has_points_or_credits"],
+      "generation_directive": "Reminder that accumulated value expires, with a concrete date and amount. Frequency ≤ 2 touches per expiry cycle.",
+      "copy_formulas": ["Your {n} points expire on {date}"],
+      "metrics": ["reactivation_rate_in_expiry_window"],
+      "observed_effects": []
+    },
+    {
+      "id": "LA-01-copy-framing",
+      "artifact_types": ["paywall", "pricing_page", "email", "checkout"],
+      "product_requirements": [],
+      "generation_directive": "Where a benefit exists, frame it as loss prevention: 'Stop losing ${x}/month' instead of 'Save ${x}/month'. Apply selectively — no more than 1 loss frame per screen.",
+      "copy_formulas": ["Stop losing ${x} every month"],
+      "metrics": ["cvr_loss_frame_vs_gain_frame"],
+      "observed_effects": []
+    }
+  ],
+  "constraints": {
+    "hard_rules": [
+      { "id": "real_loss_only", "rule": "The loss must be real; fake discounts and fake timers are forbidden", "severity": "block" },
+      { "id": "no_confirm_shaming", "rule": "Buttons that shame refusal ('No, I want to pay more') are forbidden", "severity": "block" },
+      { "id": "no_data_hostage", "rule": "Deleting user data is never used as pressure; genuine deletion requires ≥30-day notice and export", "severity": "block" },
+      { "id": "panic_cap", "rule": "Loss-framed pushes ≤ 1/day, no anxiety escalation", "severity": "block" },
+      { "id": "precondition_gate", "rule": "When accumulated_value_score = 0, the mechanism is not applied", "severity": "block" }
+    ],
+    "compliance_refs": ["EU_DSA_dark_patterns", "apple_asrg_5.6", "google_play_deceptive_behavior"],
+    "boundary_test": "If the user learned exactly how this works, would they shrug — or feel deceived?"
+  },
+  "relations": [
+    { "type": "enabled_by", "target": "EN-03", "note": "Endowment creates the value that LA-01 protects. Sequence: EN-03 → LA-01" },
+    { "type": "adjacent", "target": "ZE-07", "note": "Incompleteness is an adjacent tension, a different mechanism" },
+    { "type": "hybrid_with", "target": "SC-06", "note": "Scarcity = loss of opportunity" }
+  ],
+  "telemetry": { "tag_format": "me:LA-01:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "reference_examples": [
+    { "product": "Duolingo", "what": "Streak as the retention core; fear of losing the streak drives daily return; Streak Freeze monetizes the fear directly" },
+    { "product": "Amazon Prime", "what": "Cancellation flow enumerates concrete owned benefits that disappear, turning a subscription expense into property" },
+    { "product": "Starbucks Rewards", "what": "Expiring stars trigger visits: customers come to rescue what is theirs, not to buy coffee" }
+  ]
+}

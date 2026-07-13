@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ventora.dev/motivation-engine/dossier.schema.json",
+  "title": "Dossier (admission gate record)",
+  "description": "Scored dossier that moves a mechanism through lifecycle gates (SPEC.md §3.3). Thresholds enforced by the validator and the owner: to enter INCUBATING — total >= 11 AND scores.evidence >= 2 AND scores.safety >= 2; to enter CORE — additionally at least one measured effect (from our loop or public corpora).",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Dossier id, e.g. DOS-LA-01-001"
+    },
+    "mechanism_id": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}-\\d{2}$"
+    },
+    "scores": {
+      "type": "object",
+      "description": "Five scoring axes, each an integer 0–3",
+      "properties": {
+        "evidence": { "$ref": "#/$defs/axisScore" },
+        "product_applicability": { "$ref": "#/$defs/axisScore" },
+        "measurability": { "$ref": "#/$defs/axisScore" },
+        "orthogonality": { "$ref": "#/$defs/axisScore" },
+        "safety": { "$ref": "#/$defs/axisScore" }
+      },
+      "required": ["evidence", "product_applicability", "measurability", "orthogonality", "safety"],
+      "additionalProperties": false
+    },
+    "total": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 15,
+      "description": "Sum of the five axis scores. Gate: incubating requires total >= 11 (with evidence >= 2 and safety >= 2)"
+    },
+    "evidence_sources": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["incubating", "core", "rejected", "hold"],
+      "description": "Lifecycle decision this dossier supports. 'core' additionally requires at least one measured effect."
+    },
+    "decided_by": { "type": "string", "minLength": 1 },
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "notes": { "type": "string" }
+  },
+  "required": [
+    "id",
+    "mechanism_id",
+    "scores",
+    "total",
+    "evidence_sources",
+    "verdict",
+    "decided_by",
+    "date",
+    "notes"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "axisScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
+    }
+  }
+}
