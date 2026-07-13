@@ -10,11 +10,17 @@
  * - /dossiers/dossier.schema.json integrity + any dossier records; a dossier
  *   referencing a mechanism whose evidence corpus is missing, unclassified,
  *   or has an empty dissent category FAILS (D-019)
- * - /corpora/{corpus}/manifest.json against the connector manifest
- *   contract (tools/connectors/types.ts): dir name = source_id,
+ * - EVERY manifest.json under /corpora, at any depth, against the connector
+ *   manifest contract (tools/connectors/types.ts): dir name = source_id,
  *   run_history ≤ 20, data_files exist on disk, every source_ids entry
  *   matches a source id in sources.json, non-"_" dirs harvest ≥1 source
  *   (D-014)
+ * - CONTRACT DRIFT GUARD (D-020): the manifest schema below is key-derived
+ *   from the writer contract (tools/connectors/types.ts), and a type-level
+ *   assertion pins the writer contract to the reader contract
+ *   (lib/types.ts CorpusManifest — what status computation expects). Any
+ *   drift between connectors and the showcase fails `npm run build` in CI
+ *   instead of silently flipping sources to not_connected.
  * - Cross-references: filename = id, unique ids, parent in taxonomy,
  *   relations[].target in the mechanism roster
  *
@@ -22,9 +28,17 @@
  */
 
 import { readFileSync, readdirSync, existsSync } from "node:fs";
-import { join, relative } from "node:path";
+import { basename, dirname, join, relative, sep } from "node:path";
 import { Ajv2020, type ValidateFunction, type ErrorObject } from "ajv/dist/2020";
 import addFormats from "ajv-formats";
+import {
+  EVIDENCE_CATEGORIES,
+  RUN_HISTORY_LIMIT,
+  type Manifest,
+  type ManifestDataFile,
+  type ManifestRun,
+} from "./connectors/types";
+import type { CorpusManifest } from "../lib/types";
 
 const ROOT = join(__dirname, "..");
 
@@ -72,6 +86,18 @@ function listJsonFiles(dir: string): string[] {
     .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
     .map((entry) => join(dir, entry.name))
     .sort();
+}
+
+/** Every manifest.json under `dir` at any depth (D-020), sorted. */
+function findManifestFiles(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+  const found: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) found.push(...findManifestFiles(full));
+    else if (entry.isFile() && entry.name === "manifest.json") found.push(full);
+  }
+  return found.sort();
 }
 
 const ajv = new Ajv2020({ allErrors: true, allowUnionTypes: true });
@@ -206,36 +232,55 @@ const decisionsSchema = {
   additionalProperties: false,
 } as const;
 
-// Mirrors the connector manifest contract in tools/connectors/types.ts.
+// ---------- Manifest contract drift guards (D-020) ----------
+//
+// The manifest contract exists in three places: the writer
+// (tools/connectors/types.ts `Manifest`), the reader the showcase computes
+// source states from (lib/types.ts `CorpusManifest`), and the Ajv schema
+// below. The assertions here turn any drift between them into a compile
+// error — `npm run build` in CI goes red instead of production sources
+// silently flipping to not_connected.
+
+/** Compiles only while the writer contract satisfies the reader contract. */
+type AssertAssignable<Writer extends Reader, Reader> = Writer;
+
+// Connector output must remain readable by lib/status.ts computations.
+type _ManifestContractInSync = AssertAssignable<Manifest, CorpusManifest>;
+
+// Schema property/required keys are checked against the writer contract:
+// a field renamed, removed, or added in tools/connectors/types.ts without a
+// schema update no longer compiles.
+const manifestRunProperties = {
+  timestamp: { type: "string", format: "date-time" },
+  status: { type: "string", enum: ["success", "partial", "failed"] },
+  params: { type: "object", additionalProperties: { type: "string" } },
+  records_fetched: { type: "integer", minimum: 0 },
+  files_written: { type: "integer", minimum: 0 },
+  duration_s: { type: "number", minimum: 0 },
+  error: { type: "string", minLength: 1 },
+  warnings: { type: "object", additionalProperties: { type: "boolean" } },
+} as const satisfies Record<keyof ManifestRun, unknown>;
+
+const manifestRunRequired = [
+  "timestamp",
+  "status",
+  "params",
+  "records_fetched",
+  "files_written",
+  "duration_s",
+] as const satisfies readonly (keyof ManifestRun)[];
+
 const manifestRunSchema = {
   type: "object",
-  properties: {
-    timestamp: { type: "string", format: "date-time" },
-    status: { type: "string", enum: ["success", "partial", "failed"] },
-    params: { type: "object", additionalProperties: { type: "string" } },
-    records_fetched: { type: "integer", minimum: 0 },
-    files_written: { type: "integer", minimum: 0 },
-    duration_s: { type: "number", minimum: 0 },
-    error: { type: "string", minLength: 1 },
-    warnings: { type: "object", additionalProperties: { type: "boolean" } },
-  },
-  required: ["timestamp", "status", "params", "records_fetched", "files_written", "duration_s"],
+  properties: manifestRunProperties,
+  required: manifestRunRequired,
   additionalProperties: false,
 } as const;
 
-/** The category checklist vocabulary (D-019) — mirrors EVIDENCE_CATEGORIES
- *  in tools/connectors/types.ts. */
-const EVIDENCE_CATEGORIES = [
-  "foundational",
-  "meta-analysis",
-  "replication",
-  "dissent",
-  "recent",
-] as const;
-
-// Per-file category checklist counts (D-019): exactly the five categories,
-// each a non-negative integer. Optional — files harvested by pre-v2
-// connectors carry no categories.
+// Per-file category checklist counts (D-019): exactly the five categories
+// (imported from the connector contract — no local mirror), each a
+// non-negative integer. Optional — files harvested by pre-v2 connectors
+// carry no categories.
 const categoryCountsSchema = {
   type: "object",
   properties: Object.fromEntries(
@@ -248,33 +293,51 @@ const categoryCountsSchema = {
   additionalProperties: false,
 } as const;
 
-const corpusManifestSchema = {
-  type: "object",
-  properties: {
-    source_id: { type: "string", pattern: "^_?[a-z0-9-]+$" },
-    source_ids: {
-      type: "array",
-      items: { type: "string", pattern: "^[a-z0-9-]+$" },
-    },
-    connector_version: { type: "string", pattern: "^\\d+\\.\\d+\\.\\d+$" },
-    last_run: manifestRunSchema,
-    run_history: { type: "array", minItems: 1, maxItems: 20, items: manifestRunSchema },
-    data_files: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          path: { type: "string", minLength: 1 },
-          records: { type: "integer", minimum: 0 },
-          bytes: { type: "integer", minimum: 0 },
-          categories: categoryCountsSchema,
-        },
-        required: ["path", "records", "bytes"],
-        additionalProperties: false,
-      },
+const manifestDataFileProperties = {
+  path: { type: "string", minLength: 1 },
+  records: { type: "integer", minimum: 0 },
+  bytes: { type: "integer", minimum: 0 },
+  categories: categoryCountsSchema,
+} as const satisfies Record<keyof ManifestDataFile, unknown>;
+
+const corpusManifestProperties = {
+  source_id: { type: "string", pattern: "^_?[a-z0-9-]+$" },
+  source_ids: {
+    type: "array",
+    items: { type: "string", pattern: "^[a-z0-9-]+$" },
+  },
+  connector_version: { type: "string", pattern: "^\\d+\\.\\d+\\.\\d+$" },
+  last_run: manifestRunSchema,
+  run_history: {
+    type: "array",
+    minItems: 1,
+    maxItems: RUN_HISTORY_LIMIT,
+    items: manifestRunSchema,
+  },
+  data_files: {
+    type: "array",
+    items: {
+      type: "object",
+      properties: manifestDataFileProperties,
+      required: ["path", "records", "bytes"] satisfies readonly (keyof ManifestDataFile)[],
+      additionalProperties: false,
     },
   },
-  required: ["source_id", "source_ids", "connector_version", "last_run", "run_history", "data_files"],
+} as const satisfies Record<keyof Manifest, unknown>;
+
+const corpusManifestRequired = [
+  "source_id",
+  "source_ids",
+  "connector_version",
+  "last_run",
+  "run_history",
+  "data_files",
+] as const satisfies readonly (keyof Manifest)[];
+
+const corpusManifestSchema = {
+  type: "object",
+  properties: corpusManifestProperties,
+  required: corpusManifestRequired,
   additionalProperties: false,
 } as const;
 
@@ -537,6 +600,10 @@ function main(): void {
   }
 
   // 9. Corpus manifests (connector manifest contract, tools/connectors/types.ts).
+  // Every top-level corpus dir must carry a manifest, and EVERY manifest.json
+  // under /corpora — at any depth — is validated against the schema (D-020),
+  // so a manifest the status computation might read can never enter the repo
+  // malformed.
   const validateManifest = ajv.compile(corpusManifestSchema);
   const corpusDirs = existsSync(PATHS.corporaDir)
     ? readdirSync(PATHS.corporaDir, { withFileTypes: true })
@@ -545,12 +612,22 @@ function main(): void {
         .sort()
     : [];
   for (const dirName of corpusDirs) {
-    const corpusDir = join(PATHS.corporaDir, dirName);
-    const manifestFile = join(corpusDir, "manifest.json");
-    if (!existsSync(manifestFile)) {
-      fail(corpusDir, "corpus directory has no manifest.json (contract in corpora/README.md)");
-      continue;
+    if (!existsSync(join(PATHS.corporaDir, dirName, "manifest.json"))) {
+      fail(
+        join(PATHS.corporaDir, dirName),
+        "corpus directory has no manifest.json (contract in corpora/README.md)",
+      );
     }
+  }
+  const manifestFiles = findManifestFiles(PATHS.corporaDir);
+  for (const manifestFile of manifestFiles) {
+    const corpusDir = dirname(manifestFile);
+    const dirName = basename(corpusDir);
+    // Internal (framework smoke-test) corpora live under "_"-prefixed dirs
+    // at any level; the app ignores them (lib/status.ts).
+    const isInternal = relative(PATHS.corporaDir, corpusDir)
+      .split(sep)
+      .some((segment) => segment.startsWith("_"));
     const data = readJson(manifestFile);
     if (data === undefined) continue;
     let ok = validateAgainst(validateManifest, manifestFile, data);
@@ -566,7 +643,7 @@ function main(): void {
     // D-014: a connector is not a source — the manifest declares the sources
     // it harvests in source_ids; every entry must exist in sources.json, and
     // a non-internal corpus must harvest at least one source.
-    if (!dirName.startsWith("_") && (manifest.source_ids ?? []).length === 0) {
+    if (!isInternal && (manifest.source_ids ?? []).length === 0) {
       fail(manifestFile, `non-internal corpus "${dirName}" has empty source_ids — a corpus must harvest at least one source (D-014)`);
       ok = false;
     }
@@ -586,7 +663,7 @@ function main(): void {
     }
     if (ok) console.log(`  ✓ ${rel(manifestFile)} valid (corpus manifest)`);
   }
-  if (corpusDirs.length === 0) {
+  if (manifestFiles.length === 0) {
     console.log("  · no harvested corpora yet (honest empty state)");
   }
 
