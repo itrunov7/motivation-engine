@@ -34,6 +34,19 @@ export interface PoliteFetchOptions {
   mailto?: string;
 }
 
+/** Live request counter for cost accounting (D-022). */
+export interface FetchStats {
+  /** Every outbound HTTP attempt, including retries — the honest request
+   *  cost the manifest records as cost.api_calls. */
+  apiCalls: number;
+}
+
+/** A polite fetch paired with its live request counter (D-022). */
+export interface PoliteFetchHandle {
+  fetch: PoliteFetch;
+  stats: FetchStats;
+}
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -47,12 +60,13 @@ function retryDelayMs(attempt: number, response?: Response): number {
   return BACKOFF_BASE_MS * 2 ** (attempt - 1); // 1s, 2s
 }
 
-export function createPoliteFetch(options: PoliteFetchOptions): PoliteFetch {
+export function createPoliteFetch(options: PoliteFetchOptions): PoliteFetchHandle {
   const { minIntervalMs, mailto } = options;
   const userAgent = `motivation-engine/0.1 (${mailto ? `mailto:${mailto}` : "no-contact-configured"})`;
   let lastRequestAt = 0;
+  const stats: FetchStats = { apiCalls: 0 };
 
-  return async (input, init) => {
+  const fetchImpl: PoliteFetch = async (input, init) => {
     const url = new URL(input.toString());
 
     if (!(ALLOWED_HOSTS as readonly string[]).includes(url.hostname)) {
@@ -75,6 +89,7 @@ export function createPoliteFetch(options: PoliteFetchOptions): PoliteFetch {
       const wait = lastRequestAt + minIntervalMs - Date.now();
       if (wait > 0) await sleep(wait);
       lastRequestAt = Date.now();
+      stats.apiCalls++;
 
       let response: Response | undefined;
       try {
@@ -98,4 +113,6 @@ export function createPoliteFetch(options: PoliteFetchOptions): PoliteFetch {
       `Request failed after ${MAX_ATTEMPTS} attempts: ${lastError?.message ?? "unknown error"}`,
     );
   };
+
+  return { fetch: fetchImpl, stats };
 }

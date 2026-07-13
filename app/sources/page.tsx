@@ -3,11 +3,15 @@ import { loadSources } from "@/lib/data";
 import {
   CONNECTION_MODE_META,
   CONNECTION_MODE_ORDER,
+  HEALTH_META,
   SOURCE_STATE_META,
   SOURCE_STATE_ORDER,
+  computeSourceHealth,
   computeSourceModeCounts,
   computeSourceState,
+  formatCheckedAgo,
   formatModeCount,
+  type ComputedSourceHealth,
 } from "@/lib/status";
 import type {
   ComputedSourceState,
@@ -48,6 +52,8 @@ interface FlatSource extends Source {
   className: string;
   /** Computed from /corpora/{id}/manifest.json — never stored (D-013). */
   state: ComputedSourceState;
+  /** Computed from /corpora/_health/heartbeat.json — never stored (D-021). */
+  health: ComputedSourceHealth;
 }
 
 // ---------- Small presentational pieces ----------
@@ -65,6 +71,34 @@ function SourceStatePill({ state }: { state: ComputedSourceState }) {
       />
       {meta.label}
     </span>
+  );
+}
+
+function HealthPill({ health }: { health: ComputedSourceHealth }) {
+  if (!health.status) {
+    return <span className="font-mono text-xs text-[#7C93A8]">—</span>;
+  }
+  const meta = HEALTH_META[health.status];
+  const checkedAgo = formatCheckedAgo(health);
+  return (
+    <div className="flex flex-col gap-1">
+      <span
+        className="inline-flex w-fit items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider"
+        style={{ color: meta.color, borderColor: `${meta.color}40` }}
+        title={health.note ?? undefined}
+      >
+        <span
+          className="h-1.5 w-1.5 rounded-full"
+          style={{ backgroundColor: meta.color }}
+        />
+        {meta.label}
+      </span>
+      {checkedAgo && (
+        <span className="whitespace-nowrap font-mono text-[10px] text-[#7C93A8]">
+          {checkedAgo}
+        </span>
+      )}
+    </div>
   );
 }
 
@@ -148,6 +182,7 @@ const TABLE_HEADERS = [
   "feeds",
   "mode",
   "status",
+  "health",
 ];
 
 function SourceRow({ source }: { source: FlatSource }) {
@@ -215,6 +250,9 @@ function SourceRow({ source }: { source: FlatSource }) {
       <td className="px-3 py-2.5">
         <SourceStatePill state={source.state} />
       </td>
+      <td className="px-3 py-2.5">
+        <HealthPill health={source.health} />
+      </td>
     </tr>
   );
 }
@@ -233,6 +271,7 @@ export default function SourcesPage({
       classId: cls.id,
       className: cls.name,
       state: computeSourceState(source),
+      health: computeSourceHealth(source),
     })),
   );
 
@@ -279,7 +318,9 @@ export default function SourcesPage({
             {all.length} sources across {registry.classes.length} classes, read
             from /sources/sources.json. Each source has a connection mode;
             statuses are computed from /corpora/&#123;id&#125;/manifest.json —
-            nothing turns green until a run actually succeeds.
+            nothing turns green until a run actually succeeds. Health is an
+            independent axis read from /corpora/_health/heartbeat.json
+            (D-021) — the app itself never calls an external API.
           </p>
         </div>
         <span className="rounded-full border border-[#243329] bg-[#1A2620] px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-[#8CA495]">
@@ -347,7 +388,7 @@ export default function SourcesPage({
           </div>
         ) : (
           <div className="mt-3 overflow-x-auto rounded-lg border border-[#243329] bg-[#151F1A]">
-            <table className="w-full min-w-[1020px] border-collapse text-left">
+            <table className="w-full min-w-[1120px] border-collapse text-left">
               <thead>
                 <tr className="border-b border-[#243329] bg-[#1A2620]">
                   {TABLE_HEADERS.map((header) => (
@@ -379,6 +420,20 @@ export default function SourcesPage({
             `${CONNECTION_MODE_META[mode].label} = ${CONNECTION_MODE_META[mode].description}`,
         ).join(" · ")}
         .
+      </p>
+
+      <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
+          health legend ·{" "}
+        </span>
+        health comes from the 6-hourly heartbeat probe
+        (tools/health-check.ts), independent of connection:{" "}
+        {HEALTH_META.ok.label} = API answered, {HEALTH_META.degraded.label} =
+        throttled (429/206), {HEALTH_META.down.label} = network error /
+        timeout / 5xx, {HEALTH_META.unknown.label} = no probe or heartbeat
+        older than 12h (stale never renders as ok), {HEALTH_META.n_a.label} =
+        internal source with no external endpoint. Sources without an api
+        mode have no health axis (—).
       </p>
 
       <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">

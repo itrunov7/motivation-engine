@@ -40,8 +40,11 @@ import {
   type ComputedSourceState,
   type ConnectionMode,
   type CorpusManifest,
+  type CorpusManifestRun,
   type CorpusRunStatus,
   type EvidenceCategory,
+  type HealthStatus,
+  type HeartbeatFile,
   type LifecycleStatus,
   type Mechanism,
   type SeedStub,
@@ -170,6 +173,119 @@ function manifestsForSource(
     .map(([dirName, manifest]) => ({ dirName, manifest }));
 }
 
+// ---------- Source health (heartbeat axis, D-021) ----------
+
+/**
+ * Presentation metadata for the health axis (D-021): ok = emerald,
+ * degraded = amber, down = alert red, unknown = slate (a stale or missing
+ * heartbeat never renders as ok), n/a = muted (internal sources have no
+ * external endpoint by design — not a problem to flag).
+ */
+export const HEALTH_META: Record<HealthStatus, StatusMeta> = {
+  ok: { label: "ok", color: "#34D399" },
+  degraded: { label: "degraded", color: "#E4B54E" },
+  down: { label: "down", color: ALERT_COLOR },
+  unknown: { label: "unknown", color: "#7C93A8" },
+  n_a: { label: "n/a", color: "#8CA495" },
+};
+
+/** A heartbeat older than this renders as unknown, never as ok (D-021). */
+export const HEARTBEAT_STALE_HOURS = 12;
+
+/** Parsed /corpora/_health/heartbeat.json, or undefined if absent/broken. */
+export function loadHeartbeat(): HeartbeatFile | undefined {
+  const file = join(DATA_PATHS.corporaDir, "_health", "heartbeat.json");
+  if (!existsSync(file)) return undefined;
+  try {
+    return JSON.parse(readFileSync(file, "utf-8")) as HeartbeatFile;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Computed health of one source — everything the UI needs, no literals. */
+export interface ComputedSourceHealth {
+  /** null for modes with no health axis (report/manual/deferred). */
+  status: HealthStatus | null;
+  /** ISO timestamp of the probe; null when no probe was recorded. */
+  checkedAt: string | null;
+  /** Whole hours since the probe; null when no probe was recorded. */
+  ageHours: number | null;
+  latencyMs: number | null;
+  note: string | null;
+}
+
+const NO_HEALTH_AXIS: ComputedSourceHealth = {
+  status: null,
+  checkedAt: null,
+  ageHours: null,
+  latencyMs: null,
+  note: null,
+};
+
+/**
+ * Computes a source's health from /corpora/_health/heartbeat.json (D-021).
+ * The app performs NO live external calls — health is read from the
+ * heartbeat file only:
+ * - report/manual/deferred: no health axis (null status, UI shows "—")
+ * - internal: n_a — no external endpoint by design
+ * - no heartbeat file or no entry: unknown
+ * - entry older than HEARTBEAT_STALE_HOURS: unknown — stale never renders ok
+ * - otherwise: the recorded status, with "checked Nh ago" data
+ */
+export function computeSourceHealth(
+  source: Source,
+  now: Date = new Date(),
+): ComputedSourceHealth {
+  if (source.connection_mode !== "api" && source.connection_mode !== "internal") {
+    return NO_HEALTH_AXIS;
+  }
+  if (source.connection_mode === "internal") {
+    return {
+      ...NO_HEALTH_AXIS,
+      status: "n_a",
+      note: "internal source — no external endpoint by design",
+    };
+  }
+  const entry = loadHeartbeat()?.entries.find((e) => e.source_id === source.id);
+  if (!entry) {
+    return {
+      ...NO_HEALTH_AXIS,
+      status: "unknown",
+      note: "no heartbeat yet — run tools/health-check.ts (npm run health)",
+    };
+  }
+  const ageMs = now.getTime() - Date.parse(entry.checked_at);
+  const ageHours = Number.isFinite(ageMs) ? Math.floor(ageMs / 3_600_000) : null;
+  if (ageHours === null || ageHours >= HEARTBEAT_STALE_HOURS) {
+    return {
+      status: "unknown",
+      checkedAt: entry.checked_at,
+      ageHours,
+      latencyMs: entry.latency_ms,
+      note:
+        ageHours === null
+          ? "heartbeat has an unreadable checked_at timestamp"
+          : `heartbeat stale (checked ${ageHours}h ago, threshold ${HEARTBEAT_STALE_HOURS}h)`,
+    };
+  }
+  return {
+    status: entry.status,
+    checkedAt: entry.checked_at,
+    ageHours,
+    latencyMs: entry.latency_ms,
+    note: entry.note,
+  };
+}
+
+/** "checked 3h ago" line for a computed health; null when never probed. */
+export function formatCheckedAgo(health: ComputedSourceHealth): string | null {
+  if (health.ageHours === null) return null;
+  return health.ageHours === 0
+    ? "checked <1h ago"
+    : `checked ${health.ageHours}h ago`;
+}
+
 // ---------- Corpus cockpit (/connectors, D-019) ----------
 
 /** Presentation metadata for manifest run statuses (never stored in app/). */
@@ -190,6 +306,94 @@ export function loadCorpusManifests(): CorpusEntry[] {
   return Array.from(readAllCorpusManifests().entries())
     .map(([dirName, manifest]) => ({ dirName, manifest }))
     .sort((a, b) => a.dirName.localeCompare(b.dirName));
+}
+
+// ---------- Monthly cost rollup (/connectors, D-022) ----------
+
+/**
+ * run_history cap, mirrored from tools/connectors/types.ts RUN_HISTORY_LIMIT
+ * (lib/ never imports from tools/, D-020). Used only for the honest cockpit
+ * caveat that the rollup sees retained runs only.
+ */
+export const RUN_HISTORY_LIMIT = 20;
+
+/**
+ * One connector's aggregate for the current calendar month, plus the total
+ * row. All figures are SUMMED from each manifest's run_history — never
+ * asserted. Runs with no cost block (recorded before D-022) contribute 0 to
+ * api_calls / estimated_usd but still count as a run.
+ */
+export interface MonthlyRollupRow {
+  /** Corpus directory name, or "total" for the aggregate row. */
+  label: string;
+  runs: number;
+  apiCalls: number;
+  durationS: number;
+  estimatedUsd: number;
+}
+
+export interface MonthlyRollup {
+  /** Month label, e.g. "2026-07" (UTC). */
+  month: string;
+  perConnector: MonthlyRollupRow[];
+  total: MonthlyRollupRow;
+  /** True when no run in any manifest falls in the current month. */
+  empty: boolean;
+}
+
+/** The "YYYY-MM" a run belongs to (UTC), or null for an unparseable stamp. */
+function runMonthKey(run: CorpusManifestRun): string | null {
+  const ms = Date.parse(run.timestamp);
+  if (!Number.isFinite(ms)) return null;
+  return new Date(ms).toISOString().slice(0, 7);
+}
+
+/**
+ * Rolls up run_history across all corpus manifests into per-connector and
+ * total figures for the current UTC calendar month (D-022). The rollup only
+ * sees runs still retained in run_history (capped at RUN_HISTORY_LIMIT per
+ * connector) — the cockpit states this caveat honestly.
+ */
+export function computeMonthlyRollup(
+  manifests: CorpusEntry[],
+  now: Date = new Date(),
+): MonthlyRollup {
+  const month = now.toISOString().slice(0, 7);
+  const perConnector: MonthlyRollupRow[] = [];
+
+  for (const { dirName, manifest } of manifests) {
+    const monthRuns = (manifest.run_history ?? []).filter(
+      (run) => runMonthKey(run) === month,
+    );
+    if (monthRuns.length === 0) continue;
+    perConnector.push(
+      monthRuns.reduce<MonthlyRollupRow>(
+        (row, run) => ({
+          label: dirName,
+          runs: row.runs + 1,
+          apiCalls: row.apiCalls + (run.cost?.api_calls ?? 0),
+          durationS: row.durationS + run.duration_s,
+          estimatedUsd: row.estimatedUsd + (run.cost?.estimated_usd ?? 0),
+        }),
+        { label: dirName, runs: 0, apiCalls: 0, durationS: 0, estimatedUsd: 0 },
+      ),
+    );
+  }
+
+  perConnector.sort((a, b) => a.label.localeCompare(b.label));
+
+  const total = perConnector.reduce<MonthlyRollupRow>(
+    (acc, row) => ({
+      label: "total",
+      runs: acc.runs + row.runs,
+      apiCalls: acc.apiCalls + row.apiCalls,
+      durationS: acc.durationS + row.durationS,
+      estimatedUsd: acc.estimatedUsd + row.estimatedUsd,
+    }),
+    { label: "total", runs: 0, apiCalls: 0, durationS: 0, estimatedUsd: 0 },
+  );
+
+  return { month, perConnector, total, empty: perConnector.length === 0 };
 }
 
 /**

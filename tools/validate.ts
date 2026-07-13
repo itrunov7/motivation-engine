@@ -15,6 +15,9 @@
  *   run_history ≤ 20, data_files exist on disk, every source_ids entry
  *   matches a source id in sources.json, non-"_" dirs harvest ≥1 source
  *   (D-014)
+ * - /corpora/_health/heartbeat.json (when present) against the heartbeat
+ *   contract (tools/health-check.ts, D-021), with the same drift-guard
+ *   pattern pinning writer → reader (lib/types.ts HeartbeatFile)
  * - CONTRACT DRIFT GUARD (D-020): the manifest schema below is key-derived
  *   from the writer contract (tools/connectors/types.ts), and a type-level
  *   assertion pins the writer contract to the reader contract
@@ -35,10 +38,15 @@ import {
   EVIDENCE_CATEGORIES,
   RUN_HISTORY_LIMIT,
   type Manifest,
+  type ManifestCost,
   type ManifestDataFile,
   type ManifestRun,
 } from "./connectors/types";
-import type { CorpusManifest } from "../lib/types";
+import type {
+  HeartbeatEntry as WriterHeartbeatEntry,
+  HeartbeatFile as WriterHeartbeatFile,
+} from "./health-check";
+import type { CorpusManifest, HeartbeatFile } from "../lib/types";
 
 const ROOT = join(__dirname, "..");
 
@@ -52,6 +60,7 @@ const PATHS = {
   dossierSchema: join(ROOT, "dossiers", "dossier.schema.json"),
   dossiersDir: join(ROOT, "dossiers"),
   corporaDir: join(ROOT, "corpora"),
+  heartbeat: join(ROOT, "corpora", "_health", "heartbeat.json"),
 };
 
 let errorCount = 0;
@@ -250,6 +259,31 @@ type _ManifestContractInSync = AssertAssignable<Manifest, CorpusManifest>;
 // Schema property/required keys are checked against the writer contract:
 // a field renamed, removed, or added in tools/connectors/types.ts without a
 // schema update no longer compiles.
+// Cost accounting block (D-022): api_calls and duration filled by connectors
+// now; tokens reserved for future LLM jobs (number OR null); estimated_usd
+// computed. Optional on the run — runs recorded before D-022 carry no block —
+// but when present every key is required and no extras are allowed.
+const manifestCostProperties = {
+  api_calls: { type: "integer", minimum: 0 },
+  duration_s: { type: "number", minimum: 0 },
+  tokens_in: { type: ["integer", "null"], minimum: 0 },
+  tokens_out: { type: ["integer", "null"], minimum: 0 },
+  estimated_usd: { type: "number", minimum: 0 },
+} as const satisfies Record<keyof ManifestCost, unknown>;
+
+const manifestCostSchema = {
+  type: "object",
+  properties: manifestCostProperties,
+  required: [
+    "api_calls",
+    "duration_s",
+    "tokens_in",
+    "tokens_out",
+    "estimated_usd",
+  ] satisfies readonly (keyof ManifestCost)[],
+  additionalProperties: false,
+} as const;
+
 const manifestRunProperties = {
   timestamp: { type: "string", format: "date-time" },
   status: { type: "string", enum: ["success", "partial", "failed"] },
@@ -259,6 +293,7 @@ const manifestRunProperties = {
   duration_s: { type: "number", minimum: 0 },
   error: { type: "string", minLength: 1 },
   warnings: { type: "object", additionalProperties: { type: "boolean" } },
+  cost: manifestCostSchema,
 } as const satisfies Record<keyof ManifestRun, unknown>;
 
 const manifestRunRequired = [
@@ -338,6 +373,53 @@ const corpusManifestSchema = {
   type: "object",
   properties: corpusManifestProperties,
   required: corpusManifestRequired,
+  additionalProperties: false,
+} as const;
+
+// ---------- Heartbeat contract drift guards (D-021, same pattern as D-020) ----------
+//
+// The heartbeat contract exists in three places: the writer
+// (tools/health-check.ts), the reader the showcase computes health from
+// (lib/types.ts HeartbeatFile), and the Ajv schema below. The assertions
+// pin them to each other at compile time.
+
+// Health-check output must remain readable by lib/status.ts computations.
+type _HeartbeatContractInSync = AssertAssignable<WriterHeartbeatFile, HeartbeatFile>;
+
+const heartbeatEntryProperties = {
+  source_id: { type: "string", pattern: "^[a-z0-9-]+$" },
+  checked_at: { type: "string", format: "date-time" },
+  status: {
+    type: "string",
+    enum: ["ok", "degraded", "down", "unknown", "n_a"],
+  },
+  latency_ms: { type: ["integer", "null"], minimum: 0 },
+  note: { type: "string", minLength: 1 },
+} as const satisfies Record<keyof WriterHeartbeatEntry, unknown>;
+
+const heartbeatEntryRequired = [
+  "source_id",
+  "checked_at",
+  "status",
+  "latency_ms",
+  "note",
+] as const satisfies readonly (keyof WriterHeartbeatEntry)[];
+
+const heartbeatSchema = {
+  type: "object",
+  properties: {
+    generated_at: { type: "string", format: "date-time" },
+    entries: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: heartbeatEntryProperties,
+        required: heartbeatEntryRequired,
+        additionalProperties: false,
+      },
+    },
+  } satisfies Record<keyof WriterHeartbeatFile, unknown>,
+  required: ["generated_at", "entries"] satisfies readonly (keyof WriterHeartbeatFile)[],
   additionalProperties: false,
 } as const;
 
@@ -612,6 +694,8 @@ function main(): void {
         .sort()
     : [];
   for (const dirName of corpusDirs) {
+    // /corpora/_health holds the heartbeat (D-021), not a harvested corpus.
+    if (dirName === "_health") continue;
     if (!existsSync(join(PATHS.corporaDir, dirName, "manifest.json"))) {
       fail(
         join(PATHS.corporaDir, dirName),
@@ -665,6 +749,30 @@ function main(): void {
   }
   if (manifestFiles.length === 0) {
     console.log("  · no harvested corpora yet (honest empty state)");
+  }
+
+  // 10. Source health heartbeat (D-021), when present. Every entry's
+  // source_id must exist in sources.json — health of a phantom source is
+  // meaningless.
+  if (existsSync(PATHS.heartbeat)) {
+    const heartbeat = readJson(PATHS.heartbeat);
+    if (heartbeat !== undefined) {
+      let ok = validateAgainst(ajv.compile(heartbeatSchema), PATHS.heartbeat, heartbeat);
+      if (sourceIds.size > 0) {
+        for (const entry of (heartbeat as HeartbeatFile).entries ?? []) {
+          if (typeof entry.source_id === "string" && !sourceIds.has(entry.source_id)) {
+            fail(PATHS.heartbeat, `entry source_id "${entry.source_id}" is not a source id in sources.json`);
+            ok = false;
+          }
+        }
+      }
+      if (ok) {
+        const count = (heartbeat as HeartbeatFile).entries?.length ?? 0;
+        console.log(`  ✓ ${rel(PATHS.heartbeat)} valid (${count} health entries)`);
+      }
+    }
+  } else {
+    console.log("  · no health heartbeat yet (run npm run health)");
   }
 
   finish();

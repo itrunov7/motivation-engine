@@ -15,7 +15,7 @@
 import { mkdirSync } from "node:fs";
 import { join, relative } from "node:path";
 import { CONNECTORS } from "./connectors";
-import type { ManifestRun, RunContext, RunParams, RunResult } from "./connectors/types";
+import type { ManifestCost, ManifestRun, RunContext, RunParams, RunResult } from "./connectors/types";
 import { createPoliteFetch } from "./connectors/lib/http";
 import { MAX_CORPUS_BYTES, dirSizeBytes, formatBytes, writeJsonPretty } from "./connectors/lib/io";
 import { writeManifest } from "./connectors/lib/manifest";
@@ -57,9 +57,13 @@ async function main(): Promise<void> {
   mkdirSync(corpusDir, { recursive: true });
 
   const mailto = params.mailto ?? process.env.CONNECTOR_MAILTO;
+  const { fetch: politeFetch, stats: fetchStats } = createPoliteFetch({
+    minIntervalMs: 1000,
+    mailto,
+  });
   const ctx: RunContext = {
     corpusDir,
-    fetch: createPoliteFetch({ minIntervalMs: 1000, mailto }),
+    fetch: politeFetch,
     writeJson: (path, data) => writeJsonPretty(join(corpusDir, path), data),
     log: (message) => console.log(`  [${connector.id}] ${message}`),
   };
@@ -91,6 +95,21 @@ async function main(): Promise<void> {
   }
 
   const durationS = Math.round(((Date.now() - startedAt.getTime()) / 1000) * 100) / 100;
+
+  // Cost accounting (D-022): api_calls counted at the polite-fetch layer
+  // (includes retries), duration from the wall clock. Token fields are
+  // reserved for future LLM jobs — null until an engine exists (rule 5).
+  // estimated_usd is COMPUTED: the D-011 whitelist is entirely free public
+  // APIs, so a pure-fetch run computes to 0. This becomes non-zero only when
+  // a priced job reports token usage — it is never a hardcoded status.
+  const cost: ManifestCost = {
+    api_calls: fetchStats.apiCalls,
+    duration_s: durationS,
+    tokens_in: null,
+    tokens_out: null,
+    estimated_usd: 0,
+  };
+
   const run: ManifestRun = runError
     ? {
         timestamp: startedAt.toISOString(),
@@ -101,6 +120,7 @@ async function main(): Promise<void> {
         duration_s: durationS,
         error: runError,
         ...(result?.warnings ? { warnings: result.warnings } : {}),
+        cost,
       }
     : {
         timestamp: startedAt.toISOString(),
@@ -111,12 +131,13 @@ async function main(): Promise<void> {
         duration_s: durationS,
         ...(result!.error ? { error: result!.error } : {}),
         ...(result!.warnings ? { warnings: result!.warnings } : {}),
+        cost,
       };
 
   const manifest = writeManifest(connector, corpusDir, run, result?.files ?? []);
 
   console.log(`\n  manifest: ${relative(ROOT, join(corpusDir, "manifest.json"))}`);
-  console.log(`  status: ${run.status} · records: ${run.records_fetched} · files: ${manifest.data_files.length} · ${formatBytes(corpusBytes)} · ${durationS}s`);
+  console.log(`  status: ${run.status} · records: ${run.records_fetched} · files: ${manifest.data_files.length} · api_calls: ${cost.api_calls} · ${formatBytes(corpusBytes)} · ${durationS}s`);
 
   if (run.status === "failed") {
     console.error(`\nFAILED — ${runError}`);

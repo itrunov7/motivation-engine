@@ -1,0 +1,123 @@
+# Connectors workflow — scheduled source health heartbeat (D-021) with
+# failure automation (D-022).
+#
+# Every 6 hours (plus manual dispatch) tools/health-check.ts probes the
+# D-011 whitelisted APIs and writes /corpora/_health/heartbeat.json. The
+# script itself skips the write when statuses are unchanged and the
+# committed heartbeat is <11h old, so this job commits at most ~2/day on
+# quiet days — commit only when git actually sees a diff.
+#
+# Operator contract (D-022): watch issues, not logs. A failing run is
+# retried once after a backoff; if it still fails, this workflow opens a
+# GitHub issue "connector:{id} failing" labeled `ops` with the captured
+# error — deduplicated so a second issue is never opened while one is open.
+# The job is written generically around CONNECTOR_ID so a future scheduled
+# harvest job reuses the same automation verbatim.
+
+name: connectors
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    env:
+      CONNECTOR_ID: health
+      S2_API_KEY: ${{ secrets.S2_API_KEY }}
+      CONNECTOR_MAILTO: ${{ vars.CONNECTOR_MAILTO }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # Run once; on failure back off 60s and retry once. The final attempt's
+      # output is kept in health.log for the issue body. A persistent failure
+      # is recorded as an output flag (not a step failure) so the issue step
+      # can run before the job is failed at the end.
+      - name: Run health check (retry once after backoff)
+        id: health
+        run: |
+          set +e
+          npm run health 2>&1 | tee health.log
+          code=${PIPESTATUS[0]}
+          if [ "$code" -ne 0 ]; then
+            echo "::warning::health check failed (exit $code) — backing off 60s then retrying once."
+            sleep 60
+            npm run health 2>&1 | tee health.log
+            code=${PIPESTATUS[0]}
+          fi
+          if [ "$code" -ne 0 ]; then
+            echo "failed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "failed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit heartbeat if changed
+        if: steps.health.outputs.failed != 'true'
+        run: |
+          if [ -n "$(git status --porcelain corpora/_health)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add corpora/_health
+            git commit -m "data: update source health heartbeat"
+            git push
+          else
+            echo "Heartbeat unchanged — nothing to commit."
+          fi
+
+      # Failure automation (D-022): open a deduplicated ops issue. The `ops`
+      # label is ensured first so creation never fails on a missing label.
+      # Dedupe by exact title among open ops issues — never open a second
+      # issue while one is open.
+      - name: Open ops issue on persistent failure
+        if: steps.health.outputs.failed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          title="connector:${CONNECTOR_ID} failing"
+
+          gh label create ops \
+            --color B60205 \
+            --description "operations: a connector is failing (D-022)" \
+            2>/dev/null || true
+
+          existing=$(gh issue list --state open --label ops \
+            --search "in:title ${title}" \
+            --json number,title \
+            --jq ".[] | select(.title == \"${title}\") | .number" | head -n1)
+
+          if [ -n "${existing}" ]; then
+            echo "Issue #${existing} is already open for \"${title}\" — not opening a duplicate."
+            exit 0
+          fi
+
+          {
+            echo "The **${CONNECTOR_ID}** connector run failed twice in a row (initial attempt + one retry after backoff) in [\`${GITHUB_WORKFLOW}\` run #${GITHUB_RUN_NUMBER}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})."
+            echo ""
+            echo "Captured error output:"
+            echo ""
+            echo '```'
+            tail -n 40 health.log 2>/dev/null || echo "(no output captured)"
+            echo '```'
+            echo ""
+            echo "Operator contract (D-022): watch issues, not logs. Close this issue after the fix to re-arm the automation for this connector."
+          } > issue-body.md
+
+          gh issue create --title "${title}" --label ops --body-file issue-body.md
+
+      - name: Fail the job on persistent connector failure
+        if: steps.health.outputs.failed == 'true'
+        run: |
+          echo "::error::${CONNECTOR_ID} connector failed after retry — an ops issue was opened/confirmed. Failing the run so it shows red."
+          exit 1

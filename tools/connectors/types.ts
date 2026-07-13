@@ -100,6 +100,28 @@ export interface Connector {
 
 export type RunStatus = "success" | "partial" | "failed";
 
+/**
+ * Cost accounting for one run (D-022). The connector layer fills api_calls
+ * and duration_s now; token fields are RESERVED for future LLM jobs (there
+ * is no engine yet, rule 5) and are written as null until then. estimated_usd
+ * is COMPUTED, not asserted — all four D-011 whitelisted APIs are free, so a
+ * pure-fetch run computes to 0; it becomes non-zero the moment a priced job
+ * (an LLM call) reports token usage.
+ */
+export interface ManifestCost {
+  /** Outbound HTTP requests made this run, counting retries (the honest
+   *  request cost). Filled by the polite-fetch layer (lib/http.ts). */
+  api_calls: number;
+  /** Wall-clock seconds of the run; mirrors ManifestRun.duration_s. */
+  duration_s: number;
+  /** Reserved for future LLM jobs — null until an engine exists. */
+  tokens_in: number | null;
+  /** Reserved for future LLM jobs — null until an engine exists. */
+  tokens_out: number | null;
+  /** Computed dollar estimate; 0 for the free public APIs (D-011). */
+  estimated_usd: number;
+}
+
 export interface ManifestRun {
   /** ISO-8601 UTC timestamp of when the run started. */
   timestamp: string;
@@ -111,6 +133,10 @@ export interface ManifestRun {
   error?: string;
   /** Degradation flags from the connector (D-018), e.g. s2_throttled. */
   warnings?: Record<string, boolean>;
+  /** Cost accounting (D-022). Optional: runs recorded before D-022 have no
+   *  cost block, and rewriting history would be dishonest — the runner
+   *  always writes it going forward. */
+  cost?: ManifestCost;
 }
 
 export interface ManifestDataFile {

@@ -315,6 +315,20 @@ export type CategoryCounts = Record<EvidenceCategory, number>;
 
 export type CorpusRunStatus = "success" | "partial" | "failed";
 
+/**
+ * Cost accounting for one run (D-022), mirrored from
+ * tools/connectors/types.ts ManifestCost. token fields are reserved for
+ * future LLM jobs (null until an engine exists); estimated_usd is computed,
+ * 0 for the free D-011 public APIs.
+ */
+export interface CorpusManifestCost {
+  api_calls: number;
+  duration_s: number;
+  tokens_in: number | null;
+  tokens_out: number | null;
+  estimated_usd: number;
+}
+
 /** One manifest run entry (last_run / run_history). */
 export interface CorpusManifestRun {
   timestamp: string;
@@ -325,6 +339,8 @@ export interface CorpusManifestRun {
   duration_s: number;
   error?: string;
   warnings?: Record<string, boolean>;
+  /** Cost accounting (D-022); absent for runs recorded before D-022. */
+  cost?: CorpusManifestCost;
 }
 
 /**
@@ -348,6 +364,40 @@ export interface CorpusManifest {
     /** Category checklist counts (D-019); absent for unclassified files. */
     categories?: CategoryCounts;
   }[];
+}
+
+// ---------- Source health heartbeat (read-only mirror of tools/health-check.ts, D-021) ----------
+
+/**
+ * Health of a source's API right now — a separate axis from connection
+ * (D-021). Recorded by tools/health-check.ts, never measured by the app:
+ * - ok — the probe got a 2xx
+ * - degraded — throttled (HTTP 429/206, the s2_throttled condition)
+ * - down — network error, timeout, or 5xx
+ * - unknown — no probe exists (host not in the D-011 whitelist), no
+ *   heartbeat yet, or the heartbeat is stale (>12h) — stale never renders ok
+ * - n_a — internal source, no external endpoint by design
+ */
+export type HealthStatus = "ok" | "degraded" | "down" | "unknown" | "n_a";
+
+/** One probed source in /corpora/_health/heartbeat.json. */
+export interface HeartbeatEntry {
+  source_id: string;
+  checked_at: string;
+  status: HealthStatus;
+  /** Round-trip of the probe; null when no request was made. */
+  latency_ms: number | null;
+  note: string;
+}
+
+/**
+ * The heartbeat file shape. The writer contract lives in
+ * tools/health-check.ts (lib/ never imports from tools/); a drift guard in
+ * tools/validate.ts pins the writer to this reader.
+ */
+export interface HeartbeatFile {
+  generated_at: string;
+  entries: HeartbeatEntry[];
 }
 
 // ---------- Decision log (§3.5) ----------
