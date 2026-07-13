@@ -62,6 +62,13 @@
       "title": "Status computation centralized in lib/status.ts",
       "body": "All showcase block statuses (live / in progress / planned) are computed in a single server-only module, lib/status.ts — the only file in the codebase where status literals may appear; components map presentation through STATUS_META keys, never through literals. Rules per SPEC §4: Registry is live when at least one full record passes the hard rules (non-empty implementations[].metrics and constraints.hard_rules, D-003); Schema & validator when the schema files and the CI workflow exist; Card generator when /cards holds a generated {id}.md for a valid full record. Folder-driven blocks (runtime, corpora, telemetry) treat README.md, dotfiles, .gitkeep, and empty subfolders as non-data, and a corpus subfolder counts only when named after a source id from sources.json and containing a manifest.json (per the /corpora contract) — so an empty or fake folder can never turn a block green. Typed data loaders live in lib/data.ts and are reused by later showcase pages.",
       "area": "architecture"
+    },
+    {
+      "id": "D-010",
+      "date": "2026-07-13",
+      "title": "Docs render via react-markdown; /sources filters via URL searchParams",
+      "body": "The remaining showcase pages stay Server Components end to end. /docs/[slug] renders the five foundation documents with react-markdown + remark-gfm (the first runtime dependencies beyond Next itself) — server-compatible, no dangerouslySetInnerHTML, GFM tables supported; slugs are allowlisted in lib/data.ts (DOC_SLUGS) and unknown slugs 404. /sources filters (class A–D, priority P0–P2, status) are plain links that toggle URL searchParams and the table is filtered server-side — zero client JS, shareable filter URLs. /dossiers reads /dossiers/*.json via loadDossiers() (excluding the schema), so its empty state is computed from the folder being empty, never asserted; source status presentation lives in SOURCE_STATUS_META in lib/status.ts, keeping status literals out of app/ (D-005, D-009).",
+      "area": "stack"
     }
   ]
 }
