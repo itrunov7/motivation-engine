@@ -10,6 +10,9 @@ jobs:
       # secrets live only in the Vercel deployment environment.
       ACCESS_PASSWORD: ci-dummy-password
       SESSION_SECRET: ci-dummy-secret
+      # Optional Semantic Scholar key for connector runs (D-018); empty
+      # when the repository secret is unset — connectors degrade gracefully.
+      S2_API_KEY: ${{ secrets.S2_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

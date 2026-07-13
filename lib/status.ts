@@ -35,16 +35,19 @@ import {
   loadSources,
   loadTaxonomy,
 } from "./data";
-import type {
-  ComputedSourceState,
-  ConnectionMode,
-  CorpusManifest,
-  LifecycleStatus,
-  Mechanism,
-  SeedStub,
-  Source,
-  SourceClassId,
-  TaxonomyNode,
+import {
+  EVIDENCE_CATEGORIES,
+  type ComputedSourceState,
+  type ConnectionMode,
+  type CorpusManifest,
+  type CorpusRunStatus,
+  type EvidenceCategory,
+  type LifecycleStatus,
+  type Mechanism,
+  type SeedStub,
+  type Source,
+  type SourceClassId,
+  type TaxonomyNode,
 } from "./types";
 
 // ---------- Status vocabulary ----------
@@ -62,6 +65,14 @@ export const STATUS_META: Record<BlockStatus, StatusMeta> = {
   in_progress: { label: "in progress", color: "#E4B54E" },
   planned: { label: "planned", color: "#7C93A8" },
 };
+
+/**
+ * Alert token (D-019): red for structural gaps and failed runs — the one
+ * deliberate addition to the Control Center palette. An empty evidence
+ * category or a failed connector run is not "planned"; it is a hole the
+ * cockpit must flag loudly.
+ */
+export const ALERT_COLOR = "#F87171";
 
 // ---------- Source connection modes and computed states (D-013) ----------
 
@@ -157,6 +168,84 @@ function manifestsForSource(
   return Array.from(readAllCorpusManifests().entries())
     .filter(([, manifest]) => (manifest.source_ids ?? []).includes(sourceId))
     .map(([dirName, manifest]) => ({ dirName, manifest }));
+}
+
+// ---------- Corpus cockpit (/connectors, D-019) ----------
+
+/** Presentation metadata for manifest run statuses (never stored in app/). */
+export const RUN_STATUS_META: Record<CorpusRunStatus, StatusMeta> = {
+  success: { label: "success", color: "#34D399" },
+  partial: { label: "partial", color: "#E4B54E" },
+  failed: { label: "failed", color: ALERT_COLOR },
+};
+
+/** One corpus manifest with its directory name, for the /connectors page. */
+export interface CorpusEntry {
+  dirName: string;
+  manifest: CorpusManifest;
+}
+
+/** Every non-internal corpus manifest, sorted by directory name. */
+export function loadCorpusManifests(): CorpusEntry[] {
+  return Array.from(readAllCorpusManifests().entries())
+    .map(([dirName, manifest]) => ({ dirName, manifest }))
+    .sort((a, b) => a.dirName.localeCompare(b.dirName));
+}
+
+/**
+ * Category checklist state for one data file (D-019), computed from the
+ * manifest — never asserted:
+ * - covered: the category has ≥1 record
+ * - missing: the category has 0 records — a structural gap (red flag)
+ * - unclassified: the file carries no category data (pre-v2 harvest)
+ */
+export type CategoryFlagState = "covered" | "missing" | "unclassified";
+
+export const CATEGORY_FLAG_META: Record<CategoryFlagState, StatusMeta> = {
+  covered: { label: "covered", color: "#34D399" },
+  missing: { label: "missing", color: ALERT_COLOR },
+  unclassified: { label: "not classified", color: "#E4B54E" },
+};
+
+export interface CategoryFlag {
+  category: EvidenceCategory;
+  /** null when the file is unclassified. */
+  count: number | null;
+  state: CategoryFlagState;
+}
+
+export interface DataFileChecklist {
+  path: string;
+  records: number;
+  bytes: number;
+  /** False for pre-v2 files with no category data — re-run the connector. */
+  classified: boolean;
+  /** One flag per category, in EVIDENCE_CATEGORIES order. */
+  flags: CategoryFlag[];
+  /** Categories with zero records — the red flags. */
+  missing: EvidenceCategory[];
+}
+
+/** Computes the per-category checklist for one manifest data file. */
+export function computeFileChecklist(
+  file: CorpusManifest["data_files"][number],
+): DataFileChecklist {
+  const counts = file.categories;
+  const flags: CategoryFlag[] = EVIDENCE_CATEGORIES.map((category) => {
+    if (!counts) return { category, count: null, state: "unclassified" };
+    const count = counts[category] ?? 0;
+    return { category, count, state: count > 0 ? "covered" : "missing" };
+  });
+  return {
+    path: file.path,
+    records: file.records,
+    bytes: file.bytes,
+    classified: counts !== undefined,
+    flags,
+    missing: flags
+      .filter((flag) => flag.state === "missing")
+      .map((flag) => flag.category),
+  };
 }
 
 /**

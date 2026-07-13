@@ -7,7 +7,9 @@
  * - HARD RULE (checked explicitly on top of the schema): a full record with
  *   empty/missing implementations[].metrics or constraints.hard_rules FAILS
  * - /registry/taxonomy.json, /sources/sources.json, /decisions/decisions.json
- * - /dossiers/dossier.schema.json integrity + any dossier records
+ * - /dossiers/dossier.schema.json integrity + any dossier records; a dossier
+ *   referencing a mechanism whose evidence corpus is missing, unclassified,
+ *   or has an empty dissent category FAILS (D-019)
  * - /corpora/{corpus}/manifest.json against the connector manifest
  *   contract (tools/connectors/types.ts): dir name = source_id,
  *   run_history ≤ 20, data_files exist on disk, every source_ids entry
@@ -215,8 +217,34 @@ const manifestRunSchema = {
     files_written: { type: "integer", minimum: 0 },
     duration_s: { type: "number", minimum: 0 },
     error: { type: "string", minLength: 1 },
+    warnings: { type: "object", additionalProperties: { type: "boolean" } },
   },
   required: ["timestamp", "status", "params", "records_fetched", "files_written", "duration_s"],
+  additionalProperties: false,
+} as const;
+
+/** The category checklist vocabulary (D-019) — mirrors EVIDENCE_CATEGORIES
+ *  in tools/connectors/types.ts. */
+const EVIDENCE_CATEGORIES = [
+  "foundational",
+  "meta-analysis",
+  "replication",
+  "dissent",
+  "recent",
+] as const;
+
+// Per-file category checklist counts (D-019): exactly the five categories,
+// each a non-negative integer. Optional — files harvested by pre-v2
+// connectors carry no categories.
+const categoryCountsSchema = {
+  type: "object",
+  properties: Object.fromEntries(
+    EVIDENCE_CATEGORIES.map((category) => [
+      category,
+      { type: "integer", minimum: 0 },
+    ]),
+  ),
+  required: [...EVIDENCE_CATEGORIES],
   additionalProperties: false,
 } as const;
 
@@ -239,6 +267,7 @@ const corpusManifestSchema = {
           path: { type: "string", minLength: 1 },
           records: { type: "integer", minimum: 0 },
           bytes: { type: "integer", minimum: 0 },
+          categories: categoryCountsSchema,
         },
         required: ["path", "records", "bytes"],
         additionalProperties: false,
@@ -257,6 +286,51 @@ interface MechanismLike {
   implementations?: { id?: string; metrics?: unknown }[];
   constraints?: { hard_rules?: unknown };
   relations?: { target?: string }[];
+}
+
+/**
+ * D-019: a dossier referencing a mechanism whose evidence file has an empty
+ * dissent category FAILS validation — a corpus that can only confirm is
+ * broken. Missing or unclassified (pre-v2) evidence files fail too, because
+ * their dissent coverage cannot be verified.
+ */
+function checkDossierDissent(dossierFile: string, mechanismId: string): boolean {
+  const evidenceFile = join(PATHS.corporaDir, "evidence", `${mechanismId}.json`);
+  if (!existsSync(evidenceFile)) {
+    fail(
+      dossierFile,
+      `no evidence corpus for "${mechanismId}" (expected ${rel(evidenceFile)}) — a dossier cannot rest on an unharvested corpus (D-019)`,
+    );
+    return false;
+  }
+  let evidence: { category_counts?: Record<string, number> };
+  try {
+    evidence = JSON.parse(readFileSync(evidenceFile, "utf-8")) as {
+      category_counts?: Record<string, number>;
+    };
+  } catch (err) {
+    fail(
+      dossierFile,
+      `evidence corpus ${rel(evidenceFile)} is not valid JSON — ${(err as Error).message}`,
+    );
+    return false;
+  }
+  const dissent = evidence.category_counts?.dissent;
+  if (typeof dissent !== "number") {
+    fail(
+      dossierFile,
+      `evidence corpus for "${mechanismId}" has no category checklist — re-run the evidence connector (v2, D-019)`,
+    );
+    return false;
+  }
+  if (dissent === 0) {
+    fail(
+      dossierFile,
+      `corpus for "${mechanismId}" has an empty dissent category — a corpus that can only confirm is broken (D-019)`,
+    );
+    return false;
+  }
+  return true;
 }
 
 function validateAgainst(
@@ -433,7 +507,7 @@ function main(): void {
       for (const file of dossierFiles) {
         const data = readJson(file);
         if (data === undefined) continue;
-        const ok = validateAgainst(validateDossier, file, data);
+        let ok = validateAgainst(validateDossier, file, data);
         const dossier = data as {
           scores?: Record<string, number>;
           total?: number;
@@ -447,6 +521,12 @@ function main(): void {
         }
         if (typeof dossier.mechanism_id === "string" && !rosterIds.has(dossier.mechanism_id)) {
           fail(file, `mechanism_id "${dossier.mechanism_id}" is not in the mechanism roster`);
+        }
+        // D-019: a dossier must rest on a corpus that can disconfirm — the
+        // referenced mechanism's evidence file must exist, be classified,
+        // and have a non-empty dissent category.
+        if (typeof dossier.mechanism_id === "string" && rosterIds.has(dossier.mechanism_id)) {
+          if (!checkDossierDissent(file, dossier.mechanism_id)) ok = false;
         }
         if (ok) console.log(`  ✓ ${rel(file)} valid (dossier record)`);
       }

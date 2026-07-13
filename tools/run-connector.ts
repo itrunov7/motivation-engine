@@ -100,6 +100,7 @@ async function main(): Promise<void> {
         files_written: result?.files.length ?? 0,
         duration_s: durationS,
         error: runError,
+        ...(result?.warnings ? { warnings: result.warnings } : {}),
       }
     : {
         timestamp: startedAt.toISOString(),
@@ -109,6 +110,7 @@ async function main(): Promise<void> {
         files_written: result!.files.length,
         duration_s: durationS,
         ...(result!.error ? { error: result!.error } : {}),
+        ...(result!.warnings ? { warnings: result!.warnings } : {}),
       };
 
   const manifest = writeManifest(connector, corpusDir, run, result?.files ?? []);

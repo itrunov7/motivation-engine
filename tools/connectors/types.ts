@@ -13,12 +13,33 @@
 /** Params parsed from the CLI as `key=value` pairs. */
 export type RunParams = Record<string, string>;
 
+/**
+ * The evidence category checklist (D-019): corpus completeness is verified
+ * structurally — every harvested corpus is expected to cover all five
+ * categories. Classification is metadata-only (type, title, abstract, year,
+ * citations); the connector never judges scientific content.
+ */
+export const EVIDENCE_CATEGORIES = [
+  "foundational",
+  "meta-analysis",
+  "replication",
+  "dissent",
+  "recent",
+] as const;
+
+export type EvidenceCategory = (typeof EVIDENCE_CATEGORIES)[number];
+
+/** Per-category record counts, keyed by EVIDENCE_CATEGORIES entries. */
+export type CategoryCounts = Record<EvidenceCategory, number>;
+
 /** A data file the connector produced during this run. */
 export interface RunFile {
   /** Path relative to the corpus directory, e.g. "records.json". */
   path: string;
   /** Number of records the file contains. */
   records: number;
+  /** Category checklist counts (D-019), for connectors that classify. */
+  categories?: CategoryCounts;
 }
 
 /**
@@ -33,6 +54,9 @@ export interface RunResult {
   files: RunFile[];
   /** Only for "partial": what was left incomplete and why. */
   error?: string;
+  /** Degradation flags recorded in the manifest (D-018), e.g.
+   *  { s2_throttled: true } when Semantic Scholar ran keyless and 429'd. */
+  warnings?: Record<string, boolean>;
 }
 
 /** Polite fetch: same signature as global fetch, but rate-limited,
@@ -85,6 +109,8 @@ export interface ManifestRun {
   files_written: number;
   duration_s: number;
   error?: string;
+  /** Degradation flags from the connector (D-018), e.g. s2_throttled. */
+  warnings?: Record<string, boolean>;
 }
 
 export interface ManifestDataFile {
@@ -92,6 +118,8 @@ export interface ManifestDataFile {
   path: string;
   records: number;
   bytes: number;
+  /** Category checklist counts (D-019); absent for unclassified files. */
+  categories?: CategoryCounts;
 }
 
 export interface Manifest {

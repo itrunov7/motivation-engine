@@ -67,6 +67,20 @@
       "items": { "type": "string", "minLength": 1 },
       "description": "Owner-provided search terms for the evidence connector (D-015). Must include disconfirming and boundary-condition terms, not only confirming ones — a corpus that can only confirm is methodologically broken. Optional; the connector falls back to [name] when absent."
     },
+    "pinned_evidence": {
+      "type": "array",
+      "description": "Owner-pinned works the connector cannot reliably surface (D-017). The evidence connector merges these into the corpus (source_api: pinned), fetching metadata from OpenAlex by DOI. 100% recall is a human+machine contract, not a query-tuning goal.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "minLength": 1 },
+          "doi": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        },
+        "required": ["title", "doi", "reason"],
+        "additionalProperties": false
+      }
+    },
     "prior_weight": {
       "type": "number",
       "minimum": 0,

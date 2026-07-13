@@ -11,16 +11,17 @@ import {
 /** Blocks that already have a showcase page. */
 const BLOCK_ROUTES: Record<string, string> = {
   registry: "/registry",
-  // The corpora will be harvested from the sources registry — until then the
-  // /sources page is where these blocks' intake lives.
-  "corpus-interfaces-science": "/sources",
-  "corpus-reviews": "/sources",
+  // Harvested corpora live in the /connectors cockpit (manifests, run
+  // history, and the D-019 category checklist).
+  "corpus-interfaces-science": "/connectors",
+  "corpus-reviews": "/connectors",
 };
 
 /** Every room of the Control Center, in tour order. */
 const ROOMS: { href: string; label: string }[] = [
   { href: "/registry", label: "registry" },
   { href: "/sources", label: "sources" },
+  { href: "/connectors", label: "connectors" },
   { href: "/dossiers", label: "dossiers" },
   { href: "/decisions", label: "decisions" },
   { href: "/docs", label: "docs" },

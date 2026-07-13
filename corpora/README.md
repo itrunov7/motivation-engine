@@ -32,7 +32,8 @@ corpora such as earnings calls or enforcement actions (class D).
     "records_fetched": 120,
     "files_written": 1,
     "duration_s": 4.2,
-    "error": "…"                    // only for partial/failed
+    "error": "…",                   // only for partial/failed
+    "warnings": { "s2_throttled": true }  // optional degradation flags (D-018)
   },
   "run_history": [ /* last 20 runs, newest first, same shape */ ],
   "data_files": [ { "path": "records.json", "records": 120, "bytes": 48213 } ]

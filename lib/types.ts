@@ -127,6 +127,13 @@ export interface ReferenceExample {
   what: string;
 }
 
+/** Owner-pinned paper the evidence connector merges by DOI (D-017). */
+export interface PinnedEvidence {
+  title: string;
+  doi: string;
+  reason: string;
+}
+
 export interface Mechanism {
   $schema?: string;
   /** Pattern: [A-Z]{2}-\d{2} */
@@ -145,6 +152,9 @@ export interface Mechanism {
   /** Owner-provided search terms for the evidence connector (D-015); must
    *  include disconfirming/boundary terms, not only confirming ones. */
   evidence_terms?: string[];
+  /** Owner-pinned works the connector cannot surface (D-017); merged into
+   *  the evidence corpus with source_api "pinned". */
+  pinned_evidence?: PinnedEvidence[];
   /** 0–1 */
   prior_weight: number;
   mechanism_summary_for_context: string;
@@ -286,20 +296,57 @@ export interface SourcesRegistry {
 // ---------- Corpus manifest (read-only mirror of tools/connectors/types.ts) ----------
 
 /**
- * Minimal manifest shape the showcase needs to compute source states from
- * /corpora/{corpus}/manifest.json. The full contract (and its writer)
- * lives in tools/connectors/types.ts; lib/ never imports from tools/.
- * A connector is not a source (D-014): `source_ids` lists the sources.json
- * ids the corpus harvests; source states are computed from that field.
+ * The evidence category checklist (D-019), mirrored from
+ * tools/connectors/types.ts: corpus completeness is verified structurally —
+ * every harvested corpus is expected to cover all five categories.
+ */
+export const EVIDENCE_CATEGORIES = [
+  "foundational",
+  "meta-analysis",
+  "replication",
+  "dissent",
+  "recent",
+] as const;
+
+export type EvidenceCategory = (typeof EVIDENCE_CATEGORIES)[number];
+
+/** Per-category record counts, keyed by EVIDENCE_CATEGORIES entries. */
+export type CategoryCounts = Record<EvidenceCategory, number>;
+
+export type CorpusRunStatus = "success" | "partial" | "failed";
+
+/** One manifest run entry (last_run / run_history). */
+export interface CorpusManifestRun {
+  timestamp: string;
+  status: CorpusRunStatus;
+  params: Record<string, string>;
+  records_fetched: number;
+  files_written: number;
+  duration_s: number;
+  error?: string;
+  warnings?: Record<string, boolean>;
+}
+
+/**
+ * Manifest shape the showcase needs to compute source states and the
+ * /connectors cockpit from /corpora/{corpus}/manifest.json. The full
+ * contract (and its writer) lives in tools/connectors/types.ts; lib/ never
+ * imports from tools/. A connector is not a source (D-014): `source_ids`
+ * lists the sources.json ids the corpus harvests; source states are
+ * computed from that field.
  */
 export interface CorpusManifest {
   source_id: string;
   source_ids: string[];
-  last_run: {
-    status: "success" | "partial" | "failed";
-  };
+  connector_version: string;
+  last_run: CorpusManifestRun;
+  run_history: CorpusManifestRun[];
   data_files: {
     path: string;
+    records: number;
+    bytes: number;
+    /** Category checklist counts (D-019); absent for unclassified files. */
+    categories?: CategoryCounts;
   }[];
 }
 

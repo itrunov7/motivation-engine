@@ -10,6 +10,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import {
   RUN_HISTORY_LIMIT,
+  type CategoryCounts,
   type Connector,
   type Manifest,
   type ManifestDataFile,
@@ -40,8 +41,9 @@ function listFilesRecursive(dir: string, base: string): string[] {
 
 /**
  * Rebuild data_files by scanning the corpus dir: bytes from stat, record
- * counts from what the connector reported (files it did not report this
- * run keep the count from the previous manifest, or 0 if unknown).
+ * counts and category checklists from what the connector reported (files it
+ * did not report this run keep the values from the previous manifest — count
+ * 0 / no categories if unknown).
  */
 function scanDataFiles(
   corpusDir: string,
@@ -50,17 +52,28 @@ function scanDataFiles(
 ): ManifestDataFile[] {
   if (!existsSync(corpusDir)) return [];
   const recordCounts = new Map<string, number>();
-  for (const file of previous?.data_files ?? []) recordCounts.set(file.path, file.records);
-  for (const file of reported) recordCounts.set(file.path, file.records);
+  const categoryCounts = new Map<string, CategoryCounts>();
+  for (const file of previous?.data_files ?? []) {
+    recordCounts.set(file.path, file.records);
+    if (file.categories) categoryCounts.set(file.path, file.categories);
+  }
+  for (const file of reported) {
+    recordCounts.set(file.path, file.records);
+    if (file.categories) categoryCounts.set(file.path, file.categories);
+  }
 
   return listFilesRecursive(corpusDir, corpusDir)
     .filter((path) => path !== "manifest.json")
     .sort()
-    .map((path) => ({
-      path,
-      records: recordCounts.get(path) ?? 0,
-      bytes: statSync(join(corpusDir, path)).size,
-    }));
+    .map((path) => {
+      const categories = categoryCounts.get(path);
+      return {
+        path,
+        records: recordCounts.get(path) ?? 0,
+        bytes: statSync(join(corpusDir, path)).size,
+        ...(categories ? { categories } : {}),
+      };
+    });
 }
 
 /** Merge the new run into the manifest and write it to disk. */
