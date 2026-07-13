@@ -55,6 +55,13 @@
       "title": "Tooling stack: tsx + Ajv for validator and card generator",
       "body": "tools/validate.ts and tools/render-cards.ts run via tsx (npm run validate / npm run cards) — no build step for tooling. Validation uses Ajv 2020-12 (ajv + ajv-formats) against the JSON schemas in the repo; the hard rule (non-empty implementations[].metrics and constraints.hard_rules, D-003) is additionally enforced by an explicit check in validate.ts so it fails loudly even if the schema were ever weakened. taxonomy.json, sources.json, and decisions.json are validated against inline schemas mirroring SPEC §3.1/§3.4/§3.5; dossier.schema.json is compiled for integrity and any future dossier records are validated against it including total = sum of axis scores. CI (.github/workflows/validate.yml) runs install, validate, and build on every push, so invalid knowledge physically cannot enter the repo.",
       "area": "stack"
+    },
+    {
+      "id": "D-009",
+      "date": "2026-07-13",
+      "title": "Status computation centralized in lib/status.ts",
+      "body": "All showcase block statuses (live / in progress / planned) are computed in a single server-only module, lib/status.ts — the only file in the codebase where status literals may appear; components map presentation through STATUS_META keys, never through literals. Rules per SPEC §4: Registry is live when at least one full record passes the hard rules (non-empty implementations[].metrics and constraints.hard_rules, D-003); Schema & validator when the schema files and the CI workflow exist; Card generator when /cards holds a generated {id}.md for a valid full record. Folder-driven blocks (runtime, corpora, telemetry) treat README.md, dotfiles, .gitkeep, and empty subfolders as non-data, and a corpus subfolder counts only when named after a source id from sources.json and containing a manifest.json (per the /corpora contract) — so an empty or fake folder can never turn a block green. Typed data loaders live in lib/data.ts and are reused by later showcase pages.",
+      "area": "architecture"
     }
   ]
 }
