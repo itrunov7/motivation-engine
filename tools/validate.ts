@@ -1,0 +1,405 @@
+/**
+ * tools/validate.ts — repo-wide data validation (SPEC.md §6).
+ *
+ * Validates:
+ * - /registry/mechanisms/*.json against mechanism.schema.json (full records)
+ * - /registry/mechanisms/_seed/*.json against the seedStub sub-schema
+ * - HARD RULE (checked explicitly on top of the schema): a full record with
+ *   empty/missing implementations[].metrics or constraints.hard_rules FAILS
+ * - /registry/taxonomy.json, /sources/sources.json, /decisions/decisions.json
+ * - /dossiers/dossier.schema.json integrity + any dossier records
+ * - Cross-references: filename = id, unique ids, parent in taxonomy,
+ *   relations[].target in the mechanism roster
+ *
+ * Non-zero exit on any violation. Run with `npm run validate`.
+ */
+
+import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { join, relative } from "node:path";
+import { Ajv2020, type ValidateFunction, type ErrorObject } from "ajv/dist/2020";
+import addFormats from "ajv-formats";
+
+const ROOT = join(__dirname, "..");
+
+const PATHS = {
+  mechanismSchema: join(ROOT, "registry", "mechanism.schema.json"),
+  mechanismsDir: join(ROOT, "registry", "mechanisms"),
+  seedDir: join(ROOT, "registry", "mechanisms", "_seed"),
+  taxonomy: join(ROOT, "registry", "taxonomy.json"),
+  sources: join(ROOT, "sources", "sources.json"),
+  decisions: join(ROOT, "decisions", "decisions.json"),
+  dossierSchema: join(ROOT, "dossiers", "dossier.schema.json"),
+  dossiersDir: join(ROOT, "dossiers"),
+};
+
+let errorCount = 0;
+
+function rel(path: string): string {
+  return relative(ROOT, path);
+}
+
+function fail(file: string, message: string): void {
+  errorCount++;
+  console.error(`  ✗ ${rel(file)}: ${message}`);
+}
+
+function formatAjvErrors(errors: ErrorObject[] | null | undefined): string[] {
+  return (errors ?? []).map(
+    (e) => `${e.instancePath || "(root)"} ${e.message ?? "invalid"}`,
+  );
+}
+
+function readJson(file: string): unknown {
+  try {
+    return JSON.parse(readFileSync(file, "utf-8"));
+  } catch (err) {
+    fail(file, `not valid JSON — ${(err as Error).message}`);
+    return undefined;
+  }
+}
+
+function listJsonFiles(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
+    .map((entry) => join(dir, entry.name))
+    .sort();
+}
+
+const ajv = new Ajv2020({ allErrors: true, allowUnionTypes: true });
+addFormats(ajv);
+
+// ---------- Inline schemas mirroring SPEC.md §3.1 / §3.4 / §3.5 ----------
+
+const taxonomySchema = {
+  type: "object",
+  properties: {
+    version: { type: "string", pattern: "^\\d+\\.\\d+\\.\\d+$" },
+    nodes: {
+      type: "array",
+      minItems: 6,
+      maxItems: 6,
+      items: {
+        type: "object",
+        properties: {
+          id: { type: "string", pattern: "^S[1-6]$" },
+          name: { type: "string", minLength: 1 },
+          anchors: {
+            type: "object",
+            properties: {
+              rdoc: { type: "string", minLength: 1 },
+              panksepp: { type: "string", minLength: 1 },
+            },
+            required: ["rdoc"],
+            additionalProperties: false,
+          },
+          description: { type: "string", minLength: 1 },
+        },
+        required: ["id", "name", "anchors", "description"],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ["version", "nodes"],
+  additionalProperties: false,
+} as const;
+
+const sourcesSchema = {
+  type: "object",
+  properties: {
+    classes: {
+      type: "array",
+      minItems: 1,
+      items: {
+        type: "object",
+        properties: {
+          id: { type: "string", enum: ["A", "B", "C", "D"] },
+          name: { type: "string", minLength: 1 },
+          sources: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                id: { type: "string", pattern: "^[a-z0-9-]+$" },
+                name: { type: "string", minLength: 1 },
+                what: { type: "string", minLength: 1 },
+                access: {
+                  type: "string",
+                  enum: ["open", "free", "freemium", "registration", "subscription", "mixed"],
+                },
+                api: { type: "boolean" },
+                cost: { type: "string", minLength: 1 },
+                priority: { type: "string", enum: ["P0", "P1", "P2"] },
+                phase: { type: "string", minLength: 1 },
+                status: { type: "string", enum: ["not_connected", "connected"] },
+                feeds: {
+                  type: "array",
+                  minItems: 1,
+                  items: {
+                    type: "string",
+                    enum: ["L0", "L1", "L2", "L3", "dossiers", "effects", "weights", "constraints"],
+                  },
+                },
+                legal_note: { type: "string", minLength: 1 },
+              },
+              required: ["id", "name", "what", "access", "api", "cost", "priority", "phase", "status", "feeds"],
+              additionalProperties: false,
+            },
+          },
+        },
+        required: ["id", "name", "sources"],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ["classes"],
+  additionalProperties: false,
+} as const;
+
+const decisionsSchema = {
+  type: "object",
+  properties: {
+    decisions: {
+      type: "array",
+      minItems: 1,
+      items: {
+        type: "object",
+        properties: {
+          id: { type: "string", pattern: "^D-\\d{3}$" },
+          date: { type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$" },
+          title: { type: "string", minLength: 1 },
+          body: { type: "string", minLength: 1 },
+          area: {
+            type: "string",
+            enum: ["architecture", "data", "process", "stack", "operations"],
+          },
+        },
+        required: ["id", "date", "title", "body", "area"],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ["decisions"],
+  additionalProperties: false,
+} as const;
+
+// ---------- Validation passes ----------
+
+interface MechanismLike {
+  id?: string;
+  parent?: string;
+  implementations?: { id?: string; metrics?: unknown }[];
+  constraints?: { hard_rules?: unknown };
+  relations?: { target?: string }[];
+}
+
+function validateAgainst(
+  validate: ValidateFunction,
+  file: string,
+  data: unknown,
+): boolean {
+  if (validate(data)) return true;
+  for (const message of formatAjvErrors(validate.errors)) {
+    fail(file, message);
+  }
+  return false;
+}
+
+function main(): void {
+  console.log("Motivation Engine validator\n");
+
+  // 1. Compile the mechanism schema (full + seed sub-schema).
+  const mechanismSchema = readJson(PATHS.mechanismSchema);
+  if (mechanismSchema === undefined) return finish();
+  let validateFull: ValidateFunction;
+  let validateSeed: ValidateFunction;
+  try {
+    validateFull = ajv.compile(mechanismSchema as object);
+    const schemaId = (mechanismSchema as { $id: string }).$id;
+    const seed = ajv.getSchema(`${schemaId}#/$defs/seedStub`);
+    if (!seed) throw new Error("$defs.seedStub not found in mechanism.schema.json");
+    validateSeed = seed;
+  } catch (err) {
+    fail(PATHS.mechanismSchema, `schema does not compile — ${(err as Error).message}`);
+    return finish();
+  }
+  console.log(`  ✓ ${rel(PATHS.mechanismSchema)} compiles (full record + seedStub)`);
+
+  // 2. Taxonomy (needed for cross-checks below).
+  const taxonomy = readJson(PATHS.taxonomy) as { nodes?: { id: string }[] } | undefined;
+  const taxonomyIds = new Set<string>();
+  if (taxonomy !== undefined && validateAgainst(ajv.compile(taxonomySchema), PATHS.taxonomy, taxonomy)) {
+    for (const node of taxonomy.nodes ?? []) taxonomyIds.add(node.id);
+    if (taxonomyIds.size !== 6) {
+      fail(PATHS.taxonomy, `expected 6 unique node ids S1–S6, found ${taxonomyIds.size}`);
+    } else {
+      console.log(`  ✓ ${rel(PATHS.taxonomy)} valid (${taxonomyIds.size} L0 nodes)`);
+    }
+  }
+
+  // 3. Full mechanism records.
+  const fullFiles = listJsonFiles(PATHS.mechanismsDir);
+  const rosterIds = new Map<string, string>(); // id -> file
+  const fullRecords: { file: string; record: MechanismLike }[] = [];
+
+  for (const file of fullFiles) {
+    const data = readJson(file);
+    if (data === undefined) continue;
+    const record = data as MechanismLike;
+
+    const schemaOk = validateAgainst(validateFull, file, data);
+
+    // HARD RULE — checked explicitly so it fails loudly even if the schema
+    // were ever weakened (SPEC §3.2, .cursorrules invariant 4, D-003).
+    let hardRulesOk = true;
+    const impls = Array.isArray(record.implementations) ? record.implementations : [];
+    impls.forEach((impl, i) => {
+      const metrics = impl?.metrics;
+      if (!Array.isArray(metrics) || metrics.length === 0) {
+        fail(
+          file,
+          `HARD RULE violated: implementations[${i}] (${impl?.id ?? "?"}) has empty or missing metrics — a mechanism we cannot measure is not knowledge`,
+        );
+        hardRulesOk = false;
+      }
+    });
+    const hardRules = record.constraints?.hard_rules;
+    if (!Array.isArray(hardRules) || hardRules.length === 0) {
+      fail(
+        file,
+        "HARD RULE violated: constraints.hard_rules is empty or missing — a mechanism without guardrails is a dark-pattern risk",
+      );
+      hardRulesOk = false;
+    }
+
+    if (typeof record.id === "string") {
+      const expected = `${record.id}.json`;
+      if (!file.endsWith(`/${expected}`)) {
+        fail(file, `filename does not match record id "${record.id}" (expected ${expected})`);
+      }
+      if (rosterIds.has(record.id)) {
+        fail(file, `duplicate mechanism id "${record.id}" (also in ${rel(rosterIds.get(record.id)!)})`);
+      } else {
+        rosterIds.set(record.id, file);
+      }
+    }
+
+    if (schemaOk && hardRulesOk) {
+      fullRecords.push({ file, record });
+      console.log(`  ✓ ${rel(file)} valid (full record, ${impls.length} implementations)`);
+    }
+  }
+
+  // 4. Seed stubs.
+  const seedFiles = listJsonFiles(PATHS.seedDir);
+  for (const file of seedFiles) {
+    const data = readJson(file);
+    if (data === undefined) continue;
+    const stub = data as MechanismLike;
+    const ok = validateAgainst(validateSeed, file, data);
+
+    if (typeof stub.id === "string") {
+      const expected = `${stub.id}.json`;
+      if (!file.endsWith(`/${expected}`)) {
+        fail(file, `filename does not match stub id "${stub.id}" (expected ${expected})`);
+      }
+      if (rosterIds.has(stub.id)) {
+        fail(file, `duplicate mechanism id "${stub.id}" (also in ${rel(rosterIds.get(stub.id)!)})`);
+      } else {
+        rosterIds.set(stub.id, file);
+      }
+    }
+    if (typeof stub.parent === "string" && taxonomyIds.size === 6 && !taxonomyIds.has(stub.parent)) {
+      fail(file, `parent "${stub.parent}" is not an L0 taxonomy node`);
+    }
+
+    if (ok) console.log(`  ✓ ${rel(file)} valid (seed stub)`);
+  }
+
+  // 5. Cross-references for full records (need the complete roster first).
+  for (const { file, record } of fullRecords) {
+    if (typeof record.parent === "string" && taxonomyIds.size === 6 && !taxonomyIds.has(record.parent)) {
+      fail(file, `parent "${record.parent}" is not an L0 taxonomy node`);
+    }
+    for (const relation of record.relations ?? []) {
+      if (typeof relation.target === "string" && !rosterIds.has(relation.target)) {
+        fail(file, `relations target "${relation.target}" is not in the mechanism roster`);
+      }
+    }
+  }
+
+  // 6. Sources registry.
+  const sources = readJson(PATHS.sources);
+  if (sources !== undefined && validateAgainst(ajv.compile(sourcesSchema), PATHS.sources, sources)) {
+    const count = (sources as { classes: { sources: unknown[] }[] }).classes.reduce(
+      (n, c) => n + c.sources.length,
+      0,
+    );
+    console.log(`  ✓ ${rel(PATHS.sources)} valid (${count} sources)`);
+  }
+
+  // 7. Decision log.
+  const decisions = readJson(PATHS.decisions);
+  if (decisions !== undefined && validateAgainst(ajv.compile(decisionsSchema), PATHS.decisions, decisions)) {
+    const items = (decisions as { decisions: { id: string }[] }).decisions;
+    const ids = new Set(items.map((d) => d.id));
+    if (ids.size !== items.length) {
+      fail(PATHS.decisions, "duplicate decision ids");
+    } else {
+      console.log(`  ✓ ${rel(PATHS.decisions)} valid (${items.length} decisions)`);
+    }
+  }
+
+  // 8. Dossier schema integrity + any dossier records.
+  const dossierSchema = readJson(PATHS.dossierSchema);
+  if (dossierSchema !== undefined) {
+    let validateDossier: ValidateFunction | undefined;
+    try {
+      validateDossier = ajv.compile(dossierSchema as object);
+      console.log(`  ✓ ${rel(PATHS.dossierSchema)} compiles`);
+    } catch (err) {
+      fail(PATHS.dossierSchema, `schema does not compile — ${(err as Error).message}`);
+    }
+    if (validateDossier) {
+      const dossierFiles = listJsonFiles(PATHS.dossiersDir).filter(
+        (f) => !f.endsWith("dossier.schema.json"),
+      );
+      for (const file of dossierFiles) {
+        const data = readJson(file);
+        if (data === undefined) continue;
+        const ok = validateAgainst(validateDossier, file, data);
+        const dossier = data as {
+          scores?: Record<string, number>;
+          total?: number;
+          mechanism_id?: string;
+        };
+        if (dossier.scores && typeof dossier.total === "number") {
+          const sum = Object.values(dossier.scores).reduce((a, b) => a + b, 0);
+          if (sum !== dossier.total) {
+            fail(file, `total (${dossier.total}) does not equal the sum of axis scores (${sum})`);
+          }
+        }
+        if (typeof dossier.mechanism_id === "string" && !rosterIds.has(dossier.mechanism_id)) {
+          fail(file, `mechanism_id "${dossier.mechanism_id}" is not in the mechanism roster`);
+        }
+        if (ok) console.log(`  ✓ ${rel(file)} valid (dossier record)`);
+      }
+      if (dossierFiles.length === 0) {
+        console.log("  · no dossier records yet (honest empty state)");
+      }
+    }
+  }
+
+  finish();
+}
+
+function finish(): void {
+  console.log("");
+  if (errorCount > 0) {
+    console.error(`FAILED — ${errorCount} violation${errorCount === 1 ? "" : "s"}. Invalid knowledge does not enter the repo.`);
+    process.exit(1);
+  }
+  console.log("OK — all data files valid.");
+}
+
+main();
