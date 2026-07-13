@@ -8,6 +8,10 @@
  *   empty/missing implementations[].metrics or constraints.hard_rules FAILS
  * - /registry/taxonomy.json, /sources/sources.json, /decisions/decisions.json
  * - /dossiers/dossier.schema.json integrity + any dossier records
+ * - /corpora/{source_id}/manifest.json against the connector manifest
+ *   contract (tools/connectors/types.ts): dir name = source_id,
+ *   run_history ≤ 20, data_files exist on disk, non-"_" dirs match a
+ *   source id in sources.json
  * - Cross-references: filename = id, unique ids, parent in taxonomy,
  *   relations[].target in the mechanism roster
  *
@@ -30,6 +34,7 @@ const PATHS = {
   decisions: join(ROOT, "decisions", "decisions.json"),
   dossierSchema: join(ROOT, "dossiers", "dossier.schema.json"),
   dossiersDir: join(ROOT, "dossiers"),
+  corporaDir: join(ROOT, "corpora"),
 };
 
 let errorCount = 0;
@@ -183,6 +188,47 @@ const decisionsSchema = {
   additionalProperties: false,
 } as const;
 
+// Mirrors the connector manifest contract in tools/connectors/types.ts.
+const manifestRunSchema = {
+  type: "object",
+  properties: {
+    timestamp: { type: "string", format: "date-time" },
+    status: { type: "string", enum: ["success", "partial", "failed"] },
+    params: { type: "object", additionalProperties: { type: "string" } },
+    records_fetched: { type: "integer", minimum: 0 },
+    files_written: { type: "integer", minimum: 0 },
+    duration_s: { type: "number", minimum: 0 },
+    error: { type: "string", minLength: 1 },
+  },
+  required: ["timestamp", "status", "params", "records_fetched", "files_written", "duration_s"],
+  additionalProperties: false,
+} as const;
+
+const corpusManifestSchema = {
+  type: "object",
+  properties: {
+    source_id: { type: "string", pattern: "^_?[a-z0-9-]+$" },
+    connector_version: { type: "string", pattern: "^\\d+\\.\\d+\\.\\d+$" },
+    last_run: manifestRunSchema,
+    run_history: { type: "array", minItems: 1, maxItems: 20, items: manifestRunSchema },
+    data_files: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          path: { type: "string", minLength: 1 },
+          records: { type: "integer", minimum: 0 },
+          bytes: { type: "integer", minimum: 0 },
+        },
+        required: ["path", "records", "bytes"],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ["source_id", "connector_version", "last_run", "run_history", "data_files"],
+  additionalProperties: false,
+} as const;
+
 // ---------- Validation passes ----------
 
 interface MechanismLike {
@@ -330,11 +376,11 @@ function main(): void {
 
   // 6. Sources registry.
   const sources = readJson(PATHS.sources);
+  const sourceIds = new Set<string>();
   if (sources !== undefined && validateAgainst(ajv.compile(sourcesSchema), PATHS.sources, sources)) {
-    const count = (sources as { classes: { sources: unknown[] }[] }).classes.reduce(
-      (n, c) => n + c.sources.length,
-      0,
-    );
+    const classes = (sources as { classes: { sources: { id: string }[] }[] }).classes;
+    for (const cls of classes) for (const source of cls.sources) sourceIds.add(source.id);
+    const count = classes.reduce((n, c) => n + c.sources.length, 0);
     console.log(`  ✓ ${rel(PATHS.sources)} valid (${count} sources)`);
   }
 
@@ -388,6 +434,48 @@ function main(): void {
         console.log("  · no dossier records yet (honest empty state)");
       }
     }
+  }
+
+  // 9. Corpus manifests (connector manifest contract, tools/connectors/types.ts).
+  const validateManifest = ajv.compile(corpusManifestSchema);
+  const corpusDirs = existsSync(PATHS.corporaDir)
+    ? readdirSync(PATHS.corporaDir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => entry.name)
+        .sort()
+    : [];
+  for (const dirName of corpusDirs) {
+    const corpusDir = join(PATHS.corporaDir, dirName);
+    const manifestFile = join(corpusDir, "manifest.json");
+    if (!existsSync(manifestFile)) {
+      fail(corpusDir, "corpus directory has no manifest.json (contract in corpora/README.md)");
+      continue;
+    }
+    const data = readJson(manifestFile);
+    if (data === undefined) continue;
+    let ok = validateAgainst(validateManifest, manifestFile, data);
+    const manifest = data as {
+      source_id?: string;
+      data_files?: { path: string }[];
+    };
+    if (typeof manifest.source_id === "string" && manifest.source_id !== dirName) {
+      fail(manifestFile, `source_id "${manifest.source_id}" does not match directory name "${dirName}"`);
+      ok = false;
+    }
+    if (!dirName.startsWith("_") && sourceIds.size > 0 && !sourceIds.has(dirName)) {
+      fail(manifestFile, `corpus directory "${dirName}" is not a source id in sources.json`);
+      ok = false;
+    }
+    for (const file of manifest.data_files ?? []) {
+      if (!existsSync(join(corpusDir, file.path))) {
+        fail(manifestFile, `data_files entry "${file.path}" does not exist on disk`);
+        ok = false;
+      }
+    }
+    if (ok) console.log(`  ✓ ${rel(manifestFile)} valid (corpus manifest)`);
+  }
+  if (corpusDirs.length === 0) {
+    console.log("  · no harvested corpora yet (honest empty state)");
   }
 
   finish();

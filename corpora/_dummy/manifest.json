@@ -1,0 +1,56 @@
+{
+  "source_id": "_dummy",
+  "connector_version": "1.0.0",
+  "last_run": {
+    "timestamp": "2026-07-13T10:58:32.440Z",
+    "status": "success",
+    "params": {},
+    "records_fetched": 3,
+    "files_written": 1,
+    "duration_s": 0
+  },
+  "run_history": [
+    {
+      "timestamp": "2026-07-13T10:58:32.440Z",
+      "status": "success",
+      "params": {},
+      "records_fetched": 3,
+      "files_written": 1,
+      "duration_s": 0
+    },
+    {
+      "timestamp": "2026-07-13T10:58:13.548Z",
+      "status": "failed",
+      "params": {
+        "fail": "1"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 0,
+      "error": "Simulated failure requested via fail=1"
+    },
+    {
+      "timestamp": "2026-07-13T10:58:13.350Z",
+      "status": "success",
+      "params": {},
+      "records_fetched": 3,
+      "files_written": 1,
+      "duration_s": 0
+    },
+    {
+      "timestamp": "2026-07-13T10:58:06.989Z",
+      "status": "success",
+      "params": {},
+      "records_fetched": 3,
+      "files_written": 1,
+      "duration_s": 0
+    }
+  ],
+  "data_files": [
+    {
+      "path": "records.json",
+      "records": 3,
+      "bytes": 302
+    }
+  ]
+}

@@ -76,6 +76,13 @@
       "title": "Constitution amendment: controlled external-API whitelist for tools/ scripts (Phase 2)",
       "body": "Baseline forbade all external fetches (former rule 12 in .cursorrules). Phase 2 opens a controlled whitelist: scripts under tools/ MAY call exactly four public APIs — api.openalex.org, api.semanticscholar.org, PubMed E-utilities (eutils.ncbi.nlm.nih.gov), and web.archive.org (CDX API). Any other external endpoint requires a new decisions.json entry first. The Next.js app remains file-based with zero runtime external calls from app/ (including middleware and server actions); data reading stays fs-only. LLM API calls remain forbidden everywhere in the repo. General scrapers stay forbidden; source connectors exist only as tools/ scripts against the whitelisted APIs.",
       "area": "architecture"
+    },
+    {
+      "id": "D-012",
+      "date": "2026-07-13",
+      "title": "Connector framework: one contract, one runner, one manifest shape, 40 MB corpus guardrail",
+      "body": "All source connectors implement a single Connector interface (tools/connectors/types.ts) and are executed only through tools/run-connector.ts (npm run connector -- <id> [key=value ...]). Every run — success, partial, or failed — writes /corpora/{source_id}/manifest.json: { source_id, connector_version, last_run {timestamp, status, params, records_fetched, files_written, duration_s, error?}, run_history (last 20 runs, newest first), data_files [{path, records, bytes}] }, so corpus statuses in the showcase stay computed from disk. Shared helpers bake the guardrails in rather than trusting each connector: fetch is rate-limited with 3 attempts and exponential backoff, sends polite User-Agent/mailto headers, and hard-rejects any host outside the D-011 whitelist; JSON output is pretty-printed for reviewable git diffs. Guardrail: a corpus directory exceeding 40 MB fails the run with a message pointing at the Postgres escalation trigger in docs/architecture.md (corpora at thousands-of-rows scale move to managed Postgres / object storage; the repo is never silently bloated). Connectors with a \"_\"-prefixed source_id (e.g. the dummy smoke-test connector) are internal and ignored by the showcase. The validator checks every corpus manifest against this contract.",
+      "area": "architecture"
     }
   ]
 }
