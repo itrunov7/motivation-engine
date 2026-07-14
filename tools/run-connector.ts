@@ -220,7 +220,16 @@ async function main(): Promise<void> {
     cost,
   };
 
-  const manifest = writeManifest(connector, corpusDir, run, result?.files ?? []);
+  const manifest = writeManifest(
+    {
+      sourceId: connector.sourceId,
+      sourceIds: connector.sourceIds,
+      connectorVersion: connector.connectorVersion,
+    },
+    corpusDir,
+    run,
+    result?.files ?? [],
+  );
 
   console.log(`\n  manifest: ${relative(ROOT, join(corpusDir, "manifest.json"))}`);
   console.log(`  status: ${run.status} · records: ${run.records_fetched} · files: ${manifest.data_files.length} · api_calls: ${cost.api_calls} · ${formatBytes(corpusBytes)} · ${durationS}s`);

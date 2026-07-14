@@ -366,6 +366,42 @@ export interface CorpusManifest {
   }[];
 }
 
+// ---------- Benchmark corpus (read-only mirror of tools/ingest-report.ts, D-029) ----------
+
+/**
+ * One benchmark value extracted from a report source (D-029). Reader mirror
+ * of tools/ingest-report.ts BenchmarkMetric (lib/ never imports from tools/);
+ * a drift guard in tools/validate.ts pins the writer to this reader. Feeds
+ * the future effects-table baseline column.
+ */
+export interface BenchmarkMetric {
+  /** What is measured, e.g. "trial_to_paid_cvr". */
+  metric: string;
+  /** The segment the value applies to (app category, industry, pattern). */
+  category?: string;
+  /** The measured number, as reported. */
+  value: number;
+  /** Unit of `value`, e.g. "%", "count", "usd". */
+  unit: string;
+  /** Provenance / caveat for the value. */
+  notes?: string;
+}
+
+/**
+ * /corpora/benchmarks/{source_id}.json — one report source's benchmark
+ * table, written by tools/ingest-report.ts from an owner-prepared file. The
+ * corpus manifest (source_id "benchmarks") declares which report sources it
+ * covers in source_ids; a source is ingested iff a manifest lists it AND its
+ * data file exists on disk (D-026, computed in lib/status.ts).
+ */
+export interface BenchmarkFile {
+  /** The sources.json id this file was ingested for. */
+  source_id: string;
+  /** ISO date (YYYY-MM-DD) the numbers were read from the report. */
+  retrieved: string;
+  metrics: BenchmarkMetric[];
+}
+
 // ---------- Source health heartbeat (read-only mirror of tools/health-check.ts, D-021) ----------
 
 /**

@@ -1,0 +1,104 @@
+{
+  "source_id": "benchmarks",
+  "source_ids": [
+    "goodui",
+    "revenuecat-report",
+    "unbounce-benchmarks"
+  ],
+  "connector_version": "1.0.0",
+  "last_run": {
+    "timestamp": "2026-07-14T14:10:21.624Z",
+    "status": "success",
+    "params": {
+      "source_id": "goodui",
+      "file": "goodui.md",
+      "retrieved": "2026-07-14"
+    },
+    "records_fetched": 7,
+    "files_written": 1,
+    "duration_s": 0,
+    "cost": {
+      "api_calls": 0,
+      "duration_s": 0,
+      "tokens_in": null,
+      "tokens_out": null,
+      "estimated_usd": 0
+    }
+  },
+  "run_history": [
+    {
+      "timestamp": "2026-07-14T14:10:21.624Z",
+      "status": "success",
+      "params": {
+        "source_id": "goodui",
+        "file": "goodui.md",
+        "retrieved": "2026-07-14"
+      },
+      "records_fetched": 7,
+      "files_written": 1,
+      "duration_s": 0,
+      "cost": {
+        "api_calls": 0,
+        "duration_s": 0,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-14T14:10:21.436Z",
+      "status": "success",
+      "params": {
+        "source_id": "unbounce-benchmarks",
+        "file": "unbounce-benchmarks.csv",
+        "retrieved": "2026-07-14"
+      },
+      "records_fetched": 17,
+      "files_written": 1,
+      "duration_s": 0,
+      "cost": {
+        "api_calls": 0,
+        "duration_s": 0,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-14T14:10:21.252Z",
+      "status": "success",
+      "params": {
+        "source_id": "revenuecat-report",
+        "file": "revenuecat-report.json",
+        "retrieved": "2026-07-14"
+      },
+      "records_fetched": 14,
+      "files_written": 1,
+      "duration_s": 0,
+      "cost": {
+        "api_calls": 0,
+        "duration_s": 0,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    }
+  ],
+  "data_files": [
+    {
+      "path": "goodui.json",
+      "records": 7,
+      "bytes": 1447
+    },
+    {
+      "path": "revenuecat-report.json",
+      "records": 14,
+      "bytes": 2566
+    },
+    {
+      "path": "unbounce-benchmarks.json",
+      "records": 17,
+      "bytes": 3186
+    }
+  ]
+}

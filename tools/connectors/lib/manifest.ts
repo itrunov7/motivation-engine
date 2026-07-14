@@ -11,13 +11,28 @@ import { join, relative } from "node:path";
 import {
   RUN_HISTORY_LIMIT,
   type CategoryCounts,
-  type Connector,
   type Manifest,
   type ManifestDataFile,
   type ManifestRun,
   type RunFile,
 } from "../types";
 import { writeJsonPretty } from "./io";
+
+/**
+ * The manifest identity fields — everything writeManifest needs that is not
+ * derived from the run or the disk scan. A connector supplies these (D-012),
+ * but so does the report ingester (tools/ingest-report.ts, D-029), which is
+ * not a connector: it normalizes owner-prepared files instead of harvesting
+ * an API. Decoupling the writer from the Connector interface lets both share
+ * one manifest writer (D-020: one manifest contract, one writer).
+ */
+export interface ManifestIdentity {
+  /** The corpus id — equals the directory name under /corpora. */
+  sourceId: string;
+  /** The sources/sources.json ids this corpus covers (D-014). */
+  sourceIds: string[];
+  connectorVersion: string;
+}
 
 function readExistingManifest(manifestPath: string): Manifest | undefined {
   if (!existsSync(manifestPath)) return undefined;
@@ -78,7 +93,7 @@ function scanDataFiles(
 
 /** Merge the new run into the manifest and write it to disk. */
 export function writeManifest(
-  connector: Connector,
+  identity: ManifestIdentity,
   corpusDir: string,
   run: ManifestRun,
   reportedFiles: RunFile[],
@@ -87,9 +102,9 @@ export function writeManifest(
   const previous = readExistingManifest(manifestPath);
 
   const manifest: Manifest = {
-    source_id: connector.sourceId,
-    source_ids: connector.sourceIds,
-    connector_version: connector.connectorVersion,
+    source_id: identity.sourceId,
+    source_ids: identity.sourceIds,
+    connector_version: identity.connectorVersion,
     last_run: run,
     run_history: [run, ...(previous?.run_history ?? [])].slice(0, RUN_HISTORY_LIMIT),
     data_files: scanDataFiles(corpusDir, reportedFiles, previous),

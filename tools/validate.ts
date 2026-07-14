@@ -46,13 +46,14 @@ import type {
   HeartbeatEntry as WriterHeartbeatEntry,
   HeartbeatFile as WriterHeartbeatFile,
 } from "./health-check";
+import type { BenchmarkFile as WriterBenchmarkFile } from "./ingest-report";
 import type {
   OpsBudget as WriterOpsBudget,
   OpsConnectorConfig as WriterOpsConnectorConfig,
   RunQuote as WriterRunQuote,
 } from "./connectors/types";
 import { CONNECTORS } from "./connectors";
-import type { CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig, RunQuote } from "../lib/types";
+import type { BenchmarkFile, BenchmarkMetric, CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig, RunQuote } from "../lib/types";
 import {
   KNOWN_CONNECTOR_IDS,
   OPS_PATHS,
@@ -72,6 +73,7 @@ const PATHS = {
   dossierSchema: join(ROOT, "dossiers", "dossier.schema.json"),
   dossiersDir: join(ROOT, "dossiers"),
   corporaDir: join(ROOT, "corpora"),
+  benchmarksDir: join(ROOT, "corpora", "benchmarks"),
   heartbeat: join(ROOT, "corpora", "_health", "heartbeat.json"),
 };
 
@@ -408,6 +410,10 @@ type _OpsBudgetInSync = AssertAssignable<WriterOpsBudget, OpsBudget>;
 type _OpsConnectorConfigInSync = AssertAssignable<WriterOpsConnectorConfig, OpsConnectorConfig>;
 type _RunQuoteInSync = AssertAssignable<WriterRunQuote, RunQuote>;
 
+// Benchmark ingester output (D-029) must remain readable by the showcase /
+// future effects-table baseline column (lib/types.ts BenchmarkFile).
+type _BenchmarkContractInSync = AssertAssignable<WriterBenchmarkFile, BenchmarkFile>;
+
 const heartbeatEntryProperties = {
   source_id: { type: "string", pattern: "^[a-z0-9-]+$" },
   checked_at: { type: "string", format: "date-time" },
@@ -442,6 +448,37 @@ const heartbeatSchema = {
     },
   } satisfies Record<keyof WriterHeartbeatFile, unknown>,
   required: ["generated_at", "entries"] satisfies readonly (keyof WriterHeartbeatFile)[],
+  additionalProperties: false,
+} as const;
+
+// ---------- Benchmark file contract (D-029) ----------
+//
+// /corpora/benchmarks/{source_id}.json is owner-prepared data normalized by
+// tools/ingest-report.ts. The manifest is already validated by the corpus
+// pass; here we additionally check the benchmark RECORD shape so a malformed
+// baseline can never enter the repo. metric/unit non-empty, value a finite
+// number (JSON cannot express NaN/Infinity), category/notes optional.
+const benchmarkMetricSchema = {
+  type: "object",
+  properties: {
+    metric: { type: "string", minLength: 1 },
+    category: { type: "string", minLength: 1 },
+    value: { type: "number" },
+    unit: { type: "string", minLength: 1 },
+    notes: { type: "string", minLength: 1 },
+  } satisfies Record<keyof BenchmarkMetric, unknown>,
+  required: ["metric", "value", "unit"] satisfies readonly (keyof BenchmarkMetric)[],
+  additionalProperties: false,
+} as const;
+
+const benchmarkFileSchema = {
+  type: "object",
+  properties: {
+    source_id: { type: "string", pattern: "^[a-z0-9-]+$" },
+    retrieved: { type: "string", format: "date" },
+    metrics: { type: "array", minItems: 1, items: benchmarkMetricSchema },
+  } satisfies Record<keyof BenchmarkFile, unknown>,
+  required: ["source_id", "retrieved", "metrics"] satisfies readonly (keyof BenchmarkFile)[],
   additionalProperties: false,
 } as const;
 
@@ -638,9 +675,14 @@ function main(): void {
   // 6. Sources registry.
   const sources = readJson(PATHS.sources);
   const sourceIds = new Set<string>();
+  const reportSourceIds = new Set<string>();
   if (sources !== undefined && validateAgainst(ajv.compile(sourcesSchema), PATHS.sources, sources)) {
-    const classes = (sources as { classes: { sources: { id: string }[] }[] }).classes;
-    for (const cls of classes) for (const source of cls.sources) sourceIds.add(source.id);
+    const classes = (sources as { classes: { sources: { id: string; connection_mode: string }[] }[] }).classes;
+    for (const cls of classes)
+      for (const source of cls.sources) {
+        sourceIds.add(source.id);
+        if (source.connection_mode === "report") reportSourceIds.add(source.id);
+      }
     const count = classes.reduce((n, c) => n + c.sources.length, 0);
     console.log(`  ✓ ${rel(PATHS.sources)} valid (${count} sources)`);
   }
@@ -772,6 +814,37 @@ function main(): void {
   }
   if (manifestFiles.length === 0) {
     console.log("  · no harvested corpora yet (honest empty state)");
+  }
+
+  // 9b. Benchmark files (D-029): every /corpora/benchmarks/{source_id}.json
+  // is owner-prepared data normalized by tools/ingest-report.ts. Beyond the
+  // manifest contract above, the RECORD shape is validated here, and the
+  // filename stem must be a report-mode source in sources.json — a benchmark
+  // baseline for a phantom or non-report source is meaningless.
+  const validateBenchmark = ajv.compile(benchmarkFileSchema);
+  const benchmarkFiles = listJsonFiles(PATHS.benchmarksDir).filter(
+    (f) => basename(f) !== "manifest.json",
+  );
+  for (const file of benchmarkFiles) {
+    const data = readJson(file);
+    if (data === undefined) continue;
+    let ok = validateAgainst(validateBenchmark, file, data);
+    const benchmark = data as { source_id?: string };
+    const stem = basename(file, ".json");
+    if (typeof benchmark.source_id === "string" && benchmark.source_id !== stem) {
+      fail(file, `source_id "${benchmark.source_id}" does not match filename "${stem}"`);
+      ok = false;
+    }
+    if (reportSourceIds.size > 0 && !reportSourceIds.has(stem)) {
+      fail(
+        file,
+        sourceIds.has(stem)
+          ? `"${stem}" is not a report-mode source in sources.json — ingest-report only ingests connection_mode "report" (D-013)`
+          : `"${stem}" is not a source in sources.json`,
+      );
+      ok = false;
+    }
+    if (ok) console.log(`  ✓ ${rel(file)} valid (benchmark file, ${(data as BenchmarkFile).metrics.length} metrics)`);
   }
 
   // 10. Source health heartbeat (D-021), when present. Every entry's
