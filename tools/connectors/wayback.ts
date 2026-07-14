@@ -191,6 +191,10 @@ export const waybackConnector: Connector = {
   connectorVersion: "1.0.0",
   description:
     "Interface-evolution indexer: Wayback CDX quarterly capture index (statuscode 200, one per quarter) per survivor domain → {domain}.json. URLs and dates only — page contents are a later, size-conscious step.",
+  // Scope is the owner-editable wayback-domains.json, not _ops targets
+  // (D-028); the scheduler plans the default domain list on an empty targets
+  // list (D-030).
+  schedulableWithoutTargets: true,
 
   /**
    * Deterministic pre-run estimate (D-025). No network: one CDX call per

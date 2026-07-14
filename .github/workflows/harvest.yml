@@ -1,24 +1,24 @@
-# Harvest workflow — the fleet's run surface (D-024/D-025/D-027).
+# Harvest workflow — the DISPATCH run surface (D-024/D-025/D-027/D-030).
 #
-# The app never harvests; it triggers THIS workflow. Two ways in:
+# The app never harvests; it triggers THIS workflow via workflow_dispatch from
+# /ops. The run-with-quote flow (D-025):
+#   - dry_run=true  → compute a DETERMINISTIC estimate (no network harvest) and
+#     upload it as the `quote` artifact (quote.json). The dispatch_id is echoed
+#     into the run name so the app can correlate and download it.
+#   - dry_run=false → the confirmed real run. The ops-gate (D-025) checks the
+#     per-run limits + monthly budget first; raise_cap=true bypasses ONLY the
+#     budget gate (never the per-run limits, enforced again at the fetch layer,
+#     D-027). A failed run is retried once, then opens a deduplicated ops issue
+#     (D-022).
 #
-# 1. workflow_dispatch from /ops. The run-with-quote flow (D-025):
-#    - dry_run=true  → compute a DETERMINISTIC estimate (no network harvest)
-#      and upload it as the `quote` artifact (quote.json). The dispatch_id is
-#      echoed into the run name so the app can correlate and download it.
-#    - dry_run=false → the confirmed real run. The ops-gate (D-025) checks the
-#      per-run limits + monthly budget first; raise_cap=true bypasses ONLY the
-#      budget gate (never the per-run limits, enforced again at the fetch
-#      layer, D-027). A failed run is retried once, then opens a deduplicated
-#      ops issue (D-022).
-#
-# 2. schedule (weekly). tools/ops-gate.ts plan decides which (connector,target)
-#    pairs are due — respecting paused, cadence, per-target freshness, and the
-#    budget — and writes every skip reason to the job summary.
+# SCHEDULED runs live in connectors.yml (D-030), not here — that file owns every
+# scheduled connector job (heartbeat, evidence weekly, wayback monthly). This
+# workflow is dispatch-only.
 #
 # S2 rate compliance (D-027): this workflow MUST reuse the exact concurrency
 # group "connectors-s2" from connectors.yml so two runner processes never call
-# Semantic Scholar at the same time (the key allows 1 rps CUMULATIVE).
+# Semantic Scholar at the same time (the key allows 1 rps CUMULATIVE) — this
+# covers manual dispatches against every scheduled job.
 
 name: harvest
 
@@ -52,9 +52,6 @@ on:
         required: false
         type: string
         default: "false"
-  schedule:
-    # Weekly, Monday 05:00 UTC. The ops-gate decides what is actually due.
-    - cron: "0 5 * * 1"
 
 concurrency:
   group: connectors-s2
@@ -186,59 +183,3 @@ jobs:
         run: |
           echo "::error::${CONNECTOR_ID} harvest failed after retry — an ops issue was opened/confirmed."
           exit 1
-
-  # ---------- Weekly scheduled run (D-024) ----------
-  scheduled:
-    if: github.event_name == 'schedule'
-    runs-on: ubuntu-latest
-    env:
-      S2_API_KEY: ${{ secrets.S2_API_KEY }}
-      CONNECTOR_MAILTO: ${{ vars.CONNECTOR_MAILTO }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          # Full history so the ops-gate freshness filter can read git log.
-          fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-
-      - name: Plan the scheduled run (writes skip reasons to the summary)
-        run: |
-          set -euo pipefail
-          npx tsx tools/ops-gate.ts plan > plan.json 2> plan-summary.md
-          cat plan-summary.md >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Harvest due targets
-        run: |
-          set -euo pipefail
-          jq -c '.entries[] | select(.action == "run")' plan.json > due.txt || true
-          if [ ! -s due.txt ]; then
-            echo "Nothing due this week." | tee -a "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          while read -r entry; do
-            connector=$(echo "$entry" | jq -r '.connector')
-            target=$(echo "$entry" | jq -r '.target // ""')
-            echo "::group::harvest ${connector} ${target}"
-            if [ -n "$target" ] && [ "$target" != "null" ]; then
-              npm run connector -- "$connector" "mechanism=$target"
-            else
-              npm run connector -- "$connector"
-            fi
-            echo "::endgroup::"
-          done < due.txt
-
-      - name: Commit corpora if changed
-        run: |
-          if [ -n "$(git status --porcelain corpora)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add corpora
-            git commit -m "data: scheduled harvest"
-            git push
-          else
-            echo "No corpus changes to commit."
-          fi

@@ -1,35 +1,49 @@
-# Connectors workflow — scheduled source health heartbeat (D-021) with
-# failure automation (D-022).
+# Connectors workflow — the scheduled orchestration surface (D-021/D-022/
+# D-024/D-025/D-027/D-030). One file owns every scheduled connector job; the
+# app never harvests, it only dispatches harvest.yml (D-025).
 #
-# Every 6 hours (plus manual dispatch) tools/health-check.ts probes the
-# D-011 whitelisted APIs and writes /corpora/_health/heartbeat.json. The
-# script itself skips the write when statuses are unchanged and the
-# committed heartbeat is <11h old, so this job commits at most ~2/day on
-# quiet days — commit only when git actually sees a diff.
+# Three schedules, routed by github.event.schedule:
+#   0 */6 * * *   heartbeat — tools/health-check.ts probes the D-011 whitelisted
+#                 APIs and writes /corpora/_health/heartbeat.json (D-021). The
+#                 script skips the write when statuses are unchanged and the
+#                 committed heartbeat is <11h old, so this commits at most ~2/day
+#                 on quiet days — commit only when git sees a diff.
+#   0 5 * * 1     evidence weekly (Mon 05:00 UTC).
+#   0 6 1 * *     wayback monthly (1st, 06:00 UTC).
 #
-# Operator contract (D-022): watch issues, not logs. A failing run is
-# retried once after a backoff; if it still fails, this workflow opens a
-# GitHub issue "connector:{id} failing" labeled `ops` with the captured
-# error — deduplicated so a second issue is never opened while one is open.
-# The job is written generically around CONNECTOR_ID so a future scheduled
-# harvest job reuses the same automation verbatim.
+# The harvest-scheduled job is generic around CONNECTOR_ID (picked from the
+# schedule) and never rebuilds the gate: tools/ops-gate.ts plan decides which
+# (connector,target) pairs are due — respecting paused, cadence, per-target
+# freshness, health-down (D-030), per-run limits and the monthly budget — and
+# writes every skip reason to the job summary. Per-run call caps are re-enforced
+# mid-run at the fetch layer (D-027); raise_cap is never passed on the schedule.
+#
+# Operator contract (D-022): watch issues, not logs. A failing run is retried
+# once after a backoff; if it still fails, this workflow opens a deduplicated
+# GitHub issue "connector:{id} failing" labeled `ops` with the captured error —
+# never a second issue while one is open.
+#
+# S2 rate compliance (D-027): the Semantic Scholar key allows 1 request/second
+# CUMULATIVE per key, so two runners must never call S2 at the same time. This
+# workflow-level group serializes EVERY job in this workflow — heartbeat,
+# evidence, wayback — and any connector workflow in a SEPARATE file (harvest.yml
+# dispatches) MUST reuse this exact group name ("connectors-s2"). Within one
+# process all S2 calls additionally share the single queue in
+# tools/connectors/lib/http.ts. cancel-in-progress stays false: a queued job
+# waiting behind another is correct; killing an in-flight harvest is not.
 
 name: connectors
 
+run-name: >-
+  connectors — ${{ github.event_name == 'workflow_dispatch' && 'heartbeat (dispatch)' || (github.event.schedule == '0 5 * * 1' && 'evidence (weekly)' || (github.event.schedule == '0 6 1 * *' && 'wayback (monthly)' || 'heartbeat (6h)')) }}
+
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 */6 * * *" # heartbeat
+    - cron: "0 5 * * 1" # evidence weekly
+    - cron: "0 6 1 * *" # wayback monthly
   workflow_dispatch:
 
-# S2 rate compliance (D-027): the Semantic Scholar key allows 1 request/second
-# CUMULATIVE per key, so two runners must never call S2 at the same time. This
-# workflow-level group serializes every job in this workflow — the health
-# heartbeat today, and any future scheduled harvest job added here. Within one
-# job/process, all S2 calls additionally share the single queue in
-# tools/connectors/lib/http.ts. A future connector workflow living in a
-# SEPARATE file must reuse this exact group name ("connectors-s2") to keep the
-# no-two-simultaneous-runs guarantee. cancel-in-progress stays false: a queued
-# heartbeat waiting behind a harvest is correct; killing the harvest is not.
 concurrency:
   group: connectors-s2
   cancel-in-progress: false
@@ -39,7 +53,10 @@ permissions:
   issues: write
 
 jobs:
+  # ---------- Source health heartbeat (D-021/D-022) ----------
+  # Runs on the 6h schedule and on manual dispatch.
   health:
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 */6 * * *'
     runs-on: ubuntu-latest
     env:
       CONNECTOR_ID: health
@@ -133,4 +150,136 @@ jobs:
         if: steps.health.outputs.failed == 'true'
         run: |
           echo "::error::${CONNECTOR_ID} connector failed after retry — an ops issue was opened/confirmed. Failing the run so it shows red."
+          exit 1
+
+  # ---------- Scheduled harvest (D-024/D-030) ----------
+  # Runs on the weekly (evidence) and monthly (wayback) schedules. Generic
+  # around CONNECTOR_ID, picked from the schedule that fired. The ops-gate does
+  # all the deciding; this job only executes what is due and reports it.
+  harvest-scheduled:
+    if: github.event.schedule == '0 5 * * 1' || github.event.schedule == '0 6 1 * *'
+    runs-on: ubuntu-latest
+    env:
+      CONNECTOR_ID: ${{ github.event.schedule == '0 6 1 * *' && 'wayback' || 'evidence' }}
+      S2_API_KEY: ${{ secrets.S2_API_KEY }}
+      CONNECTOR_MAILTO: ${{ vars.CONNECTOR_MAILTO }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the ops-gate freshness filter can read git log.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Plan this connector's run (writes skip reasons to the summary)
+        run: |
+          set -euo pipefail
+          npx tsx tools/ops-gate.ts plan "$CONNECTOR_ID" > plan.json 2> plan-summary.md
+          cat plan-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      # Harvest each due (action == run) entry. Retry once after a 60s backoff
+      # per target (D-022); a persistent failure is recorded as an output so the
+      # issue step runs before the job is failed. `ran` gates the run summary so
+      # a "nothing due" week never reports a stale manifest as this run.
+      - name: Harvest due targets (retry once per target)
+        id: harvest
+        run: |
+          set +e
+          jq -c '.entries[] | select(.action == "run")' plan.json > due.txt
+          if [ ! -s due.txt ]; then
+            echo "Nothing due — the plan skipped every target (see summary)."
+            echo "ran=false" >> "$GITHUB_OUTPUT"
+            echo "failed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          harvest_one() {
+            local connector="$1" target="$2"
+            if [ -n "$target" ] && [ "$target" != "null" ]; then
+              npm run connector -- "$connector" "mechanism=$target" 2>&1 | tee -a harvest.log
+            else
+              npm run connector -- "$connector" 2>&1 | tee -a harvest.log
+            fi
+            return ${PIPESTATUS[0]}
+          }
+          overall=0
+          while read -r entry; do
+            connector=$(echo "$entry" | jq -r '.connector')
+            target=$(echo "$entry" | jq -r '.target // ""')
+            echo "::group::harvest ${connector} ${target}"
+            harvest_one "$connector" "$target"
+            code=$?
+            if [ "$code" -ne 0 ]; then
+              echo "::warning::harvest ${connector} ${target} failed (exit $code) — backing off 60s then retrying once."
+              sleep 60
+              harvest_one "$connector" "$target"
+              code=$?
+            fi
+            echo "::endgroup::"
+            if [ "$code" -ne 0 ]; then overall=1; fi
+          done < due.txt
+          echo "ran=true" >> "$GITHUB_OUTPUT"
+          if [ "$overall" -ne 0 ]; then echo "failed=true" >> "$GITHUB_OUTPUT"; else echo "failed=false" >> "$GITHUB_OUTPUT"; fi
+
+      # Job summary per run (D-030): records, calls, duration, estimated_usd
+      # from the connector's manifest last_run — alongside the plan's
+      # skipped-with-reasons list already appended above.
+      - name: Run summary
+        if: steps.harvest.outputs.ran == 'true'
+        run: |
+          set -euo pipefail
+          manifest="corpora/${CONNECTOR_ID}/manifest.json"
+          {
+            echo ""
+            echo "### ${CONNECTOR_ID} run $(date -u +%Y-%m-%d) (latest target)"
+            if [ -f "$manifest" ]; then
+              jq -r '.last_run | "- status: \(.status)\n- records: \(.records_fetched)\n- calls: \(.cost.api_calls // "n/a")\n- duration_s: \(.duration_s)\n- estimated_usd: \(.cost.estimated_usd // 0)"' "$manifest"
+            else
+              echo "- no manifest written"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit corpora if changed
+        if: steps.harvest.outputs.failed != 'true'
+        run: |
+          if [ -n "$(git status --porcelain corpora)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add corpora
+            git commit -m "data(connector): ${CONNECTOR_ID} run $(date -u +%Y-%m-%d)"
+            git push
+          else
+            echo "Corpus unchanged — nothing to commit."
+          fi
+
+      - name: Open ops issue on persistent failure
+        if: steps.harvest.outputs.failed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          title="connector:${CONNECTOR_ID} failing"
+          gh label create ops --color B60205 --description "operations: a connector is failing (D-022)" 2>/dev/null || true
+          existing=$(gh issue list --state open --label ops --search "in:title ${title}" --json number,title --jq ".[] | select(.title == \"${title}\") | .number" | head -n1)
+          if [ -n "${existing}" ]; then
+            echo "Issue #${existing} already open for \"${title}\" — not duplicating."
+            exit 0
+          fi
+          {
+            echo "The **${CONNECTOR_ID}** scheduled connector run failed twice in a row (initial attempt + one retry after backoff) in [\`${GITHUB_WORKFLOW}\` run #${GITHUB_RUN_NUMBER}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})."
+            echo ""
+            echo '```'
+            tail -n 40 harvest.log 2>/dev/null || echo "(no output captured)"
+            echo '```'
+            echo ""
+            echo "Operator contract (D-022): watch issues, not logs. Close this issue after the fix to re-arm the automation."
+          } > issue-body.md
+          gh issue create --title "${title}" --label ops --body-file issue-body.md
+
+      - name: Fail the job on persistent failure
+        if: steps.harvest.outputs.failed == 'true'
+        run: |
+          echo "::error::${CONNECTOR_ID} scheduled harvest failed after retry — an ops issue was opened/confirmed."
           exit 1

@@ -114,6 +114,16 @@ export interface Connector {
   /** Optional deterministic cost estimate for the run-with-quote flow
    *  (D-025). No network calls. */
   quote?(params: RunParams): RunQuote;
+  /**
+   * When true, the scheduler may plan this connector with an EMPTY _ops
+   * `targets` list — its harvest scope lives outside the mechanism-centric
+   * target machinery (D-028: wayback's scope is wayback-domains.json). The
+   * scheduled plan emits a single default-scope entry (params {}, target null)
+   * that still passes through cadence, health, and the quote/budget gate.
+   * Absent/false → an empty targets list honestly skips ("no targets
+   * configured"). D-030.
+   */
+  schedulableWithoutTargets?: boolean;
 }
 
 // ---------- Manifest contract (/corpora/{source_id}/manifest.json) ----------

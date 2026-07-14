@@ -11,9 +11,11 @@
  *   check <id> [key=value ...]     gate ONE run (limits + budget); exit 1 if
  *                                  blocked. raise_cap=1 overrides the budget
  *                                  (never the per-run limits).
- *   plan                           the weekly schedule: per (connector,target)
+ *   plan [connectorId]             the schedule: per (connector,target)
  *                                  run/skip decision (paused, cadence-due,
- *                                  freshness, budget) as JSON + a summary.
+ *                                  health-down, freshness, budget) as JSON +
+ *                                  a summary. An id restricts the plan to one
+ *                                  connector (each schedule plans its own).
  *
  * A quote is DETERMINISTIC and makes zero network calls (connector.quote),
  * so the gate is safe to run in CI and before a dispatch.
@@ -32,6 +34,7 @@ import {
   type BudgetSnapshot,
   type OpsConnectorConfig,
 } from "../lib/ops";
+import { HEARTBEAT_STALE_HOURS, loadHeartbeat } from "../lib/status";
 
 const ROOT = join(__dirname, "..");
 const CORPORA_DIR = join(ROOT, "corpora");
@@ -120,12 +123,74 @@ function daysSinceLastRun(connector: Connector, now: Date): number | null {
   }
 }
 
+/** UTC HH:MM of an ISO timestamp, for the "source down at HH:MM" reason. */
+function hhmmUTC(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "??:??";
+  const hh = String(d.getUTCHours()).padStart(2, "0");
+  const mm = String(d.getUTCMinutes()).padStart(2, "0");
+  return `${hh}:${mm}`;
+}
+
+/**
+ * Health-aware skip (D-030): if the latest heartbeat marks any source this
+ * connector harvests as "down", the scheduled run skips with a plain reason
+ * instead of hammering a dead API and producing a red run. A missing or STALE
+ * heartbeat (> HEARTBEAT_STALE_HOURS, matching lib/status.ts) never claims
+ * "down" — the run proceeds and its own retry/issue automation handles a real
+ * outage. "degraded" (e.g. an S2 429) does not skip: connectors degrade
+ * gracefully. Returns a reason when the connector should skip, else null.
+ */
+function healthSkipReason(sourceIds: string[], now: Date): string | null {
+  if (sourceIds.length === 0) return null;
+  const heartbeat = loadHeartbeat();
+  if (!heartbeat) return null;
+  for (const sourceId of sourceIds) {
+    const entry = heartbeat.entries.find((e) => e.source_id === sourceId);
+    if (!entry || entry.status !== "down") continue;
+    const ageHours = (now.getTime() - Date.parse(entry.checked_at)) / 3_600_000;
+    if (!Number.isFinite(ageHours) || ageHours >= HEARTBEAT_STALE_HOURS) continue;
+    return `source ${sourceId} down at ${hhmmUTC(entry.checked_at)}`;
+  }
+  return null;
+}
+
 interface PlanEntry {
   connector: string;
   target: string | null;
   action: "run" | "skip";
   reason: string;
   quote?: RunQuote;
+}
+
+/**
+ * Quote one (connector, target) pair and gate it against the _ops limits +
+ * monthly budget (D-025). raiseCap is never passed on the schedule — the
+ * scheduled fleet respects the budget and skips over it. Shared by the
+ * per-target map and the default-scope (wayback) path (D-030).
+ */
+function gateEntry(
+  connector: Connector,
+  config: OpsConnectorConfig,
+  target: string | null,
+  params: RunParams,
+  runReason: string,
+  now: Date,
+): PlanEntry {
+  const quote = connector.quote ? connector.quote(params) : undefined;
+  if (quote) {
+    const decision = evaluateRunAgainstOps({ config, quote, now });
+    if (!decision.allowed) {
+      return {
+        connector: config.connector_id,
+        target,
+        action: "skip",
+        reason: `gate blocked — ${decision.reasons.join("; ")}`,
+        quote,
+      };
+    }
+  }
+  return { connector: config.connector_id, target, action: "run", reason: runReason, quote };
 }
 
 function planForConnector(config: OpsConnectorConfig, now: Date): PlanEntry[] {
@@ -157,7 +222,19 @@ function planForConnector(config: OpsConnectorConfig, now: Date): PlanEntry[] {
     ];
   }
 
+  const downReason = healthSkipReason(connector.sourceIds, now);
+  if (downReason !== null) {
+    return [{ connector: config.connector_id, target: null, action: "skip", reason: downReason }];
+  }
+
+  // A connector whose scope lives outside the mechanism-centric target
+  // machinery (D-028: wayback → wayback-domains.json) is planned as a single
+  // default-scope entry on an empty targets list (D-030); every other
+  // connector honestly skips when it has nothing configured.
   if (config.targets.length === 0) {
+    if (connector.schedulableWithoutTargets) {
+      return [gateEntry(connector, config, null, {}, "default scope (no _ops targets — D-028)", now)];
+    }
     return [
       {
         connector: config.connector_id,
@@ -174,20 +251,7 @@ function planForConnector(config: OpsConnectorConfig, now: Date): PlanEntry[] {
       return { connector: config.connector_id, target, action: "skip", reason: freshness.reason };
     }
     const params: RunParams = connector.id === "evidence" ? { mechanism: target } : {};
-    const quote = connector.quote ? connector.quote(params) : undefined;
-    if (quote) {
-      const decision = evaluateRunAgainstOps({ config, quote, now });
-      if (!decision.allowed) {
-        return {
-          connector: config.connector_id,
-          target,
-          action: "skip",
-          reason: `gate blocked — ${decision.reasons.join("; ")}`,
-          quote,
-        };
-      }
-    }
-    return { connector: config.connector_id, target, action: "run", reason: freshness.reason, quote };
+    return gateEntry(connector, config, target, params, freshness.reason, now);
   });
 }
 
@@ -248,7 +312,19 @@ function main(): void {
   }
 
   if (mode === "plan") {
-    const configs = loadOpsConnectorConfigsFromDisk();
+    // Optional connector id restricts the plan to that connector, so each
+    // schedule (connectors.yml) plans only its own connector (D-030). No arg
+    // = every connector (the /ops fleet view).
+    const [only] = rest;
+    let configs = loadOpsConnectorConfigsFromDisk();
+    if (only) {
+      connectorOrExit(only);
+      configs = configs.filter((config) => config.connector_id === only);
+      if (configs.length === 0) {
+        console.error(`No _ops config for "${only}" (corpora/_ops/connectors/${only}.json) — nothing to plan.`);
+        process.exit(1);
+      }
+    }
     const entries = configs.flatMap((config) => planForConnector(config, now));
     const budget = computeBudgetSnapshot(now);
     console.log(JSON.stringify({ month: budget.month, budget, entries }, null, 2));
