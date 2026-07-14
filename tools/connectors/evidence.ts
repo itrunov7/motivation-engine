@@ -22,12 +22,14 @@
  *   expressible in a single OpenAlex filter; the citation sort surfaces
  *   reviews and meta-analyses at the top of the text match anyway.
  * - Semantic Scholar /graph/v1/paper/search: relevance search, top 15.
- *   Sends x-api-key when the S2_API_KEY env var is set — authenticated
- *   clients get materially higher rate limits (D-018). Keyless runs share
- *   a contended public pool that 429s in bursts; on the first keyless 429
- *   the run degrades gracefully instead of failing: per-term batch drops
- *   to 10 for the retry passes (exponential cooldowns: 30s, 60s, 120s) and
- *   the manifest records warnings.s2_throttled: true.
+ *   Sends x-api-key when the S2_API_KEY env var is set (D-018). The issued
+ *   key allows 1 request/second CUMULATIVE across all endpoints, so every
+ *   S2 request goes through the global per-process queue in lib/http.ts
+ *   (≥1100ms spacing, never parallelized; 429s despite the limiter back
+ *   off from 2s) — see D-027. Any S2 429 records
+ *   warnings.s2_throttled: true in the manifest; keyless runs additionally
+ *   degrade gracefully: per-term batch drops to 10 for the retry passes
+ *   (exponential cooldowns: 30s, 60s, 120s).
  *
  * Records are deduplicated by DOI AND normalized title (lowercase, punctuation
  * and asterisks stripped), keeping the highest-citation variant of each paper.
@@ -44,7 +46,10 @@
  * the answers in advance:
  * - Snowballing: the top 2 review/meta-analysis records (OpenAlex type +
  *   title keywords, by citations) have their referenced_works fetched from
- *   OpenAlex; coverage = share of each review's references already in the
+ *   OpenAlex — DELIBERATELY OpenAlex, never Semantic Scholar: OpenAlex
+ *   carries the same citation graph without S2's 1 rps cumulative ceiling
+ *   (D-027), so reference expansion stays off the S2 budget entirely;
+ *   coverage = share of each review's references already in the
  *   corpus; references missing from the corpus that appear in ≥2 reviews'
  *   lists are auto-added with source_api "snowball". The coverage_report is
  *   written into the output file.
@@ -729,7 +734,7 @@ export const evidenceConnector: Connector = {
   id: "evidence",
   sourceId: "evidence",
   sourceIds: ["openalex", "semantic-scholar"],
-  connectorVersion: "2.0.0",
+  connectorVersion: "2.1.0",
   description:
     "Evidence harvester: OpenAlex + Semantic Scholar literature for one mechanism → {mechanism_id}.json. Terms from the record's evidence_terms; owner pins merged from pinned_evidence; review-reference snowballing and a category checklist verify completeness structurally (D-019). Fetch and structure only.",
 
@@ -748,9 +753,9 @@ export const evidenceConnector: Connector = {
       error?: string;
     }
 
-    // Graceful degradation (D-018): a keyless 429 from Semantic Scholar
-    // flips the run into throttled mode — per-term batch drops to 10 for
-    // the retry passes — and is recorded in the manifest as s2_throttled.
+    // Any Semantic Scholar 429 — even keyed, despite the global queue —
+    // records s2_throttled in the manifest (D-018/D-027); keyless runs
+    // additionally drop the per-term batch to 10 for the retry passes.
     let s2Throttled = false;
     const s2Limit = (): number =>
       s2Throttled && !s2ApiKey() ? S2_THROTTLED_PER_TERM : S2_PER_TERM;
@@ -785,13 +790,14 @@ export const evidenceConnector: Connector = {
         ctx.log(`FAILED ${task.error}`);
         if (
           task.api === "semantic-scholar" &&
-          !s2ApiKey() &&
           !s2Throttled &&
           /HTTP 429/.test(task.error)
         ) {
           s2Throttled = true;
           ctx.log(
-            `WARNING s2_throttled: keyless Semantic Scholar hit 429 — reducing batch to ${S2_THROTTLED_PER_TERM}/term for retries (set S2_API_KEY for higher limits)`,
+            s2ApiKey()
+              ? "WARNING s2_throttled: Semantic Scholar hit 429 despite the 1 rps queue (D-027) — recorded in the manifest"
+              : `WARNING s2_throttled: keyless Semantic Scholar hit 429 — reducing batch to ${S2_THROTTLED_PER_TERM}/term for retries (set S2_API_KEY for higher limits)`,
           );
         }
       }

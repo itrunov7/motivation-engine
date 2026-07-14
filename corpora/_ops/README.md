@@ -1,0 +1,79 @@
+# /corpora/_ops — Operational config (D-024)
+
+The fleet's operating parameters, as versioned data. This is the ONLY part of
+`/corpora` the app can write: the `/ops` page commits here through a
+fine-grained GitHub token via a server-action write path with a hard path
+allowlist (D-023). Knowledge files (registry, dossiers, docs, sources,
+decisions) stay read-only in the UI and are edited only in git.
+
+`_ops` is `_`-prefixed, so the showcase corpus scan ignores it exactly like
+`_health` and `_dummy` — it is config, not a harvested corpus.
+
+## Files
+
+### `budget.json`
+
+```jsonc
+{
+  "monthly_caps": {
+    "usd": 5,        // dollar ceiling for the calendar month (guards future priced jobs)
+    "calls": 20000   // outbound-API-call ceiling for the calendar month
+  }
+}
+```
+
+The scheduler stops starting new runs once month-to-date (rolled up from
+manifests) would exceed a cap. Every D-011 API is free, so `usd` reads $0
+today and guards only future LLM jobs; `calls` is the meaningful ceiling now.
+
+### `connectors/{id}.json`
+
+One file per registered connector; the filename stem must equal
+`connector_id`.
+
+```jsonc
+{
+  "connector_id": "evidence",
+  "paused": false,
+  "paused_reason": null,          // required (non-empty) when paused is true
+  "cadence": { "every_days": 7 }, // a due target runs at most this often
+  "limits": {
+    "max_calls_per_run": 500,     // pre-run ceiling on the estimated calls
+    "max_records_per_run": 5000   // pre-run ceiling on the estimated records
+  },
+  "targets": ["LA-01"]            // what the machine harvests (mechanism ids)
+}
+```
+
+- `targets` is the explicit harvest scope — what the owner pointed the machine
+  at, not whatever files happen to exist. It defaults to every mechanism id
+  with a full record in `/registry/mechanisms`. The scheduled run adds a
+  freshness filter on top: a target is only harvested if its registry record
+  changed in the last 7 days (checked with `git log`).
+- `paused` connectors are skipped by the scheduled workflow, and the
+  `paused_reason` is written to the job summary.
+- `limits` are enforced as a pre-run ceiling against the deterministic quote
+  (D-025), before any harvest call is made. `max_calls_per_run` is
+  additionally enforced by the runner at the polite-fetch layer DURING the
+  run, retries included (D-027) — a connector cannot opt out. For connectors
+  that call Semantic Scholar, size it so a run stays within minutes even if
+  every call were S2 at the 1 rps cumulative key allowance (100 S2 calls ≈
+  2 min; evidence defaults to 150).
+
+## Validation (D-024)
+
+`npm run validate` checks every `_ops` file with the SAME validators the
+write path uses (`lib/ops.ts`), so the UI can never push a config that would
+redden CI: required fields, non-negative numbers, filename = `connector_id`,
+`connector_id` is a registered connector, and every `target` exists in
+`/registry/mechanisms`. Malformed ops config fails the build rather than
+silently misconfiguring the fleet.
+
+## Run-with-quote flow (D-025)
+
+Runs are triggered from `/ops`, never executed by the app. A dry-run dispatch
+produces a deterministic `quote` (calls, records, duration, estimated_usd) as
+an ephemeral run artifact — never committed. The operator confirms; if the
+quote exceeds remaining budget, confirmation requires an explicit
+"raise cap for this run" checkbox, which logs an override auto-entry to
+`decisions.json`. See `.github/workflows/harvest.yml` and `tools/ops-gate.ts`.

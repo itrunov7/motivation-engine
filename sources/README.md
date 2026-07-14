@@ -24,21 +24,30 @@ Sources differ by nature, so each carries a `connection_mode`:
 
 ## Statuses are computed, never stored
 
-There is no status field in this file. The showcase computes each source's
-state from `/corpora/{source_id}/manifest.json` (written by connector runs,
-contract in /corpora/README.md):
+There is no status field in this file. The showcase computes three
+independent axes per source from files (contract in /corpora/README.md):
 
-- an **api** or **internal** source is *connected* iff its manifest exists
-  with `last_run.status = "success"`
-- a **report** source is *ingested* iff additionally at least one
-  `data_files` entry exists on disk
+- **connection** — "is this source set up": an **api** or **internal**
+  source is *connected* iff ANY `/corpora/{dir}/manifest.json` lists it in
+  `source_ids` (D-026). A manifest only exists after a connector was built
+  and run at least once, so its presence is the set-up proof — regardless
+  of how that run went.
+- **last run** — "is it working well": success / partial / failed from the
+  newest `last_run` among manifests listing the source. Granularity is per
+  corpus (D-020): sources sharing a corpus share its run status.
+- **health** — "is the API accessible right now": from
+  `/corpora/_health/heartbeat.json` (D-021); a heartbeat older than 12h
+  renders as unknown, never as ok.
+- a **report** source is *ingested* iff a manifest lists it AND at least
+  one `data_files` entry exists on disk
 - **manual** and **deferred** sources show their mode — a connectivity
   status for them would be fake in either direction
 
 ## Filled by
 
 Owner-provided source registry, ported during the data step. States change
-only when a connector run actually writes a successful manifest.
+only when a connector run writes a manifest (connection / last run) or the
+health check writes a heartbeat (health).
 
 ## Phase
 

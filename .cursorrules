@@ -13,7 +13,11 @@ fetching from a whitelist of public APIs. NO engine, NO LLM calls, NO database.
 ## Architectural invariants (violation = stop and ask the owner)
 1. SOURCE OF TRUTH — files in the repo. Data lives ONLY in:
    /registry/**.json, /sources/sources.json, /decisions/decisions.json,
-   /dossiers/**, /docs/**.md. No data inside components, no databases.
+   /dossiers/**, /docs/**.md, /corpora/_ops/**.json (operational config).
+   No data inside components, no databases. Knowledge files (registry,
+   dossiers, docs, sources, decisions) are edited ONLY in git; the app has a
+   NARROW write surface limited to /corpora/_ops/** and append-only auto-
+   entries in decisions.json (D-023).
 2. HONEST STATUSES — statuses in the showcase are COMPUTED from data.
    Hardcoding a status ("live", "connected", coverage numbers) in JSX/TS is
    forbidden. No data → show an honest empty state explaining what will appear
@@ -48,11 +52,16 @@ fetching from a whitelist of public APIs. NO engine, NO LLM calls, NO database.
     default; client components only where interactivity is required.
 12. Data reading in the app: fs in server components / static generation. The
     Next.js app remains file-based — no runtime external fetches from app/
-    (including middleware and server actions). Scripts under tools/ MAY call
-    ONLY these public APIs: api.openalex.org, api.semanticscholar.org, PubMed
-    E-utilities (eutils.ncbi.nlm.nih.gov), web.archive.org (CDX API). Any other
-    external endpoint requires a new decisions.json entry first. LLM API calls
-    remain forbidden everywhere in this repo.
+    (including middleware and server actions), with ONE exception (D-023):
+    server actions under app/ops/ MAY call api.github.com to commit the
+    allowlisted /corpora/_ops/** write surface, to dispatch harvest workflows
+    (workflow_dispatch), to poll a run, and to download a run's quote artifact
+    — nothing else, and harvesting itself never runs in the app. Scripts under
+    tools/ MAY call ONLY these public APIs: api.openalex.org,
+    api.semanticscholar.org, PubMed E-utilities (eutils.ncbi.nlm.nih.gov),
+    web.archive.org (CDX API). Any other external endpoint requires a new
+    decisions.json entry first. LLM API calls remain forbidden everywhere in
+    this repo.
 13. Data types are generated from JSON schemas (or declared in /lib/types.ts
     mirroring the schemas). `any` is forbidden.
 14. Design tokens — from the Control Center v0.1 reference: dark background
@@ -76,5 +85,7 @@ fetching from a whitelist of public APIs. NO engine, NO LLM calls, NO database.
 - Do not connect LLM APIs (OpenRouter/Anthropic/OpenAI) — there is no engine yet
 - Do not build general scrapers; source connectors are allowed ONLY as scripts
   under tools/ calling the whitelisted APIs in rule 12
-- Do not build data-editing forms in the UI (data is edited in git)
+- Do not build data-editing forms in the UI for KNOWLEDGE (registry, dossiers,
+  docs, sources, decisions) — that is edited in git. The ONLY UI write surface
+  is operational config under /corpora/_ops/** and run triggering (D-023)
 - Do not add dependencies "for the future"

@@ -40,30 +40,66 @@
 - `CONNECTOR_MAILTO` — contact email for polite headers and the OpenAlex
   `mailto` param; can also be passed per run as `mailto=me@example.com`.
 - `S2_API_KEY` — optional Semantic Scholar API key (D-018), sent as the
-  `x-api-key` header. Authenticated clients get materially higher rate
-  limits. Without it the evidence connector runs against the shared keyless
-  pool: on the first HTTP 429 it degrades gracefully — per-term batch drops
-  from 15 to 10 for the retry passes (exponential cooldowns 30s/60s/120s)
-  and the manifest records `warnings: { "s2_throttled": true }` instead of
-  the run failing. In CI the key comes from the `S2_API_KEY` repository
-  secret (see `.github/workflows/validate.yml`); locally, export it in your
-  shell or put it in `.env.local` (never commit it).
+  `x-api-key` header. Without it the evidence connector runs against the
+  shared keyless pool: on the first HTTP 429 it degrades gracefully —
+  per-term batch drops from 15 to 10 for the retry passes (exponential
+  cooldowns 30s/60s/120s) and the manifest records
+  `warnings: { "s2_throttled": true }` instead of the run failing. In CI
+  the key comes from the `S2_API_KEY` repository secret (see
+  `.github/workflows/validate.yml`); locally, export it in your shell or
+  put it in `.env.local` (never commit it).
 
-## Health × connection runbook (D-021)
+## Semantic Scholar rate compliance (D-027)
 
-Connection (from corpus manifests: has a harvest run ever succeeded) and
-health (from the heartbeat: is the API answering right now) are independent
-axes. Read them together:
+**S2 = 1 request/second CUMULATIVE per key, across ALL endpoints** — search,
+paper details, references, health probes all draw from the same allowance.
+Compliance is enforced structurally, not by convention:
 
-| connection    | health     | reading and action                                                                 |
-| ------------- | ---------- | ---------------------------------------------------------------------------------- |
-| connected     | ok         | all good — nothing to do                                                            |
-| connected     | down       | transient API outage — wait and retry later; the corpus itself is fine              |
-| connected     | degraded   | throttled (429/206) — check rate limits and keys (e.g. set `S2_API_KEY`, D-018)     |
-| not_connected | ok         | the API is fine but no successful harvest run exists — run the connector            |
-| not_connected | down       | cannot harvest right now anyway — wait for health to recover, then run the connector |
-| any           | unknown    | heartbeat stale (>12h) or no probe exists — run `npm run health`, or build the source's connector first (the D-011 whitelist grows with connectors, not ahead of them) |
-| any           | n/a        | internal source — no external endpoint by design; nothing to probe                  |
+- One global queue per process: every request to `api.semanticscholar.org`
+  is serialized through `enqueueS2()` in `tools/connectors/lib/http.ts` at
+  ≥1100ms spacing. S2 calls are **never parallelized**. `createPoliteFetch`
+  routes S2 hosts through the queue automatically; the health check routes
+  its S2 probe through the same queue.
+- **Do not add S2 calls to any new tool without routing them through the
+  shared limiter** — either use `createPoliteFetch` or wrap the raw fetch in
+  `enqueueS2()`. An S2 call outside the queue violates the key's allowance.
+- A 429 despite the limiter backs off exponentially from 2s (2s, 4s) and is
+  recorded in the manifest as `warnings: { "s2_throttled": true }`.
+- Run budgets live in `/corpora/_ops/connectors/{id}.json` (D-024):
+  `limits.max_calls_per_run` is enforced by the runner at the fetch layer
+  during the run, retries included — sized so a run stays within minutes
+  even if every call were S2 (100 S2 calls ≈ 2 min at 1 rps; evidence
+  defaults to 150).
+- Reference snowballing runs against **OpenAlex only** — it carries the same
+  citation graph without the 1 rps ceiling; never move reference expansion
+  to S2.
+- Across CI jobs, the `connectors-s2` concurrency group in
+  `.github/workflows/connectors.yml` prevents two simultaneous runner
+  processes; a future connector workflow in a separate file must reuse that
+  exact group name.
+
+## Connection × last run × health runbook (D-021, D-026)
+
+Three independent axes per api/internal source:
+
+- **connection** (from corpus manifests): is the source set up — a manifest
+  lists it in `source_ids`, i.e. a connector was built and has run
+- **last run** (from the newest `last_run`): is it working well —
+  success / partial / failed (per corpus, D-020)
+- **health** (from the heartbeat): is the API answering right now
+
+Read them together:
+
+| connection    | last run        | health   | reading and action                                                                  |
+| ------------- | --------------- | -------- | ----------------------------------------------------------------------------------- |
+| connected     | success         | ok       | all good — nothing to do                                                             |
+| connected     | partial/failed  | ok       | the API is fine but the harvest hit errors — check the manifest error, re-run        |
+| connected     | partial/failed  | degraded | throttled (429/206) — check rate limits and keys (e.g. set `S2_API_KEY`, D-018), then re-run |
+| connected     | any             | down     | transient API outage — wait and retry later; the corpus itself is fine               |
+| not_connected | —               | ok       | the API is fine but no connector has run for this source — build/run the connector   |
+| not_connected | —               | down     | cannot harvest right now anyway — wait for health to recover, then run the connector |
+| any           | any             | unknown  | heartbeat stale (>12h) or no probe exists — run `npm run health`, or build the source's connector first (the D-011 whitelist grows with connectors, not ahead of them) |
+| any           | any             | n/a      | internal source — no external endpoint by design; nothing to probe                   |
 
 ## Operations — watch issues, not logs (D-022)
 

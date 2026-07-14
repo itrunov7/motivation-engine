@@ -62,12 +62,31 @@ corpora such as earnings calls or enforcement actions (class D).
   Postgres and binary raw data to object storage; this folder holds
   file-sized corpora and manifests only.
 - The app computes corpus block statuses from this folder: empty folder →
-  `planned`. Source connectivity is computed from `source_ids`: a source
-  is connected iff ANY manifest here lists it in `source_ids` with
-  `last_run.status: "success"` (D-014). No status is ever asserted in code.
+  `planned`. Source connection is computed from `source_ids`: a source is
+  connected iff ANY manifest here lists it in `source_ids` (D-014, D-026) —
+  connection means "the connector is set up and has run", while run quality
+  (success / partial / failed from the newest `last_run`) is shown as its
+  own axis. No status is ever asserted in code.
 - `npm run validate` checks every `manifest.json` against this contract:
   every `source_ids` entry must exist in `sources.json`, and a
   non-internal corpus must harvest at least one source.
+
+## Ops config (`_ops/`, D-024)
+
+`/corpora/_ops/` is not a corpus — it holds the fleet's operating
+parameters as versioned data: `budget.json` (monthly caps) and
+`connectors/{id}.json` (per-connector limits, pause, cadence, targets).
+The full contract lives in `_ops/README.md` and `lib/ops.ts`; `npm run
+validate` checks every `_ops` file with the same validators the write
+path uses, so a malformed config fails CI rather than silently
+misconfiguring the fleet.
+
+The runner additionally enforces `limits.max_calls_per_run` at the
+polite-fetch layer DURING the run, retries included (D-027) — a
+connector cannot opt out. For connectors that call Semantic Scholar the
+limit is sized so a run stays within minutes even if every call were S2
+at its 1 request/second cumulative key allowance (100 S2 calls ≈ 2 min;
+the evidence connector's default is 150).
 
 ## Health heartbeat (`_health/heartbeat.json`, D-021)
 

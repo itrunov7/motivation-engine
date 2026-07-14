@@ -19,6 +19,7 @@ import type { ManifestCost, ManifestRun, RunContext, RunParams, RunResult } from
 import { createPoliteFetch } from "./connectors/lib/http";
 import { MAX_CORPUS_BYTES, dirSizeBytes, formatBytes, writeJsonPretty } from "./connectors/lib/io";
 import { writeManifest } from "./connectors/lib/manifest";
+import { loadOpsConnectorConfigFromDisk } from "../lib/ops";
 
 const ROOT = join(__dirname, "..");
 const CORPORA_DIR = join(ROOT, "corpora");
@@ -57,9 +58,13 @@ async function main(): Promise<void> {
   mkdirSync(corpusDir, { recursive: true });
 
   const mailto = params.mailto ?? process.env.CONNECTOR_MAILTO;
+  // Ops limits (D-024/D-027): the connector's /corpora/_ops config caps the
+  // run's request budget at the fetch layer — a connector cannot opt out.
+  const opsConfig = loadOpsConnectorConfigFromDisk(connector.id);
   const { fetch: politeFetch, stats: fetchStats } = createPoliteFetch({
     minIntervalMs: 1000,
     mailto,
+    maxApiCalls: opsConfig?.limits.max_calls_per_run,
   });
   const ctx: RunContext = {
     corpusDir,
@@ -69,7 +74,9 @@ async function main(): Promise<void> {
   };
 
   console.log(
-    `Running connector "${connector.id}" v${connector.connectorVersion} → ${relative(ROOT, corpusDir)}/\n`,
+    `Running connector "${connector.id}" v${connector.connectorVersion} → ${relative(ROOT, corpusDir)}/` +
+      (opsConfig ? ` (ops limit: max_calls_per_run ${opsConfig.limits.max_calls_per_run})` : "") +
+      "\n",
   );
 
   const startedAt = new Date();

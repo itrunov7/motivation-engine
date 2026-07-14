@@ -16,13 +16,17 @@
  * - Runtime / corpora / telemetry: planned while their folders hold no data.
  *   README.md, dotfiles, and .gitkeep are never data; a corpus subfolder
  *   only counts if it contains a manifest.json (contract in corpora/README).
- * - Source states (D-013, D-014): computed per connection_mode from the
- *   corpus manifests. A connector is not a source: each manifest lists the
- *   sources it harvests in source_ids. An api source is connected iff ANY
- *   /corpora/{dir}/manifest.json lists it in source_ids with
- *   last_run.status === "success"; a report source is ingested iff
- *   additionally that corpus has a data file on disk; manual and deferred
- *   sources show their mode, never a fake connectivity status.
+ * - Source states (D-013, D-014, D-026): computed per connection_mode from
+ *   the corpus manifests. A connector is not a source: each manifest lists
+ *   the sources it harvests in source_ids. An api/internal source is
+ *   connected iff ANY /corpora/{dir}/manifest.json lists it in source_ids —
+ *   connection means "this source's connector is set up and has run",
+ *   regardless of how the run went; run quality is its own axis
+ *   (computeSourceLastRun: success/partial/failed from last_run), and
+ *   health is a third (computeSourceHealth, D-021). A report source is
+ *   ingested iff a manifest lists it AND a data file exists on disk;
+ *   manual and deferred sources show their mode, never a fake
+ *   connectivity status.
  */
 
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -454,13 +458,17 @@ export function computeFileChecklist(
 
 /**
  * Computes a source's state from its mode and the file system (SPEC §4,
- * D-014):
- * - api / internal: connected iff ANY /corpora/{dir}/manifest.json lists the
- *   source in source_ids with last_run.status === "success" (internal data
- *   arrives via our own export pipeline, but connectivity is proven the same
- *   way — by a successful run, D-016)
- * - report: ingested iff additionally that corpus has at least one
- *   data_files entry existing on disk
+ * D-014, D-026). Connection answers ONE question — "is this source set up?"
+ * — not "did the last run go well" (that is computeSourceLastRun) and not
+ * "is the API answering right now" (that is computeSourceHealth, D-021):
+ * - api / internal: connected iff ANY /corpora/{dir}/manifest.json lists
+ *   the source in source_ids — a manifest only exists after a connector
+ *   was built and run at least once, so its presence IS the set-up proof
+ *   (internal data arrives via our own export pipeline, but set-up is
+ *   proven the same way, D-016)
+ * - report: ingested iff a manifest lists the source AND that corpus has
+ *   at least one data_files entry existing on disk — the artifact is
+ *   either on disk or it is not
  * - manual / deferred: the mode itself — a connectivity status would be fake
  */
 export function computeSourceState(source: Source): ComputedSourceState {
@@ -471,15 +479,12 @@ export function computeSourceState(source: Source): ComputedSourceState {
       return "deferred";
     case "api":
     case "internal": {
-      const connected = manifestsForSource(source.id).some(
-        ({ manifest }) => manifest.last_run?.status === "success",
-      );
+      const connected = manifestsForSource(source.id).length > 0;
       return connected ? "connected" : "not_connected";
     }
     case "report": {
       const ingested = manifestsForSource(source.id).some(
         ({ dirName, manifest }) =>
-          manifest.last_run?.status === "success" &&
           (manifest.data_files ?? []).some((file) =>
             existsSync(join(DATA_PATHS.corporaDir, dirName, file.path)),
           ),
@@ -487,6 +492,39 @@ export function computeSourceState(source: Source): ComputedSourceState {
       return ingested ? "ingested" : "not_ingested";
     }
   }
+}
+
+/** The newest last_run among manifests harvesting a source (D-026). */
+export interface ComputedSourceLastRun {
+  status: CorpusRunStatus;
+  /** ISO timestamp of the run. */
+  timestamp: string;
+  /** The corpus whose manifest recorded the run (per-corpus granularity,
+   *  D-020: all sources one corpus harvests share its run status). */
+  corpusDir: string;
+}
+
+/**
+ * Computes the "is it working well" axis (D-026): the most recent last_run
+ * across every manifest listing the source in source_ids, or null when the
+ * source was never set up. Presentation maps through RUN_STATUS_META.
+ */
+export function computeSourceLastRun(
+  source: Source,
+): ComputedSourceLastRun | null {
+  let newest: ComputedSourceLastRun | null = null;
+  for (const { dirName, manifest } of manifestsForSource(source.id)) {
+    const run = manifest.last_run;
+    if (!run) continue;
+    if (!newest || Date.parse(run.timestamp) > Date.parse(newest.timestamp)) {
+      newest = {
+        status: run.status,
+        timestamp: run.timestamp,
+        corpusDir: dirName,
+      };
+    }
+  }
+  return newest;
 }
 
 /** Per-mode aggregate: done = connected (api) / ingested (report). */

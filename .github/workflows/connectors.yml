@@ -21,6 +21,19 @@ on:
     - cron: "0 */6 * * *"
   workflow_dispatch:
 
+# S2 rate compliance (D-027): the Semantic Scholar key allows 1 request/second
+# CUMULATIVE per key, so two runners must never call S2 at the same time. This
+# workflow-level group serializes every job in this workflow — the health
+# heartbeat today, and any future scheduled harvest job added here. Within one
+# job/process, all S2 calls additionally share the single queue in
+# tools/connectors/lib/http.ts. A future connector workflow living in a
+# SEPARATE file must reuse this exact group name ("connectors-s2") to keep the
+# no-two-simultaneous-runs guarantee. cancel-in-progress stays false: a queued
+# heartbeat waiting behind a harvest is correct; killing the harvest is not.
+concurrency:
+  group: connectors-s2
+  cancel-in-progress: false
+
 permissions:
   contents: write
   issues: write

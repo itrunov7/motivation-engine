@@ -46,7 +46,18 @@ import type {
   HeartbeatEntry as WriterHeartbeatEntry,
   HeartbeatFile as WriterHeartbeatFile,
 } from "./health-check";
-import type { CorpusManifest, HeartbeatFile } from "../lib/types";
+import type {
+  OpsBudget as WriterOpsBudget,
+  OpsConnectorConfig as WriterOpsConnectorConfig,
+} from "./connectors/types";
+import { CONNECTORS } from "./connectors";
+import type { CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig } from "../lib/types";
+import {
+  KNOWN_CONNECTOR_IDS,
+  OPS_PATHS,
+  validateOpsBudget,
+  validateOpsConnectorConfig,
+} from "../lib/ops";
 
 const ROOT = join(__dirname, "..");
 
@@ -62,6 +73,9 @@ const PATHS = {
   corporaDir: join(ROOT, "corpora"),
   heartbeat: join(ROOT, "corpora", "_health", "heartbeat.json"),
 };
+
+/** /corpora dirs that are ops surfaces, not harvested corpora — no manifest. */
+const NON_CORPUS_DIRS = new Set(["_health", "_ops"]);
 
 let errorCount = 0;
 
@@ -386,6 +400,12 @@ const corpusManifestSchema = {
 // Health-check output must remain readable by lib/status.ts computations.
 type _HeartbeatContractInSync = AssertAssignable<WriterHeartbeatFile, HeartbeatFile>;
 
+// Ops config drift guards (D-024, same pattern): the write-path/tooling
+// contract (tools/connectors/types.ts) must stay assignable to the reader the
+// app and lib/ops.ts compute from (lib/types.ts).
+type _OpsBudgetInSync = AssertAssignable<WriterOpsBudget, OpsBudget>;
+type _OpsConnectorConfigInSync = AssertAssignable<WriterOpsConnectorConfig, OpsConnectorConfig>;
+
 const heartbeatEntryProperties = {
   source_id: { type: "string", pattern: "^[a-z0-9-]+$" },
   checked_at: { type: "string", format: "date-time" },
@@ -694,8 +714,9 @@ function main(): void {
         .sort()
     : [];
   for (const dirName of corpusDirs) {
-    // /corpora/_health holds the heartbeat (D-021), not a harvested corpus.
-    if (dirName === "_health") continue;
+    // /corpora/_health (heartbeat, D-021) and /corpora/_ops (ops config,
+    // D-024) are operational surfaces, not harvested corpora.
+    if (NON_CORPUS_DIRS.has(dirName)) continue;
     if (!existsSync(join(PATHS.corporaDir, dirName, "manifest.json"))) {
       fail(
         join(PATHS.corporaDir, dirName),
@@ -773,6 +794,53 @@ function main(): void {
     }
   } else {
     console.log("  · no health heartbeat yet (run npm run health)");
+  }
+
+  // 11. Ops config (/corpora/_ops, D-024): validated with the SAME
+  // validators the write path uses (lib/ops.ts), so the UI can never push a
+  // config that would redden CI — malformed ops config fails the build
+  // rather than silently misconfiguring the fleet.
+
+  // Drift guard: the connector-id list lib/ops.ts declares (lib/ never
+  // imports tools/, D-020) must equal the connector registry keys.
+  const registryIds = Object.keys(CONNECTORS).sort();
+  const knownIds = [...KNOWN_CONNECTOR_IDS].sort();
+  if (registryIds.join(",") !== knownIds.join(",")) {
+    fail(
+      join(ROOT, "lib", "ops.ts"),
+      `KNOWN_CONNECTOR_IDS [${knownIds.join(", ")}] does not equal the connector registry [${registryIds.join(", ")}] — update lib/ops.ts when adding a connector`,
+    );
+  }
+
+  if (existsSync(OPS_PATHS.budget)) {
+    const budget = readJson(OPS_PATHS.budget);
+    if (budget !== undefined) {
+      const errors = validateOpsBudget(budget);
+      for (const message of errors) fail(OPS_PATHS.budget, message);
+      if (errors.length === 0) {
+        console.log(`  ✓ ${rel(OPS_PATHS.budget)} valid (ops budget)`);
+      }
+    }
+  } else {
+    console.log("  · no ops budget yet (defaults apply)");
+  }
+
+  const opsFiles = listJsonFiles(OPS_PATHS.connectorsDir);
+  for (const file of opsFiles) {
+    const data = readJson(file);
+    if (data === undefined) continue;
+    const errors = validateOpsConnectorConfig(data, {
+      expectedId: basename(file, ".json"),
+      knownConnectorIds: registryIds,
+      knownMechanismIds: Array.from(rosterIds.keys()),
+    });
+    for (const message of errors) fail(file, message);
+    if (errors.length === 0) {
+      console.log(`  ✓ ${rel(file)} valid (ops connector config)`);
+    }
+  }
+  if (opsFiles.length === 0) {
+    console.log("  · no ops connector configs yet (defaults apply)");
   }
 
   finish();

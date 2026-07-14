@@ -4,14 +4,17 @@ import {
   CONNECTION_MODE_META,
   CONNECTION_MODE_ORDER,
   HEALTH_META,
+  RUN_STATUS_META,
   SOURCE_STATE_META,
   SOURCE_STATE_ORDER,
   computeSourceHealth,
+  computeSourceLastRun,
   computeSourceModeCounts,
   computeSourceState,
   formatCheckedAgo,
   formatModeCount,
   type ComputedSourceHealth,
+  type ComputedSourceLastRun,
 } from "@/lib/status";
 import type {
   ComputedSourceState,
@@ -50,9 +53,11 @@ function filterHref(filters: Filters, key: FilterKey, value?: string): string {
 interface FlatSource extends Source {
   classId: SourceClassId;
   className: string;
-  /** Computed from /corpora/{id}/manifest.json — never stored (D-013). */
+  /** Connection = "is this source set up" — from corpus manifests (D-026). */
   state: ComputedSourceState;
-  /** Computed from /corpora/_health/heartbeat.json — never stored (D-021). */
+  /** Last run = "is it working well" — newest last_run (D-026). */
+  lastRun: ComputedSourceLastRun | null;
+  /** Health = "is the API accessible" — from the heartbeat (D-021). */
   health: ComputedSourceHealth;
 }
 
@@ -96,6 +101,44 @@ function HealthPill({ health }: { health: ComputedSourceHealth }) {
       {checkedAgo && (
         <span className="whitespace-nowrap font-mono text-[10px] text-[#7C93A8]">
           {checkedAgo}
+        </span>
+      )}
+    </div>
+  );
+}
+
+/** "3h ago" / "2d ago" from an ISO timestamp; null when unparseable. */
+function formatRunAgo(iso: string): string | null {
+  const ms = Date.now() - Date.parse(iso);
+  if (!Number.isFinite(ms)) return null;
+  const hours = Math.floor(ms / 3_600_000);
+  if (hours < 1) return "<1h ago";
+  if (hours < 48) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+}
+
+function LastRunPill({ lastRun }: { lastRun: ComputedSourceLastRun | null }) {
+  if (!lastRun) {
+    return <span className="font-mono text-xs text-[#7C93A8]">—</span>;
+  }
+  const meta = RUN_STATUS_META[lastRun.status];
+  const ago = formatRunAgo(lastRun.timestamp);
+  return (
+    <div className="flex flex-col gap-1">
+      <span
+        className="inline-flex w-fit items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider"
+        style={{ color: meta.color, borderColor: `${meta.color}40` }}
+        title={`corpus: ${lastRun.corpusDir}`}
+      >
+        <span
+          className="h-1.5 w-1.5 rounded-full"
+          style={{ backgroundColor: meta.color }}
+        />
+        {meta.label}
+      </span>
+      {ago && (
+        <span className="whitespace-nowrap font-mono text-[10px] text-[#7C93A8]">
+          {ago}
         </span>
       )}
     </div>
@@ -182,6 +225,7 @@ const TABLE_HEADERS = [
   "feeds",
   "mode",
   "status",
+  "last run",
   "health",
 ];
 
@@ -251,6 +295,9 @@ function SourceRow({ source }: { source: FlatSource }) {
         <SourceStatePill state={source.state} />
       </td>
       <td className="px-3 py-2.5">
+        <LastRunPill lastRun={source.lastRun} />
+      </td>
+      <td className="px-3 py-2.5">
         <HealthPill health={source.health} />
       </td>
     </tr>
@@ -271,6 +318,7 @@ export default function SourcesPage({
       classId: cls.id,
       className: cls.name,
       state: computeSourceState(source),
+      lastRun: computeSourceLastRun(source),
       health: computeSourceHealth(source),
     })),
   );
@@ -316,11 +364,12 @@ export default function SourcesPage({
           </h1>
           <p className="mt-1 text-sm text-[#8CA495]">
             {all.length} sources across {registry.classes.length} classes, read
-            from /sources/sources.json. Each source has a connection mode;
-            statuses are computed from /corpora/&#123;id&#125;/manifest.json —
-            nothing turns green until a run actually succeeds. Health is an
-            independent axis read from /corpora/_health/heartbeat.json
-            (D-021) — the app itself never calls an external API.
+            from /sources/sources.json. Three independent axes per source
+            (D-026), all computed from files: status = is the source set up
+            (a corpus manifest lists it), last run = is it working well
+            (success / partial / failed), health = is the API accessible
+            right now (/corpora/_health/heartbeat.json, D-021) — the app
+            itself never calls an external API.
           </p>
         </div>
         <span className="rounded-full border border-[#243329] bg-[#1A2620] px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-[#8CA495]">
@@ -388,7 +437,7 @@ export default function SourcesPage({
           </div>
         ) : (
           <div className="mt-3 overflow-x-auto rounded-lg border border-[#243329] bg-[#151F1A]">
-            <table className="w-full min-w-[1120px] border-collapse text-left">
+            <table className="w-full min-w-[1220px] border-collapse text-left">
               <thead>
                 <tr className="border-b border-[#243329] bg-[#1A2620]">
                   {TABLE_HEADERS.map((header) => (
@@ -420,6 +469,20 @@ export default function SourcesPage({
             `${CONNECTION_MODE_META[mode].label} = ${CONNECTION_MODE_META[mode].description}`,
         ).join(" · ")}
         .
+      </p>
+
+      <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
+          status legend ·{" "}
+        </span>
+        {SOURCE_STATE_META.connected.label} = the source&apos;s connector is
+        set up — a /corpora manifest lists it (regardless of how the last run
+        went, D-026); {SOURCE_STATE_META.not_connected.label} = no connector
+        has run for this source yet. The last-run column shows run quality
+        separately: {RUN_STATUS_META.success.label} /{" "}
+        {RUN_STATUS_META.partial.label} / {RUN_STATUS_META.failed.label} from
+        the newest manifest run (per corpus — sources sharing a corpus share
+        its run status, D-020).
       </p>
 
       <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">

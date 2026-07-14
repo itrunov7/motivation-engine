@@ -9,12 +9,14 @@ import {
   computeFileChecklist,
   computeMonthlyRollup,
   computeSourceHealth,
+  computeSourceLastRun,
   computeSourceState,
   formatCheckedAgo,
   loadCorpusManifests,
   loadHeartbeat,
   type CategoryFlag,
   type ComputedSourceHealth,
+  type ComputedSourceLastRun,
   type CorpusEntry,
   type DataFileChecklist,
   type MonthlyRollup,
@@ -144,8 +146,10 @@ function Tag({ children }: { children: React.ReactNode }) {
 
 interface HealthRow {
   source: Source;
-  /** Connection — from corpus manifests (D-013), unchanged by D-021. */
+  /** Connection = "is this source set up" — from corpus manifests (D-026). */
   state: ComputedSourceState;
+  /** Last run = "is it working well" — newest last_run (D-026). */
+  lastRun: ComputedSourceLastRun | null;
   /** Health — from /corpora/_health/heartbeat.json only. */
   health: ComputedSourceHealth;
 }
@@ -162,6 +166,15 @@ function SourceHealthRow({ row }: { row: HealthRow }) {
       </td>
       <td className="whitespace-nowrap px-3 py-2.5">
         <SourceStatePill state={row.state} />
+      </td>
+      <td className="whitespace-nowrap px-3 py-2.5">
+        {row.lastRun ? (
+          <span title={`corpus: ${row.lastRun.corpusDir} · ${formatTimestamp(row.lastRun.timestamp)}`}>
+            <RunStatusPill status={row.lastRun.status} />
+          </span>
+        ) : (
+          <span className="font-mono text-xs text-[#7C93A8]">—</span>
+        )}
       </td>
       <td className="whitespace-nowrap px-3 py-2.5">
         <HealthPill health={row.health} />
@@ -193,8 +206,11 @@ function SourceHealthSection({
           Source health
         </h2>
         <p className="mt-1 text-sm text-[#8CA495]">
-          Two independent axes per api/internal source (D-021): connection
-          (has a harvest run ever succeeded — from corpus manifests) and
+          Three independent axes per api/internal source (D-021, D-026):
+          connection (is the source set up — a corpus manifest lists it),
+          last run (is it working well —{" "}
+          {RUN_STATUS_META.success.label} / {RUN_STATUS_META.partial.label} /{" "}
+          {RUN_STATUS_META.failed.label} from the newest manifest run), and
           health (is the API answering right now — from
           /corpora/_health/heartbeat.json). The app performs no live external
           calls; a heartbeat older than 12h renders as{" "}
@@ -221,7 +237,7 @@ function SourceHealthSection({
           <table className="w-full min-w-[760px] border-collapse text-left">
             <thead>
               <tr className="border-b border-[#243329] bg-[#1A2620]">
-                {["source", "connection", "health", "checked", "latency", "note"].map(
+                {["source", "connection", "last run", "health", "checked", "latency", "note"].map(
                   (header) => (
                     <th
                       key={header}
@@ -245,15 +261,20 @@ function SourceHealthSection({
         <span className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
           runbook ·{" "}
         </span>
+        {SOURCE_STATE_META.not_connected.label} + {HEALTH_META.ok.label} =
+        the API is fine but no connector has run for this source — build/run
+        the connector ·{" "}
+        {SOURCE_STATE_META.connected.label} + last run{" "}
+        {RUN_STATUS_META.partial.label}/{RUN_STATUS_META.failed.label} = the
+        harvest hit errors — check the corpus panel below and re-run ·{" "}
+        {SOURCE_STATE_META.connected.label} + {HEALTH_META.degraded.label} =
+        currently throttled — check rate limits and keys (e.g. S2_API_KEY)
+        before re-running ·{" "}
         {SOURCE_STATE_META.connected.label} + {HEALTH_META.down.label} = the
         API has a transient outage — wait and retry later ·{" "}
-        {SOURCE_STATE_META.connected.label} + {HEALTH_META.degraded.label} =
-        throttled — check rate limits and keys (e.g. S2_API_KEY) ·{" "}
-        {SOURCE_STATE_META.not_connected.label} + {HEALTH_META.ok.label} =
-        the API is fine but no successful harvest run exists — run the
-        connector · {HEALTH_META.unknown.label} = stale or unprobeable
-        heartbeat — run npm run health, or build the source&apos;s connector
-        first. Full matrix in tools/README.md.
+        {HEALTH_META.unknown.label} = stale or unprobeable heartbeat — run
+        npm run health, or build the source&apos;s connector first. Full
+        matrix in tools/README.md.
       </p>
     </section>
   );
@@ -554,6 +575,7 @@ export default function ConnectorsPage() {
     .map((source) => ({
       source,
       state: computeSourceState(source),
+      lastRun: computeSourceLastRun(source),
       health: computeSourceHealth(source),
     }));
   const hasHeartbeat = loadHeartbeat() !== undefined;

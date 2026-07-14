@@ -400,6 +400,38 @@ export interface HeartbeatFile {
   entries: HeartbeatEntry[];
 }
 
+// ---------- Operational config (/corpora/_ops, D-024) ----------
+
+/**
+ * /corpora/_ops/budget.json — the monthly ceiling the scheduler respects
+ * before starting new runs. Reader mirror of tools/connectors/types.ts
+ * OpsBudget; a drift guard in tools/validate.ts pins writer → reader.
+ */
+export interface OpsBudget {
+  monthly_caps: {
+    usd: number;
+    calls: number;
+  };
+}
+
+/**
+ * /corpora/_ops/connectors/{id}.json — one connector's operating config
+ * (D-024). Reader mirror of tools/connectors/types.ts OpsConnectorConfig.
+ */
+export interface OpsConnectorConfig {
+  connector_id: string;
+  paused: boolean;
+  paused_reason: string | null;
+  cadence: {
+    every_days: number;
+  };
+  limits: {
+    max_calls_per_run: number;
+    max_records_per_run: number;
+  };
+  targets: string[];
+}
+
 // ---------- Decision log (§3.5) ----------
 
 export type DecisionArea =

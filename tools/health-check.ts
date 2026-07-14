@@ -34,7 +34,7 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { ALLOWED_HOSTS } from "./connectors/lib/http";
+import { ALLOWED_HOSTS, S2_HOST, enqueueS2 } from "./connectors/lib/http";
 import { writeJsonPretty } from "./connectors/lib/io";
 
 const ROOT = join(__dirname, "..");
@@ -128,13 +128,20 @@ async function runProbe(sourceId: string, probe: Probe): Promise<HeartbeatEntry>
     ...probe.headers,
   };
 
-  const checkedAt = new Date().toISOString();
-  const startedAt = Date.now();
-  try {
-    const response = await fetch(url, {
+  // D-027: the Semantic Scholar key allows 1 rps CUMULATIVE across all
+  // endpoints, so even this single probe goes through the shared
+  // per-process S2 queue — if any other S2 call ever runs in the same
+  // process, they serialize instead of colliding.
+  const doFetch = (): Promise<Response> =>
+    fetch(url, {
       headers,
       signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
     });
+
+  const checkedAt = new Date().toISOString();
+  const startedAt = Date.now();
+  try {
+    const response = await (url.hostname === S2_HOST ? enqueueS2(doFetch) : doFetch());
     const latencyMs = Date.now() - startedAt;
     // Drain the body so the socket closes cleanly.
     await response.arrayBuffer().catch(() => undefined);

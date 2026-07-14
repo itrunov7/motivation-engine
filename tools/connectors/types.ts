@@ -77,6 +77,23 @@ export interface RunContext {
   log: (message: string) => void;
 }
 
+/**
+ * A deterministic cost estimate for a run BEFORE it happens (D-025). No
+ * network calls — computed from the connector's inputs (for evidence: the
+ * record's evidence_terms, pinned_evidence, per-term caps, and the polite
+ * fetch interval). Powers the dry-run quote shown on /ops before a real run.
+ */
+export interface RunQuote {
+  /** Estimated outbound HTTP requests, retries excluded (a floor). */
+  calls: number;
+  /** Estimated records written (an upper-bound before dedupe). */
+  records: number;
+  /** Estimated wall-clock seconds (≈ calls × the polite min interval). */
+  duration_s: number;
+  /** Computed dollar estimate; 0 for the free D-011 public APIs. */
+  estimated_usd: number;
+}
+
 /** The single interface every connector implements. */
 export interface Connector {
   /** CLI id, e.g. "evidence". */
@@ -94,6 +111,52 @@ export interface Connector {
   connectorVersion: string;
   description: string;
   run(ctx: RunContext, params: RunParams): Promise<RunResult>;
+  /** Optional deterministic cost estimate for the run-with-quote flow
+   *  (D-025). No network calls. */
+  quote?(params: RunParams): RunQuote;
+}
+
+// ---------- Operational config (/corpora/_ops, D-024) ----------
+//
+// The fleet's operating parameters as data, not code. Writer: the app's
+// server-action write path (app/ops/actions.ts). Reader: the scheduler gate
+// (tools/ops-gate.ts) and the /ops page. The reader mirror lives in
+// lib/types.ts (OpsBudget / OpsConnectorConfig); a drift guard in
+// tools/validate.ts pins these to each other, and a single set of validators
+// in lib/ops.ts is shared by CI and the write path (D-024).
+
+/** /corpora/_ops/budget.json — the monthly ceiling the scheduler respects. */
+export interface OpsBudget {
+  monthly_caps: {
+    /** Dollar cap for the calendar month. */
+    usd: number;
+    /** Outbound-API-call cap for the calendar month. */
+    calls: number;
+  };
+}
+
+/** /corpora/_ops/connectors/{id}.json — one connector's operating config. */
+export interface OpsConnectorConfig {
+  /** Must equal the filename stem and be a registered connector. */
+  connector_id: string;
+  /** When true the scheduled workflow skips this connector. */
+  paused: boolean;
+  /** Plain-language reason shown in the UI and the job summary; null when
+   *  not paused. */
+  paused_reason: string | null;
+  cadence: {
+    /** The scheduler runs a due target at most once per this many days. */
+    every_days: number;
+  };
+  limits: {
+    /** Pre-run ceiling on the estimated outbound calls for one run. */
+    max_calls_per_run: number;
+    /** Pre-run ceiling on the estimated records for one run. */
+    max_records_per_run: number;
+  };
+  /** What the machine harvests (for evidence: mechanism ids). The schedule's
+   *  scope is what the owner pointed it at, not what happens to be on disk. */
+  targets: string[];
 }
 
 // ---------- Manifest contract (/corpora/{source_id}/manifest.json) ----------
@@ -162,3 +225,47 @@ export interface Manifest {
 
 /** run_history cap — the manifest keeps the last N runs. */
 export const RUN_HISTORY_LIMIT = 20;
+
+// ---------- Ops config contract (/corpora/_ops, D-024) ----------
+//
+// Writer mirrors of the reader contract in lib/types.ts (lib/ never imports
+// tools/, D-020); tools/validate.ts pins writer → reader at compile time.
+// The shared validators live in lib/ops.ts.
+
+/** /corpora/_ops/budget.json — monthly ceilings the scheduler respects. */
+export interface OpsBudget {
+  monthly_caps: {
+    usd: number;
+    calls: number;
+  };
+}
+
+/**
+ * /corpora/_ops/connectors/{id}.json — one connector's operating config
+ * (D-024). The runner reads it before every run and enforces
+ * limits.max_calls_per_run at the polite-fetch layer as a hard run budget
+ * (D-027) — a connector cannot opt out. For S2-calling connectors the limit
+ * is sized so a run stays within minutes even if every call were Semantic
+ * Scholar at the 1 rps cumulative key allowance (D-027).
+ */
+export interface OpsConnectorConfig {
+  /** Must equal the connector's CLI id and the filename stem. */
+  connector_id: string;
+  /** A paused connector is skipped by the scheduled workflow. */
+  paused: boolean;
+  /** Required (non-empty) when paused is true. */
+  paused_reason: string | null;
+  /** A due target runs at most this often. */
+  cadence: {
+    every_days: number;
+  };
+  limits: {
+    /** Run request budget, retries included: enforced pre-run against the
+     *  quote (D-025) AND at the fetch layer during the run (D-027). */
+    max_calls_per_run: number;
+    /** Pre-run ceiling on the estimated records (D-025). */
+    max_records_per_run: number;
+  };
+  /** Explicit harvest scope (mechanism ids). */
+  targets: string[];
+}

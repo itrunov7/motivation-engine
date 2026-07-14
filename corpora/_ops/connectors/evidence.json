@@ -1,0 +1,15 @@
+{
+  "connector_id": "evidence",
+  "paused": false,
+  "paused_reason": null,
+  "cadence": {
+    "every_days": 7
+  },
+  "limits": {
+    "max_calls_per_run": 150,
+    "max_records_per_run": 5000
+  },
+  "targets": [
+    "LA-01"
+  ]
+}
