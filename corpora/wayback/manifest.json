@@ -1,0 +1,60 @@
+{
+  "source_id": "wayback",
+  "source_ids": [
+    "wayback-cdx"
+  ],
+  "connector_version": "1.0.0",
+  "last_run": {
+    "timestamp": "2026-07-14T11:46:42.061Z",
+    "status": "success",
+    "params": {
+      "domains": "duolingo.com;calm.com;notion.so"
+    },
+    "records_fetched": 136,
+    "files_written": 3,
+    "duration_s": 30.04,
+    "cost": {
+      "api_calls": 3,
+      "duration_s": 30.04,
+      "tokens_in": null,
+      "tokens_out": null,
+      "estimated_usd": 0
+    }
+  },
+  "run_history": [
+    {
+      "timestamp": "2026-07-14T11:46:42.061Z",
+      "status": "success",
+      "params": {
+        "domains": "duolingo.com;calm.com;notion.so"
+      },
+      "records_fetched": 136,
+      "files_written": 3,
+      "duration_s": 30.04,
+      "cost": {
+        "api_calls": 3,
+        "duration_s": 30.04,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    }
+  ],
+  "data_files": [
+    {
+      "path": "calm.com.json",
+      "records": 47,
+      "bytes": 8432
+    },
+    {
+      "path": "duolingo.com.json",
+      "records": 47,
+      "bytes": 8810
+    },
+    {
+      "path": "notion.so.json",
+      "records": 42,
+      "bytes": 7635
+    }
+  ]
+}
