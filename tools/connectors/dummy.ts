@@ -9,7 +9,7 @@
  * (status "failed" manifest + non-zero exit).
  */
 
-import type { Connector, RunResult } from "./types";
+import type { Connector, RunQuote, RunResult } from "./types";
 
 interface DummyRecord {
   id: string;
@@ -17,12 +17,21 @@ interface DummyRecord {
   note: string;
 }
 
+/** The 3 fake records the smoke test always writes; no network calls. */
+const DUMMY_RECORD_COUNT = 3;
+
 export const dummyConnector: Connector = {
   id: "dummy",
   sourceId: "_dummy",
   sourceIds: [],
   connectorVersion: "1.0.0",
   description: "Smoke-test connector: writes 3 fake records, no network calls.",
+
+  /** Deterministic estimate (D-025): the smoke test makes no calls and always
+   *  writes the same 3 records. */
+  quote(): RunQuote {
+    return { calls: 0, records: DUMMY_RECORD_COUNT, duration_s: 0, estimated_usd: 0 };
+  },
 
   async run(ctx, params): Promise<RunResult> {
     if (params.fail === "1") {

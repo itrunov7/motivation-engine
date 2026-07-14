@@ -71,6 +71,7 @@ import {
   type Connector,
   type EvidenceCategory,
   type PoliteFetch,
+  type RunQuote,
   type RunResult,
 } from "./types";
 
@@ -97,6 +98,21 @@ const SNOWBALL_MIN_REVIEWS = 2;
 
 /** OpenAlex OR-filter cap: batch size for resolving referenced works. */
 const OPENALEX_BATCH_SIZE = 50;
+
+// ---------- Dry-run quote estimate params (D-025) ----------
+// The quote is DETERMINISTIC and makes ZERO network calls — it estimates from
+// the record's terms/pins and the polite spacing only. Snowballing depends on
+// the (unknown-until-run) reference graph, so it is a fixed conservative
+// allowance rather than a guess per review.
+
+/** Polite spacing for non-S2 calls (run-connector minIntervalMs = 1000ms). */
+const QUOTE_POLITE_INTERVAL_S = 1.0;
+/** S2 cumulative spacing (≥1100ms per key, D-027). */
+const QUOTE_S2_INTERVAL_S = 1.1;
+/** Fixed OpenAlex allowance for snowball reference resolution (batched). */
+const QUOTE_SNOWBALL_CALLS = 4;
+/** Fixed record allowance the snowball pass may add (one OR-batch worth). */
+const QUOTE_SNOWBALL_RECORDS = OPENALEX_BATCH_SIZE;
 
 // ---------- Output shape (/corpora/evidence/{mechanism_id}.json) ----------
 
@@ -737,6 +753,34 @@ export const evidenceConnector: Connector = {
   connectorVersion: "2.1.0",
   description:
     "Evidence harvester: OpenAlex + Semantic Scholar literature for one mechanism → {mechanism_id}.json. Terms from the record's evidence_terms; owner pins merged from pinned_evidence; review-reference snowballing and a category checklist verify completeness structurally (D-019). Fetch and structure only.",
+
+  /**
+   * Deterministic pre-run estimate (D-025). No network: reads the mechanism
+   * record from disk and counts the calls the run WILL make — one OpenAlex +
+   * one S2 search per term, one OpenAlex fetch per pin, plus a fixed snowball
+   * allowance. Powers the /ops dry-run quote and the budget gate.
+   */
+  quote(params): RunQuote {
+    const record = loadMechanism(params.mechanism);
+    const { terms } = resolveTerms(record, params.terms);
+    const pins = record.pinned_evidence?.length ?? 0;
+
+    const openAlexCalls = terms.length + pins + QUOTE_SNOWBALL_CALLS;
+    const s2Calls = terms.length;
+    const calls = openAlexCalls + s2Calls;
+
+    const records =
+      terms.length * (OPENALEX_PER_TERM + S2_PER_TERM) + pins + QUOTE_SNOWBALL_RECORDS;
+
+    const duration_s =
+      Math.round(
+        (openAlexCalls * QUOTE_POLITE_INTERVAL_S + s2Calls * QUOTE_S2_INTERVAL_S) * 10,
+      ) / 10;
+
+    // estimated_usd is COMPUTED, not asserted: every D-011 API is free, so a
+    // pure-fetch run is 0 until a priced (LLM) job exists.
+    return { calls, records, duration_s, estimated_usd: 0 };
+  },
 
   async run(ctx, params): Promise<RunResult> {
     const mechanismId = params.mechanism;

@@ -432,6 +432,18 @@ export interface OpsConnectorConfig {
   targets: string[];
 }
 
+/**
+ * Deterministic pre-run cost estimate (D-025). Reader mirror of
+ * tools/connectors/types.ts RunQuote; drives the /ops budget snapshot and the
+ * dry-run quote panel. A drift guard in tools/validate.ts pins writer → reader.
+ */
+export interface RunQuote {
+  calls: number;
+  records: number;
+  duration_s: number;
+  estimated_usd: number;
+}
+
 // ---------- Decision log (§3.5) ----------
 
 export type DecisionArea =

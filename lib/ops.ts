@@ -18,9 +18,10 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { DATA_PATHS } from "./data";
-import type { OpsBudget, OpsConnectorConfig } from "./types";
+import { computeMonthlyRollup, loadCorpusManifests } from "./status";
+import type { CorpusManifest, CorpusRunStatus, OpsBudget, OpsConnectorConfig, RunQuote } from "./types";
 
-export type { OpsBudget, OpsConnectorConfig } from "./types";
+export type { OpsBudget, OpsConnectorConfig, RunQuote } from "./types";
 
 /**
  * Connector ids the ops surface knows about. Declared here because lib/ never
@@ -270,4 +271,139 @@ export function loadOpsConnectorConfigsFromDisk(): OpsConnectorConfig[] {
       const config = loadOpsConnectorConfigFromDisk(id);
       return config ? [config] : [];
     });
+}
+
+/** The last run of a connector, flattened for the /ops connector card. */
+export interface ConnectorLastRun {
+  status: CorpusRunStatus;
+  timestamp: string;
+  apiCalls: number | null;
+  estimatedUsd: number | null;
+  /** True when the run stopped at the max_calls_per_run budget (D-027). */
+  capped: boolean;
+  error: string | null;
+}
+
+/**
+ * The connector's most recent run, read from its corpus manifest. Tries both
+ * /corpora/{id} and /corpora/_{id} (the smoke-test connectors use the "_"
+ * prefix) so /ops need not import the connector registry from tools/.
+ */
+export function loadConnectorLastRun(id: string): ConnectorLastRun | undefined {
+  for (const dir of [id, `_${id}`]) {
+    const manifest = readJsonSafe<CorpusManifest>(join(DATA_PATHS.corporaDir, dir, "manifest.json"));
+    const run = manifest?.last_run;
+    if (run) {
+      return {
+        status: run.status,
+        timestamp: run.timestamp,
+        apiCalls: run.cost?.api_calls ?? null,
+        estimatedUsd: run.cost?.estimated_usd ?? null,
+        capped: Boolean(run.warnings?.capped),
+        error: run.error ?? null,
+      };
+    }
+  }
+  return undefined;
+}
+
+// ---------- Budget snapshot + run gate (shared by /ops and the scheduler) ----------
+
+/**
+ * Month-to-date budget picture (D-024/D-025), COMPUTED from the manifests —
+ * never asserted. `used` sums this UTC month's run costs across every corpus
+ * manifest (lib/status.ts computeMonthlyRollup); `remaining` is caps − used,
+ * floored at 0. The /ops progress bar and the run gate both read this.
+ */
+export interface BudgetSnapshot {
+  /** UTC "YYYY-MM". */
+  month: string;
+  caps: { usd: number; calls: number };
+  used: { usd: number; calls: number };
+  remaining: { usd: number; calls: number };
+}
+
+export function computeBudgetSnapshot(now: Date = new Date()): BudgetSnapshot {
+  const caps = (loadOpsBudgetFromDisk() ?? DEFAULT_BUDGET).monthly_caps;
+  const rollup = computeMonthlyRollup(loadCorpusManifests(), now);
+  const used = { usd: rollup.total.estimatedUsd, calls: rollup.total.apiCalls };
+  return {
+    month: rollup.month,
+    caps,
+    used,
+    remaining: {
+      usd: Math.max(0, caps.usd - used.usd),
+      calls: Math.max(0, caps.calls - used.calls),
+    },
+  };
+}
+
+/**
+ * The full dry-run quote artifact (D-025): the deterministic estimate merged
+ * with the budget snapshot and the gate outcome. Produced by
+ * tools/run-connector.ts `quote` and uploaded as the run's quote.json; the
+ * /ops run flow downloads and renders it.
+ */
+export interface QuoteArtifact {
+  connector: string;
+  target: string | null;
+  params: Record<string, string>;
+  quote: RunQuote;
+  budget: BudgetSnapshot;
+  over_budget: boolean;
+  allowed: boolean;
+  reasons: string[];
+  raise_cap: boolean;
+  generated_at: string;
+}
+
+/** The outcome of gating one run against its config + the monthly budget. */
+export interface OpsRunDecision {
+  /** True only when no per-run limit is exceeded AND (budget ok OR raiseCap). */
+  allowed: boolean;
+  /** Human-readable blockers; empty when allowed. */
+  reasons: string[];
+  /** The estimate would push month-to-date past a cap. */
+  overBudget: boolean;
+  budget: BudgetSnapshot;
+}
+
+/**
+ * Gate a single run (D-025). Per-run limits are HARD — raiseCap NEVER bypasses
+ * them, it only overrides the monthly budget for this one run (and the caller
+ * logs that override to decisions.json). Budget is evaluated against the
+ * month-to-date snapshot plus this run's estimate.
+ */
+export function evaluateRunAgainstOps(args: {
+  config: OpsConnectorConfig;
+  quote: RunQuote;
+  raiseCap?: boolean;
+  now?: Date;
+}): OpsRunDecision {
+  const { config, quote, raiseCap = false } = args;
+  const budget = computeBudgetSnapshot(args.now);
+  const reasons: string[] = [];
+
+  if (quote.calls > config.limits.max_calls_per_run) {
+    reasons.push(
+      `estimated ${quote.calls} calls exceeds this connector's max_calls_per_run (${config.limits.max_calls_per_run})`,
+    );
+  }
+  if (quote.records > config.limits.max_records_per_run) {
+    reasons.push(
+      `estimated ${quote.records} records exceeds this connector's max_records_per_run (${config.limits.max_records_per_run})`,
+    );
+  }
+
+  const overBudget =
+    budget.used.calls + quote.calls > budget.caps.calls ||
+    budget.used.usd + quote.estimated_usd > budget.caps.usd;
+  if (overBudget && !raiseCap) {
+    reasons.push(
+      `this run would exceed the monthly budget (calls ${budget.used.calls}+${quote.calls} of ${budget.caps.calls}; ` +
+        `usd ${budget.used.usd}+${quote.estimated_usd} of ${budget.caps.usd}) — raise the cap for this run to proceed`,
+    );
+  }
+
+  return { allowed: reasons.length === 0, reasons, overBudget, budget };
 }

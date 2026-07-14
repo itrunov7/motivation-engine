@@ -116,49 +116,6 @@ export interface Connector {
   quote?(params: RunParams): RunQuote;
 }
 
-// ---------- Operational config (/corpora/_ops, D-024) ----------
-//
-// The fleet's operating parameters as data, not code. Writer: the app's
-// server-action write path (app/ops/actions.ts). Reader: the scheduler gate
-// (tools/ops-gate.ts) and the /ops page. The reader mirror lives in
-// lib/types.ts (OpsBudget / OpsConnectorConfig); a drift guard in
-// tools/validate.ts pins these to each other, and a single set of validators
-// in lib/ops.ts is shared by CI and the write path (D-024).
-
-/** /corpora/_ops/budget.json — the monthly ceiling the scheduler respects. */
-export interface OpsBudget {
-  monthly_caps: {
-    /** Dollar cap for the calendar month. */
-    usd: number;
-    /** Outbound-API-call cap for the calendar month. */
-    calls: number;
-  };
-}
-
-/** /corpora/_ops/connectors/{id}.json — one connector's operating config. */
-export interface OpsConnectorConfig {
-  /** Must equal the filename stem and be a registered connector. */
-  connector_id: string;
-  /** When true the scheduled workflow skips this connector. */
-  paused: boolean;
-  /** Plain-language reason shown in the UI and the job summary; null when
-   *  not paused. */
-  paused_reason: string | null;
-  cadence: {
-    /** The scheduler runs a due target at most once per this many days. */
-    every_days: number;
-  };
-  limits: {
-    /** Pre-run ceiling on the estimated outbound calls for one run. */
-    max_calls_per_run: number;
-    /** Pre-run ceiling on the estimated records for one run. */
-    max_records_per_run: number;
-  };
-  /** What the machine harvests (for evidence: mechanism ids). The schedule's
-   *  scope is what the owner pointed it at, not what happens to be on disk. */
-  targets: string[];
-}
-
 // ---------- Manifest contract (/corpora/{source_id}/manifest.json) ----------
 
 export type RunStatus = "success" | "partial" | "failed";

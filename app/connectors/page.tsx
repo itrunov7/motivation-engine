@@ -599,6 +599,12 @@ export default function ConnectorsPage() {
           replication, dissent, recent — and an empty category is flagged red,
           because a corpus that can only confirm is broken.
         </p>
+        <p className="mt-2 font-mono text-[11px] text-[#7C93A8]">
+          <Link href="/ops" className="underline hover:text-[#34D399]">
+            operations →
+          </Link>{" "}
+          to set budgets, tune connectors, and trigger runs.
+        </p>
       </header>
 
       <SourceHealthSection rows={healthRows} hasHeartbeat={hasHeartbeat} />

@@ -49,9 +49,10 @@ import type {
 import type {
   OpsBudget as WriterOpsBudget,
   OpsConnectorConfig as WriterOpsConnectorConfig,
+  RunQuote as WriterRunQuote,
 } from "./connectors/types";
 import { CONNECTORS } from "./connectors";
-import type { CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig } from "../lib/types";
+import type { CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig, RunQuote } from "../lib/types";
 import {
   KNOWN_CONNECTOR_IDS,
   OPS_PATHS,
@@ -405,6 +406,7 @@ type _HeartbeatContractInSync = AssertAssignable<WriterHeartbeatFile, HeartbeatF
 // app and lib/ops.ts compute from (lib/types.ts).
 type _OpsBudgetInSync = AssertAssignable<WriterOpsBudget, OpsBudget>;
 type _OpsConnectorConfigInSync = AssertAssignable<WriterOpsConnectorConfig, OpsConnectorConfig>;
+type _RunQuoteInSync = AssertAssignable<WriterRunQuote, RunQuote>;
 
 const heartbeatEntryProperties = {
   source_id: { type: "string", pattern: "^[a-z0-9-]+$" },

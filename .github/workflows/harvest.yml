@@ -1,0 +1,244 @@
+# Harvest workflow — the fleet's run surface (D-024/D-025/D-027).
+#
+# The app never harvests; it triggers THIS workflow. Two ways in:
+#
+# 1. workflow_dispatch from /ops. The run-with-quote flow (D-025):
+#    - dry_run=true  → compute a DETERMINISTIC estimate (no network harvest)
+#      and upload it as the `quote` artifact (quote.json). The dispatch_id is
+#      echoed into the run name so the app can correlate and download it.
+#    - dry_run=false → the confirmed real run. The ops-gate (D-025) checks the
+#      per-run limits + monthly budget first; raise_cap=true bypasses ONLY the
+#      budget gate (never the per-run limits, enforced again at the fetch
+#      layer, D-027). A failed run is retried once, then opens a deduplicated
+#      ops issue (D-022).
+#
+# 2. schedule (weekly). tools/ops-gate.ts plan decides which (connector,target)
+#    pairs are due — respecting paused, cadence, per-target freshness, and the
+#    budget — and writes every skip reason to the job summary.
+#
+# S2 rate compliance (D-027): this workflow MUST reuse the exact concurrency
+# group "connectors-s2" from connectors.yml so two runner processes never call
+# Semantic Scholar at the same time (the key allows 1 rps CUMULATIVE).
+
+name: harvest
+
+run-name: >-
+  harvest ${{ inputs.dispatch_id || github.run_id }} — ${{ inputs.connector || 'scheduled' }} ${{ inputs.target }}${{ inputs.dry_run == 'true' && ' (dry-run)' || '' }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      connector:
+        description: "Connector id (e.g. evidence)"
+        required: true
+        type: string
+      target:
+        description: "Target mechanism id (evidence), or blank"
+        required: false
+        type: string
+        default: ""
+      dry_run:
+        description: "true = estimate only (no harvest)"
+        required: false
+        type: string
+        default: "true"
+      dispatch_id:
+        description: "Correlation id echoed into the run name"
+        required: false
+        type: string
+        default: ""
+      raise_cap:
+        description: "true = override the monthly budget for this one run"
+        required: false
+        type: string
+        default: "false"
+  schedule:
+    # Weekly, Monday 05:00 UTC. The ops-gate decides what is actually due.
+    - cron: "0 5 * * 1"
+
+concurrency:
+  group: connectors-s2
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  # ---------- Dry-run estimate (D-025): quote artifact, no harvest ----------
+  quote:
+    if: github.event_name == 'workflow_dispatch' && inputs.dry_run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Compute deterministic quote
+        run: |
+          set -euo pipefail
+          if [ -n "${{ inputs.target }}" ]; then
+            npx tsx tools/run-connector.ts quote "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" "raise_cap=${{ inputs.raise_cap }}"
+          else
+            npx tsx tools/run-connector.ts quote "${{ inputs.connector }}" "raise_cap=${{ inputs.raise_cap }}"
+          fi
+      - name: Upload quote artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: quote
+          path: quote.json
+          retention-days: 1
+
+  # ---------- Confirmed real run (D-025) ----------
+  run:
+    if: github.event_name == 'workflow_dispatch' && inputs.dry_run != 'true'
+    runs-on: ubuntu-latest
+    env:
+      CONNECTOR_ID: ${{ inputs.connector }}
+      S2_API_KEY: ${{ secrets.S2_API_KEY }}
+      CONNECTOR_MAILTO: ${{ vars.CONNECTOR_MAILTO }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # Gate FIRST (D-025): per-run limits + budget. raise_cap overrides only
+      # the budget; per-run limits still block. A blocked run fails here.
+      - name: Ops gate
+        run: |
+          set -euo pipefail
+          if [ -n "${{ inputs.target }}" ]; then
+            npx tsx tools/ops-gate.ts check "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" "raise_cap=${{ inputs.raise_cap }}"
+          else
+            npx tsx tools/ops-gate.ts check "${{ inputs.connector }}" "raise_cap=${{ inputs.raise_cap }}"
+          fi
+
+      # Run once; on failure back off 60s and retry once (D-022). Persistent
+      # failure is recorded as an output so the issue step runs before red.
+      - name: Harvest (retry once after backoff)
+        id: harvest
+        run: |
+          set +e
+          harvest() {
+            if [ -n "${{ inputs.target }}" ]; then
+              npm run connector -- "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" 2>&1 | tee harvest.log
+            else
+              npm run connector -- "${{ inputs.connector }}" 2>&1 | tee harvest.log
+            fi
+            return ${PIPESTATUS[0]}
+          }
+          harvest
+          code=$?
+          if [ "$code" -ne 0 ]; then
+            echo "::warning::harvest failed (exit $code) — backing off 60s then retrying once."
+            sleep 60
+            harvest
+            code=$?
+          fi
+          if [ "$code" -ne 0 ]; then echo "failed=true" >> "$GITHUB_OUTPUT"; else echo "failed=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Commit corpus if changed
+        if: steps.harvest.outputs.failed != 'true'
+        run: |
+          if [ -n "$(git status --porcelain corpora)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add corpora
+            git commit -m "data: harvest ${{ inputs.connector }} ${{ inputs.target }}"
+            git push
+          else
+            echo "Corpus unchanged — nothing to commit."
+          fi
+
+      - name: Open ops issue on persistent failure
+        if: steps.harvest.outputs.failed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          title="connector:${CONNECTOR_ID} failing"
+          gh label create ops --color B60205 --description "operations: a connector is failing (D-022)" 2>/dev/null || true
+          existing=$(gh issue list --state open --label ops --search "in:title ${title}" --json number,title --jq ".[] | select(.title == \"${title}\") | .number" | head -n1)
+          if [ -n "${existing}" ]; then
+            echo "Issue #${existing} already open for \"${title}\" — not duplicating."
+            exit 0
+          fi
+          {
+            echo "The **${CONNECTOR_ID}** connector run failed twice in a row in [run #${GITHUB_RUN_NUMBER}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})."
+            echo ""
+            echo '```'
+            tail -n 40 harvest.log 2>/dev/null || echo "(no output captured)"
+            echo '```'
+            echo ""
+            echo "Operator contract (D-022): watch issues, not logs. Close this issue after the fix to re-arm the automation."
+          } > issue-body.md
+          gh issue create --title "${title}" --label ops --body-file issue-body.md
+
+      - name: Fail the job on persistent failure
+        if: steps.harvest.outputs.failed == 'true'
+        run: |
+          echo "::error::${CONNECTOR_ID} harvest failed after retry — an ops issue was opened/confirmed."
+          exit 1
+
+  # ---------- Weekly scheduled run (D-024) ----------
+  scheduled:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    env:
+      S2_API_KEY: ${{ secrets.S2_API_KEY }}
+      CONNECTOR_MAILTO: ${{ vars.CONNECTOR_MAILTO }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the ops-gate freshness filter can read git log.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Plan the scheduled run (writes skip reasons to the summary)
+        run: |
+          set -euo pipefail
+          npx tsx tools/ops-gate.ts plan > plan.json 2> plan-summary.md
+          cat plan-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Harvest due targets
+        run: |
+          set -euo pipefail
+          jq -c '.entries[] | select(.action == "run")' plan.json > due.txt || true
+          if [ ! -s due.txt ]; then
+            echo "Nothing due this week." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          while read -r entry; do
+            connector=$(echo "$entry" | jq -r '.connector')
+            target=$(echo "$entry" | jq -r '.target // ""')
+            echo "::group::harvest ${connector} ${target}"
+            if [ -n "$target" ] && [ "$target" != "null" ]; then
+              npm run connector -- "$connector" "mechanism=$target"
+            else
+              npm run connector -- "$connector"
+            fi
+            echo "::endgroup::"
+          done < due.txt
+
+      - name: Commit corpora if changed
+        run: |
+          if [ -n "$(git status --porcelain corpora)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add corpora
+            git commit -m "data: scheduled harvest"
+            git push
+          else
+            echo "No corpus changes to commit."
+          fi

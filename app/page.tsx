@@ -22,6 +22,7 @@ const ROOMS: { href: string; label: string }[] = [
   { href: "/registry", label: "registry" },
   { href: "/sources", label: "sources" },
   { href: "/connectors", label: "connectors" },
+  { href: "/ops", label: "operations" },
   { href: "/dossiers", label: "dossiers" },
   { href: "/decisions", label: "decisions" },
   { href: "/docs", label: "docs" },

@@ -77,3 +77,20 @@ an ephemeral run artifact — never committed. The operator confirms; if the
 quote exceeds remaining budget, confirmation requires an explicit
 "raise cap for this run" checkbox, which logs an override auto-entry to
 `decisions.json`. See `.github/workflows/harvest.yml` and `tools/ops-gate.ts`.
+
+## Environment (D-023)
+
+The `/ops` write + run surface needs a fine-grained, repo-scoped GitHub token.
+Set these on the deployment (never committed):
+
+| Env var         | Required | Purpose                                                            |
+| --------------- | -------- | ------------------------------------------------------------------ |
+| `GH_OPS_TOKEN`  | yes      | Fine-grained PAT with **Contents: read/write** and **Actions: read/write** on this repo. Enables committing `_ops` and dispatching/reading `harvest.yml`. |
+| `GH_OPS_REPO`   | yes\*    | `owner/repo` to target. Falls back to `GITHUB_REPOSITORY`.         |
+| `GH_OPS_BRANCH` | no       | Branch to commit to and dispatch against (default `main`).         |
+
+Without `GH_OPS_TOKEN`/`GH_OPS_REPO`, `/ops` renders **read-only**: current
+settings and usage are visible, but every Save and Run control is disabled.
+Auth is unchanged (D-006): the whole app, `/ops` included, sits behind the
+single-password middleware. Harvest runs also read `S2_API_KEY` (secret) and
+`CONNECTOR_MAILTO` (var) in the workflow, as `connectors.yml` does.

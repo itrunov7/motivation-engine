@@ -24,6 +24,24 @@
 
 import type { PoliteFetch } from "../types";
 
+/**
+ * Thrown by the polite fetch when a run's request budget
+ * (limits.max_calls_per_run from the _ops config, D-024/D-027) is spent. The
+ * runner catches this as a GRACEFUL stop: the run is recorded status "partial"
+ * with warnings.capped = true and exits 0, rather than a hard failure.
+ */
+export class RunBudgetExceededError extends Error {
+  readonly maxApiCalls: number;
+  constructor(maxApiCalls: number) {
+    super(
+      `max_calls_per_run limit (${maxApiCalls}) from the _ops connector config reached — ` +
+        "the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional).",
+    );
+    this.name = "RunBudgetExceededError";
+    this.maxApiCalls = maxApiCalls;
+  }
+}
+
 /** D-011: the only external hosts tools/ scripts may call. */
 export const ALLOWED_HOSTS = [
   "api.openalex.org",
@@ -68,7 +86,13 @@ export function enqueueS2<T>(task: () => Promise<T>): Promise<T> {
   const run = s2Chain.then(async () => {
     const wait = s2LastRequestAt + S2_MIN_INTERVAL_MS - Date.now();
     if (wait > 0) await sleep(wait);
+    const previousAt = s2LastRequestAt;
     s2LastRequestAt = Date.now();
+    // Emit the measured spacing so licensing compliance (≥1100ms cumulative,
+    // D-027) is auditable in connector and workflow logs, not just asserted.
+    if (previousAt > 0) {
+      console.error(`  [s2 queue] request spaced +${s2LastRequestAt - previousAt}ms`);
+    }
     return task();
   });
   // The chain must survive task failures — swallow here, callers get `run`.
@@ -150,10 +174,7 @@ export function createPoliteFetch(options: PoliteFetchOptions): PoliteFetchHandl
     let lastError: Error | undefined;
     for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
       if (maxApiCalls !== undefined && stats.apiCalls >= maxApiCalls) {
-        throw new Error(
-          `max_calls_per_run limit (${maxApiCalls}) from the _ops connector config reached — ` +
-            "the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional).",
-        );
+        throw new RunBudgetExceededError(maxApiCalls);
       }
 
       let response: Response | undefined;
