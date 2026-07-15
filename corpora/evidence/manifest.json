@@ -6,23 +6,40 @@
   ],
   "connector_version": "2.3.0",
   "last_run": {
-    "timestamp": "2026-07-15T15:10:03.202Z",
+    "timestamp": "2026-07-15T15:12:55.044Z",
     "status": "success",
     "params": {
-      "mechanism": "ST-09"
+      "mechanism": "RE-10"
     },
-    "records_fetched": 187,
+    "records_fetched": 171,
     "files_written": 1,
-    "duration_s": 19.99,
+    "duration_s": 13.55,
     "cost": {
-      "api_calls": 20,
-      "duration_s": 19.99,
+      "api_calls": 12,
+      "duration_s": 13.55,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-15T15:12:55.044Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RE-10"
+      },
+      "records_fetched": 171,
+      "files_written": 1,
+      "duration_s": 13.55,
+      "cost": {
+        "api_calls": 12,
+        "duration_s": 13.55,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T15:10:03.202Z",
       "status": "success",
@@ -367,23 +384,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T09:37:27.363Z",
-      "status": "success",
-      "params": {
-        "mechanism": "LA-01"
-      },
-      "records_fetched": 209,
-      "files_written": 1,
-      "duration_s": 37.32,
-      "cost": {
-        "api_calls": 37,
-        "duration_s": 37.32,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -445,6 +445,18 @@
         "replication": 25,
         "dissent": 36,
         "recent": 61
+      }
+    },
+    {
+      "path": "RE-10.json",
+      "records": 171,
+      "bytes": 556549,
+      "categories": {
+        "foundational": 5,
+        "meta-analysis": 7,
+        "replication": 32,
+        "dissent": 29,
+        "recent": 46
       }
     },
     {
