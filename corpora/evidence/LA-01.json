@@ -1,6 +1,6 @@
 {
   "mechanism_id": "LA-01",
-  "fetched_at": "2026-07-15T08:54:08.333Z",
+  "fetched_at": "2026-07-15T09:38:04.679Z",
   "terms_source": "record",
   "terms": [
     "loss aversion",
@@ -57,44 +57,44 @@
     {
       "api": "semantic-scholar",
       "term": "loss aversion",
-      "requested": 10,
-      "returned": 10
+      "requested": 15,
+      "returned": 15
     },
     {
       "api": "semantic-scholar",
       "term": "prospect theory meta-analysis",
-      "requested": 10,
-      "returned": 0
+      "requested": 15,
+      "returned": 15
     },
     {
       "api": "semantic-scholar",
       "term": "loss aversion replication",
-      "requested": 10,
-      "returned": 10
+      "requested": 15,
+      "returned": 15
     },
     {
       "api": "semantic-scholar",
       "term": "loss aversion moderators",
-      "requested": 10,
-      "returned": 10
+      "requested": 15,
+      "returned": 15
     },
     {
       "api": "semantic-scholar",
       "term": "loss of loss aversion",
-      "requested": 10,
-      "returned": 0
+      "requested": 15,
+      "returned": 15
     },
     {
       "api": "semantic-scholar",
       "term": "loss aversion small stakes",
-      "requested": 10,
-      "returned": 10
+      "requested": 15,
+      "returned": 15
     },
     {
       "api": "semantic-scholar",
       "term": "endowment effect",
-      "requested": 10,
-      "returned": 0
+      "requested": 15,
+      "returned": 15
     }
   ],
   "coverage_report": {
@@ -124,10 +124,10 @@
   },
   "category_counts": {
     "foundational": 31,
-    "meta-analysis": 22,
-    "replication": 20,
-    "dissent": 26,
-    "recent": 30
+    "meta-analysis": 28,
+    "replication": 25,
+    "dissent": 36,
+    "recent": 61
   },
   "records": [
     {
@@ -242,6 +242,25 @@
       "source_api": "openalex"
     },
     {
+      "title": "Behavioral Law and Economics: Experimental Tests of the Endowment Effect and the Coase Theorem",
+      "authors": [
+        "D. Kahneman",
+        "J. Knetsch",
+        "R. Thaler"
+      ],
+      "year": 2000,
+      "venue": "Journal of Political Economy",
+      "doi": "10.1017/cbo9781139175197.009",
+      "citations": 3787,
+      "abstract": "Contrary to theoretical expectations, measures of willingness-to-accept greatly exceed measures of willingness-to-pay. This paper reports several experiments that demonstrate that this \"endowment effect\" persists even in market settings with opportunities to learn. Consumption objects (e.g., coffee mugs) are randomly given to half the subjects in an experiment. Markets for the mugs are then conducted. The Coase theorem predicts that about half the mugs will trade, but observed volume is always significantly less. When markets for \"induced-value\" tokens are conducted, the predicted volume is observed, suggesting that transactions costs cannot explain the undertrading for consumption goods. Copyright 1990 by University of Chicago Press.",
+      "openalex_id": "W4251252946",
+      "openalex_type": "article",
+      "categories": [
+        "foundational"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "The Disposition to Sell Winners Too Early and Ride Losers Too Long: Theory and Evidence",
       "authors": [
         "Hersh Shefrin",
@@ -253,25 +272,6 @@
       "citations": 3399,
       "abstract": "ABSTRACT One of the most significant and unique features in Kahneman and Tversky's approach to choice under uncertainty is aversion to loss realization. This paper is concerned with two aspects of this feature. First, we place this behavior pattern into a wider theoretical framework concerning a general disposition to sell winners too early and hold losers too long. This framework includes other elements, namely mental accounting, regret aversion, self‐control, and tax considerations. Second, we discuss evidence which suggests that tax considerations alone cannot explain the observed patterns of loss and gain realization, and that the patterns are consistent with a combined effect of tax considerations and the three other elements of our framework. We also show that the concentration of loss realizations in December is not consistent with fully rational behavior, but is consistent with our theory.",
       "openalex_id": "W2157323155",
-      "openalex_type": "article",
-      "categories": [
-        "foundational"
-      ],
-      "source_api": "openalex"
-    },
-    {
-      "title": "Experimental Tests of the Endowment Effect and the Coase Theorem",
-      "authors": [
-        "Daniel Kahneman",
-        "Jack L. Knetsch",
-        "Richard H. Thaler"
-      ],
-      "year": 1990,
-      "venue": "Journal of Political Economy",
-      "doi": "10.1086/261737",
-      "citations": 3205,
-      "abstract": "Contrary to theoretical expectations, measures of willingness-to-accept greatly exceed measures of willingness-to-pay. This paper reports several experiments that demonstrate that this \"endowment effect\" persists even in market settings with opportunities to learn. Consumption objects (e.g., coffee mugs) are randomly given to half the subjects in an experiment. Markets for the mugs are then conducted. The Coase theorem predicts that about half the mugs will trade, but observed volume is always significantly less. When markets for \"induced-value\" tokens are conducted, the predicted volume is observed, suggesting that transactions costs cannot explain the undertrading for consumption goods. Copyright 1990 by University of Chicago Press.",
-      "openalex_id": "W4251252946",
       "openalex_type": "article",
       "categories": [
         "foundational"
@@ -1052,6 +1052,22 @@
       "source_api": "semantic-scholar"
     },
     {
+      "title": "The Loss of Loss Aversion: Will It Loom Larger Than Its Gain?",
+      "authors": [
+        "David Gal",
+        "Derek D. Rucker"
+      ],
+      "year": 2018,
+      "venue": null,
+      "doi": "10.1002/jcpy.1047",
+      "citations": 244,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Explaining the Endowment Effect through Ownership: The Role of Identity, Gender, and Self-Threat",
       "authors": [
         "Sara Loughran Dommer",
@@ -1194,6 +1210,24 @@
       "pin_reason": "small-stakes boundary condition, cited in dossier"
     },
     {
+      "title": "Meta-Analysis of Empirical Estimates of Loss-Aversion",
+      "authors": [
+        "Alexander L. Brown",
+        "Colin Camerer"
+      ],
+      "year": 2020,
+      "venue": "Social Science Research Network",
+      "doi": "10.31222/osf.io/hnefr",
+      "citations": 139,
+      "abstract": "Loss aversion is one of the most widely used concepts in behavioral economics. We conduct a large-scale interdisciplinary meta-analysis, to systematically accumulate knowledge from numerous empirical estimates of the loss aversion coefficient reported during the past couple of decades. We examine 607 empirical estimates of loss aversion from 150 articles in economics, psychology, neuroscience, and several other disciplines. Our analysis indicates that the mean loss aversion coefficient is between 1.8 and 2.1. We also document how reported estimates vary depending on the observable characteristics of the study design.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "meta-analysis"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Charting the future of social psychology on stormy seas: Winners, losers, and recommendations",
       "authors": [
         "Roy F. Baumeister"
@@ -1259,6 +1293,22 @@
         "meta-analysis"
       ],
       "source_api": "openalex"
+    },
+    {
+      "title": "The Psychological and Neural Basis of Loss Aversion",
+      "authors": [
+        "Peter Sokol-Hessner",
+        "Robb B. Rutledge"
+      ],
+      "year": 2018,
+      "venue": "Current Directions in Psychological Science",
+      "doi": "10.1177/0963721418806510",
+      "citations": 121,
+      "abstract": "Loss aversion is a central element of prospect theory, the dominant theory of decision making under uncertainty for the past four decades, and refers to the overweighting of potential losses relative to equivalent gains, a critical determinant of risky decision making. Recent advances in affective and decision neuroscience have shed new light on the psychological and neurobiological mechanisms underlying loss aversion. Here, integrating disparate literatures from the level of neurotransmitters to subjective reports of emotion, we propose a novel neural and computational framework that links norepinephrine to loss aversion and identifies a distinct role for dopamine in risk taking for rewards. We also propose that loss aversion specifically relates to anticipated emotions and aspects of the immediate experience of realized gains and losses but not their long-term emotional consequences, highlighting an underappreciated temporal structure. Finally, we discuss challenges to loss aversion and the relevance of loss aversion to understanding psychiatric disorders. Refining models of loss aversion will have broad consequences for the science of decision making and for how we understand individual variation in economic preferences and psychological well-being across both healthy and psychiatric populations.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
     },
     {
       "title": "Moderating Loss Aversion: Loss Aversion Has Moderators, But Reports of its Death are Greatly Exaggerated",
@@ -1411,6 +1461,19 @@
       "source_api": "openalex"
     },
     {
+      "title": "Endowment Effect",
+      "authors": [],
+      "year": 2020,
+      "venue": "Achievement Relocked",
+      "doi": "10.7551/mitpress/12243.003.0005",
+      "citations": 93,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Using Theory to Improve Program and Policy Evaluations.",
       "authors": [
         "Paul Sabatier",
@@ -1527,6 +1590,26 @@
       "source_api": "openalex"
     },
     {
+      "title": "Behavioral Biases and Firm Behavior : Evidence from Kenyan Retail Shops",
+      "authors": [
+        "M. Kremer",
+        "Jean N. Lee",
+        "Jonathan Robinson",
+        "Olga Rostapshova"
+      ],
+      "year": 2013,
+      "venue": "American Economic Review",
+      "doi": "10.1257/aer.103.3.362",
+      "citations": 77,
+      "abstract": "Many subjects in lab experiments show considerable risk aversion in small-stakes gambles. This is counter to the predictions of expected utility theory for any reasonable degree of risk aversion but is consistent with loss aversion in prospect theory. In this paper, the authors show that acceptance of small risky gambles and scores on math tests is associated with inventory accumulation among Kenyan shopkeepers. More broadly, the authors argue that loss aversion may be one factor helping explain the broader puzzle of why high rates of return on capital among small firms in developing countries are not arbitraged away and do not lead to the high growth rates of consumption that the Euler equation will predict. The authors show that many Kenyan shopkeepers fail to make small inventory investments with high expected returns. In this paper, the authors examine the determinants of inventory investments and show that shopkeepers who invest one standard deviation more into a risky asset in a laboratory-style game have 10-16 percent larger inventories. Consistent with the view that math skills may be useful in debiasing, those with one - standard deviation higher math scores have 14-18 percent larger inventory levels.",
+      "openalex_id": "W2084892499",
+      "openalex_type": "article",
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Neuroeconomics: Opening the Gray Box",
       "authors": [
         "Colin F. Camerer"
@@ -1578,6 +1661,24 @@
       "source_api": "openalex"
     },
     {
+      "title": "Do complainants appreciate overcompensation? A meta-analysis on the effect of simple compensation vs. overcompensation on post-complaint satisfaction",
+      "authors": [
+        "Katja Gelbrich",
+        "H. Roschk"
+      ],
+      "year": 2011,
+      "venue": "Marketing Letters",
+      "doi": "10.1007/s11002-010-9101-6",
+      "citations": 70,
+      "abstract": null,
+      "openalex_id": "W1982099272",
+      "openalex_type": "article",
+      "categories": [
+        "meta-analysis"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Family snaps — The meaning of domestic photography",
       "authors": [],
       "year": 1991,
@@ -1608,22 +1709,35 @@
       "source_api": "semantic-scholar"
     },
     {
-      "title": "Do complainants appreciate overcompensation? A meta-analysis on the effect of simple compensation vs. overcompensation on post-complaint satisfaction",
+      "title": "The Loss of Loss Aversion: Paying Attention to Reference Points",
       "authors": [
-        "Katja Gelbrich",
-        "Holger Roschk"
+        "E. Higgins",
+        "N. Liberman"
       ],
-      "year": 2010,
-      "venue": "Marketing Letters",
-      "doi": "10.1007/s11002-010-9101-6",
-      "citations": 67,
+      "year": 2018,
+      "venue": null,
+      "doi": "10.1002/jcpy.1045",
+      "citations": 70,
       "abstract": null,
-      "openalex_id": "W1982099272",
-      "openalex_type": "article",
-      "categories": [
-        "meta-analysis"
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Prospect theory and the risk return association: Another look",
+      "authors": [
+        "Tapen Sinha"
       ],
-      "source_api": "openalex"
+      "year": 1994,
+      "venue": "Journal of Economic Behavior & Organization",
+      "doi": "10.1016/0167-2681(94)90029-9",
+      "citations": 68,
+      "abstract": null,
+      "openalex_id": "W2058203312",
+      "openalex_type": "article",
+      "categories": [],
+      "source_api": "semantic-scholar"
     },
     {
       "title": "Romance, risk, and replication: Can consumer choices and risk-taking be primed by mating motives?",
@@ -1687,39 +1801,6 @@
       "source_api": "openalex"
     },
     {
-      "title": "Behavioral Biases and Firm Behavior: Evidence from Kenyan Retail Shops",
-      "authors": [
-        "Michael Kremer",
-        "Jean Lee",
-        "Jonathan Robinson",
-        "Olga Rostapshova"
-      ],
-      "year": 2013,
-      "venue": "American Economic Review",
-      "doi": "10.1257/aer.103.3.362",
-      "citations": 60,
-      "abstract": "Many subjects in lab experiments exhibit small-stakes risk aversion, consistent with loss aversion. Those with greater math skills are less likely to show small-stakes risk aversion. We argue that departures from expected utility maximization may help explain why many firms in developing countries leave high expected return investments unexploited. We show that among a sample of Kenyan shopkeepers, inventories are negatively associated with small-stakes risk aversion and positively associated with math skills.",
-      "openalex_id": "W2084892499",
-      "openalex_type": "article",
-      "categories": [],
-      "source_api": "openalex"
-    },
-    {
-      "title": "Prospect theory and the risk return association: Another look",
-      "authors": [
-        "Tapen Sinha"
-      ],
-      "year": 1994,
-      "venue": "Journal of Economic Behavior & Organization",
-      "doi": "10.1016/0167-2681(94)90029-9",
-      "citations": 60,
-      "abstract": null,
-      "openalex_id": "W2058203312",
-      "openalex_type": "article",
-      "categories": [],
-      "source_api": "openalex"
-    },
-    {
       "title": "Expression of a taste aversion conditioned with an odor-taste compound: Overshadowing is relatively weak in weanlings and decreases over a retention interval in adults",
       "authors": [
         "Philipp J. Kraemer",
@@ -1735,6 +1816,23 @@
       "openalex_type": "article",
       "categories": [],
       "source_api": "openalex"
+    },
+    {
+      "title": "Is it All Connected? A Testing Ground for Unified Theories of Behavioral Economics Phenomena",
+      "authors": [
+        "Mark Dean",
+        "Mark Dean",
+        "Pietro Ortoleva"
+      ],
+      "year": 2015,
+      "venue": "SSRN Electronic Journal",
+      "doi": "10.2139/ssrn.2643355",
+      "citations": 59,
+      "abstract": null,
+      "openalex_id": "W2252885339",
+      "openalex_type": "article",
+      "categories": [],
+      "source_api": "semantic-scholar"
     },
     {
       "title": "Individual Differences in Loss Aversion",
@@ -1835,6 +1933,25 @@
       "source_api": "semantic-scholar"
     },
     {
+      "title": "The endowment effect accompanying villagers' withdrawal from rural homesteads: Field evidence from Chengdu, China",
+      "authors": [
+        "Runqiu Liu",
+        "Jian Jiang",
+        "Chaoran Yu",
+        "Jesse Rodenbiker",
+        "Yongmu Jiang"
+      ],
+      "year": 2020,
+      "venue": null,
+      "doi": "10.1016/j.landusepol.2020.105107",
+      "citations": 53,
+      "abstract": "Abstract The withdrawal from rural homesteads (WRH) refers to a mechanism to encourage villagers to withdraw from their vacant homesteads or give up their occupied homesteads (including the houses built on them) voluntarily and move into high-rise buildings with compensation. WRH aims to address inefficient utilization of rural land in China. However, the endowment effect, a behavioral tendency for villagers to value rural homesteads more highly when they own them relative to when they do not, may affect the process of implementing WRH policy. Based on survey data from 878 villagers in Chengdu, Sichuan Province, this paper estimates endowment effects for different types of villagers whose rights to their rural homesteads could be withdrawn. It then makes an empirical analysis on the differences and influencing factors of villagers’ endowment effects related to WRH via a binary logistic model querying emotional attachment, property right status, and substitutability of rural homesteads. The results show 70.62 % of sampled villagers exhibit an intensive endowment effect after WRH. Meanwhile, as non-agricultural economic activities increase, villagers’ endowment effects intensify. In terms of influencing factors, emotional attachment and cognition of inheritance rights strengthen the degree of pain experienced by villagers when they withdraw from their rural homesteads, thereby enhancing endowment effects. Property certificates and cognition of disposal rights negatively affect villagers’ endowment effects. From the perspective of villagers’ differentiation, cognition of mortgage rights intensifies the feelings of security within rural homesteads for full-time agricultural households, thereby intensifying endowment effects. Substitutability of villagers' livelihood positively affects endowment effects in full-time agricultural households and negatively affects endowment effects in non-agricultural households. This paper concludes by discussing the land use policy implications of these findings.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Public sector reforms and their impact on the level of corruption: A systematic review",
       "authors": [
         "Giulia Mugellini",
@@ -1856,6 +1973,21 @@
         "recent"
       ],
       "source_api": "openalex"
+    },
+    {
+      "title": "Applicability of an Extended Prospect Theory to Travel Behaviour Research: A Meta‐Analysis",
+      "authors": [
+        "E. J. V. D. Kaa"
+      ],
+      "year": 2010,
+      "venue": "Transport Reviews",
+      "doi": "10.1080/01441647.2010.486907",
+      "citations": 50,
+      "abstract": "Abstract In transport research, choice behaviour is commonly investigated by using discrete choice models that comply with the utility theory (UT) paradigm. The objective of this article is to assess the extent to which the assumptions of an extended version of prospect theory (PT) allow for a better description of travellers’ choice behaviour than UT. To that aim the travel behaviour literature was reviewed for information about observed choice behaviour suitable for such a comparison. The review yielded 106 studies that covered almost the whole range of domains and contexts of travel behaviour. Compared to the corresponding assumptions of UT, a meta‐analysis showed a better descriptive performance of reference‐dependent framing connected with loss‐aversive valuation, and of interpersonal heterogeneity in choice behaviour strategies. Diminishing sensitivity approached the observed behaviour better than the sign‐independent utility function of UT in several studies where a comparison was feasible. In choice under risk or uncertainty, the non‐linear weighting of probabilities in connection with loss aversion appeared to offer a better description than expected UT. It is concluded that the joint application of the assumptions of an extended PT might provide a better understanding of human choice behaviour over the whole range of travel‐related contexts.",
+      "openalex_id": "W2108975248",
+      "openalex_type": "article",
+      "categories": [],
+      "source_api": "semantic-scholar"
     },
     {
       "title": "Beyond mere ownership: transaction demand as a moderator of the endowment effect",
@@ -1913,21 +2045,6 @@
       "source_api": "openalex"
     },
     {
-      "title": "Applicability of an Extended Prospect Theory to Travel Behaviour Research: A Meta‐Analysis",
-      "authors": [
-        "E.J. Van de Kaa"
-      ],
-      "year": 2010,
-      "venue": "Transport Reviews",
-      "doi": "10.1080/01441647.2010.486907",
-      "citations": 49,
-      "abstract": "Abstract In transport research, choice behaviour is commonly investigated by using discrete choice models that comply with the utility theory (UT) paradigm. The objective of this article is to assess the extent to which the assumptions of an extended version of prospect theory (PT) allow for a better description of travellers’ choice behaviour than UT. To that aim the travel behaviour literature was reviewed for information about observed choice behaviour suitable for such a comparison. The review yielded 106 studies that covered almost the whole range of domains and contexts of travel behaviour. Compared to the corresponding assumptions of UT, a meta‐analysis showed a better descriptive performance of reference‐dependent framing connected with loss‐aversive valuation, and of interpersonal heterogeneity in choice behaviour strategies. Diminishing sensitivity approached the observed behaviour better than the sign‐independent utility function of UT in several studies where a comparison was feasible. In choice under risk or uncertainty, the non‐linear weighting of probabilities in connection with loss aversion appeared to offer a better description than expected UT. It is concluded that the joint application of the assumptions of an extended PT might provide a better understanding of human choice behaviour over the whole range of travel‐related contexts.",
-      "openalex_id": "W2108975248",
-      "openalex_type": "article",
-      "categories": [],
-      "source_api": "openalex"
-    },
-    {
       "title": "Brain death: time for an international consensus",
       "authors": [
         "Martin Smith"
@@ -1955,22 +2072,6 @@
       "citations": 48,
       "abstract": null,
       "openalex_id": "W2151824431",
-      "openalex_type": "article",
-      "categories": [],
-      "source_api": "openalex"
-    },
-    {
-      "title": "Is it All Connected? A Testing Ground for Unified Theories of Behavioral Economics Phenomena",
-      "authors": [
-        "Mark Dean",
-        "Pietro Ortoleva"
-      ],
-      "year": 2015,
-      "venue": "SSRN Electronic Journal",
-      "doi": "10.2139/ssrn.2643355",
-      "citations": 47,
-      "abstract": null,
-      "openalex_id": "W2252885339",
       "openalex_type": "article",
       "categories": [],
       "source_api": "openalex"
@@ -2273,6 +2374,27 @@
       "source_api": "openalex"
     },
     {
+      "title": "Minimum cost consensus model with loss aversion based large-scale group decision making",
+      "authors": [
+        "Yingying Liang",
+        "Yanbing Ju",
+        "Jindong Qin",
+        "W. Pedrycz",
+        "Peiwu Dong"
+      ],
+      "year": 2022,
+      "venue": "Journal of the Operational Research Society",
+      "doi": "10.1080/01605682.2022.2110002",
+      "citations": 29,
+      "abstract": "Abstract In minimum cost consensus problems, to accomplish the group consensus, decision makers accommodate their initial discrepant opinions based on the unit adjustment costs. During this process, decision makers may exhibit loss aversion, which results in extra expenses when participants feel loss in contrast to their reference opinion adjustments. Existing minimum cost consensus models pay little attention to the loss-averse preference. Hence, to fill up this gap, a minimum cost consensus model with loss aversion (MCCM-LA) is established and the desired properties are analyzed. To manage large-scale group decision making problems, we first propose an integrated opinion similarity, connectivity similarity and behavior similarity clustering algorithm to divide decision makers into multiple subgroups. Balancing the individual adjustment willingness and consensus reaching efficiency, a two-stage consensus reaching mechanism is further designed based on MCCM-LA to realize the accordant opinion. Finally, the effectiveness and feasibility of the proposed method are demonstrated by sensitivity and comparative analyses with an illustrative example.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Humans' Use of AI Assistance: The Effect of Loss Aversion on Willingness to Delegate Decisions",
       "authors": [
         "Jesse C. Bockstedt",
@@ -2307,6 +2429,23 @@
       "source_api": "openalex"
     },
     {
+      "title": "Prospect theory and insurance demand: Empirical evidence on the role of loss aversion",
+      "authors": [
+        "Injun Hwang"
+      ],
+      "year": 2021,
+      "venue": "Journal of Behavioral and Experimental Economics",
+      "doi": "10.1016/j.socec.2021.101764",
+      "citations": 26,
+      "abstract": "Abstract This paper empirically tests if prospect theory's loss aversion can explain an individual's real-world insurance take-up behavior. Using American Life Panel data, this paper shows that loss-averse individuals have a significantly lower ownership rate of private long-term care insurance and supplemental disability insurance than other sample populations. The results are consistent with the prospect theory, which predicts that loss-aversion may decrease insurance demand if an individual's reference points are “the status quo wealth level when they do not engage in insurance contracts.” This paper also provides suggestive evidence that reference points are important in determining the relationship between loss-aversion and insurance ownership by showing that the negative association is not observed in the take-up of auto insurance, which is one of the most widely held insurance products and often regarded as a basic necessity.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Replication: Cheating, loss aversion, and moral attitudes in Vietnam",
       "authors": [
         "T. Huynh"
@@ -2339,6 +2478,44 @@
       "openalex_type": "article",
       "categories": [],
       "source_api": "openalex"
+    },
+    {
+      "title": "Loss aversion in strategy-proof school-choice mechanisms",
+      "authors": [
+        "Vincent Meisner",
+        "Jonas von Wangenheim"
+      ],
+      "year": 2022,
+      "venue": "Journal of Economics Theory",
+      "doi": "10.1016/j.jet.2022.105588",
+      "citations": 24,
+      "abstract": "Evidence suggests that participants in strategy-proof matching mechanisms play dominated strategies. To explain the data, we introduce expectation-based loss aversion into a school-choice setting and characterize choice-acclimating personal equilibria. We find that non-truthful preference submissions can be strictly optimal if and only if they are top-rank monotone. In equilibrium, inefficiency or justified envy may arise in seemingly stable or efficient mechanisms. Specifically, students who are more loss averse or less confident than their peers obtain suboptimal allocations.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Loss aversion, the endowment effect, and gain-loss framing shape preferences for noninstrumental information",
+      "authors": [
+        "Yana Litovsky",
+        "G. Loewenstein",
+        "Samantha Horn",
+        "Christopher Y. Olivola"
+      ],
+      "year": 2022,
+      "venue": "Proceedings of the National Academy of Sciences of the United States of America",
+      "doi": "10.1073/pnas.2202700119",
+      "citations": 23,
+      "abstract": "Significance We build on Abelson and Prentice’s conjecture that beliefs are not merely valued as guides to interacting with the world, but as cherished possessions. Extending this idea to information, we show that three key phenomena which characterize the valuation of money and material goods—loss aversion, the endowment effect, and the gain-loss framing effect—also apply to noninstrumental information. We discuss, more generally, how the analogy between noninstrumental information and material goods can help make sense of the complex ways in which people deal with the huge expansion of available information in the digital age.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
     },
     {
       "title": "Executives’ financial experience and myopic marketing management: A myopic loss-aversion perspective",
@@ -2377,6 +2554,26 @@
       "source_api": "openalex"
     },
     {
+      "title": "Loss aversion (simply) does not materialize for smaller losses",
+      "authors": [
+        "Dana Zeif",
+        "E. Yechiam"
+      ],
+      "year": 2022,
+      "venue": "Judgment and Decision Making",
+      "doi": "10.1017/s193029750000930x",
+      "citations": 20,
+      "abstract": "Loss aversion, the argument that losses are given more weight than gains, has been recently shown to be absent in small losses. However, a series of studies by Mrkva et al. (2020) appear to demonstrate the existence of loss aversion even for smaller losses. We re-ran Mrkva et al.’s decision tasks after removing features of the task that differentiated losses from the gains, particularly asymmetries in sizes of gains and losses, an increasing order of losses, and status quo effects. The results show that we replicate Mrkva et al.’s (2020) findings in their original paradigm with online participants, yet in five studies where gains and losses were symmetrically presented in random order (n = 2,001), we find no loss aversion for small amounts, with loss aversion surfacing very weakly only for average losses of $40 (mean λ = 1.16). We do find loss aversion for higher amounts such as $100 (mean λ = 1.54) though it is not as extreme as previously reported. Furthermore, we find weak correlation between the endowment effect and loss aversion, with the former effect existing simultaneously with no loss aversion. Thus, when items are presented symmetrically, significant loss aversion emerges only for large losses, suggesting that it cannot be argued that (all) “losses loom larger than gains.”",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "replication",
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "The effect of testosterone on economic risk-taking: A multi-study, multi-method investigation",
       "authors": [
         "Steven J. Stanton",
@@ -2408,6 +2605,62 @@
       "doi": "10.2139/ssrn.4199169",
       "citations": 19,
       "abstract": "Loss aversion has been shown to be a key driver of people ’ s investment decisions. Encouraged by regulators, financial institutions are seeking ways to integrate this behavioral factor into client risk classifications. A critical obstacle is the lack of a valid measurement method for loss aversion that can be straightforwardly incorporated into existing processes. This paper reports on two large-scale implementations of such a method within the risk-profiling application of an established financial institution. We elicit loss aversion for 1,040 employees and 3,740 clients, observing distributions that align with existing findings. Importantly, our results demonstrate that loss aversion is largely independent of the risk-return preferences commonly used for investor classification. Furthermore, the correlations we observe between these two preferences and individuals ’ background characteristics align with previous research: loss aversion is strongly correlated with education — higher educated individuals exhibit greater loss aversion — whereas risk aversion is related to gender, age, and financial status — women, older individuals, and those less financially secure are more risk averse. These findings support the conjecture that risk and loss aversion are complementary in capturing investor intent.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Translating research into evidence-based practice in juvenile justice: brand-name programs, meta-analysis, and key issues",
+      "authors": [
+        "Brandon C. Welsh",
+        "M. Rocque",
+        "P. Greenwood"
+      ],
+      "year": 2014,
+      "venue": "Journal of Experimental Criminology",
+      "doi": "10.1007/s11292-013-9182-3",
+      "citations": 19,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "meta-analysis"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "How Endogenization of the Reference Point Affects Loss Aversion: A Study of Portfolio Selection",
+      "authors": [
+        "X. He",
+        "M. Strub"
+      ],
+      "year": 2022,
+      "venue": "Operational Research",
+      "doi": "10.1287/opre.2022.2309",
+      "citations": 18,
+      "abstract": "Endogenization of the Reference Point Reduces Loss Aversion A central idea in behavioral economics is that agents derive utility from gain and losses relative to a certain reference point and that losses loom larger than gains. In “How Endogenization of the Reference Point Affects Loss Aversion: A Study of Portfolio Selection,” He and Strub study the implications of various models of partially endogenous reference points on portfolio selection. In these models, an agent faces a salient exogenous reference point that influences the formation of endogenously determined expectations about the future, through rational expectations, optimal expectations, or mental updating of the reference point. A key finding is that the predictions of these models are identical to a model with an exogenous reference point but a lower degree of loss aversion. This suggests that it is difficult to separately identify an agent’s degree of loss aversion and his or her reference point and may help to explain why experienced and sophisticated agents appear to be less loss averse than expected in some field settings.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Loss aversion and risk for cigarette smoking and other substance use",
+      "authors": [
+        "Eric A. Thrailkill",
+        "M. Desarno",
+        "S. Higgins"
+      ],
+      "year": 2022,
+      "venue": "Drug and Alcohol Dependence",
+      "doi": "10.1016/j.drugalcdep.2022.109307",
+      "citations": 18,
+      "abstract": "Background: Cigarette smoking is among the leading preventable causes of global morbidity and mortality. We aimed to determine whether individual differences in loss aversion, a bias in decision-making wherein losses are valued greater than gains, predicts smoking and other addiction risk. Methods: We recruited current daily cigarette smokers (n = 181; > 10 cigarettes per day) and never-smokers (n = 237; < 100 cigarettes lifetime) from the United States using Amazon Mechanical Turk. Groups were matched on gender, educational attainment, and age. All completed items related to current cigarette smoking, alcohol use, other drug use, sleep problems, and depressed mood, and task-based measures of loss aversion and delay discounting, a decision-making bias associated with cigarette smoking. Results: Smokers were less loss averse than never-smokers (F(1, 411) = 24.19, η2 = 0.02, p < .0001) even after accounting for delay discounting (F(1, 410) = 20.53, η2 = 0.02, p < .0001). Loss aversion was also a significant independent risk factor for alcohol (F(1, 410) = 21.47, η2 = 0.02, p < .0001) and other drug use (F(1, 410) = 54.12, η2 = 0.04, p < .0001), although not other behavioral-health conditions (i.e., sleep disturbance, depressed mood). Further analyses revealed that co-occurring low loss aversion and high delay discounting were independently associated with greater risk for patterns of substance use. Conclusions: Loss aversion was associated with current cigarette smoking and other substance use patterns independent of delay discounting. Loss aversion may warrant attention as a protective factor and potential target for preventive intervention for substance use and addiction.",
       "openalex_id": null,
       "openalex_type": null,
       "categories": [
@@ -2468,6 +2721,27 @@
       "source_api": "openalex"
     },
     {
+      "title": "Heterogeneity of Gain-Loss Attitudes and Expectations-Based Reference Points",
+      "authors": [
+        "L. Goette",
+        "Thomas Graeber",
+        "A. Kellogg",
+        "Charles D. Sprenger"
+      ],
+      "year": 2020,
+      "venue": "Social Science Research Network",
+      "doi": "10.2139/ssrn.3589906",
+      "citations": 16,
+      "abstract": "This project examines the role of heterogeneity in gain-loss attitudes for identifying models of expectations-based reference dependence (Koszegi and Rabin, 2006, 2007) (KR). Different gain-loss attitudes lead to different signs for KR comparative statics. Failure to account for the known heterogeneity in gain-loss attitudes is a central confounding factor challenging prior tests of the KR model conducted under the assumption of universal loss aversion. We document heterogeneous treatment effects over gain-loss types in both an initial experiment and an exact replication. Recognizing heterogeneity over types allows us to both recover the KR model’s central predictions, and account for inconsistency across prior empirical tests.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "replication",
+        "dissent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Reduced loss aversion in value-based decision-making and edge-centric functional connectivity in patients with internet gaming disorder",
       "authors": [
         "Wei Hong",
@@ -2493,6 +2767,26 @@
       "doi": "10.1556/2006.2023.00014",
       "citations": 16,
       "abstract": "Abstract Background and aims Impaired value-based decision-making is a feature of substance and behavioral addictions. Loss aversion is a core of value-based decision-making and its alteration plays an important role in addiction. However, few studies explored it in internet gaming disorder patients (IGD). Methods In this study, IGD patients (PIGD) and healthy controls (Con-PIGD) performed the Iowa gambling task (IGT), under functional magnetic resonance imaging (fMRI). We investigated group differences in loss aversion, brain functional networks of node-centric functional connectivity (nFC) and the overlapping community features of edge-centric functional connectivity (eFC) in IGT. Results PIGD performed worse with lower average net score in IGT. The computational model results showed that PIGD significantly reduced loss aversion. There was no group difference in nFC. However, there were significant group differences in the overlapping community features of eFC1. Furthermore, in Con-PIGD, loss aversion was positively correlated with the edge community proﬁle similarity of the edge2 between left IFG and right hippocampus at right caudate. This relationship was suppressed by response consistency3 in PIGD. In addition, reduced loss aversion was negatively correlated with the promoted bottom-to-up neuromodulation from the right hippocampus to the left IFG in PIGD. Discussion and conclusions The reduced loss aversion in value-based decision making and their related edge-centric functional connectivity support that the IGD showed the same value-based decision-making deficit as the substance use and other behavioral addictive disorders. These findings may have important significance for understanding the definition and mechanism of IGD in the future.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Analyzing the dynamic effect of energy endowment-demand distortion on sustainable development: Insights from China's regional disparity.",
+      "authors": [
+        "Zhuojia Dong",
+        "Hao Ding",
+        "Xianyu Yu",
+        "Dequn Zhou"
+      ],
+      "year": 2024,
+      "venue": "Journal of Environmental Management",
+      "doi": "10.1016/j.jenvman.2024.121647",
+      "citations": 15,
+      "abstract": "The distribution of China's energy resources is concentrated in the central and western regions, whereas the energy demand is predominantly centered in the eastern regions. Under the ambitious \"carbon neutrality\" goal, how to effectively quantify and respond to the impact of this energy \"endowment-demand\" distortion (EEDD) on economy and environment has become a key issue. We introduce an EEDD index that quantifies the distortion characteristics of China's energy endowment and demand. Based on the EEDD index, a panel vector auto regression-generalized method of moments (PVAR-GMM) model is adopted to assess the interactive effects between regional EEDD and sustainable development variables. The obtained results indicate that the energy endowment-demand distortions are progressively worsening across most provinces. Interestingly, we discover that the EEDD has significant beneficial effects on regional sustainable development. Moreover, the EEDD is found to be significantly influenced by the sustainability-related variables. These impacts between EEDD and sustainable development variables demonstrate significant regional heterogeneity. This study provides crucial empirical evidence for advancing the comprehensive and sustainable development of regional energy, environment, and economy.",
       "openalex_id": null,
       "openalex_type": null,
       "categories": [
@@ -2540,6 +2834,26 @@
       "source_api": "semantic-scholar"
     },
     {
+      "title": "The endowment effect: Loss aversion or a buy-sell discrepancy?",
+      "authors": [
+        "Gal Smitizsky",
+        "Wendy Liu",
+        "U. Gneezy"
+      ],
+      "year": 2021,
+      "venue": "Journal of experimental psychology. General",
+      "doi": "10.2139/ssrn.3588012",
+      "citations": 14,
+      "abstract": "In a typical endowment effect experiment, individuals state a higher willingness-to-accept to sell an object than a willingness-to-pay to obtain the object. The leading explanation for the endowment effect is loss aversion for the object. An alternative explanation is based on a buy-sell discrepancy, according to which people price the object in a strategic way. Disentangling these two explanations is the goal of this research. To this end, we introduce a third condition, in which participants receive an object and are asked how much they are willing to pay to keep it (Pay-to-Keep). Comparing the three conditions we find no evidence for loss aversion in the endowment effect setting. We found support for the buy-sell strategy mechanism. Our results have important implications for the understanding of buyer and seller behaviors, subjective value, and elicitation methods. (PsycInfo Database Record (c) 2021 APA, all rights reserved).",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "The Impact of Attribute Importance in the Effects of Option Framing on Choice: Budget Range and Justification as Moderators of Loss Aversion",
       "authors": [
         "Sehoon Park",
@@ -2554,6 +2868,46 @@
       "openalex_type": "article",
       "categories": [],
       "source_api": "openalex"
+    },
+    {
+      "title": "The Impact of Loss Aversion and Diminishing Sensitivity on Airline Revenue: Price Sensitivity in Cabin Classes",
+      "authors": [
+        "J. Nicolau",
+        "Hakseung Shin",
+        "Bora Kim",
+        "J. F. O'Connell"
+      ],
+      "year": 2022,
+      "venue": "Journal of Travel Research",
+      "doi": "10.1177/00472875221093014",
+      "citations": 14,
+      "abstract": "While most businesses actively adopt a data-driven approach for revenue management decisions, understanding how air travelers perceive and behave differently to pricing strategies is essential for yielding optimal financial outcomes. This study analyzes the loss aversion and diminishing sensitivity mechanisms of prospect theory in economy and business cabin classes. With rich longitudinal airfares, regression models and revenue data (15,868 observations from the top-10 aviation routes in the world) from 2014 to 2019, this study finds that lower-(higher-)than-expected airfares have a positive (negative) impact on revenue. When the effect of loss-coded and gain-coded tickets were compared, the extent to which passengers avoided losses (vs. welcomed gains) had a greater impact on revenue, supporting that loss aversion applies to the airline revenue, especially for business passengers. This study contributes to the further refinement of prospect theory by showing that the loss aversion and diminishing sensitivity mechanisms manifest differently in each cabin class.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "The Endowment Effect and Collateralized Loans",
+      "authors": [
+        "K. Carney",
+        "M. Kremer",
+        "Xinyue Lin",
+        "Gautam Rao"
+      ],
+      "year": 2022,
+      "venue": "Social Science Research Network",
+      "doi": "10.3386/w30073",
+      "citations": 13,
+      "abstract": "Collateral requirements play an important role in credit markets. This paper shows that the endowment effect—the phenomenon where owing a good increases one's valuation of it— inhibits demand for loans which use a borrower's existing assets as collateral. Using a field experiment in Kenya, we show that borrowers instead strongly prefer loans collateralized using the new durable assets being financed by the loans themselves. They are willing to pay 9% per month higher interest for such Same-Asset Collateralized Loans (SACLs) despite the endowed and new assets being randomized, and thus similarly valued before ownership. Our findings imply that assets which are difficult to use as collateral—which cannot be financed by SACLs— will be invested in less, even if the borrower has other collateral. We argue that borrowers' preference for SACLs is driven by naivete: they initially perceive that they have little to lose when offered a SACL, but subsequently come to develop an attachment to the new asset, resulting in high repayment effort. Consistent with this, borrowers underestimate their future attachment to an asset before owning it, and SACLs do not have higher default rates despite having higher demand. We derive the conditions under which offering consumers SACLs increases or conversely decreases borrower welfare. Kevin Carney Harvard University carney@g.harvard.edu Michael Kremer University of Chicago Kenneth C. Griffin Department of Economics 1126 E. 59th St. Chicago, IL 60637 and NBER kremermr@uchicago.edu Xinyue Lin Harvard University xinyue_lin@g.harvard.edu Gautam Rao Department of Economics Harvard University Littauer M-30 Cambridge, MA 02138 and NBER grao@fas.harvard.edu",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
     },
     {
       "title": "Financial Literacy as a Moderator in Behavioral Biases and Investor Decisions",
@@ -2573,6 +2927,24 @@
         "recent"
       ],
       "source_api": "openalex"
+    },
+    {
+      "title": "Impact of Direct Interaction with Virtual Objects through Touchscreens on Enhancing Psychological Ownership and Endowment Effect",
+      "authors": [
+        "Mihaela Știr",
+        "Adriana Zait"
+      ],
+      "year": 2022,
+      "venue": "International journal of human computer interactions",
+      "doi": "10.1080/10447318.2022.2131263",
+      "citations": 12,
+      "abstract": "Abstract As e-shopping continues to grow, with a significant nudge from the pandemic, more research is needed to find out how we can deal with reluctance caused by people’s inability to touch online bought products. Previous studies found that psychological ownership is an important predictor of individuals’ attitudes, while the endowment effect, in particular, impacts the finalization of economic transactions. In this article, we explore the impact of direct interaction with virtual objects through touchscreens on enhancing psychological ownership and endowment effect. Moreover, we explore if the product type influences the degree of psychological ownership manifested by consumers and if the individual differences in terms of need for touch moderate the relationship between the interface and psychological ownership, respectively endowment effect. We also analyzed if virtually touching the products through a tactile interface impacts psychological ownership and endowment effect compared to the situation when the products are analyzed on a mouse interface. Results highlight that studying products on a touchscreen will not lead to an increased psychological ownership and enhanced endowment effect compared to studying them on a no-touch interface. However, participants who studied the material products on touchscreen reported a higher psychological ownership. Touchscreens lead to an enhanced perceived touch, which will trigger a higher level of psychological ownership. Comparing the impact of touch on two touchscreen devices, results showed that tablets will determine an increased psychological ownership compared to smartphones.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
     },
     {
       "title": "Risk Preferences Over Small Stakes: Evidence from Deductible Choice",
@@ -2642,6 +3014,24 @@
       "source_api": "openalex"
     },
     {
+      "title": "Mementos and the endowment effect",
+      "authors": [
+        "Charlene K. Chu",
+        "Suzanne B. Shu"
+      ],
+      "year": 2022,
+      "venue": "Journal of Behavioral Decision Making",
+      "doi": "10.1002/bdm.2295",
+      "citations": 10,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Prospect theory’s loss aversion is robust to stake size",
       "authors": [
         "Han Bleichrodt",
@@ -2658,6 +3048,22 @@
         "recent"
       ],
       "source_api": "openalex"
+    },
+    {
+      "title": "Risk Experiments in Gains and Losses: A Case Study for Benin",
+      "authors": [
+        "Jonathan Gheyssens",
+        "I. Günther"
+      ],
+      "year": 2012,
+      "venue": "Econstor (Econstor)",
+      "doi": null,
+      "citations": 10,
+      "abstract": "&lt;p&gt;The aim of this paper is to expand our knowledge on risk aversion among the poor by conducting experiments that do not only test risk aversion in small and large stakes but also in risky gains and risky losses. To our knowledge, this is the first attempt&lt;/p&gt;",
+      "openalex_id": "W1488876126",
+      "openalex_type": "preprint",
+      "categories": [],
+      "source_api": "semantic-scholar"
     },
     {
       "title": "Essays on dispositional greed : the effect of insatiability on consumer behavior",
@@ -2692,6 +3098,45 @@
       "source_api": "semantic-scholar"
     },
     {
+      "title": "When Payments Go Social: The Use of Person-to-Person Payment Methods Attenuates the Endowment Effect",
+      "authors": [
+        "Liang Huang",
+        "Jennifer Savary"
+      ],
+      "year": 2022,
+      "venue": "Journal of Marketing Research",
+      "doi": "10.1177/00222437221128255",
+      "citations": 9,
+      "abstract": "The authors examine how person-to-person (P2P) payment methods affect consumers’ participative pricing decisions. Participative pricing occurs when people choose how much to pay for a good or how much they will sell it for. This pricing mechanism is increasingly common, for example, on platforms like Craigslist, eBay, or Etsy. A successful transaction requires that consumers converge on a mutually acceptable price, yet decades of research on the endowment effect show that sellers often demand more for goods than buyers are willing to pay. The authors propose that compared with traditional payment methods, when consumers use P2P payments they make somewhat more cooperative pricing decisions: buyers are willing to pay a bit more and sellers are willing to accept a bit less. This attenuates the endowment effect and increases the odds of a successful trade. This occurs because even when the trade is with a stranger, P2P payments can subtly activate a social transaction context, cuing the social transaction pricing norm of making more cooperative pricing offers. The authors test these proposals in eight studies using consequential and hypothetical choices, moderation, and mediated moderation. A simulation indicates that compared with traditional payment methods, the use of P2P payments can increase successful transactions in a marketplace by nearly 10%.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "A Bayesian Modeling Approach to Examine the Role of Testosterone Administration on the Endowment Effect and Risk-Taking",
+      "authors": [
+        "M. Votinov",
+        "I. Knyazeva",
+        "U. Habel",
+        "K. Konrad",
+        "A. Puiu"
+      ],
+      "year": 2022,
+      "venue": "Frontiers in Neuroscience",
+      "doi": "10.3389/fnins.2022.858168",
+      "citations": 8,
+      "abstract": "Financial risk-taking and loss aversion are multifaceted phenomena that are the focus of neuroscience, psychology, and economics research. A growing number of studies highlighted the role of hormones (particularly of testosterone) on socio-economic decision-making. However, the effects of testosterone on risk-taking under framing and consumer-based choices and preferences are inconclusive. We investigated the effects of 100 mg testosterone administration on aspects of decision-making within the Prospect Theory framework which is the most used descriptive model of decision-making under risk. We assessed risk-taking under framing and the endowment effect (effect of possession) using Bayesian modeling. Forty men participated in this double-blind placebo-controlled fully-randomized cross-over experiment and performed two tasks. One was a risk-taking task with binary choices under positive and negative framing associated with different probabilities. In the second task participants had to bid money for hedonic and utilitarian items. We observed a significant increase in serum testosterone concentrations after transdermal application. Compared to placebo, testosterone administration increased risk-taking under the positive framing (very large effect size) and decreased under the negative framing (moderate to small). The sensitivity to gain was positive in each framing. Our model showed that decision-making is jointly influenced by testosterone and the trade-off between gains and losses. However, while the endowment effect was more pronounced for hedonic than for utilitarian items, the effect was independent of testosterone. The findings provide novel information on the complex modulatory role of testosterone on risk-taking within the framework of prospect theory and shed light on mechanisms of behavioral economic biases. The proposed models of effects of individual differences in testosterone on risk-taking could be used as predictive models for reference-depended behavior under positive and negative framing with low and high probabilities.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Optimal consumption and portfolio selection problems under loss aversion with downside consumption constraints",
       "authors": [
         "Jingjing Song",
@@ -2710,20 +3155,24 @@
       "source_api": "semantic-scholar"
     },
     {
-      "title": "Risk experiments in gains and losses: A case study for Benin",
+      "title": "Choice uncertainty and the endowment effect",
       "authors": [
-        "Jonathan Gheyssens",
-        "Isabel Günther"
+        "Christina McGranaghan",
+        "Steven G. Otto"
       ],
-      "year": 2012,
-      "venue": "Econstor (Econstor)",
-      "doi": null,
-      "citations": 7,
-      "abstract": "&lt;p&gt;The aim of this paper is to expand our knowledge on risk aversion among the poor by conducting experiments that do not only test risk aversion in small and large stakes but also in risky gains and risky losses. To our knowledge, this is the first attempt&lt;/p&gt;",
-      "openalex_id": "W1488876126",
-      "openalex_type": "preprint",
-      "categories": [],
-      "source_api": "openalex"
+      "year": 2022,
+      "venue": "Journal of Risk and Uncertainty",
+      "doi": "10.1007/s11166-022-09387-8",
+      "citations": 6,
+      "abstract": "We experimentally test for the role of choice uncertainty in generating “endowment effects” - the robust empirical finding that endowing participants with an item raises their reported valuation relative to participants being asked to purchase it instead. While there is some compelling evidence concerning trade uncertainty in the literature, there is substantially less evidence regarding the importance of choice uncertainty. This paper provides novel support for the significance of choice uncertainty in the context of both trading and stated valuations. In a primary set of studies, we find that reducing choice uncertainty eliminates under-trading in the exchange setting and decreases (but does not eliminate) the difference in average valuations reported by buyers and sellers, mainly by decreasing the number of extreme valuations by sellers. Interestingly, our treatment does not lead to a significant increase in the number of mutually acceptable trades implied by stated valuations. Comparing the results from our two primary experiments therefore suggests that value uncertainty continues to play a role in generating valuation asymmetries even after relevant product uncertainty has been resolved. A set of follow-up studies with modified designs replicates this finding in the exchange setting but fails to generate a valuation asymmetry in the control condition, possibly due to pandemic-related mitigation measures and less participant time with the endowed item.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "replication",
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
     },
     {
       "title": "Risk Preferences in Small and Large Stakes: Evidence from Insurance Contract Decisions",
@@ -2744,6 +3193,44 @@
         "dissent"
       ],
       "source_api": "openalex"
+    },
+    {
+      "title": "Sensitivity to scope of water and wastewater service valuations: a meta-analysis of findings from water price reviews in Great Britain",
+      "authors": [
+        "P. Metcalfe",
+        "A. Seń"
+      ],
+      "year": 2021,
+      "venue": "Journal of Environmental Economics and Policy",
+      "doi": "10.1080/21606544.2021.1984314",
+      "citations": 6,
+      "abstract": "ABSTRACT At the 2014/15 water price reviews in Great Britain, a notionally similar stated preference methodology was used across multiple customer surveys to derive willingness to pay (WTP) estimates for comparable service improvements. Very different valuations were obtained for the same service measures, however, raising questions regarding their validity and reliability. This paper examines the variation in those WTP estimates via a meta-analysis of household WTP values from 18 water companies for five common service measures. Our main finding is that WTP decreased substantially with the service changes offered for valuation, a finding that is inconsistent with expected utility theory, the standard economic theory of rational choice under uncertainty, but is consistent with predictions from prospect theory, and with empirical evidence from related fields. Moreover, the majority of the observed variation in WTP estimates could be explained by differences in the scope of service change offered. The study also finds that WTP increased with the number of households supplied, a finding which is considered likely to be due to altruism, and with GDP per capita, and decreased with the number of attributes included in the study design. Significant risk framing effects are also identified.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "meta-analysis",
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Index Mutual Fund Replication",
+      "authors": [
+        "Jin Zhang",
+        "D. Maringer"
+      ],
+      "year": 2010,
+      "venue": null,
+      "doi": "10.1007/978-3-642-13950-5_7",
+      "citations": 5,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "replication"
+      ],
+      "source_api": "semantic-scholar"
     },
     {
       "title": "The Challenges of Retranslating <i>The Great Gatsby</i> into Hungarian With a Focus on Metaphors of Emotion and Embodiment",
@@ -2784,6 +3271,65 @@
       "source_api": "openalex"
     },
     {
+      "title": "Absolute and relative stability of loss aversion across contexts.",
+      "authors": [
+        "M. S. Spektor",
+        "David Kellen",
+        "Jörg Rieskamp",
+        "K. C. Klauer"
+      ],
+      "year": 2023,
+      "venue": "Journal of experimental psychology. General",
+      "doi": "10.1037/xge0001513",
+      "citations": 4,
+      "abstract": "Individuals' decisions under risk tend to be in line with the notion that \"losses loom larger than gains.\" This loss aversion in decision making is commonly understood as a stable individual preference that is manifested across different contexts. The presumed stability and generality, which underlies the prominence of loss aversion in the literature at large, has been recently questioned by studies reporting how loss aversion can disappear, and even reverse, as a function of the choice context. The present study investigated whether loss aversion reflects a trait-like attitude of avoiding losses or rather individuals' adaptability to different contexts. We report three experiments investigating the within-subject context sensitivity of loss aversion in a two-alternative forced-choice task. Our results show that the choice context can shift people's loss aversion, though somewhat inconsistently. Moreover, individual estimates of loss aversion are shown to have a considerable degree of stability. Altogether, these results indicate that even though the absolute value of loss aversion can be affected by external factors such as the choice context, estimates of people's loss aversion still capture the relative dispositions toward gains and losses across individuals. (PsycInfo Database Record (c) 2023 APA, all rights reserved).",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Acceptance of Mixed Gambles Is Sensitive to the Range of Gains and Losses Experienced, and Estimates of Lambda (λ) Are Not a Reliable Measure of Loss Aversion: Reply to André and de Langhe (2020)",
+      "authors": [
+        "Lukasz Walasek",
+        "Timothy L. Mullett",
+        "Neil Stewart"
+      ],
+      "year": 2021,
+      "venue": "Journal of experimental psychology. General",
+      "doi": "10.1037/xge0001054",
+      "citations": 4,
+      "abstract": "Walasek and Stewart (2015) demonstrated that loss aversion estimated from fitting accept–reject choice data from a set of 50–50 gambles can be made to disappear or even reverse by manipulating the range of gains and losses experienced in different conditions. André and de Langhe (2020) critique this conclusion because in estimating loss aversion on different choice sets, Walasek and Stewart (2015) have violated measurement invariance. They show, and we agree, that when loss aversion is estimated on the choices common to all conditions, there is no difference in prospect theory’s λ parameter. But there are two problems here. First, while there are no differences in λs across conditions, there are very large differences in the proportion of the common gambles that are accepted, which André and de Langhe chose not to report. These choice proportion differences are consistent with decision by sampling (but are inconsistent with prospect theory or any of the alternative mechanisms proposed by André & de Langhe, 2020). Second, we demonstrate a much more general problem related to the issue of measurement invariance: that λ estimated from the accept–reject choices is extremely unreliable and does not generalize even across random splits within large, balanced choice sets. It is therefore not possible to determine whether differences in choice proportions are due to loss aversion or to a bias in accepting or rejecting mixed gambles. We conclude that context has large effects on the acceptance of mixed gambles and that it is futile to estimate λ from accept–reject choices.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Implications Of Loss Aversion And Investment Decisions",
+      "authors": [
+        "Sudha V Ingalagi",
+        "Mamata"
+      ],
+      "year": 2024,
+      "venue": "Journal of Scientific Research and Technology",
+      "doi": "10.61808/jsrt90",
+      "citations": 4,
+      "abstract": "As a behavioral bias known as \"Loss Aversion,\" it states that people are more negatively affected by the prospect of losing money than they are by the prospect of gaining it. Concerning its effect on investors, the findings of the many research conducted on loss aversion have been contradictory. Individuals who engage in the Indian stock markets via brokerage companies are the target of this research, which seeks to answer the question, \"Is loss aversion real?\" and how does it influence investing decisions. This research also looks at the potential effects of gender, income, investing history, and risk perception on loss aversion. The research relied on primary data gathered via a structured questionnaire and analyzed using statistical procedures such as linear regression, independent t-test, and analysis of variance. According to the study's findings, loss aversion bias influences investors' investing choices and is significantly impacted by the respondents' gender.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Life insurance, loss aversion, and temporal orientation: a field experiment and replication with young adults",
       "authors": [
         "Simon J. Blanchard",
@@ -2798,6 +3344,118 @@
       "openalex_type": null,
       "categories": [
         "replication",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "The art of the deal: Deciphering the endowment effect from traders’ eyes",
+      "authors": [
+        "Feng Sheng",
+        "Ruining Wang",
+        "Ze Liang",
+        "Xiaoyi Wang",
+        "M. Platt"
+      ],
+      "year": 2023,
+      "venue": "Science Advances",
+      "doi": "10.1126/sciadv.adf2115",
+      "citations": 4,
+      "abstract": "People are often reluctant to trade, a reticence attributed to the endowment effect. The prevailing account attributes the endowment effect to valuation-related bias, manifesting as sellers valuing goods more than buyers, whereas an alternative account attributes it to response-related bias, manifesting as both buyers and sellers tending to stick to the status quo. Here, by tracking and modeling eye activity of buyers and sellers during trading, we accommodate both views within an evidence-accumulation framework. We find that valuation-related bias is indexed by asymmetric attentional allocation between buyers and sellers, whereas response-related bias is indexed by arousal-linked pupillary reactivity. A deal emerges when both buyers and sellers attend to their potential gains and dilate their pupils. Our study provides preliminary evidence for our computational framework of the dynamic processes mediating the endowment effect and identifies physiological biomarkers of deal-making.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "The endowment effect in the future: How time shapes buying and selling prices",
+      "authors": [
+        "Shohei Yamamoto",
+        "Daniel Navarro-Martinez"
+      ],
+      "year": 2022,
+      "venue": "Judgment and Decision Making",
+      "doi": "10.1017/s1930297500009293",
+      "citations": 4,
+      "abstract": "Previous research has focused on studying the endowment effect for transactions that take place in the present. Many real-world transactions, however, are delayed into the future (i.e., people agree to buy or sell, but the actual transaction does not materialize until a later time). Here we investigate how transaction timing affects the endowment effect. In five studies, we show that the endowment effect systematically increases as transactions are delayed into the future. Specifically, buying prices significantly decrease as the transaction is delayed, while selling prices remain constant, resulting in an amplified endowment effect (Experiment 1). This pattern is not produced by a discounting of the money involved in the transaction (Experiment 2), and it holds across different types of items (Experiment 3). We also show that the phenomenon cannot be explained by sellers anticipating becoming increasingly attached to the items over time (Experiment 4). Finally, we demonstrate that this increased endowment effect in the future holds in the field, in the context of a real market and with real transactions (Experiment 5).",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "The Evolution of Entrepreneurs and Venture Capitalists",
+      "authors": [
+        "M. Sewell"
+      ],
+      "year": 2011,
+      "venue": null,
+      "doi": "10.1007/978-1-4419-7527-0_11",
+      "citations": 4,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "The Influence of Loss Aversion and Herding on Investment Decisions with Fear of Missing Out (FoMO) as a Mediating Variable",
+      "authors": [
+        "Athaya Ariella Galvani",
+        "Katiya Nahda"
+      ],
+      "year": 2025,
+      "venue": "International Journal of Business and Applied Economics",
+      "doi": "10.55927/ijbae.v4i4.201",
+      "citations": 4,
+      "abstract": "This study aims to analyze the effects of loss aversion and herding behavioral biases on investment decisions among retail investors in Indonesia, with Fear of Missing Out (FoMO) as a mediating variable. The phenomenon of behavioral biases has become increasingly relevant in the digital era, as the rapid flow of information through social media and advancements in financial technology influence how individuals make investment decisions. A quantitative approach was employed by distributing questionnaires to 167 respondents using a purposive sampling method. The data were analyzed using the Partial Least Squares-Structural Equation Modeling (PLS-SEM) technique with SmartPLS software version 4.1.1.2. The results indicate that both herding and FoMO have a positive and significant effect on investment decisions. Furthermore, FoMO is shown to mediate the relationship between herding and investment decisions, whereas loss aversion does not exhibit a significant effect and is not mediated by FoMO.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Impact of loss aversion on the newsvendor problem: a literature review and insights for future researchers",
+      "authors": [
+        "S. Yamini"
+      ],
+      "year": 2023,
+      "venue": "Quarterly Journal of the Operational Research Society of India (OPSEARCH)",
+      "doi": "10.1007/s12597-023-00677-6",
+      "citations": 3,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Cognitive bias asymmetry and heuristic-driven market anomalies: A neurofinancial noise trading analysis of prospect theory elasticity in the Pakistan Stock Exchange (PSX)",
+      "authors": [
+        "Abdul Malik",
+        "Mirza Muhammad",
+        "Qasim Ali",
+        "Wasim Abbas",
+        "M. Scholar"
+      ],
+      "year": 2025,
+      "venue": "Social Sciences Spectrum",
+      "doi": "10.71085/sss.04.02.260",
+      "citations": 2,
+      "abstract": "This study presents a novel empirical investigation into the impact of psychological biases on investment decision-making within the Pakistan Stock Exchange (PSX), integrating Kahneman and Tversky’s Prospect Theory and Heuristics Theory into a unified behavioral finance framework. Departing from conventional analyses, this research employs a dual-method approach, combining meta-theoretical synthesis with primary quantitative data, to dissect how cognitive distortions such as overconfidence, loss aversion, and representativeness skew financial choices under uncertainty. A technically advanced self-descriptive questionnaire was administered to 250 PSX traders, leveraging psychometric scaling to quantify bias intensity, followed by machine learning-assisted regression analysis to isolate dominant behavioral predictors. The findings reveal a nonlinear relationship between heuristic-driven biases and market anomalies, challenging traditional rational-agent assumptions. Notably, the study introduces a bias susceptibility index (BSI), a pioneering metric for assessing individual vulnerability to cognitive errors. By contextualizing these distortions within emerging markets, a previously underexplored domain, this work advances behavioral finance theory while offering pragmatic tools for investors, advisors, and regulators to mitigate irrational decision-making.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
         "recent"
       ],
       "source_api": "semantic-scholar"
@@ -2871,6 +3529,48 @@
       "source_api": "semantic-scholar"
     },
     {
+      "title": "Meta-Analysis of Prospect Theory Parameters",
+      "authors": [
+        "Taisuke Imai",
+        "Salvatore Nunnari",
+        "Jilong Wu",
+        "Ferdinand M. Vieider"
+      ],
+      "year": 2025,
+      "venue": "Social Science Research Network",
+      "doi": "10.2139/ssrn.5928259",
+      "citations": 1,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "meta-analysis",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "A meta-analysis of query theory, a psychological process account of framing effects",
+      "authors": [
+        "Jordana W. Composto",
+        "Shannon M. Duncan",
+        "Eric J. Johnson",
+        "Elke U. Weber"
+      ],
+      "year": 2025,
+      "venue": "Journal of Risk and Uncertainty",
+      "doi": "10.1007/s11166-025-09458-6",
+      "citations": 0,
+      "abstract": "Query Theory (QT) offers a psychological process theory of preference construction that shows how attentional processes and memory dynamics give rise to framing effects and other judgment and choice anomalies. These same anomalies are also modeled by Prospect Theory (PT) and its functional or \"as-if\" account, particularly through its feature of loss aversion. Given the lack of clear evidence that loss aversion results from differences in emotional reactions to gains versus losses, it is worth asking whether QT's process account—which explains framing effects as resulting from attentional shifts and subsequent differences in memory retrieval—provides a psychological process account of the loss-aversion feature of PT. Since QT's introduction in 2007, a series of studies have examined its accounts of framing effects in risky choice, intertemporal choice, and multi-attribute decisions. The present review used meta-analytic techniques to evaluate the main claims of QT by synthesizing findings from 27 papers. Across three meta-analyses, we find that (1) decision frame significantly affects query order (d = 0.34, CI95 = [0.27,0.41], n = 11,202), (2) QT mechanisms (query order and content) partially mediate the effect of decision frame on choice, and (3) manipulating query order decreases the effect of decision frame on choice from d = 0.92 (CI95 = [0.74,1.09], n = 1,680) to d = 0.39 (CI95 = [0.25,0.53], n = 1,720).",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "meta-analysis",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "A PRISMA-Based Systematic Review of Behavioral Biases and Demographic Moderators in Investment Decision-Making",
       "authors": [
         "El Mehdi Douhabi",
@@ -2921,6 +3621,23 @@
       "source_api": "semantic-scholar"
     },
     {
+      "title": "BEHAVIORAL FINANCE IN THE INDONESIAN MSME SECTOR: A SYSTEMATIC LITERATURE REVIEW",
+      "authors": [
+        "Komang Agus Rudi Indra Laksmana"
+      ],
+      "year": 2026,
+      "venue": "Akurasi : Jurnal Studi Akuntansi dan Keuangan",
+      "doi": "10.29303/akurasi.v9i1.901",
+      "citations": 0,
+      "abstract": "This study examines behavioral finance in the Indonesian MSME sector, evaluated using a PRISMA 2020-based SLR. 1,847 articles identified from Web of Science, Google Scholar, ProQuest, SINTA/Garuda, Scopus, and other scientific research sources. 42 peer-reviewed publications satisfied the standards for MMAT and CASP. The review identifies four dominant behavioral finance constructs in the Indonesian MSME sector: overconfidence bias, loss aversion, mental accounting, and herd behavior. These cognitive biases significantly influence financial decision-making, resulting in suboptimal capital allocation, limited adoption of formal financial instruments, and constrained business growth. Digital financial literacy and Islamic financial values operate as contextual moderators unique to the Indonesian setting. This review makes a threefold contribution: it provides the first PRISMA-compliant synthesis of the Indonesian MSME behavioral finance literature (2019–2024); proposes an integrative conceptual framework combining prospect theory, bounded rationality Theora, and social capital theory; and formulates a geographically and methodologically diversified research agenda for future empirical inquiry.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Cognitive Moderators of Loss Aversion",
       "authors": [
         "S. Gächter",
@@ -2936,6 +3653,43 @@
       "openalex_id": null,
       "openalex_type": null,
       "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Decoding The Mind: How Psychological Factors Shape In‎vestment Decisions Among Employees in India",
+      "authors": [
+        "Sarmistha Das",
+        "Bidyut Jyoti Bhattacharjee"
+      ],
+      "year": 2026,
+      "venue": "International Journal of Accounting and Economics Studies",
+      "doi": "10.14419/4dxwt048",
+      "citations": 0,
+      "abstract": "Behavioural biases highlight the impact of psychological factors in shaping investment choices. This study consists of six key psychological ‎factors, such as overconfidence, herding, availability bias, loss aversion, anchoring, and mental accounting, which influence the investment ‎decision of salaried employees while considering demographic variables as moderators. Primary data were collected from 300 salaried em-‎employees working across banking, educational, and healthcare sectors. Data were analyzed using regression analysis, an independent t-test, ‎and one-way ANOVA. The result shows that herding behaviour, availability bias, and mental accounting significantly influence the invest-‎ment decision, while overconfidence, loss aversion, and anchoring bias do not exhibit substantial effects. Furthermore, only gender differences were found in herding tendencies, with males displaying higher susceptibility than females. These findings show that salaried em-‎employees’ investment decisions are shaped less by rational considerations and more by social influence, easily available information, and ‎mental categorization of money. By decoding the psychological tendencies of employee investment decisions, the research helps policymakers-‎ers, financial advisors, and institutions seeking to promote more informed and rational investment practices‎.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Do Robo-Advisors As Moderating Variables Weaken The Overconfidence and Loss Aversion Behavior Bias of Young Investors’ Mutual Fund Investment Decisions?",
+      "authors": [
+        "L. Wijaya",
+        "Victor Marcelino Liangga",
+        "B. Sutejo"
+      ],
+      "year": 2025,
+      "venue": "Jurnal Aplikasi Bisnis dan Manajemen",
+      "doi": "10.17358/jabm.11.2.349",
+      "citations": 0,
+      "abstract": "Background: Behavioral bias factors influence individual decision-making. Technological innovations in the financial services industry have introduced automated financial advisors, or robo-advisors, to assist in mutual fund investment decisions and reduce behavioral biases. Purpose: This study aims to prove the influence of overconfidence and loss aversion behavior bias on mutual fund investment decisions by using robo-advisors as moderator variables.Design/methodology/approach: The research sample was 100 respondents with the criteria of young investors in the age range of 18 to 25 who invested in mutual funds for the last five years and were officially registered with the Financial Services Authority. The data processing method uses multiple linear analysis with moderation dummy variable, using a robo-advisor or not.Finding/Result: The results indicate that overconfidence and loss aversion biases significantly impact mutual fund investment decisions positively. Apart from that, the results also show that robo-advisors succeed in weakening the relationship between overconfidence bias and mutual fund investment decisions. Meanwhile, robo-advisors show results that cannot moderate the relationship between loss aversion and mutual fund investment decisions.Conclusion: Robo-advisors moderate the relationship between overconfidence bias and investment decisions but do not moderate the relationship between loss aversion and mutual fund investment decisions. The high overconfidence is caused by the ease of access to information related to investment assets that is widely spread through social media. Young investors are expected to be able to screen all information related to investment knowledge to reduce loss aversion from young investors. It can help investors make more rational decisions.Originality/value (State of the art):This research is unique because it examines the behavioral biases associated with robo-advisors on investment decisions, especially investments in mutual funds. This research is novel and includes artificial intelligence technology developing in finance using robo-advisor and mutual fund investment. These have managerial implications, such as the high overconfidence in the younger generation due to easy access to information related to investment assets, which is widely spread via social media. Knowledge related to finance is considered capable of reducing loss aversion from young investors to help them make more rational and better decisions. Robo-advisor technology has reduced the irrationality of mutual fund investors' investment decisions. The research results show that overconfidence and loss aversion bias positively and significantly influence investment decisions. Apart from that, the results also show that robo-advisors succeed in weakening the relationship between overconfidence bias and investment decisions. Meanwhile, robo-advisors show results that cannot moderate the relationship between loss aversion and investment decisions. \nKeywords: Robo-advisor, behavioral bias, overconfidence, loss aversion, mutual fund investment decision",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "recent"
+      ],
       "source_api": "semantic-scholar"
     },
     {
@@ -3011,6 +3765,38 @@
       "source_api": "semantic-scholar"
     },
     {
+      "title": "Kühberger, A., Schulte-Mecklenbeck, M. and Perner, J. (1999). The effect of probabilities and payoff on framing: A meta-analysis and an empirical test. Organizational Behavior and Human Decision Processes, 78(3), 204 - 231. Mailing address:",
+      "authors": [
+        "A. Kühberger"
+      ],
+      "year": 1999,
+      "venue": null,
+      "doi": null,
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "meta-analysis"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Local Research of the Gap between Management Theory and Practice: Retrospect and Prospect",
+      "authors": [
+        "Y. Don"
+      ],
+      "year": 2015,
+      "venue": null,
+      "doi": null,
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Myopic loss aversion: Potential causes of replication failures – ERRATUM",
       "authors": [
         "Alexander Klos"
@@ -3067,6 +3853,37 @@
       "source_api": "semantic-scholar"
     },
     {
+      "title": "Risk Aversion 2.1 Risk Attitude De¯ Nition 2.1: Certainty Equivalent",
+      "authors": [],
+      "year": null,
+      "venue": null,
+      "doi": null,
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Risk Preference Inconsistencies across Low and High Stakes: Evidence from the Field",
+      "authors": [
+        "B. Collier",
+        "Daniel Schwartz",
+        "H. Kunreuther",
+        "E. Michel-Kerjan"
+      ],
+      "year": 2016,
+      "venue": null,
+      "doi": null,
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Stochastic Reference Points , Loss Aversion and Choice under Risk",
       "authors": [
         "Yusufcan Masatlioglu"
@@ -3079,6 +3896,26 @@
       "openalex_id": null,
       "openalex_type": null,
       "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Understanding public participatory budgeting behavior: how cognitive biases shape public budget preferences",
+      "authors": [
+        "Wenbin Li",
+        "Jia Yang",
+        "Xiaoxuan Chen"
+      ],
+      "year": 2026,
+      "venue": "Journal of Public Budgeting, Accounting &amp; Financial Management",
+      "doi": "10.1108/jpbafm-08-2025-0232",
+      "citations": 0,
+      "abstract": "\n \n This study investigates how individual-level cognitive biases shape budgetary preferences in public participatory budgeting (PB), offering a micro-level perspective that complements the traditional research focus on collective decision-making processes.\n \n \n \n Conducting an empirical generalization replication of Overmans and Grimmelikhuijsen's (2025) experiment, this study examines how cognitive biases (anchoring, herding, mental accounting and loss aversion) influence public budget allocations in local Chinese contexts. Controlled experimental scenarios were employed to analyze participants' budgetary preferences and identify systematic deviations resulting from underlying cognitive biases.\n \n \n \n The results indicate that public budgeting decisions are significantly shaped by multiple cognitive biases: allocations exhibit anchoring effects from initial numerical values, demonstrate herding tendencies and generally favor gain-generating projects. Notably, the study found no statistically significant evidence of mental accounting or loss aversion, suggesting that the manifestation of cognitive biases is highly context- and subject-dependent.\n \n \n \n This study contributes to the behavioral public administration literature through systematic validation of cognitive bias mechanisms in PB context, offering an integrated framework that bridges behavioral science and budgetary decision-making. Furthermore, the findings provide actionable policy guidance for developing bias-aware budgeting systems and establishing decision architectures that effectively reconcile behavioral insights with rational fiscal principles.\n",
+      "openalex_id": null,
+      "openalex_type": null,
+      "categories": [
+        "replication",
+        "recent"
+      ],
       "source_api": "semantic-scholar"
     },
     {
