@@ -6,23 +6,40 @@
   ],
   "connector_version": "2.1.0",
   "last_run": {
-    "timestamp": "2026-07-15T10:05:14.025Z",
+    "timestamp": "2026-07-15T10:07:17.735Z",
     "status": "success",
     "params": {
-      "mechanism": "LA-01"
+      "mechanism": "ZE-07"
     },
-    "records_fetched": 209,
+    "records_fetched": 167,
     "files_written": 1,
-    "duration_s": 39.14,
+    "duration_s": 17.8,
     "cost": {
-      "api_calls": 38,
-      "duration_s": 39.14,
+      "api_calls": 19,
+      "duration_s": 17.8,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-15T10:07:17.735Z",
+      "status": "success",
+      "params": {
+        "mechanism": "ZE-07"
+      },
+      "records_fetched": 167,
+      "files_written": 1,
+      "duration_s": 17.8,
+      "cost": {
+        "api_calls": 19,
+        "duration_s": 17.8,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T10:05:14.025Z",
       "status": "success",
@@ -264,18 +281,6 @@
       "files_written": 1,
       "duration_s": 121.09,
       "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
-    },
-    {
-      "timestamp": "2026-07-13T14:40:30.090Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "LA-01",
-        "terms": "loss aversion;prospect theory meta-analysis"
-      },
-      "records_fetched": 57,
-      "files_written": 1,
-      "duration_s": 122.88,
-      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
     }
   ],
   "data_files": [
@@ -295,6 +300,18 @@
       "path": "VR-02.json",
       "records": 79,
       "bytes": 109643
+    },
+    {
+      "path": "ZE-07.json",
+      "records": 167,
+      "bytes": 805533,
+      "categories": {
+        "foundational": 20,
+        "meta-analysis": 32,
+        "replication": 10,
+        "dissent": 27,
+        "recent": 41
+      }
     }
   ]
 }
