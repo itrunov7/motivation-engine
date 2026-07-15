@@ -6,23 +6,40 @@
   ],
   "connector_version": "2.3.0",
   "last_run": {
-    "timestamp": "2026-07-15T15:04:35.585Z",
+    "timestamp": "2026-07-15T15:07:37.017Z",
     "status": "success",
     "params": {
-      "mechanism": "SP-08"
+      "mechanism": "ST-09"
     },
-    "records_fetched": 234,
+    "records_fetched": 187,
     "files_written": 1,
-    "duration_s": 17.44,
+    "duration_s": 17.74,
     "cost": {
-      "api_calls": 18,
-      "duration_s": 17.44,
+      "api_calls": 19,
+      "duration_s": 17.74,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-15T15:07:37.017Z",
+      "status": "success",
+      "params": {
+        "mechanism": "ST-09"
+      },
+      "records_fetched": 187,
+      "files_written": 1,
+      "duration_s": 17.74,
+      "cost": {
+        "api_calls": 19,
+        "duration_s": 17.74,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T15:04:35.585Z",
       "status": "success",
@@ -371,17 +388,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-13T17:03:14.936Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "LA-01"
-      },
-      "records_fetched": 166,
-      "files_written": 1,
-      "duration_s": 218.22,
-      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"prospect theory meta-analysis\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss aversion replication\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss of loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
     }
   ],
   "data_files": [
@@ -467,6 +473,18 @@
         "replication": 29,
         "dissent": 59,
         "recent": 76
+      }
+    },
+    {
+      "path": "ST-09.json",
+      "records": 187,
+      "bytes": 786755,
+      "categories": {
+        "foundational": 51,
+        "meta-analysis": 12,
+        "replication": 2,
+        "dissent": 40,
+        "recent": 43
       }
     },
     {
