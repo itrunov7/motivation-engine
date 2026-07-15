@@ -6,23 +6,40 @@
   ],
   "connector_version": "2.1.0",
   "last_run": {
-    "timestamp": "2026-07-15T10:07:17.735Z",
+    "timestamp": "2026-07-15T10:10:48.339Z",
     "status": "success",
     "params": {
-      "mechanism": "ZE-07"
+      "mechanism": "EN-03"
     },
-    "records_fetched": 167,
+    "records_fetched": 173,
     "files_written": 1,
-    "duration_s": 17.8,
+    "duration_s": 21.13,
     "cost": {
-      "api_calls": 19,
-      "duration_s": 17.8,
+      "api_calls": 20,
+      "duration_s": 21.13,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-15T10:10:48.339Z",
+      "status": "success",
+      "params": {
+        "mechanism": "EN-03"
+      },
+      "records_fetched": 173,
+      "files_written": 1,
+      "duration_s": 21.13,
+      "cost": {
+        "api_calls": 20,
+        "duration_s": 21.13,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T10:07:17.735Z",
       "status": "success",
@@ -269,21 +286,21 @@
       "records_fetched": 69,
       "files_written": 1,
       "duration_s": 12.43
-    },
-    {
-      "timestamp": "2026-07-13T14:42:56.934Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "LA-01",
-        "terms": "loss aversion;prospect theory meta-analysis"
-      },
-      "records_fetched": 57,
-      "files_written": 1,
-      "duration_s": 121.09,
-      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
     }
   ],
   "data_files": [
+    {
+      "path": "EN-03.json",
+      "records": 173,
+      "bytes": 781837,
+      "categories": {
+        "foundational": 13,
+        "meta-analysis": 23,
+        "replication": 18,
+        "dissent": 36,
+        "recent": 32
+      }
+    },
     {
       "path": "LA-01.json",
       "records": 209,
