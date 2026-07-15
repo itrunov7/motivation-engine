@@ -17,9 +17,23 @@ export type LifecycleStatus =
   | "deprecated"
   | "rejected";
 
-export type EvidenceGrade = "A" | "B" | "C";
+export type EvidenceGrade =
+  | "A+"
+  | "A"
+  | "A-"
+  | "B+"
+  | "B"
+  | "B-"
+  | "C+"
+  | "C"
+  | "C-";
 
-export type RelationType = "enabled_by" | "adjacent" | "hybrid_with";
+export type RelationType =
+  | "enabled_by"
+  | "enables"
+  | "adjacent"
+  | "hybrid_with"
+  | "orthogonality_note";
 
 export type RuleSeverity = "block" | "warn";
 

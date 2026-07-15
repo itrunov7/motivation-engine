@@ -44,10 +44,14 @@ function relationLabel(type: Relation["type"]): string {
   switch (type) {
     case "enabled_by":
       return "enabled by";
+    case "enables":
+      return "enables";
     case "adjacent":
       return "adjacent to";
     case "hybrid_with":
       return "hybrid with";
+    case "orthogonality_note":
+      return "orthogonality note";
   }
 }
 

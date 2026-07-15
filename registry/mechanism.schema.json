@@ -51,7 +51,7 @@
     "evidence": {
       "type": "object",
       "properties": {
-        "grade": { "type": "string", "enum": ["A", "B", "C"] },
+        "grade": { "type": "string", "enum": ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-"] },
         "basis": { "type": "string", "minLength": 1 },
         "effect_size_note": { "type": "string" },
         "caveats": {
@@ -195,7 +195,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["enabled_by", "adjacent", "hybrid_with"]
+            "enum": ["enabled_by", "enables", "adjacent", "hybrid_with", "orthogonality_note"]
           },
           "target": {
             "type": "string",

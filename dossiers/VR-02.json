@@ -1,0 +1,23 @@
+{
+  "id": "DOS-VR-02",
+  "mechanism_id": "VR-02",
+  "date": "2026-07-15",
+  "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects from Ventora telemetry or public corpora",
+  "scores": {
+    "evidence": { "score": 3, "rationale": "Two independent pillars. Behavioral: variable-ratio schedules produce the highest and most extinction-resistant response rates (Skinner; operant literature). Neural: dopamine encodes reward-prediction-error — Schultz, Dayan & Montague (1997, Science), Schultz (1998 review) — so unpredictable reward drives the strongest dopamine response. Convergence of behavioral and neuroscientific evidence makes this grade A." },
+    "product_applicability": { "score": 3, "rationale": "Directly implementable in feeds, discovery, and reward systems. Canonical interface (pull-to-refresh, variable content). Applicable to Ventora products with recurring reward moments. Reference at scale: social feeds, Spotify Discover Weekly, Duolingo surprise bonuses." },
+    "measurability": { "score": 3, "rationale": "Maps to d7_retention, sessions_per_week, return_rate_without_push, activation_rate — all Amplitude-reachable. No new infrastructure." },
+    "orthogonality": { "score": 3, "rationale": "Distinct from neighbors: CG-05 (curiosity gap) is an information gap, VR-02 is reward unpredictability; HA-04 (habit loop) is the full cue-action-reward-investment cycle, VR-02 is specifically the variable-reward component. Clear boundaries, minimal overlap." },
+    "safety": { "score": 1, "rationale": "LOWEST safety score in the set so far — deliberately. This is the mechanism closest to addictive design and gambling; intermittent reinforcement is the core of slot machines and compulsive-use loops. Misuse is easy, commercially tempting, and increasingly regulated (loot-box disclosure laws, EU DSA, platform store bans). Score of 1 is a flag, not a rejection: the mechanism is scientifically A-grade and legitimately valuable when the reward is real and non-gating. Four block-severity hard rules constrain it (genuine_reward_only, no_gambling_mechanics, no_compulsion_loops, vulnerable_users). Admitted to INCUBATING with the understanding that VR-02 implementations receive the strictest review and that any observed compulsive-use signal triggers immediate review." }
+  },
+  "total": 13,
+  "dissent": "The reward-prediction-error interpretation is not unchallenged. Berridge & Robinson's incentive-salience theory (in the corpus: 'The debate over dopamine's role in reward,' 2006) argues dopamine mediates 'wanting' (motivational salience) rather than 'liking' or a pure prediction-error learning signal — a substantive reframing of what the variable-reward dopamine response *is*. This does not weaken the product claim (unpredictable reward drives engagement either way) but it disciplines the mechanistic story we tell: we claim the behavioral regularity (variable > fixed for engagement), which both accounts agree on, rather than committing to a single neural interpretation. Separately, the ethical literature on intermittent reinforcement as the basis of behavioral addiction is itself the strongest argument for VR-02's guardrails — the science that validates the mechanism also validates the restraint.",
+  "evidence_sources": [
+    { "ref": "Schultz, Dayan & Montague (1997). A Neural Substrate of Prediction and Reward. Science 275(5306).", "doi": "10.1126/science.275.5306.1593" },
+    { "ref": "Schultz (1998). Predictive Reward Signal of Dopamine Neurons. J Neurophysiology 80(1).", "doi": "10.1152/jn.1998.80.1.1" },
+    { "ref": "Berridge & Robinson (2006). The debate over dopamine's role in reward: the case for incentive salience. Psychopharmacology 191(3).", "doi": "10.1007/s00213-006-0578-x" }
+  ],
+  "notes": "Sources cross-checked against /corpora/evidence/VR-02.json (79 records — earlier harvest without pins; canonical works present via term search: Schultz RPE, Schultz review, Berridge dissent). A fresh harvest with the 6 batch terms + 2 pins is queued and will re-verify coverage, but the corpus is sufficient for this record. Safety scored 1 by design — this is the set's highest-risk mechanism; the low score is the honest flag, and the four hard rules plus the boundary test are the mitigation. Verdict INCUBATING; CORE strictly on a measured effect."
+}

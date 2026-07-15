@@ -1,0 +1,26 @@
+{
+  "id": "DOS-EN-03",
+  "mechanism_id": "EN-03",
+  "date": "2026-07-15",
+  "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects from Ventora telemetry or public corpora",
+  "scores": {
+    "evidence": { "score": 3, "rationale": "Foundational: Thaler (1980) coined the term; Kahneman, Knetsch & Thaler (1990) mug experiments are among the most replicated results in behavioral economics; 'Anomalies' (KKT 1991) synthesizes endowment/loss-aversion/status-quo. Integrative mechanism review Morewedge & Giblin (2015). Effect robust across hundreds of studies. Grade held at A- (not A) because interpretation and magnitude are genuinely contested — see dissent." },
+    "product_applicability": { "score": 3, "rationale": "Directly implementable and central to Ventora's ICP: user-created artifacts, personalization/investment during onboarding, trial-as-possession framing. Reference products at scale: Canva/Figma (your designs), Spotify (my library), Duolingo (personalized course). Covers priority artifacts paywall and onboarding." },
+    "measurability": { "score": 3, "rationale": "Maps to Amplitude-reachable metrics: trial_to_paid_cvr, onboarding_completion, activation_rate, d7_retention. No new infrastructure." },
+    "orthogonality": { "score": 2, "rationale": "Theoretically downstream of LA-01 (parting with an owned good is coded as a loss), so overlap is real and deliberate. Kept as a distinct L1 because its product implementations — creation, personalization, investment — are mechanisms of establishing ownership that LA-01 does not address; LA-01 operates once value exists, EN-03 creates it. Documented in relations. Score 2 reflects managed, not eliminated, overlap." },
+    "safety": { "score": 3, "rationale": "Lower dark-pattern risk than LA-01: establishing genuine ownership (real creations, meaningful personalization) is largely value-aligned. Residual risk is fabricated 'yours' language and coerced busywork to manufacture attachment — both blocked by hard rules. Regulatory adjacency exists (negative-option, misleading trial scope) but is narrower and clearly bounded, hence 3." }
+  },
+  "total": 14,
+  "dissent": "Two lines of serious critique are in the corpus and must discipline application. (1) Plott & Zeiler (2005, AER; and 2011 follow-up) argue the WTA-WTP gap is largely an artifact of experimental procedure — misconceptions about the task, not a true preference for owned goods; when procedures control for this, the gap shrinks or vanishes. (2) List (2003, QJE) shows the endowment effect attenuates and can disappear among experienced market traders — market experience 'debiases' it. Implication for us: the effect is strongest for goods held for use/identity (which matches product contexts — a user's own creations), and weakest for goods held for exchange by experienced agents. We therefore claim EN-03 for use/identity ownership (creations, personalization), not for generic possession, and we measure rather than assume.",
+  "evidence_sources": [
+    { "ref": "Kahneman, Knetsch & Thaler (1990). Experimental Tests of the Endowment Effect and the Coase Theorem. JPE 98(6).", "doi": "10.1086/261737" },
+    { "ref": "Kahneman, Knetsch & Thaler (1991). Anomalies: The Endowment Effect, Loss Aversion, and Status Quo Bias. JEP 5(1).", "doi": "10.1257/jep.5.1.193" },
+    { "ref": "Morewedge & Giblin (2015). Explanations of the endowment effect: an integrative review. Trends in Cognitive Sciences 19(6).", "doi": "10.1016/j.tics.2015.04.004" },
+    { "ref": "Plott & Zeiler (2005). The Willingness to Pay–Willingness to Accept Gap... AER 95(3).", "doi": "10.1257/0002828054201387" },
+    { "ref": "Plott & Zeiler (2011). ...Endowment Effect,' Subject Misconceptions... AER 101(2).", "doi": "10.1257/aer.101.2.991" },
+    { "ref": "List (2003). Does Market Experience Eliminate Market Anomalies? QJE 118(1).", "doi": "10.1162/00335530360535144" }
+  ],
+  "notes": "Sources cross-checked against /corpora/evidence/EN-03.json (173 records; pins KKT-1990, Morewedge review, Plott-Zeiler resolved). Snowball review_found:false reported honestly — endowment literature did not yield a qualifying topical review anchor beyond the pinned Morewedge review; coverage verification rests on pins + term breadth for this mechanism. Verdict formalizes INCUBATING; CORE strictly on a measured effect."
+}
