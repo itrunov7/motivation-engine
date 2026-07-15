@@ -1,0 +1,24 @@
+{
+  "id": "DOS-ZE-07",
+  "mechanism_id": "ZE-07",
+  "date": "2026-07-15",
+  "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects from Ventora telemetry or public corpora",
+  "scores": {
+    "evidence": { "score": 2, "rationale": "Composite construct with uneven support. Goal-gradient (effort accelerates near goal): originated Hull (1932), strongly field-validated by Kivetz, Urminsky & Zheng (2006, JMR) with real loyalty-program data — solid. Endowed-progress effect (Nunes & Dreze 2006, JCR): robust, replicated. Zeigarnik effect (unfinished tasks stay active in memory): real but its replication record is mixed and the popular version overstates it. Score 2 (not 3) reflects that this L1 bundles a well-supported component (goal-gradient/endowed-progress) with a weaker one (classic Zeigarnik) — see caveats and dissent. We lead with the strong components in implementations." },
+    "product_applicability": { "score": 3, "rationale": "Highly implementable: progress bars, completion meters, onboarding checklists, endowed head-starts, open loops. Reference at scale: LinkedIn profile strength, loyalty punch cards (endowed progress), Duolingo path. Directly serves Ventora's onboarding artifact — a priority integration target." },
+    "measurability": { "score": 3, "rationale": "Maps to onboarding_completion, activation_rate, d7_retention, task_completion_rate, return_rate — all Amplitude-reachable." },
+    "orthogonality": { "score": 2, "rationale": "Some overlap with LA-01 (near-complete progress can be framed as loss-if-abandoned) and HA-04 (progress supports habit). Kept distinct because the core driver is the pull of completion / goal-gradient, a different mechanism from loss fear or the habit loop. Score 2 reflects managed overlap." },
+    "safety": { "score": 3, "rationale": "Low dark-pattern risk when progress and goals are real. Residual risks — fake progress bars, moving goalposts, manufactured incompleteness — are all blocked by hard rules (true_progress_only, real_headstart_only, attainable_goal, no_manufactured_incompleteness). Value-aligned in normal use (helping users complete things they want to complete)." }
+  },
+  "total": 13,
+  "dissent": "The Zeigarnik effect — the popular anchor of 'unfinished tasks nag the mind' — has a mixed replication record. The corpus contains work qualifying and bounding it (e.g. the 2016 occupational study on unfinished tasks and off-job rumination, and earlier work tying it to specific conditions rather than a universal memory advantage); the effect is real under some conditions but weaker and more context-dependent than its folk reputation. This is why the mechanism's evidence axis is scored 2 and why the implementations lead with the well-supported goal-gradient and endowed-progress components rather than resting on Zeigarnik. We claim the strong, field-validated versions (progress acceleration, endowed head-start) and treat the pure open-loop/Zeigarnik lever as the most tentative of the three implementations — to be validated by our own measurement before any weight is placed on it.",
+  "evidence_sources": [
+    { "ref": "Hull (1932). The goal-gradient hypothesis and maze learning. Psychological Review 39(1).", "doi": "10.1037/h0072640" },
+    { "ref": "Kivetz, Urminsky & Zheng (2006). The Goal-Gradient Hypothesis Resurrected... JMR 43(1).", "doi": "10.1509/jmkr.43.1.39" },
+    { "ref": "Nunes & Dreze (2006). The Endowed Progress Effect... JCR 32(4).", "doi": "10.1086/500480" },
+    { "ref": "Syrek et al. (2016). Zeigarnik's sleepless nights: unfinished tasks and off-job rumination. J Occupational Health Psychology 22(2).", "doi": "10.1037/ocp0000031" }
+  ],
+  "notes": "Sources cross-checked against /corpora/evidence/ZE-07.json (167 records; pins Kivetz and Nunes resolved; Hull original present). Snowball review_found:true with a topical goal-theory anchor at coverage 0 (honest — that anchor is educational goal theory, a different sub-literature; low coverage reported, not masked). This is a composite mechanism; evidence scored conservatively at 2 to reflect the weaker Zeigarnik component. Verdict INCUBATING; CORE strictly on a measured effect."
+}
