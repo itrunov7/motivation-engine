@@ -6,23 +6,40 @@
   ],
   "connector_version": "2.3.0",
   "last_run": {
-    "timestamp": "2026-07-15T15:07:37.017Z",
+    "timestamp": "2026-07-15T15:10:03.202Z",
     "status": "success",
     "params": {
       "mechanism": "ST-09"
     },
     "records_fetched": 187,
     "files_written": 1,
-    "duration_s": 17.74,
+    "duration_s": 19.99,
     "cost": {
-      "api_calls": 19,
-      "duration_s": 17.74,
+      "api_calls": 20,
+      "duration_s": 19.99,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-15T15:10:03.202Z",
+      "status": "success",
+      "params": {
+        "mechanism": "ST-09"
+      },
+      "records_fetched": 187,
+      "files_written": 1,
+      "duration_s": 19.99,
+      "cost": {
+        "api_calls": 20,
+        "duration_s": 19.99,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T15:07:37.017Z",
       "status": "success",
@@ -363,27 +380,6 @@
       "cost": {
         "api_calls": 37,
         "duration_s": 37.32,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-15T08:47:04.379Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "LA-01"
-      },
-      "records_fetched": 164,
-      "files_written": 1,
-      "duration_s": 423.96,
-      "error": "semantic-scholar \"prospect theory meta-analysis\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss of loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"endowment effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 96,
-        "duration_s": 423.96,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
