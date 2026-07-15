@@ -40,7 +40,7 @@ import {
   type Manifest,
   type ManifestCost,
   type ManifestDataFile,
-  type ManifestRun,
+  type StoredManifestRun,
 } from "./connectors/types";
 import type {
   HeartbeatEntry as WriterHeartbeatEntry,
@@ -311,7 +311,7 @@ const manifestRunProperties = {
   error: { type: "string", minLength: 1 },
   warnings: { type: "object", additionalProperties: { type: "boolean" } },
   cost: manifestCostSchema,
-} as const satisfies Record<keyof ManifestRun, unknown>;
+} as const satisfies Record<keyof StoredManifestRun, unknown>;
 
 const manifestRunRequired = [
   "timestamp",
@@ -320,7 +320,7 @@ const manifestRunRequired = [
   "records_fetched",
   "files_written",
   "duration_s",
-] as const satisfies readonly (keyof ManifestRun)[];
+] as const satisfies readonly (keyof StoredManifestRun)[];
 
 const manifestRunSchema = {
   type: "object",
@@ -718,12 +718,15 @@ function main(): void {
         if (data === undefined) continue;
         let ok = validateAgainst(validateDossier, file, data);
         const dossier = data as {
-          scores?: Record<string, number>;
+          scores?: Record<string, { score?: number }>;
           total?: number;
           mechanism_id?: string;
         };
         if (dossier.scores && typeof dossier.total === "number") {
-          const sum = Object.values(dossier.scores).reduce((a, b) => a + b, 0);
+          const sum = Object.values(dossier.scores).reduce(
+            (a, axis) => a + (axis?.score ?? 0),
+            0,
+          );
           if (sum !== dossier.total) {
             fail(file, `total (${dossier.total}) does not equal the sum of axis scores (${sum})`);
           }

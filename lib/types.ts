@@ -184,19 +184,37 @@ export interface SeedStub {
 /** Axis score, integer 0–3. */
 export type AxisScore = 0 | 1 | 2 | 3;
 
+/**
+ * One scored axis: the integer score plus its markdown rationale. The prose
+ * is part of the scientific record, not decoration (Option A) — JSON is the
+ * source of truth, /dossiers renders the markdown.
+ */
+export interface DossierAxis {
+  score: AxisScore;
+  /** Markdown justification for the score, entered by the owner. */
+  rationale: string;
+}
+
 export interface DossierScores {
-  evidence: AxisScore;
-  product_applicability: AxisScore;
-  measurability: AxisScore;
-  orthogonality: AxisScore;
-  safety: AxisScore;
+  evidence: DossierAxis;
+  product_applicability: DossierAxis;
+  measurability: DossierAxis;
+  orthogonality: DossierAxis;
+  safety: DossierAxis;
+}
+
+/** One cited source backing the dossier; doi is optional (books, preprints). */
+export interface DossierEvidenceSource {
+  ref: string;
+  doi?: string;
 }
 
 export type DossierVerdict = "incubating" | "core" | "rejected" | "hold";
 
 /**
  * Thresholds: to enter incubating — total >= 11 AND evidence >= 2 AND
- * safety >= 2; to enter core — additionally at least one measured effect.
+ * safety >= 2; to enter core — additionally at least one measured effect
+ * (stated in core_condition).
  */
 export interface Dossier {
   $schema?: string;
@@ -206,7 +224,11 @@ export interface Dossier {
   scores: DossierScores;
   /** Sum of the five axis scores, 0–15. */
   total: number;
-  evidence_sources: string[];
+  /** The measured condition under which the mechanism may be promoted to core. */
+  core_condition: string;
+  /** Documented counter-evidence (markdown) — every dossier addresses dissent. */
+  dissent: string;
+  evidence_sources: DossierEvidenceSource[];
   verdict: DossierVerdict;
   decided_by: string;
   /** ISO date, YYYY-MM-DD */

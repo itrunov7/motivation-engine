@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { loadDossiers } from "@/lib/data";
 import type { Dossier, DossierScores } from "@/lib/types";
 
@@ -8,8 +10,9 @@ export const metadata = {
 
 /**
  * The five scoring axes, in schema order (/dossiers/dossier.schema.json).
- * Each is an integer 0–3; the gate thresholds below are quoted from the
- * schema description — the page explains the gate, it never scores anything.
+ * Each is an integer 0–3 with a markdown rationale; the gate thresholds
+ * below are quoted from the schema description — the page explains the gate,
+ * it never scores anything.
  */
 const AXES: (keyof DossierScores)[] = [
   "evidence",
@@ -24,6 +27,32 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <h2 className="font-mono text-xs uppercase tracking-widest text-[#7C93A8]">
       {children}
     </h2>
+  );
+}
+
+/**
+ * Owner prose rendered from the dossier's markdown strings (rationales,
+ * dissent). Reuses the /docs markdown pipeline (react-markdown + remark-gfm)
+ * so the JSON stays the single source of truth and the page renders it —
+ * Option A, no separate markdown pipeline.
+ */
+function Prose({ children }: { children: string }) {
+  return (
+    <div
+      className="
+        text-sm leading-relaxed text-[#8CA495]
+        [&_p]:mt-2 first:[&_p]:mt-0
+        [&_strong]:text-[#E6EFE8]
+        [&_em]:text-[#E6EFE8]
+        [&_a]:text-[#34D399] [&_a]:underline [&_a]:underline-offset-2
+        [&_ul]:mt-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:marker:text-[#7C93A8]
+        [&_ol]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:marker:text-[#7C93A8]
+        [&_li]:mt-1
+        [&_code]:rounded [&_code]:bg-[#1A2620] [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:text-[#E6EFE8]
+      "
+    >
+      <Markdown remarkPlugins={[remarkGfm]}>{children}</Markdown>
+    </div>
   );
 }
 
@@ -42,36 +71,94 @@ function DossierCard({ dossier }: { dossier: Dossier }) {
             {dossier.date}
           </span>
         </div>
-        <span className="rounded border border-[#243329] bg-[#1A2620] px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-[#E6EFE8]">
-          {dossier.verdict}
-        </span>
-      </div>
-      <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-6">
-        {AXES.map((axis) => (
-          <div key={axis} className="flex flex-col gap-0.5">
-            <dt className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
-              {axis.replace(/_/g, " ")}
-            </dt>
-            <dd className="font-mono text-sm text-[#E6EFE8]">
-              {dossier.scores[axis]}/3
-            </dd>
-          </div>
-        ))}
-        <div className="flex flex-col gap-0.5">
-          <dt className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
-            total
-          </dt>
-          <dd className="font-mono text-sm text-[#34D399]">
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-sm text-[#34D399]">
             {dossier.total}/15
-          </dd>
+          </span>
+          <span className="rounded border border-[#243329] bg-[#1A2620] px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-[#E6EFE8]">
+            {dossier.verdict}
+          </span>
         </div>
-      </dl>
-      <p className="mt-3 text-sm leading-relaxed text-[#8CA495]">
-        {dossier.notes}
-      </p>
-      <p className="mt-2 font-mono text-[11px] text-[#7C93A8]">
-        decided by {dossier.decided_by} · {dossier.evidence_sources.length}{" "}
-        evidence source{dossier.evidence_sources.length === 1 ? "" : "s"}
+      </div>
+
+      <div className="mt-4 flex flex-col divide-y divide-[#243329]/60">
+        {AXES.map((axis) => {
+          const entry = dossier.scores[axis];
+          return (
+            <div key={axis} className="py-3 first:pt-0">
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="font-mono text-[11px] uppercase tracking-wider text-[#7C93A8]">
+                  {axis.replace(/_/g, " ")}
+                </span>
+                <span className="font-mono text-sm text-[#E6EFE8]">
+                  {entry.score}/3
+                </span>
+              </div>
+              <div className="mt-1.5">
+                <Prose>{entry.rationale}</Prose>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 rounded-md border border-[#34D399]/30 bg-[#1A2620] px-4 py-3">
+        <p className="font-mono text-[11px] uppercase tracking-wider text-[#34D399]">
+          core condition
+        </p>
+        <div className="mt-1.5">
+          <Prose>{dossier.core_condition}</Prose>
+        </div>
+      </div>
+
+      <div className="mt-4 rounded-md border border-[#E4B54E]/30 bg-[#1A2620] px-4 py-3">
+        <p className="font-mono text-[11px] uppercase tracking-wider text-[#E4B54E]">
+          dissent
+        </p>
+        <div className="mt-1.5">
+          <Prose>{dossier.dissent}</Prose>
+        </div>
+      </div>
+
+      {dossier.evidence_sources.length > 0 && (
+        <div className="mt-4">
+          <p className="font-mono text-[11px] uppercase tracking-wider text-[#7C93A8]">
+            evidence sources · {dossier.evidence_sources.length}
+          </p>
+          <ul className="mt-2 flex flex-col gap-1.5">
+            {dossier.evidence_sources.map((source) => (
+              <li
+                key={source.ref}
+                className="text-xs leading-relaxed text-[#8CA495]"
+              >
+                <span>{source.ref}</span>
+                {source.doi && (
+                  <>
+                    {" "}
+                    <a
+                      href={`https://doi.org/${source.doi}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-[#34D399] underline underline-offset-2"
+                    >
+                      {source.doi}
+                    </a>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {dossier.notes && (
+        <p className="mt-4 text-sm leading-relaxed text-[#8CA495]">
+          {dossier.notes}
+        </p>
+      )}
+
+      <p className="mt-3 font-mono text-[11px] text-[#7C93A8]">
+        decided by {dossier.decided_by}
       </p>
     </article>
   );
@@ -101,9 +188,10 @@ function GateExplainer() {
           ))}
         </div>
         <p className="mt-3 text-sm leading-relaxed text-[#8CA495]">
-          The record also carries evidence sources, a verdict (incubating,
-          core, rejected, or hold), who decided, the date, and notes — the full
-          shape is /dossiers/dossier.schema.json.
+          Each axis carries a markdown rationale, and the record also carries a
+          dissent statement, a core-promotion condition, evidence sources, a
+          verdict (incubating, core, rejected, or hold), who decided, the date,
+          and notes — the full shape is /dossiers/dossier.schema.json.
         </p>
       </section>
 
@@ -138,22 +226,12 @@ function GateExplainer() {
       <div className="rounded-lg border border-dashed border-[#243329] bg-[#1A2620] px-5 py-4">
         <p className="text-sm leading-relaxed text-[#8CA495]">
           <span className="text-[#E6EFE8]">No dossiers exist yet</span> — the
-          folder ships with the schema only, and this page will list scored
-          records as they land.
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-[#8CA495]">
-          <span className="text-[#E6EFE8]">Next milestone:</span> the first
-          dossier — LA-01 (Loss aversion), the one mechanism that already has a
-          full registry record. Its dossier decides whether it stays
-          incubating or earns core.
+          folder ships with the schema only, and this page lists scored records
+          as they land.
         </p>
         <p className="mt-2 text-sm leading-relaxed text-[#8CA495]">
           <span className="text-[#E6EFE8]">Filled by:</span> owner decisions
           entered in git as /dossiers/*.json — never generated by code.
-        </p>
-        <p className="mt-2 font-mono text-[11px] uppercase tracking-wider text-[#7C93A8]">
-          phase · schema: July (baseline) · first dossier: next milestone after
-          baseline
         </p>
       </div>
     </div>

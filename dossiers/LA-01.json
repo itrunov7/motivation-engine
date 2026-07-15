@@ -1,0 +1,29 @@
+{
+  "$schema": "./dossier.schema.json",
+  "id": "DOS-LA-01",
+  "mechanism_id": "LA-01",
+  "date": "2026-07-13",
+  "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects (live test moved to team integration phase)",
+  "scores": {
+    "evidence": { "score": 3, "rationale": "Prospect theory (Kahneman & Tversky 1979, Econometrica; Nobel 2002); cumulative version 1992 estimated λ≈2.25. Meta-analysis of ~600 λ estimates across ~150 studies (Brown, Imai, Vieider & Camerer, JEL) finds mean λ≈1.8–2.1. Cross-country moderator work (Mrkva et al. 2020) finds the effect present across samples with real heterogeneity. Boundary conditions kept as record caveats: attenuates on small stakes (Ert & Erev 2013); coefficient shifts with decision context (Walasek & Stewart 2015)." },
+    "product_applicability": { "score": 3, "rationale": "Five implementations specified with at-scale reference products: Duolingo (streak + Streak Freeze), Amazon Prime (cancellation inventory), Starbucks Rewards (expiring stars). Covers Ventora's priority artifacts: paywall, cancellation flow, retention push." },
+    "measurability": { "score": 3, "rationale": "Every implementation maps to an Amplitude-reachable metric: trial_to_paid_cvr, cancel_save_rate, d7/d30 retention, reactivation-in-expiry-window. No new infrastructure required." },
+    "orthogonality": { "score": 2, "rationale": "Managed overlap, documented in relations: EN-03 endowment is theoretically downstream (giving up an owned good is coded as loss) — whether EN-03 is a peer L1 or an L2 effect is deferred to DOS-EN-03. SC-06 scarcity operates partly as loss-of-opportunity (hybrid noted)." },
+    "safety": { "score": 2, "rationale": "Adjacent to the most regulated dark patterns (fake urgency/scarcity, cancellation obstruction — EU and FTC enforcement targets). Boundary is definable and encoded as block-severity hard rules (real_loss_only, no_confirm_shaming, no_data_hostage, panic_cap, precondition_gate) plus the boundary test. Residual risk moderate because misuse is commercially tempting — hence 2, not 3." }
+  },
+  "total": 13,
+  "dissent": "Gal & Rucker, 'The Loss of Loss Aversion' (Journal of Consumer Psychology, 2018, DOI 10.1002/jcpy.1047): argues the principle is overgeneralized — in some paradigms losses do not loom larger than gains, and several classic demonstrations admit alternative explanations (inertia, status quo). Does not overturn the meta-analytic core but disciplines application: we claim the mechanism where accumulated, self-relevant value is at stake, and we measure rather than assume (see core_condition).",
+  "evidence_sources": [
+    { "ref": "Kahneman & Tversky (1979). Prospect Theory. Econometrica 47(2).", "doi": "10.2307/1914185" },
+    { "ref": "Tversky & Kahneman (1992). Advances in Prospect Theory. J Risk & Uncertainty 5(4).", "doi": "10.1007/bf00122574" },
+    { "ref": "Brown, Imai, Vieider & Camerer. Meta-analysis of Empirical Estimates of Loss Aversion. JEL.", "doi": "10.31222/osf.io/hnefr" },
+    { "ref": "Mrkva, Johnson, Gächter & Herrmann (2020). Moderating Loss Aversion. JCP 30(3).", "doi": "10.1002/jcpy.1156" },
+    { "ref": "Walasek & Stewart (2015). How to Make Loss Aversion Disappear and Reverse. JEP: General 144(1).", "doi": "10.1037/xge0000039" },
+    { "ref": "Ert & Erev (2013). On the Descriptive Value of Loss Aversion. JDM 8(3).", "doi": "10.1017/S1930297500005945" },
+    { "ref": "Gal & Rucker (2018). The Loss of Loss Aversion. JCP 28(3).", "doi": "10.1002/jcpy.1047" },
+    { "ref": "Kahneman, Knetsch & Thaler (1990). Experimental Tests of the Endowment Effect. JPE 98(6).", "doi": "10.1086/261737" }
+  ],
+  "notes": "Sources cross-checked against /corpora/evidence/LA-01.json; Ert & Erev and Walasek & Stewart entered via pinned_evidence (connector harvests breadth, owner pins the tail). Verdict formalizes INCUBATING; promotion to CORE strictly on core_condition — a null or negative measured result triggers review, not concealment."
+}
