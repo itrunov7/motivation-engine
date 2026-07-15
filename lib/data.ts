@@ -86,13 +86,17 @@ export function loadDossiers(): Dossier[] {
 
 // ---------- Foundation documents (/docs, SPEC §3.6) ----------
 
-/** The five foundation documents, in sidebar order (SPEC §3.6). */
+/**
+ * The library documents, in sidebar order. The first five are the SPEC §3.6
+ * foundation set; connectors-runbook is the operator's manual added in D-031.
+ */
 export const DOC_SLUGS = [
   "manifesto",
   "ontology-as-science",
   "architecture",
   "runtime-flow",
   "roadmap",
+  "connectors-runbook",
 ] as const;
 
 export type DocSlug = (typeof DOC_SLUGS)[number];
@@ -125,7 +129,7 @@ export function loadDoc(slug: string): Doc | null {
   return { slug, title: extractTitle(markdown, slug), markdown };
 }
 
-/** All five documents (slug + title) for the sidebar nav. */
+/** All library documents (slug + title) for the sidebar nav. */
 export function listDocs(): DocEntry[] {
   return DOC_SLUGS.flatMap((slug) => {
     const doc = loadDoc(slug);

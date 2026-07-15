@@ -35,8 +35,8 @@ export default function DocPage({ params }: { params: { slug: string } }) {
           Docs — the library
         </h1>
         <p className="mt-1 text-sm text-[#8CA495]">
-          The five foundation documents, rendered from /docs/*.md. Written by
-          the owner; the showcase renders them, never edits them.
+          The foundation documents and operator runbooks, rendered from
+          /docs/*.md. The showcase renders them, never edits them.
         </p>
       </header>
 
