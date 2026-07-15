@@ -6,23 +6,46 @@
   ],
   "connector_version": "2.1.0",
   "last_run": {
-    "timestamp": "2026-07-15T09:37:27.363Z",
+    "timestamp": "2026-07-15T10:03:04.623Z",
     "status": "success",
     "params": {
       "mechanism": "LA-01"
     },
     "records_fetched": 209,
     "files_written": 1,
-    "duration_s": 37.32,
+    "duration_s": 71.78,
+    "warnings": {
+      "s2_throttled": true
+    },
     "cost": {
-      "api_calls": 37,
-      "duration_s": 37.32,
+      "api_calls": 39,
+      "duration_s": 71.78,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-15T10:03:04.623Z",
+      "status": "success",
+      "params": {
+        "mechanism": "LA-01"
+      },
+      "records_fetched": 209,
+      "files_written": 1,
+      "duration_s": 71.78,
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 39,
+        "duration_s": 71.78,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T09:37:27.363Z",
       "status": "success",
@@ -251,30 +274,18 @@
       "files_written": 1,
       "duration_s": 134.08,
       "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"prospect theory meta-analysis\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
-    },
-    {
-      "timestamp": "2026-07-13T14:32:21.052Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "LA-01",
-        "terms": "loss aversion;prospect theory meta-analysis"
-      },
-      "records_fetched": 57,
-      "files_written": 1,
-      "duration_s": 129.56,
-      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
     }
   ],
   "data_files": [
     {
       "path": "LA-01.json",
       "records": 209,
-      "bytes": 572330,
+      "bytes": 573622,
       "categories": {
         "foundational": 31,
         "meta-analysis": 28,
         "replication": 25,
-        "dissent": 36,
+        "dissent": 37,
         "recent": 61
       }
     },
