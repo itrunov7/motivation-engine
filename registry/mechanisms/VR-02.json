@@ -15,6 +15,26 @@
     "effect_size_note": "Robust and mechanistic; magnitude in product contexts depends on reward salience and unpredictability. The effect is strongest when the reward is both variable and meaningful.",
     "caveats": ["reward_must_be_genuinely_valued", "unpredictability_can_frustrate_if_reward_never_arrives", "highest_abuse_potential_of_the_core_set"]
   },
+  "evidence_terms": [
+    "variable ratio reinforcement",
+    "reward prediction error",
+    "intermittent reinforcement",
+    "dopamine reward anticipation",
+    "schedules of reinforcement",
+    "variable reward engagement"
+  ],
+  "pinned_evidence": [
+    {
+      "doi": "10.1126/science.275.5306.1593",
+      "title": "A Neural Substrate of Prediction and Reward",
+      "reason": "foundational — dopamine RPE"
+    },
+    {
+      "doi": "10.1007/s00213-006-0578-x",
+      "title": "The debate over dopamine's role in reward: the case for incentive salience",
+      "reason": "dissent — RPE vs incentive salience"
+    }
+  ],
   "prior_weight": 0.85,
   "mechanism_summary_for_context": "Unpredictable rewards drive engagement far more strongly than predictable ones — the brain's dopamine system responds to the *surprise* of reward, not just the reward. A fixed reward ('every 10th action earns X') is weaker than a variable one ('some actions earn a surprise'). This is the engine behind feeds, discovery, streak bonuses, and 'what will I get' moments. It is also the mechanism closest to addictive design — apply with the strongest guardrails in the set.",
   "applicability": {

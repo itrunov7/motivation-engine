@@ -191,6 +191,13 @@ export interface SeedStub {
   oneliner: string;
   parent: TaxonomyNodeId;
   lifecycle_status: "candidate";
+  /** Owner-provided search terms for the evidence connector (D-015),
+   *  permitted on a stub so a candidate can be harvested before it is
+   *  fleshed out. Mirrors the schema's seedStub sub-schema (D-033). */
+  evidence_terms?: string[];
+  /** Owner-pinned works the connector cannot surface (D-017), permitted on a
+   *  stub; merged into the evidence corpus with source_api "pinned". */
+  pinned_evidence?: PinnedEvidence[];
 }
 
 // ---------- Dossier, admission gate (§3.3) ----------

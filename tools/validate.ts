@@ -6,6 +6,10 @@
  * - /registry/mechanisms/_seed/*.json against the seedStub sub-schema
  * - HARD RULE (checked explicitly on top of the schema): a full record with
  *   empty/missing implementations[].metrics or constraints.hard_rules FAILS
+ * - HARD RULE (D-038): a full record with a non-null dossier_ref MUST carry a
+ *   non-empty evidence_terms — a dossier'd corpus was built from terms, so a
+ *   record that dropped them is non-reproducible (a re-harvest would fall back
+ *   to [name] and silently regress the corpus)
  * - /registry/taxonomy.json, /sources/sources.json, /decisions/decisions.json
  * - /dossiers/dossier.schema.json integrity + any dossier records; a dossier
  *   referencing a mechanism whose evidence corpus is missing, unclassified,
@@ -487,6 +491,8 @@ const benchmarkFileSchema = {
 interface MechanismLike {
   id?: string;
   parent?: string;
+  dossier_ref?: string | null;
+  evidence_terms?: unknown;
   implementations?: { id?: string; metrics?: unknown }[];
   constraints?: { hard_rules?: unknown };
   relations?: { target?: string }[];
@@ -614,6 +620,23 @@ function main(): void {
         "HARD RULE violated: constraints.hard_rules is empty or missing — a mechanism without guardrails is a dark-pattern risk",
       );
       hardRulesOk = false;
+    }
+
+    // HARD RULE — corpus reproducibility (D-038): a record with a dossier rests
+    // on a harvested corpus (D-019), and that corpus was built from the
+    // record's evidence_terms (D-015). A dossier'd mechanism that has dropped
+    // its terms is non-reproducible — a re-harvest would silently fall back to
+    // [name] and regress the corpus. Terms MUST live on the full record, not
+    // only on the (deleted-at-admission) seed stub.
+    if (typeof record.dossier_ref === "string" && record.dossier_ref.length > 0) {
+      const terms = record.evidence_terms;
+      if (!Array.isArray(terms) || terms.length === 0) {
+        fail(
+          file,
+          "HARD RULE violated: record has a dossier_ref but no evidence_terms — a dossier'd corpus was built from terms; without them the corpus is non-reproducible and a re-harvest silently regresses it (D-038)",
+        );
+        hardRulesOk = false;
+      }
     }
 
     if (typeof record.id === "string") {

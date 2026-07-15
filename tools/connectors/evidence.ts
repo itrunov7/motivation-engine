@@ -61,6 +61,12 @@
  *
  * Fetch and structure ONLY — no scoring, no "quality" filtering, no summaries.
  * What the canon says is for the dossier process to weigh, not this script.
+ *
+ * Anti-regression guardrail (D-038): a re-harvest that yields FEWER records
+ * than the existing corpus (a dropped evidence_terms and name-only fallback, an
+ * upstream outage, a throttled partial) never overwrites the good file. The run
+ * writes {mechanism_id}.regression.json instead, returns status "partial" with
+ * warnings.regression_suspected, and keeps the prior corpus for review.
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -829,6 +835,21 @@ function loadMechanism(mechanismId: string | undefined): MechanismRecord {
   return JSON.parse(readFileSync(path, "utf-8")) as MechanismRecord;
 }
 
+/**
+ * Record count of an existing corpus file, or null when the file is absent or
+ * unreadable (a first harvest, or a corrupt prior file — neither is a
+ * regression). Used by the anti-regression guardrail (D-038).
+ */
+function readExistingRecordCount(path: string): number | null {
+  if (!existsSync(path)) return null;
+  try {
+    const prev = JSON.parse(readFileSync(path, "utf-8")) as { records?: unknown };
+    return Array.isArray(prev.records) ? prev.records.length : null;
+  } catch {
+    return null;
+  }
+}
+
 function splitTerms(raw: string | undefined): string[] {
   return (raw ?? "")
     .split(";")
@@ -861,7 +882,7 @@ export const evidenceConnector: Connector = {
   id: "evidence",
   sourceId: "evidence",
   sourceIds: ["openalex", "semantic-scholar"],
-  connectorVersion: "2.2.0",
+  connectorVersion: "2.3.0",
   description:
     "Evidence harvester: OpenAlex + Semantic Scholar literature for one mechanism → {mechanism_id}.json. Terms from the record's evidence_terms; owner pins merged from pinned_evidence; review-reference snowballing and a category checklist verify completeness structurally (D-019). Fetch and structure only.",
 
@@ -1032,6 +1053,29 @@ export const evidenceConnector: Connector = {
       records,
     };
     const fileName = `${mechanismId}.json`;
+
+    // Anti-regression guardrail (D-038): a re-harvest that produces FEWER
+    // records than the existing corpus is suspicious — a dropped evidence_terms
+    // (name-only fallback), an upstream outage, or a throttled partial. Never
+    // silently overwrite hard-won breadth with a weaker pull. Write to a side
+    // file for review instead and flag the run; the existing corpus is kept.
+    const existingCount = readExistingRecordCount(join(ctx.corpusDir, fileName));
+    if (existingCount !== null && records.length < existingCount) {
+      const sideFile = `${mechanismId}.regression.json`;
+      ctx.writeJson(sideFile, file);
+      const message =
+        `regression suspected: re-harvest produced ${records.length} records vs ${existingCount} ` +
+        `already in the corpus — corpus NOT overwritten; wrote ${sideFile} for review (D-038)`;
+      ctx.log(`WARNING ${message}`);
+      return {
+        status: "partial",
+        recordsFetched: records.length,
+        files: [{ path: sideFile, records: records.length, categories: categoryCounts }],
+        error: [message, ...failures].join(" · "),
+        warnings: { regression_suspected: true, ...(s2Throttled ? { s2_throttled: true } : {}) },
+      };
+    }
+
     ctx.writeJson(fileName, file);
     ctx.log(`wrote ${records.length} deduplicated records to ${fileName}`);
 
