@@ -280,7 +280,26 @@
           "type": "string",
           "pattern": "^S[1-6]$"
         },
-        "lifecycle_status": { "const": "candidate" }
+        "lifecycle_status": { "const": "candidate" },
+        "evidence_terms": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Owner-provided search terms for the evidence connector (D-015), permitted on a stub so a candidate can be harvested before it is fleshed out. Must include disconfirming and boundary-condition terms, not only confirming ones. Optional; the connector falls back to [name] when absent."
+        },
+        "pinned_evidence": {
+          "type": "array",
+          "description": "Owner-pinned works the connector cannot reliably surface (D-017), permitted on a stub. The evidence connector merges these into the corpus (source_api: pinned), fetching metadata from OpenAlex by DOI.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string", "minLength": 1 },
+              "doi": { "type": "string", "minLength": 1 },
+              "reason": { "type": "string", "minLength": 1 }
+            },
+            "required": ["title", "doi", "reason"],
+            "additionalProperties": false
+          }
+        }
       },
       "required": ["id", "name", "grade_draft", "oneliner", "parent", "lifecycle_status"],
       "additionalProperties": false

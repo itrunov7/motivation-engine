@@ -136,6 +136,11 @@ interface EvidenceRecord {
   source_api: SourceApi;
   /** Only on owner-pinned records (D-017): why this work is pinned. */
   pin_reason?: string;
+  /** Only on a pinned record whose DOI did NOT resolve on OpenAlex: the pin
+   *  still enters the corpus with owner-provided metadata, flagged so the
+   *  owner can correct the DOI — a dead pin is a recorded finding, not a run
+   *  failure. */
+  pin_unresolved?: boolean;
   /** Only on snowballed records (D-019): OpenAlex ids of the reviews whose
    *  reference lists surfaced this work. */
   snowball_from?: string[];
@@ -402,6 +407,7 @@ async function fetchPinnedWork(
     categories: [],
     source_api: "pinned",
     pin_reason: pin.reason,
+    pin_unresolved: true,
   };
   try {
     const url = new URL(`https://api.openalex.org/works/https://doi.org/${pin.doi}`);
