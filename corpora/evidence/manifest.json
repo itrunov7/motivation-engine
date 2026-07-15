@@ -4,29 +4,42 @@
     "openalex",
     "semantic-scholar"
   ],
-  "connector_version": "2.2.0",
+  "connector_version": "2.3.0",
   "last_run": {
-    "timestamp": "2026-07-15T10:45:37.388Z",
-    "status": "partial",
+    "timestamp": "2026-07-15T12:32:11.210Z",
+    "status": "success",
     "params": {
-      "mechanism": "ZE-07"
+      "mechanism": "EN-03"
     },
-    "records_fetched": 139,
+    "records_fetched": 173,
     "files_written": 1,
-    "duration_s": 330.24,
-    "error": "semantic-scholar \"endowed progress effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-    "warnings": {
-      "s2_throttled": true
-    },
+    "duration_s": 22.2,
     "cost": {
-      "api_calls": 50,
-      "duration_s": 330.24,
+      "api_calls": 17,
+      "duration_s": 22.2,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-15T12:32:11.210Z",
+      "status": "success",
+      "params": {
+        "mechanism": "EN-03"
+      },
+      "records_fetched": 173,
+      "files_written": 1,
+      "duration_s": 22.2,
+      "cost": {
+        "api_calls": 17,
+        "duration_s": 22.2,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T10:45:37.388Z",
       "status": "partial",
@@ -317,36 +330,25 @@
       "records_fetched": 206,
       "files_written": 1,
       "duration_s": 166.24
-    },
-    {
-      "timestamp": "2026-07-13T16:00:54.366Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "LA-01"
-      },
-      "records_fetched": 177,
-      "files_written": 1,
-      "duration_s": 220.54,
-      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss aversion moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss of loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
     }
   ],
   "data_files": [
     {
       "path": "EN-03.json",
-      "records": 143,
-      "bytes": 753377,
+      "records": 173,
+      "bytes": 787672,
       "categories": {
         "foundational": 13,
-        "meta-analysis": 21,
-        "replication": 17,
-        "dissent": 32,
-        "recent": 19
+        "meta-analysis": 23,
+        "replication": 18,
+        "dissent": 36,
+        "recent": 32
       }
     },
     {
       "path": "LA-01.json",
       "records": 209,
-      "bytes": 572330,
+      "bytes": 573622,
       "categories": {
         "foundational": 31,
         "meta-analysis": 28,
