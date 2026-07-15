@@ -1,0 +1,19 @@
+{
+  "id": "DOS-RE-10", "mechanism_id": "RE-10", "date": "2026-07-15", "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects from Ventora telemetry or public corpora",
+  "scores": {
+    "evidence": { "score": 2, "rationale": "The reciprocity norm (Gouldner 1960) is a foundational and broadly accepted social rule, and reciprocity underlies well-studied compliance techniques (door-in-the-face; gift-exchange field experiments). Scored 2 rather than 3 because much of the applied persuasion literature is demonstration-based, effect sizes in commercial digital contexts are less rigorously established, and door-in-the-face/compliance findings have some replication variability." },
+    "product_applicability": { "score": 3, "rationale": "Directly implementable via value-first lead magnets, free tools, and unexpected upgrades. Ventora's own free Idea Check funnel is a live reciprocity mechanism. High applicability at top and middle of funnel." },
+    "measurability": { "score": 3, "rationale": "Maps to signup_rate, cvr, conversion_after_gift, retention_lift — Amplitude-reachable and A/B-testable." },
+    "orthogonality": { "score": 3, "rationale": "Distinct from EN-03 (obligation-to-return vs valuation-of-owned) and SP-08 (exchange obligation vs others-as-evidence). Clear boundaries." },
+    "safety": { "score": 3, "rationale": "Value-first giving is among the most benign mechanisms — it front-loads genuine user benefit. Risks are hollow gifts, coercive obligation framing, and unsolicited-gift-as-leverage (forced trials that auto-bill), all blocked by hard rules and covered by negative-option/inertia-selling regulation. Clear boundary, hence 3." }
+  },
+  "total": 14,
+  "dissent": "Two cautions. (1) The compliance-technique literature (door-in-the-face, that's-not-all) that popularized reciprocity in persuasion has uneven replication and effect sizes smaller than early demonstrations; we lean on the robust norm itself (Gouldner, gift-exchange field evidence) rather than specific compliance tricks. (2) Reciprocity weakens or reverses when perceived as manipulation — a transparent quid-pro-quo ('we gave you X, now buy Y') triggers reactance. We therefore claim genuine, standalone-useful value given first, and block manufactured obligation.",
+  "evidence_sources": [
+    { "ref": "Gouldner (1960). The Norm of Reciprocity: A Preliminary Statement. American Sociological Review 25(2).", "doi": "10.2307/2092623" },
+    { "ref": "Cialdini et al. (1975). Reciprocal concessions procedure (door-in-the-face). JPSP 31(2).", "doi": "10.1037/0022-3514.31.2.206" }
+  ],
+  "notes": "Cross-checked against /corpora/evidence/RE-10.json (171 records; Gouldner pin resolved; door-in-the-face pin unresolved DOI but the technique literature and gift-exchange field experiments present via terms). Snowball review_found:false — reported honestly; coverage rests on pins + term breadth. Verdict INCUBATING; CORE on a measured effect."
+}

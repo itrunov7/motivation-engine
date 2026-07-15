@@ -259,6 +259,8 @@ export interface Dossier {
   notes: string;
   /** Optional owner flag: lowest-scoring mechanism admitted to incubating (D-042). */
   flag_lowest_admitted?: boolean;
+  /** Optional owner flag: the dossier that completes the 12-mechanism core admission (D-045). */
+  flag_completes_core?: boolean;
 }
 
 // ---------- Data-source registry (§3.4) ----------

@@ -1,0 +1,19 @@
+{
+  "id": "DOS-ST-09", "mechanism_id": "ST-09", "date": "2026-07-15", "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects from Ventora telemetry or public corpora",
+  "scores": {
+    "evidence": { "score": 3, "rationale": "Festinger's social comparison theory (1954) is foundational and heavily cited; status-seeking and positional/conspicuous consumption (Veblen effects) are well-documented across economics and consumer behavior. Relative standing as a motivator is robust. Grade A- because the direction and welfare effects of comparison are variable — see dissent." },
+    "product_applicability": { "score": 3, "rationale": "Directly implementable via levels, leagues, badges, leaderboards, milestone recognition. Reference at scale: Duolingo Leagues, Strava, GitHub contribution graph. Serves activation and retention." },
+    "measurability": { "score": 3, "rationale": "Maps to d7_retention, engagement_depth, achievement_completion, cohort_engagement — Amplitude-reachable." },
+    "orthogonality": { "score": 2, "rationale": "Overlaps SP-08 (leaderboards blend evidence and standing) and ZE-07 (levels/progress). Distinct driver: relative standing. Score 2 for managed overlap." },
+    "safety": { "score": 2, "rationale": "Powerful and double-edged. Comparison motivates but upward/forced comparison can demoralize and harm wellbeing, especially in appearance/self-worth domains and for minors — an active area of platform-design regulation. Four hard rules (no_harmful_comparison, real_achievement, comparison_opt_out, vulnerable_wellbeing) constrain it. Score 2 reflects real wellbeing risk with clear mitigation." }
+  },
+  "total": 13,
+  "dissent": "The social-comparison and social-media literature is sharply split on welfare: upward comparison can motivate but is also robustly linked to reduced wellbeing, envy, and disengagement in many studies (the social-media comparison literature especially). This is not a reason to reject the mechanism — relative standing is a genuine motivator — but a strong reason for the guardrails: we use self-referential progress and attainable, fair peer comparison, and we explicitly block demoralizing ranking, appearance/self-worth comparison, and non-opt-out public competition. Note we deliberately excluded the weaker, wellbeing-charged social-media-comparison studies from the evidence basis and rest on the foundational comparison/status literature.",
+  "evidence_sources": [
+    { "ref": "Festinger (1954). A Theory of Social Comparison Processes. Human Relations 7(2).", "doi": "10.1177/001872675400700202" },
+    { "ref": "Bagwell & Bernheim (1996). Veblen Effects in a Theory of Conspicuous Consumption. AER 86(3).", "doi": "10.2307/2946511" }
+  ],
+  "notes": "Cross-checked against /corpora/evidence/ST-09.json (187 records; Festinger pin resolved; Veblen/positional-goods work present via terms; the second prep pin DOI was wrong, corrected to Bagwell & Bernheim). Wellbeing-charged social-media-comparison studies present in corpus but deliberately not used as evidence basis. Verdict INCUBATING; CORE on a measured effect."
+}

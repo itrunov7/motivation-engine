@@ -1,0 +1,20 @@
+{
+  "id": "DOS-SP-08", "mechanism_id": "SP-08", "date": "2026-07-15", "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects from Ventora telemetry or public corpora",
+  "scores": {
+    "evidence": { "score": 3, "rationale": "Deep and convergent. Asch (1956) conformity, Cialdini's focus theory of normative conduct (descriptive norms reliably shift behavior in field experiments), and applied evidence that online reviews/WOM measurably affect sales. One of the best-supported social-influence effects. Grade A- overall (not A) because it is strongly context-moderated, not a universal constant." },
+    "product_applicability": { "score": 3, "rationale": "Directly implementable via usage counts, reviews, 'most popular', customer logos. Central to conversion surfaces. Reference at scale: Amazon reviews, SaaS trust logos." },
+    "measurability": { "score": 3, "rationale": "Maps to cvr, tier_selection_distribution, trust-signal engagement — Amplitude-reachable and A/B-testable." },
+    "orthogonality": { "score": 3, "rationale": "Distinct from ST-09 (others-as-evidence vs standing-relative-to-others) and SC-06 (consensus vs availability). Clear boundaries." },
+    "safety": { "score": 2, "rationale": "Legitimate with real signals, but fake social proof — fabricated reviews, fake 'X viewing/bought', inflated counts — is a common dark pattern and specifically illegal (FTC endorsement guides, EU fake-review rules). Three hard rules block fabrication. Score 2: misuse is easy and regulated, mitigation is clear." }
+  },
+  "total": 14,
+  "dissent": "Two caveats discipline application. (1) The boomerang effect: telling people 'most others do X' can backfire if the norm is undesirable or if the user was already above the norm (Schultz et al. energy studies) — descriptive norms are not universally positive levers. (2) Fake-review and fake-activity literature shows consumers increasingly detect and penalize manufactured social proof, and it is now explicitly regulated. We claim the well-supported effect for genuine, relevant signals under uncertainty and hard-block fabrication.",
+  "evidence_sources": [
+    { "ref": "Asch (1956). Studies of independence and conformity. Psychological Monographs 70(9).", "doi": "10.1037/h0093718" },
+    { "ref": "Cialdini, Reno & Kallgren (1990). A focus theory of normative conduct. JPSP 58(6).", "doi": "10.1037/0022-3514.58.6.1015" },
+    { "ref": "Trusov, Bucklin & Pauwels / WOM-on-sales literature (JMKG).", "doi": "10.1509/jmkg.73.4.15" }
+  ],
+  "notes": "Cross-checked against /corpora/evidence/SP-08.json (234 records; Asch and Cialdini pins resolved; WOM pin unresolved DOI but applied review literature present via terms). Verdict INCUBATING; CORE on a measured effect."
+}

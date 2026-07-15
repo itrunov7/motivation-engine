@@ -1,0 +1,74 @@
+{
+  "$schema": "../mechanism.schema.json",
+  "id": "ST-09",
+  "slug": "status_comparison",
+  "name": "Status & comparison",
+  "version": "1.0.0",
+  "level": "L1",
+  "parent": "S4",
+  "lifecycle_status": "incubating",
+  "dossier_ref": "dossiers/ST-09.json",
+  "provenance": { "proposed_by": "owner", "date": "2026-07-15" },
+  "evidence_terms": ["social comparison theory", "status seeking consumer behavior", "positional goods status", "social comparison social media", "conspicuous consumption status signaling"],
+  "pinned_evidence": [
+    { "doi": "10.1177/001872675400700202", "title": "A Theory of Social Comparison Processes", "reason": "foundational — Festinger" },
+    { "doi": "10.2307/2946511", "title": "Veblen Effects in a Theory of Conspicuous Consumption", "reason": "economics of status signaling" }
+  ],
+  "evidence": {
+    "grade": "A-",
+    "basis": "People evaluate themselves relative to others and are motivated by relative standing (Festinger 1954, social comparison theory). Status-seeking and positional/conspicuous consumption are well-documented in economics and consumer behavior (Veblen effects).",
+    "effect_size_note": "Social comparison as a motivational driver is robust and cross-culturally present; the specific status goods and comparison referents are highly variable. Upward comparison motivates but can also demotivate/harm wellbeing — direction matters.",
+    "caveats": ["upward_comparison_can_demotivate_or_harm_wellbeing", "referent_group_dependent", "status_signals_are_culturally_specific"]
+  },
+  "prior_weight": 0.75,
+  "mechanism_summary_for_context": "People are motivated by their standing relative to others — progress, rank, recognition among a relevant peer group. Levels, leagues, leaderboards, badges, and visible achievement tap this. The powerful and careful part: comparison motivates when it feels attainable and fair, but harms and demotivates when it feels hopeless or when it damages wellbeing. Use to recognize and motivate, not to shame or induce harmful comparison.",
+  "applicability": {
+    "funnel_stages": ["activation", "retention"],
+    "excluded_stages": ["cold_acquisition", "conversion"],
+    "artifact_types": ["dashboard_widget", "onboarding", "retention_push"],
+    "preconditions": [
+      { "predicate": "product.has_progress_or_achievement == true", "reason": "requires a dimension of achievement or standing to compare; not applicable to flows without progress/status" }
+    ],
+    "culture_note": "Comparison is universal but status markers and acceptable competitiveness vary strongly by culture; a significant L3 surface parameter"
+  },
+  "implementations": [
+    {
+      "id": "ST-09-progress-recognition",
+      "artifact_types": ["dashboard_widget", "retention_push"],
+      "product_requirements": ["has_achievement_system"],
+      "generation_directive": "Recognize genuine achievement and progress (levels, milestones, badges tied to real accomplishment). Prefer self-referential progress ('your best week') and attainable next steps over harsh peer ranking. Recognition must reflect real accomplishment, not participation inflation.",
+      "copy_formulas": ["You reached {level}", "Your best {metric} yet"],
+      "metrics": ["d7_retention", "engagement_depth", "achievement_completion"],
+      "observed_effects": []
+    },
+    {
+      "id": "ST-09-peer-standing",
+      "artifact_types": ["dashboard_widget"],
+      "product_requirements": ["has_leaderboard_or_cohort"],
+      "generation_directive": "Where peer comparison is used (leagues, leaderboards), keep it fair and attainable — compare within similar cohorts, emphasize movement and reachable positions, avoid permanent bottom-ranking that demotivates. Provide opt-out of public ranking.",
+      "copy_formulas": ["You moved up to {rank}", "{n} spots to the next league"],
+      "metrics": ["d7_retention", "return_rate", "cohort_engagement"],
+      "observed_effects": []
+    }
+  ],
+  "constraints": {
+    "hard_rules": [
+      { "id": "no_harmful_comparison", "rule": "Do not engineer demoralizing or wellbeing-damaging comparison (permanent bottom-ranking, shaming, appearance/self-worth comparison); comparison must motivate, not harm", "severity": "block" },
+      { "id": "real_achievement", "rule": "Status and achievement signals must reflect genuine accomplishment, not fabricated or purchased rank presented as merit", "severity": "block" },
+      { "id": "comparison_opt_out", "rule": "Public ranking/comparison must be opt-out-able; do not force users into visible competition", "severity": "block" },
+      { "id": "vulnerable_wellbeing", "rule": "Do not intensify social comparison toward users where it risks wellbeing harm (e.g. appearance, body, self-worth domains)", "severity": "block" }
+    ],
+    "compliance_refs": ["EU_DSA_dark_patterns", "apple_asrg_1.1_wellbeing", "dsa_minors_protection"],
+    "boundary_test": "Does the comparison recognize and motivate through attainable standing — or shame, demoralize, or harm wellbeing?"
+  },
+  "relations": [
+    { "type": "adjacent", "target": "SP-08", "note": "Standing-relative-to-others (ST-09) differs from others-as-evidence (SP-08), though leaderboards blend both" },
+    { "type": "adjacent", "target": "ZE-07", "note": "Levels/progress overlap ZE-07; distinct — ST-09 is relative standing, ZE-07 is goal progress" }
+  ],
+  "telemetry": { "tag_format": "me:ST-09:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "reference_examples": [
+    { "product": "Duolingo Leagues", "what": "Cohort-based leagues compare within similar-skill groups with promotion/relegation — attainable, movement-focused status" },
+    { "product": "Strava segments/KOM", "what": "Achievement recognition and peer comparison on real athletic performance" },
+    { "product": "GitHub contribution graph", "what": "Self-referential progress recognition ('your streak/activity') without harsh peer ranking" }
+  ]
+}

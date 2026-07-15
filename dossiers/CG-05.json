@@ -1,0 +1,19 @@
+{
+  "id": "DOS-CG-05", "mechanism_id": "CG-05", "date": "2026-07-15", "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects from Ventora telemetry or public corpora",
+  "scores": {
+    "evidence": { "score": 2, "rationale": "Loewenstein's information-gap theory (1994) is a well-cited, coherent account, and neuroscience (Gruber, Kang et al.) links curiosity to reward and memory circuitry. The attention/information-seeking effect is well supported. Scored 2 rather than 3 because much of the applied 'curiosity gap' literature is marketing folklore rather than rigorous experiment, and the effect is primarily on immediate attention rather than durable engagement — see caveats and dissent." },
+    "product_applicability": { "score": 3, "rationale": "Uniquely works on cold traffic (top of funnel) where most core mechanisms do not. Directly implementable in landing heroes, quizzes, personalized-reveal flows, email subject lines. Ventora's own Idea Check funnel is a live example. High applicability." },
+    "measurability": { "score": 3, "rationale": "Maps to cvr, landing_engagement, flow_start_rate, open_rate, click_through — all Amplitude-reachable and A/B-testable." },
+    "orthogonality": { "score": 2, "rationale": "Overlaps VR-02 (not knowing the reward) and ZE-07 (open loop). Distinct driver: an information gap specifically. Score 2 for managed overlap." },
+    "safety": { "score": 2, "rationale": "The dominant risk is clickbait — teasing a payoff the product does not deliver — which erodes trust and is deceptive. Two hard rules (real_payoff, no_deceptive_teaser) constrain it. Lower stakes than scarcity/variable-reward but reputationally real, hence 2." }
+  },
+  "total": 12,
+  "dissent": "Two cautions. (1) Much of the popular 'curiosity gap' advice is copywriting lore, not experimental evidence; the rigorous core (Loewenstein's gap theory) supports attention and information-seeking but does not license the stronger engagement claims often made. (2) The effect is fragile to disappointment: an unmet gap (clickbait) produces backlash and trust loss, and audiences are increasingly clickbait-literate, so the net effect in real funnels can be negative if the payoff underdelivers. We therefore claim the moderate, well-supported attention effect and hard-gate it on a genuine payoff.",
+  "evidence_sources": [
+    { "ref": "Loewenstein (1994). The psychology of curiosity: A review and reinterpretation. Psychological Bulletin 116(1).", "doi": "10.1037/0033-2909.116.1.75" },
+    { "ref": "Gruber, Gelman & Ranganath (2014). States of curiosity modulate hippocampus-dependent learning. Neuron 84(2).", "doi": "10.1016/j.neuron.2014.08.060" }
+  ],
+  "notes": "Cross-checked against /corpora/evidence/CG-05.json (185 records; Loewenstein pin resolved, neural curiosity work present via terms; one prep pin DOI wrong, corrected to Gruber 2014). Verdict INCUBATING; CORE on a measured effect."
+}

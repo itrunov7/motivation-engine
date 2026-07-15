@@ -1,0 +1,74 @@
+{
+  "$schema": "../mechanism.schema.json",
+  "id": "SP-08",
+  "slug": "social_proof",
+  "name": "Social proof",
+  "version": "1.0.0",
+  "level": "L1",
+  "parent": "S4",
+  "lifecycle_status": "incubating",
+  "dossier_ref": "dossiers/SP-08.json",
+  "provenance": { "proposed_by": "owner", "date": "2026-07-15" },
+  "evidence_terms": ["social proof conformity", "social influence compliance descriptive norms", "social proof replication", "online reviews purchase behavior", "herding consumer behavior", "descriptive norm behavior change"],
+  "pinned_evidence": [
+    { "doi": "10.1037/h0093718", "title": "Studies of independence and conformity: A minority of one against a unanimous majority", "reason": "foundational — Asch conformity" },
+    { "doi": "10.1037/0022-3514.58.6.1015", "title": "A focus theory of normative conduct", "reason": "foundational — Cialdini descriptive norms" },
+    { "doi": "10.1509/jmkg.73.4.15", "title": "The Effect of Word of Mouth on Sales", "reason": "product-relevant — reviews/WOM on sales" }
+  ],
+  "evidence": {
+    "grade": "A-",
+    "basis": "People use others' behavior as evidence for the correct action, especially under uncertainty (Asch conformity; Cialdini's focus theory of normative conduct). Descriptive norms reliably shift behavior; online reviews measurably affect purchasing.",
+    "effect_size_note": "Robust but context-dependent: strongest under uncertainty and when the referent group is similar/relevant. Descriptive norms ('most people do X') move behavior reliably in field studies; magnitude varies by domain.",
+    "caveats": ["strongest_under_uncertainty", "referent_similarity_matters", "boomerang_effect_if_norm_is_undesirable"]
+  },
+  "prior_weight": 0.8,
+  "mechanism_summary_for_context": "When unsure, people look to what others do and treat it as evidence of the right choice. Show credible, relevant social signals — real usage numbers, genuine reviews, what similar users chose, 'most popular' — and uncertainty resolves toward the socially-validated option. Signals must be true and the referent should be relevant to the user. Strongest at decision points under uncertainty.",
+  "applicability": {
+    "funnel_stages": ["conversion", "activation"],
+    "excluded_stages": ["cold_acquisition"],
+    "artifact_types": ["landing_hero", "pricing_page", "paywall", "checkout", "onboarding"],
+    "preconditions": [
+      { "predicate": "product.has_real_social_signal == true", "reason": "requires genuine social data — real users, real reviews, real choices; fabricated social proof is forbidden and ineffective long-term" }
+    ],
+    "culture_note": "Social proof is universal but referent norms differ (individualist vs collectivist weighting, which groups count); an L3 surface parameter"
+  },
+  "implementations": [
+    {
+      "id": "SP-08-usage-signal",
+      "artifact_types": ["landing_hero", "pricing_page"],
+      "product_requirements": ["has_real_usage_data"],
+      "generation_directive": "Show genuine, specific social signals: real user counts, 'X businesses use this', real ratings. Specificity and truth beat vague grandiosity ('trusted by 12,400 founders' only if true). Prefer referents similar to the user where the data allows.",
+      "copy_formulas": ["Used by {n} {referent}", "{rating} from {n} reviews"],
+      "metrics": ["cvr", "trust_signal_engagement"],
+      "observed_effects": []
+    },
+    {
+      "id": "SP-08-choice-signal",
+      "artifact_types": ["pricing_page", "paywall"],
+      "product_requirements": ["has_multiple_options"],
+      "generation_directive": "Indicate what similar users chose ('most popular', 'chosen by {segment}') where genuinely true, to resolve choice uncertainty. The 'most popular' label must reflect real selection data, not a marketing preference.",
+      "copy_formulas": ["Most popular", "Most {segment} choose {option}"],
+      "metrics": ["cvr", "tier_selection_distribution"],
+      "observed_effects": []
+    }
+  ],
+  "constraints": {
+    "hard_rules": [
+      { "id": "real_social_data", "rule": "All social-proof signals (counts, ratings, 'most popular', reviews) must be genuine and current; fabricated or inflated social proof is forbidden", "severity": "block" },
+      { "id": "no_fake_activity", "rule": "No fake 'X people viewing/bought recently' notifications unless literally true and verifiable", "severity": "block" },
+      { "id": "no_fake_reviews", "rule": "Never generate, imply, or display fabricated reviews or testimonials", "severity": "block" }
+    ],
+    "compliance_refs": ["EU_DSA_dark_patterns", "ftc_endorsement_guides", "eu_ucpd_fake_reviews", "asa_testimonials"],
+    "boundary_test": "Is the social signal true and relevant — or manufactured to fake consensus?"
+  },
+  "relations": [
+    { "type": "adjacent", "target": "ST-09", "note": "Social proof (others as evidence) is distinct from status/comparison (standing relative to others); they co-occur but differ in driver" },
+    { "type": "adjacent", "target": "SC-06", "note": "Demand-caused scarcity ('others want it') borrows social proof; distinct driver (availability vs consensus)" }
+  ],
+  "telemetry": { "tag_format": "me:SP-08:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "reference_examples": [
+    { "product": "Amazon reviews / ratings", "what": "Star ratings and review counts as decision evidence — the canonical social-proof interface" },
+    { "product": "Booking 'X people booked today'", "what": "Real-time demand signal — effective when true, a regulatory target when fabricated" },
+    { "product": "SaaS 'trusted by' logos", "what": "Credible customer logos resolve B2B uncertainty via relevant-referent social proof" }
+  ]
+}

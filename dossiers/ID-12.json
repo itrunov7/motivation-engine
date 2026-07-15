@@ -1,0 +1,21 @@
+{
+  "id": "DOS-ID-12", "mechanism_id": "ID-12", "date": "2026-07-15", "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects from Ventora telemetry or public corpora",
+  "scores": {
+    "evidence": { "score": 2, "rationale": "Self-perception theory (Bem) and identity-based motivation (Oyserman) are well-supported accounts that people act consistently with self-image and salient identities. Foot-in-the-door (Freedman & Fraser 1966) is a classic commitment/consistency demonstration. Scored 2 because foot-in-the-door and several consistency-compliance techniques have moderate and variable replication, and the strong 'commitment' claims of persuasion lore outrun the rigorous core. We lead with identity-based motivation and genuine goal commitment." },
+    "product_applicability": { "score": 3, "rationale": "Directly implementable via onboarding goal-setting and identity-salient framing. Ventora's own 'what do you want to build?' onboarding is a live example. Serves activation and retention." },
+    "measurability": { "score": 3, "rationale": "Maps to onboarding_completion, d7_retention, goal_progress, feature_adoption — Amplitude-reachable." },
+    "orthogonality": { "score": 2, "rationale": "Overlaps EN-03 ('mine' vs 'part of who I am') and ZE-07 (stated goal as progress target). Distinct driver: self-consistency and identity. Score 2 for managed overlap." },
+    "safety": { "score": 2, "rationale": "Value-aligned when reinforcing user-chosen goals and identities, but has manipulation vectors: manufactured commitments, imposed identities, and the consistency-trap (escalating small commitments into large unwanted ones — manipulative foot-in-the-door). Three hard rules block these. Score 2: real manipulation potential with clear guardrails." }
+  },
+  "total": 12,
+  "dissent": "The commitment-and-consistency persuasion literature (foot-in-the-door, low-ball, that's-not-all) is the shakiest part of this mechanism's evidence base — moderate and inconsistent replication, effect sizes below early demonstrations, and susceptibility to the same publication-bias concerns as much of social-psychology compliance research. We therefore rest ID-12 on the more robust identity-based-motivation and self-perception accounts and treat commitment-escalation techniques as the most tentative implementation, explicitly guard-railed against the consistency trap. Genuine, user-chosen commitments and self-relevant identities are the claim; manufactured ones are blocked.",
+  "evidence_sources": [
+    { "ref": "Freedman & Fraser (1966). Compliance without pressure: the foot-in-the-door technique. JPSP 4(2).", "doi": "10.1037/h0023552" },
+    { "ref": "Oyserman (2009). Identity-Based Motivation. J Consumer Psychology 19(3).", "doi": "10.1086/651257" },
+    { "ref": "Bem (1972). Self-Perception Theory. Advances in Experimental Social Psychology 6.", "doi": "10.1016/S0065-2601(08)60024-6" }
+  ],
+  "notes": "Cross-checked against /corpora/evidence/ID-12.json (175 records; Freedman & Fraser and Oyserman pins resolved; Bem self-perception present via terms). Verdict INCUBATING; CORE on a measured effect.",
+  "flag_completes_core": true
+}
