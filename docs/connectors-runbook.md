@@ -107,6 +107,15 @@ should print the same estimate JSON.
 > the selector, the quote path, or the ops server actions, re-run the acceptance
 > check above and confirm the estimate header names the target you picked before
 > pressing Confirm.
+>
+> **Why it persisted after the first fix (D-040).** `/ops` writes config to
+> GitHub but originally *read* it from the deploy-time filesystem snapshot, so a
+> just-saved targets list stayed invisible until the next redeploy and the Run
+> selector kept defaulting to the stale first target. The console now reads the
+> live `_ops` config from GitHub on load (a read-only server action, same
+> allowlist as the write path), so the selector reflects committed targets
+> immediately — no redeploy or hard reload needed. If you ever see the selector
+> lag a save, that live read failed: check `GH_OPS_TOKEN`/`GH_OPS_REPO`.
 
 ### The operator's contract: watch issues, not logs
 

@@ -16,6 +16,7 @@ import { randomUUID } from "node:crypto";
 import { loadDecisions, loadFullMechanisms, loadSeedStubs } from "@/lib/data";
 import {
   DECISIONS_REPO_PATH,
+  KNOWN_CONNECTOR_IDS,
   OPS_BUDGET_REPO_PATH,
   isAllowedOpsWritePath,
   isKnownConnectorId,
@@ -136,6 +137,45 @@ export async function saveConnectorConfigAction(
       toJson(config),
     );
     return { ok: true };
+  } catch (err) {
+    return { ok: false, error: errorMessage(err) };
+  }
+}
+
+// ---------- Read path: LIVE connector config (D-040) ----------
+
+export type LiveConfigsResult =
+  | { ok: true; configs: Record<string, OpsConnectorConfig> }
+  | { ok: false; error: string };
+
+/**
+ * Reads every registered connector's _ops config LIVE from GitHub — the same
+ * source the write path commits to (D-023) — so the console reflects committed
+ * targets/limits immediately, not the deploy-time filesystem snapshot the page
+ * loads with (D-040). Without this, a just-saved target list stays invisible
+ * until the next redeploy, and the Run selector dispatches a stale target.
+ *
+ * Read is confined to the SAME _ops allowlist as the write path
+ * (isAllowedOpsWritePath); a broken or foreign payload is skipped, never
+ * thrown — a bad file must not blank the whole console.
+ */
+export async function loadLiveConnectorConfigsAction(): Promise<LiveConfigsResult> {
+  try {
+    const env = requireEnv();
+    const configs: Record<string, OpsConnectorConfig> = {};
+    for (const id of KNOWN_CONNECTOR_IDS) {
+      const path = opsConnectorRepoPath(id);
+      if (!isAllowedOpsWritePath(path)) continue;
+      const file = await getRepoFile(env, path);
+      if (!file) continue;
+      try {
+        const config = JSON.parse(file.text) as OpsConnectorConfig;
+        if (config.connector_id === id) configs[id] = config;
+      } catch {
+        // skip an unparseable config — the disk snapshot stays in effect
+      }
+    }
+    return { ok: true, configs };
   } catch (err) {
     return { ok: false, error: errorMessage(err) };
   }

@@ -9,10 +9,11 @@
  * client bundle.
  */
 
-import { useCallback, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import type { BudgetSnapshot, OpsConnectorConfig, QuoteArtifact } from "@/lib/ops";
 import {
   confirmRealRunAction,
+  loadLiveConnectorConfigsAction,
   pollDryRunAction,
   saveBudgetAction,
   saveConnectorConfigAction,
@@ -803,6 +804,34 @@ export default function OpsClient({
   connectors,
   availableMechanismIds,
 }: OpsClientProps) {
+  // The page loads config from the deploy-time filesystem snapshot; targets
+  // saved since the last deploy are invisible there and the Run selector would
+  // dispatch a stale target (D-040). Reconcile against the LIVE _ops config in
+  // GitHub — the source the write path commits to — on mount. `configVersion`
+  // bumps once the live read lands so each ConnectorCard remounts and reseeds
+  // its state (and the Run selector) from the committed config.
+  const [views, setViews] = useState<ConnectorView[]>(connectors);
+  const [configVersion, setConfigVersion] = useState(0);
+
+  useEffect(() => {
+    if (!writeEnabled) return;
+    let cancelled = false;
+    void (async () => {
+      const res = await loadLiveConnectorConfigsAction();
+      if (cancelled || !res.ok) return;
+      setViews((prev) =>
+        prev.map((view) => {
+          const live = res.configs[view.config.connector_id];
+          return live ? { ...view, config: live } : view;
+        }),
+      );
+      setConfigVersion((v) => v + 1);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [writeEnabled]);
+
   return (
     <div className="mt-6 flex flex-col gap-5">
       {!writeEnabled && (
@@ -817,9 +846,9 @@ export default function OpsClient({
 
       <BudgetPanel writeEnabled={writeEnabled} budget={budget} />
 
-      {connectors.map((view) => (
+      {views.map((view) => (
         <ConnectorCard
-          key={view.config.connector_id}
+          key={`${view.config.connector_id}-${configVersion}`}
           writeEnabled={writeEnabled}
           view={view}
           availableMechanismIds={availableMechanismIds}
