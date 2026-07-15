@@ -59,6 +59,39 @@ D-025). The flow is:
 
 The app's entire job is to *trigger* the workflow. GitHub runs the connector.
 
+If the dry run **fails** (rather than succeeding with no data), `/ops` now says
+so explicitly — it shows *which step* broke and links the run — instead of a
+generic "no estimate" message. A blank estimate and a failed estimate are
+different things, and the console tells them apart (D-025).
+
+### Acceptance check: the Run → quote → confirm loop
+
+Run this end-to-end whenever the quote path, the harvest workflow, or the ops
+server actions change. It also re-verifies cost accounting and Semantic Scholar
+rate compliance in one pass.
+
+Preconditions: `/ops` is deployed with `GH_OPS_TOKEN` + `GH_OPS_REPO` set (the
+write/run surface is enabled, not read-only), and the repo secret `S2_API_KEY`
+is configured (the real run uses it; the dry-run quote does not).
+
+1. On `/ops`, press **Run** on `evidence` with target `LA-01`.
+2. Within ~60s a **quote** appears with realistic figures — for `LA-01`,
+   ~20 API calls, ~332 records, `$0.00` — next to the month-to-date budget.
+   - If instead you see **"The estimate run failed: …"**, open the linked run,
+     read the named step, fix that cause, and re-run. (You should *not* see the
+     old catch-all "no estimate" message for a real failure.)
+3. Press **Confirm & run**. The real harvest dispatches.
+4. When it finishes, open the connectors page (or the evidence manifest): the
+   last run's **api_calls** is a realistic non-zero number (verifies cost
+   accounting, D-022), and there is **no `s2_throttled` warning** and no
+   `HTTP 429` in the harvest log (verifies the S2 key + the global 1-rps queue
+   under load, D-027).
+
+The quote step is deterministic and makes zero network calls, so step 2 can
+also be smoke-tested locally without the app:
+`npx tsx tools/run-connector.ts quote evidence mechanism=LA-01 raise_cap=false`
+should print the same estimate JSON.
+
 ### The operator's contract: watch issues, not logs
 
 You are **not** expected to read GitHub Actions logs. When something fails for

@@ -31,6 +31,7 @@ import {
   downloadArtifactJson,
   findRunByDispatchId,
   getRepoFile,
+  getRunFailureSummary,
   putRepoFile,
   readGithubOpsEnv,
   type GithubOpsEnv,
@@ -46,10 +47,10 @@ export type DispatchResult =
   | { ok: true; dispatchId: string }
   | { ok: false; error: string };
 
-export type PollState = "pending" | "running" | "ready" | "no_quote";
+export type PollState = "pending" | "running" | "ready" | "no_quote" | "failed";
 
 export type PollResult =
-  | { ok: true; state: PollState; runUrl?: string; quote?: QuoteArtifact }
+  | { ok: true; state: PollState; runUrl?: string; quote?: QuoteArtifact; error?: string }
   | { ok: false; error: string };
 
 // ---------- Guards ----------
@@ -224,6 +225,13 @@ export async function pollDryRunAction(dispatchId: string): Promise<PollResult> 
     if (!run) return { ok: true, state: "pending" };
     if (run.status !== "completed") {
       return { ok: true, state: "running", runUrl: run.html_url };
+    }
+    // A completed run that did not SUCCEED produces no artifact — surface the
+    // real failure (which step broke) instead of the generic "no estimate"
+    // message, so the operator sees why (D-025).
+    if (run.conclusion !== "success") {
+      const error = await getRunFailureSummary(env, run.id, run.conclusion);
+      return { ok: true, state: "failed", runUrl: run.html_url, error };
     }
     const quote = await downloadArtifactJson<QuoteArtifact>(env, run.id, "quote", "quote.json");
     if (!quote) return { ok: true, state: "no_quote", runUrl: run.html_url };

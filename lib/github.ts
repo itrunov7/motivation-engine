@@ -182,6 +182,47 @@ export async function getRun(env: GithubOpsEnv, runId: number): Promise<Workflow
   return (await res.json()) as WorkflowRun;
 }
 
+interface WorkflowJob {
+  name: string;
+  conclusion: string | null;
+  steps?: { name: string; conclusion: string | null }[];
+}
+
+/**
+ * A short, human-readable reason a completed run did not succeed, read from
+ * the run's jobs: the first non-successful job and its first failed step
+ * (D-025). Used by the /ops poll to show WHY a dry run produced no estimate,
+ * instead of the generic "no quote" message. Best-effort — falls back to the
+ * run's own conclusion when the jobs list is empty or unreadable.
+ */
+export async function getRunFailureSummary(
+  env: GithubOpsEnv,
+  runId: number,
+  runConclusion: string | null,
+): Promise<string> {
+  const fallback = `the dry run did not succeed (${runConclusion ?? "unknown"})`;
+  try {
+    const res = await ghFetch(
+      env,
+      `/repos/${env.owner}/${env.repo}/actions/runs/${runId}/jobs`,
+    );
+    if (!res.ok) return fallback;
+    const jobs = ((await res.json()) as { jobs?: WorkflowJob[] }).jobs ?? [];
+    const failedJob = jobs.find(
+      (job) => job.conclusion !== null && job.conclusion !== "success" && job.conclusion !== "skipped",
+    );
+    if (!failedJob) return fallback;
+    const failedStep = (failedJob.steps ?? []).find(
+      (step) => step.conclusion !== null && step.conclusion !== "success" && step.conclusion !== "skipped",
+    );
+    return failedStep
+      ? `the "${failedJob.name}" job failed at step "${failedStep.name}" (${failedStep.conclusion})`
+      : `the "${failedJob.name}" job did not succeed (${failedJob.conclusion})`;
+  } catch {
+    return fallback;
+  }
+}
+
 /**
  * Download a run's named artifact zip and extract one JSON entry from it.
  * GitHub artifacts are ZIPs; we parse the central directory and inflate the

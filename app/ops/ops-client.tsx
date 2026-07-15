@@ -254,6 +254,7 @@ type RunPhase =
   | { kind: "quote"; quote: QuoteArtifact; runUrl?: string; raiseCap: boolean }
   | { kind: "timeout"; runUrl?: string }
   | { kind: "no_quote"; runUrl?: string }
+  | { kind: "failed"; message: string; runUrl?: string }
   | { kind: "confirming" }
   | { kind: "dispatched" }
   | { kind: "error"; message: string };
@@ -289,6 +290,14 @@ function RunFlow({
         runUrl = res.runUrl ?? runUrl;
         if (res.state === "ready" && res.quote) {
           setPhase({ kind: "quote", quote: res.quote, runUrl, raiseCap: false });
+          return;
+        }
+        if (res.state === "failed") {
+          setPhase({
+            kind: "failed",
+            message: res.error ?? "the dry run did not succeed",
+            runUrl,
+          });
           return;
         }
         if (res.state === "no_quote") {
@@ -381,9 +390,19 @@ function RunFlow({
           )}
         </Notice>
       )}
+      {phase.kind === "failed" && (
+        <Notice tone="err">
+          The estimate run failed: {phase.message}.{" "}
+          {phase.runUrl && (
+            <a className="underline" href={phase.runUrl} target="_blank" rel="noreferrer">
+              open the run
+            </a>
+          )}
+        </Notice>
+      )}
       {phase.kind === "no_quote" && (
         <Notice tone="err">
-          The run finished but produced no estimate.{" "}
+          The dry run succeeded but no estimate file was produced.{" "}
           {phase.runUrl && (
             <a className="underline" href={phase.runUrl} target="_blank" rel="noreferrer">
               open the run

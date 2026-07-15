@@ -74,13 +74,23 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Compute deterministic quote
+        id: quote
         run: |
           set -euo pipefail
           if [ -n "${{ inputs.target }}" ]; then
-            npx tsx tools/run-connector.ts quote "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" "raise_cap=${{ inputs.raise_cap }}"
+            npx tsx tools/run-connector.ts quote "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" "raise_cap=${{ inputs.raise_cap }}" 2>&1 | tee quote-run.log
           else
-            npx tsx tools/run-connector.ts quote "${{ inputs.connector }}" "raise_cap=${{ inputs.raise_cap }}"
+            npx tsx tools/run-connector.ts quote "${{ inputs.connector }}" "raise_cap=${{ inputs.raise_cap }}" 2>&1 | tee quote-run.log
           fi
+      # On failure the quote artifact is never produced, so /ops would otherwise
+      # only see "no estimate". Echo the tail here so the surfaced failure
+      # summary (D-025) has a matching log line the operator can open.
+      - name: Show quote failure
+        if: failure()
+        run: |
+          echo "::error::quote step failed — the /ops dry run will report this as a failed estimate."
+          echo '--- quote-run.log (tail) ---'
+          tail -n 40 quote-run.log 2>/dev/null || echo "(no output captured)"
       - name: Upload quote artifact
         uses: actions/upload-artifact@v4
         with:
