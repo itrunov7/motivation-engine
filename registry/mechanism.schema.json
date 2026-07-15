@@ -81,6 +81,11 @@
         "additionalProperties": false
       }
     },
+    "orthogonality_note": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional top-level annotation explaining why two distinct phenomena are bundled as one L1, or a managed-overlap note. Owner-authored content (D-042)."
+    },
     "prior_weight": {
       "type": "number",
       "minimum": 0,

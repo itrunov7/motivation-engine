@@ -1,0 +1,74 @@
+{
+  "$schema": "../mechanism.schema.json",
+  "id": "HA-04",
+  "slug": "habit_loop",
+  "name": "Habit loop",
+  "version": "1.0.0",
+  "level": "L1",
+  "parent": "S3",
+  "lifecycle_status": "incubating",
+  "dossier_ref": "dossiers/HA-04.json",
+  "provenance": { "proposed_by": "owner", "date": "2026-07-15" },
+  "evidence_terms": ["habit formation", "habit formation automaticity", "context-dependent repetition habit", "habit loop cue routine reward", "how are habits formed", "habit strength behavior"],
+  "pinned_evidence": [
+    { "doi": "10.1002/ejsp.674", "title": "How are habits formed: Modelling habit formation in the real world", "reason": "foundational — Lally et al., 66-day field study" },
+    { "doi": "10.1146/annurev-psych-122414-033417", "title": "Psychology of Habit", "reason": "authoritative review — Wood & Rünger 2016" },
+    { "doi": "10.1016/j.jcps.2009.06.001", "title": "The habitual consumer", "reason": "review — Wood & Neal on habit mechanisms in behavior" }
+  ],
+  "evidence": {
+    "grade": "A-",
+    "basis": "Habits form through context-dependent repetition until behavior becomes automatic (Lally et al. 2009, ~66-day field study; Wood & Rünger 2016 Annual Review). Cue-triggered automaticity is the well-supported core; the popular 'cue-routine-reward loop' is a useful framing of it.",
+    "effect_size_note": "Habit formation is real and field-validated, but slow (weeks to months) and highly dependent on stable context cues and consistent repetition; the '21 days' folk claim is false (median ~66 days, wide range).",
+    "caveats": ["formation_is_slow_weeks_to_months", "requires_stable_context_cue", "reward_supports_but_automaticity_is_the_core"]
+  },
+  "prior_weight": 0.8,
+  "mechanism_summary_for_context": "Behavior becomes automatic when repeated in a stable context: a consistent cue triggers the action with decreasing conscious effort. The lever for products is building a reliable cue (a consistent trigger — time, notification, entry point) tied to a low-friction action and a genuine reward, repeated until return becomes automatic rather than deliberate. Distinct from variable reward (VR-02 is one possible reward component) — HA-04 is the full cue->action->reward->repetition cycle that produces automaticity.",
+  "applicability": {
+    "funnel_stages": ["activation", "retention"],
+    "excluded_stages": ["cold_acquisition", "conversion"],
+    "artifact_types": ["onboarding", "retention_push", "dashboard_widget"],
+    "preconditions": [
+      { "predicate": "product.has_recurring_core_action == true", "reason": "habits require a repeatable core action; not applicable to one-time or infrequent-use products" }
+    ],
+    "culture_note": "Habit mechanics are universal; appropriate cue types and cadence (notification norms, daily rhythms) are L3 surface parameters"
+  },
+  "implementations": [
+    {
+      "id": "HA-04-consistent-cue",
+      "artifact_types": ["retention_push", "dashboard_widget"],
+      "product_requirements": ["has_recurring_core_action"],
+      "generation_directive": "Establish one consistent, predictable cue for the core action — same time, same entry point, same trigger — so repetition builds automaticity. Consistency matters more than intensity; a reliable gentle cue beats loud irregular ones. Tie the cue to the user's existing routine where possible.",
+      "copy_formulas": ["Your daily {action}", "Time for your {routine}"],
+      "metrics": ["d7_retention", "d30_retention", "return_rate_without_push", "streak_length"],
+      "observed_effects": []
+    },
+    {
+      "id": "HA-04-friction-reduction",
+      "artifact_types": ["onboarding", "dashboard_widget"],
+      "product_requirements": [],
+      "generation_directive": "Make the core habitual action as low-friction as possible — fewest steps from cue to completion, sensible defaults, resumable state. Automaticity forms fastest when the action is easy to perform on cue. Remove decisions that force conscious effort each time.",
+      "copy_formulas": ["Pick up where you left off", "One tap to {action}"],
+      "metrics": ["action_completion_rate", "d7_retention"],
+      "observed_effects": []
+    }
+  ],
+  "constraints": {
+    "hard_rules": [
+      { "id": "genuine_value_habit", "rule": "The habitual action must deliver real user value; do not build habits around actions that serve engagement metrics but not the user", "severity": "block" },
+      { "id": "cue_not_harassment", "rule": "Cues must be helpful reminders, not manipulative or high-frequency nagging; respect notification limits and user control over cues", "severity": "block" },
+      { "id": "no_compulsion", "rule": "Do not engineer habit loops that the user cannot easily stop or that work against their stated intent; habit support, not compulsion", "severity": "block" }
+    ],
+    "compliance_refs": ["EU_DSA_dark_patterns", "apple_asrg_4.5_push", "gdpr_consent_notifications"],
+    "boundary_test": "Is this building a habit the user wants and benefits from — or engineering compulsive return against their interest?"
+  },
+  "relations": [
+    { "type": "adjacent", "target": "VR-02", "note": "Variable reward can be the reward component of a habit loop; HA-04 is the full cue-action-reward-repetition cycle, VR-02 is one reward strategy within it" },
+    { "type": "adjacent", "target": "ZE-07", "note": "Progress and streaks support habit maintenance; distinct — ZE-07 is goal-directed progress, HA-04 is context-cued automaticity" }
+  ],
+  "telemetry": { "tag_format": "me:HA-04:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "reference_examples": [
+    { "product": "Duolingo daily reminder", "what": "Consistent time-based cue + low-friction lesson builds a daily-return habit; the streak (ZE-07/LA-01) reinforces an already-cued routine" },
+    { "product": "Wordle", "what": "Once-daily cadence + same simple action + social share creates a strong daily habit with minimal mechanics" },
+    { "product": "Headspace / Calm", "what": "Consistent daily meditation cue tied to routine (morning/bedtime) builds automaticity around a genuinely valued action" }
+  ]
+}

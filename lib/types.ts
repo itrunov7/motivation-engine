@@ -169,6 +169,8 @@ export interface Mechanism {
   /** Owner-pinned works the connector cannot surface (D-017); merged into
    *  the evidence corpus with source_api "pinned". */
   pinned_evidence?: PinnedEvidence[];
+  /** Optional owner annotation explaining a bundled/managed-overlap L1 (D-042). */
+  orthogonality_note?: string;
   /** 0–1 */
   prior_weight: number;
   mechanism_summary_for_context: string;
@@ -255,6 +257,8 @@ export interface Dossier {
   /** ISO date, YYYY-MM-DD */
   date: string;
   notes: string;
+  /** Optional owner flag: lowest-scoring mechanism admitted to incubating (D-042). */
+  flag_lowest_admitted?: boolean;
 }
 
 // ---------- Data-source registry (§3.4) ----------

@@ -1,0 +1,23 @@
+{
+  "id": "DOS-HA-04",
+  "mechanism_id": "HA-04",
+  "date": "2026-07-15",
+  "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects from Ventora telemetry or public corpora",
+  "scores": {
+    "evidence": { "score": 3, "rationale": "Strong field and review support. Lally et al. (2009) tracked habit formation over ~66 days in a real-world study establishing the automaticity-through-repetition curve. Wood & Rünger (2016, Annual Review of Psychology) and Wood & Neal provide authoritative mechanistic reviews. The core claim — context-dependent repetition produces cue-triggered automaticity — is well established. Grade A- overall because formation is slow and context-dependent and the popular 'cue-routine-reward loop / 21 days' framing overstates the tidy version; the science underneath is solid." },
+    "product_applicability": { "score": 3, "rationale": "Directly implementable via consistent cues and friction reduction for recurring core actions. Reference at scale: Duolingo daily reminder, Wordle daily cadence, Headspace routine cueing. Serves Ventora's onboarding and retention artifacts." },
+    "measurability": { "score": 3, "rationale": "Maps to d7/d30 retention, return_rate_without_push, streak_length, action_completion_rate — all Amplitude-reachable. Automaticity is directly proxied by unprompted return." },
+    "orthogonality": { "score": 3, "rationale": "Clear boundaries with neighbors: VR-02 is one possible reward component within a habit loop; ZE-07 is goal-directed progress. HA-04 uniquely covers the full context-cued repetition cycle producing automaticity. Documented in relations." },
+    "safety": { "score": 2, "rationale": "Moderate risk. Habit-building is value-aligned when the action genuinely benefits the user, but the same mechanics power compulsive-use designs and notification harassment. Three hard rules constrain it (genuine_value_habit, cue_not_harassment, no_compulsion) plus notification-consent compliance. Score 2 reflects that cue frequency and 'engagement vs user value' is where misuse concentrates." }
+  },
+  "total": 14,
+  "dissent": "The popular 'habit loop' (cue -> routine -> reward, habits form in 21 days) is a simplification that outruns the evidence. Lally et al. found a median closer to 66 days with very wide individual variation, and some behaviors never reached automaticity in the study window. There is also ongoing debate about how much of everyday behavior is truly 'habitual' (automatic, cue-driven) versus goal-directed — the dual-system account is not settled. Implication: we claim the well-supported core (consistent context cues + repetition build automaticity for simple, frequently-repeated actions) and avoid promising fast or universal habit formation; formation is slow, context-dependent, and works best for low-complexity recurring actions.",
+  "evidence_sources": [
+    { "ref": "Lally, van Jaarsveld, Potts & Wardle (2009). How are habits formed. European J Social Psychology 40(6).", "doi": "10.1002/ejsp.674" },
+    { "ref": "Wood & Rünger (2016). Psychology of Habit. Annual Review of Psychology 67.", "doi": "10.1146/annurev-psych-122414-033417" },
+    { "ref": "Wood & Neal (2009). The habitual consumer. J Consumer Psychology 19(4).", "doi": "10.1016/j.jcps.2009.06.001" }
+  ],
+  "notes": "Sources cross-checked against /corpora/evidence/HA-04.json (205 records; snowball review_found:true, +18 added; Lally and Wood&Runger pins resolved). One prep pin used a wrong DOI (Wood&Neal 'habitual consumer' — corrected here to 10.1016/j.jcps.2009.06.001); the work arrived via term search regardless. Verdict INCUBATING; CORE strictly on a measured effect."
+}

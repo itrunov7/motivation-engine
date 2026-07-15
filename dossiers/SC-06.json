@@ -1,0 +1,23 @@
+{
+  "id": "DOS-SC-06",
+  "mechanism_id": "SC-06",
+  "date": "2026-07-15",
+  "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects from Ventora telemetry or public corpora",
+  "scores": {
+    "evidence": { "score": 2, "rationale": "Real but moderate and heavily moderated. Worchel, Lee & Adewole (1975) cookie study is the classic demonstration; Lynn (1991) provides a quantitative review of commodity-theory scarcity effects. The effect holds but depends strongly on type (limited-quantity vs limited-time), perceived cause (demand-caused stronger than supply-caused), and credibility. A recent meta-analysis in the corpus confirms a moderate, variable effect. Weaker and more context-dependent than loss aversion or framing — hence grade B and evidence score 2." },
+    "product_applicability": { "score": 3, "rationale": "Directly implementable at conversion (limited quantity, real deadlines, capacity caps). Highly relevant to Ventora checkout/paywall. Reference: genuine product drops, cohort caps, and Booking.com as the canonical real-vs-fake example." },
+    "measurability": { "score": 3, "rationale": "Maps to cvr, time_to_purchase, conversion_before_deadline — Amplitude-reachable and A/B-testable." },
+    "orthogonality": { "score": 2, "rationale": "Substantial overlap: operates partly as loss-of-opportunity (hybrid with LA-01) and demand-caused scarcity shades into social proof (SP-08). Kept distinct because its driver is limited availability specifically. Score 2 reflects real, documented overlap." },
+    "safety": { "score": 1, "rationale": "Tied with VR-02 for the highest-risk mechanism in the set. Fake scarcity — invented low-stock counts, resetting countdown timers, fake 'X viewing now' — is the single most common e-commerce dark pattern and is now explicitly illegal under EU UCPD/DSA and targeted by the FTC (Booking.com faced regulatory action). Score 1 is the honest flag: the mechanism is legitimate ONLY with genuine limits, and misuse is both trivially easy and specifically unlawful. Three block-severity hard rules (genuine_scarcity_only, no_fake_timers, no_manufactured_limits) plus the precondition gate (has_genuine_limit) are the mitigation. Any scarcity implementation gets the strictest review." }
+  },
+  "total": 11,
+  "dissent": "Beyond the moderation issues, scarcity has a well-documented backfire: when perceived as a manipulation tactic, it triggers reactance and reduces trust and intent — the opposite of the intended effect. Consumers are increasingly literate about fake-scarcity tactics, so the effect may be weakening in exactly the digital contexts we operate in. This, combined with the legal exposure of fake scarcity, is why SC-06 is admitted at the threshold minimum (total 11) with the strictest guardrails: it earns its place only for genuine limits, and its use should be conservative and measured rather than assumed effective. If our own measurement shows reactance/backfire in a niche, the mechanism is demoted for that context.",
+  "evidence_sources": [
+    { "ref": "Worchel, Lee & Adewole (1975). Effects of supply and demand on ratings of object value. J Personality and Social Psychology 32(5).", "doi": "10.1037/0022-3514.32.5.906" },
+    { "ref": "Lynn (1991). Scarcity effects on value: A quantitative review of the commodity theory literature. Psychology & Marketing 8(1).", "doi": "10.1002/mar.4220080204" }
+  ],
+  "notes": "Sources cross-checked against /corpora/evidence/SC-06.json (214 records; both prep pins had wrong/unresolved DOIs — corrected here: Worchel to 10.1037/0022-3514.32.5.906, Lynn review to 10.1002/mar.4220080204; both works arrived via term search, and a recent scarcity meta-analysis is present). Scored at threshold (11) by design — this is the weakest-evidence, highest-risk mechanism admitted so far; safety 1 is the honest flag. Verdict INCUBATING; CORE strictly on a measured effect; backfire/reactance in any niche triggers per-context demotion.",
+  "flag_lowest_admitted": true
+}

@@ -1,0 +1,24 @@
+{
+  "id": "DOS-FR-11",
+  "mechanism_id": "FR-11",
+  "date": "2026-07-15",
+  "decided_by": "owner",
+  "verdict": "incubating",
+  "core_condition": "at least one measured effect recorded in observed_effects from Ventora telemetry or public corpora",
+  "scores": {
+    "evidence": { "score": 2, "rationale": "Two bundled phenomena with uneven robustness. Framing (Tversky & Kahneman 1981; Levin's typology of risky/attribute/goal framing) is reliable, attribute framing especially. Anchoring (Tversky & Kahneman 1974) is real for explicit and self-generated anchors, and Maniadis, Tufano & List (2014, AER) provide evidence it replicates — but the incidental/subliminal anchoring variants were part of the replication crisis and are weaker or unreliable. Score 2 reflects that this L1 bundles a solid component (framing, explicit anchoring) with contested variants (incidental anchoring); we lead with the robust versions." },
+    "product_applicability": { "score": 3, "rationale": "Central to pricing pages and plan selection — a top-priority Ventora conversion surface. Price anchoring, tier structure, gain/loss framing all directly implementable. Reference at scale: SaaS 3-tier pricing, Apple pricing order, insurance framing." },
+    "measurability": { "score": 3, "rationale": "Maps to cvr, average_plan_value, tier_selection_distribution, frame A/B CVR — all Amplitude-reachable and A/B-testable." },
+    "orthogonality": { "score": 2, "rationale": "Bundles two distinct cognitive phenomena (framing, anchoring) into one L1 for product coherence — both are presentation-of-choice effects at the pricing/selection funnel point. Some overlap with LA-01 (loss framing) and SC-06 (scarcity framing), documented in relations. Score 2 reflects the deliberate bundle and managed overlap." },
+    "safety": { "score": 3, "rationale": "When anchors are real and framing is truthful, this is standard, legitimate value presentation. Risks — fake 'was' prices, fabricated anchors, deceptive decoys, misleading framing — are blocked by hard rules and are directly regulated (EU Omnibus price-reduction rules, FTC deceptive pricing). The boundary is clear and legally well-defined, hence 3 with strong guardrails." }
+  },
+  "total": 13,
+  "dissent": "Anchoring was a focal point of the replication crisis. While classic explicit anchoring (Tversky & Kahneman 1974) and self-generated anchoring replicate well, several incidental and subliminal anchoring findings failed to replicate or showed much smaller effects than originally reported. Maniadis, Tufano & List (2014) specifically re-examined anchoring reliability and argued the core effect survives, but the episode disciplines our claims: we use explicit, real anchors (genuine higher tiers, true prior prices) — the robust variant — and do not rely on incidental/subliminal anchoring. Framing effects are more consistently replicated but also vary by type (attribute framing strongest); we lead with attribute and gain/loss framing over weaker goal-framing claims.",
+  "evidence_sources": [
+    { "ref": "Tversky & Kahneman (1981). The Framing of Decisions and the Psychology of Choice. Science 211(4481).", "doi": "10.1126/science.7455683" },
+    { "ref": "Tversky & Kahneman (1974). Judgment under Uncertainty: Heuristics and Biases. Science 185(4157).", "doi": "10.1126/science.185.4157.1124" },
+    { "ref": "Maniadis, Tufano & List (2014). One Swallow Doesn't Make a Summer: New Evidence on Anchoring Effects. AER 104(1).", "doi": "10.1257/aer.104.1.277" },
+    { "ref": "Levin, Schneider & Gaeth (1998). All Frames Are Not Created Equal: A Typology of Framing Effects. OBHDP 76(2).", "doi": "10.1006/obhd.1998.2804" }
+  ],
+  "notes": "Sources cross-checked against /corpora/evidence/FR-11.json (222 records; framing and anchoring foundational pins resolved; Maniadis-List anchoring-robustness work present; Levin typology arrived via terms). One prep pin used a wrong DOI (boundary work — corrected to Maniadis/Tufano/List here; the anchoring-robustness evidence arrived regardless). Evidence scored 2 for the bundled anchoring-replication contest. Verdict INCUBATING; CORE strictly on a measured effect."
+}

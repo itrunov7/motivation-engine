@@ -1,0 +1,75 @@
+{
+  "$schema": "../mechanism.schema.json",
+  "id": "FR-11",
+  "slug": "framing_anchoring",
+  "name": "Framing & anchoring",
+  "version": "1.0.0",
+  "level": "L1",
+  "parent": "S6",
+  "lifecycle_status": "incubating",
+  "dossier_ref": "dossiers/FR-11.json",
+  "provenance": { "proposed_by": "owner", "date": "2026-07-15" },
+  "evidence_terms": ["framing effect risky choice", "anchoring adjustment heuristic", "anchoring effect replication", "attribute framing", "price anchoring decoy effect", "framing effect meta-analysis"],
+  "pinned_evidence": [
+    { "doi": "10.1126/science.7455683", "title": "The Framing of Decisions and the Psychology of Choice", "reason": "foundational — Tversky & Kahneman 1981, framing" },
+    { "doi": "10.1126/science.185.4157.1124", "title": "Judgment under Uncertainty: Heuristics and Biases", "reason": "foundational — Tversky & Kahneman 1974, anchoring introduced" },
+    { "doi": "10.1257/aer.104.5.277", "title": "One Swallow Doesn't Make a Summer: New Evidence on Anchoring Effects", "reason": "replication/robustness — Maniadis, Tufano & List on anchoring reliability" }
+  ],
+  "evidence": {
+    "grade": "B+",
+    "basis": "Framing: how equivalent information is presented shifts choice (Tversky & Kahneman 1981; Levin's attribute/risky/goal framing typology). Anchoring: an initial reference value biases subsequent estimates (Tversky & Kahneman 1974). Both robust, but anchoring's magnitude and some subliminal/incidental variants have a contested replication record.",
+    "effect_size_note": "Framing effects are reliable, especially attribute framing. Anchoring is real and replicates for explicit/self-generated anchors, but incidental/subliminal anchoring is weaker and part of the replication debate; effect sizes vary widely by paradigm.",
+    "caveats": ["anchoring_replication_contested_for_incidental_variants", "framing_strength_varies_by_type", "effect_sizes_paradigm_dependent"]
+  },
+  "prior_weight": 0.75,
+  "mechanism_summary_for_context": "The same facts land differently depending on how they are framed and what reference point they are compared against. Two levers: framing (present the option in the terms that make its value salient — gain vs loss, what's included vs what's lost) and anchoring (set a reference value — a higher-tier price, a 'was' price, a recommended option — so other options are judged relative to it). Central to pricing pages, plan selection, and value presentation.",
+  "applicability": {
+    "funnel_stages": ["conversion", "activation"],
+    "excluded_stages": ["cold_acquisition"],
+    "artifact_types": ["pricing_page", "paywall", "checkout", "landing_hero"],
+    "preconditions": [
+      { "predicate": "artifact.presents_choice_or_price == true", "reason": "framing/anchoring operate on a presented choice, price, or value comparison; not applicable where there is nothing to frame" }
+    ],
+    "culture_note": "Framing and anchoring are broadly universal; specific reference norms (what counts as a high anchor, culturally expected price presentation) are L3 surface parameters"
+  },
+  "implementations": [
+    {
+      "id": "FR-11-price-anchor",
+      "artifact_types": ["pricing_page", "paywall"],
+      "product_requirements": ["has_multiple_tiers_or_reference_price"],
+      "generation_directive": "Present a higher-value reference point before the target option so it is judged favorably: a premium tier shown first, a genuine 'was' price, or a recommended plan highlighted as the anchor. The anchor must be real (a genuinely offered tier or a true prior price) — fabricated anchors and fake 'was' prices are forbidden.",
+      "copy_formulas": ["Most popular · {plan}", "{anchor_price} value for {target_price}"],
+      "metrics": ["cvr", "average_plan_value", "tier_selection_distribution"],
+      "observed_effects": []
+    },
+    {
+      "id": "FR-11-gain-loss-framing",
+      "artifact_types": ["pricing_page", "landing_hero", "checkout"],
+      "product_requirements": [],
+      "generation_directive": "Frame the value in the terms that make it most salient and truthful — what the user gains, or (paired with LA-01) what they avoid losing. Attribute framing: present the positive attribute ('90% success' not '10% failure') where both are true. Never misrepresent — framing selects emphasis among true statements, it does not distort facts.",
+      "copy_formulas": ["{positive_attribute}", "Everything you get: {inclusions}"],
+      "metrics": ["cvr", "cvr_frame_a_vs_b"],
+      "observed_effects": []
+    }
+  ],
+  "constraints": {
+    "hard_rules": [
+      { "id": "real_anchor_only", "rule": "Anchors (reference prices, tiers, 'was' prices) must be genuine; fabricated anchors and fake original prices are forbidden and often illegal", "severity": "block" },
+      { "id": "truthful_framing", "rule": "Framing selects emphasis among true statements; it must never misrepresent, omit material negatives deceptively, or state falsehoods", "severity": "block" },
+      { "id": "no_deceptive_decoy", "rule": "Decoy/reference options must be real offerings, not fake options designed solely to mislead", "severity": "block" }
+    ],
+    "compliance_refs": ["EU_DSA_dark_patterns", "eu_omnibus_price_reduction", "ftc_deceptive_pricing", "asa_misleading_advertising"],
+    "boundary_test": "Is the frame emphasizing true value with a real reference point — or manufacturing a misleading comparison?"
+  },
+  "relations": [
+    { "type": "hybrid_with", "target": "LA-01", "note": "Loss framing is the intersection of FR-11 (framing) and LA-01 (loss aversion) — presenting value as loss-avoided" },
+    { "type": "adjacent", "target": "SC-06", "note": "Scarcity framing ('only 2 left') co-occurs with pricing presentation but is a distinct driver" }
+  ],
+  "orthogonality_note": "Framing and anchoring are bundled as one L1 because both are presentation-of-choice effects operating at the same funnel point (pricing/selection); kept together for product coherence though they are distinct cognitive phenomena.",
+  "telemetry": { "tag_format": "me:FR-11:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "reference_examples": [
+    { "product": "SaaS pricing pages (3-tier)", "what": "Middle 'most popular' tier anchored between a cheap and a premium option — canonical anchoring + decoy structure" },
+    { "product": "Apple pricing", "what": "Highest-capacity/priciest option shown first anchors perception so mid-tier feels reasonable" },
+    { "product": "Insurance / warranty framing", "what": "'Protect what you own' loss-framed vs 'save money' gain-framed — attribute/gain-loss framing at point of choice" }
+  ]
+}

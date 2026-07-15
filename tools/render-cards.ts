@@ -166,6 +166,10 @@ function renderCard(m: Mechanism): string {
     `Tag format \`${m.telemetry.tag_format}\` · event property \`${m.telemetry.amplitude_event_property}\``,
   );
 
+  if (m.orthogonality_note) {
+    lines.push("", "## Orthogonality note", "", m.orthogonality_note);
+  }
+
   if (m.reference_examples && m.reference_examples.length > 0) {
     lines.push(
       "",
