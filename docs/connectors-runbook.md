@@ -76,11 +76,14 @@ is configured (the real run uses it; the dry-run quote does not).
 
 1. On `/ops`, press **Run** on `evidence` with target `LA-01`.
 2. Within ~60s a **quote** appears with realistic figures — for `LA-01`,
-   ~20 API calls, ~332 records, `$0.00` — next to the month-to-date budget.
+   ~20 API calls, ~332 records, `$0.00` — next to the month-to-date budget. The
+   estimate header **names the target it priced** (e.g. "estimate — LA-01");
+   confirm only that it matches the target you selected.
    - If instead you see **"The estimate run failed: …"**, open the linked run,
      read the named step, fix that cause, and re-run. (You should *not* see the
      old catch-all "no estimate" message for a real failure.)
-3. Press **Confirm & run**. The real harvest dispatches.
+3. Press **Confirm & run**. The real harvest dispatches against the quoted
+   target — not a re-read of the dropdown.
 4. When it finishes, open the connectors page (or the evidence manifest): the
    last run's **api_calls** is a realistic non-zero number (verifies cost
    accounting, D-022), and there is **no `s2_throttled` warning** and no
@@ -91,6 +94,19 @@ The quote step is deterministic and makes zero network calls, so step 2 can
 also be smoke-tested locally without the app:
 `npx tsx tools/run-connector.ts quote evidence mechanism=LA-01 raise_cap=false`
 should print the same estimate JSON.
+
+> **Regression watch — the selector must dispatch what it shows (D-039).** On
+> 2026-07-15 the Run Now selector showed `HA-04` but dispatched `EN-03`, and
+> reset to `EN-03` after the run. Cause: the selected target lived in React
+> state initialized once to the first target; when the connector's targets list
+> was edited under it, the controlled `<select>` painted its first option while
+> state kept the stale value, so the dispatch used the invisible stale target.
+> The fix reconciles the displayed value with the live targets list, locks the
+> **quoted** target through Confirm (the estimate is the single source of truth
+> for the real run), and names the target in the estimate header. When you touch
+> the selector, the quote path, or the ops server actions, re-run the acceptance
+> check above and confirm the estimate header names the target you picked before
+> pressing Confirm.
 
 ### The operator's contract: watch issues, not logs
 

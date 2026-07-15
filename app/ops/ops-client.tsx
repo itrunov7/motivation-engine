@@ -274,6 +274,12 @@ function RunFlow({
   const [target, setTarget] = useState<string>(targets[0] ?? "");
   const [phase, setPhase] = useState<RunPhase>({ kind: "idle" });
 
+  // The displayed value IS the dispatched value: a controlled <select> paints
+  // its first option when `value` matches no option, so a stale state target
+  // (e.g. after the targets list was edited under it) would silently dispatch
+  // a target the operator never sees. Reconcile at render instead (D-039).
+  const selected = targets.includes(target) ? target : targets[0] ?? "";
+
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
   const poll = useCallback(
@@ -312,26 +318,36 @@ function RunFlow({
 
   const startRun = useCallback(async () => {
     setPhase({ kind: "dispatching" });
-    const res = await startDryRunAction(connectorId, target || null);
+    const res = await startDryRunAction(connectorId, selected || null);
     if (!res.ok) {
       setPhase({ kind: "error", message: res.error });
       return;
     }
     void poll(res.dispatchId);
-  }, [connectorId, target, poll]);
+  }, [connectorId, selected, poll]);
+
+  // Changing the selector while a quote is on screen discards the quote — a
+  // quote can only ever be confirmed against the target it priced (D-039).
+  const onSelectTarget = useCallback((value: string) => {
+    setTarget(value);
+    setPhase((p) => (p.kind === "quote" ? { kind: "idle" } : p));
+  }, []);
 
   const confirm = useCallback(
     async (quote: QuoteArtifact, raiseCap: boolean) => {
       setPhase({ kind: "confirming" });
+      // The real run uses the target the QUOTE priced (echoed back in the
+      // artifact), never a fresh dropdown read — the estimate is the single
+      // source of truth for the dispatch (D-039).
       const res = await confirmRealRunAction({
         connectorId,
-        target: target || null,
+        target: quote.target ?? (selected || null),
         raiseCap,
         quote,
       });
       setPhase(res.ok ? { kind: "dispatched" } : { kind: "error", message: res.error });
     },
-    [connectorId, target],
+    [connectorId, selected],
   );
 
   const busy =
@@ -347,9 +363,9 @@ function RunFlow({
           <label className="flex flex-col gap-1">
             <span className="text-[11px] text-[#8CA495]">which target</span>
             <select
-              value={target}
+              value={selected}
               disabled={!writeEnabled || busy}
-              onChange={(e) => setTarget(e.target.value)}
+              onChange={(e) => onSelectTarget(e.target.value)}
               className="rounded-md border border-[#243329] bg-[#0E1512] px-2.5 py-1.5 font-mono text-sm text-[#E6EFE8] outline-none focus:border-[#34D399] disabled:opacity-50"
             >
               {targets.map((t) => (
@@ -464,7 +480,9 @@ function QuoteConfirm({
 
   return (
     <div className="mt-3 rounded-md border border-[#243329] bg-[#0E1512] p-4">
-      <p className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">estimate</p>
+      <p className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">
+        estimate{quote.target ? ` — ${quote.target}` : ""}
+      </p>
       <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-1.5 sm:grid-cols-4">
         {[
           { label: "api calls", value: String(quote.quote.calls) },
