@@ -6,23 +6,40 @@
   ],
   "connector_version": "2.3.0",
   "last_run": {
-    "timestamp": "2026-07-15T13:32:50.389Z",
+    "timestamp": "2026-07-15T13:37:02.811Z",
     "status": "success",
     "params": {
-      "mechanism": "HA-04"
+      "mechanism": "SC-06"
     },
-    "records_fetched": 205,
+    "records_fetched": 214,
     "files_written": 1,
-    "duration_s": 30.54,
+    "duration_s": 31.82,
     "cost": {
-      "api_calls": 26,
-      "duration_s": 30.54,
+      "api_calls": 24,
+      "duration_s": 31.82,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-15T13:37:02.811Z",
+      "status": "success",
+      "params": {
+        "mechanism": "SC-06"
+      },
+      "records_fetched": 214,
+      "files_written": 1,
+      "duration_s": 31.82,
+      "cost": {
+        "api_calls": 24,
+        "duration_s": 31.82,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T13:32:50.389Z",
       "status": "success",
@@ -344,17 +361,6 @@
       "files_written": 1,
       "duration_s": 190.32,
       "error": "semantic-scholar \"loss of loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"endowment effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
-    },
-    {
-      "timestamp": "2026-07-13T16:38:50.715Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "LA-01"
-      },
-      "records_fetched": 166,
-      "files_written": 1,
-      "duration_s": 224.7,
-      "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss aversion moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss of loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"endowment effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
     }
   ],
   "data_files": [
@@ -392,6 +398,18 @@
         "replication": 25,
         "dissent": 36,
         "recent": 61
+      }
+    },
+    {
+      "path": "SC-06.json",
+      "records": 214,
+      "bytes": 1061113,
+      "categories": {
+        "foundational": 4,
+        "meta-analysis": 16,
+        "replication": 33,
+        "dissent": 43,
+        "recent": 89
       }
     },
     {
