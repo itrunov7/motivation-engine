@@ -116,6 +116,14 @@ should print the same estimate JSON.
 > allowlist as the write path), so the selector reflects committed targets
 > immediately — no redeploy or hard reload needed. If you ever see the selector
 > lag a save, that live read failed: check `GH_OPS_TOKEN`/`GH_OPS_REPO`.
+>
+> **Loading gate (D-041).** Because the page first renders from the deployment
+> snapshot and then reads the live config, the console holds the connector cards
+> behind a brief "loading current settings…" state until that live read lands —
+> so you never see the snapshot flash as if it were saved. If the live read
+> fails you get an explicit error with a **Retry** button rather than a silently
+> stale copy. The settings on screen are always the committed ones, a short
+> loading state, or an honest error — never a stale guess.
 
 ### The operator's contract: watch issues, not logs
 

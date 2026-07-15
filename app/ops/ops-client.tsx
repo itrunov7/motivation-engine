@@ -798,27 +798,41 @@ function ConnectorCard({
 
 // ---------- Root ----------
 
+type HydrateStatus = "loading" | "ready" | "error";
+
 export default function OpsClient({
   writeEnabled,
   budget,
   connectors,
   availableMechanismIds,
 }: OpsClientProps) {
-  // The page loads config from the deploy-time filesystem snapshot; targets
-  // saved since the last deploy are invisible there and the Run selector would
-  // dispatch a stale target (D-040). Reconcile against the LIVE _ops config in
-  // GitHub — the source the write path commits to — on mount. `configVersion`
-  // bumps once the live read lands so each ConnectorCard remounts and reseeds
-  // its state (and the Run selector) from the committed config.
+  // The page renders from the deploy-time filesystem snapshot; config saved
+  // since the last deploy is invisible there, so showing that snapshot would
+  // display stale settings that "change" once the live read lands — the
+  // "different settings when I come back" report (D-040/D-041). When the write
+  // surface is live, config comes ONLY from GitHub (the source the write path
+  // commits to): we hold back the connector cards behind a short loading state
+  // until the live read resolves, so the snapshot is never shown as if saved.
   const [views, setViews] = useState<ConnectorView[]>(connectors);
   const [configVersion, setConfigVersion] = useState(0);
+  const [status, setStatus] = useState<HydrateStatus>(writeEnabled ? "loading" : "ready");
+  const [errorText, setErrorText] = useState<string | null>(null);
+  // Bumped by Retry to re-run the live read.
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     if (!writeEnabled) return;
     let cancelled = false;
+    setStatus("loading");
+    setErrorText(null);
     void (async () => {
       const res = await loadLiveConnectorConfigsAction();
-      if (cancelled || !res.ok) return;
+      if (cancelled) return;
+      if (!res.ok) {
+        setStatus("error");
+        setErrorText(res.error);
+        return;
+      }
       setViews((prev) =>
         prev.map((view) => {
           const live = res.configs[view.config.connector_id];
@@ -826,11 +840,12 @@ export default function OpsClient({
         }),
       );
       setConfigVersion((v) => v + 1);
+      setStatus("ready");
     })();
     return () => {
       cancelled = true;
     };
-  }, [writeEnabled]);
+  }, [writeEnabled, reloadKey]);
 
   return (
     <div className="mt-6 flex flex-col gap-5">
@@ -846,14 +861,43 @@ export default function OpsClient({
 
       <BudgetPanel writeEnabled={writeEnabled} budget={budget} />
 
-      {views.map((view) => (
-        <ConnectorCard
-          key={`${view.config.connector_id}-${configVersion}`}
-          writeEnabled={writeEnabled}
-          view={view}
-          availableMechanismIds={availableMechanismIds}
-        />
-      ))}
+      {status === "loading" && (
+        <div className="rounded-lg border border-[#243329] bg-[#151F1A] px-5 py-6">
+          <p className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8]">
+            loading current settings…
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-[#8CA495]">
+            Reading each connector&apos;s committed config from git so the settings you see are the
+            saved ones, not this deployment&apos;s snapshot.
+          </p>
+        </div>
+      )}
+
+      {status === "error" && (
+        <div className="rounded-lg border border-[#F8717155] bg-[#F8717110] px-5 py-5">
+          <p className="text-sm leading-relaxed text-[#F87171]">
+            Could not load the current settings from git, so they are not shown to avoid
+            displaying a stale copy. {errorText}
+          </p>
+          <button
+            type="button"
+            onClick={() => setReloadKey((k) => k + 1)}
+            className="mt-3 rounded-md border border-[#34D399] px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-[#34D399] transition hover:bg-[#34D39915]"
+          >
+            retry
+          </button>
+        </div>
+      )}
+
+      {status === "ready" &&
+        views.map((view) => (
+          <ConnectorCard
+            key={`${view.config.connector_id}-${configVersion}`}
+            writeEnabled={writeEnabled}
+            view={view}
+            availableMechanismIds={availableMechanismIds}
+          />
+        ))}
     </div>
   );
 }
