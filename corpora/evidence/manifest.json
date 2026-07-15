@@ -6,23 +6,40 @@
   ],
   "connector_version": "2.3.0",
   "last_run": {
-    "timestamp": "2026-07-15T15:00:22.603Z",
+    "timestamp": "2026-07-15T15:04:35.585Z",
     "status": "success",
     "params": {
-      "mechanism": "CG-05"
+      "mechanism": "SP-08"
     },
-    "records_fetched": 185,
+    "records_fetched": 234,
     "files_written": 1,
-    "duration_s": 18.44,
+    "duration_s": 17.44,
     "cost": {
-      "api_calls": 19,
-      "duration_s": 18.44,
+      "api_calls": 18,
+      "duration_s": 17.44,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-15T15:04:35.585Z",
+      "status": "success",
+      "params": {
+        "mechanism": "SP-08"
+      },
+      "records_fetched": 234,
+      "files_written": 1,
+      "duration_s": 17.44,
+      "cost": {
+        "api_calls": 18,
+        "duration_s": 17.44,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T15:00:22.603Z",
       "status": "success",
@@ -365,17 +382,6 @@
       "files_written": 1,
       "duration_s": 218.22,
       "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"prospect theory meta-analysis\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss aversion replication\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss of loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
-    },
-    {
-      "timestamp": "2026-07-13T16:54:47.689Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "LA-01"
-      },
-      "records_fetched": 202,
-      "files_written": 1,
-      "duration_s": 207,
-      "error": "semantic-scholar \"loss aversion moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
     }
   ],
   "data_files": [
@@ -449,6 +455,18 @@
         "replication": 33,
         "dissent": 43,
         "recent": 89
+      }
+    },
+    {
+      "path": "SP-08.json",
+      "records": 234,
+      "bytes": 1222397,
+      "categories": {
+        "foundational": 10,
+        "meta-analysis": 13,
+        "replication": 29,
+        "dissent": 59,
+        "recent": 76
       }
     },
     {
