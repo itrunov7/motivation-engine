@@ -6,23 +6,40 @@
   ],
   "connector_version": "2.3.0",
   "last_run": {
-    "timestamp": "2026-07-15T15:12:55.044Z",
+    "timestamp": "2026-07-15T15:15:10.278Z",
     "status": "success",
     "params": {
-      "mechanism": "RE-10"
+      "mechanism": "ID-12"
     },
-    "records_fetched": 171,
+    "records_fetched": 175,
     "files_written": 1,
-    "duration_s": 13.55,
+    "duration_s": 17.35,
     "cost": {
-      "api_calls": 12,
-      "duration_s": 13.55,
+      "api_calls": 18,
+      "duration_s": 17.35,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-15T15:15:10.278Z",
+      "status": "success",
+      "params": {
+        "mechanism": "ID-12"
+      },
+      "records_fetched": 175,
+      "files_written": 1,
+      "duration_s": 17.35,
+      "cost": {
+        "api_calls": 18,
+        "duration_s": 17.35,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T15:12:55.044Z",
       "status": "success",
@@ -364,26 +381,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T10:03:04.623Z",
-      "status": "success",
-      "params": {
-        "mechanism": "LA-01"
-      },
-      "records_fetched": 209,
-      "files_written": 1,
-      "duration_s": 71.78,
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 39,
-        "duration_s": 71.78,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -433,6 +430,18 @@
         "replication": 3,
         "dissent": 44,
         "recent": 60
+      }
+    },
+    {
+      "path": "ID-12.json",
+      "records": 175,
+      "bytes": 564691,
+      "categories": {
+        "foundational": 45,
+        "meta-analysis": 9,
+        "replication": 32,
+        "dissent": 34,
+        "recent": 31
       }
     },
     {
