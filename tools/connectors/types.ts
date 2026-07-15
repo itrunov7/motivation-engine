@@ -163,9 +163,25 @@ export interface ManifestRun {
   error?: string;
   /** Degradation flags from the connector (D-018), e.g. s2_throttled. */
   warnings?: Record<string, boolean>;
-  /** Cost accounting (D-022). Optional: runs recorded before D-022 have no
-   *  cost block, and rewriting history would be dishonest — the runner
-   *  always writes it going forward. */
+  /** Cost accounting (D-022). REQUIRED on every run a writer constructs: the
+   *  runner and the report ingester both fill it from the polite-fetch
+   *  counter (api_calls incl. retries) and the wall clock. Making it
+   *  mandatory here turns "a run written with no cost block" — which would
+   *  contribute a silent 0 to the rollup — into a compile error rather than a
+   *  data gap. Persisted history that predates D-022 is typed separately as
+   *  StoredManifestRun, where cost is optional. */
+  cost: ManifestCost;
+}
+
+/**
+ * A run as PERSISTED in a manifest on disk (last_run / run_history). Cost is
+ * optional here for one honest reason: runs recorded before D-022 carry no
+ * cost block and history is never rewritten (rule against dishonest backfill).
+ * Every run WRITTEN going forward is a ManifestRun (cost required), so a new
+ * rollup zero can only come from genuinely old data, never from a writer that
+ * forgot to count.
+ */
+export interface StoredManifestRun extends Omit<ManifestRun, "cost"> {
   cost?: ManifestCost;
 }
 
@@ -184,9 +200,9 @@ export interface Manifest {
   /** The sources/sources.json ids this corpus harvests (D-014). */
   source_ids: string[];
   connector_version: string;
-  last_run: ManifestRun;
+  last_run: StoredManifestRun;
   /** Newest first, capped at 20 entries. */
-  run_history: ManifestRun[];
+  run_history: StoredManifestRun[];
   data_files: ManifestDataFile[];
 }
 
