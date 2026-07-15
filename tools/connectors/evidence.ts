@@ -96,6 +96,14 @@ const SNOWBALL_TOP_REVIEWS = 2;
 /** A snowball candidate must appear in at least this many reviews' lists. */
 const SNOWBALL_MIN_REVIEWS = 2;
 
+/** A snowball anchor must cite at least this many works — a real review, not
+ *  a short commentary or editorial (D-034). */
+const SNOWBALL_MIN_REFERENCES = 20;
+
+/** Topical concentration: distinct core keywords a review's abstract must
+ *  contain to count as on-topic (its title must contain ≥1 already) (D-034). */
+const TOPICAL_ABSTRACT_MIN_KEYWORDS = 2;
+
 /** OpenAlex OR-filter cap: batch size for resolving referenced works. */
 const OPENALEX_BATCH_SIZE = 50;
 
@@ -131,6 +139,9 @@ interface EvidenceRecord {
   openalex_id: string | null;
   /** OpenAlex work type (e.g. "article", "review"); null when unknown. */
   openalex_type: string | null;
+  /** OpenAlex outgoing reference count; null for non-OpenAlex records. Used to
+   *  gate snowball anchors: a real review cites many works (D-034). */
+  referenced_works_count: number | null;
   /** Category checklist (D-019): non-exclusive, metadata-only classification. */
   categories: EvidenceCategory[];
   source_api: SourceApi;
@@ -170,6 +181,10 @@ interface ReviewCoverage {
 }
 
 interface CoverageReport {
+  /** Whether any review passed topical + type + reference-count validation
+   *  (D-034). When false, reviews is empty and no anchor was chosen — an
+   *  honest empty state rather than a garbage anchor. */
+  review_found: boolean;
   reviews: ReviewCoverage[];
   snowball_added: number;
   /** Honest caveat when fewer reviews were snowballed than planned. */
@@ -203,6 +218,7 @@ interface OpenAlexWork {
   authorships: { author?: { display_name?: string | null } }[] | null;
   primary_location: { source?: { display_name?: string | null } | null } | null;
   abstract_inverted_index: Record<string, number[]> | null;
+  referenced_works_count: number | null;
 }
 
 interface S2Paper {
@@ -275,6 +291,7 @@ function mergeCluster(group: EvidenceRecord[]): EvidenceRecord {
     base.abstract = base.abstract ?? r.abstract;
     base.openalex_id = base.openalex_id ?? r.openalex_id;
     base.openalex_type = base.openalex_type ?? r.openalex_type;
+    base.referenced_works_count = base.referenced_works_count ?? r.referenced_works_count;
     if (base.authors.length === 0) base.authors = r.authors;
   }
   return base;
@@ -344,7 +361,7 @@ async function fetchJson<T>(fetch: PoliteFetch, url: URL, headers?: Record<strin
 }
 
 const OPENALEX_SELECT =
-  "id,type,doi,title,display_name,publication_year,cited_by_count,authorships,primary_location,abstract_inverted_index";
+  "id,type,doi,title,display_name,publication_year,cited_by_count,authorships,primary_location,abstract_inverted_index,referenced_works_count";
 
 function fromOpenAlexWork(work: OpenAlexWork, sourceApi: SourceApi): EvidenceRecord | null {
   const title = work.title ?? work.display_name;
@@ -361,6 +378,7 @@ function fromOpenAlexWork(work: OpenAlexWork, sourceApi: SourceApi): EvidenceRec
     abstract: reconstructAbstract(work.abstract_inverted_index),
     openalex_id: normalizeOpenAlexId(work.id),
     openalex_type: work.type ?? null,
+    referenced_works_count: work.referenced_works_count ?? null,
     categories: [],
     source_api: sourceApi,
   };
@@ -404,6 +422,7 @@ async function fetchPinnedWork(
     abstract: null,
     openalex_id: null,
     openalex_type: null,
+    referenced_works_count: null,
     categories: [],
     source_api: "pinned",
     pin_reason: pin.reason,
@@ -464,6 +483,7 @@ async function searchSemanticScholar(
         abstract: paper.abstract ?? null,
         openalex_id: null,
         openalex_type: null,
+        referenced_works_count: null,
         categories: [] as EvidenceCategory[],
         source_api: "semantic-scholar" as const,
       },
@@ -498,6 +518,66 @@ const DISSENT_MARKERS =
 
 function isReviewLike(record: EvidenceRecord): boolean {
   return record.openalex_type === "review" || META_ANALYSIS_TITLE.test(record.title);
+}
+
+/**
+ * Generic tokens that appear across many mechanisms' evidence_terms and would
+ * cause topical collisions (a dopamine review matching "reward", an endowment
+ * review matching "effect"). Dropped when deriving distinctive core keywords.
+ */
+const GENERIC_TERM_TOKENS = new Set([
+  "effect",
+  "effects",
+  "meta",
+  "analysis",
+  "analyses",
+  "replication",
+  "gap",
+  "hypothesis",
+  "motivation",
+  "willingness",
+  "accept",
+  "theory",
+  "model",
+  "review",
+  "systematic",
+]);
+
+/**
+ * Distinctive core keywords for topical validation (D-034): tokens from the
+ * mechanism's evidence_terms, lowercased, with generic academic words and
+ * short tokens (<4 chars) dropped so only mechanism-specific words remain
+ * (e.g. "endowment", "zeigarnik", "reinforcement", "dopamine").
+ */
+function coreKeywords(terms: string[]): string[] {
+  const keys = new Set<string>();
+  for (const term of terms) {
+    for (const token of term.toLowerCase().split(/[^a-z0-9]+/)) {
+      if (token.length >= 4 && !GENERIC_TERM_TOKENS.has(token)) keys.add(token);
+    }
+  }
+  return Array.from(keys);
+}
+
+/** Count the distinct core keywords present as whole words in `text`. */
+function countCoreKeywords(text: string, keys: string[]): number {
+  const tokens = new Set(text.toLowerCase().split(/[^a-z0-9]+/));
+  return keys.filter((key) => tokens.has(key)).length;
+}
+
+/**
+ * A review is on-topic (D-034) only if a distinctive core keyword appears in
+ * its TITLE and at least TOPICAL_ABSTRACT_MIN_KEYWORDS distinct core keywords
+ * appear in its ABSTRACT — a title-keyword collision (e.g. a c-fos or
+ * default-mode review sharing one word) cannot qualify. A record with no
+ * abstract cannot be validated and is rejected as an anchor.
+ */
+function isTopicalReview(record: EvidenceRecord, keys: string[]): boolean {
+  if (keys.length === 0 || !record.abstract) return false;
+  return (
+    countCoreKeywords(record.title, keys) >= 1 &&
+    countCoreKeywords(record.abstract, keys) >= TOPICAL_ABSTRACT_MIN_KEYWORDS
+  );
 }
 
 function classifyRecord(record: EvidenceRecord, currentYear: number): EvidenceCategory[] {
@@ -570,28 +650,52 @@ async function fetchWorksByIds(
 }
 
 /**
- * Snowballing (D-019): completeness is verified structurally. The top
- * SNOWBALL_TOP_REVIEWS review/meta-analysis records (by citations) have
- * their referenced_works fetched from OpenAlex; coverage = share of each
- * review's resolved references already in the corpus; references missing
- * from the corpus that appear in ≥SNOWBALL_MIN_REVIEWS reviews' lists are
- * auto-added with source_api "snowball". Mutates `records` in place and
- * returns the coverage report.
+ * Snowballing (D-019, D-034): completeness is verified structurally, but only
+ * against TOPICALLY VALIDATED anchors — a wrong anchor is worse than none. A
+ * qualifying review must (a) contain the mechanism's core terms in its title
+ * AND abstract, not a collision word, (b) be typed as a review/meta-analysis,
+ * and (c) cite ≥SNOWBALL_MIN_REFERENCES works. The top SNOWBALL_TOP_REVIEWS
+ * qualifying reviews (by citations) have their referenced_works fetched;
+ * coverage = share of each review's resolved references already in the corpus;
+ * references missing from the corpus that appear in ≥SNOWBALL_MIN_REVIEWS
+ * reviews' lists are auto-added with source_api "snowball". If no review
+ * qualifies, review_found is false and no anchor is chosen. Mutates `records`
+ * in place and returns the coverage report.
  */
 async function snowball(
   fetch: PoliteFetch,
   records: EvidenceRecord[],
+  coreKeys: string[],
   log: (message: string) => void,
 ): Promise<CoverageReport> {
   const candidates = records
-    .filter((r) => isReviewLike(r) && (r.openalex_id || r.doi))
+    .filter(
+      (r) =>
+        isReviewLike(r) &&
+        (r.openalex_id || r.doi) &&
+        isTopicalReview(r, coreKeys) &&
+        (r.referenced_works_count ?? 0) >= SNOWBALL_MIN_REFERENCES,
+    )
     .sort((a, b) => (b.citations ?? -1) - (a.citations ?? -1))
     .slice(0, SNOWBALL_TOP_REVIEWS);
+
+  if (candidates.length === 0) {
+    log(
+      "snowball: no review passed topical validation (core terms in title+abstract), review typing, and the reference-count threshold — no anchor chosen",
+    );
+    return {
+      review_found: false,
+      reviews: [],
+      snowball_added: 0,
+      note: "no topically-validated review anchor (core terms in title+abstract, review typing, ≥"
+        + `${SNOWBALL_MIN_REFERENCES} references) — no anchor chosen (D-034)`,
+    };
+  }
 
   const notes: string[] = [];
   if (candidates.length < SNOWBALL_TOP_REVIEWS) {
     notes.push(
-      `only ${candidates.length} of ${SNOWBALL_TOP_REVIEWS} review/meta-analysis records detected in the corpus`,
+      `only ${candidates.length} of ${SNOWBALL_TOP_REVIEWS} topically-validated review anchors found in the corpus`,
     );
   }
 
@@ -686,6 +790,7 @@ async function snowball(
   }
 
   return {
+    review_found: true,
     reviews,
     snowball_added: added,
     ...(notes.length > 0 ? { note: notes.join(" · ") } : {}),
@@ -756,7 +861,7 @@ export const evidenceConnector: Connector = {
   id: "evidence",
   sourceId: "evidence",
   sourceIds: ["openalex", "semantic-scholar"],
-  connectorVersion: "2.1.0",
+  connectorVersion: "2.2.0",
   description:
     "Evidence harvester: OpenAlex + Semantic Scholar literature for one mechanism → {mechanism_id}.json. Terms from the record's evidence_terms; owner pins merged from pinned_evidence; review-reference snowballing and a category checklist verify completeness structurally (D-019). Fetch and structure only.",
 
@@ -892,9 +997,15 @@ export const evidenceConnector: Connector = {
       }
     }
 
-    // Snowballing (D-019): review-reference coverage + auto-added references
-    // shared by ≥2 reviews. Mutates records in place.
-    const coverageReport = await snowball(ctx.fetch, records, ctx.log);
+    // Snowballing (D-019, D-034): review-reference coverage + auto-added
+    // references shared by ≥2 reviews, anchored only on topically-validated
+    // reviews. Mutates records in place.
+    const coverageReport = await snowball(
+      ctx.fetch,
+      records,
+      coreKeywords(terms),
+      ctx.log,
+    );
 
     // Category checklist (D-019): metadata-only classification of every
     // record, including snowballed ones.

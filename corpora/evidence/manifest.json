@@ -4,25 +4,113 @@
     "openalex",
     "semantic-scholar"
   ],
-  "connector_version": "2.1.0",
+  "connector_version": "2.2.0",
   "last_run": {
-    "timestamp": "2026-07-15T10:10:48.339Z",
-    "status": "success",
+    "timestamp": "2026-07-15T10:45:37.388Z",
+    "status": "partial",
     "params": {
-      "mechanism": "EN-03"
+      "mechanism": "ZE-07"
     },
-    "records_fetched": 173,
+    "records_fetched": 139,
     "files_written": 1,
-    "duration_s": 21.13,
+    "duration_s": 330.24,
+    "error": "semantic-scholar \"endowed progress effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "warnings": {
+      "s2_throttled": true
+    },
     "cost": {
-      "api_calls": 20,
-      "duration_s": 21.13,
+      "api_calls": 50,
+      "duration_s": 330.24,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-15T10:45:37.388Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "ZE-07"
+      },
+      "records_fetched": 139,
+      "files_written": 1,
+      "duration_s": 330.24,
+      "error": "semantic-scholar \"endowed progress effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 50,
+        "duration_s": 330.24,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-15T10:40:28.530Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "ZE-07"
+      },
+      "records_fetched": 134,
+      "files_written": 1,
+      "duration_s": 338.39,
+      "error": "semantic-scholar \"goal gradient hypothesis\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"Zeigarnik effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 53,
+        "duration_s": 338.39,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-15T10:34:32.739Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "EN-03"
+      },
+      "records_fetched": 143,
+      "files_written": 1,
+      "duration_s": 309.5,
+      "error": "semantic-scholar \"endowment effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"mere ownership effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 42,
+        "duration_s": 309.5,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-15T10:27:31.479Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "VR-02"
+      },
+      "records_fetched": 201,
+      "files_written": 1,
+      "duration_s": 387.29,
+      "error": "semantic-scholar \"dopamine reward anticipation\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"schedules of reinforcement\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"variable reward engagement\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 74,
+        "duration_s": 387.29,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T10:10:48.339Z",
       "status": "success",
@@ -240,94 +328,55 @@
       "files_written": 1,
       "duration_s": 220.54,
       "error": "semantic-scholar \"loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss aversion moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"loss of loss aversion\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
-    },
-    {
-      "timestamp": "2026-07-13T14:58:38.379Z",
-      "status": "success",
-      "params": {
-        "mechanism": "VR-02",
-        "terms": "variable ratio reinforcement;reward prediction error"
-      },
-      "records_fetched": 79,
-      "files_written": 1,
-      "duration_s": 8.26
-    },
-    {
-      "timestamp": "2026-07-13T14:54:52.607Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "VR-02",
-        "terms": "variable ratio reinforcement;reward prediction error"
-      },
-      "records_fetched": 50,
-      "files_written": 1,
-      "duration_s": 135.53,
-      "error": "semantic-scholar \"variable ratio reinforcement\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"reward prediction error\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
-    },
-    {
-      "timestamp": "2026-07-13T14:49:08.067Z",
-      "status": "failed",
-      "params": {
-        "mechanism": "VR-02",
-        "terms": "variable ratio reinforcement;reward prediction error"
-      },
-      "records_fetched": 0,
-      "files_written": 0,
-      "duration_s": 254.3,
-      "error": "All queries failed — openalex \"variable ratio reinforcement\": Request failed after 3 attempts: HTTP 503 Service Unavailable for api.openalex.org/works · openalex \"reward prediction error\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · semantic-scholar \"variable ratio reinforcement\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"reward prediction error\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
-    },
-    {
-      "timestamp": "2026-07-13T14:46:28.258Z",
-      "status": "success",
-      "params": {
-        "mechanism": "LA-01",
-        "terms": "loss aversion;prospect theory meta-analysis"
-      },
-      "records_fetched": 69,
-      "files_written": 1,
-      "duration_s": 12.43
     }
   ],
   "data_files": [
     {
       "path": "EN-03.json",
-      "records": 173,
-      "bytes": 781837,
+      "records": 143,
+      "bytes": 753377,
       "categories": {
         "foundational": 13,
-        "meta-analysis": 23,
-        "replication": 18,
-        "dissent": 36,
-        "recent": 32
+        "meta-analysis": 21,
+        "replication": 17,
+        "dissent": 32,
+        "recent": 19
       }
     },
     {
       "path": "LA-01.json",
       "records": 209,
-      "bytes": 573622,
+      "bytes": 572330,
       "categories": {
         "foundational": 31,
         "meta-analysis": 28,
         "replication": 25,
-        "dissent": 37,
+        "dissent": 36,
         "recent": 61
       }
     },
     {
       "path": "VR-02.json",
-      "records": 79,
-      "bytes": 109643
+      "records": 201,
+      "bytes": 569914,
+      "categories": {
+        "foundational": 40,
+        "meta-analysis": 35,
+        "replication": 2,
+        "dissent": 27,
+        "recent": 23
+      }
     },
     {
       "path": "ZE-07.json",
-      "records": 167,
-      "bytes": 805533,
+      "records": 139,
+      "bytes": 778871,
       "categories": {
         "foundational": 20,
         "meta-analysis": 32,
         "replication": 10,
-        "dissent": 27,
-        "recent": 41
+        "dissent": 25,
+        "recent": 25
       }
     }
   ]
