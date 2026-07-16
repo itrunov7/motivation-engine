@@ -1,0 +1,114 @@
+# GENERATED FILE — do not edit by hand.
+# Source: packs/pack-map.yaml + registry/mechanisms/*.json · regenerate with `npm run packs` (D-049).
+
+pack: retention-return
+applies_to: [return-triggers, notifications]
+funnel_stage: retention
+version: 0.1.0
+nature: knowledge base. facts with evidence strength. no instructions.
+source: projection of registry records HA-04 LA-01 ZE-07
+
+# ─────────────────────────────────────────────
+# LAYER 1 — MECHANISMS (atoms of evidence)
+# ─────────────────────────────────────────────
+mechanisms:
+
+  - id: HA-04
+    name: habit loop
+    fact: "Behavior becomes automatic when repeated in a stable context: a consistent cue triggers the action with decreasing conscious effort."
+    grade: A-
+    source: Habits form through context-dependent repetition until behavior becomes automatic (Lally et al. 2009, ~66-day field study; Wood & Rünger 2016 Annual Review). Cue-triggered automaticity is the well-supported core; the popular 'cue-routine-reward loop' is a useful framing of it.; doi:10.1002/ejsp.674; doi:10.1146/annurev-psych-122414-033417; doi:10.1016/j.jcps.2009.06.001
+    boundary: formation is slow weeks to months; requires stable context cue; reward supports but automaticity is the core
+    active_when: product.has_recurring_core_action
+    realizations: [consistent-cue, friction-reduction]
+    forbidden: [genuine-value-habit, cue-not-harassment, no-compulsion]
+
+  - id: LA-01
+    name: loss aversion
+    fact: A loss is experienced ~2x more intensely than an equivalent gain.
+    grade: A
+    source: Prospect theory (Kahneman & Tversky 1979); Nobel Prize 2002; cross-cultural replications over 45 years; doi:10.1017/S1930297500005945; doi:10.1037/xge0000039
+    boundary: weak on small stakes; requires perceived ownership; contested by Gal & Rucker, 'The Loss of Loss Aversion' (Journal of Consumer Psychology, 2018, DOI 10.1002/jcpy.1047)
+    active_when: user.accumulated_value_score > 0
+    realizations: [streak, trial-ownership, cancel-inventory, expiring-value, copy-framing]
+    forbidden: [real-loss-only, no-confirm-shaming, no-data-hostage, panic-cap, precondition-gate]
+
+  - id: ZE-07
+    name: progress & incompleteness
+    fact: People are pulled to close what is unfinished, and they push harder the closer the goal appears.
+    grade: B+
+    source: "Goal-gradient: effort accelerates near a goal (Hull 1932; field-validated by Kivetz, Urminsky & Zheng 2006). Endowed-progress effect (Nunes & Dreze 2006). Zeigarnik effect (unfinished tasks stay cognitively active) — real but with mixed replication.; doi:10.1509/jmkr.43.1.39; doi:10.1086/500480"
+    boundary: zeigarnik memory effect replication mixed; requires visible attainable goal; false progress backfires if detected
+    active_when: product.has_multi_step_goal
+    realizations: [progress-indicator, endowed-progress, open-loop]
+    forbidden: [true-progress-only, real-headstart-only, attainable-goal, no-manufactured-incompleteness]
+
+# ─────────────────────────────────────────────
+# LAYER 2 — INTERACTIONS (often stronger than any single mechanism)
+# ─────────────────────────────────────────────
+interactions:
+
+  - combination: [HA-04, ZE-07]
+    type: noted
+    fact: Progress and streaks support habit maintenance; distinct — ZE-07 is goal-directed progress, HA-04 is context-cued automaticity
+    grade: B+
+
+  - combination: [LA-01, ZE-07]
+    type: noted
+    fact: Incompleteness is an adjacent tension, a different mechanism
+    grade: B+
+
+# ─────────────────────────────────────────────
+# LAYER 3 — CONTEXT WEIGHTS (what fits what)
+# ─────────────────────────────────────────────
+context_weights:
+  - context: product.has_recurring_core_action
+    strong: [HA-04]
+  - context: not (product.has_recurring_core_action)
+    inactive: [HA-04]
+  - context: user.accumulated_value_score > 0
+    strong: [LA-01]
+  - context: not (user.accumulated_value_score > 0)
+    inactive: [LA-01]
+  - context: product.has_multi_step_goal
+    strong: [ZE-07]
+  - context: not (product.has_multi_step_goal)
+    inactive: [ZE-07]
+
+# ─────────────────────────────────────────────
+# HARD BOUNDARIES (absolute — legal/policy status, not preference)
+# ─────────────────────────────────────────────
+hard_boundaries:
+  - genuine-value-habit: forbidden — The habitual action must deliver real user value; do not build habits around actions that serve engagement metrics but not the user
+  - cue-not-harassment: forbidden — Cues must be helpful reminders, not manipulative or high-frequency nagging; respect notification limits and user control over cues
+  - no-compulsion: forbidden — engineer habit loops that the user cannot easily stop or that work against their stated intent; habit support, not compulsion
+  - real-loss-only: forbidden — The loss must be real; fake discounts and fake timers are forbidden
+  - no-confirm-shaming: forbidden — Buttons that shame refusal ('No, I want to pay more') are forbidden
+  - no-data-hostage: forbidden — Deleting user data is never used as pressure; genuine deletion requires ≥30-day notice and export
+  - panic-cap: forbidden — Loss-framed pushes ≤ 1/day, no anxiety escalation
+  - precondition-gate: forbidden — When accumulated_value_score = 0, the mechanism is not applied
+  - true-progress-only: forbidden — Displayed progress must reflect real state; fabricated or inflated progress bars are forbidden
+  - real-headstart-only: forbidden — Endowed progress must correspond to something the user actually did or received; inventing fake completed steps is forbidden
+  - attainable-goal: forbidden — The goal must be genuinely reachable; do not create endless or moving goalposts that never complete
+  - no-manufactured-incompleteness: forbidden — artificially fragment or leave things incomplete solely to create tension; open loops must be real, user-relevant unfinished states
+  - boundary_test: Is this building a habit the user wants and benefits from — or engineering compulsive return against their interest?
+  - boundary_test: If the user learned exactly how this works, would they shrug — or feel deceived?
+  - boundary_test: Is the progress and the goal real and reachable — or is completion engineered to always recede?
+
+# ─────────────────────────────────────────────
+# telemetry
+# ─────────────────────────────────────────────
+signals:
+  measured: [action_completion_rate, activation_rate, cancel_save_rate, cvr_loss_frame_vs_gain_frame, d30_retention, d7_retention, onboarding_completion, push_return_rate_vs_baseline, reactivation_rate_in_expiry_window, return_rate, return_rate_without_push, streak_length, task_completion_rate, trial_to_paid_cvr_vs_neutral_paywall]
+  tag: each generated element carries its mechanism id
+  learning: weak/negative signal demotes a realization; strong signal spreads it — the palette evolves from outcomes
+
+# ─────────────────────────────────────────────
+# wiring (only human-facing section; not read at generation time)
+# ─────────────────────────────────────────────
+wiring:
+  where: planning stage of the Development Plan, when the planned element matches applies_to
+  how: pack is provided to the generator as knowledge to reason from; nothing here instructs how to build
+  selection_now: by element type
+  selection_later: planning agent pre-filters mechanisms via active_when against the product spec, narrowing the evidence in context
+  provenance: downstream of registry records; regenerate when a record's grade/boundary/guardrail changes; never edit independently

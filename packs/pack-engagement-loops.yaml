@@ -1,0 +1,88 @@
+# GENERATED FILE — do not edit by hand.
+# Source: packs/pack-map.yaml + registry/mechanisms/*.json · regenerate with `npm run packs` (D-049).
+
+pack: engagement-loops
+applies_to: [in-product-loops]
+funnel_stage: activation
+version: 0.1.0
+nature: knowledge base. facts with evidence strength. no instructions.
+source: projection of registry records VR-02 CG-05
+
+# ─────────────────────────────────────────────
+# LAYER 1 — MECHANISMS (atoms of evidence)
+# ─────────────────────────────────────────────
+mechanisms:
+
+  - id: VR-02
+    name: variable reward
+    fact: Unpredictable rewards drive engagement far more strongly than predictable ones — the brain's dopamine system responds to the *surprise* of reward, not just the reward.
+    grade: A
+    source: "Variable-ratio schedules produce the highest, most persistent response rates (Skinner). Neural basis: dopamine reward-prediction-error (Schultz, Dayan & Montague 1997) — unpredictable reward drives the strongest dopamine signal.; doi:10.1126/science.275.5306.1593; doi:10.1007/s00213-006-0578-x"
+    boundary: reward must be genuinely valued; unpredictability can frustrate if reward never arrives; highest abuse potential of the core set
+    active_when: product.has_repeatable_reward_moment
+    realizations: [variable-discovery, surprise-reward]
+    forbidden: [genuine-reward-only, no-gambling-mechanics, no-compulsion-loops, vulnerable-users]
+
+  - id: CG-05
+    name: curiosity gap
+    fact: A gap between what someone knows and what they want to know creates a pull to close it.
+    grade: B+
+    source: Curiosity arises from an information gap between what one knows and wants to know; the gap creates a drive to close it (Loewenstein 1994, information-gap theory). Neuroscience links curiosity states to reward and memory circuitry (Gruber, Kang et al.).; doi:10.1037/0033-2909.116.1.75; doi:10.1016/j.neuron.2014.08.060
+    boundary: gap must be moderate known enough to care; clickbait backlash if payoff disappoints; attention effect stronger than lasting engagement
+    active_when: artifact.can_pose_a_resolvable_question
+    realizations: [personalized-reveal, progressive-reveal]
+    forbidden: [real-payoff, no-deceptive-teaser]
+
+# ─────────────────────────────────────────────
+# LAYER 2 — INTERACTIONS (often stronger than any single mechanism)
+# ─────────────────────────────────────────────
+interactions:
+
+  - combination: [VR-02, CG-05]
+    type: noted
+    fact: "Curiosity gap often co-occurs (not knowing what the reward is), but is a distinct driver: information gap vs reward unpredictability"
+    grade: B+
+
+# ─────────────────────────────────────────────
+# LAYER 3 — CONTEXT WEIGHTS (what fits what)
+# ─────────────────────────────────────────────
+context_weights:
+  - context: product.has_repeatable_reward_moment
+    strong: [VR-02]
+  - context: not (product.has_repeatable_reward_moment)
+    inactive: [VR-02]
+  - context: artifact.can_pose_a_resolvable_question
+    strong: [CG-05]
+  - context: not (artifact.can_pose_a_resolvable_question)
+    inactive: [CG-05]
+
+# ─────────────────────────────────────────────
+# HARD BOUNDARIES (absolute — legal/policy status, not preference)
+# ─────────────────────────────────────────────
+hard_boundaries:
+  - genuine-reward-only: forbidden — The variable reward must deliver real user value; variability that dispenses junk, empty pulls, or manufactured near-misses is forbidden
+  - no-gambling-mechanics: forbidden — No loot-box / paid-random-reward / near-miss / loss-disguised-as-win patterns; no monetary or paid-currency randomized rewards
+  - no-compulsion-loops: forbidden — engineer intermittent reward to maximize time-on-app against the user's interest; core functionality must never require chasing the variable reward
+  - vulnerable-users: forbidden — deploy variable-reward intensification toward users showing compulsive-use signals; no escalation of unpredictability to re-hook lapsing users
+  - real-payoff: forbidden — The curiosity gap must resolve into genuine, specific value; teasing a reveal the product does not deliver (clickbait) is forbidden
+  - no-deceptive-teaser: forbidden — The teased question must honestly represent what will be revealed; misleading curiosity hooks are forbidden
+  - boundary_test: Does the surprise add real value the user is glad to receive — or is it engineered to keep them pulling a lever against their own interest?
+  - boundary_test: Does closing the gap give the user something genuinely worth their attention — or is it a bait that disappoints?
+
+# ─────────────────────────────────────────────
+# telemetry
+# ─────────────────────────────────────────────
+signals:
+  measured: [activation_rate, click_through, completion_rate, cvr, d7_retention, flow_start_rate, landing_engagement, open_rate, return_rate_without_push, sessions_per_week]
+  tag: each generated element carries its mechanism id
+  learning: weak/negative signal demotes a realization; strong signal spreads it — the palette evolves from outcomes
+
+# ─────────────────────────────────────────────
+# wiring (only human-facing section; not read at generation time)
+# ─────────────────────────────────────────────
+wiring:
+  where: planning stage of the Development Plan, when the planned element matches applies_to
+  how: pack is provided to the generator as knowledge to reason from; nothing here instructs how to build
+  selection_now: by element type
+  selection_later: planning agent pre-filters mechanisms via active_when against the product spec, narrowing the evidence in context
+  provenance: downstream of registry records; regenerate when a record's grade/boundary/guardrail changes; never edit independently

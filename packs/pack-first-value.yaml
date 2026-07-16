@@ -1,0 +1,105 @@
+# GENERATED FILE — do not edit by hand.
+# Source: packs/pack-map.yaml + registry/mechanisms/*.json · regenerate with `npm run packs` (D-049).
+
+pack: first-value
+applies_to: [first-run-experience]
+funnel_stage: activation
+version: 0.1.0
+nature: knowledge base. facts with evidence strength. no instructions.
+source: projection of registry records ZE-07 VR-02 EN-03
+
+# ─────────────────────────────────────────────
+# LAYER 1 — MECHANISMS (atoms of evidence)
+# ─────────────────────────────────────────────
+mechanisms:
+
+  - id: ZE-07
+    name: progress & incompleteness
+    fact: People are pulled to close what is unfinished, and they push harder the closer the goal appears.
+    grade: B+
+    source: "Goal-gradient: effort accelerates near a goal (Hull 1932; field-validated by Kivetz, Urminsky & Zheng 2006). Endowed-progress effect (Nunes & Dreze 2006). Zeigarnik effect (unfinished tasks stay cognitively active) — real but with mixed replication.; doi:10.1509/jmkr.43.1.39; doi:10.1086/500480"
+    boundary: zeigarnik memory effect replication mixed; requires visible attainable goal; false progress backfires if detected
+    active_when: product.has_multi_step_goal
+    realizations: [progress-indicator, endowed-progress, open-loop]
+    forbidden: [true-progress-only, real-headstart-only, attainable-goal, no-manufactured-incompleteness]
+
+  - id: VR-02
+    name: variable reward
+    fact: Unpredictable rewards drive engagement far more strongly than predictable ones — the brain's dopamine system responds to the *surprise* of reward, not just the reward.
+    grade: A
+    source: "Variable-ratio schedules produce the highest, most persistent response rates (Skinner). Neural basis: dopamine reward-prediction-error (Schultz, Dayan & Montague 1997) — unpredictable reward drives the strongest dopamine signal.; doi:10.1126/science.275.5306.1593; doi:10.1007/s00213-006-0578-x"
+    boundary: reward must be genuinely valued; unpredictability can frustrate if reward never arrives; highest abuse potential of the core set
+    active_when: product.has_repeatable_reward_moment
+    realizations: [variable-discovery, surprise-reward]
+    forbidden: [genuine-reward-only, no-gambling-mechanics, no-compulsion-loops, vulnerable-users]
+
+  - id: EN-03
+    name: endowment effect
+    fact: Once something is 'mine', I value it more highly than I would to acquire it — parting with it is coded as a loss (endowment is upstream of LA-01).
+    grade: A-
+    source: Kahneman, Knetsch & Thaler (1990) mug experiments; Thaler (1980) coined the term; integrative review Morewedge & Giblin (2015). Robust and widely replicated.; doi:10.1086/261737; doi:10.1257/0002828054825547; doi:10.1016/j.tics.2015.04.004
+    boundary: procedure sensitive; attenuates with market experience; weaker for goods held for exchange
+    active_when: user.has_created_or_customized_artifact OR product.has_trial
+    realizations: [user-creation-preview, personalization-investment, trial-possession]
+    forbidden: [real-ownership-only, no-forced-investment, honest-trial-scope]
+
+# ─────────────────────────────────────────────
+# LAYER 2 — INTERACTIONS (often stronger than any single mechanism)
+# ─────────────────────────────────────────────
+interactions:
+
+  [] # no relations among this element's mechanisms in the registry
+
+# ─────────────────────────────────────────────
+# LAYER 3 — CONTEXT WEIGHTS (what fits what)
+# ─────────────────────────────────────────────
+context_weights:
+  - context: product.has_multi_step_goal
+    strong: [ZE-07]
+  - context: not (product.has_multi_step_goal)
+    inactive: [ZE-07]
+  - context: product.has_repeatable_reward_moment
+    strong: [VR-02]
+  - context: not (product.has_repeatable_reward_moment)
+    inactive: [VR-02]
+  - context: user.has_created_or_customized_artifact OR product.has_trial
+    strong: [EN-03]
+  - context: not (user.has_created_or_customized_artifact OR product.has_trial)
+    inactive: [EN-03]
+
+# ─────────────────────────────────────────────
+# HARD BOUNDARIES (absolute — legal/policy status, not preference)
+# ─────────────────────────────────────────────
+hard_boundaries:
+  - true-progress-only: forbidden — Displayed progress must reflect real state; fabricated or inflated progress bars are forbidden
+  - real-headstart-only: forbidden — Endowed progress must correspond to something the user actually did or received; inventing fake completed steps is forbidden
+  - attainable-goal: forbidden — The goal must be genuinely reachable; do not create endless or moving goalposts that never complete
+  - no-manufactured-incompleteness: forbidden — artificially fragment or leave things incomplete solely to create tension; open loops must be real, user-relevant unfinished states
+  - genuine-reward-only: forbidden — The variable reward must deliver real user value; variability that dispenses junk, empty pulls, or manufactured near-misses is forbidden
+  - no-gambling-mechanics: forbidden — No loot-box / paid-random-reward / near-miss / loss-disguised-as-win patterns; no monetary or paid-currency randomized rewards
+  - no-compulsion-loops: forbidden — engineer intermittent reward to maximize time-on-app against the user's interest; core functionality must never require chasing the variable reward
+  - vulnerable-users: forbidden — deploy variable-reward intensification toward users showing compulsive-use signals; no escalation of unpredictability to re-hook lapsing users
+  - real-ownership-only: forbidden
+  - no-forced-investment: forbidden — coerce meaningless effort solely to manufacture endowment; investment must carry genuine user value
+  - honest-trial-scope: forbidden — If trial access is partial, do not imply full possession
+  - boundary_test: Is the progress and the goal real and reachable — or is completion engineered to always recede?
+  - boundary_test: Does the surprise add real value the user is glad to receive — or is it engineered to keep them pulling a lever against their own interest?
+  - boundary_test: Does the 'yours' reflect real ownership the user would recognize — or is it manufactured to create false attachment?
+
+# ─────────────────────────────────────────────
+# telemetry
+# ─────────────────────────────────────────────
+signals:
+  measured: [activation_rate, d7_retention, onboarding_completion, return_rate, return_rate_without_push, sessions_per_week, task_completion_rate, trial_to_paid_cvr]
+  tag: each generated element carries its mechanism id
+  learning: weak/negative signal demotes a realization; strong signal spreads it — the palette evolves from outcomes
+
+# ─────────────────────────────────────────────
+# wiring (only human-facing section; not read at generation time)
+# ─────────────────────────────────────────────
+wiring:
+  where: planning stage of the Development Plan, when the planned element matches applies_to
+  how: pack is provided to the generator as knowledge to reason from; nothing here instructs how to build
+  selection_now: by element type
+  selection_later: planning agent pre-filters mechanisms via active_when against the product spec, narrowing the evidence in context
+  provenance: downstream of registry records; regenerate when a record's grade/boundary/guardrail changes; never edit independently

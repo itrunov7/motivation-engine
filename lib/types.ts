@@ -632,3 +632,85 @@ export interface PackMapFile {
   version: string;
   elements: PackMapElement[];
 }
+
+// ---------- Pack datasheet (/packs/pack-{id}.yaml, D-049) ----------
+//
+// A pack is a COMPUTED projection over the pack map + the registry, generated
+// by tools/render-packs.ts (`npm run packs`) and never hand-authored. Its
+// structure is pinned to the reference file pack-paywall-conversion.yaml:
+// header + LAYER 1 mechanisms + LAYER 2 interactions + LAYER 3 context_weights
+// + hard_boundaries + signals + wiring. Knowledge-base tone: facts only, no
+// instructions.
+
+/** LAYER 1 — one mechanism atom, projected from a registry record. */
+export interface PackMechanism {
+  id: string;
+  /** Record name, lowercased. */
+  name: string;
+  /** First sentence of mechanism_summary_for_context. */
+  fact: string;
+  grade: EvidenceGrade;
+  /** evidence.basis plus pinned-evidence DOIs. */
+  source: string;
+  /** Humanized evidence.caveats plus dossier dissent citation. */
+  boundary: string;
+  /** Precondition predicates, joined with OR when several. */
+  active_when: string;
+  /** Implementation ids with the "{ID}-" prefix stripped. */
+  realizations: string[];
+  /** Hard-rule ids, kebab-cased. */
+  forbidden: string[];
+}
+
+/** How two co-present mechanisms interact, derived from record relations. */
+export type PackInteractionType = "sequence-amplifying" | "reinforcing" | "noted";
+
+/** LAYER 2 — one interaction between two of the pack's mechanisms. */
+export interface PackInteraction {
+  combination: string[];
+  type: PackInteractionType;
+  /** The relation note. */
+  fact: string;
+  /** The weaker of the two members' grades. */
+  grade: EvidenceGrade;
+}
+
+/** LAYER 3 — a context and the mechanisms it makes strong or inactive. */
+export interface PackContextWeight {
+  context: string;
+  strong?: string[];
+  inactive?: string[];
+}
+
+/** Telemetry block — what the pack's realizations are measured against. */
+export interface PackSignals {
+  measured: string[];
+  tag: string;
+  learning: string;
+}
+
+/** The one human-facing block; not read at generation time. */
+export interface PackWiring {
+  where: string;
+  how: string;
+  selection_now: string;
+  selection_later: string;
+  provenance: string;
+}
+
+/** A full pack datasheet — the generated projection for one element. */
+export interface PackDatasheet {
+  pack: string;
+  applies_to: string[];
+  funnel_stage: FunnelStage;
+  version: string;
+  nature: string;
+  source: string;
+  mechanisms: PackMechanism[];
+  interactions: PackInteraction[];
+  context_weights: PackContextWeight[];
+  /** Each entry is a single-key map, e.g. { "fake-scarcity": "forbidden — ..." }. */
+  hard_boundaries: Record<string, string>[];
+  signals: PackSignals;
+  wiring: PackWiring;
+}

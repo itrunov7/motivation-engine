@@ -1,0 +1,123 @@
+# GENERATED FILE — do not edit by hand.
+# Source: packs/pack-map.yaml + registry/mechanisms/*.json · regenerate with `npm run packs` (D-049).
+
+pack: entry
+applies_to: [landing, demo]
+funnel_stage: cold_acquisition
+version: 0.1.0
+nature: knowledge base. facts with evidence strength. no instructions.
+source: projection of registry records CG-05 SP-08 FR-11 RE-10
+
+# ─────────────────────────────────────────────
+# LAYER 1 — MECHANISMS (atoms of evidence)
+# ─────────────────────────────────────────────
+mechanisms:
+
+  - id: CG-05
+    name: curiosity gap
+    fact: A gap between what someone knows and what they want to know creates a pull to close it.
+    grade: B+
+    source: Curiosity arises from an information gap between what one knows and wants to know; the gap creates a drive to close it (Loewenstein 1994, information-gap theory). Neuroscience links curiosity states to reward and memory circuitry (Gruber, Kang et al.).; doi:10.1037/0033-2909.116.1.75; doi:10.1016/j.neuron.2014.08.060
+    boundary: gap must be moderate known enough to care; clickbait backlash if payoff disappoints; attention effect stronger than lasting engagement
+    active_when: artifact.can_pose_a_resolvable_question
+    realizations: [personalized-reveal, progressive-reveal]
+    forbidden: [real-payoff, no-deceptive-teaser]
+
+  - id: SP-08
+    name: social proof
+    fact: When unsure, people look to what others do and treat it as evidence of the right choice.
+    grade: A-
+    source: People use others' behavior as evidence for the correct action, especially under uncertainty (Asch conformity; Cialdini's focus theory of normative conduct). Descriptive norms reliably shift behavior; online reviews measurably affect purchasing.; doi:10.1037/h0093718; doi:10.1037/0022-3514.58.6.1015; doi:10.1509/jmkg.73.4.15
+    boundary: strongest under uncertainty; referent similarity matters; boomerang effect if norm is undesirable
+    active_when: product.has_real_social_signal
+    realizations: [usage-signal, choice-signal]
+    forbidden: [real-social-data, no-fake-activity, no-fake-reviews]
+
+  - id: FR-11
+    name: framing & anchoring
+    fact: The same facts land differently depending on how they are framed and what reference point they are compared against.
+    grade: B+
+    source: "Framing: how equivalent information is presented shifts choice (Tversky & Kahneman 1981; Levin's attribute/risky/goal framing typology). Anchoring: an initial reference value biases subsequent estimates (Tversky & Kahneman 1974). Both robust, but anchoring's magnitude and some subliminal/incidental variants have a contested replication record.; doi:10.1126/science.7455683; doi:10.1126/science.185.4157.1124; doi:10.1257/aer.104.5.277"
+    boundary: anchoring replication contested for incidental variants; framing strength varies by type; effect sizes paradigm dependent
+    active_when: artifact.presents_choice_or_price
+    realizations: [price-anchor, gain-loss-framing]
+    forbidden: [real-anchor-only, truthful-framing, no-deceptive-decoy]
+
+  - id: RE-10
+    name: reciprocity
+    fact: Receiving something creates a felt obligation to give back.
+    grade: B+
+    source: The reciprocity norm — a felt obligation to return benefits received — is a broadly documented social rule (Gouldner 1960) and underlies compliance techniques like door-in-the-face (Cialdini). Field experiments (gift-exchange) show reciprocal behavior reliably.; doi:10.2307/2092623; doi:10.1037/0022-3514.31.2.206
+    boundary: gift must feel genuine not transactional; effect weakens if perceived as manipulation; obligation can feel coercive if overused
+    active_when: product.can_give_genuine_value_first
+    realizations: [value-first, unexpected-upgrade]
+    forbidden: [genuine-gift, no-coercive-obligation, no-unwanted-gifts-as-leverage]
+
+# ─────────────────────────────────────────────
+# LAYER 2 — INTERACTIONS (often stronger than any single mechanism)
+# ─────────────────────────────────────────────
+interactions:
+
+  - combination: [RE-10, SP-08]
+    type: noted
+    fact: "Both are social-norm mechanisms but differ: reciprocity is exchange obligation, social proof is others-as-evidence"
+    grade: B+
+
+# ─────────────────────────────────────────────
+# LAYER 3 — CONTEXT WEIGHTS (what fits what)
+# ─────────────────────────────────────────────
+context_weights:
+  - context: artifact.can_pose_a_resolvable_question
+    strong: [CG-05]
+  - context: not (artifact.can_pose_a_resolvable_question)
+    inactive: [CG-05]
+  - context: product.has_real_social_signal
+    strong: [SP-08]
+  - context: not (product.has_real_social_signal)
+    inactive: [SP-08]
+  - context: artifact.presents_choice_or_price
+    strong: [FR-11]
+  - context: not (artifact.presents_choice_or_price)
+    inactive: [FR-11]
+  - context: product.can_give_genuine_value_first
+    strong: [RE-10]
+  - context: not (product.can_give_genuine_value_first)
+    inactive: [RE-10]
+
+# ─────────────────────────────────────────────
+# HARD BOUNDARIES (absolute — legal/policy status, not preference)
+# ─────────────────────────────────────────────
+hard_boundaries:
+  - real-payoff: forbidden — The curiosity gap must resolve into genuine, specific value; teasing a reveal the product does not deliver (clickbait) is forbidden
+  - no-deceptive-teaser: forbidden — The teased question must honestly represent what will be revealed; misleading curiosity hooks are forbidden
+  - real-social-data: forbidden — All social-proof signals (counts, ratings, 'most popular', reviews) must be genuine and current; fabricated or inflated social proof is forbidden
+  - no-fake-activity: forbidden — No fake 'X people viewing/bought recently' notifications unless literally true and verifiable
+  - no-fake-reviews: forbidden — generate, imply, or display fabricated reviews or testimonials
+  - real-anchor-only: forbidden — Anchors (reference prices, tiers, 'was' prices) must be genuine; fabricated anchors and fake original prices are forbidden and often illegal
+  - truthful-framing: forbidden — Framing selects emphasis among true statements; it must never misrepresent, omit material negatives deceptively, or state falsehoods
+  - no-deceptive-decoy: forbidden — Decoy/reference options must be real offerings, not fake options designed solely to mislead
+  - genuine-gift: forbidden — The value given must be genuinely useful on its own; hollow 'gifts' engineered solely to create obligation are forbidden
+  - no-coercive-obligation: forbidden — frame the gift as a debt or pressure repayment; reciprocity must remain a free response, not a manufactured obligation
+  - no-unwanted-gifts-as-leverage: forbidden — use unsolicited 'gifts' (e.g. forced trials that auto-bill) as reciprocity leverage
+  - boundary_test: Does closing the gap give the user something genuinely worth their attention — or is it a bait that disappoints?
+  - boundary_test: Is the social signal true and relevant — or manufactured to fake consensus?
+  - boundary_test: Is the frame emphasizing true value with a real reference point — or manufacturing a misleading comparison?
+  - boundary_test: Is the value given genuinely useful and freely given — or a hollow gift engineered to manufacture obligation?
+
+# ─────────────────────────────────────────────
+# telemetry
+# ─────────────────────────────────────────────
+signals:
+  measured: [activation_rate, average_plan_value, click_through, completion_rate, conversion_after_gift, cvr, cvr_frame_a_vs_b, flow_start_rate, landing_engagement, open_rate, retention_lift, signup_rate, tier_selection_distribution, trust_signal_engagement]
+  tag: each generated element carries its mechanism id
+  learning: weak/negative signal demotes a realization; strong signal spreads it — the palette evolves from outcomes
+
+# ─────────────────────────────────────────────
+# wiring (only human-facing section; not read at generation time)
+# ─────────────────────────────────────────────
+wiring:
+  where: planning stage of the Development Plan, when the planned element matches applies_to
+  how: pack is provided to the generator as knowledge to reason from; nothing here instructs how to build
+  selection_now: by element type
+  selection_later: planning agent pre-filters mechanisms via active_when against the product spec, narrowing the evidence in context
+  provenance: downstream of registry records; regenerate when a record's grade/boundary/guardrail changes; never edit independently

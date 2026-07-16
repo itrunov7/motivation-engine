@@ -1,0 +1,109 @@
+# GENERATED FILE — do not edit by hand.
+# Source: packs/pack-map.yaml + registry/mechanisms/*.json · regenerate with `npm run packs` (D-049).
+
+pack: retention-billing
+applies_to: [billing, renewal]
+funnel_stage: retention
+version: 0.1.0
+nature: knowledge base. facts with evidence strength. no instructions.
+source: projection of registry records LA-01 EN-03 ST-09
+
+# ─────────────────────────────────────────────
+# LAYER 1 — MECHANISMS (atoms of evidence)
+# ─────────────────────────────────────────────
+mechanisms:
+
+  - id: LA-01
+    name: loss aversion
+    fact: A loss is experienced ~2x more intensely than an equivalent gain.
+    grade: A
+    source: Prospect theory (Kahneman & Tversky 1979); Nobel Prize 2002; cross-cultural replications over 45 years; doi:10.1017/S1930297500005945; doi:10.1037/xge0000039
+    boundary: weak on small stakes; requires perceived ownership; contested by Gal & Rucker, 'The Loss of Loss Aversion' (Journal of Consumer Psychology, 2018, DOI 10.1002/jcpy.1047)
+    active_when: user.accumulated_value_score > 0
+    realizations: [streak, trial-ownership, cancel-inventory, expiring-value, copy-framing]
+    forbidden: [real-loss-only, no-confirm-shaming, no-data-hostage, panic-cap, precondition-gate]
+
+  - id: EN-03
+    name: endowment effect
+    fact: Once something is 'mine', I value it more highly than I would to acquire it — parting with it is coded as a loss (endowment is upstream of LA-01).
+    grade: A-
+    source: Kahneman, Knetsch & Thaler (1990) mug experiments; Thaler (1980) coined the term; integrative review Morewedge & Giblin (2015). Robust and widely replicated.; doi:10.1086/261737; doi:10.1257/0002828054825547; doi:10.1016/j.tics.2015.04.004
+    boundary: procedure sensitive; attenuates with market experience; weaker for goods held for exchange
+    active_when: user.has_created_or_customized_artifact OR product.has_trial
+    realizations: [user-creation-preview, personalization-investment, trial-possession]
+    forbidden: [real-ownership-only, no-forced-investment, honest-trial-scope]
+
+  - id: ST-09
+    name: status & comparison
+    fact: People are motivated by their standing relative to others — progress, rank, recognition among a relevant peer group.
+    grade: A-
+    source: People evaluate themselves relative to others and are motivated by relative standing (Festinger 1954, social comparison theory). Status-seeking and positional/conspicuous consumption are well-documented in economics and consumer behavior (Veblen effects).; doi:10.1177/001872675400700202; doi:10.2307/2946511
+    boundary: upward comparison can demotivate or harm wellbeing; referent group dependent; status signals are culturally specific
+    active_when: product.has_progress_or_achievement
+    realizations: [progress-recognition, peer-standing]
+    forbidden: [no-harmful-comparison, real-achievement, comparison-opt-out, vulnerable-wellbeing]
+
+# ─────────────────────────────────────────────
+# LAYER 2 — INTERACTIONS (often stronger than any single mechanism)
+# ─────────────────────────────────────────────
+interactions:
+
+  - combination: [EN-03, LA-01]
+    type: sequence-amplifying
+    fact: "Endowment creates the value that LA-01 protects. Sequence: EN-03 → LA-01"
+    grade: A-
+
+# ─────────────────────────────────────────────
+# LAYER 3 — CONTEXT WEIGHTS (what fits what)
+# ─────────────────────────────────────────────
+context_weights:
+  - context: user.accumulated_value_score > 0
+    strong: [LA-01]
+  - context: not (user.accumulated_value_score > 0)
+    inactive: [LA-01]
+  - context: user.has_created_or_customized_artifact OR product.has_trial
+    strong: [EN-03]
+  - context: not (user.has_created_or_customized_artifact OR product.has_trial)
+    inactive: [EN-03]
+  - context: product.has_progress_or_achievement
+    strong: [ST-09]
+  - context: not (product.has_progress_or_achievement)
+    inactive: [ST-09]
+
+# ─────────────────────────────────────────────
+# HARD BOUNDARIES (absolute — legal/policy status, not preference)
+# ─────────────────────────────────────────────
+hard_boundaries:
+  - real-loss-only: forbidden — The loss must be real; fake discounts and fake timers are forbidden
+  - no-confirm-shaming: forbidden — Buttons that shame refusal ('No, I want to pay more') are forbidden
+  - no-data-hostage: forbidden — Deleting user data is never used as pressure; genuine deletion requires ≥30-day notice and export
+  - panic-cap: forbidden — Loss-framed pushes ≤ 1/day, no anxiety escalation
+  - precondition-gate: forbidden — When accumulated_value_score = 0, the mechanism is not applied
+  - real-ownership-only: forbidden
+  - no-forced-investment: forbidden — coerce meaningless effort solely to manufacture endowment; investment must carry genuine user value
+  - honest-trial-scope: forbidden — If trial access is partial, do not imply full possession
+  - no-harmful-comparison: forbidden — engineer demoralizing or wellbeing-damaging comparison (permanent bottom-ranking, shaming, appearance/self-worth comparison); comparison must motivate, not harm
+  - real-achievement: forbidden — Status and achievement signals must reflect genuine accomplishment, not fabricated or purchased rank presented as merit
+  - comparison-opt-out: forbidden — Public ranking/comparison must be opt-out-able; do not force users into visible competition
+  - vulnerable-wellbeing: forbidden — intensify social comparison toward users where it risks wellbeing harm (e.g. appearance, body, self-worth domains)
+  - boundary_test: If the user learned exactly how this works, would they shrug — or feel deceived?
+  - boundary_test: Does the 'yours' reflect real ownership the user would recognize — or is it manufactured to create false attachment?
+  - boundary_test: Does the comparison recognize and motivate through attainable standing — or shame, demoralize, or harm wellbeing?
+
+# ─────────────────────────────────────────────
+# telemetry
+# ─────────────────────────────────────────────
+signals:
+  measured: [achievement_completion, activation_rate, cancel_save_rate, cohort_engagement, cvr_loss_frame_vs_gain_frame, d30_retention, d7_retention, engagement_depth, onboarding_completion, push_return_rate_vs_baseline, reactivation_rate_in_expiry_window, return_rate, trial_to_paid_cvr, trial_to_paid_cvr_vs_neutral_paywall]
+  tag: each generated element carries its mechanism id
+  learning: weak/negative signal demotes a realization; strong signal spreads it — the palette evolves from outcomes
+
+# ─────────────────────────────────────────────
+# wiring (only human-facing section; not read at generation time)
+# ─────────────────────────────────────────────
+wiring:
+  where: planning stage of the Development Plan, when the planned element matches applies_to
+  how: pack is provided to the generator as knowledge to reason from; nothing here instructs how to build
+  selection_now: by element type
+  selection_later: planning agent pre-filters mechanisms via active_when against the product spec, narrowing the evidence in context
+  provenance: downstream of registry records; regenerate when a record's grade/boundary/guardrail changes; never edit independently

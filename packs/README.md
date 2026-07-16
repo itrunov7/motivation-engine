@@ -1,10 +1,14 @@
-# /packs — Pack map
+# /packs — Pack map + generated packs
 
 ## What lives here
 
 - `pack-map.yaml` — the **one hand-authored input** to pack generation: which
   mechanisms' evidence is relevant to which Development-Plan element type. Each
   entry is `{ id, applies_to, funnel_stage, mechanisms, note? }`.
+- `pack-{id}.yaml` — **generated** datasheets, one per pack-map element
+  (`npm run packs`, D-049). These are computed projections over the pack map +
+  the registry; **never edit them by hand** — change a registry record (or the
+  map) and re-render. Stale packs are removed automatically on regenerate.
 
 ## Why this is the only judgment call
 

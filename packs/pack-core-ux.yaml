@@ -1,0 +1,113 @@
+# GENERATED FILE — do not edit by hand.
+# Source: packs/pack-map.yaml + registry/mechanisms/*.json · regenerate with `npm run packs` (D-049).
+
+pack: core-ux
+applies_to: [core-product-screens]
+funnel_stage: activation
+version: 0.1.0
+nature: knowledge base. facts with evidence strength. no instructions.
+source: projection of registry records VR-02 HA-04 ZE-07
+
+# ─────────────────────────────────────────────
+# LAYER 1 — MECHANISMS (atoms of evidence)
+# ─────────────────────────────────────────────
+mechanisms:
+
+  - id: VR-02
+    name: variable reward
+    fact: Unpredictable rewards drive engagement far more strongly than predictable ones — the brain's dopamine system responds to the *surprise* of reward, not just the reward.
+    grade: A
+    source: "Variable-ratio schedules produce the highest, most persistent response rates (Skinner). Neural basis: dopamine reward-prediction-error (Schultz, Dayan & Montague 1997) — unpredictable reward drives the strongest dopamine signal.; doi:10.1126/science.275.5306.1593; doi:10.1007/s00213-006-0578-x"
+    boundary: reward must be genuinely valued; unpredictability can frustrate if reward never arrives; highest abuse potential of the core set
+    active_when: product.has_repeatable_reward_moment
+    realizations: [variable-discovery, surprise-reward]
+    forbidden: [genuine-reward-only, no-gambling-mechanics, no-compulsion-loops, vulnerable-users]
+
+  - id: HA-04
+    name: habit loop
+    fact: "Behavior becomes automatic when repeated in a stable context: a consistent cue triggers the action with decreasing conscious effort."
+    grade: A-
+    source: Habits form through context-dependent repetition until behavior becomes automatic (Lally et al. 2009, ~66-day field study; Wood & Rünger 2016 Annual Review). Cue-triggered automaticity is the well-supported core; the popular 'cue-routine-reward loop' is a useful framing of it.; doi:10.1002/ejsp.674; doi:10.1146/annurev-psych-122414-033417; doi:10.1016/j.jcps.2009.06.001
+    boundary: formation is slow weeks to months; requires stable context cue; reward supports but automaticity is the core
+    active_when: product.has_recurring_core_action
+    realizations: [consistent-cue, friction-reduction]
+    forbidden: [genuine-value-habit, cue-not-harassment, no-compulsion]
+
+  - id: ZE-07
+    name: progress & incompleteness
+    fact: People are pulled to close what is unfinished, and they push harder the closer the goal appears.
+    grade: B+
+    source: "Goal-gradient: effort accelerates near a goal (Hull 1932; field-validated by Kivetz, Urminsky & Zheng 2006). Endowed-progress effect (Nunes & Dreze 2006). Zeigarnik effect (unfinished tasks stay cognitively active) — real but with mixed replication.; doi:10.1509/jmkr.43.1.39; doi:10.1086/500480"
+    boundary: zeigarnik memory effect replication mixed; requires visible attainable goal; false progress backfires if detected
+    active_when: product.has_multi_step_goal
+    realizations: [progress-indicator, endowed-progress, open-loop]
+    forbidden: [true-progress-only, real-headstart-only, attainable-goal, no-manufactured-incompleteness]
+
+# ─────────────────────────────────────────────
+# LAYER 2 — INTERACTIONS (often stronger than any single mechanism)
+# ─────────────────────────────────────────────
+interactions:
+
+  - combination: [VR-02, HA-04]
+    type: noted
+    fact: Variable reward is the reward component that makes habit loops (HA-04) sticky; HA-04 is the full loop, VR-02 is one part
+    grade: A-
+
+  - combination: [HA-04, ZE-07]
+    type: noted
+    fact: Progress and streaks support habit maintenance; distinct — ZE-07 is goal-directed progress, HA-04 is context-cued automaticity
+    grade: B+
+
+# ─────────────────────────────────────────────
+# LAYER 3 — CONTEXT WEIGHTS (what fits what)
+# ─────────────────────────────────────────────
+context_weights:
+  - context: product.has_repeatable_reward_moment
+    strong: [VR-02]
+  - context: not (product.has_repeatable_reward_moment)
+    inactive: [VR-02]
+  - context: product.has_recurring_core_action
+    strong: [HA-04]
+  - context: not (product.has_recurring_core_action)
+    inactive: [HA-04]
+  - context: product.has_multi_step_goal
+    strong: [ZE-07]
+  - context: not (product.has_multi_step_goal)
+    inactive: [ZE-07]
+
+# ─────────────────────────────────────────────
+# HARD BOUNDARIES (absolute — legal/policy status, not preference)
+# ─────────────────────────────────────────────
+hard_boundaries:
+  - genuine-reward-only: forbidden — The variable reward must deliver real user value; variability that dispenses junk, empty pulls, or manufactured near-misses is forbidden
+  - no-gambling-mechanics: forbidden — No loot-box / paid-random-reward / near-miss / loss-disguised-as-win patterns; no monetary or paid-currency randomized rewards
+  - no-compulsion-loops: forbidden — engineer intermittent reward to maximize time-on-app against the user's interest; core functionality must never require chasing the variable reward
+  - vulnerable-users: forbidden — deploy variable-reward intensification toward users showing compulsive-use signals; no escalation of unpredictability to re-hook lapsing users
+  - genuine-value-habit: forbidden — The habitual action must deliver real user value; do not build habits around actions that serve engagement metrics but not the user
+  - cue-not-harassment: forbidden — Cues must be helpful reminders, not manipulative or high-frequency nagging; respect notification limits and user control over cues
+  - no-compulsion: forbidden — engineer habit loops that the user cannot easily stop or that work against their stated intent; habit support, not compulsion
+  - true-progress-only: forbidden — Displayed progress must reflect real state; fabricated or inflated progress bars are forbidden
+  - real-headstart-only: forbidden — Endowed progress must correspond to something the user actually did or received; inventing fake completed steps is forbidden
+  - attainable-goal: forbidden — The goal must be genuinely reachable; do not create endless or moving goalposts that never complete
+  - no-manufactured-incompleteness: forbidden — artificially fragment or leave things incomplete solely to create tension; open loops must be real, user-relevant unfinished states
+  - boundary_test: Does the surprise add real value the user is glad to receive — or is it engineered to keep them pulling a lever against their own interest?
+  - boundary_test: Is this building a habit the user wants and benefits from — or engineering compulsive return against their interest?
+  - boundary_test: Is the progress and the goal real and reachable — or is completion engineered to always recede?
+
+# ─────────────────────────────────────────────
+# telemetry
+# ─────────────────────────────────────────────
+signals:
+  measured: [action_completion_rate, activation_rate, d30_retention, d7_retention, onboarding_completion, return_rate, return_rate_without_push, sessions_per_week, streak_length, task_completion_rate]
+  tag: each generated element carries its mechanism id
+  learning: weak/negative signal demotes a realization; strong signal spreads it — the palette evolves from outcomes
+
+# ─────────────────────────────────────────────
+# wiring (only human-facing section; not read at generation time)
+# ─────────────────────────────────────────────
+wiring:
+  where: planning stage of the Development Plan, when the planned element matches applies_to
+  how: pack is provided to the generator as knowledge to reason from; nothing here instructs how to build
+  selection_now: by element type
+  selection_later: planning agent pre-filters mechanisms via active_when against the product spec, narrowing the evidence in context
+  provenance: downstream of registry records; regenerate when a record's grade/boundary/guardrail changes; never edit independently
