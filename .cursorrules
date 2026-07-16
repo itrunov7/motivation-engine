@@ -14,7 +14,8 @@ fetching from a whitelist of public APIs. NO engine, NO LLM calls, NO database.
 1. SOURCE OF TRUTH — files in the repo. Data lives ONLY in:
  /registry/**.json, /sources/sources.json, /decisions/decisions.json,
  /dossiers/**, /docs/**.md, /segments/segments.yaml (product-segment axis,
- D-047), /corpora/_ops/**.json (operational config).
+ D-047), /packs/pack-map.yaml (pack map — sole hand-authored pack input,
+ D-048), /corpora/_ops/**.json (operational config).
    No data inside components, no databases. Knowledge files (registry,
    dossiers, docs, sources, decisions) are edited ONLY in git; the app has a
    NARROW write surface limited to /corpora/_ops/** and append-only auto-

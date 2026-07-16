@@ -592,3 +592,43 @@ export interface SegmentsFile {
   version: string;
   segments: Segment[];
 }
+
+// ---------- Pack map (/packs/pack-map.yaml, D-048) ----------
+
+/**
+ * Funnel stage vocabulary, mirroring the registry applicability stages
+ * (registry/mechanisms/*.json applicability.funnel_stages). A pack-map
+ * element's stage records evidence relevance, not runtime applicability.
+ */
+export type FunnelStage =
+  | "cold_acquisition"
+  | "onboarding"
+  | "activation"
+  | "conversion"
+  | "retention"
+  | "reactivation";
+
+/**
+ * One Development-Plan element type mapped to the mechanisms whose evidence is
+ * relevant to it — the sole hand-authored input to pack generation (D-048).
+ * Everything downstream (packs) is a computed projection over this map plus
+ * the registry. Validated by tools/validate.ts against a schema pinned to this
+ * reader; every `mechanisms` id must resolve to a registry record.
+ */
+export interface PackMapElement {
+  /** Element type slug (unique), e.g. "paywall-conversion". */
+  id: string;
+  /** Product surfaces this element covers (free-text slugs). */
+  applies_to: string[];
+  funnel_stage: FunnelStage;
+  /** Mechanism ids whose evidence is relevant; each must exist in the registry. */
+  mechanisms: string[];
+  /** Optional owner annotation, e.g. "guardrail-forward". */
+  note?: string;
+}
+
+/** /packs/pack-map.yaml — the pack map. */
+export interface PackMapFile {
+  version: string;
+  elements: PackMapElement[];
+}

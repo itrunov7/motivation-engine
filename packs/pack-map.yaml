@@ -1,0 +1,80 @@
+version: 0.1.0
+
+# Pack map — the ONE hand-authored input to pack generation (D-048).
+#
+# This file records the single judgment call in the pack pipeline: which
+# mechanisms' evidence is relevant to which Development-Plan element type.
+# Everything downstream (the packs themselves) is a COMPUTED projection over
+# this map + the registry; packs are never hand-authored. Edited in git only,
+# no UI write surface. Validated in CI by tools/validate.ts: the file must
+# parse as YAML, every entry must match the schema, element ids must be
+# unique, and EVERY referenced mechanism id must resolve to a registry record.
+#
+# Fields per element:
+#   id            — the Development-Plan element type (unique slug)
+#   applies_to    — product surfaces this element covers (free-text slugs)
+#   funnel_stage  — where the element sits in the funnel (registry vocabulary)
+#   mechanisms    — mechanism ids whose evidence is relevant here
+#   note          — optional owner annotation
+#
+# NOTE: funnel_stage maps evidence RELEVANCE, not runtime applicability. An
+# element's stage may differ from a member mechanism's applicability
+# (e.g. entry is cold_acquisition while SP-08/FR-11 exclude that stage at
+# generation time) — the validator deliberately does not cross-check the two.
+
+elements:
+  - id: entry
+    applies_to: [landing, demo]
+    funnel_stage: cold_acquisition
+    mechanisms: [CG-05, SP-08, FR-11, RE-10]
+
+  - id: onboarding
+    applies_to: [onboarding-flow]
+    funnel_stage: onboarding
+    mechanisms: [ID-12, EN-03, ZE-07, VR-02]
+
+  - id: first-value
+    applies_to: [first-run-experience]
+    funnel_stage: activation
+    mechanisms: [ZE-07, VR-02, EN-03]
+
+  - id: core-ux
+    applies_to: [core-product-screens]
+    funnel_stage: activation
+    mechanisms: [VR-02, HA-04, ZE-07]
+
+  - id: retention-return
+    applies_to: [return-triggers, notifications]
+    funnel_stage: retention
+    mechanisms: [HA-04, LA-01, ZE-07]
+
+  - id: engagement-loops
+    applies_to: [in-product-loops]
+    funnel_stage: activation
+    mechanisms: [VR-02, CG-05]
+
+  - id: social-proof-status
+    applies_to: [social-surfaces, profiles]
+    funnel_stage: activation
+    mechanisms: [SP-08, ST-09]
+
+  - id: paywall-conversion
+    applies_to: [paywall, pricing]
+    funnel_stage: conversion
+    mechanisms: [LA-01, EN-03, FR-11, SC-06]
+
+  - id: retention-billing
+    applies_to: [billing, renewal]
+    funnel_stage: retention
+    mechanisms: [LA-01, EN-03, ST-09]
+
+  - id: trust-friction
+    applies_to: [checkout, forms]
+    funnel_stage: conversion
+    mechanisms: [SP-08, FR-11]
+    note: guardrail-forward
+
+  - id: aha-sharing
+    applies_to: [share-moments, exports]
+    funnel_stage: activation
+    mechanisms: [RE-10, ST-09, SP-08]

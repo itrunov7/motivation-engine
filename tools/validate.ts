@@ -58,7 +58,7 @@ import type {
   RunQuote as WriterRunQuote,
 } from "./connectors/types";
 import { CONNECTORS } from "./connectors";
-import type { BenchmarkFile, BenchmarkMetric, CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig, RunQuote, Segment } from "../lib/types";
+import type { BenchmarkFile, BenchmarkMetric, CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig, PackMapElement, RunQuote, Segment } from "../lib/types";
 import {
   KNOWN_CONNECTOR_IDS,
   OPS_PATHS,
@@ -81,6 +81,7 @@ const PATHS = {
   benchmarksDir: join(ROOT, "corpora", "benchmarks"),
   heartbeat: join(ROOT, "corpora", "_health", "heartbeat.json"),
   segments: join(ROOT, "segments", "segments.yaml"),
+  packMap: join(ROOT, "packs", "pack-map.yaml"),
 };
 
 /** /corpora dirs that are ops surfaces, not harvested corpora — no manifest. */
@@ -304,6 +305,66 @@ const segmentsSchema = {
     },
   },
   required: ["version", "segments"],
+  additionalProperties: false,
+} as const;
+
+// ---------- Pack map (D-048) ----------
+//
+// /packs/pack-map.yaml is the ONE hand-authored input to pack generation:
+// which mechanisms' evidence is relevant to which Development-Plan element
+// type. Everything downstream (packs) is a computed projection. The Ajv
+// schema property keys are pinned to the reader contract (lib/types.ts
+// PackMapElement) via a satisfies constraint, so a field renamed/added/removed
+// on the type without a schema update no longer compiles. The mechanism-id
+// cross-check (every id resolves to a registry record) runs in the pass below,
+// once the roster is built.
+const packMapElementProperties = {
+  id: { type: "string", pattern: "^[a-z0-9-]+$" },
+  applies_to: {
+    type: "array",
+    minItems: 1,
+    items: { type: "string", pattern: "^[a-z0-9-]+$" },
+  },
+  funnel_stage: {
+    type: "string",
+    enum: [
+      "cold_acquisition",
+      "onboarding",
+      "activation",
+      "conversion",
+      "retention",
+      "reactivation",
+    ],
+  },
+  mechanisms: {
+    type: "array",
+    minItems: 1,
+    items: { type: "string", pattern: "^[A-Z]{2}-\\d{2}$" },
+  },
+  note: { type: "string", minLength: 1 },
+} as const satisfies Record<keyof PackMapElement, unknown>;
+
+const packMapSchema = {
+  type: "object",
+  properties: {
+    version: { type: "string", pattern: "^\\d+\\.\\d+\\.\\d+$" },
+    elements: {
+      type: "array",
+      minItems: 1,
+      items: {
+        type: "object",
+        properties: packMapElementProperties,
+        required: [
+          "id",
+          "applies_to",
+          "funnel_stage",
+          "mechanisms",
+        ] satisfies readonly (keyof PackMapElement)[],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ["version", "elements"],
   additionalProperties: false,
 } as const;
 
@@ -1014,6 +1075,49 @@ function main(): void {
     }
   } else {
     console.log("  · no segments file yet (segments/segments.yaml)");
+  }
+
+  // 13. Pack map (D-048): /packs/pack-map.yaml is the sole hand-authored input
+  // to pack generation — element type → relevant mechanisms. Parse the YAML,
+  // validate every element against the schema, enforce unique element ids, and
+  // cross-check that EVERY referenced mechanism id resolves to a registry
+  // record (rosterIds, built in passes 3–4). A pack map pointing at a phantom
+  // mechanism would silently produce an empty/wrong pack.
+  if (existsSync(PATHS.packMap)) {
+    let packMapDoc: unknown;
+    try {
+      packMapDoc = parseYaml(readFileSync(PATHS.packMap, "utf-8"));
+    } catch (err) {
+      fail(PATHS.packMap, `not valid YAML — ${(err as Error).message}`);
+      packMapDoc = undefined;
+    }
+    if (packMapDoc !== undefined) {
+      let ok = validateAgainst(ajv.compile(packMapSchema), PATHS.packMap, packMapDoc);
+      if (ok) {
+        const elements = (packMapDoc as { elements: PackMapElement[] }).elements;
+        const ids = new Set(elements.map((e) => e.id));
+        if (ids.size !== elements.length) {
+          fail(PATHS.packMap, "duplicate element ids");
+          ok = false;
+        }
+        for (const element of elements) {
+          for (const mechanismId of element.mechanisms) {
+            if (!rosterIds.has(mechanismId)) {
+              fail(
+                PATHS.packMap,
+                `element "${element.id}" references mechanism "${mechanismId}" which is not in the registry roster`,
+              );
+              ok = false;
+            }
+          }
+        }
+        if (ok) {
+          console.log(`  ✓ ${rel(PATHS.packMap)} valid (${elements.length} pack-map elements)`);
+        }
+      }
+    }
+  } else {
+    console.log("  · no pack map yet (packs/pack-map.yaml)");
   }
 
   finish();
