@@ -38,6 +38,7 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { basename, dirname, join, relative, sep } from "node:path";
 import { Ajv2020, type ValidateFunction, type ErrorObject } from "ajv/dist/2020";
 import addFormats from "ajv-formats";
+import { parse as parseYaml } from "yaml";
 import {
   EVIDENCE_CATEGORIES,
   RUN_HISTORY_LIMIT,
@@ -57,7 +58,7 @@ import type {
   RunQuote as WriterRunQuote,
 } from "./connectors/types";
 import { CONNECTORS } from "./connectors";
-import type { BenchmarkFile, BenchmarkMetric, CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig, RunQuote } from "../lib/types";
+import type { BenchmarkFile, BenchmarkMetric, CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig, RunQuote, Segment } from "../lib/types";
 import {
   KNOWN_CONNECTOR_IDS,
   OPS_PATHS,
@@ -79,6 +80,7 @@ const PATHS = {
   corporaDir: join(ROOT, "corpora"),
   benchmarksDir: join(ROOT, "corpora", "benchmarks"),
   heartbeat: join(ROOT, "corpora", "_health", "heartbeat.json"),
+  segments: join(ROOT, "segments", "segments.yaml"),
 };
 
 /** /corpora dirs that are ops surfaces, not harvested corpora — no manifest. */
@@ -259,6 +261,49 @@ const decisionsSchema = {
     },
   },
   required: ["decisions"],
+  additionalProperties: false,
+} as const;
+
+// ---------- Product segments (D-047) ----------
+//
+// /segments/segments.yaml is the product-segment axis — first-class,
+// evolving system data classifying the OUTPUT products Ventora builds. The
+// Ajv schema property keys are pinned to the reader contract (lib/types.ts
+// Segment) via a satisfies constraint, so a field renamed/added/removed on
+// the type without a schema update no longer compiles.
+const segmentProperties = {
+  id: { type: "string", pattern: "^[a-z0-9-]+$" },
+  group: {
+    type: "string",
+    enum: ["business-model", "form", "audience", "usage-rhythm"],
+  },
+  definition: { type: "string", minLength: 1 },
+  status: { type: "string", enum: ["active", "retired"] },
+  provenance: { type: "string", pattern: "^(seed-\\d{4}-\\d{2}|analyzer|owner)$" },
+} as const satisfies Record<keyof Segment, unknown>;
+
+const segmentsSchema = {
+  type: "object",
+  properties: {
+    version: { type: "string", pattern: "^\\d+\\.\\d+\\.\\d+$" },
+    segments: {
+      type: "array",
+      minItems: 1,
+      items: {
+        type: "object",
+        properties: segmentProperties,
+        required: [
+          "id",
+          "group",
+          "definition",
+          "status",
+          "provenance",
+        ] satisfies readonly (keyof Segment)[],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ["version", "segments"],
   additionalProperties: false,
 } as const;
 
@@ -942,6 +987,33 @@ function main(): void {
   }
   if (opsFiles.length === 0) {
     console.log("  · no ops connector configs yet (defaults apply)");
+  }
+
+  // 12. Product segments (D-047): /segments/segments.yaml is the
+  // product-segment axis — first-class evolving data. Parse the YAML, validate
+  // every entry against the schema, and enforce unique ids. The success line
+  // reports the count so the pass stays honest as the list evolves.
+  if (existsSync(PATHS.segments)) {
+    let segmentsDoc: unknown;
+    try {
+      segmentsDoc = parseYaml(readFileSync(PATHS.segments, "utf-8"));
+    } catch (err) {
+      fail(PATHS.segments, `not valid YAML — ${(err as Error).message}`);
+      segmentsDoc = undefined;
+    }
+    if (segmentsDoc !== undefined) {
+      if (validateAgainst(ajv.compile(segmentsSchema), PATHS.segments, segmentsDoc)) {
+        const items = (segmentsDoc as { segments: { id: string }[] }).segments;
+        const ids = new Set(items.map((s) => s.id));
+        if (ids.size !== items.length) {
+          fail(PATHS.segments, "duplicate segment ids");
+        } else {
+          console.log(`  ✓ ${rel(PATHS.segments)} valid (${items.length} segments)`);
+        }
+      }
+    }
+  } else {
+    console.log("  · no segments file yet (segments/segments.yaml)");
   }
 
   finish();

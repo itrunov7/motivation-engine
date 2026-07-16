@@ -1,0 +1,91 @@
+version: 0.1.0
+
+# Product segments — first-class, evolving system data.
+# These classify the OUTPUT products Ventora builds, NOT Ventora itself.
+# Seed set is owner-provided (provenance: seed-2026-07); segments added
+# later by the analyzer or the owner carry provenance: analyzer | owner.
+# Validated in CI by tools/validate.ts. Renders nowhere yet — data only.
+
+segments:
+  # By business model
+  - id: transactional-ecommerce
+    group: business-model
+    definition: Products sold per order — revenue comes from discrete purchase transactions of physical or digital goods.
+    status: active
+    provenance: seed-2026-07
+  - id: subscription
+    group: business-model
+    definition: Recurring-payment products where value is delivered continuously and revenue depends on retention.
+    status: active
+    provenance: seed-2026-07
+  - id: freemium
+    group: business-model
+    definition: Free-to-use products with a paid upgrade tier; conversion from free to paid is the core motion.
+    status: active
+    provenance: seed-2026-07
+  - id: marketplace
+    group: business-model
+    definition: Two-sided products matching supply and demand, monetized via take rate or listing fees.
+    status: active
+    provenance: seed-2026-07
+  - id: lead-gen-service
+    group: business-model
+    definition: Products whose output is qualified intent — the visitor converts into an inquiry, booking, or sales lead.
+    status: active
+    provenance: seed-2026-07
+  - id: one-time-digital
+    group: business-model
+    definition: Digital goods sold once with no recurring relationship (templates, courses, licenses, one-off tools).
+    status: active
+    provenance: seed-2026-07
+
+  # By form
+  - id: web-saas
+    group: form
+    definition: Browser-delivered software used in work or personal sessions, typically account-based and multi-device.
+    status: active
+    provenance: seed-2026-07
+  - id: mobile-app
+    group: form
+    definition: Products living primarily on a phone, distributed through app stores and shaped by mobile session patterns.
+    status: active
+    provenance: seed-2026-07
+  - id: content-media
+    group: form
+    definition: Products whose core unit is consumable content — articles, video, audio, feeds.
+    status: active
+    provenance: seed-2026-07
+  - id: local-offline-bridge
+    group: form
+    definition: Digital surfaces that drive a real-world action — visits, bookings, deliveries, in-person services.
+    status: active
+    provenance: seed-2026-07
+
+  # By audience
+  - id: b2b
+    group: audience
+    definition: Products bought by organizations, with multi-stakeholder decisions and value measured in work outcomes.
+    status: active
+    provenance: seed-2026-07
+  - id: b2c-mass
+    group: audience
+    definition: Products aimed at broad consumer audiences with individual, low-friction adoption decisions.
+    status: active
+    provenance: seed-2026-07
+  - id: creator-prosumer
+    group: audience
+    definition: Products for individual creators and power users who produce output for an audience or income.
+    status: active
+    provenance: seed-2026-07
+
+  # By usage rhythm
+  - id: daily-habit
+    group: usage-rhythm
+    definition: Products designed for daily or near-daily return visits where streaks and routines carry retention.
+    status: active
+    provenance: seed-2026-07
+  - id: occasional-high-consideration
+    group: usage-rhythm
+    definition: Products used rarely but with high stakes per session — research-heavy, comparison-driven decisions.
+    status: active
+    provenance: seed-2026-07

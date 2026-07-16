@@ -551,3 +551,44 @@ export interface Decision {
 export interface DecisionsLog {
   decisions: Decision[];
 }
+
+// ---------- Product segments (/segments/segments.yaml, D-047) ----------
+
+/** The axis a segment classifies a product along. */
+export type SegmentGroup =
+  | "business-model"
+  | "form"
+  | "audience"
+  | "usage-rhythm";
+
+/**
+ * Lifecycle of a segment. A segment no longer in use is "retired" (kept for
+ * history), never deleted from the file.
+ */
+export type SegmentStatus = "active" | "retired";
+
+/**
+ * One product segment — a type of OUTPUT product Ventora builds, NOT a
+ * description of Ventora itself. First-class, evolving system data the rest
+ * of the layer references. Validated by tools/validate.ts against a schema
+ * pinned to this reader (D-047).
+ */
+export interface Segment {
+  /** Slug id, pattern ^[a-z0-9-]+$. */
+  id: string;
+  group: SegmentGroup;
+  /** One-line definition of the segment. */
+  definition: string;
+  status: SegmentStatus;
+  /**
+   * Where the segment came from: "seed-YYYY-MM" for the owner seed set,
+   * "analyzer" for derived additions, "owner" for later hand-added ones.
+   */
+  provenance: string;
+}
+
+/** /segments/segments.yaml — the product-segment axis. */
+export interface SegmentsFile {
+  version: string;
+  segments: Segment[];
+}
