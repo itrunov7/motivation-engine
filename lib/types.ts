@@ -714,3 +714,82 @@ export interface PackDatasheet {
   signals: PackSignals;
   wiring: PackWiring;
 }
+
+// ---------- Sufficiency analyzer (/analysis, D-050) ----------
+//
+// tools/analyzer.ts (npm run analyze) scores every [pack × active segment]
+// cell on 5 computable criteria against the registry + dossiers, driven by
+// the ONE hand-authored input analysis/analyzer.config.yaml. The matrix
+// (analysis/sufficiency-matrix.json) is a COMPUTED projection, never
+// hand-edited.
+
+/** The five sufficiency criteria a cell is scored on (each 0–1). */
+export type SufficiencyCriterion =
+  | "dissent_completeness"
+  | "grade_sufficiency"
+  | "interaction_coverage"
+  | "context_coverage"
+  | "freshness";
+
+/** Criterion scores for one cell, keyed by SufficiencyCriterion. */
+export type SufficiencyScores = Record<SufficiencyCriterion, number>;
+
+export type SufficiencyStatus = "red" | "amber" | "green";
+
+/**
+ * Whether a cell's scores rest on any segment-specific judgment
+ * (a segment_affinity entry touching the pack) or on general evidence only.
+ * general_only is the signal that segment-specific harvesting is needed.
+ */
+export type SegmentEvidence = "segment_specific" | "general_only";
+
+/** score ≥ green → green, ≥ amber → amber, else red. */
+export interface SufficiencyThreshold {
+  green: number;
+  amber: number;
+}
+
+/** Grade letter family; the +/- modifier collapses (A- → A). */
+export type GradeLetter = "A" | "B" | "C";
+
+/**
+ * /analysis/analyzer.config.yaml — the owner-tunable analyzer input:
+ * grade weights, per-criterion thresholds, the segment → typical-funnel-stage
+ * map, segment-affinity boosts, and owner replication flags. segment_stages
+ * and segment_affinity are product judgment defaults, not science claims.
+ */
+export interface AnalyzerConfig {
+  version: string;
+  grade_weights: Record<GradeLetter, number>;
+  /** The "grade ≥ B" cutoff for context_coverage. */
+  min_context_grade: EvidenceGrade;
+  thresholds: { default: SufficiencyThreshold } & Partial<
+    Record<SufficiencyCriterion, SufficiencyThreshold>
+  >;
+  /** Every active segment must have an entry; the analyzer fails loudly otherwise. */
+  segment_stages: Record<string, FunnelStage[]>;
+  /** Segment → mechanism boost; presence marks segment-specific judgment. */
+  segment_affinity: Record<string, Record<string, number>>;
+  /** Mechanism ids flagged replication-shaky by the owner (freshness). */
+  replication_flags: string[];
+}
+
+/** One scored [pack × segment] cell of the sufficiency matrix. */
+export interface SufficiencyCell {
+  pack: string;
+  segment: string;
+  scores: SufficiencyScores;
+  status: SufficiencyStatus;
+  /** Criteria below their green threshold, i.e. what fails this cell. */
+  gaps: SufficiencyCriterion[];
+  segment_evidence: SegmentEvidence;
+}
+
+/** /analysis/sufficiency-matrix.json — the generated sufficiency matrix. */
+export interface SufficiencyMatrix {
+  version: string;
+  generated_at: string;
+  /** The analyzer.config.yaml version the matrix was scored with. */
+  config_version: string;
+  cells: SufficiencyCell[];
+}

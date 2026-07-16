@@ -1,0 +1,78 @@
+version: 0.1.0
+
+# Analyzer config — the ONE hand-authored input to sufficiency scoring (D-050).
+#
+# tools/analyzer.ts scores every [pack × active segment] cell on 5 computable
+# criteria against the registry + dossiers; everything downstream
+# (analysis/sufficiency-matrix.json) is a COMPUTED projection over this config
+# + the pack map + the registry. Edited in git only, no UI write surface.
+#
+# IMPORTANT — nature of this file: the segment_stages and segment_affinity
+# seeds below are PRODUCT JUDGMENT defaults (which funnel stages a segment
+# type typically lives on, which mechanisms a segment strengthens), NOT
+# scientific claims. They are owner-reviewable and owner-tunable; changing
+# them changes emphasis inside a cell, never the underlying evidence.
+
+# Weight per grade LETTER FAMILY (the +/- modifier collapses: A- → A).
+# grade_sufficiency = weighted mean of these over a pack's mechanisms.
+grade_weights:
+  A: 1.0
+  B: 0.6
+  C: 0.2
+
+# The "grade ≥ B" cutoff for context_coverage (fine-grained scale: B- is
+# below B, so A+, A, A-, B+, B qualify).
+min_context_grade: B
+
+# Per-criterion status thresholds: score ≥ green → green, ≥ amber → amber,
+# else red. Criteria without an override use default. Cell status = worst
+# criterion.
+thresholds:
+  default: { green: 0.8, amber: 0.5 }
+  # Dissent is a hard hygiene bar: one stripped dossier in a 3–4 mechanism
+  # pack (share ≤ 0.75) must turn the cell red, not amber.
+  dissent_completeness: { green: 1.0, amber: 0.8 }
+
+# Segment → typical funnel stages (registry applicability vocabulary:
+# cold_acquisition | onboarding | activation | conversion | retention |
+# reactivation). Drives context_coverage: does the pack hold ≥1 grade≥B
+# mechanism active on each of the segment's stages? Every ACTIVE segment
+# in segments/segments.yaml must have an entry — the analyzer fails loudly
+# on a missing one rather than guessing.
+segment_stages:
+  # business-model
+  transactional-ecommerce: [cold_acquisition, conversion, reactivation]
+  subscription: [conversion, retention]
+  freemium: [activation, conversion]
+  marketplace: [cold_acquisition, activation, retention]
+  lead-gen-service: [cold_acquisition, conversion]
+  one-time-digital: [cold_acquisition, conversion]
+  # form
+  web-saas: [onboarding, activation, retention]
+  mobile-app: [onboarding, activation, retention]
+  content-media: [activation, retention]
+  local-offline-bridge: [cold_acquisition, conversion, reactivation]
+  # audience
+  b2b: [onboarding, activation, conversion]
+  b2c-mass: [cold_acquisition, activation, retention]
+  creator-prosumer: [activation, retention]
+  # usage-rhythm
+  daily-habit: [activation, retention]
+  occasional-high-consideration: [cold_acquisition, conversion]
+
+# Segment → mechanism boost. A boost > 1 marks a mechanism as especially
+# load-bearing for the segment; the resulting per-mechanism weight is capped
+# at 1 so affinity redistributes emphasis inside a cell without fabricating
+# evidence. PRESENCE of an entry touching a pack's mechanisms is also the
+# segment_evidence signal: cells without one carry segment_evidence:
+# general_only — the flag that segment-specific harvesting is needed.
+segment_affinity:
+  daily-habit: { HA-04: 1.5, VR-02: 1.5 }
+  occasional-high-consideration: { SP-08: 1.5, FR-11: 1.5 }
+  transactional-ecommerce: { SC-06: 1.5, LA-01: 1.3 }
+
+# Mechanism ids flagged replication-shaky by the owner (freshness criterion).
+# Empty today → freshness scores 1.0 (green) everywhere. Replication concerns
+# currently live as prose in dossier dissent / evidence caveats; flagging one
+# here is an explicit owner judgment, never derived from prose.
+replication_flags: []

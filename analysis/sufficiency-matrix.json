@@ -1,0 +1,2728 @@
+{
+  "version": "0.1.0",
+  "generated_at": "2026-07-16T15:39:48.348Z",
+  "config_version": "0.1.0",
+  "cells": [
+    {
+      "pack": "entry",
+      "segment": "transactional-ecommerce",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "subscription",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7143,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "freemium",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "marketplace",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "lead-gen-service",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "one-time-digital",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "web-saas",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "mobile-app",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "content-media",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "local-offline-bridge",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "b2b",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "b2c-mass",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "creator-prosumer",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "daily-habit",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "entry",
+      "segment": "occasional-high-consideration",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7,
+        "interaction_coverage": 0.1667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "interaction_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "transactional-ecommerce",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.84,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "subscription",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "freemium",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "marketplace",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "lead-gen-service",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.84,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "one-time-digital",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.84,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "web-saas",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "mobile-app",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "content-media",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "local-offline-bridge",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.84,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "b2b",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "b2c-mass",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "creator-prosumer",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "daily-habit",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "onboarding",
+      "segment": "occasional-high-consideration",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.84,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "transactional-ecommerce",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.9,
+        "interaction_coverage": 0,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "subscription",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "freemium",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "marketplace",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "lead-gen-service",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.9,
+        "interaction_coverage": 0,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "one-time-digital",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.9,
+        "interaction_coverage": 0,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "web-saas",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "mobile-app",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "content-media",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "local-offline-bridge",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.9,
+        "interaction_coverage": 0,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "b2b",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "b2c-mass",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "creator-prosumer",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "first-value",
+      "segment": "daily-habit",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "first-value",
+      "segment": "occasional-high-consideration",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.9,
+        "interaction_coverage": 0,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "transactional-ecommerce",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "subscription",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "freemium",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "marketplace",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "lead-gen-service",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "one-time-digital",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "web-saas",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "mobile-app",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "content-media",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "local-offline-bridge",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "b2b",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "b2c-mass",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "creator-prosumer",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "daily-habit",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "core-ux",
+      "segment": "occasional-high-consideration",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "transactional-ecommerce",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.9,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "subscription",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "freemium",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "marketplace",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "lead-gen-service",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.9,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "one-time-digital",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.9,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "web-saas",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "mobile-app",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "content-media",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "local-offline-bridge",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.9,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "b2b",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "b2c-mass",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "creator-prosumer",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "daily-habit",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "retention-return",
+      "segment": "occasional-high-consideration",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.9,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "transactional-ecommerce",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7333,
+        "interaction_coverage": 1,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "subscription",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 1,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "freemium",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 1,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "marketplace",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 1,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "green",
+      "gaps": [],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "lead-gen-service",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7333,
+        "interaction_coverage": 1,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "grade_sufficiency",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "one-time-digital",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7333,
+        "interaction_coverage": 1,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "grade_sufficiency",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "web-saas",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 1,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "mobile-app",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 1,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "content-media",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 1,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "green",
+      "gaps": [],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "local-offline-bridge",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7333,
+        "interaction_coverage": 1,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "grade_sufficiency",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "b2b",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 1,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "b2c-mass",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 1,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "green",
+      "gaps": [],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "creator-prosumer",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 1,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "green",
+      "gaps": [],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "daily-habit",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 1,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "green",
+      "gaps": [],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "occasional-high-consideration",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.7333,
+        "interaction_coverage": 1,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "grade_sufficiency",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "transactional-ecommerce",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "subscription",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "green",
+      "gaps": [],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "freemium",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "green",
+      "gaps": [],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "marketplace",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "lead-gen-service",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "one-time-digital",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "web-saas",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "mobile-app",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "content-media",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "green",
+      "gaps": [],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "local-offline-bridge",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "b2b",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "b2c-mass",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "creator-prosumer",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "green",
+      "gaps": [],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "daily-habit",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "green",
+      "gaps": [],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "occasional-high-consideration",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 1,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "context_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "transactional-ecommerce",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "subscription",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "freemium",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "marketplace",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8286,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "lead-gen-service",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "one-time-digital",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "web-saas",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8286,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "mobile-app",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8286,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "content-media",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8286,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "local-offline-bridge",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "b2b",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "b2c-mass",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8286,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "creator-prosumer",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8286,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "daily-habit",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8286,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "occasional-high-consideration",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "transactional-ecommerce",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "subscription",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "freemium",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "marketplace",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "lead-gen-service",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "one-time-digital",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "web-saas",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "mobile-app",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "content-media",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "local-offline-bridge",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "b2b",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "b2c-mass",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "creator-prosumer",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "daily-habit",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "occasional-high-consideration",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 1,
+        "interaction_coverage": 0.3333,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "transactional-ecommerce",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "subscription",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "freemium",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "marketplace",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "lead-gen-service",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "one-time-digital",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "web-saas",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "mobile-app",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "content-media",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "local-offline-bridge",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "b2b",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "b2c-mass",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.3333,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "creator-prosumer",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "daily-habit",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "occasional-high-consideration",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8,
+        "interaction_coverage": 0,
+        "context_coverage": 0.5,
+        "freshness": 1
+      },
+      "status": "red",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "transactional-ecommerce",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.84,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "subscription",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "freemium",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "marketplace",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "lead-gen-service",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.84,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "one-time-digital",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.84,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "web-saas",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "mobile-app",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "content-media",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "local-offline-bridge",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.84,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "b2b",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage",
+        "context_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "b2c-mass",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "creator-prosumer",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "daily-habit",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "general_only"
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "occasional-high-consideration",
+      "scores": {
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.84,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
+      },
+      "status": "amber",
+      "gaps": [
+        "interaction_coverage"
+      ],
+      "segment_evidence": "segment_specific"
+    }
+  ]
+}
