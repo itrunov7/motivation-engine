@@ -18,6 +18,11 @@
  *
  * Stale pack-*.yaml files whose element no longer exists are removed;
  * pack-map.yaml and README.md are never touched.
+ *
+ * Scoped regenerate (D-052, the maturation loop): `npm run packs -- packs=a,b`
+ * renders ONLY the listed elements — the loop regenerates the packs whose
+ * cells changed, not the whole set. A scoped run never removes stale packs
+ * (it cannot know which of the unrendered files are stale).
  */
 
 import { readFileSync, readdirSync, writeFileSync, unlinkSync, existsSync } from "node:fs";
@@ -418,6 +423,27 @@ function voiceViolations(text: string): string[] {
 
 // ---------- main ----------
 
+/** `packs=a,b` CLI filter (D-052) — undefined means render every element. */
+function parsePacksFilter(args: string[]): Set<string> | undefined {
+  for (const arg of args) {
+    if (!arg.startsWith("packs=")) {
+      console.error(`  ✗ unknown argument "${arg}" — usage: npm run packs [-- packs=a,b]`);
+      process.exit(1);
+    }
+    const ids = arg
+      .slice("packs=".length)
+      .split(",")
+      .map((id) => id.trim())
+      .filter((id) => id.length > 0);
+    if (ids.length === 0) {
+      console.error("  ✗ packs= filter is empty — usage: npm run packs [-- packs=a,b]");
+      process.exit(1);
+    }
+    return new Set(ids);
+  }
+  return undefined;
+}
+
 function main(): void {
   console.log("Motivation Engine pack generator\n");
 
@@ -426,8 +452,20 @@ function main(): void {
     process.exit(1);
   }
 
+  const packsFilter = parsePacksFilter(process.argv.slice(2));
+
   const packMap = parseYaml(readFileSync(PACK_MAP, "utf-8")) as PackMapFile;
   PACK_MAP_VERSION = packMap.version;
+
+  if (packsFilter) {
+    const known = new Set(packMap.elements.map((e) => e.id));
+    for (const id of Array.from(packsFilter)) {
+      if (!known.has(id)) {
+        console.error(`  ✗ packs= filter names unknown pack "${id}" — not in ${rel(PACK_MAP)}.`);
+        process.exit(1);
+      }
+    }
+  }
 
   const mechanisms = new Map<string, Mechanism>();
   for (const file of listJsonFiles(MECHANISMS_DIR)) {
@@ -439,6 +477,7 @@ function main(): void {
   let voiceWarnings = 0;
 
   for (const element of packMap.elements) {
+    if (packsFilter && !packsFilter.has(element.id)) continue;
     const members = element.mechanisms.map((id) => {
       const m = mechanisms.get(id);
       if (!m) throw new Error(`pack "${element.id}" references unknown mechanism "${id}"`);
@@ -469,12 +508,15 @@ function main(): void {
   }
 
   // Remove stale generated packs; never touch the hand-authored map or README.
-  for (const entry of readdirSync(PACKS_DIR)) {
-    if (!entry.startsWith("pack-") || !entry.endsWith(".yaml")) continue;
-    if (entry === "pack-map.yaml") continue;
-    if (!generated.has(entry)) {
-      unlinkSync(join(PACKS_DIR, entry));
-      console.log(`  ✗ removed stale pack packs/${entry}`);
+  // Skipped on a scoped run — it cannot tell stale from simply-not-rendered.
+  if (!packsFilter) {
+    for (const entry of readdirSync(PACKS_DIR)) {
+      if (!entry.startsWith("pack-") || !entry.endsWith(".yaml")) continue;
+      if (entry === "pack-map.yaml") continue;
+      if (!generated.has(entry)) {
+        unlinkSync(join(PACKS_DIR, entry));
+        console.log(`  ✗ removed stale pack packs/${entry}`);
+      }
     }
   }
 

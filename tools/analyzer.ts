@@ -12,6 +12,14 @@
  * typical-funnel-stage map, segment-affinity boosts, and owner replication
  * flags. Re-score with `npm run analyze`.
  *
+ * Scoped re-score (D-052, the maturation loop): `npm run analyze -- packs=a,b`
+ * re-scores ONLY the listed packs' cells and preserves every other pack's
+ * cells from the existing matrix — the loop re-analyzes the cells its
+ * harvests touched, not the whole grid. The merged matrix keeps pack-map
+ * order, so a scoped run diffs cleanly against a full one. A scoped run
+ * requires an existing matrix whose preserved packs cover every active
+ * segment; anything else fails loudly and asks for a full `npm run analyze`.
+ *
  * The five criteria:
  * - dissent_completeness — share of the pack's mechanisms whose dossier
  *   dissent is non-empty (missing dossier or blank dissent = 0). Deliberately
@@ -341,6 +349,43 @@ function scoreCell(
 
 // ---------- main ----------
 
+/** `packs=a,b` CLI filter (D-052) — undefined means a full re-score. */
+function parsePacksFilter(args: string[]): Set<string> | undefined {
+  for (const arg of args) {
+    if (!arg.startsWith("packs=")) {
+      console.error(`  ✗ unknown argument "${arg}" — usage: npm run analyze [-- packs=a,b]`);
+      process.exit(1);
+    }
+    const ids = arg
+      .slice("packs=".length)
+      .split(",")
+      .map((id) => id.trim())
+      .filter((id) => id.length > 0);
+    if (ids.length === 0) {
+      console.error("  ✗ packs= filter is empty — usage: npm run analyze [-- packs=a,b]");
+      process.exit(1);
+    }
+    return new Set(ids);
+  }
+  return undefined;
+}
+
+/**
+ * The existing matrix's cells keyed "pack|segment", for a scoped re-score to
+ * preserve untouched packs from. Fails loudly when the matrix is absent —
+ * a scoped run cannot invent the cells it does not re-score.
+ */
+function loadExistingCells(): Map<string, SufficiencyCell> {
+  if (!existsSync(MATRIX)) {
+    console.error(
+      `  ✗ scoped re-score needs an existing matrix at ${rel(MATRIX)} — run a full \`npm run analyze\` first.`,
+    );
+    process.exit(1);
+  }
+  const matrix = JSON.parse(readFileSync(MATRIX, "utf-8")) as SufficiencyMatrix;
+  return new Map(matrix.cells.map((cell) => [`${cell.pack}|${cell.segment}`, cell]));
+}
+
 function main(): void {
   console.log("Motivation Engine sufficiency analyzer\n");
 
@@ -353,9 +398,22 @@ function main(): void {
     process.exit(1);
   }
 
+  const packsFilter = parsePacksFilter(process.argv.slice(2));
+
   const packMap = parseYaml(readFileSync(PACK_MAP, "utf-8")) as PackMapFile;
   const segmentsFile = parseYaml(readFileSync(SEGMENTS, "utf-8")) as SegmentsFile;
   const activeSegments = segmentsFile.segments.filter((s) => s.status === "active");
+
+  if (packsFilter) {
+    const known = new Set(packMap.elements.map((e) => e.id));
+    for (const id of Array.from(packsFilter)) {
+      if (!known.has(id)) {
+        console.error(`  ✗ packs= filter names unknown pack "${id}" — not in ${rel(PACK_MAP)}.`);
+        process.exit(1);
+      }
+    }
+  }
+  const existingCells = packsFilter ? loadExistingCells() : undefined;
 
   const mechanisms = new Map<string, Mechanism>();
   for (const file of listJsonFiles(MECHANISMS_DIR)) {
@@ -378,8 +436,26 @@ function main(): void {
   const cells: SufficiencyCell[] = [];
   const statusCounts: Record<SufficiencyStatus, number> = { red: 0, amber: 0, green: 0 };
   let generalOnly = 0;
+  let rescored = 0;
 
   for (const element of packMap.elements) {
+    // Scoped run: an unfiltered pack keeps its existing cells verbatim; only
+    // the filtered packs are re-scored. Pack-map order is preserved either way.
+    if (packsFilter && !packsFilter.has(element.id)) {
+      for (const segment of activeSegments) {
+        const existing = existingCells?.get(`${element.id}|${segment.id}`);
+        if (!existing) {
+          console.error(
+            `  ✗ existing matrix has no cell ${element.id}×${segment.id} — the grid changed; run a full \`npm run analyze\`.`,
+          );
+          process.exit(1);
+        }
+        cells.push(existing);
+        statusCounts[existing.status] += 1;
+        if (existing.segment_evidence === "general_only") generalOnly += 1;
+      }
+      continue;
+    }
     const members = element.mechanisms.map((id) => {
       const m = mechanisms.get(id);
       if (!m) throw new Error(`pack "${element.id}" references unknown mechanism "${id}"`);
@@ -391,6 +467,7 @@ function main(): void {
       statusCounts[cell.status] += 1;
       if (cell.segment_evidence === "general_only") generalOnly += 1;
     }
+    rescored += 1;
     console.log(`  ✓ ${element.id} scored across ${activeSegments.length} segments`);
   }
 
@@ -404,8 +481,11 @@ function main(): void {
   mkdirSync(ANALYSIS_DIR, { recursive: true });
   writeFileSync(MATRIX, `${JSON.stringify(matrix, null, 2)}\n`, "utf-8");
 
+  const scope = packsFilter
+    ? `${rescored} of ${packMap.elements.length} packs re-scored (packs= filter), rest preserved`
+    : `${packMap.elements.length} packs`;
   console.log(
-    `\nOK — ${cells.length} cells (${packMap.elements.length} packs × ${activeSegments.length} segments) → ${rel(MATRIX)}.`,
+    `\nOK — ${cells.length} cells (${scope} × ${activeSegments.length} segments) → ${rel(MATRIX)}.`,
   );
   console.log(
     `     status: ${statusCounts.green} green / ${statusCounts.amber} amber / ${statusCounts.red} red; ` +

@@ -1,0 +1,239 @@
+# Maturation workflow — the weekly maturation loop (D-052).
+#
+# The spiral turns on a schedule, on a budget, forever:
+#   (1) npm run analyze          → analysis/sufficiency-matrix.json (full grid)
+#   (2) npm run gaps             → analysis/research-queue.json (ranked, budget-bounded, D-051)
+#   (3) ops-gate plan-queue      → gate the top-N tasks through the EXISTING
+#       guards (paused, health-down, per-run limits, monthly budget — D-024/
+#       D-025/D-030, never re-implemented here) with the batch's own pending
+#       spend projected cumulatively, then harvest each "run" task via the
+#       evidence connector with the task's segment-qualified terms
+#   (4) npm run analyze -- packs=<affected>   → re-score ONLY the harvested
+#       packs' cells, preserving the rest of the matrix
+#   (5) npm run packs -- packs=<flipped>      → regenerate ONLY the packs whose
+#       cells flipped to green
+#   (6) commit as `maturation: week {date} — filled {gaps} gaps` with a job
+#       summary showing the red→green cell diff, regenerated packs, and spend.
+#
+# NEVER exhausts the budget: the gap planner already bounds the queue by the
+# monthly cap (D-051), and plan-queue re-gates every task at harvest time with
+# cumulative batch accounting — a task that no longer fits is DEFERRED to next
+# week (action "defer", reason logged in the job summary), never forced.
+# raise_cap is never passed here.
+#
+# Operator contract (D-022): watch issues, not logs. A failing harvest is
+# retried once after a backoff; a persistent failure opens a deduplicated ops
+# issue and fails the run red.
+#
+# S2 rate compliance (D-027): this workflow MUST reuse the exact concurrency
+# group "connectors-s2" from connectors.yml/harvest.yml so two runner
+# processes never call Semantic Scholar at the same time.
+
+name: maturation
+
+run-name: >-
+  maturation — ${{ github.event_name == 'workflow_dispatch' && format('dispatch (top {0})', inputs.max_tasks || 'all') || 'weekly' }}
+
+on:
+  schedule:
+    # Monday 07:00 UTC — behind the scheduled evidence run (Mon 05:00,
+    # connectors.yml); the shared concurrency group serializes them anyway.
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+    inputs:
+      max_tasks:
+        description: "Harvest at most N queued tasks (blank = the full budget-bounded queue)"
+        required: false
+        type: string
+        default: ""
+
+concurrency:
+  group: connectors-s2
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  maturation:
+    runs-on: ubuntu-latest
+    env:
+      MAX_TASKS: ${{ inputs.max_tasks || '' }}
+      S2_API_KEY: ${{ secrets.S2_API_KEY }}
+      CONNECTOR_MAILTO: ${{ vars.CONNECTOR_MAILTO }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # ---------- (1) analyze + (2) plan gaps ----------
+      # The pre-harvest matrix is kept aside as the baseline for the
+      # red→green diff after re-analysis.
+      - name: Analyze sufficiency and plan gaps
+        run: |
+          set -euo pipefail
+          npm run analyze
+          cp analysis/sufficiency-matrix.json matrix-before.json
+          npm run gaps
+
+      # ---------- (3) gate the queue through the existing guards ----------
+      # plan-queue reuses paused / health-down / per-run limits / monthly
+      # budget and defers over-budget tasks to next week; every run/defer/skip
+      # reason lands in the job summary.
+      - name: Gate the research queue (writes the plan to the summary)
+        run: |
+          set -euo pipefail
+          npx tsx tools/ops-gate.ts plan-queue "$MAX_TASKS" > queue-plan.json 2> plan-summary.md
+          cat plan-summary.md >> "$GITHUB_STEP_SUMMARY"
+          npx tsx tools/ops-gate.ts budget > budget-before.json
+
+      # Harvest each due task with its segment-qualified terms. Retry once
+      # after a 60s backoff per target (D-022); a persistent failure is
+      # recorded as an output so the issue step runs before the job goes red.
+      - name: Harvest due tasks (retry once per target)
+        id: harvest
+        run: |
+          set +e
+          jq -r '.entries[] | select(.action == "run") | [.mechanism, .terms] | @tsv' queue-plan.json > due.tsv
+          if [ ! -s due.tsv ]; then
+            echo "Nothing due — the plan deferred or skipped every task (see summary)."
+            echo "ran=false" >> "$GITHUB_OUTPUT"
+            echo "failed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          harvest_one() {
+            local mechanism="$1" terms="$2"
+            npm run connector -- evidence "mechanism=$mechanism" "terms=$terms" 2>&1 | tee -a harvest.log
+            return ${PIPESTATUS[0]}
+          }
+          overall=0
+          while IFS=$'\t' read -r mechanism terms; do
+            echo "::group::harvest evidence ${mechanism}"
+            harvest_one "$mechanism" "$terms"
+            code=$?
+            if [ "$code" -ne 0 ]; then
+              echo "::warning::harvest evidence ${mechanism} failed (exit $code) — backing off 60s then retrying once."
+              sleep 60
+              harvest_one "$mechanism" "$terms"
+              code=$?
+            fi
+            echo "::endgroup::"
+            if [ "$code" -ne 0 ]; then overall=1; fi
+          done < due.tsv
+          echo "ran=true" >> "$GITHUB_OUTPUT"
+          if [ "$overall" -ne 0 ]; then echo "failed=true" >> "$GITHUB_OUTPUT"; else echo "failed=false" >> "$GITHUB_OUTPUT"; fi
+
+      # ---------- (4) re-analyze ONLY the affected cells ----------
+      # Affected = the packs whose gap cells the harvested tasks addressed;
+      # every other pack's cells are preserved from the baseline matrix.
+      - name: Re-analyze affected cells
+        id: reanalyze
+        if: steps.harvest.outputs.failed != 'true'
+        run: |
+          set -euo pipefail
+          affected=$(jq -r '[.entries[] | select(.action == "run") | .pack] | unique | join(",")' queue-plan.json)
+          if [ -n "$affected" ]; then
+            npm run analyze -- "packs=$affected"
+          else
+            echo "No harvests ran — matrix left at the step-1 baseline."
+          fi
+          jq -n \
+            --slurpfile before matrix-before.json \
+            --slurpfile after analysis/sufficiency-matrix.json \
+            '[ $after[0].cells[] as $cell
+               | ($before[0].cells[] | select(.pack == $cell.pack and .segment == $cell.segment)) as $old
+               | select($old.status != $cell.status)
+               | { pack: $cell.pack, segment: $cell.segment, from: $old.status, to: $cell.status } ]' \
+            > cell-diff.json
+          echo "filled=$(jq '[.[] | select(.to == "green")] | length' cell-diff.json)" >> "$GITHUB_OUTPUT"
+          echo "flipped_packs=$(jq -r '[.[] | select(.to == "green") | .pack] | unique | join(",")' cell-diff.json)" >> "$GITHUB_OUTPUT"
+
+      # ---------- (5) regenerate ONLY the packs whose cells went green ----------
+      - name: Regenerate packs for filled cells
+        if: steps.harvest.outputs.failed != 'true' && steps.reanalyze.outputs.flipped_packs != ''
+        run: |
+          set -euo pipefail
+          npm run packs -- "packs=${{ steps.reanalyze.outputs.flipped_packs }}"
+
+      # ---------- Job summary: red→green diff, packs regenerated, spend ----------
+      - name: Maturation summary
+        if: steps.harvest.outputs.failed != 'true'
+        run: |
+          set -euo pipefail
+          npx tsx tools/ops-gate.ts budget > budget-after.json
+          {
+            echo ""
+            echo "### Maturation week $(date -u +%Y-%m-%d)"
+            echo ""
+            if [ "$(jq 'length' cell-diff.json)" -gt 0 ]; then
+              echo "Cell status changes:"
+              jq -r '.[] | "- \(.pack) × \(.segment): \(.from) → \(.to)"' cell-diff.json
+            else
+              echo "No cell changed status this week."
+            fi
+            echo ""
+            flipped="${{ steps.reanalyze.outputs.flipped_packs }}"
+            if [ -n "$flipped" ]; then
+              echo "Packs regenerated: $flipped"
+            else
+              echo "Packs regenerated: none (no cell flipped to green)"
+            fi
+            echo ""
+            jq -rn \
+              --slurpfile before budget-before.json \
+              --slurpfile after budget-after.json \
+              '"Spend this run: \($after[0].used.calls - $before[0].used.calls) calls, $\($after[0].used.usd - $before[0].used.usd) — month \($after[0].month): \($after[0].used.calls)/\($after[0].caps.calls) calls used."'
+            deferred=$(jq '[.entries[] | select(.action == "defer")] | length' queue-plan.json)
+            if [ "$deferred" -gt 0 ]; then
+              echo ""
+              echo "$deferred task(s) deferred to next week (budget) — reasons in the plan above."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # ---------- (6) commit the week's turn ----------
+      - name: Commit maturation results if changed
+        if: steps.harvest.outputs.failed != 'true'
+        run: |
+          if [ -n "$(git status --porcelain analysis corpora packs)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add analysis corpora packs
+            git commit -m "maturation: week $(date -u +%Y-%m-%d) — filled ${{ steps.reanalyze.outputs.filled || '0' }} gaps"
+            git push
+          else
+            echo "Nothing changed — no commit."
+          fi
+
+      - name: Open ops issue on persistent failure
+        if: steps.harvest.outputs.failed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          title="maturation loop failing"
+          gh label create ops --color B60205 --description "operations: a connector is failing (D-022)" 2>/dev/null || true
+          existing=$(gh issue list --state open --label ops --search "in:title ${title}" --json number,title --jq ".[] | select(.title == \"${title}\") | .number" | head -n1)
+          if [ -n "${existing}" ]; then
+            echo "Issue #${existing} already open for \"${title}\" — not duplicating."
+            exit 0
+          fi
+          {
+            echo "The weekly maturation loop's harvest step failed twice in a row (initial attempt + one retry after backoff) in [\`${GITHUB_WORKFLOW}\` run #${GITHUB_RUN_NUMBER}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})."
+            echo ""
+            echo '```'
+            tail -n 40 harvest.log 2>/dev/null || echo "(no output captured)"
+            echo '```'
+            echo ""
+            echo "Operator contract (D-022): watch issues, not logs. Close this issue after the fix to re-arm the automation."
+          } > issue-body.md
+          gh issue create --title "${title}" --label ops --body-file issue-body.md
+
+      - name: Fail the job on persistent failure
+        if: steps.harvest.outputs.failed == 'true'
+        run: |
+          echo "::error::maturation harvest failed after retry — an ops issue was opened/confirmed."
+          exit 1

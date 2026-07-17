@@ -16,6 +16,19 @@
  *                                  health-down, freshness, budget) as JSON +
  *                                  a summary. An id restricts the plan to one
  *                                  connector (each schedule plans its own).
+ *   plan-queue [maxTasks]          the maturation loop (D-052): gate the top-N
+ *                                  tasks of analysis/research-queue.json
+ *                                  through the SAME guards — paused,
+ *                                  health-down, per-run limits, monthly
+ *                                  budget — with the batch's own pending
+ *                                  spend projected cumulatively, so the loop
+ *                                  can never exhaust the budget. A task that
+ *                                  no longer fits is "defer"red to next week
+ *                                  with a logged reason. Cadence and registry
+ *                                  freshness deliberately do NOT apply: the
+ *                                  queue is gap-driven (which knowledge is
+ *                                  thin), not change-driven (what the owner
+ *                                  touched).
  *
  * A quote is DETERMINISTIC and makes zero network calls (connector.quote),
  * so the gate is safe to run in CI and before a dispatch.
@@ -35,10 +48,12 @@ import {
   type OpsConnectorConfig,
 } from "../lib/ops";
 import { HEARTBEAT_STALE_HOURS, loadHeartbeat } from "../lib/status";
+import type { ResearchQueue } from "../lib/types";
 
 const ROOT = join(__dirname, "..");
 const CORPORA_DIR = join(ROOT, "corpora");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
+const RESEARCH_QUEUE = join(ROOT, "analysis", "research-queue.json");
 
 /** A target's registry record must have changed within this window to be
  *  harvested on the schedule (D-024) — the machine re-harvests what the owner
@@ -255,6 +270,118 @@ function planForConnector(config: OpsConnectorConfig, now: Date): PlanEntry[] {
   });
 }
 
+// ---------- plan-queue (D-052): gate the research queue for the maturation loop ----------
+
+/** One gated research-queue task. "defer" means the task itself is fine but
+ *  this week's batch ran out of budget — it stays in the queue for next week. */
+interface QueuePlanEntry {
+  connector: "evidence";
+  mechanism: string;
+  segment: string;
+  pack: string;
+  terms: string;
+  action: "run" | "skip" | "defer";
+  reason: string;
+  quote?: RunQuote;
+}
+
+/**
+ * Gate the top-N tasks of analysis/research-queue.json (npm run gaps, D-051)
+ * for the weekly maturation loop. Reuses the SAME guards as the scheduled
+ * fleet — paused, health-down (D-030), per-run limits and the monthly budget
+ * via evaluateRunAgainstOps (D-025) — never re-implements them. The batch's
+ * own accepted spend is projected cumulatively (pendingSpend), so accepting
+ * task k already accounts for tasks 1..k-1: the loop is self-limiting and can
+ * never exhaust the budget. Tasks that exceed the remaining batch budget are
+ * DEFERRED (not dropped): they stay in the queue and surface again next week,
+ * with the deferral reason logged in the plan output / job summary.
+ */
+function planQueue(maxTasks: number | undefined, now: Date): {
+  budget: BudgetSnapshot;
+  entries: QueuePlanEntry[];
+} {
+  if (!existsSync(RESEARCH_QUEUE)) {
+    console.error(`No research queue at analysis/research-queue.json — run \`npm run gaps\` first.`);
+    process.exit(1);
+  }
+  const queue = JSON.parse(readFileSync(RESEARCH_QUEUE, "utf-8")) as ResearchQueue;
+  const connector = connectorOrExit("evidence");
+  const config = loadOpsConnectorConfigFromDisk("evidence");
+  if (!config) {
+    console.error(`No _ops config for "evidence" (corpora/_ops/connectors/evidence.json) — cannot gate.`);
+    process.exit(1);
+  }
+
+  const tasks = queue.tasks.slice(0, maxTasks ?? queue.tasks.length);
+  const budget = computeBudgetSnapshot(now);
+
+  const base = (task: ResearchQueue["tasks"][number]) => ({
+    connector: "evidence" as const,
+    mechanism: task.mechanism,
+    segment: task.segment,
+    pack: task.gap_cell.pack,
+    terms: task.suggested_evidence_terms.join(";"),
+  });
+
+  // Connector-level guards block the whole batch with one honest reason each.
+  if (config.paused) {
+    const reason = `paused — ${config.paused_reason ?? "no reason given"}`;
+    return { budget, entries: tasks.map((t) => ({ ...base(t), action: "skip" as const, reason })) };
+  }
+  const downReason = healthSkipReason(connector.sourceIds, now);
+  if (downReason !== null) {
+    return {
+      budget,
+      entries: tasks.map((t) => ({ ...base(t), action: "skip" as const, reason: downReason })),
+    };
+  }
+
+  // Per-task gate with cumulative pending spend: once a task is accepted its
+  // estimated calls/usd count against every later task in this batch.
+  const pending = { calls: 0, usd: 0 };
+  const entries = tasks.map((task): QueuePlanEntry => {
+    const entry = base(task);
+    const quote = quoteOrExit(connector, { mechanism: task.mechanism, terms: entry.terms });
+    const decision = evaluateRunAgainstOps({ config, quote, now, pendingSpend: pending });
+    if (!decision.allowed) {
+      const overBatchBudget = decision.overBudget;
+      return {
+        ...entry,
+        action: overBatchBudget ? "defer" : "skip",
+        reason: overBatchBudget
+          ? `deferred to next week — ${decision.reasons.join("; ")}`
+          : `gate blocked — ${decision.reasons.join("; ")}`,
+        quote,
+      };
+    }
+    pending.calls += quote.calls;
+    pending.usd += quote.estimated_usd;
+    return { ...entry, action: "run", reason: task.reason, quote };
+  });
+
+  return { budget, entries };
+}
+
+function printQueueSummary(budget: BudgetSnapshot, entries: QueuePlanEntry[]): void {
+  const line = (s: string): void => console.error(s);
+  line(`## Maturation harvest plan (${budget.month})`);
+  line("");
+  line(
+    `Budget: ${budget.used.calls}/${budget.caps.calls} calls, $${budget.used.usd}/$${budget.caps.usd} used this month.`,
+  );
+  line("");
+  const groups: [QueuePlanEntry["action"], string][] = [
+    ["run", "Harvesting"],
+    ["defer", "Deferred to next week"],
+    ["skip", "Skipped"],
+  ];
+  for (const [action, label] of groups) {
+    const group = entries.filter((e) => e.action === action);
+    line(`${label} ${group.length}:`);
+    for (const e of group) line(`  - ${e.mechanism} × ${e.segment} (pack ${e.pack}) — ${e.reason}`);
+  }
+}
+
 function printSummary(budget: BudgetSnapshot, entries: PlanEntry[]): void {
   const line = (s: string): void => console.error(s);
   line(`## Scheduled run plan (${budget.month})`);
@@ -332,7 +459,23 @@ function main(): void {
     return;
   }
 
-  console.error("Usage: npm run ops-gate -- <budget|check|plan> [...]");
+  if (mode === "plan-queue") {
+    const [rawMax] = rest;
+    let maxTasks: number | undefined;
+    if (rawMax !== undefined && rawMax !== "") {
+      maxTasks = Number(rawMax);
+      if (!Number.isInteger(maxTasks) || maxTasks < 1) {
+        console.error("Usage: npm run ops-gate -- plan-queue [maxTasks ≥ 1]");
+        process.exit(1);
+      }
+    }
+    const { budget, entries } = planQueue(maxTasks, now);
+    console.log(JSON.stringify({ month: budget.month, budget, entries }, null, 2));
+    printQueueSummary(budget, entries);
+    return;
+  }
+
+  console.error("Usage: npm run ops-gate -- <budget|check|plan|plan-queue> [...]");
   process.exit(1);
 }
 

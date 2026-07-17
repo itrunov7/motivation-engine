@@ -372,16 +372,24 @@ export interface OpsRunDecision {
  * Gate a single run (D-025). Per-run limits are HARD — raiseCap NEVER bypasses
  * them, it only overrides the monthly budget for this one run (and the caller
  * logs that override to decisions.json). Budget is evaluated against the
- * month-to-date snapshot plus this run's estimate.
+ * month-to-date snapshot plus this run's estimate. When a caller gates a BATCH
+ * of runs before any of them executes (the maturation loop, D-052), it passes
+ * the calls/usd already committed to earlier runs in the same batch as
+ * pendingSpend — projected on top of month-to-date so the batch as a whole can
+ * never exhaust the budget. pendingSpend only tightens the gate, never loosens
+ * it.
  */
 export function evaluateRunAgainstOps(args: {
   config: OpsConnectorConfig;
   quote: RunQuote;
   raiseCap?: boolean;
   now?: Date;
+  pendingSpend?: { calls: number; usd: number };
 }): OpsRunDecision {
   const { config, quote, raiseCap = false } = args;
   const budget = computeBudgetSnapshot(args.now);
+  const pendingCalls = args.pendingSpend?.calls ?? 0;
+  const pendingUsd = args.pendingSpend?.usd ?? 0;
   const reasons: string[] = [];
 
   if (quote.calls > config.limits.max_calls_per_run) {
@@ -396,12 +404,13 @@ export function evaluateRunAgainstOps(args: {
   }
 
   const overBudget =
-    budget.used.calls + quote.calls > budget.caps.calls ||
-    budget.used.usd + quote.estimated_usd > budget.caps.usd;
+    budget.used.calls + pendingCalls + quote.calls > budget.caps.calls ||
+    budget.used.usd + pendingUsd + quote.estimated_usd > budget.caps.usd;
   if (overBudget && !raiseCap) {
+    const pendingNote = pendingCalls > 0 || pendingUsd > 0 ? `+${pendingCalls} pending` : "";
     reasons.push(
-      `this run would exceed the monthly budget (calls ${budget.used.calls}+${quote.calls} of ${budget.caps.calls}; ` +
-        `usd ${budget.used.usd}+${quote.estimated_usd} of ${budget.caps.usd}) — raise the cap for this run to proceed`,
+      `this run would exceed the monthly budget (calls ${budget.used.calls}${pendingNote}+${quote.calls} of ${budget.caps.calls}; ` +
+        `usd ${budget.used.usd}+${pendingUsd + quote.estimated_usd} of ${budget.caps.usd}) — raise the cap for this run to proceed`,
     );
   }
 
