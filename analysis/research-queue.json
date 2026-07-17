@@ -1,0 +1,274 @@
+{
+  "version": "0.1.0",
+  "generated_at": "2026-07-16T15:58:51.387Z",
+  "config_version": "0.1.0",
+  "matrix_generated_at": "2026-07-16T15:57:48.447Z",
+  "budget": {
+    "month": "2026-07",
+    "monthly_remaining_calls": 19440,
+    "monthly_budget_share": 0.5,
+    "estimated_calls_per_task": 150,
+    "budget_max_tasks": 64,
+    "config_max_tasks": 12,
+    "effective_max_tasks": 12
+  },
+  "candidate_count": 180,
+  "tasks": [
+    {
+      "gap_cell": {
+        "pack": "trust-friction",
+        "segment": "web-saas",
+        "status": "red",
+        "gaps": [
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "FR-11",
+      "segment": "web-saas",
+      "importance": 1.6467,
+      "suggested_evidence_terms": [
+        "framing effect risky choice saas onboarding",
+        "anchoring adjustment heuristic saas onboarding",
+        "anchoring effect replication saas onboarding"
+      ],
+      "reason": "red cell trust-friction×web-saas: interaction_coverage 0.00<0.80, context_coverage 0.33<0.80; segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "trust-friction",
+        "segment": "web-saas",
+        "status": "red",
+        "gaps": [
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "SP-08",
+      "segment": "web-saas",
+      "importance": 1.6467,
+      "suggested_evidence_terms": [
+        "social proof conformity saas onboarding",
+        "social influence compliance descriptive norms saas onboarding",
+        "social proof replication saas onboarding"
+      ],
+      "reason": "red cell trust-friction×web-saas: interaction_coverage 0.00<0.80, context_coverage 0.33<0.80; segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "entry",
+        "segment": "web-saas",
+        "status": "red",
+        "gaps": [
+          "grade_sufficiency",
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "CG-05",
+      "segment": "web-saas",
+      "importance": 1.56,
+      "suggested_evidence_terms": [
+        "information gap theory curiosity saas onboarding",
+        "curiosity gap attention saas onboarding",
+        "need for cognition curiosity saas onboarding"
+      ],
+      "reason": "red cell entry×web-saas: grade_sufficiency 0.70<0.80, interaction_coverage 0.17<0.80, context_coverage 0.33<0.80; segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "entry",
+        "segment": "web-saas",
+        "status": "red",
+        "gaps": [
+          "grade_sufficiency",
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "RE-10",
+      "segment": "web-saas",
+      "importance": 1.56,
+      "suggested_evidence_terms": [
+        "reciprocity norm compliance saas onboarding",
+        "reciprocity persuasion gift saas onboarding",
+        "rule of reciprocation saas onboarding"
+      ],
+      "reason": "red cell entry×web-saas: grade_sufficiency 0.70<0.80, interaction_coverage 0.17<0.80, context_coverage 0.33<0.80; segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "trust-friction",
+        "segment": "subscription",
+        "status": "red",
+        "gaps": [
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "FR-11",
+      "segment": "subscription",
+      "importance": 1.54,
+      "suggested_evidence_terms": [
+        "framing effect risky choice subscription retention",
+        "anchoring adjustment heuristic subscription retention",
+        "anchoring effect replication subscription retention"
+      ],
+      "reason": "red cell trust-friction×subscription: interaction_coverage 0.00<0.80, context_coverage 0.50<0.80; segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "trust-friction",
+        "segment": "subscription",
+        "status": "red",
+        "gaps": [
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "SP-08",
+      "segment": "subscription",
+      "importance": 1.54,
+      "suggested_evidence_terms": [
+        "social proof conformity subscription retention",
+        "social influence compliance descriptive norms subscription retention",
+        "social proof replication subscription retention"
+      ],
+      "reason": "red cell trust-friction×subscription: interaction_coverage 0.00<0.80, context_coverage 0.50<0.80; segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "trust-friction",
+        "segment": "mobile-app",
+        "status": "red",
+        "gaps": [
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "FR-11",
+      "segment": "mobile-app",
+      "importance": 1.52,
+      "suggested_evidence_terms": [
+        "framing effect risky choice mobile app",
+        "anchoring adjustment heuristic mobile app",
+        "anchoring effect replication mobile app"
+      ],
+      "reason": "red cell trust-friction×mobile-app: interaction_coverage 0.00<0.80, context_coverage 0.33<0.80; segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "trust-friction",
+        "segment": "mobile-app",
+        "status": "red",
+        "gaps": [
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "SP-08",
+      "segment": "mobile-app",
+      "importance": 1.52,
+      "suggested_evidence_terms": [
+        "social proof conformity mobile app",
+        "social influence compliance descriptive norms mobile app",
+        "social proof replication mobile app"
+      ],
+      "reason": "red cell trust-friction×mobile-app: interaction_coverage 0.00<0.80, context_coverage 0.33<0.80; segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "entry",
+        "segment": "mobile-app",
+        "status": "red",
+        "gaps": [
+          "grade_sufficiency",
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "CG-05",
+      "segment": "mobile-app",
+      "importance": 1.44,
+      "suggested_evidence_terms": [
+        "information gap theory curiosity mobile app",
+        "curiosity gap attention mobile app",
+        "need for cognition curiosity mobile app"
+      ],
+      "reason": "red cell entry×mobile-app: grade_sufficiency 0.70<0.80, interaction_coverage 0.17<0.80, context_coverage 0.33<0.80; segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "entry",
+        "segment": "mobile-app",
+        "status": "red",
+        "gaps": [
+          "grade_sufficiency",
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "RE-10",
+      "segment": "mobile-app",
+      "importance": 1.44,
+      "suggested_evidence_terms": [
+        "reciprocity norm compliance mobile app",
+        "reciprocity persuasion gift mobile app",
+        "rule of reciprocation mobile app"
+      ],
+      "reason": "red cell entry×mobile-app: grade_sufficiency 0.70<0.80, interaction_coverage 0.17<0.80, context_coverage 0.33<0.80; segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "trust-friction",
+        "segment": "daily-habit",
+        "status": "red",
+        "gaps": [
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "FR-11",
+      "segment": "daily-habit",
+      "importance": 1.43,
+      "suggested_evidence_terms": [
+        "framing effect risky choice habit daily app",
+        "anchoring adjustment heuristic habit daily app",
+        "anchoring effect replication habit daily app"
+      ],
+      "reason": "red cell trust-friction×daily-habit: interaction_coverage 0.00<0.80, context_coverage 0.50<0.80; segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "trust-friction",
+        "segment": "daily-habit",
+        "status": "red",
+        "gaps": [
+          "interaction_coverage",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "SP-08",
+      "segment": "daily-habit",
+      "importance": 1.43,
+      "suggested_evidence_terms": [
+        "social proof conformity habit daily app",
+        "social influence compliance descriptive norms habit daily app",
+        "social proof replication habit daily app"
+      ],
+      "reason": "red cell trust-friction×daily-habit: interaction_coverage 0.00<0.80, context_coverage 0.50<0.80; segment evidence general_only (segment-specific harvest needed)"
+    }
+  ]
+}

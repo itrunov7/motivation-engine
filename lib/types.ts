@@ -793,3 +793,88 @@ export interface SufficiencyMatrix {
   config_version: string;
   cells: SufficiencyCell[];
 }
+
+// ---------- Gap planner (/analysis/research-queue.json, D-051) ----------
+//
+// tools/gap-planner.ts (npm run gaps) ranks the red/amber cells of the
+// sufficiency matrix into a budget-bounded queue of targeted, segment-qualified
+// evidence harvests. Its ONE hand-authored input is the gap_planner block of
+// analysis/analyzer.config.yaml; analysis/research-queue.json is a COMPUTED
+// projection, never hand-edited (same pattern as the sufficiency matrix).
+
+/** gap_planner.budget — how the monthly cap system bounds the queue length. */
+export interface GapPlannerBudgetConfig {
+  /** Hard ceiling on queued tasks. */
+  max_tasks: number;
+  /** Estimated evidence-connector calls one task spends (≈ one run). */
+  estimated_calls_per_task: number;
+  /** Fraction of the remaining monthly calls the queue may claim, in (0, 1]. */
+  monthly_budget_share: number;
+}
+
+/**
+ * The gap_planner block of analysis/analyzer.config.yaml — owner-tunable
+ * priority judgment (segment_weights) and segment vocabulary
+ * (segment_qualifiers), neither a scientific claim.
+ */
+export interface GapPlannerConfig {
+  version: string;
+  /** Segment id → importance weight; omitted segments default to 1.0. */
+  segment_weights?: Record<string, number>;
+  /** Segment id → qualifier tokens appended to a mechanism's evidence terms. */
+  segment_qualifiers: Record<string, string>;
+  budget: GapPlannerBudgetConfig;
+}
+
+/** The gap cell a research task addresses (a subset of a SufficiencyCell). */
+export interface ResearchGapCell {
+  pack: string;
+  segment: string;
+  status: SufficiencyStatus;
+  gaps: SufficiencyCriterion[];
+  segment_evidence: SegmentEvidence;
+}
+
+/** One prioritized, segment-qualified harvest task for the evidence connector. */
+export interface ResearchTask {
+  gap_cell: ResearchGapCell;
+  /** Mechanism id to harvest (resolves in /registry/mechanisms). */
+  mechanism: string;
+  segment: string;
+  /** segment_weight × gap_size; higher = more important. */
+  importance: number;
+  /** Mechanism evidence terms qualified with the segment's vocabulary. */
+  suggested_evidence_terms: string[];
+  /** Human-readable, computed from the cell's failed criteria + scores. */
+  reason: string;
+}
+
+/** How the monthly budget/cap system bounded the queue length (D-051). */
+export interface ResearchQueueBudget {
+  /** UTC "YYYY-MM" the snapshot was taken in. */
+  month: string;
+  /** Remaining monthly calls (caps − month-to-date used), from the ops snapshot. */
+  monthly_remaining_calls: number;
+  monthly_budget_share: number;
+  estimated_calls_per_task: number;
+  /** floor(monthly_remaining_calls × monthly_budget_share / estimated_calls_per_task). */
+  budget_max_tasks: number;
+  /** gap_planner.budget.max_tasks. */
+  config_max_tasks: number;
+  /** min(config_max_tasks, budget_max_tasks) — the applied N. */
+  effective_max_tasks: number;
+}
+
+/** /analysis/research-queue.json — the generated research queue (D-051). */
+export interface ResearchQueue {
+  version: string;
+  generated_at: string;
+  /** The analyzer.config.yaml version the gap_planner block was read from. */
+  config_version: string;
+  /** generated_at of the sufficiency matrix this queue was ranked from. */
+  matrix_generated_at: string;
+  budget: ResearchQueueBudget;
+  /** Total red/amber (mechanism × segment) candidates before truncation to N. */
+  candidate_count: number;
+  tasks: ResearchTask[];
+}
