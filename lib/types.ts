@@ -878,3 +878,48 @@ export interface ResearchQueue {
   candidate_count: number;
   tasks: ResearchTask[];
 }
+
+// ---------- Maturation log (/analysis/maturation-log.json, D-053) ----------
+//
+// tools/maturation-log.ts appends one entry per weekly maturation run
+// (.github/workflows/maturation.yml, D-052) from the artifacts that run
+// already produces: the red→green cell diff, the flipped packs, the budget
+// snapshot delta, and the deferred-task count. The file is generated output
+// (the sufficiency-matrix / research-queue precedent) — never hand-edited —
+// and is what the /maturation cockpit reads to show the week-over-week
+// history instead of the ephemeral GitHub Actions job summary.
+
+/** One [pack × segment] cell whose status changed in a maturation run. */
+export interface MaturationCellChange {
+  pack: string;
+  segment: string;
+  from: SufficiencyStatus;
+  to: SufficiencyStatus;
+}
+
+/** One weekly maturation run recorded from the workflow's own artifacts. */
+export interface MaturationLogEntry {
+  /** UTC "YYYY-MM-DD" of the run (the week label). */
+  week: string;
+  /** ISO timestamp the entry was appended. */
+  generated_at: string;
+  /** Every cell whose status changed this run (red→green and any other flip). */
+  cells_changed: MaturationCellChange[];
+  /** Packs regenerated because a cell flipped to green (npm run packs -- packs=…). */
+  packs_regenerated: string[];
+  /** Budget-snapshot delta for the run (before→after), from ops-gate budget. */
+  spend: {
+    calls: number;
+    usd: number;
+  };
+  /** Tasks the plan-queue gate deferred to next week over budget (D-052). */
+  deferred: number;
+}
+
+/** /analysis/maturation-log.json — the append-only weekly maturation history. */
+export interface MaturationLog {
+  version: string;
+  generated_at: string;
+  /** Newest run last; the reader sorts for display. */
+  entries: MaturationLogEntry[];
+}

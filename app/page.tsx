@@ -23,6 +23,7 @@ const ROOMS: { href: string; label: string }[] = [
   { href: "/sources", label: "sources" },
   { href: "/connectors", label: "connectors" },
   { href: "/ops", label: "operations" },
+  { href: "/maturation", label: "maturation" },
   { href: "/dossiers", label: "dossiers" },
   { href: "/decisions", label: "decisions" },
   { href: "/docs", label: "docs" },

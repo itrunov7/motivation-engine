@@ -52,8 +52,10 @@ import {
   type LifecycleStatus,
   type Mechanism,
   type SeedStub,
+  type SegmentEvidence,
   type Source,
   type SourceClassId,
+  type SufficiencyStatus,
   type TaxonomyNode,
 } from "./types";
 
@@ -601,6 +603,68 @@ export const LIFECYCLE_ORDER: LifecycleStatus[] = [
   "deprecated",
   "rejected",
 ];
+
+// ---------- Sufficiency matrix vocabulary (/maturation, D-050/D-053) ----------
+
+/**
+ * Presentation metadata for the COMPUTED sufficiency status of a
+ * [pack × segment] cell (analysis/sufficiency-matrix.json, D-050): green =
+ * emerald, amber = amber, red = the alert token (a red cell is a knowledge
+ * hole the cockpit flags loudly, not merely "planned"). This is the ONLY
+ * place the "red"/"amber"/"green" literals live; the /maturation heatmap maps
+ * every cell through this table, never via a literal (honesty rule).
+ */
+export const CELL_STATUS_META: Record<SufficiencyStatus, StatusMeta> = {
+  green: { label: "green", color: "#34D399" },
+  amber: { label: "amber", color: "#E4B54E" },
+  red: { label: "red", color: ALERT_COLOR },
+};
+
+/** Sufficiency statuses in maturity order (worst → best) for legends/counts. */
+export const CELL_STATUS_ORDER: SufficiencyStatus[] = ["red", "amber", "green"];
+
+/**
+ * A segment present in segments.yaml but absent from the matrix (a new or
+ * not-yet-scored segment) renders as this neutral state — honest, never red.
+ * Slate, the "planned/unknown" token, so an empty column reads as "no data
+ * yet", not as a failing cell.
+ */
+export const CELL_NOT_ANALYZED_META: StatusMeta = {
+  label: "not analyzed",
+  color: "#7C93A8",
+};
+
+/**
+ * Presentation metadata for the segment-evidence axis (D-050): general_only is
+ * the signal that segment-specific harvesting is still needed (amber),
+ * segment_specific means some segment judgment already touches the cell
+ * (emerald). The literals live here, not in app/.
+ */
+/**
+ * True when a cell rests on general evidence only — the signal that
+ * segment-specific harvesting is still needed (D-050). Lives here so the
+ * "general_only" literal stays out of app/ (honesty grep check).
+ */
+export function needsSegmentHarvest(evidence: SegmentEvidence): boolean {
+  return evidence === "general_only";
+}
+
+export const SEGMENT_EVIDENCE_META: Record<
+  SegmentEvidence,
+  { label: string; color: string; description: string }
+> = {
+  segment_specific: {
+    label: "segment-specific",
+    color: "#34D399",
+    description: "some segment-specific judgment touches this cell",
+  },
+  general_only: {
+    label: "general-only",
+    color: "#E4B54E",
+    description:
+      "scored on general evidence only — segment-specific harvest needed",
+  },
+};
 
 // ---------- Block model ----------
 

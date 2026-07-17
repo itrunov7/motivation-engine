@@ -194,6 +194,23 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
+      # ---------- Persist the week's turn for the /maturation cockpit ----------
+      # Records the same diff / spend / deferred figures the job summary shows
+      # into analysis/maturation-log.json (D-053) so the cockpit reads the
+      # weekly history from a file instead of the ephemeral Actions summary.
+      # It only records what steps 1-5 already computed; a zero-flip week is
+      # recorded truthfully.
+      - name: Record the maturation log entry
+        if: steps.harvest.outputs.failed != 'true'
+        run: |
+          set -euo pipefail
+          npx tsx tools/maturation-log.ts \
+            --cell-diff cell-diff.json \
+            --budget-before budget-before.json \
+            --budget-after budget-after.json \
+            --queue-plan queue-plan.json \
+            --week "$(date -u +%Y-%m-%d)"
+
       # ---------- (6) commit the week's turn ----------
       - name: Commit maturation results if changed
         if: steps.harvest.outputs.failed != 'true'
