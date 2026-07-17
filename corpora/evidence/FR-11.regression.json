@@ -1,0 +1,409 @@
+{
+  "mechanism_id": "FR-11",
+  "fetched_at": "2026-07-17T13:47:05.036Z",
+  "terms_source": "param",
+  "terms": [
+    "framing effect risky choice saas onboarding",
+    "anchoring adjustment heuristic saas onboarding",
+    "anchoring effect replication saas onboarding"
+  ],
+  "queries": [
+    {
+      "api": "openalex",
+      "term": "framing effect risky choice saas onboarding",
+      "requested": 25,
+      "returned": 0
+    },
+    {
+      "api": "openalex",
+      "term": "anchoring adjustment heuristic saas onboarding",
+      "requested": 25,
+      "returned": 0
+    },
+    {
+      "api": "openalex",
+      "term": "anchoring effect replication saas onboarding",
+      "requested": 25,
+      "returned": 0
+    },
+    {
+      "api": "semantic-scholar",
+      "term": "framing effect risky choice saas onboarding",
+      "requested": 15,
+      "returned": 15
+    },
+    {
+      "api": "semantic-scholar",
+      "term": "anchoring adjustment heuristic saas onboarding",
+      "requested": 15,
+      "returned": 0
+    },
+    {
+      "api": "semantic-scholar",
+      "term": "anchoring effect replication saas onboarding",
+      "requested": 15,
+      "returned": 0
+    }
+  ],
+  "coverage_report": {
+    "review_found": false,
+    "reviews": [],
+    "snowball_added": 0,
+    "note": "no topically-validated review anchor (core terms in title+abstract, review typing, ≥20 references) — no anchor chosen (D-034)"
+  },
+  "category_counts": {
+    "foundational": 2,
+    "meta-analysis": 1,
+    "replication": 3,
+    "dissent": 4,
+    "recent": 11
+  },
+  "records": [
+    {
+      "title": "Judgment under Uncertainty: Heuristics and Biases",
+      "authors": [
+        "Amos Tversky",
+        "Daniel Kahneman"
+      ],
+      "year": 1974,
+      "venue": "Science",
+      "doi": "10.1126/science.185.4157.1124",
+      "citations": 28149,
+      "abstract": "This article described three heuristics that are employed in making judgments under uncertainty: (i) representativeness, which is usually employed when people are asked to judge the probability that an object or event A belongs to class or process B; (ii) availability of instances or scenarios, which is often employed when people are asked to assess the frequency of a class or the plausibility of a particular development; and (iii) adjustment from an anchor, which is usually employed in numerical prediction when a relevant value is available. These heuristics are highly economical and usually effective, but they lead to systematic and predictable errors. A better understanding of these heuristics and of the biases to which they lead could improve judgments and decisions in situations of uncertainty.",
+      "openalex_id": "W4292157289",
+      "openalex_type": "article",
+      "referenced_works_count": 12,
+      "categories": [
+        "foundational"
+      ],
+      "source_api": "pinned",
+      "pin_reason": "foundational — Tversky & Kahneman 1974, anchoring introduced"
+    },
+    {
+      "title": "The Framing of Decisions and the Psychology of Choice",
+      "authors": [
+        "Amos Tversky",
+        "Daniel Kahneman"
+      ],
+      "year": 1981,
+      "venue": "Science",
+      "doi": "10.1126/science.7455683",
+      "citations": 17384,
+      "abstract": "The psychological principles that govern the perception of decision problems and the evaluation of probabilities and outcomes produce predictable shifts of preference when the same problem is framed in different ways. Reversals of preference are demonstrated in choices regarding monetary outcomes, both hypothetical and real, and in questions pertaining to the loss of human lives. The effects of frames on preferences are compared to the effects of perspectives on perceptual appearance. The dependence of preferences on the formulation of decision problems is a significant concern for the theory of rational choice.",
+      "openalex_id": "W2096452841",
+      "openalex_type": "article",
+      "referenced_works_count": 48,
+      "categories": [
+        "foundational",
+        "dissent"
+      ],
+      "source_api": "pinned",
+      "pin_reason": "foundational — Tversky & Kahneman 1981, framing"
+    },
+    {
+      "title": "Dissecting the risky-choice framing effect: Numeracy as an individual-difference factor in weighting risky and riskless options",
+      "authors": [
+        "E. Peters",
+        "I. Levin"
+      ],
+      "year": 2008,
+      "venue": "Judgment and Decision Making",
+      "doi": "10.1017/s1930297500000012",
+      "citations": 175,
+      "abstract": "Using five variants of the Asian Disease Problem, we dissected the risky-choice framing effect by requiring each participant to provide preference ratings for the full decision problem and also to provide attractiveness ratings for each of the component parts, i.e., the sure-thing option and the risky option. Consistent with previous research, more risky choices were made by respondents receiving negatively framed versions of the decision problems than by those receiving positively framed versions. However, different processes were evident for those scoring high and low on numeracy. Whereas the choices of the less numerate showed a large effect of frame above and beyond any influence of their evaluations of the separate options, the choices of the highly numerate were almost completely accounted for by their attractiveness ratings of the separate options. These results are consistent with an increased tendency of the highly numerate to integrate complex numeric information in the construction of their preferences and a tendency for the less numerate to respond more superficially to non-numeric sources of information.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Accelerating Psychological Science With Metastudies: A Demonstration Using the Risky-Choice Framing Effect",
+      "authors": [
+        "M. DeKay",
+        "Nataliya Rubinchik",
+        "Zhaojun Li",
+        "P. De Boeck"
+      ],
+      "year": 2022,
+      "venue": "Perspectives on Psychological Science",
+      "doi": "10.1177/17456916221079611",
+      "citations": 28,
+      "abstract": "A metastudy is a set of many tiny studies (microstudies) created from a much larger collection of possibilities. Metastudies can yield many of the benefits of time-consuming replications and meta-analyses but more efficiently and with greater attention to generalizability and the causal effects of moderators. Statistical precision and power are higher than in studies with the same total sample size but with fewer conditions and more participants per condition. In this article, we describe metastudies and their benefits, demonstrate how to conduct a metastudy using the well-known risky-choice framing effect as an example, and report on the generalizability of that effect. In three metastudies (total N = 2,338), the framing effect generalized well across most of the potential moderators tested, as was expected. Surprisingly, however, the effect was up to twice as large when the certain option was replaced with a slightly risky option; prospect theory predicts the opposite, and fuzzy-trace theory predicts no difference. Metastudies provide a relatively quick and not-so-painful way of examining an effect’s generalizability without waiting for a meta-analysis. Both individual labs and multilab networks are encouraged to shift from traditional studies to metastudies.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "replication",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Aging and decision making: Differences in susceptibility to the risky‐choice framing effect between older and younger adults in Japan",
+      "authors": [
+        "Satoshi Watanabe",
+        "Hirohide Shibutani"
+      ],
+      "year": 2010,
+      "venue": null,
+      "doi": "10.1111/j.1468-5884.2010.00432.x",
+      "citations": 17,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "A systematic review of risky-choice framing effects",
+      "authors": [
+        "A. Kühberger"
+      ],
+      "year": 2023,
+      "venue": "EXCLI Journal : Experimental and Clinical Sciences",
+      "doi": "10.17179/excli2023-6169",
+      "citations": 13,
+      "abstract": "Classic decision theory requires that rational agents show description invariance: which description is chosen should not matter for judgments, preferences, or choices given the descriptions are co-extensive. Framing research has amply demonstrated a failure of description invariance by showing that the choice of the description has a systematic effect on judgments, preferences, and choices. Specifically, framing research has shown that linguistically different descriptions of seemingly equivalent options frequently lead to preference reversals. I summarize the research on framing in situations entailing risk. This includes the characterization of different research designs used, the size and robustness of the framing effects reported for those designs, and the theoretical accounts put forward to explain framing effects. The theoretical accounts are evaluated with respect to their merits, empirically and theoretically. I end by providing the implications of framing research. My central point is that the existence of framing effects points to the adaptiveness of the processes underlying human judgment and choice rather than simply showing human irrationality.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "meta-analysis",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Prospect Theory and Risky Choice in the Ecommerce Setting: Evidence of a Framing Effect",
+      "authors": [
+        "Tammy Bahmanziari",
+        "M. Odom"
+      ],
+      "year": 2015,
+      "venue": null,
+      "doi": null,
+      "citations": 8,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Advanced age predicts increased susceptibility to attribute, goal, and risky-choice framing in negative frame valences",
+      "authors": [
+        "Lan Xu"
+      ],
+      "year": 2024,
+      "venue": "Humanities and Social Sciences Communications",
+      "doi": "10.1057/s41599-024-02658-6",
+      "citations": 4,
+      "abstract": "The framing effect has been extensively studied in the context of attribute, goal, and risky-choice framing, revealing its significant impact on decision-making. However, the interplay between age and the framing effect remains relatively unexplored, and existing findings are inconclusive and conflicting. Addressing this gap, this study investigates the influence of age on all three types of framing using a large cohort of participants ( N  = 696). The Johnson-Neyman technique was employed to examine the effect across a continuous range of ages. The analysis demonstrated that advanced age significantly increased susceptibility to the framing effect. Moreover, it was found that this susceptibility primarily manifests in response to negative frames across all framing types. These findings not only align with the socioemotional selectivity theory and dual-process model but also underscore the importance of affect heuristics in decision-making among older adults. By offering a robust examination of all three types of framing and their interactions with age, this study provides a theoretical foundation for the role of age as a potential moderator in framing contexts. These findings may therefore inform the development of targeted strategies to mitigate the impact of the framing effect on elderly populations.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Risky-choice framing and its null effect on integral emotions",
+      "authors": [
+        "Hao Cheng",
+        "C. Burns",
+        "M. Revie"
+      ],
+      "year": 2021,
+      "venue": "Journal of Risk Research",
+      "doi": "10.1080/13669877.2021.1936611",
+      "citations": 3,
+      "abstract": "Abstract The effects of risky-choice framing are well-established and have been demonstrated in several decision contexts. Recent research has pointed to a role for affect and emotions in risky-choice framing, but those findings may have been influenced by carry-over effects due to the use of multiple decision problems. In a one-off decision, the effects of risky-choice framing on affect and emotions remain unclear. This article extends the risky-choice framing literature by using the Emotion-Imbued Choice model to investigate whether integral fear and anger can account for the effects of risky-choice framing in a one-off decision. In two studies involving a one-off decision about internet connectivity and human lives respectively, we expected higher levels of integral fear in participants who chose the certain option in the positive framing condition as compared to the negative framing condition, and also higher levels of integral anger in participants who chose the risky option in the negative framing condition as compared to the positive framing condition. Our findings did not support these hypotheses and suggest that the effects of risky-choice framing are not due to integral emotions. We explained our findings by proposing that the choice architecture involved in risky-choice framing prevents integral emotions from becoming attached to the choice options because it offers a less effortful decision tactic than considering one’s emotional response to those options. We call for future research to investigate this possibility and to also consider the demand characteristics of conducting risky-choice framing problems online.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Working memory capacity and the risky-choice framing effect: A preregistered replication and extension of Corbin et al. ()",
+      "authors": [
+        "B. Bogdanov",
+        "J. Corbin",
+        "Sabina Dobreva",
+        "Todd McElroy",
+        "Nikolay R. Rachev"
+      ],
+      "year": 2023,
+      "venue": "Judgment and Decision Making",
+      "doi": "10.1017/jdm.2023.40",
+      "citations": 3,
+      "abstract": "\n While working memory capacity is associated with superior performance on a number of tasks, could it paradoxically sometimes be associated with suboptimal performance? Corbin et al. (2010, Judgment and Decision Making 5(2), 110–115) found that, in a between-subjects design, higher WMC is associated with a larger risky-choice framing effect, traditionally conceived of as a departure from rational principles. Such surprising findings are of potentially great theoretical importance; yet the original study was underpowered. In this registered report, we aimed to replicate and extend the original findings, by conducting an online experiment among 425 North Americans. To extend the findings beyond the specific single tasks used in the original study, we used three WMC tasks with different processing components and six framing problems involving human lives. In a close replication, the frame significantly interacted with neither the Ospan short absolute score nor the Ospan short partial score in predicting ratings on the disease-framing problem. Similarly, in an extended replication, a composite WMC score did not significantly interact with the frame in predicting ratings on three framing problems involving human lives. The Bayes factors showed that the data were 3 to 10 times more likely under the null hypothesis of no interaction between WMC and frame. Taken together, these findings show an absence of association between the between-subjects risky-choice framing effect and WMC. This outcome is compatible with four out of the six theoretical accounts we considered, and is uniquely predicted by the default-interventionist dual-process account and the pragmatic inference account. Further research can more rigorously pit conflicting predictions of these accounts against each other.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "replication",
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Protective behaviors during COVID-19 confinement measures in Greece: the role of anxiety, perceived risk and risky-choice framing",
+      "authors": [
+        "G. Koulierakis",
+        "Anastasia Dermatis",
+        "D. Zavras",
+        "E. Pavi"
+      ],
+      "year": 2023,
+      "venue": "AIMS Public Health",
+      "doi": "10.3934/publichealth.2023021",
+      "citations": 2,
+      "abstract": "Confinement measures at the beginning of the COVID-19 pandemic imposed major changes on the global population. The aim of this study was to explore the level to which the public adhered to protective guidelines by adopting the most appropriate behaviors at that time (such as hand washing with soap and using sanitizer gel) and to identify the determinants of these behaviors. A purposive sample of 1013 individuals was invited and voluntarily participated in the online survey. The questionnaire collected information on demographic data, hand washing, risk perception, anxiety (through the S = Anxiety scale of STAI) and risky-choice framing. Results showed increased levels of anxiety, a moderate perception of the risk of catching coronavirus and increased adoption of protective behaviors, such as handwashing and cleaning surfaces with disinfectant/antiseptic products. Multiple ordinal logistic regression models showed that being female, more educated and cleaning home with disinfectant / antiseptic products predicted handwashing with soap. Additionally, having an increased perception of getting the coronavirus, being older and cleaning the home with disinfectant / antiseptic products predicted handwashing with antiseptics. Public health interventions should take into consideration the unified cleaning pattern and the combined effect of sociodemographic variables and risk perception on the adoption of protective behaviour in the context of a health crisis which is out of people's control.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "RESPONSIBILITY ON RISKY CHOICE: FRAMING EFFECT ON INVESTMENT DECISION MAKING OF INDIVIDUAL WITHIN THE GROUP",
+      "authors": [
+        "Ang Prisila Kartin",
+        "Monika Palupi Murniati"
+      ],
+      "year": 2018,
+      "venue": null,
+      "doi": null,
+      "citations": 2,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Risky-Choice Framing Effects Result Partly From Mismatched Option Descriptions in Gains and Losses",
+      "authors": [
+        "M. DeKay",
+        "Shiyu Dou"
+      ],
+      "year": 2024,
+      "venue": "Psychology Science",
+      "doi": "10.1177/09567976241249183",
+      "citations": 2,
+      "abstract": "Textbook psychology holds that people usually prefer a certain option over a risky one when options are framed as gains but prefer the opposite when options are framed as losses. However, this pattern can be amplified, eliminated, or reversed depending on whether option descriptions include only positive information (e.g., “200 people will be saved”), only negative information (e.g., “400 people will not be saved”), or both. Previous studies suggest that framing effects arise only when option descriptions are mismatched across frames. Using online and student samples (Ns = 906 and 521), we investigated 81 framing-effect variants created from matched and mismatched pairs of 18 option descriptions (nine in each frame). Description valence or gist explained substantial variation in risk preferences (prospect theory does not predict such variation), but a considerable framing effect remained in our balanced design. Risky-choice framing effects appear to be partly—but not completely—the result of mismatched comparisons.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Supplemental Material for Probabilities and the Risky-Choice Framing Effect: Evidence for an Inverted-U Pattern",
+      "authors": [
+        "M. DeKay",
+        "Prachiti P. Garge"
+      ],
+      "year": 2023,
+      "venue": "Decision",
+      "doi": "10.1037/dec0000214.supp",
+      "citations": 2,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "(Almost) no evidence of self–other differences in risk preferences and cognitive processing among professionals in contextualized risky-choice framing tasks",
+      "authors": [
+        "Lewend Mayiwar"
+      ],
+      "year": 2025,
+      "venue": "Social Psychology",
+      "doi": "10.32872/spb.16619",
+      "citations": 0,
+      "abstract": "A substantial body of research has shown that risky decisions made for others often differ from those made for oneself. However, findings remain mixed, and there is still ongoing discussion about when and for whom self-other differences are most likely to emerge or be strongest. Building on previous research, which has primarily focused on lay samples and the outcomes of decision-making rather than the underlying processes, the current study reports on four preregistered experiments examining self–other differences across various professional domains, while also testing the commonly assumed cognitive mechanisms. Participants (total N = 1,337) were financial advisors at a large trade union (Experiment 1), leaders at a local government organization (Experiment 2) and a large hospital (Experiment 3), and a general sample of employees and leaders (Experiment 4). Participants completed a risky choice problem tailored to reflect their professional background (Experiments 1–3), where they were asked to choose between a safe and risky option either for themselves or for a hypothetical other, in both gain and loss frames. They then reported the extent to which they engaged in intuitive and analytical processing, and their emotional arousal. There was no evidence for consistent self-other differences in risk and no moderation by frame. In addition, there were no self-other differences in cognitive processing or affect. However, there was a main effect of framing in all experiments—that is, greater risk-seeking in loss (vs. gain) frames.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Framing Effect Intellectual Structure Mapping: A Bibliometric Review",
+      "authors": [
+        "T. Costa",
+        "D. Rafael",
+        "Murilo Carrazedo Marques da Costa Filho"
+      ],
+      "year": 2025,
+      "venue": "Journal of Scientometric Research",
+      "doi": "10.5530/jscires.20250943",
+      "citations": 0,
+      "abstract": "Framing effect is a cognitive bias that leads people to display a preference for one option between alternatives that are factually equivalent but differ in the way they are presented. The effect was demonstrated by Tversky and Kahneman following the development of Prospect Theory, gained momentum in the early 1980s, and continues to be a widely researched topic. Employing a bibliometric co-citation analysis, the current paper maps the intellectual structure of research in framing effects of the last 20 years of publications. The results reveal four clusters that represent the main areas of concentration of scholarly research on framing, providing an interesting case of the scientific development process. The first cluster reveals that framing research, although initially based on Prospect Theory, which confronted traditional expected utility theory in the field of economics, was mainly advanced in the field of psychology. Initially applied to choices between risky-choices, scholars expanded framing research to contexts where no risk is at stake, and other theories and cognitive, emotional, and motivational mechanisms were proposed. The second and third clusters revealed that framing research has been mainly applied in the fields of communication / political sciences and health, respectively. The final cluster, composed of seminal papers on framing, reveals that the framing effect remains relevant and still requires additional studies to better assess its effects on different profiles of individuals, scenarios, contexts, and methodological approaches",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Risky-choice framing effects persist when option descriptions are matched and complete: A replication and extension of DeKay and Dou (2024)",
+      "authors": [
+        "M. DeKay"
+      ],
+      "year": 2026,
+      "venue": "Psychonomic Bulletin & Review",
+      "doi": "10.3758/s13423-025-02771-w",
+      "citations": 0,
+      "abstract": "People’s choices involving money, health, and other matters can often be steered toward safer or riskier options by framing the options as gains or losses. This risky-choice framing effect is well established, but its direction and magnitude depend on whether the options are described completely or incompletely and whether the descriptions are matched or mismatched (in terms of good and bad outcomes) in the gain and loss frames. In a recent experiment involving 18 combinations of option descriptions (nine in each frame), DeKay and Dou, Psychological Science, 35(8), 918–932 (2024) found that the valence or gist of the descriptions accounted for substantial variation in risk preferences, favoring categorical theories of framing over more mathematical theories. However, a residual framing effect and a framing effect in choices between completely described options contradicted the categorical theories and previous results. The effect for completely described options was especially surprising, but it was based on data from only 97 participants. The experiment reported here replicated all these effects in a large sample (N=1,697\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$N = 1,697$$\\end{document}) well matched to US Census data and with many more participants (477) making choices between completely described options. Risky-choice framing effects do stem partly from mismatched option descriptions, but a framing effect persists even when descriptions are matched and complete. The latter results expand the effect’s relevance to situations where it was thought to be absent. Among several theory specifications, only a new rescaled version of the explicated valence account explains these effects in the replication and in DeKay and Dou’s online and student samples.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "replication",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "One Swallow Doesn't Make a Summer: New Evidence on Anchoring Effects",
+      "authors": [],
+      "year": null,
+      "venue": null,
+      "doi": "10.1257/aer.104.5.277",
+      "citations": null,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "pinned",
+      "pin_reason": "replication/robustness — Maniadis, Tufano & List on anchoring reliability",
+      "pin_unresolved": true
+    }
+  ]
+}

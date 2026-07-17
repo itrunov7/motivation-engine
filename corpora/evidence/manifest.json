@@ -6,23 +6,50 @@
   ],
   "connector_version": "2.3.0",
   "last_run": {
-    "timestamp": "2026-07-15T15:15:10.278Z",
-    "status": "success",
+    "timestamp": "2026-07-17T13:46:58.468Z",
+    "status": "partial",
     "params": {
-      "mechanism": "ID-12"
+      "mechanism": "FR-11",
+      "terms": "framing effect risky choice saas onboarding;anchoring adjustment heuristic saas onboarding;anchoring effect replication saas onboarding"
     },
-    "records_fetched": 175,
+    "records_fetched": 18,
     "files_written": 1,
-    "duration_s": 17.35,
+    "duration_s": 6.57,
+    "error": "regression suspected: re-harvest produced 18 records vs 222 already in the corpus — corpus NOT overwritten; wrote FR-11.regression.json for review (D-038)",
+    "warnings": {
+      "regression_suspected": true
+    },
     "cost": {
-      "api_calls": 18,
-      "duration_s": 17.35,
+      "api_calls": 9,
+      "duration_s": 6.57,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-17T13:46:58.468Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FR-11",
+        "terms": "framing effect risky choice saas onboarding;anchoring adjustment heuristic saas onboarding;anchoring effect replication saas onboarding"
+      },
+      "records_fetched": 18,
+      "files_written": 1,
+      "duration_s": 6.57,
+      "error": "regression suspected: re-harvest produced 18 records vs 222 already in the corpus — corpus NOT overwritten; wrote FR-11.regression.json for review (D-038)",
+      "warnings": {
+        "regression_suspected": true
+      },
+      "cost": {
+        "api_calls": 9,
+        "duration_s": 6.57,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-15T15:15:10.278Z",
       "status": "success",
@@ -364,23 +391,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T10:05:14.025Z",
-      "status": "success",
-      "params": {
-        "mechanism": "LA-01"
-      },
-      "records_fetched": 209,
-      "files_written": 1,
-      "duration_s": 39.14,
-      "cost": {
-        "api_calls": 38,
-        "duration_s": 39.14,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -418,6 +428,18 @@
         "replication": 30,
         "dissent": 45,
         "recent": 67
+      }
+    },
+    {
+      "path": "FR-11.regression.json",
+      "records": 18,
+      "bytes": 29043,
+      "categories": {
+        "foundational": 2,
+        "meta-analysis": 1,
+        "replication": 3,
+        "dissent": 4,
+        "recent": 11
       }
     },
     {
