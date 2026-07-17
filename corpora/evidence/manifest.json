@@ -6,28 +6,138 @@
   ],
   "connector_version": "2.3.0",
   "last_run": {
-    "timestamp": "2026-07-17T13:46:58.468Z",
+    "timestamp": "2026-07-17T14:36:28.736Z",
     "status": "partial",
     "params": {
       "mechanism": "FR-11",
-      "terms": "framing effect risky choice saas onboarding;anchoring adjustment heuristic saas onboarding;anchoring effect replication saas onboarding"
+      "terms": "framing effect risky choice subscription retention;anchoring adjustment heuristic subscription retention;anchoring effect replication subscription retention"
     },
-    "records_fetched": 18,
+    "records_fetched": 34,
     "files_written": 1,
-    "duration_s": 6.57,
-    "error": "regression suspected: re-harvest produced 18 records vs 222 already in the corpus — corpus NOT overwritten; wrote FR-11.regression.json for review (D-038)",
+    "duration_s": 6.86,
+    "error": "regression suspected: re-harvest produced 34 records vs 222 already in the corpus — corpus NOT overwritten; wrote FR-11.regression.json for review (D-038)",
     "warnings": {
       "regression_suspected": true
     },
     "cost": {
       "api_calls": 9,
-      "duration_s": 6.57,
+      "duration_s": 6.86,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-17T14:36:28.736Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FR-11",
+        "terms": "framing effect risky choice subscription retention;anchoring adjustment heuristic subscription retention;anchoring effect replication subscription retention"
+      },
+      "records_fetched": 34,
+      "files_written": 1,
+      "duration_s": 6.86,
+      "error": "regression suspected: re-harvest produced 34 records vs 222 already in the corpus — corpus NOT overwritten; wrote FR-11.regression.json for review (D-038)",
+      "warnings": {
+        "regression_suspected": true
+      },
+      "cost": {
+        "api_calls": 9,
+        "duration_s": 6.86,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-17T14:36:20.422Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RE-10",
+        "terms": "reciprocity norm compliance saas onboarding;reciprocity persuasion gift saas onboarding;rule of reciprocation saas onboarding"
+      },
+      "records_fetched": 2,
+      "files_written": 1,
+      "duration_s": 8.09,
+      "error": "regression suspected: re-harvest produced 2 records vs 171 already in the corpus — corpus NOT overwritten; wrote RE-10.regression.json for review (D-038)",
+      "warnings": {
+        "regression_suspected": true
+      },
+      "cost": {
+        "api_calls": 9,
+        "duration_s": 8.09,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-17T14:36:12.222Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "CG-05",
+        "terms": "information gap theory curiosity saas onboarding;curiosity gap attention saas onboarding;need for cognition curiosity saas onboarding"
+      },
+      "records_fetched": 17,
+      "files_written": 1,
+      "duration_s": 7.97,
+      "error": "regression suspected: re-harvest produced 17 records vs 185 already in the corpus — corpus NOT overwritten; wrote CG-05.regression.json for review (D-038)",
+      "warnings": {
+        "regression_suspected": true
+      },
+      "cost": {
+        "api_calls": 9,
+        "duration_s": 7.97,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-17T14:36:02.749Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "SP-08",
+        "terms": "social proof conformity saas onboarding;social influence compliance descriptive norms saas onboarding;social proof replication saas onboarding"
+      },
+      "records_fetched": 18,
+      "files_written": 1,
+      "duration_s": 9.24,
+      "error": "regression suspected: re-harvest produced 18 records vs 234 already in the corpus — corpus NOT overwritten; wrote SP-08.regression.json for review (D-038)",
+      "warnings": {
+        "regression_suspected": true
+      },
+      "cost": {
+        "api_calls": 10,
+        "duration_s": 9.24,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-17T14:35:49.711Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FR-11",
+        "terms": "framing effect risky choice saas onboarding;anchoring adjustment heuristic saas onboarding;anchoring effect replication saas onboarding"
+      },
+      "records_fetched": 18,
+      "files_written": 1,
+      "duration_s": 12.81,
+      "error": "regression suspected: re-harvest produced 18 records vs 222 already in the corpus — corpus NOT overwritten; wrote FR-11.regression.json for review (D-038)",
+      "warnings": {
+        "regression_suspected": true
+      },
+      "cost": {
+        "api_calls": 11,
+        "duration_s": 12.81,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-17T13:46:58.468Z",
       "status": "partial",
@@ -294,103 +404,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T10:40:28.530Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "ZE-07"
-      },
-      "records_fetched": 134,
-      "files_written": 1,
-      "duration_s": 338.39,
-      "error": "semantic-scholar \"goal gradient hypothesis\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"Zeigarnik effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 53,
-        "duration_s": 338.39,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-15T10:34:32.739Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "EN-03"
-      },
-      "records_fetched": 143,
-      "files_written": 1,
-      "duration_s": 309.5,
-      "error": "semantic-scholar \"endowment effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"mere ownership effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 42,
-        "duration_s": 309.5,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-15T10:27:31.479Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "VR-02"
-      },
-      "records_fetched": 201,
-      "files_written": 1,
-      "duration_s": 387.29,
-      "error": "semantic-scholar \"dopamine reward anticipation\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"schedules of reinforcement\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar \"variable reward engagement\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 74,
-        "duration_s": 387.29,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-15T10:10:48.339Z",
-      "status": "success",
-      "params": {
-        "mechanism": "EN-03"
-      },
-      "records_fetched": 173,
-      "files_written": 1,
-      "duration_s": 21.13,
-      "cost": {
-        "api_calls": 20,
-        "duration_s": 21.13,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-15T10:07:17.735Z",
-      "status": "success",
-      "params": {
-        "mechanism": "ZE-07"
-      },
-      "records_fetched": 167,
-      "files_written": 1,
-      "duration_s": 17.8,
-      "cost": {
-        "api_calls": 19,
-        "duration_s": 17.8,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -404,6 +417,18 @@
         "replication": 26,
         "dissent": 41,
         "recent": 81
+      }
+    },
+    {
+      "path": "CG-05.regression.json",
+      "records": 17,
+      "bytes": 34703,
+      "categories": {
+        "foundational": 1,
+        "meta-analysis": 0,
+        "replication": 1,
+        "dissent": 6,
+        "recent": 14
       }
     },
     {
@@ -432,14 +457,14 @@
     },
     {
       "path": "FR-11.regression.json",
-      "records": 18,
-      "bytes": 29043,
+      "records": 34,
+      "bytes": 56891,
       "categories": {
         "foundational": 2,
         "meta-analysis": 1,
-        "replication": 3,
-        "dissent": 4,
-        "recent": 11
+        "replication": 9,
+        "dissent": 6,
+        "recent": 19
       }
     },
     {
@@ -491,6 +516,18 @@
       }
     },
     {
+      "path": "RE-10.regression.json",
+      "records": 2,
+      "bytes": 3544,
+      "categories": {
+        "foundational": 1,
+        "meta-analysis": 0,
+        "replication": 0,
+        "dissent": 0,
+        "recent": 0
+      }
+    },
+    {
       "path": "SC-06.json",
       "records": 214,
       "bytes": 1061113,
@@ -512,6 +549,18 @@
         "replication": 29,
         "dissent": 59,
         "recent": 76
+      }
+    },
+    {
+      "path": "SP-08.regression.json",
+      "records": 18,
+      "bytes": 38706,
+      "categories": {
+        "foundational": 2,
+        "meta-analysis": 0,
+        "replication": 0,
+        "dissent": 5,
+        "recent": 15
       }
     },
     {

@@ -1,48 +1,48 @@
 {
   "mechanism_id": "FR-11",
-  "fetched_at": "2026-07-17T13:47:05.036Z",
+  "fetched_at": "2026-07-17T14:36:35.590Z",
   "terms_source": "param",
   "terms": [
-    "framing effect risky choice saas onboarding",
-    "anchoring adjustment heuristic saas onboarding",
-    "anchoring effect replication saas onboarding"
+    "framing effect risky choice subscription retention",
+    "anchoring adjustment heuristic subscription retention",
+    "anchoring effect replication subscription retention"
   ],
   "queries": [
     {
       "api": "openalex",
-      "term": "framing effect risky choice saas onboarding",
+      "term": "framing effect risky choice subscription retention",
       "requested": 25,
       "returned": 0
     },
     {
       "api": "openalex",
-      "term": "anchoring adjustment heuristic saas onboarding",
+      "term": "anchoring adjustment heuristic subscription retention",
       "requested": 25,
       "returned": 0
     },
     {
       "api": "openalex",
-      "term": "anchoring effect replication saas onboarding",
+      "term": "anchoring effect replication subscription retention",
       "requested": 25,
       "returned": 0
     },
     {
       "api": "semantic-scholar",
-      "term": "framing effect risky choice saas onboarding",
+      "term": "framing effect risky choice subscription retention",
       "requested": 15,
       "returned": 15
     },
     {
       "api": "semantic-scholar",
-      "term": "anchoring adjustment heuristic saas onboarding",
+      "term": "anchoring adjustment heuristic subscription retention",
       "requested": 15,
-      "returned": 0
+      "returned": 1
     },
     {
       "api": "semantic-scholar",
-      "term": "anchoring effect replication saas onboarding",
+      "term": "anchoring effect replication subscription retention",
       "requested": 15,
-      "returned": 0
+      "returned": 15
     }
   ],
   "coverage_report": {
@@ -54,9 +54,9 @@
   "category_counts": {
     "foundational": 2,
     "meta-analysis": 1,
-    "replication": 3,
-    "dissent": 4,
-    "recent": 11
+    "replication": 9,
+    "dissent": 6,
+    "recent": 19
   },
   "records": [
     {
@@ -101,6 +101,24 @@
       "pin_reason": "foundational — Tversky & Kahneman 1981, framing"
     },
     {
+      "title": "Fidelity and spatio-temporal control in MAP kinase (ERKs) signalling.",
+      "authors": [
+        "J. Pouysségur",
+        "Véronique Volmat",
+        "P. Lenormand"
+      ],
+      "year": 2003,
+      "venue": "Biochemical Pharmacology",
+      "doi": "10.1046/j.1432-1033.2003.03707.x",
+      "citations": 393,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Dissecting the risky-choice framing effect: Numeracy as an individual-difference factor in weighting risky and riskless options",
       "authors": [
         "E. Peters",
@@ -111,6 +129,23 @@
       "doi": "10.1017/s1930297500000012",
       "citations": 175,
       "abstract": "Using five variants of the Asian Disease Problem, we dissected the risky-choice framing effect by requiring each participant to provide preference ratings for the full decision problem and also to provide attractiveness ratings for each of the component parts, i.e., the sure-thing option and the risky option. Consistent with previous research, more risky choices were made by respondents receiving negatively framed versions of the decision problems than by those receiving positively framed versions. However, different processes were evident for those scoring high and low on numeracy. Whereas the choices of the less numerate showed a large effect of frame above and beyond any influence of their evaluations of the separate options, the choices of the highly numerate were almost completely accounted for by their attractiveness ratings of the separate options. These results are consistent with an increased tendency of the highly numerate to integrate complex numeric information in the construction of their preferences and a tendency for the less numerate to respond more superficially to non-numeric sources of information.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Cognitive Psychology: Applying the Science of the Mind",
+      "authors": [
+        "Bridget Robinson-Riegler",
+        "Gregory Robinson-Riegler"
+      ],
+      "year": 2003,
+      "venue": null,
+      "doi": null,
+      "citations": 72,
+      "abstract": null,
       "openalex_id": null,
       "openalex_type": null,
       "referenced_works_count": null,
@@ -157,6 +192,30 @@
       "source_api": "semantic-scholar"
     },
     {
+      "title": "TREX (transcription/export)-NP complex exerts a dual effect on regulating polymerase activity and replication of influenza A virus",
+      "authors": [
+        "Lingcai Zhao",
+        "Qingzheng Liu",
+        "Jingjin Huang",
+        "Yuanlu Lu",
+        "Yongzhen Zhao",
+        "Jihui Ping"
+      ],
+      "year": 2022,
+      "venue": "PLoS Pathogens",
+      "doi": "10.1371/journal.ppat.1010835",
+      "citations": 14,
+      "abstract": "Influenza A viruses effectively hijack the intracellular \"resources\" to complete transcription and replication, which involve extensive interactions between the viral and host proteins. Herein, we screened the host factors, which belong to DExD/H-box protein family members, RNA-binding proteins or mitochondrial anchoring proteins, to investigate their effects on polymerase activity. We observed DDX39B and DDX39A, DEAD-box RNA-Helicases, exert a dual effect on regulating polymerase activity and replication of influenza A viruses. We further revealed that DDX39B and DDX39A interact with viral NP and NS1 proteins. Interestingly, the viral NP proteins could reverse the inhibitory effect of excess DDX39B or DDX39A on polymerase activity. Mechanistically, the TREX complex subunits, THOC1, THOC4 and CIP29, were recruited to DDX39B-DDX39A-NP complex in an ATP-dependent manner, via the interaction with DDX39B or DDX39A, followed by excess TREX-NP complexes interfere with the normal oligomerization state of NP depending on the ratio between the viral and host proteins. On the other hand, the TREX complex, an evolutionarily conserved protein complex, is responsible for the integration of several mRNA processing steps to export viral mRNA. Knockdown of TREX complex subunits significantly down-regulated viral titers and protein levels, accompanied by retention of viral mRNA in the nucleus. Taken together, screening the host factors that regulate the replication of influenza virus advances our understanding of viral pathogenesis and our findings point out a previously unclear mechanism of TREX complex function.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "replication",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "A systematic review of risky-choice framing effects",
       "authors": [
         "A. Kühberger"
@@ -176,6 +235,30 @@
       "source_api": "semantic-scholar"
     },
     {
+      "title": "Divergent evolution of Di-lysine ER retention vs. farnesylation motif-mediated anchoring of the AnkB virulence effector to the Legionella-containing vacuolar membrane",
+      "authors": [
+        "J. Perpich",
+        "A. Kalia",
+        "C. Price",
+        "Snake C. Jones",
+        "Kathy Wong",
+        "K. Gehring",
+        "Y. Kwaik"
+      ],
+      "year": 2017,
+      "venue": "Scientific Reports",
+      "doi": "10.1038/s41598-017-05211-5",
+      "citations": 8,
+      "abstract": "Within macrophages and amoeba, the Legionella-containing vacuole (LCV) membrane is derived from the ER. The bona fide F-box AnkB effector protein of L. pneumophila strain AA100/130b is anchored to the cytosolic side of the LCV membrane through host-mediated farnesylation of its C-terminal eukaryotic “CaaX” motif. Here we show that the AnkB homologue of the Paris strain has a frame shift mutation that led to a loss of the CaaX motif and a concurrent generation of a unique C-terminal KNKYAP motif, which resembles the eukaryotic di-lysine ER-retention motif (KxKxx). Our phylogenetic analyses indicate that environmental isolates of L. pneumophila have a potential positive selection for the ER-retention KNKYAP motif. The AnkB-Paris effector is localized to the LCV membrane most likely through the ER-retention motif. Its ectopic expression in HEK293T cells localizes it to the perinuclear ER region and it trans-rescues the ankB mutant of strain AA100/130b in intra-vacuolar replication. The di-lysine ER retention motif of AnkB-Paris is indispensable for function; most likely as an ER retention motif that enables anchoring to the ER-derived LCV membrane. Our findings show divergent evolution of the ankB allele in exploiting either host farnesylation or the ER retention motif to be anchored into the LCV membrane.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "replication"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "Prospect Theory and Risky Choice in the Ecommerce Setting: Evidence of a Framing Effect",
       "authors": [
         "Tammy Bahmanziari",
@@ -190,6 +273,29 @@
       "openalex_type": null,
       "referenced_works_count": null,
       "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Subscription Integration and Pricing for Product Managers: Maximizing Retention and Revenue Growth",
+      "authors": [
+        "Omoezime Janet Oteri",
+        "Ekene Cynthia Onukwulu",
+        "Abbey Ngochindo Igwe",
+        "Chikezie Paul-Mikki Ewim",
+        "Augustine Ifeanyi Ibeh",
+        "Adedamola Sobowale"
+      ],
+      "year": 2024,
+      "venue": "International Journal of Social Science Exceptional Research",
+      "doi": "10.54660/ijsser.2024.3.1.160-171",
+      "citations": 5,
+      "abstract": "Subscription integration and pricing strategies have become critical for product managers aiming to optimize retention and drive revenue growth in increasingly competitive markets. This paper explores the key principles and methodologies behind designing subscription models that align with customer expectations and business goals. It emphasizes the importance of understanding customer behavior, segmenting users effectively, and tailoring subscription offerings to enhance perceived value. By integrating data-driven approaches, such as predictive analytics and A/B testing, product managers can refine pricing strategies to minimize churn while maximizing lifetime value. The role of dynamic pricing, freemium models, tiered subscriptions, and bundling strategies is examined, highlighting their impact on user acquisition and long-term engagement. Furthermore, the research delves into the psychological factors influencing subscription adoption, including perceived fairness, pricing transparency, and the anchoring effect. It also addresses challenges such as subscription fatigue and competition, offering actionable insights to mitigate these risks. Real-world case studies and best practices are presented to illustrate successful implementation strategies, empowering product managers to craft robust subscription models that balance customer satisfaction with sustainable revenue growth. The findings underscore the critical interplay between customer-centric design and strategic pricing in fostering retention and achieving scalable success in subscription-based businesses.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
       "source_api": "semantic-scholar"
     },
     {
@@ -255,23 +361,21 @@
       "source_api": "semantic-scholar"
     },
     {
-      "title": "Protective behaviors during COVID-19 confinement measures in Greece: the role of anxiety, perceived risk and risky-choice framing",
+      "title": "Effect of Different Crop Establishment Methods, Tillage and Residue on Yield, Yield Attributes and Economics of Rice in RW System of Northern Plains of IGP",
       "authors": [
-        "G. Koulierakis",
-        "Anastasia Dermatis",
-        "D. Zavras",
-        "E. Pavi"
+        "J. M. Sutaliya",
+        "U. P. Singh"
       ],
-      "year": 2023,
-      "venue": "AIMS Public Health",
-      "doi": "10.3934/publichealth.2023021",
+      "year": 2017,
+      "venue": null,
+      "doi": "10.20546/ijcmas.2017.607.432",
       "citations": 2,
-      "abstract": "Confinement measures at the beginning of the COVID-19 pandemic imposed major changes on the global population. The aim of this study was to explore the level to which the public adhered to protective guidelines by adopting the most appropriate behaviors at that time (such as hand washing with soap and using sanitizer gel) and to identify the determinants of these behaviors. A purposive sample of 1013 individuals was invited and voluntarily participated in the online survey. The questionnaire collected information on demographic data, hand washing, risk perception, anxiety (through the S = Anxiety scale of STAI) and risky-choice framing. Results showed increased levels of anxiety, a moderate perception of the risk of catching coronavirus and increased adoption of protective behaviors, such as handwashing and cleaning surfaces with disinfectant/antiseptic products. Multiple ordinal logistic regression models showed that being female, more educated and cleaning home with disinfectant / antiseptic products predicted handwashing with soap. Additionally, having an increased perception of getting the coronavirus, being older and cleaning the home with disinfectant / antiseptic products predicted handwashing with antiseptics. Public health interventions should take into consideration the unified cleaning pattern and the combined effect of sociodemographic variables and risk perception on the adoption of protective behaviour in the context of a health crisis which is out of people's control.",
+      "abstract": "Rice and wheat are staple food crops of the world cultivated on an area around 370.4 m ha. A large proportion of world population relies on rice and wheat for daily caloric intake, income and employment. Rice-wheat cropping system is one of the major cropping systems in South Asia and is practiced in 14 million hectares area (Singh et al., 2010) providing food for more than 400 million people. The rice–wheat production systems are fundamental to employment, income, and livelihoods for hundreds of millions of rural and urban population of South Asia (Saharawat et al., 2010). This system covers about 10.5 million hectares in India contributes 26% of total cereal production, 60% of total calorie intake and about 40% of the country‟s total food basket (Sharma et al., 2015).In India rice occupies nearly 44.1 The suitable crop establishment options with appropriate amount of residue retention may lower weed infestation, better crop growth, productivity, profitability and soil health. The overall goal of the present experiment was to assess the impacts of different crop establishment options on rice growth and yield in eastern Uttar Pradesh, India. Specific objective of the study was to determine the effects of different crop establishment methods on productivity and profitability of rice.The strategy was to assess yield response measured during two consecutive seasons of the rice with different crop establishment methods. The impacts on rice yield, yield attributes and economics were assessed for different crop establishment [RE1:Puddled transplanted rice (PTR), RE2:-Reduced till-direct seeded rice (RT-DSR), RE3:-Zero till-direct seeded rice (ZT-DSR) and RE4:-Zero till-direct seeded rice with 30cm anchored wheat residue (ZT-DSR+AR)]. The field experiment was laid out according to a complete randomized block design with four replications. The different crop establishment methods did not influence significantly the yield and yield attributes [panicles m -2 (no), panicle length (cm), panicle weight (g), grains Panicle -1 (no), 1000 grains weight (g)]of rice except number of panicle m -2 in both the years but higher value of yield and yield attributes were recorded by ZT-DSR+AR followed by ZT-DSR and RTDSR. The highest gross return (₹ ha), net return (₹ ha) and B: C ratio recorded in ZTDSR+AR that followed by ZT-DSR and RT-DSR crop establishment methods, whereas lowest with PTR. K e y w o r d s",
       "openalex_id": null,
       "openalex_type": null,
       "referenced_works_count": null,
       "categories": [
-        "recent"
+        "replication"
       ],
       "source_api": "semantic-scholar"
     },
@@ -332,6 +436,66 @@
       "source_api": "semantic-scholar"
     },
     {
+      "title": "Effect of tillage and crop establishment practices on performance of rice (Oryza sativa) under rice-wheat cropping system",
+      "authors": [
+        "P. Kumari"
+      ],
+      "year": 2021,
+      "venue": "Annals of plant and soil research",
+      "doi": "10.47815/apsr.2021.10051",
+      "citations": 1,
+      "abstract": "A field experiment was conducted at Agricultural Research Farm, Institute of Agricultural Sciences, Banaras Hindu University, Varanasi, Uttar Pradesh during Kharif season of 2018. The experiment consisted of six combinations of different tillage methods and crop establishment practices with four-time replicated under randomized block design. Zero tillage [direct seeded rice - wheat (Full CA; anchored residue of rice and wheat + mungbean residue retention)]showed significantly higher plant height, number of tillers m-2and chlorophyll content as compared to the other treatments, while the lowest values of these parameters were observed under conventional tillage (rice-wheat without residue). There was a steady rise in plant height and number of tillers with age of plant under all the treatments. The yield and its attributes were significantly higher under zero tillage [direct seeded rice - wheat (full CA; anchored residue of rice and wheat + mungbean residue retention)] followed by treatments zero tillage [direct seeded rice - wheat (full CA; anchored residue of rice and wheat)]. While, the poor yield was reported in conventional tillage (rice-wheat without residue). Zero tillage [direct seeded rice - wheat (full CA; anchored residue of rice and wheat + mungbean residue retention)] increased nutrient use efficiency in term of partial factor productivity of applied NPK in rice crop.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "replication",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Molecular farming and antibody expression in different cell compartments in higher plants",
+      "authors": [
+        "B. Morgun",
+        "S. Deshmukh",
+        "A. Richter",
+        "V. Stepanyuk",
+        "K. Kálai",
+        "G. Nagy",
+        "N. Lukács"
+      ],
+      "year": 2006,
+      "venue": null,
+      "doi": "10.17660/actahortic.2006.725.12",
+      "citations": 1,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "The influence of dietary nitrogen source and drinking water pH on growth, digestibility, and nitrogen metabolism in lambs fed a high roughage diet.",
+      "authors": [
+        "M. Galyean",
+        "D. Morrical",
+        "R. Hayes",
+        "J. Caton"
+      ],
+      "year": 1983,
+      "venue": null,
+      "doi": "10.2307/3897976",
+      "citations": 1,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
       "title": "(Almost) no evidence of self–other differences in risk preferences and cognitive processing among professionals in contextualized risky-choice framing tasks",
       "authors": [
         "Lewend Mayiwar"
@@ -341,6 +505,85 @@
       "doi": "10.32872/spb.16619",
       "citations": 0,
       "abstract": "A substantial body of research has shown that risky decisions made for others often differ from those made for oneself. However, findings remain mixed, and there is still ongoing discussion about when and for whom self-other differences are most likely to emerge or be strongest. Building on previous research, which has primarily focused on lay samples and the outcomes of decision-making rather than the underlying processes, the current study reports on four preregistered experiments examining self–other differences across various professional domains, while also testing the commonly assumed cognitive mechanisms. Participants (total N = 1,337) were financial advisors at a large trade union (Experiment 1), leaders at a local government organization (Experiment 2) and a large hospital (Experiment 3), and a general sample of employees and leaders (Experiment 4). Participants completed a risky choice problem tailored to reflect their professional background (Experiments 1–3), where they were asked to choose between a safe and risky option either for themselves or for a hypothetical other, in both gain and loss frames. They then reported the extent to which they engaged in intuitive and analytical processing, and their emotional arousal. There was no evidence for consistent self-other differences in risk and no moderation by frame. In addition, there were no self-other differences in cognitive processing or affect. However, there was a main effect of framing in all experiments—that is, greater risk-seeking in loss (vs. gain) frames.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Corporate reputation, generational cohorts, perceived organizational justice and employee retention in Kenyan state corporations",
+      "authors": [
+        "Joyce Nzulwa"
+      ],
+      "year": 2013,
+      "venue": null,
+      "doi": null,
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Effect of Conservation Agriculture-based Crop Establishment Options on Rice Growth in Rice-wheat System",
+      "authors": [
+        "Kajal Verma",
+        "U. Singh",
+        "N. K. Singh",
+        "Anurag Upadhyay",
+        "Sitesh Jha"
+      ],
+      "year": 2025,
+      "venue": "International Journal of Plant &amp; Soil Science",
+      "doi": "10.9734/ijpss/2025/v37i85630",
+      "citations": 0,
+      "abstract": "Rice accounts for over 40% of India's total crop production, thereby reinforces the country's food security. However, rice production in India faces several challenges like high consumption of water, labour, and energy, which are becoming scarcer and more costly. Keeping above facts in view, an experiment was conducted during Kharif season of 2021and 2022 at the Agricultural Research Farm, Institute of Agricultural Sciences, Banaras Hindu University, Varanasi to evaluate the effect of different conservation agriculture-based crop establishment options on growth of rice under rice-wheat system. The field experiment was arranged in a completely randomized block design having four replications and six different crop establishment methods, namely CE1: Conventional till puddled transplanted rice - Conventional till wheat (no residue retention/incorporation), CE2: Conventional till puddled transplanted rice - Conventional till wheat - Conventional till mung bean (Rice & Wheat residue removal, full mungbean residue incorporation), CE3: Conventional till direct seeded rice - Zero till wheat (anchored residue retentionof Rice), CE4: Conventional till direct seeded rice - Zero till wheat - Zero till mung bean (anchored residue retention of Riceand full Mungbean residue incorporation), CE5: Zero till direct seeded rice – Zero till wheat (anchored residue retention of Rice and Wheat), and CE6: Zero till direct seeded rice – Zero till wheat – Zero till mung bean (anchored residue retention of Rice and Wheat and full mungbean residue retention). The CE6 treatment (ZTR–ZTW–ZTMB) demonstrated significant superiority over the conventional CE1 (CTR–CTW) method across all assessed growth parameters. Specifically, CE6 resulted in an increase of up to 26% in plant height, 33% in number of tillers per m2, and nearly 16% in the leaf area index during the early growth stage of rice.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "replication",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Effect of Fashion Subscription Services on Consumer Retention in Japan",
+      "authors": [
+        "Ayaka Shimizu"
+      ],
+      "year": 2024,
+      "venue": "International Journal of Fashion and Design",
+      "doi": "10.47604/ijfd.2799",
+      "citations": 0,
+      "abstract": "Purpose: The aim of the study was to analyze the effect of fashion subscription services on consumer retention in Japan. \nMethodology: This study adopted a desk methodology. A desk study research design is commonly known as secondary data collection. This is basically collecting data from existing resources preferably because of its low cost advantage as compared to a field research. Our current study looked into already published studies and reports as the data was easily accessed through online journals and libraries. \nFindings: Fashion subscription services in Japan significantly boost consumer retention, with 70% of users staying subscribed due to personalized styling and convenience. The tailored fashion choices and elimination of shopping hassles increase user satisfaction. Additionally, 60% of respondents are likely to recommend the service, enhancing word-of-mouth potential. \nUnique Contribution to Theory, Practice and Policy: Customer loyalty theory, expectation-confirmation theory (ECT) & self-determination theory (SDT) may be used to anchor future studies on fashion subscription services on consumer retention in Japan. Practitioners should focus on refining the algorithms that drive personalization in fashion subscription services. Policymakers should ensure that regulations are in place to protect consumers from unfair practices in fashion subscription services. \nKeywords:  Fashion Subscription Services, Consumer Retention",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Exploring gen z loyalty in SVOD platforms: An integrated S-O-R and PAD theory perspective",
+      "authors": [
+        "Hanan Laras Sabrina",
+        "Johannes",
+        "Junaidi",
+        "T. Lubis"
+      ],
+      "year": 2025,
+      "venue": "Multidisciplinary Science Journal",
+      "doi": "10.31893/multiscience.2026077",
+      "citations": 0,
+      "abstract": "This study investigates the mediating role of electronic customer engagement in the relationship between electronic trust and loyalty among Generation Z users of Subscription Video-on-Demand (SVOD) platforms in Indonesia. Anchored in the Stimulus–Organism–Response (S-O-R) paradigm and the Pleasure–Arousal–Dominance (PAD) framework, the research conceptualizes trust as a psychological stimulus that triggers user engagement, which in turn influences loyalty. Data were collected from 385 valid respondents through an online survey, and the proposed model was analyzed using structural equation modeling (SEM). The empirical results reveal that electronic trust does not have a direct effect on loyalty. Instead, its influence is fully mediated by electronic customer engagement, underscoring the central role of engagement in the process of loyalty formation in digital service environments. These findings provide empirical support for the integration of the S-O-R and PAD frameworks in explaining digital consumer behavior, particularly within the streaming media context. The study highlights how psychological dimensions such as pleasure and arousal, elicited by trust, are instrumental in fostering deeper levels of engagement that ultimately drive loyalty. From a practical standpoint, the results offer valuable insights for SVOD service providers aiming to enhance user retention. By designing platforms that encourage interactive, emotionally resonant, and engaging user experiences, providers can better capitalize on existing trust to build long-term user relationships and loyalty. This research contributes to the growing body of knowledge on digital consumer psychology by elucidating the mechanisms through which trust translates into loyalty. It positions electronic engagement as a pivotal construct in digital marketing strategies, emphasizing its importance in sustaining customer commitment in an increasingly competitive streaming service landscape.",
       "openalex_id": null,
       "openalex_type": null,
       "referenced_works_count": null,
@@ -385,6 +628,113 @@
       "referenced_works_count": null,
       "categories": [
         "replication",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Source-of-savings framing in subscription services: paired choices between device subsidies and plan discounts",
+      "authors": [
+        "Jinhwan Park",
+        "Sungwook Yoon"
+      ],
+      "year": 2026,
+      "venue": "Asia Pacific Journal of Marketing and Logistics",
+      "doi": "10.1108/apjml-11-2025-2353",
+      "citations": 0,
+      "abstract": "\n \n This study asks whether the location of monetary relief in a multi-part mobile subscription (device subsidy vs plan discount) affects consumer choice when the total monthly payment is taken into account. We label this mechanism source-of-savings framing disutility.\n \n \n \n We ran a choice-based conjoint experiment with 1,009 current 5G subscribers in the Korean market, where policy makes the two relief formats mutually exclusive. Each respondent evaluated five full-profile choice tasks that varied network quality, data allowance, monthly plan fee, eligibility for the 25% Select Contract discount, device subsidy, and carrier. We estimated mixed logit models with a log-normal price coefficient and a frame-by-payment interaction to capture both price sensitivity and the incremental effect of relief location.\n \n \n \n Results show a framing penalty for the device-subsidy option at the representative payment. The penalty tends to become larger as the total monthly payment rises and is weaker for people with higher-tier devices. More price-sensitive consumers are also more averse to the device-subsidy frame. This means that in a regulated mobile subscription, the placement of relief in the contract can affect choice even when the payment level is controlled.\n \n \n \n This study introduces and empirically validates source-of-savings framing disutility in a policy-driven subscription environment. It shows that the location of relief and the payment structure interact in a price-contingent and segment-specific way that is common in Korean 5G contracts. It also clarifies when carriers and regulators should emphasize on-bill discounts rather than device-linked relief to support transparency, competitiveness, and consumer welfare.\n",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "The nuclear transport machinery controls the localization of Mad 1 p and modulates its function in the spindle assembly checkpoint",
+      "authors": [
+        "S. Kittanakom",
+        "P. Yenchitsomanus",
+        "J. Li",
+        "K. Du",
+        "G. Lukács",
+        "R. Reithmeier",
+        "N. Park",
+        "M. C. Freeman",
+        "R. Mullen",
+        "D. Muench",
+        "S. Hanton",
+        "L. Renna",
+        "L. Bortolotti",
+        "G. Stefano",
+        "D. A. Court",
+        "D. Dilworth",
+        "J. Aitchison",
+        "R. Wozniak",
+        "P. Kaplanek",
+        "A. Tong",
+        "A. Parsons",
+        "N. Krogan",
+        "G. Cagney",
+        "D. Mai",
+        "J. Greenblatt",
+        "C. Boone",
+        "A. Emili",
+        "W. Houry",
+        "A. Rodríguez",
+        "W. Gu",
+        "S. Shenoy"
+      ],
+      "year": 2005,
+      "venue": null,
+      "doi": null,
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Understanding the Nexus between Information Technology and Firm Performance: Insights from Food Processing Firms",
+      "authors": [
+        "Kithito Trizza Muloko",
+        "Dr. Godfrey Muigai Kinyua"
+      ],
+      "year": 2026,
+      "venue": "The International Journal of  Business &amp; Management",
+      "doi": "10.24940/theijbm/2026/v14/i1/bm2601-007",
+      "citations": 0,
+      "abstract": "In a rapidly dynamic and competitive market environment, firms progressively embrace information technology to enhance their performance. Nairobi-based food processing firms have experienced a decline in performance in recent years, as evidenced by decreased market share, challenges in improving quality, and reduced customer retention. For this reason, this study endeavored to determine the effect of information technology on the performance of food processing firms in Nairobi City County, Kenya. Grounded in the dynamic capabilities theory, the study adopted an explanatory research design. The study was carried out within 80 food-processing firms. The study population consisted of 1200 management- level employees. A stratified, proportionate random sampling method was employed to obtain a sample of 300 respondents. Relevant data were obtained using a structured questionnaire, which was tested for validity. To facilitate reliability testing, Cronbach's alpha was used as the internal consistency coefficient. A pilot study was conducted at three food processing firms in Machakos County. Descriptive statistics, including frequency counts, percentages, averages, and measures of variability like standard deviation, were employed to summarize the nature of the data obtained. Inferential statistics were utilized, with multiple linear regression used to examine the correlation between information technology dimensions and firm performance. Findings from this research were presented in terms of tables and figures. The findings of the research revealed that information technology has a positive effect on the performance of food processing firms within Nairobi. These results contribute to the body of knowledge, thereby validating the propositions of dynamic capabilities theory. Further, the conclusion of this study provides an important basis for anchoring policy guidelines on practices that foster information technology for decision-making, cost reduction, and information technology infrastructure, with the aim of optimizing performance outcomes. Future researchers should execute replicative research in other sectors and industries in order to validate the findings of this study.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "replication",
+        "recent"
+      ],
+      "source_api": "semantic-scholar"
+    },
+    {
+      "title": "Why Do Indonesian Users Remain Loyal to Digital Subscriptions? Examining Endowment Effect, Commitment Bias, Hedonic Motivation, and Switching Costs",
+      "authors": [
+        "A. Kembau",
+        "Nancy Henrietta Jessamine Mandey",
+        "Felliks Feiters Tampinongkol",
+        "Reynard Justino Nehemia Makarawung"
+      ],
+      "year": 2025,
+      "venue": "Asian Journal of Logistics Management",
+      "doi": "10.14710/ajlm.2025.27028",
+      "citations": 0,
+      "abstract": "Subscription‐based platforms have become pivotal to digital business models, yet little is known about the psychological forces that bind customers to these services in emerging markets. Drawing on behavioral economics, this study theorizes that endowment effect and commitment bias build consumer loyalty by strengthening users’ perceived ownership and rationalizing prior choices. We further propose that hedonic motivation (enjoyment derived from service use) and switching costs (economic and psychological barriers to change) intensify these effects. Data from 224 digital-service subscribers in Greater Jakarta were analyzed with covariance-based structural equation modeling in SmartPLS. All six hypotheses are supported: both endowment effect (β = .32, p < .001) and commitment bias (β = .29, p < .001) directly enhance loyalty, while their impacts are amplified by hedonic motivation (interaction β = .14, p < .01) and switching costs (interaction β = .18, p < .01). The findings extend loyalty theory by positioning endowment and commitment as dual psychological anchors in subscription contexts and by identifying boundary conditions that magnify their influence. For managers, the results stress the value of fostering user ownership feelings, designing engaging service experiences, and deliberately increasing perceived costs of defection to boost retention. Collectively, the study offers a nuanced framework for understanding—and managing—the drivers of sustained patronage in rapidly growing digital economies.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
         "recent"
       ],
       "source_api": "semantic-scholar"
