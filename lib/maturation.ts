@@ -10,6 +10,7 @@
  * - analysis/research-queue.json      (generated, D-051) — this week's queue
  * - analysis/maturation-log.json      (generated, D-053) — the weekly log
  * - segments/segments.yaml            (git-only, D-047) — columns + provenance
+ * - segments/candidates.json          (generated, D-054) — segment-suggest queue
  * - packs/pack-map.yaml               (git-only, D-048) — row order
  *
  * A missing file returns null so the page renders an honest empty state
@@ -26,6 +27,7 @@ import type {
   PackMapFile,
   ResearchQueue,
   Segment,
+  SegmentCandidateQueue,
   SegmentGroup,
   SegmentsFile,
   SufficiencyCell,
@@ -40,6 +42,7 @@ export const MATURATION_PATHS = {
   queue: join(ROOT, "analysis", "research-queue.json"),
   log: join(ROOT, "analysis", "maturation-log.json"),
   segments: join(ROOT, "segments", "segments.yaml"),
+  segmentCandidates: join(ROOT, "segments", "candidates.json"),
   packMap: join(ROOT, "packs", "pack-map.yaml"),
 } as const;
 
@@ -82,6 +85,10 @@ export function loadMaturationLog(): MaturationLog | null {
 
 export function loadSegmentsFile(): SegmentsFile | null {
   return readYamlOrNull<SegmentsFile>(MATURATION_PATHS.segments);
+}
+
+export function loadSegmentCandidates(): SegmentCandidateQueue | null {
+  return readJsonOrNull<SegmentCandidateQueue>(MATURATION_PATHS.segmentCandidates);
 }
 
 export function loadPackMap(): PackMapFile | null {
@@ -282,6 +289,26 @@ export interface SegmentProvenance {
   retiredCount: number;
   /** provenance string → count among ACTIVE segments, sorted by count desc. */
   byProvenance: { provenance: string; count: number }[];
+}
+
+/**
+ * Count of candidates in the segment-suggest queue by review status (D-054).
+ * Read from segments/candidates.json — never hardcoded. The "proposed" count
+ * is what awaits owner approval; today segment-suggest is designed but not
+ * scheduled, so the honest count is 0.
+ */
+export interface SegmentCandidateSummary {
+  proposed: number;
+  total: number;
+}
+
+export function computeSegmentCandidates(
+  queue: SegmentCandidateQueue,
+): SegmentCandidateSummary {
+  return {
+    proposed: queue.candidates.filter((c) => c.status === "proposed").length,
+    total: queue.candidates.length,
+  };
 }
 
 /**

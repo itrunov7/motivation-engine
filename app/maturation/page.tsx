@@ -11,10 +11,12 @@ import {
   SEGMENT_GROUP_LABEL,
   buildHeatmap,
   computeCoverage,
+  computeSegmentCandidates,
   computeSegmentProvenance,
   loadMaturationLog,
   loadPackMap,
   loadResearchQueue,
+  loadSegmentCandidates,
   loadSegmentsFile,
   loadSufficiencyMatrix,
   maturationEntriesNewestFirst,
@@ -366,16 +368,19 @@ export default function MaturationPage() {
   const queue = loadResearchQueue();
   const log = loadMaturationLog();
   const segmentsFile = loadSegmentsFile();
+  const candidatesQueue = loadSegmentCandidates();
   const packMap = loadPackMap();
 
   const coverage = matrix ? computeCoverage(matrix) : null;
   const heatmap = matrix ? buildHeatmap(matrix, packMap, segmentsFile) : null;
   const provenance = segmentsFile ? computeSegmentProvenance(segmentsFile) : null;
+  const candidates = candidatesQueue ? computeSegmentCandidates(candidatesQueue) : null;
 
   const matrixRel = repoRelative(MATURATION_PATHS.matrix);
   const queueRel = repoRelative(MATURATION_PATHS.queue);
   const logRel = repoRelative(MATURATION_PATHS.log);
   const segmentsRel = repoRelative(MATURATION_PATHS.segments);
+  const candidatesRel = repoRelative(MATURATION_PATHS.segmentCandidates);
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
@@ -538,7 +543,11 @@ export default function MaturationPage() {
         <Panel
           title="Segments are evolving"
           subtitle="The columns of this matrix are not fixed — the product-segment axis grows as the analyzer and owner add segments."
-          footer={provenance ? `computed from ${segmentsRel}` : segmentsRel}
+          footer={
+            provenance
+              ? `computed from ${segmentsRel}${candidates ? ` + ${candidatesRel}` : ""}`
+              : segmentsRel
+          }
         >
           {provenance ? (
             <div className="flex flex-col gap-3">
@@ -565,6 +574,57 @@ export default function MaturationPage() {
                     <span className="text-[#E6EFE8]">{p.count}</span>
                   </span>
                 ))}
+              </div>
+              <div className="border-t border-[#243329] pt-3">
+                <p className="text-sm leading-relaxed text-[#8CA495]">
+                  <span className="font-mono text-xs uppercase tracking-wider text-[#7C93A8]">
+                    suggestion queue ·{" "}
+                  </span>
+                  {candidates ? (
+                    candidates.proposed > 0 ? (
+                      <>
+                        <span className="font-mono text-[#E6EFE8]">
+                          {candidates.proposed}
+                        </span>{" "}
+                        segment candidate
+                        {candidates.proposed === 1 ? "" : "s"} awaiting owner
+                        approval in{" "}
+                        <span className="font-mono text-xs text-[#E6EFE8]">
+                          {candidatesRel}
+                        </span>
+                        . On approval a candidate is hand-added to segments.yaml
+                        with provenance{" "}
+                        <span className="font-mono text-[#E6EFE8]">analyzer</span>{" "}
+                        and enters this grid all-red.
+                      </>
+                    ) : (
+                      <>
+                        <span className="font-mono text-[#E6EFE8]">0</span>{" "}
+                        candidates — segment-suggest is designed but not scheduled
+                        yet (D-054). Proposals will appear in{" "}
+                        <span className="font-mono text-xs text-[#E6EFE8]">
+                          {candidatesRel}
+                        </span>{" "}
+                        for owner approval. The owner can also add a segment to{" "}
+                        <span className="font-mono text-xs text-[#E6EFE8]">
+                          {segmentsRel}
+                        </span>{" "}
+                        directly — it enters this grid all-red on the next
+                        analyzer run.
+                      </>
+                    )
+                  ) : (
+                    <>
+                      No candidates queue on disk yet — segment-suggest is
+                      designed but not scheduled (D-054). The owner adds segments
+                      to{" "}
+                      <span className="font-mono text-xs text-[#E6EFE8]">
+                        {segmentsRel}
+                      </span>{" "}
+                      directly today.
+                    </>
+                  )}
+                </p>
               </div>
             </div>
           ) : (

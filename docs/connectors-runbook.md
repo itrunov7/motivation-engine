@@ -372,7 +372,87 @@ is what breaks a new connector.
 
 ---
 
-## 9. Licensing — manual sources are never machine-harvested
+## 9. Segment evolution — growing the product-segment axis (D-054)
+
+The columns of the sufficiency matrix are the **product segments** in
+[`segments/segments.yaml`](segments/segments.yaml) (D-047). That list is a
+**seed, not a fixed set** — it grows two ways.
+
+### Path A — the owner adds a segment now (available today)
+
+To add a segment, make **one edit**: append an entry to `segments.yaml` with
+`provenance: owner` (git-only — there is no UI write surface for the axis).
+
+```yaml
+  - id: ai-agent-tools
+    group: form
+    definition: Products whose core surface is an autonomous or assistive AI agent acting on the user's behalf.
+    status: active
+    provenance: owner
+```
+
+What happens on the **next analyzer run** (`npm run analyze`, or the weekly
+maturation loop, D-052), with **no further configuration**:
+
+1. The segment appears in the matrix as a new column, scored **all-red** — every
+   `pack × new-segment` cell is 0 on all five criteria, status red,
+   `segment_evidence: general_only`. This is honest: nothing has been
+   demonstrated *for this segment* yet, so red is the truth, not a bug. The
+   analyzer prints `· segment "…" unconfigured — enters the matrix all-red`.
+2. `npm run gaps` (D-051) ranks those all-red cells to the **top** of the
+   research queue (max gap size), deriving the harvest qualifier from the
+   segment id (`ai-agent-tools` → `"ai agent tools"`) so the tasks are targeted
+   even before you hand-tune anything. It prints `· segment "…" unconfigured —
+   qualifier derived from id`.
+3. The maturation loop harvests against those tasks, and the segment starts
+   maturing like any other — red → green flips still require the owner to
+   upgrade registry grades/dossiers (rule 8), same as everywhere.
+
+**Graduating a segment from bootstrap to configured.** When you want the segment
+scored on real product judgment instead of all-red, add it to the hand-authored
+[`analysis/analyzer.config.yaml`](analysis/analyzer.config.yaml):
+
+- `segment_stages.{id}` — the funnel stages this segment type typically lives on
+  (**required** to leave bootstrap; this is what makes the cells score on the
+  five criteria instead of a flat red).
+- `segment_affinity.{id}` — optional per-mechanism boosts marking which
+  mechanisms are load-bearing for the segment (presence flips cells from
+  `general_only` to `segment_specific`).
+- `gap_planner.segment_qualifiers.{id}` and `gap_planner.segment_weights.{id}` —
+  optional, to override the id-derived qualifier and set harvest priority.
+
+A **configured** segment (one with a `segment_stages` entry) that is missing a
+qualifier still **fails loudly** — the bootstrap fallback applies only to
+brand-new, unconfigured segments, so a typo in a real config is never silently
+swallowed.
+
+### Path B — analyzer-suggested candidates (designed, not scheduled yet)
+
+[`tools/segment-suggest.ts`](tools/segment-suggest.ts) (`npm run segment-suggest`)
+is the discovery analog for segments — the counterpart of the mechanism seed
+stubs. Its **design is committed but it is inert**: it reads nothing, writes
+nothing, and is on **no schedule and in no workflow**. Running it today just
+prints `designed, not scheduled — no candidates written`.
+
+The intended future behavior (see the file's header): read the harvested
+corpora (`corpora/evidence`, `corpora/benchmarks`, `corpora/wayback`) for
+recurring product-context clusters that **no existing segment covers**, and
+propose them as candidates appended to
+[`segments/candidates.json`](segments/candidates.json)
+(`{ version, generated_at, candidates[] }`, each `{ id, group,
+definition_draft, evidence_note, proposed_at, status }`) for **owner approval**.
+Approving a candidate means hand-adding it to `segments.yaml` with
+`provenance: analyzer` — after which it enters the matrix all-red via Path A and
+matures through the loop. The tool never edits `segments.yaml` and never invents
+science; it only surfaces vocabulary the corpus already contains. Switching it
+on is a future decision with its own `decisions.json` entry.
+
+The `/maturation` cockpit's "Segments are evolving" panel shows the candidate
+count (0 today) read from `candidates.json` — never hardcoded.
+
+---
+
+## 10. Licensing — manual sources are never machine-harvested
 
 Some sources are licensed for human curation only. In
 [`sources/sources.json`](sources/sources.json) these carry

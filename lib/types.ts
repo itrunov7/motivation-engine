@@ -593,6 +593,47 @@ export interface SegmentsFile {
   segments: Segment[];
 }
 
+/**
+ * Review state of a proposed segment in the candidates queue (D-054): a
+ * candidate is "proposed" until the owner "approved" it (promoted into
+ * segments.yaml with provenance analyzer) or "rejected" it.
+ */
+export type SegmentCandidateStatus = "proposed" | "approved" | "rejected";
+
+/**
+ * One proposed segment awaiting owner approval — the discovery analog of a
+ * mechanism seed stub (D-054). Written by tools/segment-suggest.ts (designed,
+ * not yet scheduled) from recurring product-context clusters in the harvested
+ * corpora that no active segment covers. The owner reviews the queue and, on
+ * approval, hand-adds the segment to segments.yaml with provenance "analyzer";
+ * it then enters the sufficiency matrix all-red via the analyzer bootstrap
+ * path and matures through the loop. Never a scientific claim.
+ */
+export interface SegmentCandidate {
+  /** Proposed slug id, pattern ^[a-z0-9-]+$ (mirrors Segment.id). */
+  id: string;
+  group: SegmentGroup;
+  /** Draft one-line definition for owner review; not authoritative until promoted. */
+  definition_draft: string;
+  /** Why the analyzer proposed it — the corpus clusters that surfaced it. */
+  evidence_note: string;
+  /** ISO timestamp the candidate was proposed. */
+  proposed_at: string;
+  status: SegmentCandidateStatus;
+}
+
+/**
+ * /segments/candidates.json — the owner-approval queue for analyzer-proposed
+ * segments (D-054). Generated output (never hand-authored beyond the seeded
+ * empty queue); segment-suggest appends proposals here for owner review.
+ */
+export interface SegmentCandidateQueue {
+  version: string;
+  /** ISO timestamp of the last segment-suggest run; null until it first runs. */
+  generated_at: string | null;
+  candidates: SegmentCandidate[];
+}
+
 // ---------- Pack map (/packs/pack-map.yaml, D-048) ----------
 
 /**

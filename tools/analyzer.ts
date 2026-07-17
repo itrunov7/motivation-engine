@@ -42,6 +42,18 @@
  * judgment touches the pack, the cell scores on general evidence and carries
  * segment_evidence: general_only — the signal that segment-specific
  * harvesting is needed.
+ *
+ * Segment evolution (D-054): an ACTIVE segment with NO segment_stages entry is
+ * a BOOTSTRAP segment — the owner just added it to segments.yaml and hasn't
+ * mapped its funnel stages / affinities yet. Rather than fail loudly (which
+ * would block adding a segment), the analyzer admits it into the matrix as an
+ * honest all-red column: every pack × bootstrap-segment cell scores 0 on all
+ * five criteria, status red, all criteria as gaps, segment_evidence
+ * general_only. Nothing is demonstrated FOR this segment yet, so red is the
+ * truthful state, and the maximal gap_size pushes it to the top of the gap
+ * planner's queue — the segment starts maturing through the loop. The owner
+ * graduates it from bootstrap to configured by adding segment_stages (and
+ * optionally segment_affinity), at which point it scores on the real criteria.
  */
 
 import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
@@ -124,13 +136,20 @@ function round(value: number): number {
 
 // ---------- config loading + loud validation ----------
 
-function loadConfig(activeSegmentIds: string[], rosterIds: Set<string>): AnalyzerConfig {
+interface LoadedConfig {
+  config: AnalyzerConfig;
+  /** Active segments with NO segment_stages entry — enter the matrix all-red. */
+  bootstrapSegmentIds: Set<string>;
+}
+
+function loadConfig(activeSegmentIds: string[], rosterIds: Set<string>): LoadedConfig {
   if (!existsSync(CONFIG)) {
     console.error(`  ✗ no analyzer config at ${rel(CONFIG)} — nothing to score.`);
     process.exit(1);
   }
   const config = parseYaml(readFileSync(CONFIG, "utf-8")) as AnalyzerConfig;
   const problems: string[] = [];
+  const bootstrapSegmentIds = new Set<string>();
 
   for (const letter of ["A", "B", "C"] as const) {
     const weight = config.grade_weights?.[letter];
@@ -164,12 +183,15 @@ function loadConfig(activeSegmentIds: string[], rosterIds: Set<string>): Analyze
     }
   }
 
-  // Every active segment must be mapped to stages — the analyzer never
-  // guesses a segment's funnel; a missing entry is an owner decision to make.
+  // Segment evolution (D-054): an active segment WITHOUT a segment_stages entry
+  // is not an error — it is a freshly-added BOOTSTRAP segment that enters the
+  // matrix all-red until the owner maps its funnel. A malformed entry (present
+  // but with an unknown stage) is still a loud error; the analyzer never
+  // guesses a segment's funnel.
   for (const segmentId of activeSegmentIds) {
     const stages = config.segment_stages?.[segmentId];
     if (!Array.isArray(stages) || stages.length === 0) {
-      problems.push(`segment_stages has no entry for active segment "${segmentId}"`);
+      bootstrapSegmentIds.add(segmentId);
       continue;
     }
     for (const stage of stages) {
@@ -208,7 +230,28 @@ function loadConfig(activeSegmentIds: string[], rosterIds: Set<string>): Analyze
     for (const problem of problems) console.error(`  ✗ ${rel(CONFIG)}: ${problem}`);
     process.exit(1);
   }
-  return config;
+  return { config, bootstrapSegmentIds };
+}
+
+/**
+ * An honest all-red bootstrap cell for an active segment the owner has added
+ * to segments.yaml but not yet configured in segment_stages (D-054): every
+ * criterion scores 0, so the cell is red on all five and general_only. Nothing
+ * is demonstrated for this segment yet, so red is the truthful state and the
+ * maximal gap feeds the segment straight into the maturation loop.
+ */
+function bootstrapCell(packId: string, segmentId: string): SufficiencyCell {
+  const scores = Object.fromEntries(
+    CRITERIA.map((criterion) => [criterion, 0]),
+  ) as SufficiencyScores;
+  return {
+    pack: packId,
+    segment: segmentId,
+    scores,
+    status: "red",
+    gaps: [...CRITERIA],
+    segment_evidence: "general_only",
+  };
 }
 
 // ---------- scoring ----------
@@ -428,10 +471,18 @@ function main(): void {
     dossiers.set(dossier.mechanism_id, dossier);
   }
 
-  const config = loadConfig(
+  const { config, bootstrapSegmentIds } = loadConfig(
     activeSegments.map((s) => s.id),
     new Set(mechanisms.keys()),
   );
+  if (bootstrapSegmentIds.size > 0) {
+    for (const segmentId of Array.from(bootstrapSegmentIds)) {
+      console.log(
+        `  · segment "${segmentId}" unconfigured — enters the matrix all-red; ` +
+          "add segment_stages / segment_affinity when ready (D-054).",
+      );
+    }
+  }
 
   const cells: SufficiencyCell[] = [];
   const statusCounts: Record<SufficiencyStatus, number> = { red: 0, amber: 0, green: 0 };
@@ -462,7 +513,9 @@ function main(): void {
       return m;
     });
     for (const segment of activeSegments) {
-      const cell = scoreCell(element.id, segment.id, members, dossiers, config);
+      const cell = bootstrapSegmentIds.has(segment.id)
+        ? bootstrapCell(element.id, segment.id)
+        : scoreCell(element.id, segment.id, members, dossiers, config);
       cells.push(cell);
       statusCounts[cell.status] += 1;
       if (cell.segment_evidence === "general_only") generalOnly += 1;

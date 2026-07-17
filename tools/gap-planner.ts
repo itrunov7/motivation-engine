@@ -81,8 +81,22 @@ interface AnalyzerConfigFile {
   thresholds: { default: SufficiencyThreshold } & Partial<
     Record<SufficiencyCriterion, SufficiencyThreshold>
   >;
+  /** Segment → funnel stages; a segment absent here is a bootstrap segment (D-054). */
+  segment_stages?: Record<string, unknown>;
   replication_flags?: string[];
   gap_planner?: GapPlannerConfig;
+}
+
+/**
+ * Segment evolution (D-054): a bootstrap segment (owner-added, not yet in
+ * segment_stages) gets its harvest qualifier derived mechanically from its own
+ * id — hyphens become spaces (e.g. "ai-agent-tools" → "ai agent tools"). This
+ * is product vocabulary taken straight from the owner's own slug, never
+ * invented science, so a freshly-added segment still produces targeted tasks
+ * before the owner hand-tunes gap_planner.segment_qualifiers.
+ */
+function qualifierFromId(segmentId: string): string {
+  return segmentId.split("-").join(" ").trim();
 }
 
 function rel(path: string): string {
@@ -121,13 +135,21 @@ function loadMatrix(): SufficiencyMatrix {
 function loadGapPlannerConfig(
   neededSegments: Set<string>,
   activeSegmentIds: Set<string>,
-): { file: AnalyzerConfigFile; gp: GapPlannerConfig } {
+): { file: AnalyzerConfigFile; gp: GapPlannerConfig; qualifiers: Record<string, string> } {
   if (!existsSync(CONFIG)) {
     fail(`no analyzer config at ${rel(CONFIG)} — nothing to plan from.`);
   }
   const file = parseYaml(readFileSync(CONFIG, "utf-8")) as AnalyzerConfigFile;
   const gp = file.gap_planner;
   const problems: string[] = [];
+
+  // Bootstrap segments (D-054): active, but with no segment_stages entry — the
+  // same set the analyzer scores all-red. Their missing qualifier is derived
+  // from the id, not a loud failure.
+  const configuredStages = new Set(Object.keys(file.segment_stages ?? {}));
+  const bootstrapSegmentIds = new Set(
+    Array.from(activeSegmentIds).filter((id) => !configuredStages.has(id)),
+  );
 
   if (!file.thresholds?.default) {
     problems.push("thresholds.default is required to size gaps");
@@ -170,9 +192,12 @@ function loadGapPlannerConfig(
     }
   }
 
-  // A qualifier is REQUIRED for every segment that actually surfaces a gap —
-  // the planner fails loudly rather than harvesting unqualified terms.
-  const qualifiers = gp.segment_qualifiers ?? {};
+  // A qualifier is REQUIRED for every segment that actually surfaces a gap. A
+  // CONFIGURED segment missing one is still a loud failure (typo guard); a
+  // BOOTSTRAP segment falls back to its id-derived qualifier so the just-added
+  // segment still gets targeted tasks (D-054). The effective qualifier map is
+  // the config's plus those fallbacks.
+  const qualifiers: Record<string, string> = { ...(gp.segment_qualifiers ?? {}) };
   for (const [segmentId, qualifier] of Object.entries(qualifiers)) {
     if (!activeSegmentIds.has(segmentId)) {
       problems.push(`gap_planner.segment_qualifiers entry "${segmentId}" is not an active segment`);
@@ -183,18 +208,25 @@ function loadGapPlannerConfig(
   }
   for (const segmentId of Array.from(neededSegments)) {
     const qualifier = qualifiers[segmentId];
-    if (typeof qualifier !== "string" || qualifier.trim().length === 0) {
-      problems.push(
-        `gap_planner.segment_qualifiers has no entry for "${segmentId}", which has red/amber gaps`,
+    if (typeof qualifier === "string" && qualifier.trim().length > 0) continue;
+    if (bootstrapSegmentIds.has(segmentId)) {
+      qualifiers[segmentId] = qualifierFromId(segmentId);
+      console.log(
+        `  · segment "${segmentId}" unconfigured — qualifier derived from id ` +
+          `("${qualifiers[segmentId]}"); add gap_planner.segment_qualifiers when ready (D-054).`,
       );
+      continue;
     }
+    problems.push(
+      `gap_planner.segment_qualifiers has no entry for "${segmentId}", which has red/amber gaps`,
+    );
   }
 
   if (problems.length > 0) {
     for (const problem of problems) console.error(`  ✗ ${rel(CONFIG)}: ${problem}`);
     process.exit(1);
   }
-  return { file, gp };
+  return { file, gp, qualifiers };
 }
 
 // ---------- ranking ----------
@@ -291,7 +323,7 @@ function main(): void {
   const gapCells = matrix.cells.filter((cell) => cell.status !== "green");
   const neededSegments = new Set(gapCells.map((cell) => cell.segment));
 
-  const { file, gp } = loadGapPlannerConfig(neededSegments, activeSegmentIds);
+  const { file, gp, qualifiers } = loadGapPlannerConfig(neededSegments, activeSegmentIds);
   const flagged = new Set(file.replication_flags ?? []);
 
   // Expand every gap cell to (mechanism, segment) candidates, deduped across
@@ -336,7 +368,7 @@ function main(): void {
 
   const tasks: ResearchTask[] = ranked.slice(0, effectiveMaxTasks).map((candidate) => {
     const mechanism = mechanisms.get(candidate.mechanism) as Mechanism;
-    const qualifier = gp.segment_qualifiers[candidate.segment];
+    const qualifier = qualifiers[candidate.segment];
     const gapCell: ResearchGapCell = {
       pack: candidate.cell.pack,
       segment: candidate.cell.segment,

@@ -58,7 +58,7 @@ import type {
   RunQuote as WriterRunQuote,
 } from "./connectors/types";
 import { CONNECTORS } from "./connectors";
-import type { BenchmarkFile, BenchmarkMetric, CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig, PackMapElement, RunQuote, Segment } from "../lib/types";
+import type { BenchmarkFile, BenchmarkMetric, CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig, PackMapElement, RunQuote, Segment, SegmentCandidate } from "../lib/types";
 import {
   KNOWN_CONNECTOR_IDS,
   OPS_PATHS,
@@ -81,6 +81,7 @@ const PATHS = {
   benchmarksDir: join(ROOT, "corpora", "benchmarks"),
   heartbeat: join(ROOT, "corpora", "_health", "heartbeat.json"),
   segments: join(ROOT, "segments", "segments.yaml"),
+  segmentCandidates: join(ROOT, "segments", "candidates.json"),
   packMap: join(ROOT, "packs", "pack-map.yaml"),
 };
 
@@ -305,6 +306,52 @@ const segmentsSchema = {
     },
   },
   required: ["version", "segments"],
+  additionalProperties: false,
+} as const;
+
+// ---------- Segment candidates (D-054) ----------
+//
+// /segments/candidates.json is the owner-approval queue for analyzer-proposed
+// segments — the discovery analog of the mechanism seed stubs. Written by the
+// (designed, not yet scheduled) tools/segment-suggest.ts; the owner promotes a
+// candidate by hand-adding it to segments.yaml with provenance "analyzer". The
+// Ajv schema keys are pinned to the reader contract (lib/types.ts
+// SegmentCandidate) via a satisfies constraint, same drift-guard as segments.
+const segmentCandidateProperties = {
+  id: { type: "string", pattern: "^[a-z0-9-]+$" },
+  group: {
+    type: "string",
+    enum: ["business-model", "form", "audience", "usage-rhythm"],
+  },
+  definition_draft: { type: "string", minLength: 1 },
+  evidence_note: { type: "string", minLength: 1 },
+  proposed_at: { type: "string", format: "date-time" },
+  status: { type: "string", enum: ["proposed", "approved", "rejected"] },
+} as const satisfies Record<keyof SegmentCandidate, unknown>;
+
+const segmentCandidatesSchema = {
+  type: "object",
+  properties: {
+    version: { type: "string", pattern: "^\\d+\\.\\d+\\.\\d+$" },
+    generated_at: { type: ["string", "null"], format: "date-time" },
+    candidates: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: segmentCandidateProperties,
+        required: [
+          "id",
+          "group",
+          "definition_draft",
+          "evidence_note",
+          "proposed_at",
+          "status",
+        ] satisfies readonly (keyof SegmentCandidate)[],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ["version", "generated_at", "candidates"],
   additionalProperties: false,
 } as const;
 
@@ -1054,6 +1101,7 @@ function main(): void {
   // product-segment axis — first-class evolving data. Parse the YAML, validate
   // every entry against the schema, and enforce unique ids. The success line
   // reports the count so the pass stays honest as the list evolves.
+  const segmentIds = new Set<string>();
   if (existsSync(PATHS.segments)) {
     let segmentsDoc: unknown;
     try {
@@ -1066,6 +1114,7 @@ function main(): void {
       if (validateAgainst(ajv.compile(segmentsSchema), PATHS.segments, segmentsDoc)) {
         const items = (segmentsDoc as { segments: { id: string }[] }).segments;
         const ids = new Set(items.map((s) => s.id));
+        for (const id of Array.from(ids)) segmentIds.add(id);
         if (ids.size !== items.length) {
           fail(PATHS.segments, "duplicate segment ids");
         } else {
@@ -1075,6 +1124,49 @@ function main(): void {
     }
   } else {
     console.log("  · no segments file yet (segments/segments.yaml)");
+  }
+
+  // 12b. Segment candidates (D-054): /segments/candidates.json is the
+  // owner-approval queue for analyzer-proposed segments. Validate the schema,
+  // enforce unique candidate ids, and reject any candidate whose id already
+  // names an existing segment — a candidate is a PROPOSAL for a segment that
+  // does not exist yet, so a collision means it was already promoted (or is a
+  // typo). Only checked when the file is present.
+  if (existsSync(PATHS.segmentCandidates)) {
+    const candidatesDoc = readJson(PATHS.segmentCandidates);
+    if (candidatesDoc !== undefined) {
+      if (
+        validateAgainst(
+          ajv.compile(segmentCandidatesSchema),
+          PATHS.segmentCandidates,
+          candidatesDoc,
+        )
+      ) {
+        const items = (candidatesDoc as { candidates: { id: string }[] }).candidates;
+        const ids = new Set(items.map((c) => c.id));
+        let ok = true;
+        if (ids.size !== items.length) {
+          fail(PATHS.segmentCandidates, "duplicate candidate ids");
+          ok = false;
+        }
+        for (const id of Array.from(ids)) {
+          if (segmentIds.has(id)) {
+            fail(
+              PATHS.segmentCandidates,
+              `candidate "${id}" already names an active/retired segment — a candidate proposes a NEW segment`,
+            );
+            ok = false;
+          }
+        }
+        if (ok) {
+          console.log(
+            `  ✓ ${rel(PATHS.segmentCandidates)} valid (${items.length} segment candidate${items.length === 1 ? "" : "s"})`,
+          );
+        }
+      }
+    }
+  } else {
+    console.log("  · no segment candidates yet (segments/candidates.json)");
   }
 
   // 13. Pack map (D-048): /packs/pack-map.yaml is the sole hand-authored input
