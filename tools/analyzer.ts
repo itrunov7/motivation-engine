@@ -64,6 +64,7 @@ import type {
   Dossier,
   EvidenceGrade,
   FunnelStage,
+  GapFixType,
   GradeLetter,
   Mechanism,
   PackMapFile,
@@ -74,6 +75,7 @@ import type {
   SufficiencyScores,
   SufficiencyStatus,
   SufficiencyThreshold,
+  TypedGap,
 } from "../lib/types";
 
 const ROOT = join(__dirname, "..");
@@ -85,7 +87,7 @@ const ANALYSIS_DIR = join(ROOT, "analysis");
 const CONFIG = join(ANALYSIS_DIR, "analyzer.config.yaml");
 const MATRIX = join(ANALYSIS_DIR, "sufficiency-matrix.json");
 
-const MATRIX_VERSION = "0.1.0";
+const MATRIX_VERSION = "0.2.0";
 
 const CRITERIA: SufficiencyCriterion[] = [
   "dissent_completeness",
@@ -94,6 +96,41 @@ const CRITERIA: SufficiencyCriterion[] = [
   "context_coverage",
   "freshness",
 ];
+
+/**
+ * Gap typing (D-055): every failing criterion is labeled by what can actually
+ * close it. harvest gaps are closed by fetching more/better evidence through
+ * the connector; structural gaps are closed only by owner edits in git —
+ * registry relations, pack composition, dossier dissent — and NO harvest can
+ * touch them. The maturation loop must never dispatch a harvest against a
+ * structural gap. dissent_completeness is structural: dossier dissent is
+ * owner-authored (rule 8), so no fetch can fill it.
+ */
+const FIX_TYPE: Record<SufficiencyCriterion, GapFixType> = {
+  dissent_completeness: "structural",
+  grade_sufficiency: "harvest",
+  interaction_coverage: "structural",
+  context_coverage: "structural",
+  freshness: "harvest",
+};
+
+/** What would close each criterion's gap — the fix that stops the wheel spinning. */
+const WHAT_WOULD_CLOSE_IT: Record<SufficiencyCriterion, string> = {
+  dissent_completeness:
+    "dissent text in the member dossiers (owner-authored, git)",
+  grade_sufficiency:
+    "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)",
+  interaction_coverage:
+    "registry relations between the pack's member mechanisms (owner edit, git)",
+  context_coverage:
+    "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+  freshness:
+    "replication-supporting evidence so the owner can clear replication_flags (harvest)",
+};
+
+/** The general_only harvest pseudo-gap — segment-specific evidence is missing. */
+const SEGMENT_EVIDENCE_GAP_CLOSER =
+  "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)";
 
 const FUNNEL_STAGES: FunnelStage[] = [
   "cold_acquisition",
@@ -240,16 +277,18 @@ function loadConfig(activeSegmentIds: string[], rosterIds: Set<string>): LoadedC
  * is demonstrated for this segment yet, so red is the truthful state and the
  * maximal gap feeds the segment straight into the maturation loop.
  */
-function bootstrapCell(packId: string, segmentId: string): SufficiencyCell {
+function bootstrapCell(packId: string, segmentId: string, config: AnalyzerConfig): SufficiencyCell {
   const scores = Object.fromEntries(
     CRITERIA.map((criterion) => [criterion, 0]),
   ) as SufficiencyScores;
+  const gaps = [...CRITERIA];
   return {
     pack: packId,
     segment: segmentId,
     scores,
     status: "red",
-    gaps: [...CRITERIA],
+    gaps,
+    typed_gaps: buildTypedGaps(gaps, scores, config, "general_only", "red"),
     segment_evidence: "general_only",
   };
 }
@@ -272,6 +311,39 @@ function statusFor(score: number, threshold: SufficiencyThreshold): SufficiencyS
   if (score >= threshold.green) return "green";
   if (score >= threshold.amber) return "amber";
   return "red";
+}
+
+/**
+ * Type every gap by its filler (D-055): one TypedGap per failing criterion,
+ * plus a segment_evidence harvest pseudo-gap when the cell scored on general
+ * evidence only and is not green. value is the cell's score, threshold the
+ * green bar it falls short of, fix_type + what_would_close_it the fix. No gap
+ * is left untyped — the loop reads this to route harvest vs structural work.
+ */
+function buildTypedGaps(
+  gaps: SufficiencyCriterion[],
+  scores: SufficiencyScores,
+  config: AnalyzerConfig,
+  segmentEvidence: "segment_specific" | "general_only",
+  status: SufficiencyStatus,
+): TypedGap[] {
+  const typed: TypedGap[] = gaps.map((criterion) => ({
+    criterion,
+    value: scores[criterion],
+    threshold: thresholdFor(config, criterion).green,
+    fix_type: FIX_TYPE[criterion],
+    what_would_close_it: WHAT_WOULD_CLOSE_IT[criterion],
+  }));
+  if (segmentEvidence === "general_only" && status !== "green") {
+    typed.push({
+      criterion: "segment_evidence",
+      value: 0,
+      threshold: 1,
+      fix_type: "harvest",
+      what_would_close_it: SEGMENT_EVIDENCE_GAP_CLOSER,
+    });
+  }
+  return typed;
 }
 
 /** Weighted mean of per-member values; weights only redistribute emphasis. */
@@ -380,13 +452,16 @@ function scoreCell(
   // general evidence only — the flag that segment harvesting is needed.
   const segmentSpecific = members.some((m) => affinity[m.id] !== undefined);
 
+  const segmentEvidence = segmentSpecific ? "segment_specific" : "general_only";
+
   return {
     pack: packId,
     segment: segmentId,
     scores,
     status,
     gaps,
-    segment_evidence: segmentSpecific ? "segment_specific" : "general_only",
+    typed_gaps: buildTypedGaps(gaps, scores, config, segmentEvidence, status),
+    segment_evidence: segmentEvidence,
   };
 }
 
@@ -426,6 +501,16 @@ function loadExistingCells(): Map<string, SufficiencyCell> {
     process.exit(1);
   }
   const matrix = JSON.parse(readFileSync(MATRIX, "utf-8")) as SufficiencyMatrix;
+  // Gap typing (D-055): a preserved cell without typed_gaps predates the typing
+  // and would leave untyped gaps in the merged matrix. Fail loudly so a scoped
+  // run can never emit a partially-typed matrix.
+  const untyped = matrix.cells.find((cell) => !Array.isArray(cell.typed_gaps));
+  if (untyped) {
+    console.error(
+      `  ✗ existing matrix at ${rel(MATRIX)} predates gap typing (cell ${untyped.pack}×${untyped.segment} has no typed_gaps) — run a full \`npm run analyze\`.`,
+    );
+    process.exit(1);
+  }
   return new Map(matrix.cells.map((cell) => [`${cell.pack}|${cell.segment}`, cell]));
 }
 
@@ -514,7 +599,7 @@ function main(): void {
     });
     for (const segment of activeSegments) {
       const cell = bootstrapSegmentIds.has(segment.id)
-        ? bootstrapCell(element.id, segment.id)
+        ? bootstrapCell(element.id, segment.id, config)
         : scoreCell(element.id, segment.id, members, dossiers, config);
       cells.push(cell);
       statusCounts[cell.status] += 1;

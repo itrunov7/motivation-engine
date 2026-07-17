@@ -784,6 +784,32 @@ export type SufficiencyStatus = "red" | "amber" | "green";
  */
 export type SegmentEvidence = "segment_specific" | "general_only";
 
+/**
+ * How a gap can actually be closed — the fix that stops the wheel spinning
+ * (D-055). harvest gaps are closed by fetching more/better evidence through
+ * the connector; structural gaps are closed by owner edits in git (registry
+ * relations, pack composition, dossier dissent) and NO harvest can touch them.
+ * The maturation loop must never dispatch a harvest against a structural gap.
+ */
+export type GapFixType = "harvest" | "structural";
+
+/**
+ * A failing criterion in a cell, typed by its filler (D-055). criterion is a
+ * SufficiencyCriterion, or the pseudo-criterion "segment_evidence" — not a
+ * scored criterion but a harvest-closable gap (general_only means
+ * segment-specific evidence is missing).
+ */
+export interface TypedGap {
+  criterion: SufficiencyCriterion | "segment_evidence";
+  /** The cell's score for this criterion (0 for the segment_evidence pseudo-gap). */
+  value: number;
+  /** The green threshold the value falls short of (1 for segment_evidence). */
+  threshold: number;
+  fix_type: GapFixType;
+  /** Plain-language description of the fix that would close this gap. */
+  what_would_close_it: string;
+}
+
 /** score ≥ green → green, ≥ amber → amber, else red. */
 export interface SufficiencyThreshold {
   green: number;
@@ -823,6 +849,14 @@ export interface SufficiencyCell {
   status: SufficiencyStatus;
   /** Criteria below their green threshold, i.e. what fails this cell. */
   gaps: SufficiencyCriterion[];
+  /**
+   * The same gaps typed by their filler (D-055) — the richer superset the
+   * maturation loop reads. Every failing criterion carries a fix_type
+   * (harvest vs structural) plus what_would_close_it; a cell's gaps can be
+   * mixed type, and the general_only condition surfaces as a segment_evidence
+   * harvest gap. `gaps` above stays for the planner + cockpit that read it.
+   */
+  typed_gaps: TypedGap[];
   segment_evidence: SegmentEvidence;
 }
 
