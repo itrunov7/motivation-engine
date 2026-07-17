@@ -55,5 +55,7 @@ be unique.
 
 ## Renders
 
-Nowhere yet — this is data only. No app screen reads or displays segments
-at this step.
+The `/maturation` cockpit (D-053) reads this file: active segments are the
+columns of the sufficiency heatmap, and the "Segments are evolving" panel
+shows their active/retired counts, provenance, and any awaiting candidates.
+Statuses are computed from the matrix, never hardcoded.
