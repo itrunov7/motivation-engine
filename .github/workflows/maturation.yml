@@ -2,7 +2,12 @@
 #
 # The spiral turns on a schedule, on a budget, forever:
 #   (1) npm run analyze          → analysis/sufficiency-matrix.json (full grid)
-#   (2) npm run gaps             → analysis/research-queue.json (ranked, budget-bounded, D-051)
+#   (2) npm run gaps             → routes gaps by fix_type (D-055/D-056):
+#         analysis/research-queue.json    — HARVEST gaps only (ranked, budget-bounded, D-051)
+#         analysis/authoring-queue.json   — STRUCTURAL gaps for the owner (never harvested)
+#       A cell whose scored gaps are all structural is never harvested — no
+#       evidence fetch flips it, so it consumes no budget and dispatches no
+#       connector; it waits in the authoring queue for an owner edit in git.
 #   (3) ops-gate plan-queue      → gate the top-N tasks through the EXISTING
 #       guards (paused, health-down, per-run limits, monthly budget — D-024/
 #       D-025/D-030, never re-implemented here) with the batch's own pending
@@ -187,6 +192,10 @@ jobs:
               --slurpfile before budget-before.json \
               --slurpfile after budget-after.json \
               '"Spend this run: \($after[0].used.calls - $before[0].used.calls) calls, $\($after[0].used.usd - $before[0].used.usd) — month \($after[0].month): \($after[0].used.calls)/\($after[0].caps.calls) calls used."'
+            echo ""
+            harvest_dispatched=$(jq '[.entries[] | select(.action == "run")] | length' queue-plan.json)
+            structural_queued=$(jq '.tasks | length' analysis/authoring-queue.json 2>/dev/null || echo 0)
+            echo "Routing (D-056): $harvest_dispatched harvest task(s) dispatched, $structural_queued structural task(s) queued for authoring (analysis/authoring-queue.json)."
             deferred=$(jq '[.entries[] | select(.action == "defer")] | length' queue-plan.json)
             if [ "$deferred" -gt 0 ]; then
               echo ""
@@ -209,6 +218,7 @@ jobs:
             --budget-before budget-before.json \
             --budget-after budget-after.json \
             --queue-plan queue-plan.json \
+            --authoring-queue analysis/authoring-queue.json \
             --week "$(date -u +%Y-%m-%d)"
 
       # ---------- (6) commit the week's turn ----------

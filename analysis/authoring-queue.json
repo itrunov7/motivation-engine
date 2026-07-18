@@ -1,0 +1,4853 @@
+{
+  "version": "0.1.0",
+  "generated_at": "2026-07-17T17:21:46.850Z",
+  "config_version": "0.1.0",
+  "matrix_generated_at": "2026-07-17T17:21:46.632Z",
+  "cell_count": 155,
+  "tasks": [
+    {
+      "pack": "trust-friction",
+      "segment": "web-saas",
+      "status": "red",
+      "importance": 1.6467,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding",
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "subscription",
+      "status": "red",
+      "importance": 1.54,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "mobile-app",
+      "status": "red",
+      "importance": 1.52,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding",
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "web-saas",
+      "status": "red",
+      "importance": 1.43,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding",
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "daily-habit",
+      "status": "red",
+      "importance": 1.43,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "b2b",
+      "status": "red",
+      "importance": 1.4,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "mobile-app",
+      "status": "red",
+      "importance": 1.32,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding",
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "subscription",
+      "status": "red",
+      "importance": 1.3066,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "local-offline-bridge",
+      "status": "red",
+      "importance": 1.2667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "transactional-ecommerce",
+      "status": "red",
+      "importance": 1.2667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "b2c-mass",
+      "status": "red",
+      "importance": 1.2667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "local-offline-bridge",
+      "status": "red",
+      "importance": 1.2667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "marketplace",
+      "status": "red",
+      "importance": 1.2667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "transactional-ecommerce",
+      "status": "red",
+      "importance": 1.2667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "daily-habit",
+      "status": "red",
+      "importance": 1.2133,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "b2b",
+      "status": "red",
+      "importance": 1.2,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "b2b",
+      "status": "red",
+      "importance": 1.1499,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "subscription",
+      "status": "red",
+      "importance": 1.12,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "lead-gen-service",
+      "status": "red",
+      "importance": 1.1,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "occasional-high-consideration",
+      "status": "red",
+      "importance": 1.1,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "one-time-digital",
+      "status": "red",
+      "importance": 1.1,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "content-media",
+      "status": "red",
+      "importance": 1.1,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "creator-prosumer",
+      "status": "red",
+      "importance": 1.1,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "lead-gen-service",
+      "status": "red",
+      "importance": 1.1,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "occasional-high-consideration",
+      "status": "red",
+      "importance": 1.1,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "one-time-digital",
+      "status": "red",
+      "importance": 1.1,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "daily-habit",
+      "status": "red",
+      "importance": 1.04,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "web-saas",
+      "status": "red",
+      "importance": 1.04,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "freemium",
+      "status": "red",
+      "importance": 0.96,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "mobile-app",
+      "status": "red",
+      "importance": 0.96,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "trust-friction",
+      "segment": "freemium",
+      "status": "red",
+      "importance": 0.96,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "local-offline-bridge",
+      "status": "red",
+      "importance": 0.9334,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "transactional-ecommerce",
+      "status": "red",
+      "importance": 0.9334,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "lead-gen-service",
+      "status": "red",
+      "importance": 0.9333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "local-offline-bridge",
+      "status": "red",
+      "importance": 0.9333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "conversion",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "occasional-high-consideration",
+      "status": "red",
+      "importance": 0.9333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "one-time-digital",
+      "status": "red",
+      "importance": 0.9333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "transactional-ecommerce",
+      "status": "red",
+      "importance": 0.9333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "conversion",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "content-media",
+      "status": "red",
+      "importance": 0.9333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "creator-prosumer",
+      "status": "red",
+      "importance": 0.9333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "b2c-mass",
+      "status": "red",
+      "importance": 0.9333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "marketplace",
+      "status": "red",
+      "importance": 0.9333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "b2b",
+      "status": "red",
+      "importance": 0.9,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "content-media",
+      "status": "red",
+      "importance": 0.8,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "first-value",
+      "segment": "creator-prosumer",
+      "status": "red",
+      "importance": 0.8,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "web-saas",
+      "status": "red",
+      "importance": 0.78,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "lead-gen-service",
+      "status": "red",
+      "importance": 0.7667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "occasional-high-consideration",
+      "status": "red",
+      "importance": 0.7667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "one-time-digital",
+      "status": "red",
+      "importance": 0.7667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "lead-gen-service",
+      "status": "red",
+      "importance": 0.7667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "occasional-high-consideration",
+      "status": "red",
+      "importance": 0.7667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "one-time-digital",
+      "status": "red",
+      "importance": 0.7667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "b2c-mass",
+      "status": "red",
+      "importance": 0.7666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "local-offline-bridge",
+      "status": "red",
+      "importance": 0.7666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "marketplace",
+      "status": "red",
+      "importance": 0.7666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "transactional-ecommerce",
+      "status": "red",
+      "importance": 0.7666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "freemium",
+      "status": "red",
+      "importance": 0.76,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "mobile-app",
+      "status": "red",
+      "importance": 0.72,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "b2b",
+      "status": "red",
+      "importance": 0.7001,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding",
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "b2b",
+      "status": "red",
+      "importance": 0.7001,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "subscription",
+      "status": "red",
+      "importance": 0.6534,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "subscription",
+      "status": "red",
+      "importance": 0.6534,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "lead-gen-service",
+      "status": "red",
+      "importance": 0.6333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "occasional-high-consideration",
+      "status": "red",
+      "importance": 0.6333,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "entry",
+      "segment": "one-time-digital",
+      "status": "red",
+      "importance": 0.6333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.1667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "daily-habit",
+      "status": "red",
+      "importance": 0.6067,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "web-saas",
+      "status": "red",
+      "importance": 0.6067,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "daily-habit",
+      "status": "red",
+      "importance": 0.6067,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "subscription",
+      "status": "amber",
+      "importance": 0.6066,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "b2c-mass",
+      "status": "red",
+      "importance": 0.6,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "marketplace",
+      "status": "red",
+      "importance": 0.6,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "b2c-mass",
+      "status": "red",
+      "importance": 0.6,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "local-offline-bridge",
+      "status": "red",
+      "importance": 0.6,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "marketplace",
+      "status": "red",
+      "importance": 0.6,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "transactional-ecommerce",
+      "status": "red",
+      "importance": 0.6,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "freemium",
+      "status": "red",
+      "importance": 0.56,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "mobile-app",
+      "status": "red",
+      "importance": 0.56,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "freemium",
+      "status": "red",
+      "importance": 0.56,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "freemium",
+      "status": "amber",
+      "importance": 0.52,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "local-offline-bridge",
+      "status": "red",
+      "importance": 0.4667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "transactional-ecommerce",
+      "status": "red",
+      "importance": 0.4667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "content-media",
+      "status": "red",
+      "importance": 0.4667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "onboarding",
+      "segment": "creator-prosumer",
+      "status": "red",
+      "importance": 0.4667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "content-media",
+      "status": "red",
+      "importance": 0.4667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-billing",
+      "segment": "creator-prosumer",
+      "status": "red",
+      "importance": 0.4667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "local-offline-bridge",
+      "status": "red",
+      "importance": 0.4667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "transactional-ecommerce",
+      "status": "red",
+      "importance": 0.4667,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.3333,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "lead-gen-service",
+      "status": "amber",
+      "importance": 0.4333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "occasional-high-consideration",
+      "status": "amber",
+      "importance": 0.4333,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "one-time-digital",
+      "status": "amber",
+      "importance": 0.4333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "lead-gen-service",
+      "status": "amber",
+      "importance": 0.4333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "occasional-high-consideration",
+      "status": "amber",
+      "importance": 0.4333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "one-time-digital",
+      "status": "amber",
+      "importance": 0.4333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "subscription",
+      "status": "amber",
+      "importance": 0.42,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "b2b",
+      "status": "amber",
+      "importance": 0.3999,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "b2b",
+      "status": "amber",
+      "importance": 0.3999,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "b2b",
+      "status": "amber",
+      "importance": 0.3999,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "freemium",
+      "status": "amber",
+      "importance": 0.36,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "web-saas",
+      "status": "amber",
+      "importance": 0.3466,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "web-saas",
+      "status": "amber",
+      "importance": 0.3466,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "mobile-app",
+      "status": "amber",
+      "importance": 0.3199,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "mobile-app",
+      "status": "amber",
+      "importance": 0.3199,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "lead-gen-service",
+      "status": "amber",
+      "importance": 0.3,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "occasional-high-consideration",
+      "status": "amber",
+      "importance": 0.3,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "one-time-digital",
+      "status": "amber",
+      "importance": 0.3,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "lead-gen-service",
+      "status": "amber",
+      "importance": 0.3,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "occasional-high-consideration",
+      "status": "amber",
+      "importance": 0.3,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "one-time-digital",
+      "status": "amber",
+      "importance": 0.3,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.5,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "local-offline-bridge",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "transactional-ecommerce",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "reactivation"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "b2c-mass",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "marketplace",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "b2c-mass",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "local-offline-bridge",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "marketplace",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "transactional-ecommerce",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "b2c-mass",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "local-offline-bridge",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "marketplace",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "transactional-ecommerce",
+      "status": "amber",
+      "importance": 0.2666,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        },
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "b2b",
+      "status": "amber",
+      "importance": 0.2,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "b2b",
+      "status": "amber",
+      "importance": 0.2,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "subscription",
+      "status": "amber",
+      "importance": 0.1866,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "subscription",
+      "status": "amber",
+      "importance": 0.1866,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "subscription",
+      "status": "amber",
+      "importance": 0.1866,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "daily-habit",
+      "status": "amber",
+      "importance": 0.1733,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "daily-habit",
+      "status": "amber",
+      "importance": 0.1733,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "web-saas",
+      "status": "amber",
+      "importance": 0.1733,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "web-saas",
+      "status": "amber",
+      "importance": 0.1733,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "daily-habit",
+      "status": "amber",
+      "importance": 0.1733,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "daily-habit",
+      "status": "amber",
+      "importance": 0.1733,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "web-saas",
+      "status": "amber",
+      "importance": 0.1733,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "web-saas",
+      "status": "amber",
+      "importance": 0.1733,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "freemium",
+      "status": "amber",
+      "importance": 0.16,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "mobile-app",
+      "status": "amber",
+      "importance": 0.16,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "engagement-loops",
+      "segment": "mobile-app",
+      "status": "amber",
+      "importance": 0.16,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "freemium",
+      "status": "amber",
+      "importance": 0.16,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "freemium",
+      "status": "amber",
+      "importance": 0.16,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "mobile-app",
+      "status": "amber",
+      "importance": 0.16,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "mobile-app",
+      "status": "amber",
+      "importance": 0.16,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "b2c-mass",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "content-media",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "creator-prosumer",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "lead-gen-service",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "marketplace",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "occasional-high-consideration",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "segment_specific",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "aha-sharing",
+      "segment": "one-time-digital",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "content-media",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "core-ux",
+      "segment": "creator-prosumer",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "content-media",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "paywall-conversion",
+      "segment": "creator-prosumer",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "content-media",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "retention-return",
+      "segment": "creator-prosumer",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "interaction_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "b2c-mass",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "social-proof-status",
+      "segment": "marketplace",
+      "status": "amber",
+      "importance": 0.1333,
+      "segment_evidence": "general_only",
+      "structural_gaps": [
+        {
+          "criterion": "context_coverage",
+          "value": 0.6667,
+          "threshold": 0.8,
+          "fix_type": "structural",
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
+        }
+      ]
+    }
+  ]
+}

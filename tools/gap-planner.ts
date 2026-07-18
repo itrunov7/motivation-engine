@@ -6,12 +6,22 @@
  *         pack × segment matrix. The ONE hand-authored input is the
  *         gap_planner block of analysis/analyzer.config.yaml (segment weights,
  *         segment qualifiers, budget knobs).
- * Output: analysis/research-queue.json — a COMPUTED projection, never
- *         hand-edited (same pattern as the sufficiency matrix / render-cards).
+ * Output: analysis/research-queue.json    — harvest tasks (COMPUTED, never hand-edited)
+ *         analysis/authoring-queue.json   — structural tasks for the owner (same)
  *
  * The essence: turn red cells into a RANKED, BUDGETED queue of targeted
  * harvests, not "research everything".
  *
+ * - ROUTING BY FIX_TYPE (D-055/D-056): a cell's gaps are typed harvest vs
+ *   structural. Only HARVEST gaps (grade_sufficiency, freshness, the
+ *   segment_evidence flag) can be closed by fetching evidence; STRUCTURAL gaps
+ *   (interaction_coverage, context_coverage, dissent_completeness) close only
+ *   by owner edits in git. So harvest gaps → research-queue.json (consume
+ *   budget, dispatch connectors); structural gaps → authoring-queue.json
+ *   (owner-facing, per pack×segment, ranked by importance, NEVER harvested).
+ *   A cell whose scored gaps are ALL structural is never harvested — no amount
+ *   of segment-qualified evidence flips it, so harvesting it is pure budget
+ *   burn. The segment_evidence flag alone does NOT make a cell harvestable.
  * - SATURATION: only red/amber cells are queued; a green cell is saturated and
  *   never appears.
  * - RANKING: importance = segment_weight × gap_size, where
@@ -34,6 +44,8 @@ import { join, relative } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { computeBudgetSnapshot } from "../lib/ops";
 import type {
+  AuthoringQueue,
+  AuthoringTask,
   EvidenceGrade,
   GapPlannerConfig,
   Mechanism,
@@ -47,6 +59,7 @@ import type {
   SufficiencyMatrix,
   SufficiencyStatus,
   SufficiencyThreshold,
+  TypedGap,
 } from "../lib/types";
 
 const ROOT = join(__dirname, "..");
@@ -57,8 +70,10 @@ const ANALYSIS_DIR = join(ROOT, "analysis");
 const CONFIG = join(ANALYSIS_DIR, "analyzer.config.yaml");
 const MATRIX = join(ANALYSIS_DIR, "sufficiency-matrix.json");
 const QUEUE = join(ANALYSIS_DIR, "research-queue.json");
+const AUTHORING_QUEUE = join(ANALYSIS_DIR, "authoring-queue.json");
 
 const QUEUE_VERSION = "0.1.0";
+const AUTHORING_QUEUE_VERSION = "0.1.0";
 
 /** Strong → weak; a higher index is a WEAKER grade (mirrors the analyzer). */
 const GRADE_ORDER: EvidenceGrade[] = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-"];
@@ -235,12 +250,48 @@ function greenThreshold(file: AnalyzerConfigFile, criterion: SufficiencyCriterio
   return (file.thresholds[criterion] ?? file.thresholds.default).green;
 }
 
-/** Σ over the cell's failed criteria of (green_threshold − score), floored at 0. */
-function gapSize(cell: SufficiencyCell, file: AnalyzerConfigFile): number {
-  return cell.gaps.reduce((sum, criterion) => {
+/** Σ over the given failed criteria of (green_threshold − score), floored at 0. */
+function gapSize(
+  cell: SufficiencyCell,
+  file: AnalyzerConfigFile,
+  criteria: SufficiencyCriterion[],
+): number {
+  return criteria.reduce((sum, criterion) => {
     const distance = greenThreshold(file, criterion) - (cell.scores[criterion] ?? 0);
     return sum + Math.max(0, distance);
   }, 0);
+}
+
+// ---------- routing by fix_type (D-055/D-056) ----------
+
+/**
+ * The cell's SCORED harvest gaps — failed criteria whose typed fix_type is
+ * harvest (grade_sufficiency, freshness). The segment_evidence flag is a
+ * harvest gap too but is NOT a scored criterion, so it never appears here and
+ * cannot, on its own, make a cell harvestable.
+ */
+function harvestCriteria(cell: SufficiencyCell): SufficiencyCriterion[] {
+  const harvestTyped = new Set(
+    cell.typed_gaps
+      .filter((g) => g.fix_type === "harvest" && g.criterion !== "segment_evidence")
+      .map((g) => g.criterion as SufficiencyCriterion),
+  );
+  return cell.gaps.filter((criterion) => harvestTyped.has(criterion));
+}
+
+/** A cell is harvestable iff it has ≥1 scored harvest gap (see harvestCriteria). */
+function isHarvestable(cell: SufficiencyCell): boolean {
+  return harvestCriteria(cell).length > 0;
+}
+
+/** The cell's structural typed gaps (interaction/context/dissent), detail intact. */
+function structuralGaps(cell: SufficiencyCell): TypedGap[] {
+  return cell.typed_gaps.filter((g) => g.fix_type === "structural");
+}
+
+/** Σ over the cell's structural gaps of (threshold − value), floored at 0. */
+function structuralGapSize(cell: SufficiencyCell): number {
+  return structuralGaps(cell).reduce((sum, g) => sum + Math.max(0, g.threshold - g.value), 0);
 }
 
 interface Candidate {
@@ -280,8 +331,12 @@ function suggestedTerms(mechanism: Mechanism, qualifier: string): string[] {
   return base.slice(0, MAX_TERMS_PER_TASK).map((term) => `${term} ${qualifier}`.trim());
 }
 
-function reasonFor(cell: SufficiencyCell, file: AnalyzerConfigFile): string {
-  const failed = cell.gaps
+function reasonFor(
+  cell: SufficiencyCell,
+  file: AnalyzerConfigFile,
+  criteria: SufficiencyCriterion[],
+): string {
+  const failed = criteria
     .map((criterion) => {
       const score = cell.scores[criterion] ?? 0;
       const green = greenThreshold(file, criterion);
@@ -293,6 +348,21 @@ function reasonFor(cell: SufficiencyCell, file: AnalyzerConfigFile): string {
       ? "; segment evidence general_only (segment-specific harvest needed)"
       : "; segment_specific evidence present";
   return `${cell.status} cell ${cell.pack}×${cell.segment}: ${failed}${evidenceNote}`;
+}
+
+/**
+ * Deterministic authoring-queue order: importance desc → red before amber →
+ * stable by (pack, segment). One task per structural cell (not expanded to
+ * mechanisms — a structural fix is an owner edit to the pack/registry, not a
+ * per-mechanism harvest).
+ */
+function compareAuthoring(a: AuthoringTask, b: AuthoringTask): number {
+  if (b.importance !== a.importance) return b.importance - a.importance;
+  const sa = QUEUE_STATUS_ORDER[a.status as Exclude<SufficiencyStatus, "green">];
+  const sb = QUEUE_STATUS_ORDER[b.status as Exclude<SufficiencyStatus, "green">];
+  if (sa !== sb) return sa - sb;
+  if (a.pack !== b.pack) return a.pack < b.pack ? -1 : 1;
+  return a.segment < b.segment ? -1 : 1;
 }
 
 // ---------- main ----------
@@ -319,21 +389,29 @@ function main(): void {
     mechanisms.set(m.id, m);
   }
 
-  // Only red/amber cells feed the queue; green cells are saturated (excluded).
+  // Only red/amber cells feed either queue; green cells are saturated.
   const gapCells = matrix.cells.filter((cell) => cell.status !== "green");
-  const neededSegments = new Set(gapCells.map((cell) => cell.segment));
+
+  // ROUTING (D-056): a cell is harvested only if it has a scored harvest gap.
+  // A cell whose scored gaps are all structural never enters the harvest path —
+  // no evidence fetch can flip it — so it neither consumes budget nor needs a
+  // harvest qualifier. Qualifiers are required only for the segments we harvest.
+  const harvestableCells = gapCells.filter(isHarvestable);
+  const neededSegments = new Set(harvestableCells.map((cell) => cell.segment));
 
   const { file, gp, qualifiers } = loadGapPlannerConfig(neededSegments, activeSegmentIds);
   const flagged = new Set(file.replication_flags ?? []);
 
-  // Expand every gap cell to (mechanism, segment) candidates, deduped across
-  // packs so the same segment-qualified mechanism harvest is queued once, at
-  // its highest importance.
+  // HARVEST PATH — expand each harvestable cell to (mechanism, segment)
+  // candidates, deduped across packs so the same segment-qualified mechanism
+  // harvest is queued once, at its highest importance. Importance is sized over
+  // the cell's HARVEST gaps only, so a mixed cell ranks by what a harvest can
+  // actually fix.
   const byKey = new Map<string, Candidate>();
-  for (const cell of gapCells) {
+  for (const cell of harvestableCells) {
     const status = cell.status as Exclude<SufficiencyStatus, "green">;
     const weight = gp.segment_weights?.[cell.segment] ?? 1;
-    const importance = round(weight * gapSize(cell, file));
+    const importance = round(weight * gapSize(cell, file, harvestCriteria(cell)));
     const members = packMechanisms.get(cell.pack) ?? [];
     for (const mechanismId of members) {
       const mechanism = mechanisms.get(mechanismId);
@@ -382,7 +460,7 @@ function main(): void {
       segment: candidate.segment,
       importance: candidate.importance,
       suggested_evidence_terms: suggestedTerms(mechanism, qualifier),
-      reason: reasonFor(candidate.cell, file),
+      reason: reasonFor(candidate.cell, file, harvestCriteria(candidate.cell)),
     };
   });
 
@@ -404,25 +482,69 @@ function main(): void {
     tasks,
   };
 
+  // STRUCTURAL PATH — every cell with ≥1 structural gap becomes an owner-facing
+  // authoring task (per pack×segment, ranked by segment_weight × structural
+  // gap-size). No budget, no connector: these close only by an owner edit in
+  // git. The queue is always written, even empty, as an honest state.
+  const authoringTasks: AuthoringTask[] = gapCells
+    .map((cell): AuthoringTask | null => {
+      const gaps = structuralGaps(cell);
+      if (gaps.length === 0) return null;
+      const weight = gp.segment_weights?.[cell.segment] ?? 1;
+      return {
+        pack: cell.pack,
+        segment: cell.segment,
+        status: cell.status,
+        importance: round(weight * structuralGapSize(cell)),
+        segment_evidence: cell.segment_evidence,
+        structural_gaps: gaps,
+      };
+    })
+    .filter((task): task is AuthoringTask => task !== null)
+    .sort(compareAuthoring);
+
+  const authoringQueue: AuthoringQueue = {
+    version: AUTHORING_QUEUE_VERSION,
+    generated_at: new Date().toISOString(),
+    config_version: file.version,
+    matrix_generated_at: matrix.generated_at,
+    cell_count: authoringTasks.length,
+    tasks: authoringTasks,
+  };
+
   mkdirSync(ANALYSIS_DIR, { recursive: true });
   writeFileSync(QUEUE, `${JSON.stringify(queue, null, 2)}\n`, "utf-8");
+  writeFileSync(AUTHORING_QUEUE, `${JSON.stringify(authoringQueue, null, 2)}\n`, "utf-8");
 
   const top = tasks[0];
   console.log(
-    `OK — ${gapCells.length} red/amber cells → ${ranked.length} (mechanism × segment) candidates; ` +
-      `queued ${tasks.length} of N=${effectiveMaxTasks} ` +
+    `OK — ${gapCells.length} red/amber cells → routed by fix_type: ` +
+      `${harvestableCells.length} harvestable → ${ranked.length} (mechanism × segment) candidates, ` +
+      `queued ${tasks.length} harvest task(s) of N=${effectiveMaxTasks} ` +
       `(config ${gp.budget.max_tasks} / budget ${budgetMaxTasks}; ` +
       `${remainingCalls} monthly calls remaining) → ${rel(QUEUE)}.`,
   );
+  console.log(
+    `     ${authoringTasks.length} cell(s) with structural gaps → ${rel(AUTHORING_QUEUE)} ` +
+      "(owner authoring, no harvest, no budget).",
+  );
   if (top) {
     console.log(
-      `     top: ${top.mechanism} for ${top.segment} (importance ${top.importance}) — ${top.reason}`,
+      `     top harvest: ${top.mechanism} for ${top.segment} (importance ${top.importance}) — ${top.reason}`,
     );
   }
-  // Decision log (D-051): the shape of the policy this queue encodes.
+  const topStructural = authoringTasks[0];
+  if (topStructural) {
+    const gapNames = topStructural.structural_gaps.map((g) => g.criterion).join(", ");
+    console.log(
+      `     top structural: ${topStructural.pack}×${topStructural.segment} ` +
+        `(importance ${topStructural.importance}) — ${gapNames}`,
+    );
+  }
+  // Decision log (D-056): the routing policy this pair of queues encodes.
   console.log(
-    "\n     gaps prioritized by segment-weight × gap-size, budget-bounded; " +
-      "saturated cells excluded; addressing is targeted not exhaustive.",
+    "\n     loop routes by fix_type; structural gaps go to an authoring queue, not the API. " +
+      "Harvest gaps prioritized by segment-weight × gap-size, budget-bounded; saturated cells excluded.",
   );
 }
 

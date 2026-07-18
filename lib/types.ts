@@ -808,6 +808,18 @@ export interface TypedGap {
   fix_type: GapFixType;
   /** Plain-language description of the fix that would close this gap. */
   what_would_close_it: string;
+  /**
+   * interaction_coverage only — the pack's member-mechanism id pairs NOT yet
+   * connected by a registry relation, so the owner sees exactly which links to
+   * author. Each pair is sorted (id.localeCompare) and the list is stable.
+   */
+  missing_interaction_pairs?: [string, string][];
+  /**
+   * context_coverage only — the segment's typical funnel stages the pack does
+   * NOT cover with a grade≥min_context_grade mechanism, so the owner sees which
+   * stages need composition.
+   */
+  uncovered_stages?: FunnelStage[];
 }
 
 /** score ≥ green → green, ≥ amber → amber, else red. */
@@ -954,6 +966,41 @@ export interface ResearchQueue {
   tasks: ResearchTask[];
 }
 
+// ---------- Authoring queue (/analysis/authoring-queue.json, D-056) ----------
+//
+// tools/gap-planner.ts routes gaps by fix_type (D-055). Harvest gaps become
+// budgeted connector tasks in research-queue.json; STRUCTURAL gaps — the ones
+// no API call can close (registry relations, pack composition, dossier
+// dissent) — are written here instead, owner-facing, so the loop never burns
+// harvest budget against them. A COMPUTED projection, never hand-edited (the
+// research-queue precedent, D-051); consumed by the owner in git, not by the
+// connector.
+
+/** One [pack × segment] cell's structural gaps, awaiting an owner edit in git. */
+export interface AuthoringTask {
+  pack: string;
+  segment: string;
+  status: SufficiencyStatus;
+  /** segment_weight × Σ (green_threshold − score) over structural gaps only. */
+  importance: number;
+  segment_evidence: SegmentEvidence;
+  /** The cell's structural typed gaps (interaction/context/dissent), with detail. */
+  structural_gaps: TypedGap[];
+}
+
+/** /analysis/authoring-queue.json — structural gaps ranked for owner authoring. */
+export interface AuthoringQueue {
+  version: string;
+  generated_at: string;
+  /** The analyzer.config.yaml version the gap_planner block was read from. */
+  config_version: string;
+  /** generated_at of the sufficiency matrix this queue was ranked from. */
+  matrix_generated_at: string;
+  /** Red/amber cells carrying ≥1 structural gap (the length of tasks). */
+  cell_count: number;
+  tasks: AuthoringTask[];
+}
+
 // ---------- Maturation log (/analysis/maturation-log.json, D-053) ----------
 //
 // tools/maturation-log.ts appends one entry per weekly maturation run
@@ -989,6 +1036,12 @@ export interface MaturationLogEntry {
   };
   /** Tasks the plan-queue gate deferred to next week over budget (D-052). */
   deferred: number;
+  /**
+   * Structural gaps routed to analysis/authoring-queue.json this run (D-056) —
+   * cells needing an owner edit in git, never a harvest. Optional so entries
+   * written before D-056 stay valid.
+   */
+  structural_queued?: number;
 }
 
 /** /analysis/maturation-log.json — the append-only weekly maturation history. */

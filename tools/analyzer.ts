@@ -320,12 +320,23 @@ function statusFor(score: number, threshold: SufficiencyThreshold): SufficiencyS
  * green bar it falls short of, fix_type + what_would_close_it the fix. No gap
  * is left untyped — the loop reads this to route harvest vs structural work.
  */
+/**
+ * Owner-facing detail attached to a structural gap so the authoring queue
+ * (D-056) shows exactly what to edit: which member pairs are unlinked
+ * (interaction_coverage) or which funnel stages are uncovered (context_coverage).
+ */
+interface GapDetail {
+  missing_interaction_pairs?: [string, string][];
+  uncovered_stages?: FunnelStage[];
+}
+
 function buildTypedGaps(
   gaps: SufficiencyCriterion[],
   scores: SufficiencyScores,
   config: AnalyzerConfig,
   segmentEvidence: "segment_specific" | "general_only",
   status: SufficiencyStatus,
+  detail: Partial<Record<SufficiencyCriterion, GapDetail>> = {},
 ): TypedGap[] {
   const typed: TypedGap[] = gaps.map((criterion) => ({
     criterion,
@@ -333,6 +344,7 @@ function buildTypedGaps(
     threshold: thresholdFor(config, criterion).green,
     fix_type: FIX_TYPE[criterion],
     what_would_close_it: WHAT_WOULD_CLOSE_IT[criterion],
+    ...(detail[criterion] ?? {}),
   }));
   if (segmentEvidence === "general_only" && status !== "green") {
     typed.push({
@@ -353,46 +365,67 @@ function weightedMean(members: MemberContext[], value: (m: MemberContext) => num
   return totalWeight > 0 ? weightedSum / totalWeight : 0;
 }
 
+/** Order a member-pair id key deterministically (locale-stable, both sites). */
+function pairKey(a: string, b: string): string {
+  return a.localeCompare(b) <= 0 ? `${a}|${b}` : `${b}|${a}`;
+}
+
 /**
  * Share of the pack's C(n,2) mechanism pairs connected by a registry
  * relation in either direction — the same pairing logic render-packs projects
  * into LAYER 2. orthogonality_note is excluded: it documents that two
- * mechanisms are separate, not that they interact.
+ * mechanisms are separate, not that they interact. Also returns the UNLINKED
+ * pairs so a structural interaction_coverage gap names exactly which relations
+ * the owner must author (D-056).
  */
-function interactionCoverage(members: Mechanism[]): number {
-  if (members.length < 2) return 1;
+function interactionCoverage(members: Mechanism[]): {
+  coverage: number;
+  missing: [string, string][];
+} {
+  if (members.length < 2) return { coverage: 1, missing: [] };
   const memberIds = new Set(members.map((m) => m.id));
   const connected = new Set<string>();
   for (const m of members) {
     for (const relation of m.relations) {
       if (relation.type === "orthogonality_note") continue;
       if (!memberIds.has(relation.target)) continue;
-      connected.add([m.id, relation.target].sort().join("|"));
+      connected.add(pairKey(m.id, relation.target));
+    }
+  }
+  const ids = members.map((m) => m.id).sort((a, b) => a.localeCompare(b));
+  const missing: [string, string][] = [];
+  for (let i = 0; i < ids.length; i += 1) {
+    for (let j = i + 1; j < ids.length; j += 1) {
+      if (!connected.has(pairKey(ids[i], ids[j]))) missing.push([ids[i], ids[j]]);
     }
   }
   const totalPairs = (members.length * (members.length - 1)) / 2;
-  return connected.size / totalPairs;
+  return { coverage: connected.size / totalPairs, missing };
 }
 
 /**
  * Share of the segment's typical stages on which the pack holds ≥1 mechanism
  * at grade ≥ min_context_grade whose applicability covers the stage (listed
- * in funnel_stages and not excluded).
+ * in funnel_stages and not excluded). Also returns the UNCOVERED stages so a
+ * structural context_coverage gap names exactly which stages the owner must
+ * cover by composition (D-056).
  */
 function contextCoverage(
   members: Mechanism[],
   segmentStages: FunnelStage[],
   minGrade: EvidenceGrade,
-): number {
-  const covered = segmentStages.filter((stage) =>
-    members.some(
-      (m) =>
-        gradeAtLeast(m.evidence.grade, minGrade) &&
-        m.applicability.funnel_stages.includes(stage) &&
-        !m.applicability.excluded_stages.includes(stage),
-    ),
+): { coverage: number; uncovered: FunnelStage[] } {
+  const uncovered = segmentStages.filter(
+    (stage) =>
+      !members.some(
+        (m) =>
+          gradeAtLeast(m.evidence.grade, minGrade) &&
+          m.applicability.funnel_stages.includes(stage) &&
+          !m.applicability.excluded_stages.includes(stage),
+      ),
   );
-  return covered.length / segmentStages.length;
+  const covered = segmentStages.length - uncovered.length;
+  return { coverage: covered / segmentStages.length, uncovered };
 }
 
 function scoreCell(
@@ -429,13 +462,16 @@ function scoreCell(
   const dissentShare =
     contexts.filter((m) => m.dissentPresent).length / Math.max(contexts.length, 1);
 
+  const interaction = interactionCoverage(members);
+  const context = contextCoverage(members, segmentStages, config.min_context_grade);
+
   const scores: SufficiencyScores = {
     dissent_completeness: round(dissentShare),
     grade_sufficiency: round(
       weightedMean(contexts, (m) => config.grade_weights[gradeLetter(m.mechanism.evidence.grade)]),
     ),
-    interaction_coverage: round(interactionCoverage(members)),
-    context_coverage: round(contextCoverage(members, segmentStages, config.min_context_grade)),
+    interaction_coverage: round(interaction.coverage),
+    context_coverage: round(context.coverage),
     freshness: round(1 - weightedMean(contexts, (m) => (m.replicationFlagged ? 1 : 0))),
   };
 
@@ -454,13 +490,23 @@ function scoreCell(
 
   const segmentEvidence = segmentSpecific ? "segment_specific" : "general_only";
 
+  // Owner-facing detail on the structural gaps (D-056): the exact unlinked
+  // member pairs / uncovered stages, so the authoring queue is actionable.
+  const detail: Partial<Record<SufficiencyCriterion, GapDetail>> = {};
+  if (interaction.missing.length > 0) {
+    detail.interaction_coverage = { missing_interaction_pairs: interaction.missing };
+  }
+  if (context.uncovered.length > 0) {
+    detail.context_coverage = { uncovered_stages: context.uncovered };
+  }
+
   return {
     pack: packId,
     segment: segmentId,
     scores,
     status,
     gaps,
-    typed_gaps: buildTypedGaps(gaps, scores, config, segmentEvidence, status),
+    typed_gaps: buildTypedGaps(gaps, scores, config, segmentEvidence, status, detail),
     segment_evidence: segmentEvidence,
   };
 }

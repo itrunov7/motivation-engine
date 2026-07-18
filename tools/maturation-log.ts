@@ -9,9 +9,10 @@
  * hand-edited" pattern as the sufficiency matrix / research queue
  * (D-050/D-051). It NEVER re-computes the diff or the spend; it only records
  * what the workflow steps already computed:
- *   - cell-diff.json     — [{ pack, segment, from, to }] (baseline vs re-scored matrix)
+ *   - cell-diff.json       — [{ pack, segment, from, to }] (baseline vs re-scored matrix)
  *   - budget-before.json / budget-after.json — ops-gate budget snapshots
- *   - queue-plan.json    — the gated plan (for the deferred-task count)
+ *   - queue-plan.json      — the gated plan (for the deferred-task count)
+ *   - authoring-queue.json — structural gaps routed to owner authoring (D-056)
  *
  * packs_regenerated is derived from cell-diff exactly as the workflow derives
  * flipped_packs (packs with a cell that flipped to green) — the packs the loop
@@ -22,7 +23,8 @@
  *   npm run maturation-log -- \
  *     [--cell-diff cell-diff.json] \
  *     [--budget-before budget-before.json] [--budget-after budget-after.json] \
- *     [--queue-plan queue-plan.json] [--week YYYY-MM-DD]
+ *     [--queue-plan queue-plan.json] [--authoring-queue analysis/authoring-queue.json] \
+ *     [--week YYYY-MM-DD]
  *
  * Re-running for the same week REPLACES that week's entry (idempotent for
  * repeated manual dispatches on the same day).
@@ -93,6 +95,10 @@ function main(): void {
   const budgetBeforeFile = join(ROOT, args["budget-before"] ?? "budget-before.json");
   const budgetAfterFile = join(ROOT, args["budget-after"] ?? "budget-after.json");
   const queuePlanFile = join(ROOT, args["queue-plan"] ?? "queue-plan.json");
+  const authoringQueueFile = join(
+    ROOT,
+    args["authoring-queue"] ?? "analysis/authoring-queue.json",
+  );
   const week = args["week"] ?? new Date().toISOString().slice(0, 10);
 
   // Cell status changes (a missing/empty diff = a truthful zero-flip week).
@@ -122,6 +128,10 @@ function main(): void {
     (e) => e.action === "defer",
   ).length;
 
+  // Structural gaps routed to owner authoring this run (D-056), not harvested.
+  const authoringQueue = readJsonOrNull<{ tasks?: unknown[] }>(authoringQueueFile);
+  const structuralQueued = (authoringQueue?.tasks ?? []).length;
+
   const entry: MaturationLogEntry = {
     week,
     generated_at: new Date().toISOString(),
@@ -129,6 +139,7 @@ function main(): void {
     packs_regenerated: packsRegenerated,
     spend,
     deferred,
+    structural_queued: structuralQueued,
   };
 
   const existing = readJsonOrNull<MaturationLog>(LOG_FILE);
@@ -150,7 +161,8 @@ function main(): void {
     `OK — recorded maturation week ${week} → ${rel(LOG_FILE)}: ` +
       `${cellsChanged.length} status change(s) (${flips} → green), ` +
       `${packsRegenerated.length} pack(s) regenerated, ` +
-      `${spend.calls} calls / $${spend.usd}, ${deferred} deferred ` +
+      `${spend.calls} calls / $${spend.usd}, ${deferred} deferred, ` +
+      `${structuralQueued} structural queued ` +
       `(${entries.length} week(s) in the log).`,
   );
 }

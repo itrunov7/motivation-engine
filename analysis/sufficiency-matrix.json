@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "generated_at": "2026-07-17T17:11:31.708Z",
+  "generated_at": "2026-07-17T17:21:46.632Z",
   "config_version": "0.1.0",
   "cells": [
     {
@@ -32,14 +32,39 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -80,14 +105,39 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -127,7 +177,29 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -168,14 +240,39 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -215,7 +312,29 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -255,7 +374,29 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -296,14 +437,40 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding",
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -344,14 +511,40 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding",
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -392,14 +585,39 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -440,14 +658,39 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -488,14 +731,39 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -536,14 +804,39 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -584,14 +877,39 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -632,14 +950,39 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -679,7 +1022,29 @@
           "value": 0.1667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "CG-05",
+              "FR-11"
+            ],
+            [
+              "CG-05",
+              "RE-10"
+            ],
+            [
+              "CG-05",
+              "SP-08"
+            ],
+            [
+              "FR-11",
+              "RE-10"
+            ],
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
@@ -705,14 +1070,36 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -744,7 +1131,25 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -776,7 +1181,25 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -809,14 +1232,35 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -849,14 +1293,35 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -889,14 +1354,35 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -928,7 +1414,25 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -960,7 +1464,25 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -992,7 +1514,25 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1025,14 +1565,36 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1064,7 +1626,25 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1097,14 +1677,35 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1136,7 +1737,25 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1168,7 +1787,25 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
@@ -1194,14 +1831,35 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "ID-12",
+              "VR-02"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1234,14 +1892,32 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1273,7 +1949,21 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1305,7 +1995,21 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1338,14 +2042,31 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1378,14 +2099,31 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1418,14 +2156,31 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1457,7 +2212,21 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1489,7 +2258,21 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1521,7 +2304,21 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1554,14 +2351,32 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1593,7 +2408,21 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1626,14 +2455,31 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1665,7 +2511,21 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1697,7 +2557,21 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
@@ -1723,14 +2597,31 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "VR-02"
+            ],
+            [
+              "EN-03",
+              "ZE-07"
+            ],
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1763,14 +2654,25 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "conversion",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1803,14 +2705,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1843,14 +2754,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1883,14 +2803,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1923,14 +2852,24 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -1963,14 +2902,24 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2002,7 +2951,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2034,7 +2989,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2066,7 +3027,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2099,14 +3066,25 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "conversion",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2139,14 +3117,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2179,14 +3166,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2218,7 +3214,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2250,7 +3252,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
@@ -2276,14 +3284,24 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "VR-02",
+              "ZE-07"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2316,14 +3334,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
@@ -2348,7 +3375,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2380,7 +3413,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2413,14 +3452,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2453,14 +3501,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2493,14 +3550,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2532,7 +3598,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2564,7 +3636,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2596,7 +3674,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2629,14 +3713,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2668,7 +3761,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2701,14 +3800,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2740,7 +3848,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2772,7 +3886,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
@@ -2798,14 +3918,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "HA-04",
+              "LA-01"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2845,7 +3974,11 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2877,7 +4010,10 @@
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2909,7 +4045,10 @@
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -2964,7 +4103,10 @@
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3004,7 +4146,10 @@
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3036,7 +4181,10 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3068,7 +4216,10 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3123,7 +4274,11 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3155,7 +4310,11 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding",
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3240,7 +4399,10 @@
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "conversion"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3272,7 +4434,11 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3334,7 +4500,10 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3366,7 +4535,10 @@
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3398,7 +4570,10 @@
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3430,7 +4605,10 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3462,7 +4640,10 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3509,7 +4690,11 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3541,7 +4726,10 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3573,7 +4761,10 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3635,7 +4826,10 @@
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
@@ -3661,14 +4855,27 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
@@ -3693,7 +4900,17 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3725,7 +4942,17 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3758,14 +4985,27 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3798,14 +5038,27 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3838,14 +5091,27 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3878,14 +5144,27 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3918,14 +5197,27 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3957,7 +5249,17 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -3990,14 +5292,27 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4030,14 +5345,27 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4070,14 +5398,27 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4109,7 +5450,17 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4141,7 +5492,17 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4174,14 +5535,27 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "FR-11"
+            ],
+            [
+              "EN-03",
+              "SC-06"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
@@ -4207,14 +5581,27 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
@@ -4239,7 +5626,17 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4271,7 +5668,17 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4304,14 +5711,27 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4344,14 +5764,27 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4384,14 +5817,27 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4424,14 +5870,27 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4464,14 +5923,27 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4503,7 +5975,17 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4536,14 +6018,27 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4576,14 +6071,27 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4616,14 +6124,27 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4655,7 +6176,17 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4687,7 +6218,17 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4720,14 +6261,27 @@
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "EN-03",
+              "ST-09"
+            ],
+            [
+              "LA-01",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4760,14 +6314,24 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4800,14 +6364,23 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4839,7 +6412,13 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4872,14 +6451,24 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4912,14 +6501,23 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4952,14 +6550,23 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -4992,14 +6599,24 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding",
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5032,14 +6649,24 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding",
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5072,14 +6699,23 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5112,14 +6748,24 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5152,14 +6798,23 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5192,14 +6847,24 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.3333,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition",
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5232,14 +6897,23 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5272,14 +6946,23 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "retention"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5312,14 +6995,23 @@
           "value": 0,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "FR-11",
+              "SP-08"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.5,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "cold_acquisition"
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
@@ -5345,14 +7037,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5384,7 +7085,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5416,7 +7123,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5448,7 +7161,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5480,7 +7199,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5512,7 +7237,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5545,14 +7276,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5585,14 +7325,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5624,7 +7373,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5657,14 +7412,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "reactivation"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5697,14 +7461,23 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "context_coverage",
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
+          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
+          "uncovered_stages": [
+            "onboarding"
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5736,7 +7509,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5768,7 +7547,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5800,7 +7585,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         },
         {
           "criterion": "segment_evidence",
@@ -5832,7 +7623,13 @@
           "value": 0.6667,
           "threshold": 0.8,
           "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
+          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
+          "missing_interaction_pairs": [
+            [
+              "RE-10",
+              "ST-09"
+            ]
+          ]
         }
       ],
       "segment_evidence": "segment_specific"
