@@ -48,6 +48,7 @@ import {
   type CorpusManifestRun,
   type CorpusRunStatus,
   type EvidenceCategory,
+  type GapFixType,
   type HealthStatus,
   type HeartbeatFile,
   type LifecycleStatus,
@@ -56,6 +57,7 @@ import {
   type SegmentEvidence,
   type Source,
   type SourceClassId,
+  type SufficiencyCell,
   type SufficiencyStatus,
   type TaxonomyNode,
 } from "./types";
@@ -639,17 +641,73 @@ export const CELL_EXHAUSTED_META: StatusMeta = {
 };
 
 /**
- * Coverage-bar bands (D-059): the three computed statuses plus a distinct
- * "exhausted" band, so a thin-literature cell is counted apart from red rather
- * than inflating the red-forever share. Worst → best; the exhausted band sits
- * between the actionable reds/ambers and green.
+ * Presentation metadata for a gap's filler route (D-055/D-061): a harvest gap
+ * is closed by the automated connector (amber, in-progress work the loop
+ * drives), a structural gap by the owner in git (slate — owner-facing, never
+ * machine-fillable). The literals live here; the cockpit maps typed_gaps
+ * through this table so a hover reads "harvest" vs "author" per gap, never
+ * red/green alone. Reuses existing tokens; no new palette.
  */
-export const COVERAGE_BAND_ORDER = ["red", "amber", "exhausted", "green"] as const;
+export const FIX_TYPE_META: Record<GapFixType, StatusMeta> = {
+  harvest: { label: "harvest", color: "#E4B54E" },
+  structural: { label: "author", color: "#7C93A8" },
+};
+
+/**
+ * The filler route a whole cell needs (D-061), mirroring the gap planner's
+ * routing (D-056) so the cockpit shows the same split the loop acts on
+ * (lib/ never imports tools/, so the policy is duplicated, not shared):
+ * - green: saturated, no work
+ * - exhausted: evidence_exhausted — thin literature, best-available (owner
+ *   alternative fillers, D-059), counted apart from red-forever
+ * - harvest: has ≥1 SCORED harvest gap (grade_sufficiency / freshness) — a
+ *   segment-qualified evidence fetch can still move it. The segment_evidence
+ *   pseudo-gap alone never makes a cell harvestable (D-056), so it is excluded.
+ * - authoring: a red/amber cell whose only gaps are structural — no harvest
+ *   can flip it; it awaits an owner edit in git.
+ */
+export type CellRoute = "green" | "exhausted" | "harvest" | "authoring";
+
+export function computeCellRoute(cell: SufficiencyCell): CellRoute {
+  if (cell.status === "green") return "green";
+  if (cell.evidence_exhausted) return "exhausted";
+  const hasScoredHarvestGap = cell.typed_gaps.some(
+    (g) => g.fix_type === "harvest" && g.criterion !== "segment_evidence",
+  );
+  return hasScoredHarvestGap ? "harvest" : "authoring";
+}
+
+/**
+ * Coverage-bar bands (D-059/D-061): the actionable red/amber cells (a harvest
+ * can still move them), a distinct "authoring" band (red/amber cells only an
+ * owner edit can close, D-056), the "exhausted" thin-literature band (D-059),
+ * then green. Worst → best; keeping the four apart stops a structural or
+ * thin-literature gap from inflating the red-forever share and lets the
+ * coverage summary say honestly which filler each non-green cell needs.
+ */
+export const COVERAGE_BAND_ORDER = [
+  "red",
+  "amber",
+  "authoring",
+  "exhausted",
+  "green",
+] as const;
 export type CoverageBand = (typeof COVERAGE_BAND_ORDER)[number];
+
+/**
+ * The awaiting-authoring band (D-061): red/amber cells whose only fillers are
+ * owner edits in git. Muted slate (#8CA495, an existing token) — honest
+ * owner-facing work, not a machine-fixable alert red.
+ */
+export const COVERAGE_AUTHORING_META: StatusMeta = {
+  label: "awaiting authoring",
+  color: "#8CA495",
+};
 
 export const COVERAGE_BAND_META: Record<CoverageBand, StatusMeta> = {
   red: CELL_STATUS_META.red,
   amber: CELL_STATUS_META.amber,
+  authoring: COVERAGE_AUTHORING_META,
   exhausted: CELL_EXHAUSTED_META,
   green: CELL_STATUS_META.green,
 };

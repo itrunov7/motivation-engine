@@ -20,10 +20,11 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
-import { COVERAGE_BAND_ORDER, type CoverageBand } from "./status";
+import { COVERAGE_BAND_ORDER, computeCellRoute, type CoverageBand } from "./status";
 import type {
   AuthoringQueue,
   AuthoringTask,
+  HarvestHistory,
   InteractionRecord,
   InteractionType,
   MaturationLog,
@@ -45,6 +46,7 @@ export const MATURATION_PATHS = {
   matrix: join(ROOT, "analysis", "sufficiency-matrix.json"),
   queue: join(ROOT, "analysis", "research-queue.json"),
   authoringQueue: join(ROOT, "analysis", "authoring-queue.json"),
+  harvestHistory: join(ROOT, "analysis", "harvest-history.json"),
   log: join(ROOT, "analysis", "maturation-log.json"),
   segments: join(ROOT, "segments", "segments.yaml"),
   segmentCandidates: join(ROOT, "segments", "candidates.json"),
@@ -87,6 +89,17 @@ export function loadResearchQueue(): ResearchQueue | null {
 
 export function loadAuthoringQueue(): AuthoringQueue | null {
   return readJsonOrNull<AuthoringQueue>(MATURATION_PATHS.authoringQueue);
+}
+
+/**
+ * The per-target harvest ledger (analysis/harvest-history.json, D-059) — the
+ * persistent memory of how many consecutive weeks each (mechanism × segment)
+ * harvest came back low-novelty. Absent yields null: the loop has not yet run
+ * against a filled ledger, so the cockpit shows no low-novelty flag rather than
+ * a fabricated one (honest absence, same pattern as the analyzer, D-059).
+ */
+export function loadHarvestHistory(): HarvestHistory | null {
+  return readJsonOrNull<HarvestHistory>(MATURATION_PATHS.harvestHistory);
 }
 
 /** Pair key matching the analyzer / render-packs (locale-stable). */
@@ -251,9 +264,18 @@ export function buildHeatmap(
 // ---------- Coverage summary ----------
 
 export interface StatusCounts {
+  /** Red cells a harvest can still move (harvest route, D-061). */
   red: number;
+  /** Amber cells a harvest can still move (harvest route, D-061). */
   amber: number;
   green: number;
+  /**
+   * Red/amber cells whose only fillers are owner edits in git (authoring
+   * route, D-056/D-061) — no harvest can flip them. Kept apart from red/amber
+   * so the coverage summary distinguishes "awaiting authoring" from harvestable
+   * gaps, and the owner sees what to author vs what to harvest.
+   */
+  authoring: number;
   /**
    * Cells counted as evidence-exhausted (D-059) instead of red/amber — thin
    * literature the loop stopped harvesting. Kept apart from red so the cockpit
@@ -278,18 +300,42 @@ export interface Coverage {
 }
 
 function emptyCounts(): StatusCounts {
-  return { red: 0, amber: 0, green: 0, exhausted: 0, total: 0, pctGreen: 0 };
+  return {
+    red: 0,
+    amber: 0,
+    green: 0,
+    authoring: 0,
+    exhausted: 0,
+    total: 0,
+    pctGreen: 0,
+  };
 }
 
 function tally(cells: SufficiencyCell[]): StatusCounts {
   const counts = emptyCounts();
   for (const cell of cells) {
-    // An evidence-exhausted cell (D-059) is counted in its own band, NOT in
-    // red/amber — the literature is thin, not the work undone. Its status is
-    // still genuinely red/amber underneath, but the cockpit shows it as
-    // "thin literature — best available" rather than red-forever.
-    if (cell.evidence_exhausted) counts.exhausted += 1;
-    else counts[cell.status] += 1;
+    // Count by filler route (D-061), not raw status, so the coverage summary
+    // separates what a harvest can move (red/amber) from what only an owner
+    // edit can (authoring) and from proven-thin literature (exhausted):
+    // - exhausted: evidence_exhausted (D-059) — thin, not undone; own band
+    // - authoring: a red/amber cell with only structural gaps (D-056) — no
+    //   harvest flips it, so it is not an actionable red-forever
+    // - red/amber: still harvestable at that status
+    // - green: saturated
+    switch (computeCellRoute(cell)) {
+      case "exhausted":
+        counts.exhausted += 1;
+        break;
+      case "authoring":
+        counts.authoring += 1;
+        break;
+      case "green":
+        counts.green += 1;
+        break;
+      case "harvest":
+        counts[cell.status as "red" | "amber"] += 1;
+        break;
+    }
     counts.total += 1;
   }
   counts.pctGreen =
@@ -494,6 +540,57 @@ export function computeInteractionAuthoring(
  */
 export function computeThinLiterature(queue: AuthoringQueue): AuthoringTask[] {
   return queue.tasks.filter((task) => task.alternative_fill === true);
+}
+
+// ---------- Low-novelty flag (harvest ledger, D-058/D-059) ----------
+
+/** How many of a cell's pack mechanisms are on a low-novelty harvest streak. */
+export interface CellNovelty {
+  /** Pack mechanisms currently on a low_novelty_streak ≥ 1 for this segment. */
+  streaking: number;
+  /** Total pack mechanisms (the denominator). */
+  members: number;
+}
+
+/**
+ * Per pack×segment cell, counts how many of the pack's member mechanisms are
+ * currently on a low-novelty harvest streak (D-058) for that segment, read
+ * from analysis/harvest-history.json (D-059). Keyed "pack\u0000segment". The
+ * cockpit shows this as a hover flag ("low novelty: N/M mechanisms this
+ * streak") so the owner sees a gap the loop keeps re-fetching without progress
+ * — the early signal that precedes full evidence-exhaustion. Returns an empty
+ * map when the ledger is absent, so no flag is fabricated (honest absence).
+ */
+export function computeCellNovelty(
+  history: HarvestHistory | null,
+  packMap: PackMapFile | null,
+): Map<string, CellNovelty> {
+  const result = new Map<string, CellNovelty>();
+  if (!history || !packMap) return result;
+  const segments = new Set<string>();
+  for (const key of Object.keys(history.entries)) {
+    const idx = key.indexOf("|");
+    if (idx >= 0) segments.add(key.slice(idx + 1));
+  }
+  const segmentIds = Array.from(segments);
+  for (const element of packMap.elements) {
+    const members = element.mechanisms;
+    if (members.length === 0) continue;
+    for (const segment of segmentIds) {
+      let streaking = 0;
+      for (const mechanismId of members) {
+        const target = history.entries[`${mechanismId}|${segment}`];
+        if (target && target.low_novelty_streak >= 1) streaking += 1;
+      }
+      if (streaking > 0) {
+        result.set(`${element.id}\u0000${segment}`, {
+          streaking,
+          members: members.length,
+        });
+      }
+    }
+  }
+  return result;
 }
 
 // ---------- Maturation log ----------

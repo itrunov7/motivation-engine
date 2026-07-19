@@ -7,6 +7,7 @@ import {
   CELL_STATUS_ORDER,
   COVERAGE_BAND_META,
   COVERAGE_BAND_ORDER,
+  FIX_TYPE_META,
   INTERACTION_AUTHORING_META,
   SEGMENT_EVIDENCE_META,
   needsSegmentHarvest,
@@ -15,6 +16,7 @@ import {
   MATURATION_PATHS,
   SEGMENT_GROUP_LABEL,
   buildHeatmap,
+  computeCellNovelty,
   computeCoverage,
   computeInteractionAuthoring,
   computeSegmentCandidates,
@@ -23,6 +25,7 @@ import {
   coverageBreakdown,
   loadAuthoredInteractions,
   loadAuthoringQueue,
+  loadHarvestHistory,
   loadMaturationLog,
   loadPackMap,
   loadResearchQueue,
@@ -31,6 +34,7 @@ import {
   loadSufficiencyMatrix,
   maturationEntriesNewestFirst,
   repoRelative,
+  type CellNovelty,
   type Coverage,
   type Heatmap,
   type InteractionAuthoringPair,
@@ -45,6 +49,7 @@ import type {
   SufficiencyCell,
   SufficiencyCriterion,
   SufficiencyStatus,
+  TypedGap,
 } from "@/lib/types";
 
 export const metadata = {
@@ -205,17 +210,79 @@ function CoverageSummary({ coverage }: { coverage: Coverage }) {
 
 // ---------- Heatmap ----------
 
+/** Human label for a typed gap's criterion (incl. the segment_evidence pseudo-gap). */
+const CRITERION_LABEL: Record<SufficiencyCriterion, string> = CRITERIA.reduce(
+  (acc, { key, label }) => {
+    acc[key] = label;
+    return acc;
+  },
+  {} as Record<SufficiencyCriterion, string>,
+);
+
+function typedGapLabel(gap: TypedGap): string {
+  return gap.criterion === "segment_evidence"
+    ? "segment evidence"
+    : CRITERION_LABEL[gap.criterion];
+}
+
+/** One typed-gap line: criterion, its score vs threshold, and its filler route chip. */
+function GapLine({ gap }: { gap: TypedGap }) {
+  const meta = FIX_TYPE_META[gap.fix_type];
+  return (
+    <div className="flex items-baseline justify-between gap-2">
+      <dt className="font-mono text-[11px] text-[#E6EFE8]">{typedGapLabel(gap)}</dt>
+      <dd className="flex items-baseline gap-2">
+        <span className="font-mono text-[11px] text-[#8CA495]">
+          {fmtScore(gap.value)}
+          <span className="text-[#7C93A8]"> &lt; </span>
+          {fmtScore(gap.threshold)}
+        </span>
+        <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: meta.color }}>
+          {meta.label}
+        </span>
+      </dd>
+    </div>
+  );
+}
+
+function GapGroup({ heading, gaps }: { heading: string; gaps: TypedGap[] }) {
+  if (gaps.length === 0) return null;
+  return (
+    <div className="mt-2">
+      <p className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">
+        {heading}
+      </p>
+      <dl className="mt-1 flex flex-col gap-1">
+        {gaps.map((gap) => (
+          <GapLine key={gap.criterion} gap={gap} />
+        ))}
+      </dl>
+    </div>
+  );
+}
+
 function CellTooltip({
   pack,
   segment,
   cell,
+  stage,
+  novelty,
 }: {
   pack: string;
   segment: string;
   cell: SufficiencyCell | null;
+  stage: MaturityStage | null;
+  novelty: CellNovelty | null;
 }) {
+  const harvestGaps = cell
+    ? cell.typed_gaps.filter((g) => g.fix_type === "harvest")
+    : [];
+  const authoringGaps = cell
+    ? cell.typed_gaps.filter((g) => g.fix_type === "structural")
+    : [];
+  const passing = cell ? CRITERIA.filter(({ key }) => !cell.gaps.includes(key)) : [];
   return (
-    <div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 hidden w-64 -translate-x-1/2 rounded-md border border-[#243329] bg-[#0E1512] p-3 text-left shadow-lg group-hover:block">
+    <div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 hidden w-72 -translate-x-1/2 rounded-md border border-[#243329] bg-[#0E1512] p-3 text-left shadow-lg group-hover:block">
       <p className="font-mono text-[11px] text-[#E6EFE8]">
         {pack} <span className="text-[#7C93A8]">×</span> {segment}
       </p>
@@ -230,25 +297,25 @@ function CellTooltip({
               {CELL_STATUS_META[cell.status].label}
             </p>
           )}
-          <dl className="mt-2 flex flex-col gap-1">
-            {CRITERIA.map(({ key, label }) => {
-              const isGap = cell.gaps.includes(key);
-              return (
-                <div key={key} className="flex items-baseline justify-between gap-2">
-                  <dt
-                    className="font-mono text-[11px]"
-                    style={{ color: isGap ? CELL_STATUS_META.red.color : "#8CA495" }}
-                  >
-                    {label}
-                    {isGap ? " ·gap" : ""}
-                  </dt>
-                  <dd className="font-mono text-[11px] text-[#E6EFE8]">
-                    {fmtScore(cell.scores[key])}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
+          <GapGroup heading="harvest gaps" gaps={harvestGaps} />
+          <GapGroup heading="authoring gaps" gaps={authoringGaps} />
+          {passing.length > 0 && (
+            <div className="mt-2">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">
+                passing
+              </p>
+              <dl className="mt-1 flex flex-col gap-1">
+                {passing.map(({ key, label }) => (
+                  <div key={key} className="flex items-baseline justify-between gap-2">
+                    <dt className="font-mono text-[11px] text-[#8CA495]">{label}</dt>
+                    <dd className="font-mono text-[11px] text-[#E6EFE8]">
+                      {fmtScore(cell.scores[key])}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )}
           {cell.evidence_exhausted && cell.exhaustion && (
             <p
               className="mt-2 border-t border-[#243329] pt-2 font-mono text-[11px]"
@@ -259,6 +326,12 @@ function CellTooltip({
               available since {cell.exhaustion.since}
             </p>
           )}
+          {novelty && (
+            <p className="mt-2 border-t border-[#243329] pt-2 font-mono text-[11px] text-[#E4B54E]">
+              low novelty: {novelty.streaking}/{novelty.members} mechanism
+              {novelty.members === 1 ? "" : "s"} on a repeat-harvest streak
+            </p>
+          )}
           <p
             className="mt-2 border-t border-[#243329] pt-2 font-mono text-[11px]"
             style={{ color: SEGMENT_EVIDENCE_META[cell.segment_evidence].color }}
@@ -266,6 +339,11 @@ function CellTooltip({
           >
             evidence: {SEGMENT_EVIDENCE_META[cell.segment_evidence].label}
           </p>
+          {stage && (
+            <p className="mt-2 font-mono text-[11px] text-[#7C93A8]">
+              stage: <span className="text-[#34D399]">{stage}</span>
+            </p>
+          )}
         </>
       ) : (
         <p className="mt-1 font-mono text-[11px] text-[#7C93A8]">
@@ -280,10 +358,14 @@ function HeatCell({
   pack,
   segment,
   cell,
+  stage,
+  novelty,
 }: {
   pack: string;
   segment: string;
   cell: SufficiencyCell | null;
+  stage: MaturityStage | null;
+  novelty: CellNovelty | null;
 }) {
   const color = !cell
     ? CELL_NOT_ANALYZED_META.color
@@ -306,12 +388,26 @@ function HeatCell({
           </span>
         )}
       </div>
-      <CellTooltip pack={pack} segment={segment} cell={cell} />
+      <CellTooltip
+        pack={pack}
+        segment={segment}
+        cell={cell}
+        stage={stage}
+        novelty={novelty}
+      />
     </div>
   );
 }
 
-function HeatmapTable({ heatmap }: { heatmap: Heatmap }) {
+function HeatmapTable({
+  heatmap,
+  stage,
+  novelty,
+}: {
+  heatmap: Heatmap;
+  stage: MaturityStage | null;
+  novelty: Map<string, CellNovelty>;
+}) {
   return (
     <div className="overflow-visible">
       <table className="border-separate border-spacing-1">
@@ -356,6 +452,12 @@ function HeatmapTable({ heatmap }: { heatmap: Heatmap }) {
                     pack={row.pack}
                     segment={heatmap.columns[i].id}
                     cell={cell}
+                    stage={stage}
+                    novelty={
+                      novelty.get(
+                        `${row.pack}\u0000${heatmap.columns[i].id}`,
+                      ) ?? null
+                    }
                   />
                 </td>
               ))}
@@ -463,6 +565,9 @@ export default function MaturationPage() {
   const candidatesQueue = loadSegmentCandidates();
   const packMap = loadPackMap();
 
+  const harvestHistory = loadHarvestHistory();
+  const cellNovelty = computeCellNovelty(harvestHistory, packMap);
+
   const coverage = matrix ? computeCoverage(matrix) : null;
   const heatmap = matrix ? buildHeatmap(matrix, packMap, segmentsFile) : null;
   const provenance = segmentsFile ? computeSegmentProvenance(segmentsFile) : null;
@@ -549,7 +654,7 @@ export default function MaturationPage() {
         {/* Heatmap */}
         <Panel
           title="Sufficiency matrix"
-          subtitle="Packs (rows) × active segments (columns). Cell color = computed status; hover for the 5 scores, gaps, and the segment-evidence flag."
+          subtitle="Packs (rows) × active segments (columns). Cell color = computed status; hover for gaps split by fix type (harvest vs author), the low-novelty and evidence flags, and the maturity stage."
           footer={
             matrix
               ? `computed from ${matrixRel}${segmentsFile ? ` + ${segmentsRel}` : ""} · ${matrix.cells.length} cells · config ${matrix.config_version} · stage ${matrix.maturity_stage}`
@@ -558,7 +663,11 @@ export default function MaturationPage() {
         >
           {heatmap ? (
             <>
-              <HeatmapTable heatmap={heatmap} />
+              <HeatmapTable
+                heatmap={heatmap}
+                stage={matrix?.maturity_stage ?? null}
+                novelty={cellNovelty}
+              />
               <HeatmapLegend unscored={heatmap.unscoredSegments} />
               {matrix?.maturity_stage && matrix.thresholds && (
                 <ThresholdStrip stage={matrix.maturity_stage} thresholds={matrix.thresholds} />
@@ -572,56 +681,110 @@ export default function MaturationPage() {
           )}
         </Panel>
 
-        {/* Research queue */}
-        <Panel
-          title="This week's research queue"
-          subtitle="The biggest gaps in the segments that matter — ranked and budget-bounded. Each task is a targeted, segment-qualified evidence harvest."
-          footer={
-            queue
-              ? `computed from ${queueRel} · generated ${fmtDateTime(queue.generated_at)} · from matrix ${fmtDateTime(queue.matrix_generated_at)}`
-              : queueRel
-          }
-        >
-          {queue ? (
-            <div className="flex flex-col gap-4">
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                <BudgetStat label="queued" value={`${queue.tasks.length} / ${queue.candidate_count}`} hint="tasks / candidates" />
-                <BudgetStat
-                  label="applied N"
-                  value={`${queue.budget.effective_max_tasks}`}
-                  hint={`config ${queue.budget.config_max_tasks} · budget ${queue.budget.budget_max_tasks}`}
-                />
-                <BudgetStat
-                  label="calls left"
-                  value={`${queue.budget.monthly_remaining_calls}`}
-                  hint={`month ${queue.budget.month}`}
-                />
-                <BudgetStat
-                  label="share"
-                  value={`${Math.round(queue.budget.monthly_budget_share * 100)}%`}
-                  hint={`~${queue.budget.estimated_calls_per_task}/task`}
-                />
+        {/* Two queues side by side: harvest (automated) vs authoring (manual) */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {/* Harvest queue — automated, budget-bounded */}
+          <Panel
+            title="Harvest queue — automated"
+            subtitle="Gaps a segment-qualified evidence fetch can still close — ranked and budget-bounded. The loop dispatches these to the connector; no owner work."
+            footer={
+              queue
+                ? `computed from ${queueRel} · generated ${fmtDateTime(queue.generated_at)} · from matrix ${fmtDateTime(queue.matrix_generated_at)}`
+                : queueRel
+            }
+          >
+            {queue ? (
+              <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <BudgetStat label="queued" value={`${queue.tasks.length} / ${queue.candidate_count}`} hint="tasks / candidates" />
+                  <BudgetStat
+                    label="applied N"
+                    value={`${queue.budget.effective_max_tasks}`}
+                    hint={`config ${queue.budget.config_max_tasks} · budget ${queue.budget.budget_max_tasks}`}
+                  />
+                  <BudgetStat
+                    label="calls left"
+                    value={`${queue.budget.monthly_remaining_calls}`}
+                    hint={`month ${queue.budget.month}`}
+                  />
+                  <BudgetStat
+                    label="share"
+                    value={`${Math.round(queue.budget.monthly_budget_share * 100)}%`}
+                    hint={`~${queue.budget.estimated_calls_per_task}/task`}
+                  />
+                </div>
+                {queue.tasks.length === 0 ? (
+                  <EmptyState
+                    message="The harvest queue is empty — no red or amber cell has a scored harvest gap within budget. A gap only a segment-qualified fetch can move appears here; structural gaps route to authoring instead."
+                    command={`npm run gaps → ${queueRel}`}
+                  />
+                ) : (
+                  <ul className="flex flex-col gap-3">
+                    {queue.tasks.map((task, i) => (
+                      <QueueTask key={`${task.mechanism}-${task.segment}-${i}`} task={task} />
+                    ))}
+                  </ul>
+                )}
               </div>
-              {queue.tasks.length === 0 ? (
+            ) : (
+              <EmptyState
+                message="No research queue yet. The gap planner ranks the matrix's harvestable cells into a budget-bounded harvest queue."
+                command={`npm run gaps → ${queueRel}`}
+              />
+            )}
+          </Panel>
+
+          {/* Authoring queue — owner tasks, manual */}
+          <Panel
+            title="Authoring queue — manual"
+            subtitle="Gaps no harvest can close: registry relations, pack composition, dossier dissent, and thin-literature cells handed to owner judgment. Each is an owner edit in git — never a connector call, never budget."
+            footer={
+              authoringQueue
+                ? `computed from ${authoringQueueRel} · generated ${fmtDateTime(authoringQueue.generated_at)} · from matrix ${fmtDateTime(authoringQueue.matrix_generated_at)}`
+                : authoringQueueRel
+            }
+          >
+            {authoringQueue ? (
+              authoringQueue.tasks.length === 0 ? (
                 <EmptyState
-                  message="The queue is empty — no red or amber cell is currently within budget to harvest. A green (saturated) matrix produces no tasks."
-                  command={`npm run gaps → ${queueRel}`}
+                  message="The authoring queue is empty — every scored red/amber cell has a harvest gap the loop can still close. Structural gaps (interaction, context, dissent) and evidence-exhausted cells appear here for the owner to author in git."
+                  command={`npm run gaps → ${authoringQueueRel}`}
                 />
               ) : (
-                <ul className="flex flex-col gap-3">
-                  {queue.tasks.map((task, i) => (
-                    <QueueTask key={`${task.mechanism}-${task.segment}-${i}`} task={task} />
-                  ))}
-                </ul>
-              )}
-            </div>
-          ) : (
-            <EmptyState
-              message="No research queue yet. The gap planner ranks the matrix's red/amber cells into a budget-bounded harvest queue."
-              command={`npm run gaps → ${queueRel}`}
-            />
-          )}
-        </Panel>
+                <div className="flex flex-col gap-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    <BudgetStat
+                      label="cells queued"
+                      value={`${authoringQueue.tasks.length}`}
+                      hint="owner edits, ranked"
+                    />
+                    <BudgetStat
+                      label="thin-lit"
+                      value={`${authoringQueue.tasks.filter((t) => t.alternative_fill === true).length}`}
+                      hint="alternative fill"
+                    />
+                  </div>
+                  <ul className="flex flex-col gap-3">
+                    {authoringQueue.tasks.slice(0, MAX_AUTHORING_ROWS).map((task) => (
+                      <AuthoringQueueRow key={`${task.pack}-${task.segment}`} task={task} />
+                    ))}
+                  </ul>
+                  {authoringQueue.tasks.length > MAX_AUTHORING_ROWS && (
+                    <p className="font-mono text-[11px] text-[#7C93A8]">
+                      + {authoringQueue.tasks.length - MAX_AUTHORING_ROWS} more in{" "}
+                      <span className="text-[#8CA495]">{authoringQueueRel}</span>
+                    </p>
+                  )}
+                </div>
+              )
+            ) : (
+              <EmptyState
+                message="No authoring queue yet. The gap planner routes structural and evidence-exhausted gaps — the ones no harvest can close — into this owner-facing queue."
+                command={`npm run gaps → ${authoringQueueRel}`}
+              />
+            )}
+          </Panel>
+        </div>
 
         {/* Thin literature — evidence exhaustion (D-059) */}
         <Panel
@@ -836,6 +999,66 @@ function BudgetStat({ label, value, hint }: { label: string; value: string; hint
       <p className="mt-0.5 font-mono text-sm text-[#E6EFE8]">{value}</p>
       <p className="font-mono text-[11px] text-[#8CA495]">{hint}</p>
     </div>
+  );
+}
+
+/** Cap on authoring rows shown inline; the rest live in the queue file. */
+const MAX_AUTHORING_ROWS = 10;
+
+/** One authoring-queue task: pack×segment, its structural gaps typed by route. */
+function AuthoringQueueRow({ task }: { task: AuthoringTask }) {
+  return (
+    <li className="rounded-md border border-[#243329] bg-[#1A2620] p-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <div className="flex items-baseline gap-2">
+          <span className="font-mono text-xs text-[#8CA495]">
+            {task.pack} <span className="text-[#7C93A8]">×</span> {task.segment}
+          </span>
+          <span
+            className="font-mono text-[11px]"
+            style={{ color: CELL_STATUS_META[task.status].color }}
+          >
+            {CELL_STATUS_META[task.status].label}
+          </span>
+          {task.alternative_fill && (
+            <span className="font-mono text-[11px]" style={{ color: CELL_EXHAUSTED_META.color }}>
+              {CELL_EXHAUSTED_META.label}
+            </span>
+          )}
+        </div>
+        <span className="font-mono text-[11px] text-[#7C93A8]">
+          importance {task.importance}
+        </span>
+      </div>
+      {task.structural_gaps.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {task.structural_gaps.map((gap) => (
+            <span
+              key={gap.criterion}
+              className="inline-flex items-center gap-1.5 rounded border border-[#243329] bg-[#0E1512] px-1.5 py-0.5 font-mono text-[11px] text-[#8CA495]"
+            >
+              {typedGapLabel(gap)}
+              <span
+                className="text-[10px] uppercase tracking-wider"
+                style={{ color: FIX_TYPE_META[gap.fix_type].color }}
+              >
+                {FIX_TYPE_META[gap.fix_type].label}
+              </span>
+            </span>
+          ))}
+        </div>
+      )}
+      {task.alternative_fill && (task.fill_options ?? []).length > 0 && (
+        <p className="mt-2 font-mono text-[11px] text-[#8CA495]">
+          alternative fillers:{" "}
+          <span className="text-[#E6EFE8]">
+            {(task.fill_options ?? [])
+              .map((option) => ALTERNATIVE_FILL_META[option].label)
+              .join(" · ")}
+          </span>
+        </p>
+      )}
+    </li>
   );
 }
 
