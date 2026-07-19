@@ -271,7 +271,7 @@
     },
     "seedStub": {
       "title": "Seed mechanism stub (reduced shape)",
-      "description": "Lax sub-schema for the 11 candidate seed stubs in /registry/mechanisms/_seed/. Stubs contain ONLY these fields; content is owner-provided and never fleshed out until a dossier moves them through the gate. grade_draft is a free-form draft grade (e.g. A, B+, A-), not the strict A|B|C evidence grade.",
+      "description": "Lax sub-schema for candidate seed stubs in /registry/mechanisms/_seed/. Stubs contain ONLY these fields; content is owner-provided and never fleshed out until a dossier moves them through the gate. grade_draft is a free-form draft grade (e.g. A, B+, A-), not the strict A|B|C evidence grade.",
       "type": "object",
       "properties": {
         "id": {
@@ -283,9 +283,13 @@
         "oneliner": { "type": "string", "minLength": 1 },
         "parent": {
           "type": "string",
-          "pattern": "^S[1-6]$"
+          "pattern": "^S[1-7]$"
         },
         "lifecycle_status": { "const": "candidate" },
+        "cross_cutting": {
+          "type": "boolean",
+          "description": "A stub under a cross-cutting L0 node (D-062) applies to every generated element, not to specific funnel stages. Optional; absent === false."
+        },
         "evidence_terms": {
           "type": "array",
           "items": { "type": "string", "minLength": 1 },

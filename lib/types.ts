@@ -196,6 +196,9 @@ export interface SeedStub {
   oneliner: string;
   parent: TaxonomyNodeId;
   lifecycle_status: "candidate";
+  /** A stub under a cross-cutting L0 node (D-062) applies to every generated
+   *  element, not to specific funnel stages. Optional; absent === false. */
+  cross_cutting?: boolean;
   /** Owner-provided search terms for the evidence connector (D-015),
    *  permitted on a stub so a candidate can be harvested before it is
    *  fleshed out. Mirrors the schema's seedStub sub-schema (D-033). */
