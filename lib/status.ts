@@ -649,6 +649,22 @@ export function needsSegmentHarvest(evidence: SegmentEvidence): boolean {
   return evidence === "general_only";
 }
 
+/**
+ * Presentation metadata for the interaction-authoring state (D-057): a missing
+ * pair on the /maturation authoring view is "not yet authored" (slate — no data
+ * yet, honest), and one with a record on disk is "authored" (emerald). Computed
+ * from file existence, never asserted; the literals live here, not in app/.
+ */
+export type InteractionAuthoringState = "authored" | "not_authored";
+
+export const INTERACTION_AUTHORING_META: Record<
+  InteractionAuthoringState,
+  StatusMeta
+> = {
+  authored: { label: "authored", color: "#34D399" },
+  not_authored: { label: "not yet authored", color: "#7C93A8" },
+};
+
 export const SEGMENT_EVIDENCE_META: Record<
   SegmentEvidence,
   { label: string; color: string; description: string }

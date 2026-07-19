@@ -12,6 +12,12 @@
  * interactions + LAYER 3 context_weights + hard_boundaries + signals + wiring.
  * Knowledge-base tone: facts only, no instructions.
  *
+ * LAYER 2 draws from TWO sources (D-057): owner-authored interaction records
+ * (/interactions/{A}__{B}.json) and registry relations. An authored record is
+ * richer (type incl. suppressing/neutral, boundary, source) and REPLACES the
+ * relation-derived entry for the same pair; relations still fill pairs with no
+ * authored record.
+ *
  * Two self-checks run before writing: every emitted file must parse back as
  * YAML, and no emitted prose (outside comments) may carry instruction-voice
  * tokens (you / your / should / prefer).
@@ -31,6 +37,7 @@ import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import type {
   Dossier,
   EvidenceGrade,
+  InteractionRecord,
   Mechanism,
   PackContextWeight,
   PackDatasheet,
@@ -45,6 +52,7 @@ import type {
 const ROOT = join(__dirname, "..");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
 const DOSSIERS_DIR = join(ROOT, "dossiers");
+const INTERACTIONS_DIR = join(ROOT, "interactions");
 const PACKS_DIR = join(ROOT, "packs");
 const PACK_MAP = join(PACKS_DIR, "pack-map.yaml");
 
@@ -97,6 +105,11 @@ function flow(items: string[]): string {
 
 function weakerGrade(a: EvidenceGrade, b: EvidenceGrade): EvidenceGrade {
   return GRADE_ORDER.indexOf(a) >= GRADE_ORDER.indexOf(b) ? a : b;
+}
+
+/** Order a member-pair id key deterministically (locale-stable, matches the analyzer). */
+function pairKey(a: string, b: string): string {
+  return a.localeCompare(b) <= 0 ? `${a}|${b}` : `${b}|${a}`;
 }
 
 /** First sentence of a summary, so instruction-voice tails are dropped. */
@@ -187,16 +200,41 @@ function interactionFor(
 function buildInteractions(
   members: Mechanism[],
   gradeOf: Map<string, EvidenceGrade>,
+  authored: Map<string, InteractionRecord>,
 ): PackInteraction[] {
   const memberIds = new Set(members.map((m) => m.id));
-  const seen = new Set<string>();
   const interactions: PackInteraction[] = [];
+  const authoredPairKeys = new Set<string>();
 
+  // Authored records first (D-057): richer and owner-curated. One per member
+  // pair, ordered locale-stable, carrying the full type/fact/grade/boundary/
+  // source — and it REPLACES any relation-derived entry for the same pair.
+  const ids = members.map((m) => m.id).sort((a, b) => a.localeCompare(b));
+  for (let i = 0; i < ids.length; i += 1) {
+    for (let j = i + 1; j < ids.length; j += 1) {
+      const key = pairKey(ids[i], ids[j]);
+      const record = authored.get(key);
+      if (!record) continue;
+      authoredPairKeys.add(key);
+      interactions.push({
+        combination: [record.pair[0], record.pair[1]],
+        type: record.type,
+        fact: record.fact,
+        grade: record.grade,
+        boundary: record.boundary,
+        source: record.source,
+      });
+    }
+  }
+
+  // Relation-derived entries for the pairs WITHOUT an authored record.
+  const seen = new Set<string>();
   for (const m of members) {
     for (const relation of m.relations) {
       if (!memberIds.has(relation.target)) continue;
       const mapped = interactionFor(relation.type);
       if (!mapped) continue;
+      if (authoredPairKeys.has(pairKey(m.id, relation.target))) continue;
       const combination = mapped.ordered(m.id, relation.target);
       const key = `${mapped.kind}:${combination.slice().sort().join("|")}`;
       if (seen.has(key)) continue;
@@ -280,7 +318,11 @@ function buildMeasured(members: Mechanism[]): string[] {
 
 // ---------- datasheet ----------
 
-function buildDatasheet(element: PackMapElement, members: Mechanism[]): PackDatasheet {
+function buildDatasheet(
+  element: PackMapElement,
+  members: Mechanism[],
+  authored: Map<string, InteractionRecord>,
+): PackDatasheet {
   const gradeOf = new Map(members.map((m) => [m.id, m.evidence.grade] as const));
   return {
     pack: element.id,
@@ -290,7 +332,7 @@ function buildDatasheet(element: PackMapElement, members: Mechanism[]): PackData
     nature: NATURE,
     source: `projection of registry records ${members.map((m) => m.id).join(" ")}`,
     mechanisms: members.map((m) => buildMechanism(m, loadDossier(m.id))),
-    interactions: buildInteractions(members, gradeOf),
+    interactions: buildInteractions(members, gradeOf, authored),
     context_weights: buildContextWeights(members),
     hard_boundaries: buildHardBoundaries(members),
     signals: { measured: buildMeasured(members), tag: SIGNAL_TAG, learning: SIGNAL_LEARNING },
@@ -316,13 +358,18 @@ function renderMechanism(pm: PackMechanism): string[] {
 }
 
 function renderInteraction(pi: PackInteraction): string[] {
-  return [
+  const lines = [
     `  - combination: ${flow(pi.combination)}`,
     `    type: ${pi.type}`,
     `    fact: ${scalar(pi.fact)}`,
     `    grade: ${pi.grade}`,
-    "",
   ];
+  // Authored records (D-057) carry a boundary and source; relation-derived
+  // entries do not.
+  if (pi.boundary !== undefined) lines.push(`    boundary: ${scalar(pi.boundary)}`);
+  if (pi.source !== undefined) lines.push(`    source: ${scalar(pi.source)}`);
+  lines.push("");
+  return lines;
 }
 
 function renderContextWeight(cw: PackContextWeight): string[] {
@@ -362,7 +409,10 @@ function renderDatasheet(sheet: PackDatasheet): string {
     "",
   );
   if (sheet.interactions.length === 0) {
-    lines.push("  [] # no relations among this element's mechanisms in the registry", "");
+    lines.push(
+      "  [] # no relations or authored interactions among this element's mechanisms",
+      "",
+    );
   } else {
     for (const pi of sheet.interactions) lines.push(...renderInteraction(pi));
   }
@@ -473,6 +523,17 @@ function main(): void {
     mechanisms.set(m.id, m);
   }
 
+  // Owner-authored interaction records (D-057) — the richer LAYER 2 source,
+  // keyed by pairKey. Missing store = empty map = relations-only LAYER 2.
+  const authoredInteractions = new Map<string, InteractionRecord>();
+  if (existsSync(INTERACTIONS_DIR)) {
+    for (const file of listJsonFiles(INTERACTIONS_DIR)) {
+      if (file.endsWith("interaction.schema.json")) continue;
+      const record = JSON.parse(readFileSync(file, "utf-8")) as InteractionRecord;
+      authoredInteractions.set(pairKey(record.pair[0], record.pair[1]), record);
+    }
+  }
+
   const generated = new Set<string>();
   let voiceWarnings = 0;
 
@@ -484,7 +545,7 @@ function main(): void {
       return m;
     });
 
-    const sheet = buildDatasheet(element, members);
+    const sheet = buildDatasheet(element, members, authoredInteractions);
     const text = renderDatasheet(sheet);
 
     // Self-check 1: the emitted file must parse back as YAML.

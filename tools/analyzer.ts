@@ -28,7 +28,8 @@
  * - grade_sufficiency — weighted mean of grade-letter weights (A=1, B=0.6,
  *   C=0.2 by default; the +/- modifier collapses, A- → A)
  * - interaction_coverage — share of the pack's mechanism pairs connected by
- *   a registry relation (same pairing logic as render-packs LAYER 2;
+ *   a registry relation OR an owner-authored interaction record
+ *   (/interactions, D-057; same pairing logic as render-packs LAYER 2;
  *   orthogonality_note documents separation, not an interaction)
  * - context_coverage — share of the segment's typical funnel stages on which
  *   the pack holds ≥1 grade≥B mechanism whose applicability covers the stage
@@ -81,6 +82,7 @@ import type {
 const ROOT = join(__dirname, "..");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
 const DOSSIERS_DIR = join(ROOT, "dossiers");
+const INTERACTIONS_DIR = join(ROOT, "interactions");
 const PACK_MAP = join(ROOT, "packs", "pack-map.yaml");
 const SEGMENTS = join(ROOT, "segments", "segments.yaml");
 const ANALYSIS_DIR = join(ROOT, "analysis");
@@ -371,14 +373,21 @@ function pairKey(a: string, b: string): string {
 }
 
 /**
- * Share of the pack's C(n,2) mechanism pairs connected by a registry
- * relation in either direction — the same pairing logic render-packs projects
- * into LAYER 2. orthogonality_note is excluded: it documents that two
- * mechanisms are separate, not that they interact. Also returns the UNLINKED
- * pairs so a structural interaction_coverage gap names exactly which relations
- * the owner must author (D-056).
+ * Share of the pack's C(n,2) mechanism pairs connected by a registry relation
+ * in either direction OR by an owner-authored interaction record (D-057) — the
+ * same pairing logic render-packs projects into LAYER 2. orthogonality_note is
+ * excluded: it documents that two mechanisms are separate, not that they
+ * interact. An authored record (ANY type, including neutral) counts as covered:
+ * it means the owner examined the pair, which is exactly what coverage measures
+ * — unlike the cheap orthogonality_note relation, which stays excluded. Also
+ * returns the UNLINKED pairs (neither related nor authored) so a structural
+ * interaction_coverage gap names exactly which links the owner must author
+ * (D-056), and those pairs shrink as records land.
  */
-function interactionCoverage(members: Mechanism[]): {
+function interactionCoverage(
+  members: Mechanism[],
+  authoredPairs: Set<string>,
+): {
   coverage: number;
   missing: [string, string][];
 } {
@@ -396,7 +405,9 @@ function interactionCoverage(members: Mechanism[]): {
   const missing: [string, string][] = [];
   for (let i = 0; i < ids.length; i += 1) {
     for (let j = i + 1; j < ids.length; j += 1) {
-      if (!connected.has(pairKey(ids[i], ids[j]))) missing.push([ids[i], ids[j]]);
+      const key = pairKey(ids[i], ids[j]);
+      if (authoredPairs.has(key)) connected.add(key);
+      if (!connected.has(key)) missing.push([ids[i], ids[j]]);
     }
   }
   const totalPairs = (members.length * (members.length - 1)) / 2;
@@ -434,6 +445,7 @@ function scoreCell(
   members: Mechanism[],
   dossiers: Map<string, Dossier>,
   config: AnalyzerConfig,
+  authoredPairs: Set<string>,
 ): SufficiencyCell {
   const segmentStages = config.segment_stages[segmentId];
   const affinity = config.segment_affinity[segmentId] ?? {};
@@ -462,7 +474,7 @@ function scoreCell(
   const dissentShare =
     contexts.filter((m) => m.dissentPresent).length / Math.max(contexts.length, 1);
 
-  const interaction = interactionCoverage(members);
+  const interaction = interactionCoverage(members, authoredPairs);
   const context = contextCoverage(members, segmentStages, config.min_context_grade);
 
   const scores: SufficiencyScores = {
@@ -602,6 +614,23 @@ function main(): void {
     dossiers.set(dossier.mechanism_id, dossier);
   }
 
+  // Owner-authored interaction records (D-057): each covers one mechanism pair
+  // for interaction_coverage, in addition to registry relations. Keyed the same
+  // way (pairKey) so a pair counts once regardless of relation/record overlap.
+  // Malformed files fail loudly here — the validator is the gate, but the
+  // analyzer must never silently score on a broken store.
+  const authoredPairs = new Set<string>();
+  if (existsSync(INTERACTIONS_DIR)) {
+    for (const file of listJsonFiles(INTERACTIONS_DIR)) {
+      if (file.endsWith("interaction.schema.json")) continue;
+      const record = JSON.parse(readFileSync(file, "utf-8")) as { pair?: [string, string] };
+      if (!Array.isArray(record.pair) || record.pair.length !== 2) {
+        throw new Error(`interaction record ${rel(file)} has no valid pair`);
+      }
+      authoredPairs.add(pairKey(record.pair[0], record.pair[1]));
+    }
+  }
+
   const { config, bootstrapSegmentIds } = loadConfig(
     activeSegments.map((s) => s.id),
     new Set(mechanisms.keys()),
@@ -646,7 +675,7 @@ function main(): void {
     for (const segment of activeSegments) {
       const cell = bootstrapSegmentIds.has(segment.id)
         ? bootstrapCell(element.id, segment.id, config)
-        : scoreCell(element.id, segment.id, members, dossiers, config);
+        : scoreCell(element.id, segment.id, members, dossiers, config, authoredPairs);
       cells.push(cell);
       statusCounts[cell.status] += 1;
       if (cell.segment_evidence === "general_only") generalOnly += 1;

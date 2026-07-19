@@ -17,11 +17,14 @@
  * (same pattern as lib/data.ts loaders), never a fake "no gaps" green.
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { CELL_STATUS_ORDER } from "./status";
 import type {
+  AuthoringQueue,
+  InteractionRecord,
+  InteractionType,
   MaturationLog,
   MaturationLogEntry,
   PackMapFile,
@@ -40,10 +43,12 @@ const ROOT = process.cwd();
 export const MATURATION_PATHS = {
   matrix: join(ROOT, "analysis", "sufficiency-matrix.json"),
   queue: join(ROOT, "analysis", "research-queue.json"),
+  authoringQueue: join(ROOT, "analysis", "authoring-queue.json"),
   log: join(ROOT, "analysis", "maturation-log.json"),
   segments: join(ROOT, "segments", "segments.yaml"),
   segmentCandidates: join(ROOT, "segments", "candidates.json"),
   packMap: join(ROOT, "packs", "pack-map.yaml"),
+  interactionsDir: join(ROOT, "interactions"),
 } as const;
 
 /** Relative-to-repo path for the "traces to a file" provenance footers. */
@@ -77,6 +82,40 @@ export function loadSufficiencyMatrix(): SufficiencyMatrix | null {
 
 export function loadResearchQueue(): ResearchQueue | null {
   return readJsonOrNull<ResearchQueue>(MATURATION_PATHS.queue);
+}
+
+export function loadAuthoringQueue(): AuthoringQueue | null {
+  return readJsonOrNull<AuthoringQueue>(MATURATION_PATHS.authoringQueue);
+}
+
+/** Pair key matching the analyzer / render-packs (locale-stable). */
+function pairKeyOf(a: string, b: string): string {
+  return a.localeCompare(b) <= 0 ? `${a}\u0000${b}` : `${b}\u0000${a}`;
+}
+
+/**
+ * Owner-authored interaction records on disk (/interactions, D-057), keyed by
+ * pairKey. A missing store or a malformed file yields no entry — the validator
+ * is the gate, so the cockpit skips a broken file rather than crashing.
+ */
+export function loadAuthoredInteractions(): Map<string, InteractionRecord> {
+  const map = new Map<string, InteractionRecord>();
+  const dir = MATURATION_PATHS.interactionsDir;
+  if (!existsSync(dir)) return map;
+  for (const name of readdirSync(dir)) {
+    if (!name.endsWith(".json") || name === "interaction.schema.json") continue;
+    try {
+      const record = JSON.parse(
+        readFileSync(join(dir, name), "utf-8"),
+      ) as InteractionRecord;
+      if (Array.isArray(record.pair) && record.pair.length === 2) {
+        map.set(pairKeyOf(record.pair[0], record.pair[1]), record);
+      }
+    } catch {
+      // Skip a malformed file; validate.ts fails the build on it separately.
+    }
+  }
+  return map;
 }
 
 export function loadMaturationLog(): MaturationLog | null {
@@ -332,6 +371,103 @@ export function computeSegmentProvenance(
     byProvenance: Array.from(counts.entries())
       .map(([provenance, count]) => ({ provenance, count }))
       .sort((a, b) => b.count - a.count || a.provenance.localeCompare(b.provenance)),
+  };
+}
+
+// ---------- Interaction authoring (D-057) ----------
+
+/** One pack×segment cell whose interaction_coverage gap names a missing pair. */
+export interface InteractionPairCell {
+  pack: string;
+  segment: string;
+  status: SufficiencyStatus;
+  importance: number;
+}
+
+/** One missing interaction pair aggregated across the authoring queue. */
+export interface InteractionAuthoringPair {
+  /** The two mechanism ids, sorted (id.localeCompare). */
+  pair: [string, string];
+  /** The store filename the owner authors, {A}__{B}.json. */
+  filename: string;
+  /** True when a record already exists on disk (transient until re-analyze). */
+  authored: boolean;
+  /** The authored record's type when on disk, for the status chip. */
+  type: InteractionType | null;
+  /** Max task importance across the cells that need this pair (rank key). */
+  importance: number;
+  /** The cells whose interaction_coverage gap names this pair, importance-desc. */
+  cells: InteractionPairCell[];
+}
+
+export interface InteractionAuthoring {
+  pairs: InteractionAuthoringPair[];
+  authoredCount: number;
+  missingCount: number;
+}
+
+/**
+ * Aggregates the authoring queue's interaction_coverage gaps into a ranked list
+ * of missing mechanism pairs (D-057). A pair is deduped across the cells that
+ * need it; importance is the max across those cells; the authored flag/type is
+ * read from the /interactions store on disk. Everything here is READ from files
+ * and computed — never asserted.
+ */
+export function computeInteractionAuthoring(
+  queue: AuthoringQueue,
+  authored: Map<string, InteractionRecord>,
+): InteractionAuthoring {
+  const byPair = new Map<string, InteractionAuthoringPair>();
+
+  for (const task of queue.tasks) {
+    const gap = task.structural_gaps.find(
+      (g) => g.criterion === "interaction_coverage",
+    );
+    for (const rawPair of gap?.missing_interaction_pairs ?? []) {
+      const [a, b] = [...rawPair].sort((x, y) => x.localeCompare(y)) as [
+        string,
+        string,
+      ];
+      const key = pairKeyOf(a, b);
+      const record = authored.get(key) ?? null;
+      const entry = byPair.get(key) ?? {
+        pair: [a, b] as [string, string],
+        filename: `${a}__${b}.json`,
+        authored: record !== null,
+        type: record ? record.type : null,
+        importance: 0,
+        cells: [],
+      };
+      entry.importance = Math.max(entry.importance, task.importance);
+      entry.cells.push({
+        pack: task.pack,
+        segment: task.segment,
+        status: task.status,
+        importance: task.importance,
+      });
+      byPair.set(key, entry);
+    }
+  }
+
+  const pairs = Array.from(byPair.values()).sort(
+    (x, y) =>
+      y.importance - x.importance ||
+      x.pair[0].localeCompare(y.pair[0]) ||
+      x.pair[1].localeCompare(y.pair[1]),
+  );
+  for (const p of pairs) {
+    p.cells.sort(
+      (c, d) =>
+        d.importance - c.importance ||
+        c.pack.localeCompare(d.pack) ||
+        c.segment.localeCompare(d.segment),
+    );
+  }
+
+  return {
+    pairs,
+    authoredCount: pairs.filter((p) => p.authored).length,
+    missingCount: pairs.filter((p) => !p.authored).length,
   };
 }
 

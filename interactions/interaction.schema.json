@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ventora.dev/motivation-engine/interaction.schema.json",
+  "title": "Interaction (authored pairwise record)",
+  "description": "An owner-authored record of how two mechanisms interact when co-present (D-057). The primary structural filler for interaction_coverage. Files live at /interactions/{MECH-A}__{MECH-B}.json with the pair sorted (id.localeCompare). Content is owner-provided, never Cursor-generated (rule 8). The analyzer counts an authored record as a covered pair (in addition to registry relations); render-packs projects it into LAYER 2, replacing the relation-derived entry for the same pair.",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "pair": {
+      "type": "array",
+      "description": "The two mechanism ids, sorted (id.localeCompare); must match the filename {pair[0]}__{pair[1]}.json.",
+      "items": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "type": {
+      "type": "string",
+      "enum": ["sequence-amplifying", "reinforcing", "suppressing", "neutral"]
+    },
+    "fact": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The interaction fact — knowledge-voice, no instructions."
+    },
+    "grade": {
+      "type": "string",
+      "enum": ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-"]
+    },
+    "boundary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "When/where the interaction does not hold — the boundary condition."
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Evidence basis / citation for the interaction."
+    }
+  },
+  "required": ["pair", "type", "fact", "grade", "boundary", "source"],
+  "additionalProperties": false
+}

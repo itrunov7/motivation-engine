@@ -83,6 +83,8 @@ const PATHS = {
   segments: join(ROOT, "segments", "segments.yaml"),
   segmentCandidates: join(ROOT, "segments", "candidates.json"),
   packMap: join(ROOT, "packs", "pack-map.yaml"),
+  interactionSchema: join(ROOT, "interactions", "interaction.schema.json"),
+  interactionsDir: join(ROOT, "interactions"),
 };
 
 /** /corpora dirs that are ops surfaces, not harvested corpora — no manifest. */
@@ -1210,6 +1212,77 @@ function main(): void {
     }
   } else {
     console.log("  · no pack map yet (packs/pack-map.yaml)");
+  }
+
+  // 14. Interaction records (D-057): /interactions/{A}__{B}.json are
+  // owner-authored pairwise interactions — the primary structural filler for
+  // interaction_coverage. Compile the schema file (mechanism/dossier pattern),
+  // validate every record, and cross-check: the pair is sorted and distinct,
+  // both ids resolve to registry records (rosterIds, passes 3–4), the filename
+  // equals {pair[0]}__{pair[1]}.json, and no pair is authored twice.
+  if (existsSync(PATHS.interactionSchema)) {
+    const interactionSchemaDoc = readJson(PATHS.interactionSchema);
+    if (interactionSchemaDoc !== undefined) {
+      let validateInteraction: ValidateFunction | undefined;
+      try {
+        validateInteraction = ajv.compile(interactionSchemaDoc as object);
+        console.log(`  ✓ ${rel(PATHS.interactionSchema)} compiles`);
+      } catch (err) {
+        fail(PATHS.interactionSchema, `schema does not compile — ${(err as Error).message}`);
+      }
+      if (validateInteraction) {
+        const interactionFiles = listJsonFiles(PATHS.interactionsDir).filter(
+          (f) => basename(f) !== "interaction.schema.json",
+        );
+        const seenPairs = new Map<string, string>();
+        for (const file of interactionFiles) {
+          const data = readJson(file);
+          if (data === undefined) continue;
+          let ok = validateAgainst(validateInteraction, file, data);
+          const record = data as { pair?: unknown };
+          const pair = record.pair;
+          if (
+            Array.isArray(pair) &&
+            pair.length === 2 &&
+            typeof pair[0] === "string" &&
+            typeof pair[1] === "string"
+          ) {
+            const [a, b] = pair as [string, string];
+            if (a === b) {
+              fail(file, `pair is a self-pair "${a}" — an interaction connects two DISTINCT mechanisms`);
+              ok = false;
+            } else if (a.localeCompare(b) > 0) {
+              fail(file, `pair [${a}, ${b}] is not sorted — order the ids by localeCompare (expected [${b}, ${a}])`);
+              ok = false;
+            }
+            for (const id of [a, b]) {
+              if (!rosterIds.has(id)) {
+                fail(file, `pair id "${id}" is not in the mechanism roster`);
+                ok = false;
+              }
+            }
+            const expected = `${a}__${b}.json`;
+            if (basename(file) !== expected) {
+              fail(file, `filename does not match pair (expected ${expected})`);
+              ok = false;
+            }
+            const key = a.localeCompare(b) <= 0 ? `${a}\u0000${b}` : `${b}\u0000${a}`;
+            if (seenPairs.has(key)) {
+              fail(file, `duplicate interaction for pair ${a}×${b} (also in ${rel(seenPairs.get(key)!)})`);
+              ok = false;
+            } else {
+              seenPairs.set(key, file);
+            }
+          }
+          if (ok) console.log(`  ✓ ${rel(file)} valid (interaction record)`);
+        }
+        if (interactionFiles.length === 0) {
+          console.log("  · no interaction records yet (honest empty state)");
+        }
+      }
+    }
+  } else {
+    console.log("  · no interaction schema yet (interactions/interaction.schema.json)");
   }
 
   finish();

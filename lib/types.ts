@@ -703,17 +703,31 @@ export interface PackMechanism {
   forbidden: string[];
 }
 
-/** How two co-present mechanisms interact, derived from record relations. */
-export type PackInteractionType = "sequence-amplifying" | "reinforcing" | "noted";
+/**
+ * How two co-present mechanisms interact. sequence-amplifying / reinforcing /
+ * noted are derived from record relations; suppressing / neutral arrive only
+ * from authored interaction records (D-057), which the relation types cannot
+ * express.
+ */
+export type PackInteractionType =
+  | "sequence-amplifying"
+  | "reinforcing"
+  | "suppressing"
+  | "neutral"
+  | "noted";
 
 /** LAYER 2 — one interaction between two of the pack's mechanisms. */
 export interface PackInteraction {
   combination: string[];
   type: PackInteractionType;
-  /** The relation note. */
+  /** The relation note, or the authored interaction fact (D-057). */
   fact: string;
-  /** The weaker of the two members' grades. */
+  /** The weaker of the two members' grades, or the authored grade (D-057). */
   grade: EvidenceGrade;
+  /** Authored records only (D-057) — the interaction's boundary condition. */
+  boundary?: string;
+  /** Authored records only (D-057) — the interaction's evidence basis. */
+  source?: string;
 }
 
 /** LAYER 3 — a context and the mechanisms it makes strong or inactive. */
@@ -754,6 +768,37 @@ export interface PackDatasheet {
   hard_boundaries: Record<string, string>[];
   signals: PackSignals;
   wiring: PackWiring;
+}
+
+// ---------- Interaction records (/interactions, D-057) ----------
+//
+// An interaction is a first-class OWNER-AUTHORED record of how two mechanisms
+// interact when co-present — the primary structural filler for
+// interaction_coverage. Files live at /interactions/{MECH-A}__{MECH-B}.json
+// with the pair sorted (id.localeCompare). Content is owner-provided, never
+// Cursor-generated (rule 8). The analyzer counts an authored record as a
+// covered pair (in addition to registry relations); render-packs projects it
+// into LAYER 2, replacing the relation-derived entry for the same pair.
+
+/** How two co-present mechanisms interact, as authored by the owner (D-057). */
+export type InteractionType =
+  | "sequence-amplifying"
+  | "reinforcing"
+  | "suppressing"
+  | "neutral";
+
+/** /interactions/{A}__{B}.json — one owner-authored pairwise interaction. */
+export interface InteractionRecord {
+  /** The two mechanism ids, sorted (id.localeCompare); matches the filename. */
+  pair: [string, string];
+  type: InteractionType;
+  /** The interaction fact — knowledge-voice, no instructions. */
+  fact: string;
+  grade: EvidenceGrade;
+  /** When/where the interaction does not hold — the boundary condition. */
+  boundary: string;
+  /** Evidence basis / citation for the interaction. */
+  source: string;
 }
 
 // ---------- Sufficiency analyzer (/analysis, D-050) ----------

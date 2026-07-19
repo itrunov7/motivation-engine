@@ -3,6 +3,7 @@ import {
   CELL_NOT_ANALYZED_META,
   CELL_STATUS_META,
   CELL_STATUS_ORDER,
+  INTERACTION_AUTHORING_META,
   SEGMENT_EVIDENCE_META,
   needsSegmentHarvest,
 } from "@/lib/status";
@@ -11,8 +12,11 @@ import {
   SEGMENT_GROUP_LABEL,
   buildHeatmap,
   computeCoverage,
+  computeInteractionAuthoring,
   computeSegmentCandidates,
   computeSegmentProvenance,
+  loadAuthoredInteractions,
+  loadAuthoringQueue,
   loadMaturationLog,
   loadPackMap,
   loadResearchQueue,
@@ -24,6 +28,7 @@ import {
   statusBreakdown,
   type Coverage,
   type Heatmap,
+  type InteractionAuthoringPair,
   type StatusCounts,
 } from "@/lib/maturation";
 import type {
@@ -366,6 +371,7 @@ function HeatmapLegend({ unscored }: { unscored: string[] }) {
 export default function MaturationPage() {
   const matrix = loadSufficiencyMatrix();
   const queue = loadResearchQueue();
+  const authoringQueue = loadAuthoringQueue();
   const log = loadMaturationLog();
   const segmentsFile = loadSegmentsFile();
   const candidatesQueue = loadSegmentCandidates();
@@ -375,9 +381,14 @@ export default function MaturationPage() {
   const heatmap = matrix ? buildHeatmap(matrix, packMap, segmentsFile) : null;
   const provenance = segmentsFile ? computeSegmentProvenance(segmentsFile) : null;
   const candidates = candidatesQueue ? computeSegmentCandidates(candidatesQueue) : null;
+  const interactionAuthoring = authoringQueue
+    ? computeInteractionAuthoring(authoringQueue, loadAuthoredInteractions())
+    : null;
 
   const matrixRel = repoRelative(MATURATION_PATHS.matrix);
   const queueRel = repoRelative(MATURATION_PATHS.queue);
+  const authoringQueueRel = repoRelative(MATURATION_PATHS.authoringQueue);
+  const interactionsRel = repoRelative(MATURATION_PATHS.interactionsDir);
   const logRel = repoRelative(MATURATION_PATHS.log);
   const segmentsRel = repoRelative(MATURATION_PATHS.segments);
   const candidatesRel = repoRelative(MATURATION_PATHS.segmentCandidates);
@@ -511,6 +522,55 @@ export default function MaturationPage() {
             <EmptyState
               message="No research queue yet. The gap planner ranks the matrix's red/amber cells into a budget-bounded harvest queue."
               command={`npm run gaps → ${queueRel}`}
+            />
+          )}
+        </Panel>
+
+        {/* Interaction authoring */}
+        <Panel
+          title="Interaction authoring"
+          subtitle="The biggest structural gap: mechanism pairs co-present in a pack but not yet connected. Each is authored by the owner as an interaction record in git — content owner-provided, never generated."
+          footer={
+            authoringQueue
+              ? `computed from ${authoringQueueRel} + ${interactionsRel}/ · generated ${fmtDateTime(authoringQueue.generated_at)}`
+              : `${authoringQueueRel} + ${interactionsRel}/`
+          }
+        >
+          {interactionAuthoring ? (
+            interactionAuthoring.pairs.length === 0 ? (
+              <EmptyState
+                message="No missing interaction pairs — every scored pack's member mechanisms are already connected by a relation or an authored interaction. New gaps appear here as packs grow or segments are added."
+                command={`npm run gaps → ${authoringQueueRel}`}
+              />
+            ) : (
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-wrap gap-4">
+                  <BudgetStat
+                    label="missing pairs"
+                    value={`${interactionAuthoring.missingCount}`}
+                    hint="not yet authored"
+                  />
+                  <BudgetStat
+                    label="authored"
+                    value={`${interactionAuthoring.authoredCount}`}
+                    hint={`records in ${interactionsRel}/`}
+                  />
+                </div>
+                <ul className="flex flex-col gap-3">
+                  {interactionAuthoring.pairs.map((pair) => (
+                    <InteractionPairRow
+                      key={pair.filename}
+                      pair={pair}
+                      interactionsRel={interactionsRel}
+                    />
+                  ))}
+                </ul>
+              </div>
+            )
+          ) : (
+            <EmptyState
+              message="No authoring queue yet. The gap planner routes structural gaps — the interaction pairs no harvest can close — into an owner-facing authoring queue."
+              command={`npm run gaps → ${authoringQueueRel}`}
             />
           )}
         </Panel>
@@ -680,6 +740,54 @@ function QueueTask({ task }: { task: ResearchTask }) {
             className="rounded border border-[#243329] bg-[#0E1512] px-1.5 py-0.5 font-mono text-[11px] text-[#8CA495]"
           >
             {term}
+          </span>
+        ))}
+      </div>
+    </li>
+  );
+}
+
+function InteractionPairRow({
+  pair,
+  interactionsRel,
+}: {
+  pair: InteractionAuthoringPair;
+  interactionsRel: string;
+}) {
+  const meta = INTERACTION_AUTHORING_META[pair.authored ? "authored" : "not_authored"];
+  return (
+    <li className="rounded-md border border-[#243329] bg-[#1A2620] p-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <div className="flex items-baseline gap-2">
+          <span className="font-mono text-xs text-[#34D399]">{pair.pair[0]}</span>
+          <span className="text-[#7C93A8]">×</span>
+          <span className="font-mono text-xs text-[#34D399]">{pair.pair[1]}</span>
+          <span className="font-mono text-[11px]" style={{ color: meta.color }}>
+            {meta.label}
+            {pair.authored && pair.type ? ` · ${pair.type}` : ""}
+          </span>
+        </div>
+        <span className="font-mono text-[11px] text-[#7C93A8]">
+          importance {pair.importance}
+        </span>
+      </div>
+      <p className="mt-2 font-mono text-[11px] text-[#8CA495]">
+        author{" "}
+        <span className="text-[#E6EFE8]">
+          {interactionsRel}/{pair.filename}
+        </span>
+      </p>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {pair.cells.map((cell) => (
+          <span
+            key={`${cell.pack}-${cell.segment}`}
+            className="inline-flex items-center gap-1.5 rounded border border-[#243329] bg-[#0E1512] px-1.5 py-0.5 font-mono text-[11px] text-[#8CA495]"
+          >
+            <span
+              className="h-1.5 w-1.5 rounded-full"
+              style={{ backgroundColor: CELL_STATUS_META[cell.status].color }}
+            />
+            {cell.pack} <span className="text-[#7C93A8]">×</span> {cell.segment}
           </span>
         ))}
       </div>
