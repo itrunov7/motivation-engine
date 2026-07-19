@@ -77,6 +77,19 @@ segment_affinity:
 # here is an explicit owner judgment, never derived from prose.
 replication_flags: []
 
+# Evidence exhaustion (D-059). Some segment×mechanism gaps have thin real
+# literature — no amount of harvesting closes them. When EVERY one of a pack's
+# mechanisms has been harvested for this many CONSECUTIVE weeks (each a distinct
+# maturation run) and kept coming back low-novelty (D-058), the analyzer marks
+# the cell evidence_exhausted: true with its best-achievable scores, the gap
+# planner drops it from the harvest queue and routes it to owner authoring, and
+# the cockpit shows "thin literature — best available" instead of red-forever.
+# Read from analysis/harvest-history.json (the per-target harvest ledger). A
+# novel harvest resets the streak, so this is reversible. Raising K makes the
+# loop try longer before giving up; a low K gives up sooner.
+exhaustion:
+  low_novelty_attempts: 3
+
 # ---------------------------------------------------------------------------
 # gap_planner — the ONE hand-authored input to the research queue (D-051).
 #

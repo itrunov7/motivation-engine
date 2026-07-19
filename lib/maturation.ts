@@ -20,9 +20,10 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
-import { CELL_STATUS_ORDER } from "./status";
+import { COVERAGE_BAND_ORDER, type CoverageBand } from "./status";
 import type {
   AuthoringQueue,
+  AuthoringTask,
   InteractionRecord,
   InteractionType,
   MaturationLog,
@@ -253,6 +254,12 @@ export interface StatusCounts {
   red: number;
   amber: number;
   green: number;
+  /**
+   * Cells counted as evidence-exhausted (D-059) instead of red/amber — thin
+   * literature the loop stopped harvesting. Kept apart from red so the cockpit
+   * never shows a proven-thin gap as an actionable red-forever cell.
+   */
+  exhausted: number;
   total: number;
   /** Percentage of scored cells that are green (0–100), 0 when total is 0. */
   pctGreen: number;
@@ -271,13 +278,18 @@ export interface Coverage {
 }
 
 function emptyCounts(): StatusCounts {
-  return { red: 0, amber: 0, green: 0, total: 0, pctGreen: 0 };
+  return { red: 0, amber: 0, green: 0, exhausted: 0, total: 0, pctGreen: 0 };
 }
 
 function tally(cells: SufficiencyCell[]): StatusCounts {
   const counts = emptyCounts();
   for (const cell of cells) {
-    counts[cell.status] += 1;
+    // An evidence-exhausted cell (D-059) is counted in its own band, NOT in
+    // red/amber — the literature is thin, not the work undone. Its status is
+    // still genuinely red/amber underneath, but the cockpit shows it as
+    // "thin literature — best available" rather than red-forever.
+    if (cell.evidence_exhausted) counts.exhausted += 1;
+    else counts[cell.status] += 1;
     counts.total += 1;
   }
   counts.pctGreen =
@@ -314,11 +326,11 @@ export function computeCoverage(matrix: SufficiencyMatrix): Coverage {
   };
 }
 
-/** Status counts in worst→best order for a compact legend/bar. */
-export function statusBreakdown(
+/** Coverage bands in worst→best order for a compact legend/bar (D-059). */
+export function coverageBreakdown(
   counts: StatusCounts,
-): { status: SufficiencyStatus; count: number }[] {
-  return CELL_STATUS_ORDER.map((status) => ({ status, count: counts[status] }));
+): { band: CoverageBand; count: number }[] {
+  return COVERAGE_BAND_ORDER.map((band) => ({ band, count: counts[band] }));
 }
 
 // ---------- "Segments are evolving" provenance note ----------
@@ -469,6 +481,19 @@ export function computeInteractionAuthoring(
     authoredCount: pairs.filter((p) => p.authored).length,
     missingCount: pairs.filter((p) => !p.authored).length,
   };
+}
+
+// ---------- Thin literature (evidence exhaustion, D-059) ----------
+
+/**
+ * The authoring-queue tasks routed here by evidence exhaustion (D-059) — cells
+ * whose scored harvest gap can no longer be closed by harvesting because the
+ * literature is thin. Filtered from the authoring queue (which already carries
+ * each cell's best-achievable scores, harvest effort, and alternative fillers)
+ * and kept in the queue's importance order. Everything is READ from the file.
+ */
+export function computeThinLiterature(queue: AuthoringQueue): AuthoringTask[] {
+  return queue.tasks.filter((task) => task.alternative_fill === true);
 }
 
 // ---------- Maturation log ----------

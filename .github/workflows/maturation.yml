@@ -157,6 +157,21 @@ jobs:
             } >> "$GITHUB_STEP_SUMMARY"
           fi
 
+      # ---------- Record the per-target harvest ledger (D-059) ----------
+      # BEFORE re-analysis: append this week's harvested (mechanism × segment)
+      # targets and their low-novelty flags to analysis/harvest-history.json, so
+      # a cell that crosses the K-week low-novelty bar THIS week is marked
+      # evidence_exhausted by the very next re-analyze — the loop stops harvesting
+      # thin literature in the same run rather than a week later. Records only
+      # tasks the plan RAN; a deferred/skipped task adds no attempt.
+      - name: Record the harvest history ledger
+        if: steps.harvest.outputs.failed != 'true'
+        run: |
+          set -euo pipefail
+          npx tsx tools/harvest-history.ts \
+            --queue-plan queue-plan.json \
+            --week "$(date -u +%Y-%m-%d)"
+
       # ---------- (4) re-analyze ONLY the affected cells ----------
       # Affected = the packs whose gap cells the harvested tasks addressed;
       # every other pack's cells are preserved from the baseline matrix.
@@ -181,6 +196,9 @@ jobs:
             > cell-diff.json
           echo "filled=$(jq '[.[] | select(.to == "green")] | length' cell-diff.json)" >> "$GITHUB_OUTPUT"
           echo "flipped_packs=$(jq -r '[.[] | select(.to == "green") | .pack] | unique | join(",")' cell-diff.json)" >> "$GITHUB_OUTPUT"
+          # Evidence-exhausted cells in the re-scored matrix (D-059) — thin
+          # literature the loop stopped harvesting; recorded in the weekly log.
+          echo "exhausted=$(jq '[.cells[] | select(.evidence_exhausted == true)] | length' analysis/sufficiency-matrix.json)" >> "$GITHUB_OUTPUT"
 
       # ---------- (5) regenerate ONLY the packs whose cells went green ----------
       - name: Regenerate packs for filled cells
@@ -226,6 +244,11 @@ jobs:
               echo ""
               echo "$deferred task(s) deferred to next week (budget) — reasons in the plan above."
             fi
+            exhausted="${{ steps.reanalyze.outputs.exhausted || '0' }}"
+            if [ "$exhausted" -gt 0 ]; then
+              echo ""
+              echo "$exhausted cell(s) marked evidence-exhausted (thin literature, D-059) — dropped from the harvest queue and routed to authoring for alternative fillers. The loop never harvests indefinitely against thin literature."
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
 
       # ---------- Persist the week's turn for the /maturation cockpit ----------
@@ -245,6 +268,7 @@ jobs:
             --queue-plan queue-plan.json \
             --authoring-queue analysis/authoring-queue.json \
             --low-novelty "${{ steps.novelty.outputs.low_novelty || '0' }}" \
+            --evidence-exhausted "${{ steps.reanalyze.outputs.exhausted || '0' }}" \
             --week "$(date -u +%Y-%m-%d)"
 
       # ---------- (6) commit the week's turn ----------

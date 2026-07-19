@@ -67,6 +67,7 @@ import type {
   FunnelStage,
   GapFixType,
   GradeLetter,
+  HarvestHistory,
   Mechanism,
   PackMapFile,
   SegmentsFile,
@@ -88,6 +89,7 @@ const SEGMENTS = join(ROOT, "segments", "segments.yaml");
 const ANALYSIS_DIR = join(ROOT, "analysis");
 const CONFIG = join(ANALYSIS_DIR, "analyzer.config.yaml");
 const MATRIX = join(ANALYSIS_DIR, "sufficiency-matrix.json");
+const HARVEST_HISTORY = join(ANALYSIS_DIR, "harvest-history.json");
 
 const MATRIX_VERSION = "0.2.0";
 
@@ -262,6 +264,15 @@ function loadConfig(activeSegmentIds: string[], rosterIds: Set<string>): LoadedC
   for (const mechanismId of config.replication_flags ?? []) {
     if (!rosterIds.has(mechanismId)) {
       problems.push(`replication_flags carries unknown mechanism "${mechanismId}"`);
+    }
+  }
+
+  // Evidence exhaustion (D-059): the block is optional (absent → exhaustion
+  // never fires), but a present one must carry a sane K.
+  if (config.exhaustion !== undefined) {
+    const k = config.exhaustion.low_novelty_attempts;
+    if (!Number.isInteger(k) || k < 1) {
+      problems.push("exhaustion.low_novelty_attempts must be an integer ≥ 1");
     }
   }
 
@@ -523,6 +534,80 @@ function scoreCell(
   };
 }
 
+// ---------- evidence exhaustion (D-059) ----------
+
+/**
+ * The per-target harvest ledger (analysis/harvest-history.json, D-059), the
+ * persistent memory of how many consecutive weeks each (mechanism × segment)
+ * harvest came back low-novelty. Absent (or malformed) → null, so exhaustion
+ * simply never fires: a fresh repo harvests normally until the ledger fills.
+ */
+function loadHarvestHistory(): HarvestHistory | null {
+  if (!existsSync(HARVEST_HISTORY)) return null;
+  try {
+    return JSON.parse(readFileSync(HARVEST_HISTORY, "utf-8")) as HarvestHistory;
+  } catch {
+    console.log(
+      `  · ${rel(HARVEST_HISTORY)} is unreadable — skipping exhaustion detection this run.`,
+    );
+    return null;
+  }
+}
+
+/**
+ * Mark a cell evidence_exhausted (D-059) when the loop should stop harvesting
+ * it: it still has a scored harvest gap below threshold AND every one of its
+ * pack's mechanisms has been low-novelty for ≥ K consecutive weeks in the
+ * ledger. The cell keeps its computed scores/status — exhaustion is an honest
+ * "best available", not a status flip — and records the best-achievable harvest
+ * scores plus the effort spent proving the literature thin. Reversible: a novel
+ * harvest resets a mechanism's streak, so the next analyze drops the flag.
+ * Returns the cell unchanged when the ledger/config say it is still harvestable.
+ */
+function applyExhaustion(
+  cell: SufficiencyCell,
+  memberIds: string[],
+  history: HarvestHistory | null,
+  k: number | undefined,
+): SufficiencyCell {
+  if (!history || !k || cell.status === "green" || memberIds.length === 0) return cell;
+  // Mirror the gap planner: only a SCORED harvest gap makes a cell harvestable,
+  // so only such a cell can be "exhausted" of harvesting (the segment_evidence
+  // pseudo-gap alone never queues a harvest, D-056).
+  const hasScoredHarvestGap = cell.gaps.some((c) => FIX_TYPE[c] === "harvest");
+  if (!hasScoredHarvestGap) return cell;
+
+  let lowNoveltyAttempts = 0;
+  let minStreak = Number.POSITIVE_INFINITY;
+  let since: string | null = null;
+  for (const memberId of memberIds) {
+    const target = history.entries[`${memberId}|${cell.segment}`];
+    // Not exhausted unless EVERY member has crossed the K-week low-novelty bar.
+    if (!target || target.low_novelty_streak < k || !target.streak_since) return cell;
+    lowNoveltyAttempts += target.attempts.filter((a) => a.low_novelty).length;
+    minStreak = Math.min(minStreak, target.low_novelty_streak);
+    // The cell entered continuous low novelty only once its LAST member did.
+    if (since === null || target.streak_since > since) since = target.streak_since;
+  }
+  if (since === null) return cell;
+
+  const bestScores: Partial<SufficiencyScores> = {};
+  for (const criterion of CRITERIA) {
+    if (FIX_TYPE[criterion] === "harvest") bestScores[criterion] = cell.scores[criterion];
+  }
+
+  return {
+    ...cell,
+    evidence_exhausted: true,
+    exhaustion: {
+      attempts: lowNoveltyAttempts,
+      weeks: minStreak,
+      since,
+      best_scores: bestScores,
+    },
+  };
+}
+
 // ---------- main ----------
 
 /** `packs=a,b` CLI filter (D-052) — undefined means a full re-score. */
@@ -644,9 +729,15 @@ function main(): void {
     }
   }
 
+  // Evidence exhaustion (D-059): the per-target harvest ledger + the K knob.
+  // Absent ledger/config → exhaustion never fires (fresh-repo behavior).
+  const harvestHistory = loadHarvestHistory();
+  const exhaustionK = config.exhaustion?.low_novelty_attempts;
+
   const cells: SufficiencyCell[] = [];
   const statusCounts: Record<SufficiencyStatus, number> = { red: 0, amber: 0, green: 0 };
   let generalOnly = 0;
+  let exhausted = 0;
   let rescored = 0;
 
   for (const element of packMap.elements) {
@@ -664,6 +755,7 @@ function main(): void {
         cells.push(existing);
         statusCounts[existing.status] += 1;
         if (existing.segment_evidence === "general_only") generalOnly += 1;
+        if (existing.evidence_exhausted) exhausted += 1;
       }
       continue;
     }
@@ -673,12 +765,14 @@ function main(): void {
       return m;
     });
     for (const segment of activeSegments) {
-      const cell = bootstrapSegmentIds.has(segment.id)
+      const scored = bootstrapSegmentIds.has(segment.id)
         ? bootstrapCell(element.id, segment.id, config)
         : scoreCell(element.id, segment.id, members, dossiers, config, authoredPairs);
+      const cell = applyExhaustion(scored, element.mechanisms, harvestHistory, exhaustionK);
       cells.push(cell);
       statusCounts[cell.status] += 1;
       if (cell.segment_evidence === "general_only") generalOnly += 1;
+      if (cell.evidence_exhausted) exhausted += 1;
     }
     rescored += 1;
     console.log(`  ✓ ${element.id} scored across ${activeSegments.length} segments`);
@@ -704,6 +798,12 @@ function main(): void {
     `     status: ${statusCounts.green} green / ${statusCounts.amber} amber / ${statusCounts.red} red; ` +
       `${generalOnly} cell${generalOnly === 1 ? "" : "s"} on general evidence only.`,
   );
+  if (exhaustionK) {
+    console.log(
+      `     ${exhausted} cell${exhausted === 1 ? "" : "s"} evidence-exhausted (thin literature, ` +
+        `≥${exhaustionK} low-novelty weeks per mechanism, D-059) — surfaced honestly, dropped from the harvest queue.`,
+    );
+  }
 }
 
 main();

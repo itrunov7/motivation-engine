@@ -429,8 +429,33 @@ function main(): void {
   // A cell whose scored gaps are all structural never enters the harvest path —
   // no evidence fetch can flip it — so it neither consumes budget nor needs a
   // harvest qualifier. Qualifiers are required only for the segments we harvest.
-  const harvestableCells = gapCells.filter(isHarvestable);
+  const harvestableByType = gapCells.filter(isHarvestable);
+
+  // EVIDENCE EXHAUSTION (D-059): a harvestable cell the analyzer has marked
+  // evidence_exhausted is dropped from the harvest path — every one of its pack
+  // mechanisms has come back low-novelty for ≥K weeks, so more harvesting is
+  // pure budget burn against thin literature. It is routed to owner authoring
+  // instead (alternative fillers below). Never silently dropped: the removed
+  // (mechanism × segment) candidates are counted in evidence_exhausted_skipped,
+  // and a future novel harvest clears the streak so the cell re-enters.
+  const exhaustedCells = harvestableByType.filter((cell) => cell.evidence_exhausted === true);
+  const harvestableCells = harvestableByType.filter((cell) => cell.evidence_exhausted !== true);
   const neededSegments = new Set(harvestableCells.map((cell) => cell.segment));
+
+  // Candidates removed SOLELY by exhaustion — a (mechanism × segment) still
+  // reachable through a non-exhausted harvestable cell is not counted.
+  const reachableKeys = new Set<string>();
+  for (const cell of harvestableCells) {
+    for (const m of packMechanisms.get(cell.pack) ?? []) reachableKeys.add(`${m}|${cell.segment}`);
+  }
+  const exhaustedKeys = new Set<string>();
+  for (const cell of exhaustedCells) {
+    for (const m of packMechanisms.get(cell.pack) ?? []) {
+      const key = `${m}|${cell.segment}`;
+      if (!reachableKeys.has(key)) exhaustedKeys.add(key);
+    }
+  }
+  const evidenceExhaustedSkipped = exhaustedKeys.size;
 
   const { file, gp, qualifiers } = loadGapPlannerConfig(neededSegments, activeSegmentIds);
   const flagged = new Set(file.replication_flags ?? []);
@@ -530,6 +555,7 @@ function main(): void {
     },
     candidate_count: ranked.length,
     low_novelty_skipped: lowNoveltySkipped,
+    evidence_exhausted_skipped: evidenceExhaustedSkipped,
     tasks,
   };
 
@@ -537,19 +563,37 @@ function main(): void {
   // authoring task (per pack×segment, ranked by segment_weight × structural
   // gap-size). No budget, no connector: these close only by an owner edit in
   // git. The queue is always written, even empty, as an honest state.
+  // An evidence-exhausted cell (D-059) is ALSO owner-facing work even when it
+  // has no structural gap: its harvest gaps can no longer be closed by
+  // harvesting, so the only remaining fillers are owner judgment, a cross-domain
+  // analogy, or accepting it at lower confidence. Such a cell gets an authoring
+  // task carrying alternative_fill + fill_options + the exhaustion summary, in
+  // ADDITION to any structural gaps it also has.
   const authoringTasks: AuthoringTask[] = gapCells
     .map((cell): AuthoringTask | null => {
       const gaps = structuralGaps(cell);
-      if (gaps.length === 0) return null;
+      const isExhausted = cell.evidence_exhausted === true;
+      if (gaps.length === 0 && !isExhausted) return null;
       const weight = gp.segment_weights?.[cell.segment] ?? 1;
-      return {
+      // Rank on the structural gap size; an exhausted cell with no structural
+      // gap ranks on its (now unharvestable) harvest gap size instead, so it
+      // still surfaces meaningfully rather than at importance 0.
+      const importanceBase =
+        gaps.length === 0 ? gapSize(cell, file, harvestCriteria(cell)) : structuralGapSize(cell);
+      const task: AuthoringTask = {
         pack: cell.pack,
         segment: cell.segment,
         status: cell.status,
-        importance: round(weight * structuralGapSize(cell)),
+        importance: round(weight * importanceBase),
         segment_evidence: cell.segment_evidence,
         structural_gaps: gaps,
       };
+      if (isExhausted) {
+        task.alternative_fill = true;
+        task.fill_options = ["owner_judgment", "cross_domain_analogy", "accept_lower_confidence"];
+        if (cell.exhaustion) task.exhaustion = cell.exhaustion;
+      }
+      return task;
     })
     .filter((task): task is AuthoringTask => task !== null)
     .sort(compareAuthoring);
@@ -574,7 +618,8 @@ function main(): void {
       `queued ${tasks.length} harvest task(s) of N=${effectiveMaxTasks} ` +
       `(config ${gp.budget.max_tasks} / budget ${budgetMaxTasks}; ` +
       `${remainingCalls} monthly calls remaining` +
-      `${lowNoveltySkipped > 0 ? `; ${lowNoveltySkipped} low-novelty repeat(s) skipped, D-058` : ""}) → ${rel(QUEUE)}.`,
+      `${lowNoveltySkipped > 0 ? `; ${lowNoveltySkipped} low-novelty repeat(s) skipped, D-058` : ""}` +
+      `${evidenceExhaustedSkipped > 0 ? `; ${evidenceExhaustedSkipped} evidence-exhausted candidate(s) skipped, D-059` : ""}) → ${rel(QUEUE)}.`,
   );
   console.log(
     `     ${authoringTasks.length} cell(s) with structural gaps → ${rel(AUTHORING_QUEUE)} ` +
@@ -598,6 +643,15 @@ function main(): void {
     "\n     loop routes by fix_type; structural gaps go to an authoring queue, not the API. " +
       "Harvest gaps prioritized by segment-weight × gap-size, budget-bounded; saturated cells excluded.",
   );
+  // Decision log (D-059): evidence exhaustion is detected and surfaced honestly;
+  // the loop never harvests indefinitely against thin literature.
+  if (exhaustedCells.length > 0) {
+    console.log(
+      `     ${exhaustedCells.length} evidence-exhausted cell(s) routed to authoring for alternative fillers ` +
+        "(owner judgment / cross-domain analogy / accept lower confidence). " +
+        "Evidence exhaustion is detected and surfaced honestly; the loop never harvests indefinitely against thin literature.",
+    );
+  }
 }
 
 main();

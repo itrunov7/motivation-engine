@@ -138,6 +138,11 @@ function main(): void {
   const lowNoveltyRaw = Number.parseInt(args["low-novelty"] ?? "0", 10);
   const lowNoveltyHarvests = Number.isFinite(lowNoveltyRaw) ? Math.max(0, lowNoveltyRaw) : 0;
 
+  // Cells the analyzer marked evidence_exhausted in the re-scored matrix this
+  // run (D-059) — thin-literature gaps the loop stopped harvesting.
+  const exhaustedRaw = Number.parseInt(args["evidence-exhausted"] ?? "0", 10);
+  const evidenceExhausted = Number.isFinite(exhaustedRaw) ? Math.max(0, exhaustedRaw) : 0;
+
   const entry: MaturationLogEntry = {
     week,
     generated_at: new Date().toISOString(),
@@ -147,6 +152,7 @@ function main(): void {
     deferred,
     structural_queued: structuralQueued,
     low_novelty_harvests: lowNoveltyHarvests,
+    evidence_exhausted: evidenceExhausted,
   };
 
   const existing = readJsonOrNull<MaturationLog>(LOG_FILE);
@@ -170,7 +176,8 @@ function main(): void {
       `${packsRegenerated.length} pack(s) regenerated, ` +
       `${spend.calls} calls / $${spend.usd}, ${deferred} deferred, ` +
       `${structuralQueued} structural queued, ` +
-      `${lowNoveltyHarvests} low-novelty harvest(s) ` +
+      `${lowNoveltyHarvests} low-novelty harvest(s), ` +
+      `${evidenceExhausted} evidence-exhausted cell(s) ` +
       `(${entries.length} week(s) in the log).`,
   );
 }

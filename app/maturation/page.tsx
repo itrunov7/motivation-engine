@@ -1,8 +1,12 @@
 import Link from "next/link";
 import {
+  ALTERNATIVE_FILL_META,
+  CELL_EXHAUSTED_META,
   CELL_NOT_ANALYZED_META,
   CELL_STATUS_META,
   CELL_STATUS_ORDER,
+  COVERAGE_BAND_META,
+  COVERAGE_BAND_ORDER,
   INTERACTION_AUTHORING_META,
   SEGMENT_EVIDENCE_META,
   needsSegmentHarvest,
@@ -15,6 +19,8 @@ import {
   computeInteractionAuthoring,
   computeSegmentCandidates,
   computeSegmentProvenance,
+  computeThinLiterature,
+  coverageBreakdown,
   loadAuthoredInteractions,
   loadAuthoringQueue,
   loadMaturationLog,
@@ -25,13 +31,13 @@ import {
   loadSufficiencyMatrix,
   maturationEntriesNewestFirst,
   repoRelative,
-  statusBreakdown,
   type Coverage,
   type Heatmap,
   type InteractionAuthoringPair,
   type StatusCounts,
 } from "@/lib/maturation";
 import type {
+  AuthoringTask,
   MaturationLogEntry,
   ResearchTask,
   SufficiencyCell,
@@ -106,14 +112,14 @@ function EmptyState({ message, command }: { message: string; command: string }) 
 function CoverageBar({ counts }: { counts: StatusCounts }) {
   return (
     <div className="flex h-2 w-full overflow-hidden rounded-full bg-[#0E1512]">
-      {CELL_STATUS_ORDER.map((status) => {
-        const share = counts.total === 0 ? 0 : (counts[status] / counts.total) * 100;
+      {COVERAGE_BAND_ORDER.map((band) => {
+        const share = counts.total === 0 ? 0 : (counts[band] / counts.total) * 100;
         if (share === 0) return null;
         return (
           <div
-            key={status}
-            style={{ width: `${share}%`, backgroundColor: CELL_STATUS_META[status].color }}
-            title={`${CELL_STATUS_META[status].label}: ${counts[status]}`}
+            key={band}
+            style={{ width: `${share}%`, backgroundColor: COVERAGE_BAND_META[band].color }}
+            title={`${COVERAGE_BAND_META[band].label}: ${counts[band]}`}
           />
         );
       })}
@@ -154,13 +160,13 @@ function CoverageSummary({ coverage }: { coverage: Coverage }) {
           <CoverageBar counts={overall} />
         </div>
         <div className="mt-2 flex flex-wrap gap-4">
-          {statusBreakdown(overall).map(({ status, count }) => (
-            <span key={status} className="inline-flex items-center gap-1.5 font-mono text-xs text-[#8CA495]">
+          {coverageBreakdown(overall).map(({ band, count }) => (
+            <span key={band} className="inline-flex items-center gap-1.5 font-mono text-xs text-[#8CA495]">
               <span
                 className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: CELL_STATUS_META[status].color }}
+                style={{ backgroundColor: COVERAGE_BAND_META[band].color }}
               />
-              {CELL_STATUS_META[status].label} {count}
+              {COVERAGE_BAND_META[band].label} {count}
             </span>
           ))}
           <span className="font-mono text-xs text-[#7C93A8]">
@@ -213,9 +219,15 @@ function CellTooltip({
       </p>
       {cell ? (
         <>
-          <p className="mt-1 font-mono text-[11px]" style={{ color: CELL_STATUS_META[cell.status].color }}>
-            {CELL_STATUS_META[cell.status].label}
-          </p>
+          {cell.evidence_exhausted ? (
+            <p className="mt-1 font-mono text-[11px]" style={{ color: CELL_EXHAUSTED_META.color }}>
+              {CELL_EXHAUSTED_META.label}
+            </p>
+          ) : (
+            <p className="mt-1 font-mono text-[11px]" style={{ color: CELL_STATUS_META[cell.status].color }}>
+              {CELL_STATUS_META[cell.status].label}
+            </p>
+          )}
           <dl className="mt-2 flex flex-col gap-1">
             {CRITERIA.map(({ key, label }) => {
               const isGap = cell.gaps.includes(key);
@@ -235,6 +247,16 @@ function CellTooltip({
               );
             })}
           </dl>
+          {cell.evidence_exhausted && cell.exhaustion && (
+            <p
+              className="mt-2 border-t border-[#243329] pt-2 font-mono text-[11px]"
+              style={{ color: CELL_EXHAUSTED_META.color }}
+            >
+              thin literature — {cell.exhaustion.attempts} low-novelty harvest
+              {cell.exhaustion.attempts === 1 ? "" : "s"} over {cell.exhaustion.weeks} wk; best
+              available since {cell.exhaustion.since}
+            </p>
+          )}
           <p
             className="mt-2 border-t border-[#243329] pt-2 font-mono text-[11px]"
             style={{ color: SEGMENT_EVIDENCE_META[cell.segment_evidence].color }}
@@ -261,7 +283,11 @@ function HeatCell({
   segment: string;
   cell: SufficiencyCell | null;
 }) {
-  const color = cell ? CELL_STATUS_META[cell.status].color : CELL_NOT_ANALYZED_META.color;
+  const color = !cell
+    ? CELL_NOT_ANALYZED_META.color
+    : cell.evidence_exhausted
+      ? CELL_EXHAUSTED_META.color
+      : CELL_STATUS_META[cell.status].color;
   const generalOnly = cell ? needsSegmentHarvest(cell.segment_evidence) : false;
   return (
     <div className="group relative flex h-6 w-6 items-center justify-center">
@@ -355,6 +381,10 @@ function HeatmapLegend({ unscored }: { unscored: string[] }) {
         general-only (segment harvest needed)
       </span>
       <span className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[#8CA495]">
+        <span className="h-3 w-3 rounded-sm" style={{ backgroundColor: `${CELL_EXHAUSTED_META.color}D9` }} />
+        {CELL_EXHAUSTED_META.label}
+      </span>
+      <span className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[#8CA495]">
         <span
           className="h-3 w-3 rounded-sm"
           style={{ border: `1px dashed ${CELL_NOT_ANALYZED_META.color}66` }}
@@ -384,6 +414,7 @@ export default function MaturationPage() {
   const interactionAuthoring = authoringQueue
     ? computeInteractionAuthoring(authoringQueue, loadAuthoredInteractions())
     : null;
+  const thinLiterature = authoringQueue ? computeThinLiterature(authoringQueue) : null;
 
   const matrixRel = repoRelative(MATURATION_PATHS.matrix);
   const queueRel = repoRelative(MATURATION_PATHS.queue);
@@ -522,6 +553,37 @@ export default function MaturationPage() {
             <EmptyState
               message="No research queue yet. The gap planner ranks the matrix's red/amber cells into a budget-bounded harvest queue."
               command={`npm run gaps → ${queueRel}`}
+            />
+          )}
+        </Panel>
+
+        {/* Thin literature — evidence exhaustion (D-059) */}
+        <Panel
+          title="Thin literature — best available"
+          subtitle="Gaps the loop stopped harvesting: every mechanism in the cell came back low-novelty for K+ weeks, so the literature is thin, not the work undone. Shown honestly as best-available and handed to the owner for an alternative filler — never harvested forever."
+          footer={
+            authoringQueue
+              ? `computed from ${authoringQueueRel} (← ${repoRelative(MATURATION_PATHS.matrix)} + analysis/harvest-history.json) · generated ${fmtDateTime(authoringQueue.generated_at)}`
+              : `${authoringQueueRel} ← analysis/harvest-history.json`
+          }
+        >
+          {thinLiterature ? (
+            thinLiterature.length === 0 ? (
+              <EmptyState
+                message="No cell is evidence-exhausted. A cell appears here only after every one of its mechanisms survives K low-novelty harvest weeks (analysis/analyzer.config.yaml exhaustion.low_novelty_attempts) — until then thin gaps stay in the research queue."
+                command="analysis/harvest-history.json → npm run analyze → npm run gaps"
+              />
+            ) : (
+              <ul className="flex flex-col gap-3">
+                {thinLiterature.map((task) => (
+                  <ThinLiteratureRow key={`${task.pack}-${task.segment}`} task={task} />
+                ))}
+              </ul>
+            )
+          ) : (
+            <EmptyState
+              message="No authoring queue yet. Evidence-exhausted cells are routed here by the gap planner once the harvest ledger shows a gap can no longer be closed by harvesting."
+              command={`npm run gaps → ${authoringQueueRel}`}
             />
           )}
         </Panel>
@@ -747,6 +809,54 @@ function QueueTask({ task }: { task: ResearchTask }) {
   );
 }
 
+function ThinLiteratureRow({ task }: { task: AuthoringTask }) {
+  const ex = task.exhaustion;
+  const bestScores = ex
+    ? (Object.entries(ex.best_scores) as [SufficiencyCriterion, number][])
+    : [];
+  return (
+    <li className="rounded-md border border-[#243329] bg-[#1A2620] p-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <div className="flex items-baseline gap-2">
+          <span className="font-mono text-xs text-[#8CA495]">
+            {task.pack} <span className="text-[#7C93A8]">×</span> {task.segment}
+          </span>
+          <span className="font-mono text-[11px]" style={{ color: CELL_EXHAUSTED_META.color }}>
+            {CELL_EXHAUSTED_META.label}
+          </span>
+        </div>
+        {ex && (
+          <span className="font-mono text-[11px] text-[#7C93A8]">
+            {ex.attempts} low-novelty harvest{ex.attempts === 1 ? "" : "s"} · {ex.weeks} wk · since{" "}
+            {ex.since}
+          </span>
+        )}
+      </div>
+      {bestScores.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {bestScores.map(([criterion, value]) => (
+            <span
+              key={criterion}
+              className="rounded border border-[#243329] bg-[#0E1512] px-1.5 py-0.5 font-mono text-[11px] text-[#8CA495]"
+            >
+              {criterion.replace(/_/g, " ")}{" "}
+              <span className="text-[#E6EFE8]">{fmtScore(value)}</span>
+            </span>
+          ))}
+        </div>
+      )}
+      <p className="mt-2 font-mono text-[11px] text-[#8CA495]">
+        alternative fillers:{" "}
+        <span className="text-[#E6EFE8]">
+          {(task.fill_options ?? [])
+            .map((option) => ALTERNATIVE_FILL_META[option].label)
+            .join(" · ")}
+        </span>
+      </p>
+    </li>
+  );
+}
+
 function InteractionPairRow({
   pair,
   interactionsRel,
@@ -813,6 +923,9 @@ function LogEntry({ entry }: { entry: MaturationLogEntry }) {
           {entry.deferred > 0 ? ` · ${entry.deferred} deferred` : ""}
           {entry.low_novelty_harvests && entry.low_novelty_harvests > 0
             ? ` · ${entry.low_novelty_harvests} low-novelty`
+            : ""}
+          {entry.evidence_exhausted && entry.evidence_exhausted > 0
+            ? ` · ${entry.evidence_exhausted} exhausted`
             : ""}
         </span>
       </div>

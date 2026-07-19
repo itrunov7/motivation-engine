@@ -877,6 +877,20 @@ export interface SufficiencyThreshold {
 export type GradeLetter = "A" | "B" | "C";
 
 /**
+ * Evidence-exhaustion knob (D-059): when a harvest gap has been harvested
+ * low_novelty_attempts times across distinct weeks with continued low novelty
+ * and is still below threshold, the analyzer marks the cell evidence_exhausted
+ * rather than harvesting forever against thin literature.
+ */
+export interface ExhaustionConfig {
+  /**
+   * K — the number of consecutive low-novelty harvest weeks (each a distinct
+   * week) after which a (mechanism × segment) target is treated as exhausted.
+   */
+  low_novelty_attempts: number;
+}
+
+/**
  * /analysis/analyzer.config.yaml — the owner-tunable analyzer input:
  * grade weights, per-criterion thresholds, the segment → typical-funnel-stage
  * map, segment-affinity boosts, and owner replication flags. segment_stages
@@ -896,6 +910,25 @@ export interface AnalyzerConfig {
   segment_affinity: Record<string, Record<string, number>>;
   /** Mechanism ids flagged replication-shaky by the owner (freshness). */
   replication_flags: string[];
+  /** Evidence-exhaustion thresholds (D-059); absent → exhaustion never fires. */
+  exhaustion?: ExhaustionConfig;
+}
+
+/**
+ * Why a cell is evidence_exhausted (D-059): the best-achievable harvest-criterion
+ * scores plus the harvest effort that proved the literature thin. Computed from
+ * analysis/harvest-history.json; recorded on the cell so the cockpit can show
+ * "thin literature — best available" instead of red-forever.
+ */
+export interface CellExhaustion {
+  /** Total low-novelty harvests recorded across the pack's mechanisms for this segment. */
+  attempts: number;
+  /** Min consecutive low-novelty weeks shared by every pack mechanism (≥ K). */
+  weeks: number;
+  /** UTC "YYYY-MM-DD" from which every pack mechanism has been continuously low-novelty. */
+  since: string;
+  /** The cell's current harvest-criterion scores — the best achievable so far. */
+  best_scores: Partial<SufficiencyScores>;
 }
 
 /** One scored [pack × segment] cell of the sufficiency matrix. */
@@ -915,6 +948,16 @@ export interface SufficiencyCell {
    */
   typed_gaps: TypedGap[];
   segment_evidence: SegmentEvidence;
+  /**
+   * True when every one of the pack's mechanisms has been harvested to
+   * exhaustion for this segment (D-059) and the cell still has a scored harvest
+   * gap below threshold — the literature is thin, so the loop stops harvesting
+   * and surfaces the best-available state. Absent/false = still harvestable.
+   * Reversible: a future novel harvest clears the streak and the flag drops.
+   */
+  evidence_exhausted?: boolean;
+  /** Present iff evidence_exhausted — the best-achievable scores + harvest effort. */
+  exhaustion?: CellExhaustion;
 }
 
 /** /analysis/sufficiency-matrix.json — the generated sufficiency matrix. */
@@ -1015,6 +1058,14 @@ export interface ResearchQueue {
    * shrinks; changing the mechanism's terms or the segment qualifier re-enables it.
    */
   low_novelty_skipped: number;
+  /**
+   * Candidates skipped because their cell is evidence_exhausted (D-059) — every
+   * pack mechanism has been harvested to thin-literature exhaustion for the
+   * segment, so no further harvest can move the score. Counted here (never
+   * silently dropped): a future novel harvest clears the streak and it re-enters.
+   * Optional so queues written before D-059 stay valid.
+   */
+  evidence_exhausted_skipped?: number;
   tasks: ResearchTask[];
 }
 
@@ -1028,6 +1079,16 @@ export interface ResearchQueue {
 // research-queue precedent, D-051); consumed by the owner in git, not by the
 // connector.
 
+/**
+ * The alternative fillers for an evidence-exhausted cell (D-059) — the only
+ * remaining closers once the literature is proven thin: owner judgment, a
+ * cross-domain analogy, or accepting the gap at lower confidence.
+ */
+export type AlternativeFillOption =
+  | "owner_judgment"
+  | "cross_domain_analogy"
+  | "accept_lower_confidence";
+
 /** One [pack × segment] cell's structural gaps, awaiting an owner edit in git. */
 export interface AuthoringTask {
   pack: string;
@@ -1038,6 +1099,17 @@ export interface AuthoringTask {
   segment_evidence: SegmentEvidence;
   /** The cell's structural typed gaps (interaction/context/dissent), with detail. */
   structural_gaps: TypedGap[];
+  /**
+   * True when this authoring task exists because the cell is evidence_exhausted
+   * (D-059) — its scored harvest gaps can no longer be closed by harvesting, so
+   * it is routed here for owner judgment. Absent/false = an ordinary structural
+   * task.
+   */
+  alternative_fill?: boolean;
+  /** The alternative fillers offered when alternative_fill is true. */
+  fill_options?: AlternativeFillOption[];
+  /** The cell's exhaustion summary when alternative_fill is true (best-available scores). */
+  exhaustion?: CellExhaustion;
 }
 
 /** /analysis/authoring-queue.json — structural gaps ranked for owner authoring. */
@@ -1100,6 +1172,12 @@ export interface MaturationLogEntry {
    * so entries written before D-058 stay valid.
    */
   low_novelty_harvests?: number;
+  /**
+   * Cells marked evidence_exhausted in the re-scored matrix this run (D-059) —
+   * gaps the loop stopped harvesting because the literature is thin. Optional
+   * so entries written before D-059 stay valid.
+   */
+  evidence_exhausted?: number;
 }
 
 /** /analysis/maturation-log.json — the append-only weekly maturation history. */
@@ -1108,4 +1186,48 @@ export interface MaturationLog {
   generated_at: string;
   /** Newest run last; the reader sorts for display. */
   entries: MaturationLogEntry[];
+}
+
+// ---------- Harvest history (/analysis/harvest-history.json, D-059) ----------
+//
+// tools/harvest-history.ts appends one attempt per harvested (mechanism ×
+// segment) target per weekly maturation run, recording whether that harvest
+// came back low-novelty (D-058). It is the persistent per-gap memory the
+// analyzer reads to detect evidence exhaustion: a target harvested K times
+// across distinct weeks with continued low novelty is exhausted. A COMPUTED
+// projection, never hand-edited (the maturation-log precedent, D-053).
+
+/** One weekly harvest of a (mechanism × segment) target. */
+export interface HarvestAttempt {
+  /** UTC "YYYY-MM-DD" of the maturation run (one attempt per distinct week). */
+  week: string;
+  /** The segment-qualified terms the harvest used (for term-change transparency). */
+  terms: string[];
+  /** True when the harvest returned mostly already-known records (D-058). */
+  low_novelty: boolean;
+}
+
+/** The harvest history of one (mechanism × segment) target, keyed "mechanism|segment". */
+export interface HarvestHistoryTarget {
+  /** Every recorded weekly harvest, oldest first. */
+  attempts: HarvestAttempt[];
+  /**
+   * Trailing consecutive low-novelty attempts (weeks) — the current streak. A
+   * novel harvest resets it to 0. ≥ K (config exhaustion.low_novelty_attempts)
+   * means the target is exhausted.
+   */
+  low_novelty_streak: number;
+  /**
+   * Week the current low-novelty streak began (the first attempt in the trailing
+   * low-novelty run); null when the streak is 0.
+   */
+  streak_since: string | null;
+}
+
+/** /analysis/harvest-history.json — per-target harvest memory for exhaustion (D-059). */
+export interface HarvestHistory {
+  version: string;
+  generated_at: string;
+  /** "mechanism|segment" → that target's harvest history. */
+  entries: Record<string, HarvestHistoryTarget>;
 }

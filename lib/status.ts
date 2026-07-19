@@ -41,6 +41,7 @@ import {
 } from "./data";
 import {
   EVIDENCE_CATEGORIES,
+  type AlternativeFillOption,
   type ComputedSourceState,
   type ConnectionMode,
   type CorpusManifest,
@@ -622,6 +623,47 @@ export const CELL_STATUS_META: Record<SufficiencyStatus, StatusMeta> = {
 
 /** Sufficiency statuses in maturity order (worst → best) for legends/counts. */
 export const CELL_STATUS_ORDER: SufficiencyStatus[] = ["red", "amber", "green"];
+
+/**
+ * Presentation metadata for an evidence-exhausted cell (D-059): a red/amber
+ * cell whose scored harvest gap can no longer be closed by harvesting because
+ * the literature is thin (every pack mechanism came back low-novelty for ≥K
+ * weeks). Shown in the muted plan-slate token — NOT the red alert — so the
+ * cockpit reads it as "thin literature, best available", not "red-forever". The
+ * literal lives here, never in app/ (honesty rule). Reuses the existing
+ * plan-blue #7C93A8; no new palette.
+ */
+export const CELL_EXHAUSTED_META: StatusMeta = {
+  label: "thin literature — best available",
+  color: "#7C93A8",
+};
+
+/**
+ * Coverage-bar bands (D-059): the three computed statuses plus a distinct
+ * "exhausted" band, so a thin-literature cell is counted apart from red rather
+ * than inflating the red-forever share. Worst → best; the exhausted band sits
+ * between the actionable reds/ambers and green.
+ */
+export const COVERAGE_BAND_ORDER = ["red", "amber", "exhausted", "green"] as const;
+export type CoverageBand = (typeof COVERAGE_BAND_ORDER)[number];
+
+export const COVERAGE_BAND_META: Record<CoverageBand, StatusMeta> = {
+  red: CELL_STATUS_META.red,
+  amber: CELL_STATUS_META.amber,
+  exhausted: CELL_EXHAUSTED_META,
+  green: CELL_STATUS_META.green,
+};
+
+/**
+ * Human labels for the alternative fillers offered on an evidence-exhausted
+ * cell (D-059): the only closers left once the literature is proven thin. The
+ * enum → copy mapping lives here so app/ carries no literal.
+ */
+export const ALTERNATIVE_FILL_META: Record<AlternativeFillOption, { label: string }> = {
+  owner_judgment: { label: "owner judgment" },
+  cross_domain_analogy: { label: "cross-domain analogy" },
+  accept_lower_confidence: { label: "accept at lower confidence" },
+};
 
 /**
  * A segment present in segments.yaml but absent from the matrix (a new or
