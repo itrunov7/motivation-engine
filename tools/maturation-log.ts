@@ -24,7 +24,7 @@
  *     [--cell-diff cell-diff.json] \
  *     [--budget-before budget-before.json] [--budget-after budget-after.json] \
  *     [--queue-plan queue-plan.json] [--authoring-queue analysis/authoring-queue.json] \
- *     [--week YYYY-MM-DD]
+ *     [--low-novelty N] [--week YYYY-MM-DD]
  *
  * Re-running for the same week REPLACES that week's entry (idempotent for
  * repeated manual dispatches on the same day).
@@ -132,6 +132,12 @@ function main(): void {
   const authoringQueue = readJsonOrNull<{ tasks?: unknown[] }>(authoringQueueFile);
   const structuralQueued = (authoringQueue?.tasks ?? []).length;
 
+  // Harvests this run that returned mostly already-known records (D-058) — a
+  // re-fetch of the same canon, recorded so the cockpit history shows it was
+  // not progress. The workflow counts it from the harvested corpora.
+  const lowNoveltyRaw = Number.parseInt(args["low-novelty"] ?? "0", 10);
+  const lowNoveltyHarvests = Number.isFinite(lowNoveltyRaw) ? Math.max(0, lowNoveltyRaw) : 0;
+
   const entry: MaturationLogEntry = {
     week,
     generated_at: new Date().toISOString(),
@@ -140,6 +146,7 @@ function main(): void {
     spend,
     deferred,
     structural_queued: structuralQueued,
+    low_novelty_harvests: lowNoveltyHarvests,
   };
 
   const existing = readJsonOrNull<MaturationLog>(LOG_FILE);
@@ -162,7 +169,8 @@ function main(): void {
       `${cellsChanged.length} status change(s) (${flips} → green), ` +
       `${packsRegenerated.length} pack(s) regenerated, ` +
       `${spend.calls} calls / $${spend.usd}, ${deferred} deferred, ` +
-      `${structuralQueued} structural queued ` +
+      `${structuralQueued} structural queued, ` +
+      `${lowNoveltyHarvests} low-novelty harvest(s) ` +
       `(${entries.length} week(s) in the log).`,
   );
 }

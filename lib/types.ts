@@ -1008,6 +1008,13 @@ export interface ResearchQueue {
   budget: ResearchQueueBudget;
   /** Total red/amber (mechanism × segment) candidates before truncation to N. */
   candidate_count: number;
+  /**
+   * Candidates skipped because the mechanism's last harvest with the SAME terms
+   * was low-novelty (D-058) — re-fetching the same canon is not progress, so it
+   * never consumes a budget slot. Counted here so the queue never silently
+   * shrinks; changing the mechanism's terms or the segment qualifier re-enables it.
+   */
+  low_novelty_skipped: number;
   tasks: ResearchTask[];
 }
 
@@ -1087,6 +1094,12 @@ export interface MaturationLogEntry {
    * written before D-056 stay valid.
    */
   structural_queued?: number;
+  /**
+   * Harvests this run that returned mostly records already in the corpus
+   * (low_novelty, D-058) — a re-fetch of the same canon, NOT progress. Optional
+   * so entries written before D-058 stay valid.
+   */
+  low_novelty_harvests?: number;
 }
 
 /** /analysis/maturation-log.json — the append-only weekly maturation history. */

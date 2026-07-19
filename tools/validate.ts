@@ -641,6 +641,88 @@ const benchmarkFileSchema = {
   additionalProperties: false,
 } as const;
 
+// ---------- Evidence diversity report (D-058) ----------
+//
+// A harvested corpus (corpora/evidence/{id}.json) carries a diversity_report
+// written by the evidence connector: viewpoint spread (per angle), source
+// spread (per API), recency, and a novelty block whose low_novelty boolean
+// tells the maturation loop whether the harvest re-fetched the same canon. The
+// report is ADDITIVE — a file harvested before D-058 has none and stays valid —
+// but a file that DOES carry one must carry a well-formed one, so a malformed
+// report can never mislead the loop's progress accounting.
+const EVIDENCE_ANGLE_IDS = [
+  "canon",
+  "recent",
+  "application",
+  "critique",
+  "replication",
+  "boundary",
+  "cross-domain",
+];
+const SEARCH_API_IDS = ["openalex", "semantic-scholar"];
+
+const spreadCounts = {
+  queries: { type: "integer", minimum: 0 },
+  returned: { type: "integer", minimum: 0 },
+  unique_records: { type: "integer", minimum: 0 },
+} as const;
+
+const diversityReportSchema = {
+  type: "object",
+  properties: {
+    viewpoint_spread: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          angle: { type: "string", enum: EVIDENCE_ANGLE_IDS },
+          ...spreadCounts,
+        },
+        required: ["angle", "queries", "returned", "unique_records"],
+        additionalProperties: false,
+      },
+    },
+    source_spread: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          api: { type: "string", enum: SEARCH_API_IDS },
+          ...spreadCounts,
+        },
+        required: ["api", "queries", "returned", "unique_records"],
+        additionalProperties: false,
+      },
+    },
+    recent_records: { type: "integer", minimum: 0 },
+    recency_rate: { type: "number", minimum: 0, maximum: 1 },
+    novelty: {
+      type: "object",
+      properties: {
+        previous_corpus_records: { type: ["integer", "null"], minimum: 0 },
+        unique_records: { type: "integer", minimum: 0 },
+        already_in_corpus: { type: "integer", minimum: 0 },
+        new_records: { type: "integer", minimum: 0 },
+        novelty_rate: { type: "number", minimum: 0, maximum: 1 },
+        low_novelty: { type: "boolean" },
+        known_share_threshold: { type: "number", minimum: 0, maximum: 1 },
+      },
+      required: [
+        "previous_corpus_records",
+        "unique_records",
+        "already_in_corpus",
+        "new_records",
+        "novelty_rate",
+        "low_novelty",
+        "known_share_threshold",
+      ],
+      additionalProperties: false,
+    },
+  },
+  required: ["viewpoint_spread", "source_spread", "recent_records", "recency_rate", "novelty"],
+  additionalProperties: false,
+} as const;
+
 // ---------- Validation passes ----------
 
 interface MechanismLike {
@@ -1026,6 +1108,27 @@ function main(): void {
       ok = false;
     }
     if (ok) console.log(`  ✓ ${rel(file)} valid (benchmark file, ${(data as BenchmarkFile).metrics.length} metrics)`);
+  }
+
+  // 9c. Evidence diversity reports (D-058): every corpora/evidence/*.json that
+  // carries a diversity_report must carry a well-formed one (viewpoint + source
+  // spread and a novelty block with a boolean low_novelty). Regression side
+  // files (*.regression.json) carry one too and are checked the same way. A
+  // corpus harvested before D-058 has no report and is skipped — the block is
+  // additive, not a new hard requirement on old data.
+  const validateDiversity = ajv.compile(diversityReportSchema);
+  const evidenceDir = join(PATHS.corporaDir, "evidence");
+  const evidenceFiles = listJsonFiles(evidenceDir).filter(
+    (f) => basename(f) !== "manifest.json",
+  );
+  for (const file of evidenceFiles) {
+    const data = readJson(file);
+    if (data === undefined) continue;
+    const report = (data as { diversity_report?: unknown }).diversity_report;
+    if (report === undefined) continue;
+    if (validateAgainst(validateDiversity, file, report)) {
+      console.log(`  ✓ ${rel(file)} valid (diversity report, D-058)`);
+    }
   }
 
   // 10. Source health heartbeat (D-021), when present. Every entry's

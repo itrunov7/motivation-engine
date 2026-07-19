@@ -132,6 +132,31 @@ jobs:
           echo "ran=true" >> "$GITHUB_OUTPUT"
           if [ "$overall" -ne 0 ]; then echo "failed=true" >> "$GITHUB_OUTPUT"; else echo "failed=false" >> "$GITHUB_OUTPUT"; fi
 
+      # ---------- Count low-novelty harvests (D-058) ----------
+      # A harvest that returned mostly records already in the corpus is a
+      # re-fetch of the same canon, NOT progress. The connector flags it in the
+      # corpus file's diversity_report; here we count how many of THIS run's
+      # harvested mechanisms came back low-novelty, for the summary + log.
+      - name: Count low-novelty harvests
+        id: novelty
+        if: steps.harvest.outputs.ran == 'true' && steps.harvest.outputs.failed != 'true'
+        run: |
+          set -euo pipefail
+          count=0
+          while IFS=$'\t' read -r mechanism terms; do
+            f="corpora/evidence/${mechanism}.json"
+            [ -f "$f" ] || continue
+            low=$(jq -r '.diversity_report.novelty.low_novelty // false' "$f" 2>/dev/null || echo false)
+            if [ "$low" = "true" ]; then count=$((count + 1)); fi
+          done < due.tsv
+          echo "low_novelty=$count" >> "$GITHUB_OUTPUT"
+          if [ "$count" -gt 0 ]; then
+            {
+              echo ""
+              echo "$count harvest(s) returned mostly already-known records (low novelty, D-058) — not counted as progress."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       # ---------- (4) re-analyze ONLY the affected cells ----------
       # Affected = the packs whose gap cells the harvested tasks addressed;
       # every other pack's cells are preserved from the baseline matrix.
@@ -219,6 +244,7 @@ jobs:
             --budget-after budget-after.json \
             --queue-plan queue-plan.json \
             --authoring-queue analysis/authoring-queue.json \
+            --low-novelty "${{ steps.novelty.outputs.low_novelty || '0' }}" \
             --week "$(date -u +%Y-%m-%d)"
 
       # ---------- (6) commit the week's turn ----------

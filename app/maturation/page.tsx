@@ -811,6 +811,9 @@ function LogEntry({ entry }: { entry: MaturationLogEntry }) {
         <span className="font-mono text-[11px] text-[#7C93A8]">
           {entry.spend.calls} calls · ${entry.spend.usd}
           {entry.deferred > 0 ? ` · ${entry.deferred} deferred` : ""}
+          {entry.low_novelty_harvests && entry.low_novelty_harvests > 0
+            ? ` · ${entry.low_novelty_harvests} low-novelty`
+            : ""}
         </span>
       </div>
       {entry.cells_changed.length > 0 ? (

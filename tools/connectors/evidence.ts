@@ -31,6 +31,19 @@
  *   degrade gracefully: per-term batch drops to 10 for the retry passes
  *   (exponential cooldowns: 30s, 60s, 120s).
  *
+ * Diversity + novelty (D-058) — a harvest optimizes for BROADER data, not more
+ * of the same. Each term fans out across viewpoints: "canon" (the term as-is,
+ * most-cited / relevance), "recent" (OpenAlex sorted by date so newer product
+ * forms aren't starved), and five contrast angles (application, critique,
+ * replication, boundary, cross-domain) whose generic academic suffixes steer
+ * the query — never invented science (rule 8). The contrast angles ALTERNATE
+ * OpenAlex / Semantic Scholar so a run draws across both sources. After dedupe,
+ * a novelty check against the PREVIOUS corpus flags a re-fetch of the same
+ * canon as low_novelty (>LOW_NOVELTY_KNOWN_SHARE already on disk) — a warning
+ * in the manifest so the maturation loop does not count re-reading as progress.
+ * Every harvest writes a diversity_report (viewpoint spread, source spread,
+ * recency, novelty rate).
+ *
  * Records are deduplicated by DOI AND normalized title (lowercase, punctuation
  * and asterisks stripped), keeping the highest-citation variant of each paper.
  *
@@ -133,6 +146,78 @@ const QUOTE_SNOWBALL_RECORDS = OPENALEX_BATCH_SIZE;
 type SearchApi = "openalex" | "semantic-scholar";
 type SourceApi = SearchApi | "pinned" | "snowball";
 
+/**
+ * Search angle (D-058): a harvest fans each term out across contrasting
+ * viewpoints so the corpus is not mono-viewpoint. "canon" is the term as-is
+ * (mainstream, most-cited); "recent" re-queries it sorted by date so newer
+ * product forms aren't starved by citation sort; the five contrast angles
+ * append generic academic vocabulary (a documented constant, like
+ * DISSENT_MARKERS — never invented science) to surface application, critique,
+ * replication, boundary-condition, and cross-domain work.
+ */
+type SearchAngle =
+  | "canon"
+  | "recent"
+  | "application"
+  | "critique"
+  | "replication"
+  | "boundary"
+  | "cross-domain";
+
+/** Every angle, in report/display order. */
+const ALL_ANGLES: SearchAngle[] = [
+  "canon",
+  "recent",
+  "application",
+  "critique",
+  "replication",
+  "boundary",
+  "cross-domain",
+];
+
+const SEARCH_APIS: SearchApi[] = ["openalex", "semantic-scholar"];
+
+/**
+ * The five contrast angles and the generic vocabulary appended to a term to
+ * express each viewpoint. NOT science (rule 8) — the same documented-constant
+ * pattern as DISSENT_MARKERS; these words steer WHICH slice of the literature
+ * a query surfaces, never what the evidence says.
+ */
+const CONTRAST_ANGLES: { angle: SearchAngle; suffix: string }[] = [
+  { angle: "application", suffix: "applied intervention" },
+  { angle: "critique", suffix: "critique criticism" },
+  { angle: "replication", suffix: "replication" },
+  { angle: "boundary", suffix: "boundary conditions moderators" },
+  { angle: "cross-domain", suffix: "cross-domain generalization" },
+];
+
+/** Per-term batch for the recency query and each contrast-angle query. */
+const RECENT_PER_TERM = 10;
+const CONTRAST_PER_TERM = 10;
+
+/**
+ * Source spread (D-058): the contrast angles ALTERNATE OpenAlex / Semantic
+ * Scholar by index so a run's viewpoint diversity draws across both APIs, not
+ * one — even index → OpenAlex, odd → Semantic Scholar.
+ */
+function contrastApi(index: number): SearchApi {
+  return index % 2 === 0 ? "openalex" : "semantic-scholar";
+}
+
+/** Contrast angles routed to each API (derived from contrastApi, quote-safe). */
+const CONTRAST_OPENALEX_COUNT = CONTRAST_ANGLES.filter(
+  (_, i) => contrastApi(i) === "openalex",
+).length;
+const CONTRAST_S2_COUNT = CONTRAST_ANGLES.length - CONTRAST_OPENALEX_COUNT;
+
+/**
+ * Novelty gate (D-058): a harvest whose deduped results are more than this
+ * share already-in-corpus is LOW-NOVELTY — it re-fetched the canon it already
+ * had and must not count as progress (the loop would otherwise think it filled
+ * a gap by re-reading the same papers).
+ */
+const LOW_NOVELTY_KNOWN_SHARE = 0.8;
+
 interface EvidenceRecord {
   title: string;
   authors: string[];
@@ -161,13 +246,37 @@ interface EvidenceRecord {
   /** Only on snowballed records (D-019): OpenAlex ids of the reviews whose
    *  reference lists surfaced this work. */
   snowball_from?: string[];
+  /** Search angles whose queries surfaced this record (D-058), unioned across
+   *  the dedup cluster. Absent on pinned/snowball records (they are not the
+   *  product of an angle query). */
+  search_angles?: SearchAngle[];
 }
 
 interface QueryMeta {
   api: SearchApi;
+  /** The viewpoint this query targeted (D-058). */
+  angle: SearchAngle;
   term: string;
   requested: number;
   returned: number;
+}
+
+/** One planned search query — one (api, angle, term) triple. */
+interface QueryTask {
+  api: SearchApi;
+  angle: SearchAngle;
+  /** The query string actually sent (a contrast angle appends its suffix). */
+  term: string;
+  /** Planned batch size; for the throttleable canon S2 query the keyless 429
+   *  path may reduce it at run time. */
+  limit: number;
+  /** OpenAlex sort override; unused for Semantic Scholar. */
+  sort?: string;
+  /** True only for the canon Semantic Scholar query (keyless throttle path). */
+  throttleable: boolean;
+  meta: QueryMeta;
+  records: EvidenceRecord[];
+  error?: string;
 }
 
 type TermsSource = "param" | "record" | "name";
@@ -197,6 +306,57 @@ interface CoverageReport {
   note?: string;
 }
 
+/** Per-angle query outcome + unique deduped records surfaced (D-058). */
+interface AngleSpread {
+  angle: SearchAngle;
+  queries: number;
+  returned: number;
+  /** Unique deduped SEARCH records attributable to this angle. */
+  unique_records: number;
+}
+
+/** Per-API query outcome + unique deduped records the API contributed (D-058). */
+interface SourceSpread {
+  api: SearchApi;
+  queries: number;
+  returned: number;
+  unique_records: number;
+}
+
+/**
+ * Dedup-aware novelty vs the PREVIOUS corpus (D-058). A harvest that mostly
+ * re-fetches records already on disk is low-novelty and must not count as
+ * progress. First harvest (no prior file): novelty_rate 1, never low.
+ */
+interface NoveltyReport {
+  /** Record count of the prior corpus file; null on a first harvest. */
+  previous_corpus_records: number | null;
+  /** Unique deduped SEARCH records this run (pins/snowball excluded). */
+  unique_records: number;
+  already_in_corpus: number;
+  new_records: number;
+  /** new_records / unique_records, 4 decimals; 1 when there was no prior corpus. */
+  novelty_rate: number;
+  /** True when >LOW_NOVELTY_KNOWN_SHARE of unique results were already on disk. */
+  low_novelty: boolean;
+  known_share_threshold: number;
+}
+
+/**
+ * Diversity report (D-058): whether a harvest broadened the corpus. Computed
+ * over the deduped SEARCH records only (owner pins and snowballed references
+ * are structural completeness, not query diversity).
+ */
+interface DiversityReport {
+  viewpoint_spread: AngleSpread[];
+  source_spread: SourceSpread[];
+  /** Unique deduped search records published within RECENT_WINDOW_YEARS. */
+  recent_records: number;
+  /** recent_records / unique deduped search records, 4 decimals. */
+  recency_rate: number;
+  novelty: NoveltyReport;
+}
+
 interface EvidenceFile {
   mechanism_id: string;
   fetched_at: string;
@@ -208,6 +368,8 @@ interface EvidenceFile {
   coverage_report: CoverageReport;
   /** Category checklist counts (D-019), computed from records[].categories. */
   category_counts: CategoryCounts;
+  /** Diversity + novelty accounting for this harvest (D-058). */
+  diversity_report: DiversityReport;
   records: EvidenceRecord[];
 }
 
@@ -289,6 +451,7 @@ function mergeCluster(group: EvidenceRecord[]): EvidenceRecord {
       return best;
     }),
   };
+  const angles = new Set<SearchAngle>();
   for (const r of group) {
     base.doi = base.doi ?? r.doi;
     base.year = base.year ?? r.year;
@@ -299,6 +462,11 @@ function mergeCluster(group: EvidenceRecord[]): EvidenceRecord {
     base.openalex_type = base.openalex_type ?? r.openalex_type;
     base.referenced_works_count = base.referenced_works_count ?? r.referenced_works_count;
     if (base.authors.length === 0) base.authors = r.authors;
+    for (const a of r.search_angles ?? []) angles.add(a);
+  }
+  // Union the angles that surfaced any variant of this paper (D-058).
+  if (angles.size > 0) {
+    base.search_angles = ALL_ANGLES.filter((a) => angles.has(a));
   }
   return base;
 }
@@ -308,8 +476,15 @@ function mergeCluster(group: EvidenceRecord[]): EvidenceRecord {
  * variant of each paper. Two records are the same paper if they share a DOI
  * or a normalized title; union-find groups the transitive clusters (a paper
  * seen with a DOI on one API and without on another still collapses).
+ *
+ * Returns the merged records AND the raw clusters they came from (aligned by
+ * index) so the diversity report (D-058) can attribute each unique record to
+ * the angles and APIs that surfaced it.
  */
-function dedupeRecords(raw: EvidenceRecord[]): EvidenceRecord[] {
+function dedupeRecords(raw: EvidenceRecord[]): {
+  records: EvidenceRecord[];
+  groups: EvidenceRecord[][];
+} {
   const parent = raw.map((_, i) => i);
   const find = (x: number): number => {
     let root = x;
@@ -353,7 +528,8 @@ function dedupeRecords(raw: EvidenceRecord[]): EvidenceRecord[] {
     clusters.set(root, group);
   });
 
-  return Array.from(clusters.values()).map(mergeCluster);
+  const groups = Array.from(clusters.values());
+  return { records: groups.map(mergeCluster), groups };
 }
 
 // ---------- Per-API fetchers ----------
@@ -393,12 +569,14 @@ function fromOpenAlexWork(work: OpenAlexWork, sourceApi: SourceApi): EvidenceRec
 async function searchOpenAlex(
   fetch: PoliteFetch,
   term: string,
+  sort = "cited_by_count:desc",
+  limit = OPENALEX_PER_TERM,
 ): Promise<EvidenceRecord[]> {
   const url = new URL("https://api.openalex.org/works");
   // Commas separate OpenAlex filters — strip them from the term defensively.
   url.searchParams.set("filter", `title_and_abstract.search:${term.replace(/,/g, " ")}`);
-  url.searchParams.set("sort", "cited_by_count:desc");
-  url.searchParams.set("per-page", String(OPENALEX_PER_TERM));
+  url.searchParams.set("sort", sort);
+  url.searchParams.set("per-page", String(limit));
   url.searchParams.set("select", OPENALEX_SELECT);
 
   const data = await fetchJson<{ results?: OpenAlexWork[] }>(fetch, url);
@@ -836,18 +1014,188 @@ function loadMechanism(mechanismId: string | undefined): MechanismRecord {
 }
 
 /**
- * Record count of an existing corpus file, or null when the file is absent or
+ * Records of an existing corpus file, or null when the file is absent or
  * unreadable (a first harvest, or a corrupt prior file — neither is a
- * regression). Used by the anti-regression guardrail (D-038).
+ * regression, and both mean full novelty). Used by the anti-regression
+ * guardrail (D-038) and the novelty gate (D-058).
  */
-function readExistingRecordCount(path: string): number | null {
+function readExistingRecords(path: string): EvidenceRecord[] | null {
   if (!existsSync(path)) return null;
   try {
     const prev = JSON.parse(readFileSync(path, "utf-8")) as { records?: unknown };
-    return Array.isArray(prev.records) ? prev.records.length : null;
+    return Array.isArray(prev.records) ? (prev.records as EvidenceRecord[]) : null;
   } catch {
     return null;
   }
+}
+
+function round4(value: number): number {
+  return Math.round(value * 10000) / 10000;
+}
+
+/**
+ * Build every search query for a run (D-058): per term, the canon pair
+ * (OpenAlex most-cited + Semantic Scholar relevance), a recency query
+ * (OpenAlex by publication date), and the five contrast angles alternating
+ * across the two APIs. This is where "more data" becomes "broader data".
+ */
+function buildQueryTasks(terms: string[]): QueryTask[] {
+  const mk = (
+    api: SearchApi,
+    angle: SearchAngle,
+    term: string,
+    limit: number,
+    sort: string | undefined,
+    throttleable: boolean,
+  ): QueryTask => ({
+    api,
+    angle,
+    term,
+    limit,
+    sort,
+    throttleable,
+    meta: { api, angle, term, requested: limit, returned: 0 },
+    records: [],
+  });
+
+  const tasks: QueryTask[] = [];
+  for (const term of terms) {
+    // canon — the mainstream, most-cited view (unchanged behavior).
+    tasks.push(mk("openalex", "canon", term, OPENALEX_PER_TERM, "cited_by_count:desc", false));
+    tasks.push(mk("semantic-scholar", "canon", term, S2_PER_TERM, undefined, true));
+    // recent — recency balance so newer product forms aren't starved.
+    tasks.push(mk("openalex", "recent", term, RECENT_PER_TERM, "publication_date:desc", false));
+    // contrast angles — alternating source for spread.
+    CONTRAST_ANGLES.forEach((c, i) => {
+      const api = contrastApi(i);
+      const query = `${term} ${c.suffix}`.trim();
+      tasks.push(
+        mk(
+          api,
+          c.angle,
+          query,
+          CONTRAST_PER_TERM,
+          api === "openalex" ? "cited_by_count:desc" : undefined,
+          false,
+        ),
+      );
+    });
+  }
+  return tasks;
+}
+
+/**
+ * Dedup-aware novelty vs the prior corpus (D-058). A record is already in the
+ * corpus if its OpenAlex id, DOI, or normalized title matches a prior record.
+ */
+function buildNovelty(
+  deduped: EvidenceRecord[],
+  previous: EvidenceRecord[] | null,
+): NoveltyReport {
+  const unique = deduped.length;
+  if (previous === null) {
+    return {
+      previous_corpus_records: null,
+      unique_records: unique,
+      already_in_corpus: 0,
+      new_records: unique,
+      novelty_rate: 1,
+      low_novelty: false,
+      known_share_threshold: LOW_NOVELTY_KNOWN_SHARE,
+    };
+  }
+  const keys = corpusKeys(previous);
+  let already = 0;
+  for (const r of deduped) {
+    const inCorpus =
+      (r.openalex_id !== null && keys.ids.has(r.openalex_id)) ||
+      (r.doi !== null && keys.dois.has(r.doi)) ||
+      keys.titles.has(titleKey(r));
+    if (inCorpus) already++;
+  }
+  const newRecords = unique - already;
+  const knownShare = unique > 0 ? already / unique : 0;
+  return {
+    previous_corpus_records: previous.length,
+    unique_records: unique,
+    already_in_corpus: already,
+    new_records: newRecords,
+    novelty_rate: unique > 0 ? round4(newRecords / unique) : 0,
+    low_novelty: unique > 0 && knownShare > LOW_NOVELTY_KNOWN_SHARE,
+    known_share_threshold: LOW_NOVELTY_KNOWN_SHARE,
+  };
+}
+
+/**
+ * Diversity report (D-058) over the deduped SEARCH records: viewpoint spread
+ * (per angle), source spread (per API), recency, and novelty vs the prior
+ * corpus. `groups` are the raw dedup clusters aligned to `deduped`, so a unique
+ * record is attributed to every angle/API that surfaced any of its variants.
+ */
+function buildDiversityReport(
+  tasks: QueryTask[],
+  deduped: EvidenceRecord[],
+  groups: EvidenceRecord[][],
+  previous: EvidenceRecord[] | null,
+  currentYear: number,
+): DiversityReport {
+  const angleQueries = new Map<SearchAngle, { queries: number; returned: number }>();
+  const apiQueries = new Map<SearchApi, { queries: number; returned: number }>();
+  for (const t of tasks) {
+    const a = angleQueries.get(t.angle) ?? { queries: 0, returned: 0 };
+    a.queries += 1;
+    a.returned += t.meta.returned;
+    angleQueries.set(t.angle, a);
+    const s = apiQueries.get(t.api) ?? { queries: 0, returned: 0 };
+    s.queries += 1;
+    s.returned += t.meta.returned;
+    apiQueries.set(t.api, s);
+  }
+
+  const angleUnique = new Map<SearchAngle, number>();
+  const apiUnique = new Map<SearchApi, number>();
+  for (const group of groups) {
+    const angles = new Set<SearchAngle>();
+    const apis = new Set<SearchApi>();
+    for (const r of group) {
+      for (const a of r.search_angles ?? []) angles.add(a);
+      if (r.source_api === "openalex" || r.source_api === "semantic-scholar") {
+        apis.add(r.source_api);
+      }
+    }
+    for (const a of Array.from(angles)) angleUnique.set(a, (angleUnique.get(a) ?? 0) + 1);
+    for (const p of Array.from(apis)) apiUnique.set(p, (apiUnique.get(p) ?? 0) + 1);
+  }
+
+  const viewpoint_spread: AngleSpread[] = ALL_ANGLES.filter((a) =>
+    angleQueries.has(a),
+  ).map((angle) => ({
+    angle,
+    queries: angleQueries.get(angle)?.queries ?? 0,
+    returned: angleQueries.get(angle)?.returned ?? 0,
+    unique_records: angleUnique.get(angle) ?? 0,
+  }));
+
+  const source_spread: SourceSpread[] = SEARCH_APIS.filter((api) =>
+    apiQueries.has(api),
+  ).map((api) => ({
+    api,
+    queries: apiQueries.get(api)?.queries ?? 0,
+    returned: apiQueries.get(api)?.returned ?? 0,
+    unique_records: apiUnique.get(api) ?? 0,
+  }));
+
+  const recentRecords = deduped.filter(
+    (r) => r.year !== null && r.year >= currentYear - RECENT_WINDOW_YEARS,
+  ).length;
+
+  return {
+    viewpoint_spread,
+    source_spread,
+    recent_records: recentRecords,
+    recency_rate: deduped.length > 0 ? round4(recentRecords / deduped.length) : 0,
+    novelty: buildNovelty(deduped, previous),
+  };
 }
 
 function splitTerms(raw: string | undefined): string[] {
@@ -882,27 +1230,37 @@ export const evidenceConnector: Connector = {
   id: "evidence",
   sourceId: "evidence",
   sourceIds: ["openalex", "semantic-scholar"],
-  connectorVersion: "2.3.0",
+  connectorVersion: "2.4.0",
   description:
-    "Evidence harvester: OpenAlex + Semantic Scholar literature for one mechanism → {mechanism_id}.json. Terms from the record's evidence_terms; owner pins merged from pinned_evidence; review-reference snowballing and a category checklist verify completeness structurally (D-019). Fetch and structure only.",
+    "Evidence harvester: OpenAlex + Semantic Scholar literature for one mechanism → {mechanism_id}.json. Each term fans out across viewpoints (canon, recent, and five contrast angles) alternating both APIs for diversity, with a dedup-aware novelty gate and a diversity_report per harvest (D-058). Terms from the record's evidence_terms; owner pins merged from pinned_evidence; review-reference snowballing and a category checklist verify completeness structurally (D-019). Fetch and structure only.",
 
   /**
    * Deterministic pre-run estimate (D-025). No network: reads the mechanism
-   * record from disk and counts the calls the run WILL make — one OpenAlex +
-   * one S2 search per term, one OpenAlex fetch per pin, plus a fixed snowball
-   * allowance. Powers the /ops dry-run quote and the budget gate.
+   * record from disk and counts the calls the run WILL make — per term the
+   * canon OpenAlex + canon S2 queries, a recency OpenAlex query, and the five
+   * contrast angles alternating the two APIs (D-058) — one OpenAlex fetch per
+   * pin, plus a fixed snowball allowance. Powers the /ops dry-run quote and the
+   * budget gate.
    */
   quote(params): RunQuote {
     const record = loadMechanism(params.mechanism);
     const { terms } = resolveTerms(record, params.terms);
     const pins = record.pinned_evidence?.length ?? 0;
 
-    const openAlexCalls = terms.length + pins + QUOTE_SNOWBALL_CALLS;
-    const s2Calls = terms.length;
+    // Per term: canon OpenAlex + recency OpenAlex + the contrast angles routed
+    // to OpenAlex; canon S2 + the contrast angles routed to S2.
+    const openAlexPerTerm = 2 + CONTRAST_OPENALEX_COUNT;
+    const s2PerTerm = 1 + CONTRAST_S2_COUNT;
+    const openAlexCalls = terms.length * openAlexPerTerm + pins + QUOTE_SNOWBALL_CALLS;
+    const s2Calls = terms.length * s2PerTerm;
     const calls = openAlexCalls + s2Calls;
 
-    const records =
-      terms.length * (OPENALEX_PER_TERM + S2_PER_TERM) + pins + QUOTE_SNOWBALL_RECORDS;
+    const recordsPerTerm =
+      OPENALEX_PER_TERM +
+      S2_PER_TERM +
+      RECENT_PER_TERM +
+      CONTRAST_ANGLES.length * CONTRAST_PER_TERM;
+    const records = terms.length * recordsPerTerm + pins + QUOTE_SNOWBALL_RECORDS;
 
     const duration_s =
       Math.round(
@@ -920,15 +1278,6 @@ export const evidenceConnector: Connector = {
     const { terms, source: termsSource } = resolveTerms(record, params.terms);
     ctx.log(`terms (${termsSource}): ${terms.join(" · ")}`);
 
-    interface QueryTask {
-      api: SearchApi;
-      term: string;
-      search: (term: string) => Promise<EvidenceRecord[]>;
-      meta: QueryMeta;
-      records: EvidenceRecord[];
-      error?: string;
-    }
-
     // Any Semantic Scholar 429 — even keyed, despite the global queue —
     // records s2_throttled in the manifest (D-018/D-027); keyless runs
     // additionally drop the per-term batch to 10 for the retry passes.
@@ -936,33 +1285,27 @@ export const evidenceConnector: Connector = {
     const s2Limit = (): number =>
       s2Throttled && !s2ApiKey() ? S2_THROTTLED_PER_TERM : S2_PER_TERM;
 
-    const tasks: QueryTask[] = [
-      ...terms.map((term): QueryTask => ({
-        api: "openalex",
-        term,
-        search: (t: string) => searchOpenAlex(ctx.fetch, t),
-        meta: { api: "openalex", term, requested: OPENALEX_PER_TERM, returned: 0 },
-        records: [],
-      })),
-      ...terms.map((term): QueryTask => ({
-        api: "semantic-scholar",
-        term,
-        search: (t: string) => searchSemanticScholar(ctx.fetch, t, s2Limit()),
-        meta: { api: "semantic-scholar", term, requested: S2_PER_TERM, returned: 0 },
-        records: [],
-      })),
-    ];
+    // Fan each term out across viewpoints and both APIs (D-058).
+    const tasks = buildQueryTasks(terms);
 
     const runTask = async (task: QueryTask): Promise<void> => {
-      if (task.api === "semantic-scholar") task.meta.requested = s2Limit();
+      // Only the canon S2 query throttles; contrast S2 queries keep their
+      // fixed CONTRAST_PER_TERM batch.
+      const limit =
+        task.api === "semantic-scholar" && task.throttleable ? s2Limit() : task.limit;
+      if (task.api === "semantic-scholar") task.meta.requested = limit;
       try {
-        const records = await task.search(task.term);
+        const records =
+          task.api === "openalex"
+            ? await searchOpenAlex(ctx.fetch, task.term, task.sort, task.limit)
+            : await searchSemanticScholar(ctx.fetch, task.term, limit);
+        for (const r of records) r.search_angles = [task.angle];
         task.meta.returned = records.length;
         task.records = records;
         task.error = undefined;
-        ctx.log(`${task.api} "${task.term}": ${records.length} records`);
+        ctx.log(`${task.api} ${task.angle} "${task.term}": ${records.length} records`);
       } catch (err) {
-        task.error = `${task.api} "${task.term}": ${(err as Error).message}`;
+        task.error = `${task.api} ${task.angle} "${task.term}": ${(err as Error).message}`;
         ctx.log(`FAILED ${task.error}`);
         if (
           task.api === "semantic-scholar" &&
@@ -1000,7 +1343,34 @@ export const evidenceConnector: Connector = {
       throw new Error(`All queries failed — ${failures.join(" · ")}`);
     }
 
-    const records = dedupeRecords(tasks.flatMap((t) => t.records));
+    const { records, groups } = dedupeRecords(tasks.flatMap((t) => t.records));
+
+    const currentYear = new Date().getUTCFullYear();
+    const fileName = `${mechanismId}.json`;
+
+    // Dedup-aware novelty + diversity (D-058), computed over the deduped SEARCH
+    // records BEFORE pins/snowball (owner pins and snowballed references are
+    // structural completeness, not query diversity). A harvest that mostly
+    // re-fetched the canon already on disk is flagged low_novelty and must not
+    // count as progress.
+    const previousRecords = readExistingRecords(join(ctx.corpusDir, fileName));
+    const diversityReport = buildDiversityReport(
+      tasks,
+      records,
+      groups,
+      previousRecords,
+      currentYear,
+    );
+    const lowNovelty = diversityReport.novelty.low_novelty;
+    ctx.log(
+      `diversity: viewpoints ${diversityReport.viewpoint_spread.length}/${ALL_ANGLES.length} · ` +
+        `sources ${diversityReport.source_spread.map((s) => `${s.api} ${s.unique_records}`).join(" / ")} · ` +
+        `recency ${diversityReport.recency_rate} · ` +
+        `novelty ${diversityReport.novelty.novelty_rate} (${diversityReport.novelty.new_records}/${diversityReport.novelty.unique_records} new)` +
+        (lowNovelty
+          ? ` — LOW-NOVELTY: >${Math.round(LOW_NOVELTY_KNOWN_SHARE * 100)}% already in corpus; not progress (D-058)`
+          : ""),
+    );
 
     // Owner-pinned works (D-017): merge into the corpus with source_api
     // "pinned". A pin overlapping a harvested record fills its gaps and wins
@@ -1030,7 +1400,6 @@ export const evidenceConnector: Connector = {
 
     // Category checklist (D-019): metadata-only classification of every
     // record, including snowballed ones.
-    const currentYear = new Date().getUTCFullYear();
     for (const r of records) r.categories = classifyRecord(r, currentYear);
     const categoryCounts = countCategories(records);
     ctx.log(
@@ -1050,16 +1419,22 @@ export const evidenceConnector: Connector = {
       queries,
       coverage_report: coverageReport,
       category_counts: categoryCounts,
+      diversity_report: diversityReport,
       records,
     };
-    const fileName = `${mechanismId}.json`;
+
+    // Run warnings shared across both return paths (D-018/D-058): degradation
+    // and low-novelty flags flow through to the manifest.
+    const warnings: Record<string, boolean> = {};
+    if (s2Throttled) warnings.s2_throttled = true;
+    if (lowNovelty) warnings.low_novelty = true;
 
     // Anti-regression guardrail (D-038): a re-harvest that produces FEWER
     // records than the existing corpus is suspicious — a dropped evidence_terms
     // (name-only fallback), an upstream outage, or a throttled partial. Never
     // silently overwrite hard-won breadth with a weaker pull. Write to a side
     // file for review instead and flag the run; the existing corpus is kept.
-    const existingCount = readExistingRecordCount(join(ctx.corpusDir, fileName));
+    const existingCount = previousRecords?.length ?? null;
     if (existingCount !== null && records.length < existingCount) {
       const sideFile = `${mechanismId}.regression.json`;
       ctx.writeJson(sideFile, file);
@@ -1072,7 +1447,7 @@ export const evidenceConnector: Connector = {
         recordsFetched: records.length,
         files: [{ path: sideFile, records: records.length, categories: categoryCounts }],
         error: [message, ...failures].join(" · "),
-        warnings: { regression_suspected: true, ...(s2Throttled ? { s2_throttled: true } : {}) },
+        warnings: { regression_suspected: true, ...warnings },
       };
     }
 
@@ -1084,7 +1459,7 @@ export const evidenceConnector: Connector = {
       recordsFetched: records.length,
       files: [{ path: fileName, records: records.length, categories: categoryCounts }],
       ...(failures.length > 0 ? { error: failures.join(" · ") } : {}),
-      ...(s2Throttled ? { warnings: { s2_throttled: true } } : {}),
+      ...(Object.keys(warnings).length > 0 ? { warnings } : {}),
     };
   },
 };

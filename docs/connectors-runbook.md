@@ -292,6 +292,23 @@ completeness-checked corpus. The rules that keep that corpus honest:
   resolved via OpenAlex and the coverage ratio is written into
   `coverage_report`; any reference cited by ≥2 reviews but missing from the
   corpus is auto-added with `source_api: "snowball"`.
+- **Diversity, not volume** (D-058). Each term fans out across viewpoints — a
+  `canon` query (most-cited / relevance), a `recent` query (OpenAlex by date so
+  newer product forms aren't starved), and five contrast angles (`application`,
+  `critique`, `replication`, `boundary`, `cross-domain`) whose suffixes are
+  generic academic vocabulary, never science. The contrast angles alternate
+  OpenAlex / Semantic Scholar so a run draws across both sources. Every harvest
+  writes a `diversity_report` (viewpoint spread, source spread, recency, novelty
+  rate) into the corpus file.
+- **Novelty gate — re-fetching canon is not progress** (D-058). After dedupe,
+  the harvest's unique records are checked against the *previous* corpus. When
+  more than 80% were already on disk the run sets `low_novelty: true` in the
+  `diversity_report` and emits `warnings.low_novelty` in the manifest; the
+  corpus is still written (honest data) but the maturation loop does **not**
+  count it as progress. The gap planner skips a queued task whose mechanism's
+  last harvest with the *same terms* came back low-novelty (counted as
+  `low_novelty_skipped` in `research-queue.json`) — change the terms or the
+  segment qualifier to re-enable it.
 
 ---
 

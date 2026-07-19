@@ -64,6 +64,7 @@ import type {
 
 const ROOT = join(__dirname, "..");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
+const EVIDENCE_DIR = join(ROOT, "corpora", "evidence");
 const PACK_MAP = join(ROOT, "packs", "pack-map.yaml");
 const SEGMENTS = join(ROOT, "segments", "segments.yaml");
 const ANALYSIS_DIR = join(ROOT, "analysis");
@@ -331,6 +332,38 @@ function suggestedTerms(mechanism: Mechanism, qualifier: string): string[] {
   return base.slice(0, MAX_TERMS_PER_TASK).map((term) => `${term} ${qualifier}`.trim());
 }
 
+/**
+ * The mechanism's last harvest terms + low-novelty flag (D-058), read from
+ * corpora/evidence/{id}.json. A corpus with no diversity_report (pre-D-058) or
+ * no file yields null — never skipped, so old corpora still re-harvest.
+ */
+function readCorpusNovelty(
+  mechanismId: string,
+): { terms: string[]; lowNovelty: boolean } | null {
+  const path = join(EVIDENCE_DIR, `${mechanismId}.json`);
+  if (!existsSync(path)) return null;
+  try {
+    const data = JSON.parse(readFileSync(path, "utf-8")) as {
+      terms?: unknown;
+      diversity_report?: { novelty?: { low_novelty?: unknown } };
+    };
+    return {
+      terms: Array.isArray(data.terms) ? (data.terms as string[]) : [],
+      lowNovelty: data.diversity_report?.novelty?.low_novelty === true,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/** True when two term lists are the same set (order-insensitive, trimmed). */
+function sameTerms(a: string[], b: string[]): boolean {
+  if (a.length !== b.length) return false;
+  const sa = a.map((t) => t.trim()).sort();
+  const sb = b.map((t) => t.trim()).sort();
+  return sa.every((t, i) => t === sb[i]);
+}
+
 function reasonFor(
   cell: SufficiencyCell,
   file: AnalyzerConfigFile,
@@ -444,9 +477,26 @@ function main(): void {
   );
   const effectiveMaxTasks = Math.max(0, Math.min(gp.budget.max_tasks, budgetMaxTasks));
 
-  const tasks: ResearchTask[] = ranked.slice(0, effectiveMaxTasks).map((candidate) => {
+  // Build the queue in rank order, filling up to effective_max_tasks. A
+  // candidate whose mechanism's last harvest used the SAME terms and came back
+  // low-novelty (D-058) is skipped BEFORE it consumes a budget slot —
+  // re-fetching the same canon is not progress. It is counted, not silently
+  // dropped, so the queue's shrink is explainable and reversible (change the
+  // terms or the segment qualifier and it re-enters).
+  const tasks: ResearchTask[] = [];
+  let lowNoveltySkipped = 0;
+  for (const candidate of ranked) {
+    if (tasks.length >= effectiveMaxTasks) break;
     const mechanism = mechanisms.get(candidate.mechanism) as Mechanism;
     const qualifier = qualifiers[candidate.segment];
+    const terms = suggestedTerms(mechanism, qualifier);
+
+    const novelty = readCorpusNovelty(candidate.mechanism);
+    if (novelty && novelty.lowNovelty && sameTerms(novelty.terms, terms)) {
+      lowNoveltySkipped++;
+      continue;
+    }
+
     const gapCell: ResearchGapCell = {
       pack: candidate.cell.pack,
       segment: candidate.cell.segment,
@@ -454,15 +504,15 @@ function main(): void {
       gaps: candidate.cell.gaps,
       segment_evidence: candidate.cell.segment_evidence,
     };
-    return {
+    tasks.push({
       gap_cell: gapCell,
       mechanism: candidate.mechanism,
       segment: candidate.segment,
       importance: candidate.importance,
-      suggested_evidence_terms: suggestedTerms(mechanism, qualifier),
+      suggested_evidence_terms: terms,
       reason: reasonFor(candidate.cell, file, harvestCriteria(candidate.cell)),
-    };
-  });
+    });
+  }
 
   const queue: ResearchQueue = {
     version: QUEUE_VERSION,
@@ -479,6 +529,7 @@ function main(): void {
       effective_max_tasks: effectiveMaxTasks,
     },
     candidate_count: ranked.length,
+    low_novelty_skipped: lowNoveltySkipped,
     tasks,
   };
 
@@ -522,7 +573,8 @@ function main(): void {
       `${harvestableCells.length} harvestable → ${ranked.length} (mechanism × segment) candidates, ` +
       `queued ${tasks.length} harvest task(s) of N=${effectiveMaxTasks} ` +
       `(config ${gp.budget.max_tasks} / budget ${budgetMaxTasks}; ` +
-      `${remainingCalls} monthly calls remaining) → ${rel(QUEUE)}.`,
+      `${remainingCalls} monthly calls remaining` +
+      `${lowNoveltySkipped > 0 ? `; ${lowNoveltySkipped} low-novelty repeat(s) skipped, D-058` : ""}) → ${rel(QUEUE)}.`,
   );
   console.log(
     `     ${authoringTasks.length} cell(s) with structural gaps → ${rel(AUTHORING_QUEUE)} ` +
