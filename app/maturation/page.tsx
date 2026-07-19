@@ -39,7 +39,9 @@ import {
 import type {
   AuthoringTask,
   MaturationLogEntry,
+  MaturityStage,
   ResearchTask,
+  StageThresholds,
   SufficiencyCell,
   SufficiencyCriterion,
   SufficiencyStatus,
@@ -396,6 +398,60 @@ function HeatmapLegend({ unscored }: { unscored: string[] }) {
   );
 }
 
+// ---------- Stage + thresholds (D-060) ----------
+
+/** One-line meaning of each maturity stage — read plainly, never hardcoded bars. */
+const STAGE_MEANING: Record<MaturityStage, string> = {
+  seed: "green means seed-adequate, not final — the bar rises as the knowledge matures",
+  growing: "green means growing-adequate — a raised bar over seed, not yet the final one",
+  mature: "green means the final, mature bar is met",
+};
+
+/**
+ * States the active maturity stage and its per-criterion thresholds plainly
+ * (D-060). Every number is read from the matrix header (matrix.maturity_stage /
+ * matrix.thresholds), which the analyzer stamped from analyzer.config.yaml — no
+ * threshold is hardcoded here. Renders nothing when the matrix predates the
+ * stage-aware header (honest absence, not a fabricated bar).
+ */
+function ThresholdStrip({
+  stage,
+  thresholds,
+}: {
+  stage: MaturityStage;
+  thresholds: StageThresholds;
+}) {
+  return (
+    <div className="mt-4 rounded-md border border-[#243329] bg-[#1A2620] px-4 py-3">
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <span className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8]">
+          maturity stage
+        </span>
+        <span className="rounded-full border border-[#34D399]/30 bg-[#0E1512] px-2 py-0.5 font-mono text-xs uppercase tracking-wider text-[#34D399]">
+          {stage}
+        </span>
+        <span className="text-xs text-[#8CA495]">{STAGE_MEANING[stage]}</span>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+        {CRITERIA.map(({ key, label }) => {
+          const t = thresholds[key] ?? thresholds.default;
+          return (
+            <span key={key} className="inline-flex items-center gap-2 font-mono text-[11px]">
+              <span className="text-[#8CA495]">{label}</span>
+              <span className="text-[#34D399]">≥ {fmtScore(t.green)}</span>
+              <span className="text-[#7C93A8]">/</span>
+              <span className="text-[#E4B54E]">≥ {fmtScore(t.amber)}</span>
+            </span>
+          );
+        })}
+      </div>
+      <p className="mt-3 border-t border-[#243329] pt-2 font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
+        green ≥ · amber ≥ · below amber = red · thresholds are stage-aware and explicit (D-060)
+      </p>
+    </div>
+  );
+}
+
 // ---------- Page ----------
 
 export default function MaturationPage() {
@@ -442,11 +498,18 @@ export default function MaturationPage() {
             of the loop. The growing matrix is the proof the core is alive.
           </p>
         </div>
-        {coverage && (
-          <span className="rounded-full border border-[#243329] bg-[#1A2620] px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-[#8CA495]">
-            {coverage.overall.pctGreen}% green
-          </span>
-        )}
+        <div className="flex flex-wrap items-center gap-2">
+          {matrix && (
+            <span className="rounded-full border border-[#34D399]/30 bg-[#1A2620] px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-[#34D399]">
+              stage: {matrix.maturity_stage}
+            </span>
+          )}
+          {coverage && (
+            <span className="rounded-full border border-[#243329] bg-[#1A2620] px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-[#8CA495]">
+              {coverage.overall.pctGreen}% green
+            </span>
+          )}
+        </div>
       </header>
 
       <div className="mt-6 rounded-lg border border-[#34D399]/25 bg-[#1A2620] px-4 py-3">
@@ -489,7 +552,7 @@ export default function MaturationPage() {
           subtitle="Packs (rows) × active segments (columns). Cell color = computed status; hover for the 5 scores, gaps, and the segment-evidence flag."
           footer={
             matrix
-              ? `computed from ${matrixRel}${segmentsFile ? ` + ${segmentsRel}` : ""} · ${matrix.cells.length} cells · config ${matrix.config_version}`
+              ? `computed from ${matrixRel}${segmentsFile ? ` + ${segmentsRel}` : ""} · ${matrix.cells.length} cells · config ${matrix.config_version} · stage ${matrix.maturity_stage}`
               : matrixRel
           }
         >
@@ -497,6 +560,9 @@ export default function MaturationPage() {
             <>
               <HeatmapTable heatmap={heatmap} />
               <HeatmapLegend unscored={heatmap.unscoredSegments} />
+              {matrix?.maturity_stage && matrix.thresholds && (
+                <ThresholdStrip stage={matrix.maturity_stage} thresholds={matrix.thresholds} />
+              )}
             </>
           ) : (
             <EmptyState

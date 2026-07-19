@@ -1,4 +1,4 @@
-version: 0.1.0
+version: 0.2.0
 
 # Analyzer config — the ONE hand-authored input to sufficiency scoring (D-050).
 #
@@ -24,14 +24,37 @@ grade_weights:
 # below B, so A+, A, A-, B+, B qualify).
 min_context_grade: B
 
-# Per-criterion status thresholds: score ≥ green → green, ≥ amber → amber,
-# else red. Criteria without an override use default. Cell status = worst
-# criterion.
-thresholds:
-  default: { green: 0.8, amber: 0.5 }
-  # Dissent is a hard hygiene bar: one stripped dossier in a 3–4 mechanism
-  # pack (share ≤ 0.75) must turn the cell red, not amber.
-  dissent_completeness: { green: 1.0, amber: 0.8 }
+# Maturity stage (D-060): seed | growing | mature. This is the ONE knob that
+# selects which per-criterion thresholds are active. It is owner-tunable and
+# EXPLICIT — not a silent lowering of the bar. An 80% interaction_coverage bar
+# is unreachable at t=0 with 12 seed mechanisms, so a stage-blind "mature" bar
+# would paint honest early progress red. Green at seed stage means SEED-ADEQUATE,
+# not final; the bar rises as the knowledge matures. The analyzer stamps the
+# active stage + resolved thresholds into the matrix header so the cockpit
+# states them plainly and nothing is hardcoded in components.
+maturity_stage: seed
+
+# Per-criterion status thresholds PER STAGE: score ≥ green → green, ≥ amber →
+# amber, else red. Criteria without an override use that stage's default. Cell
+# status = worst criterion. The analyzer enforces MONOTONICITY loudly: for every
+# criterion, green and amber must be non-decreasing seed → growing → mature, so
+# a stage never secretly relaxes below an earlier one. `mature` holds the final
+# bar (unchanged from before this became stage-aware).
+stage_thresholds:
+  seed:
+    default: { green: 0.5, amber: 0.3 }
+    interaction_coverage: { green: 0.4, amber: 0.2 }
+    # Dissent is a hard hygiene bar at EVERY stage: one stripped dossier in a
+    # 3–4 mechanism pack (share ≤ 0.75) must turn the cell red, not amber.
+    # Hygiene is not maturity, so this bar does not relax at seed.
+    dissent_completeness: { green: 1.0, amber: 0.8 }
+  growing:
+    default: { green: 0.65, amber: 0.4 }
+    interaction_coverage: { green: 0.6, amber: 0.35 }
+    dissent_completeness: { green: 1.0, amber: 0.8 }
+  mature:
+    default: { green: 0.8, amber: 0.5 }
+    dissent_completeness: { green: 1.0, amber: 0.8 }
 
 # Segment → typical funnel stages (registry applicability vocabulary:
 # cold_acquisition | onboarding | activation | conversion | retention |

@@ -68,9 +68,11 @@ import type {
   GapFixType,
   GradeLetter,
   HarvestHistory,
+  MaturityStage,
   Mechanism,
   PackMapFile,
   SegmentsFile,
+  StageThresholds,
   SufficiencyCell,
   SufficiencyCriterion,
   SufficiencyMatrix,
@@ -100,6 +102,9 @@ const CRITERIA: SufficiencyCriterion[] = [
   "context_coverage",
   "freshness",
 ];
+
+/** Maturity stages (D-060) in ascending-bar order — monotonicity is checked over this. */
+const MATURITY_STAGES: MaturityStage[] = ["seed", "growing", "mature"];
 
 /**
  * Gap typing (D-055): every failing criterion is labeled by what can actually
@@ -203,24 +208,60 @@ function loadConfig(activeSegmentIds: string[], rosterIds: Set<string>): LoadedC
     problems.push(`min_context_grade "${config.min_context_grade}" is not a grade`);
   }
 
-  const thresholdEntries = Object.entries(config.thresholds ?? {});
-  if (!config.thresholds?.default) {
-    problems.push("thresholds.default is required");
+  // Maturity stage + per-stage thresholds (D-060). The active stage must be one
+  // of the three; every stage must carry a valid `default` and only real
+  // criteria as overrides; and the bars must be MONOTONIC (non-decreasing)
+  // across seed → growing → mature so a later stage never silently relaxes an
+  // earlier one — the "explicit maturity model, not a lowered bar" guarantee.
+  if (!MATURITY_STAGES.includes(config.maturity_stage)) {
+    problems.push(
+      `maturity_stage "${config.maturity_stage}" must be one of ${MATURITY_STAGES.join(" | ")}`,
+    );
   }
-  for (const [name, threshold] of thresholdEntries) {
-    if (name !== "default" && !CRITERIA.includes(name as SufficiencyCriterion)) {
-      problems.push(`thresholds.${name} is not a sufficiency criterion`);
+  for (const stage of MATURITY_STAGES) {
+    const stageThresholds = config.stage_thresholds?.[stage];
+    if (!stageThresholds) {
+      problems.push(`stage_thresholds.${stage} is required`);
       continue;
     }
-    const { green, amber } = threshold as SufficiencyThreshold;
-    if (
-      typeof green !== "number" ||
-      typeof amber !== "number" ||
-      amber > green ||
-      amber < 0 ||
-      green > 1
-    ) {
-      problems.push(`thresholds.${name} must satisfy 0 ≤ amber ≤ green ≤ 1`);
+    if (!stageThresholds.default) {
+      problems.push(`stage_thresholds.${stage}.default is required`);
+    }
+    for (const [name, threshold] of Object.entries(stageThresholds)) {
+      if (name !== "default" && !CRITERIA.includes(name as SufficiencyCriterion)) {
+        problems.push(`stage_thresholds.${stage}.${name} is not a sufficiency criterion`);
+        continue;
+      }
+      const { green, amber } = threshold as SufficiencyThreshold;
+      if (
+        typeof green !== "number" ||
+        typeof amber !== "number" ||
+        amber > green ||
+        amber < 0 ||
+        green > 1
+      ) {
+        problems.push(`stage_thresholds.${stage}.${name} must satisfy 0 ≤ amber ≤ green ≤ 1`);
+      }
+    }
+  }
+  // Monotonicity across adjacent stages, per resolved criterion (default +
+  // every override key seen at either stage), on both green and amber.
+  for (let i = 1; i < MATURITY_STAGES.length; i += 1) {
+    const lower = config.stage_thresholds?.[MATURITY_STAGES[i - 1]];
+    const higher = config.stage_thresholds?.[MATURITY_STAGES[i]];
+    if (!lower?.default || !higher?.default) continue;
+    const keys = Array.from(
+      new Set<string>(["default", ...Object.keys(lower), ...Object.keys(higher)]),
+    );
+    for (const key of keys) {
+      const lo = (lower as Record<string, SufficiencyThreshold>)[key] ?? lower.default;
+      const hi = (higher as Record<string, SufficiencyThreshold>)[key] ?? higher.default;
+      if (hi.green < lo.green || hi.amber < lo.amber) {
+        problems.push(
+          `stage_thresholds ${key} must be non-decreasing ${MATURITY_STAGES[i - 1]} → ${MATURITY_STAGES[i]} ` +
+            `(green ${lo.green}→${hi.green}, amber ${lo.amber}→${hi.amber})`,
+        );
+      }
     }
   }
 
@@ -316,8 +357,14 @@ interface MemberContext {
   replicationFlagged: boolean;
 }
 
+/** The active-stage (D-060) threshold map the matrix is scored against. */
+function activeThresholds(config: AnalyzerConfig): StageThresholds {
+  return config.stage_thresholds[config.maturity_stage];
+}
+
 function thresholdFor(config: AnalyzerConfig, criterion: SufficiencyCriterion): SufficiencyThreshold {
-  return config.thresholds[criterion] ?? config.thresholds.default;
+  const active = activeThresholds(config);
+  return active[criterion] ?? active.default;
 }
 
 function statusFor(score: number, threshold: SufficiencyThreshold): SufficiencyStatus {
@@ -782,6 +829,8 @@ function main(): void {
     version: MATRIX_VERSION,
     generated_at: new Date().toISOString(),
     config_version: config.version,
+    maturity_stage: config.maturity_stage,
+    thresholds: activeThresholds(config),
     cells,
   };
 
@@ -795,7 +844,8 @@ function main(): void {
     `\nOK — ${cells.length} cells (${scope} × ${activeSegments.length} segments) → ${rel(MATRIX)}.`,
   );
   console.log(
-    `     status: ${statusCounts.green} green / ${statusCounts.amber} amber / ${statusCounts.red} red; ` +
+    `     stage: ${config.maturity_stage} (D-060); ` +
+      `status: ${statusCounts.green} green / ${statusCounts.amber} amber / ${statusCounts.red} red; ` +
       `${generalOnly} cell${generalOnly === 1 ? "" : "s"} on general evidence only.`,
   );
   if (exhaustionK) {

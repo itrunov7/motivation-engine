@@ -1,7 +1,22 @@
 {
   "version": "0.2.0",
-  "generated_at": "2026-07-17T17:21:46.632Z",
-  "config_version": "0.1.0",
+  "generated_at": "2026-07-19T18:30:26.930Z",
+  "config_version": "0.2.0",
+  "maturity_stage": "seed",
+  "thresholds": {
+    "default": {
+      "green": 0.5,
+      "amber": 0.3
+    },
+    "interaction_coverage": {
+      "green": 0.4,
+      "amber": 0.2
+    },
+    "dissent_completeness": {
+      "green": 1,
+      "amber": 0.8
+    }
+  },
   "cells": [
     {
       "pack": "entry",
@@ -15,22 +30,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -54,16 +60,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "reactivation"
           ]
         },
         {
@@ -88,22 +84,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7143,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -130,16 +117,6 @@
           ]
         },
         {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "retention"
-          ]
-        },
-        {
           "criterion": "segment_evidence",
           "value": 0,
           "threshold": 1,
@@ -161,21 +138,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
         "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -223,22 +192,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -265,16 +225,6 @@
           ]
         },
         {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "retention"
-          ]
-        },
-        {
           "criterion": "segment_evidence",
           "value": 0,
           "threshold": 1,
@@ -296,21 +246,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
         "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -358,21 +300,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
         "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -420,22 +354,14 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
         "interaction_coverage",
         "context_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -464,7 +390,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -494,22 +420,14 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
         "interaction_coverage",
         "context_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -538,7 +456,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -568,22 +486,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -607,16 +516,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "retention"
           ]
         },
         {
@@ -641,22 +540,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -680,16 +570,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "reactivation"
           ]
         },
         {
@@ -714,22 +594,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -753,16 +624,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
           ]
         },
         {
@@ -787,22 +648,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -826,16 +678,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "retention"
           ]
         },
         {
@@ -860,22 +702,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -899,16 +732,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "retention"
           ]
         },
         {
@@ -933,22 +756,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -975,16 +789,6 @@
           ]
         },
         {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "retention"
-          ]
-        },
-        {
           "criterion": "segment_evidence",
           "value": 0,
           "threshold": 1,
@@ -1006,21 +810,13 @@
       },
       "status": "red",
       "gaps": [
-        "grade_sufficiency",
         "interaction_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "interaction_coverage",
           "value": 0.1667,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1059,7 +855,7 @@
         "context_coverage": 0.3333,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage",
         "context_coverage"
@@ -1068,7 +864,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1093,7 +889,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -1121,7 +917,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -1129,7 +925,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1171,7 +967,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -1179,7 +975,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1221,16 +1017,15 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1250,16 +1045,6 @@
               "VR-02",
               "ZE-07"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -1282,16 +1067,15 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1311,16 +1095,6 @@
               "VR-02",
               "ZE-07"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -1343,16 +1117,15 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1375,16 +1148,6 @@
           ]
         },
         {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
           "criterion": "segment_evidence",
           "value": 0,
           "threshold": 1,
@@ -1404,7 +1167,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -1412,7 +1175,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1454,7 +1217,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -1462,7 +1225,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1504,7 +1267,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -1512,7 +1275,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1554,7 +1317,7 @@
         "context_coverage": 0.3333,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage",
         "context_coverage"
@@ -1563,7 +1326,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1588,7 +1351,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -1616,7 +1379,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -1624,7 +1387,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1666,16 +1429,15 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1698,16 +1460,6 @@
           ]
         },
         {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
           "criterion": "segment_evidence",
           "value": 0,
           "threshold": 1,
@@ -1727,7 +1479,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -1735,7 +1487,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1777,7 +1529,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -1785,7 +1537,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1820,16 +1572,15 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1849,16 +1600,6 @@
               "VR-02",
               "ZE-07"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -1890,7 +1631,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1911,7 +1652,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -1947,7 +1688,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -1993,7 +1734,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2033,14 +1774,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2056,16 +1796,6 @@
               "VR-02",
               "ZE-07"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -2090,14 +1820,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2113,16 +1842,6 @@
               "VR-02",
               "ZE-07"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -2147,14 +1866,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2170,16 +1888,6 @@
               "VR-02",
               "ZE-07"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -2210,7 +1918,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2256,7 +1964,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2302,7 +2010,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2349,7 +2057,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2370,7 +2078,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -2406,7 +2114,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2446,14 +2154,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2469,16 +2176,6 @@
               "VR-02",
               "ZE-07"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -2509,7 +2206,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2555,7 +2252,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2588,14 +2285,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -2611,16 +2307,6 @@
               "VR-02",
               "ZE-07"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -2645,27 +2331,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
         "context_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
           "criterion": "context_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -2694,43 +2366,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "conversion"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -2743,43 +2381,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "conversion"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -2792,43 +2396,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -2843,27 +2413,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
         "context_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
           "criterion": "context_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -2893,27 +2449,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
         "context_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
           "criterion": "context_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -2941,32 +2483,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -2979,32 +2498,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3017,32 +2513,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3057,27 +2530,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
         "context_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
           "criterion": "context_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -3106,43 +2565,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "conversion"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3155,43 +2580,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3204,32 +2595,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3242,25 +2610,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "segment_specific"
     },
     {
@@ -3275,27 +2627,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
         "context_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "VR-02",
-              "ZE-07"
-            ]
-          ]
-        },
-        {
           "criterion": "context_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -3323,36 +2661,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "segment_specific"
     },
     {
@@ -3365,32 +2676,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3403,32 +2691,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3441,43 +2706,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3490,43 +2721,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3539,43 +2736,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3588,32 +2751,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3626,32 +2766,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3664,32 +2781,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3702,43 +2796,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3751,32 +2811,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3789,43 +2826,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3838,32 +2841,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3876,25 +2856,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "segment_specific"
     },
     {
@@ -3907,43 +2871,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "HA-04",
-              "LA-01"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3956,23 +2886,15 @@
         "context_coverage": 0.3333,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "grade_sufficiency",
         "context_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7333,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -4000,29 +2922,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "conversion"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4035,29 +2937,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "conversion"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4085,37 +2967,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "grade_sufficiency",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0.7333,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "conversion"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4128,37 +2982,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "grade_sufficiency",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0.7333,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "conversion"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4171,29 +2997,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4206,29 +3012,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4256,23 +3042,15 @@
         "context_coverage": 0.3333,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "grade_sufficiency",
         "context_coverage"
       ],
       "typed_gaps": [
         {
-          "criterion": "grade_sufficiency",
-          "value": 0.7333,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -4300,7 +3078,7 @@
         "context_coverage": 0.3333,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "context_coverage"
       ],
@@ -4308,7 +3086,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -4381,37 +3159,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "grade_sufficiency",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0.7333,
-          "threshold": 0.8,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "conversion"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4424,7 +3174,7 @@
         "context_coverage": 0.3333,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "context_coverage"
       ],
@@ -4432,7 +3182,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -4490,29 +3240,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4525,29 +3255,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4560,29 +3270,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4595,29 +3285,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4630,29 +3300,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4680,7 +3330,7 @@
         "context_coverage": 0.3333,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "context_coverage"
       ],
@@ -4688,7 +3338,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -4716,29 +3366,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4751,29 +3381,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4816,22 +3426,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "segment_specific"
     },
     {
@@ -4844,40 +3441,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "segment_specific"
     },
     {
@@ -4890,36 +3456,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4932,36 +3471,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4974,47 +3486,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -5027,47 +3501,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -5080,47 +3516,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -5133,47 +3531,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -5186,47 +3546,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -5239,36 +3561,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -5281,47 +3576,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -5334,47 +3591,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -5387,47 +3606,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -5440,36 +3621,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -5482,36 +3636,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -5524,40 +3651,9 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "EN-03",
-              "FR-11"
-            ],
-            [
-              "EN-03",
-              "SC-06"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
-          ]
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "segment_specific"
     },
     {
@@ -5570,16 +3666,15 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -5591,16 +3686,6 @@
               "LA-01",
               "ST-09"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         }
       ],
@@ -5616,7 +3701,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -5624,7 +3709,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -5658,7 +3743,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -5666,7 +3751,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -5700,16 +3785,15 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -5721,16 +3805,6 @@
               "LA-01",
               "ST-09"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -5753,16 +3827,15 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -5774,16 +3847,6 @@
               "LA-01",
               "ST-09"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -5806,16 +3869,15 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -5827,16 +3889,6 @@
               "LA-01",
               "ST-09"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -5859,16 +3911,15 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -5880,16 +3931,6 @@
               "LA-01",
               "ST-09"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
           ]
         },
         {
@@ -5912,16 +3953,15 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -5933,16 +3973,6 @@
               "LA-01",
               "ST-09"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
           ]
         },
         {
@@ -5965,7 +3995,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -5973,7 +4003,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6007,16 +4037,15 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6028,16 +4057,6 @@
               "LA-01",
               "ST-09"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -6060,16 +4079,15 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6081,16 +4099,6 @@
               "LA-01",
               "ST-09"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
           ]
         },
         {
@@ -6113,16 +4121,15 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6134,16 +4141,6 @@
               "LA-01",
               "ST-09"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -6166,7 +4163,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -6174,7 +4171,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6208,7 +4205,7 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
         "interaction_coverage"
       ],
@@ -6216,7 +4213,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6250,16 +4247,15 @@
         "context_coverage": 0.5,
         "freshness": 1
       },
-      "status": "red",
+      "status": "amber",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6271,16 +4267,6 @@
               "LA-01",
               "ST-09"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -6312,7 +4298,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6325,7 +4311,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -6355,14 +4341,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6370,16 +4355,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "retention"
           ]
         },
         {
@@ -6410,7 +4385,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6449,7 +4424,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6462,7 +4437,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -6492,14 +4467,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6507,16 +4481,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -6541,14 +4505,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6556,16 +4519,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         },
         {
@@ -6597,7 +4550,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6610,7 +4563,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -6647,7 +4600,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6660,7 +4613,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -6690,14 +4643,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6705,16 +4657,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "retention"
           ]
         },
         {
@@ -6746,7 +4688,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6759,7 +4701,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -6789,14 +4731,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6804,16 +4745,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
           ]
         },
         {
@@ -6845,7 +4776,7 @@
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6858,7 +4789,7 @@
         {
           "criterion": "context_coverage",
           "value": 0.3333,
-          "threshold": 0.8,
+          "threshold": 0.5,
           "fix_type": "structural",
           "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
           "uncovered_stages": [
@@ -6888,14 +4819,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6903,16 +4833,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "retention"
           ]
         },
         {
@@ -6937,14 +4857,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -6952,16 +4871,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "retention"
           ]
         },
         {
@@ -6986,14 +4895,13 @@
       },
       "status": "red",
       "gaps": [
-        "interaction_coverage",
-        "context_coverage"
+        "interaction_coverage"
       ],
       "typed_gaps": [
         {
           "criterion": "interaction_coverage",
           "value": 0,
-          "threshold": 0.8,
+          "threshold": 0.4,
           "fix_type": "structural",
           "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
           "missing_interaction_pairs": [
@@ -7001,16 +4909,6 @@
               "FR-11",
               "SP-08"
             ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.5,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "cold_acquisition"
           ]
         }
       ],
@@ -7026,43 +4924,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "reactivation"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7075,32 +4939,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7113,32 +4954,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7151,32 +4969,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7189,32 +4984,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7227,32 +4999,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7265,43 +5014,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7314,43 +5029,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7363,32 +5044,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7401,43 +5059,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "reactivation"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7450,43 +5074,9 @@
         "context_coverage": 0.6667,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage",
-        "context_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
-          "uncovered_stages": [
-            "onboarding"
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7499,32 +5089,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7537,32 +5104,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7575,32 +5119,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -7613,25 +5134,9 @@
         "context_coverage": 1,
         "freshness": 1
       },
-      "status": "amber",
-      "gaps": [
-        "interaction_coverage"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "interaction_coverage",
-          "value": 0.6667,
-          "threshold": 0.8,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)",
-          "missing_interaction_pairs": [
-            [
-              "RE-10",
-              "ST-09"
-            ]
-          ]
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "segment_specific"
     }
   ]

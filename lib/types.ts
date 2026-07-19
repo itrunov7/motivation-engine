@@ -873,6 +873,22 @@ export interface SufficiencyThreshold {
   amber: number;
 }
 
+/**
+ * Maturity stage (D-060): the knowledge base's honest stage of growth. Selects
+ * which per-criterion thresholds are active — green at `seed` means
+ * seed-adequate, not final. Owner-tunable and explicit, never a silent lowering.
+ */
+export type MaturityStage = "seed" | "growing" | "mature";
+
+/**
+ * Per-criterion thresholds for ONE maturity stage: a required `default` plus
+ * optional per-criterion overrides. Cell status = worst criterion; a criterion
+ * without an override uses `default`.
+ */
+export type StageThresholds = { default: SufficiencyThreshold } & Partial<
+  Record<SufficiencyCriterion, SufficiencyThreshold>
+>;
+
 /** Grade letter family; the +/- modifier collapses (A- → A). */
 export type GradeLetter = "A" | "B" | "C";
 
@@ -892,18 +908,24 @@ export interface ExhaustionConfig {
 
 /**
  * /analysis/analyzer.config.yaml — the owner-tunable analyzer input:
- * grade weights, per-criterion thresholds, the segment → typical-funnel-stage
- * map, segment-affinity boosts, and owner replication flags. segment_stages
- * and segment_affinity are product judgment defaults, not science claims.
+ * grade weights, a maturity stage selecting per-stage per-criterion thresholds
+ * (D-060), the segment → typical-funnel-stage map, segment-affinity boosts, and
+ * owner replication flags. segment_stages and segment_affinity are product
+ * judgment defaults, not science claims.
  */
 export interface AnalyzerConfig {
   version: string;
   grade_weights: Record<GradeLetter, number>;
   /** The "grade ≥ B" cutoff for context_coverage. */
   min_context_grade: EvidenceGrade;
-  thresholds: { default: SufficiencyThreshold } & Partial<
-    Record<SufficiencyCriterion, SufficiencyThreshold>
-  >;
+  /** Active maturity stage (D-060) selecting which stage_thresholds apply. */
+  maturity_stage: MaturityStage;
+  /**
+   * Per-stage per-criterion thresholds (D-060). Every stage must carry a valid
+   * `default`; the analyzer enforces monotonic (non-decreasing) bars across
+   * seed → growing → mature so a stage never silently relaxes the bar.
+   */
+  stage_thresholds: Record<MaturityStage, StageThresholds>;
   /** Every active segment must have an entry; the analyzer fails loudly otherwise. */
   segment_stages: Record<string, FunnelStage[]>;
   /** Segment → mechanism boost; presence marks segment-specific judgment. */
@@ -966,6 +988,13 @@ export interface SufficiencyMatrix {
   generated_at: string;
   /** The analyzer.config.yaml version the matrix was scored with. */
   config_version: string;
+  /** The maturity stage (D-060) the matrix was scored at. */
+  maturity_stage: MaturityStage;
+  /**
+   * The resolved active-stage thresholds the matrix was scored with (D-060) —
+   * stamped so the cockpit states the bars plainly without hardcoding them.
+   */
+  thresholds: StageThresholds;
   cells: SufficiencyCell[];
 }
 

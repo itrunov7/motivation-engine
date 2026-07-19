@@ -48,17 +48,18 @@ import type {
   AuthoringTask,
   EvidenceGrade,
   GapPlannerConfig,
+  MaturityStage,
   Mechanism,
   PackMapFile,
   ResearchGapCell,
   ResearchQueue,
   ResearchTask,
   SegmentsFile,
+  StageThresholds,
   SufficiencyCell,
   SufficiencyCriterion,
   SufficiencyMatrix,
   SufficiencyStatus,
-  SufficiencyThreshold,
   TypedGap,
 } from "../lib/types";
 
@@ -91,12 +92,12 @@ const QUEUE_STATUS_ORDER: Record<Exclude<SufficiencyStatus, "green">, number> = 
   amber: 1,
 };
 
-/** The shape of analyzer.config.yaml we read: thresholds + the gap_planner block. */
+/** The shape of analyzer.config.yaml we read: stage thresholds + the gap_planner block. */
 interface AnalyzerConfigFile {
   version: string;
-  thresholds: { default: SufficiencyThreshold } & Partial<
-    Record<SufficiencyCriterion, SufficiencyThreshold>
-  >;
+  /** Active maturity stage (D-060) selecting which stage_thresholds size gaps. */
+  maturity_stage: MaturityStage;
+  stage_thresholds: Record<MaturityStage, StageThresholds>;
   /** Segment → funnel stages; a segment absent here is a bootstrap segment (D-054). */
   segment_stages?: Record<string, unknown>;
   replication_flags?: string[];
@@ -167,8 +168,10 @@ function loadGapPlannerConfig(
     Array.from(activeSegmentIds).filter((id) => !configuredStages.has(id)),
   );
 
-  if (!file.thresholds?.default) {
-    problems.push("thresholds.default is required to size gaps");
+  if (!file.stage_thresholds?.[file.maturity_stage]?.default) {
+    problems.push(
+      `stage_thresholds.${file.maturity_stage}.default is required to size gaps (D-060)`,
+    );
   }
   if (!gp) {
     fail(`${rel(CONFIG)}: gap_planner block is missing — add it (see the file header).`);
@@ -248,7 +251,8 @@ function loadGapPlannerConfig(
 // ---------- ranking ----------
 
 function greenThreshold(file: AnalyzerConfigFile, criterion: SufficiencyCriterion): number {
-  return (file.thresholds[criterion] ?? file.thresholds.default).green;
+  const active = file.stage_thresholds[file.maturity_stage];
+  return (active[criterion] ?? active.default).green;
 }
 
 /** Σ over the given failed criteria of (green_threshold − score), floored at 0. */
