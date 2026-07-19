@@ -30,6 +30,7 @@ L0  BRAIN SYSTEMS      — fundamental motivational/affective systems (fixed set
 | S4 | Social standing | RDoC social processes | ST-09, SP-08, RE-10 |
 | S5 | Self & ownership | RDoC social: self-perception | EN-03, ID-12 |
 | S6 | Evaluation & choice | RDoC cognitive: decision | FR-11 |
+| S7 | Perception & comprehension (cross-cutting) | RDoC cognitive: attention, perception, working memory | — (cross-cutting; applies to every element, D-062) |
 
 ### L1 mechanism lifecycle
 `candidate → incubating → core → deprecated` (also: candidate/incubating → rejected; core → demoted back to incubating). Baseline state: **LA-01 = core-pending (displayed as "incubating"), 11 seed stubs = candidate.** Transitions happen only via dossiers (see §4); the baseline UI only displays statuses, it never changes them.

@@ -2,7 +2,8 @@
 
 ## What lives here
 
-- `taxonomy.json` — the fixed L0 taxonomy (6 brain systems, S1–S6).
+- `taxonomy.json` — the fixed L0 taxonomy (7 brain systems, S1–S7; S7
+  Perception & comprehension is cross-cutting, D-062).
 - `mechanism.schema.json` — JSON Schema for full L1 mechanism records.
   Hard rules: `implementations[].metrics` and `constraints.hard_rules`
   must be non-empty, otherwise the record is invalid.

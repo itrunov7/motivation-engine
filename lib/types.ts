@@ -39,8 +39,8 @@ export type RuleSeverity = "block" | "warn";
 
 export type ProposedBy = "owner" | "derivation-pipeline";
 
-/** L0 taxonomy node id (S1–S6). */
-export type TaxonomyNodeId = "S1" | "S2" | "S3" | "S4" | "S5" | "S6";
+/** L0 taxonomy node id (S1–S7). */
+export type TaxonomyNodeId = "S1" | "S2" | "S3" | "S4" | "S5" | "S6" | "S7";
 
 export type ArtifactType =
   | "paywall"
@@ -65,6 +65,9 @@ export interface TaxonomyNode {
   name: string;
   anchors: TaxonomyAnchors;
   description: string;
+  /** A cross-cutting node applies to every generated element, not to
+   *  specific funnel stages (D-062). Optional; absent === false. */
+  cross_cutting?: boolean;
 }
 
 export interface Taxonomy {

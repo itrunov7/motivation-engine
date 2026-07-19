@@ -147,12 +147,12 @@ const taxonomySchema = {
     version: { type: "string", pattern: "^\\d+\\.\\d+\\.\\d+$" },
     nodes: {
       type: "array",
-      minItems: 6,
-      maxItems: 6,
+      minItems: 7,
+      maxItems: 7,
       items: {
         type: "object",
         properties: {
-          id: { type: "string", pattern: "^S[1-6]$" },
+          id: { type: "string", pattern: "^S[1-7]$" },
           name: { type: "string", minLength: 1 },
           anchors: {
             type: "object",
@@ -164,6 +164,7 @@ const taxonomySchema = {
             additionalProperties: false,
           },
           description: { type: "string", minLength: 1 },
+          cross_cutting: { type: "boolean" },
         },
         required: ["id", "name", "anchors", "description"],
         additionalProperties: false,
@@ -817,8 +818,8 @@ function main(): void {
   const taxonomyIds = new Set<string>();
   if (taxonomy !== undefined && validateAgainst(ajv.compile(taxonomySchema), PATHS.taxonomy, taxonomy)) {
     for (const node of taxonomy.nodes ?? []) taxonomyIds.add(node.id);
-    if (taxonomyIds.size !== 6) {
-      fail(PATHS.taxonomy, `expected 6 unique node ids S1–S6, found ${taxonomyIds.size}`);
+    if (taxonomyIds.size !== 7) {
+      fail(PATHS.taxonomy, `expected 7 unique node ids S1–S7, found ${taxonomyIds.size}`);
     } else {
       console.log(`  ✓ ${rel(PATHS.taxonomy)} valid (${taxonomyIds.size} L0 nodes)`);
     }
@@ -913,7 +914,7 @@ function main(): void {
         rosterIds.set(stub.id, file);
       }
     }
-    if (typeof stub.parent === "string" && taxonomyIds.size === 6 && !taxonomyIds.has(stub.parent)) {
+    if (typeof stub.parent === "string" && taxonomyIds.size === 7 && !taxonomyIds.has(stub.parent)) {
       fail(file, `parent "${stub.parent}" is not an L0 taxonomy node`);
     }
 
@@ -922,7 +923,7 @@ function main(): void {
 
   // 5. Cross-references for full records (need the complete roster first).
   for (const { file, record } of fullRecords) {
-    if (typeof record.parent === "string" && taxonomyIds.size === 6 && !taxonomyIds.has(record.parent)) {
+    if (typeof record.parent === "string" && taxonomyIds.size === 7 && !taxonomyIds.has(record.parent)) {
       fail(file, `parent "${record.parent}" is not an L0 taxonomy node`);
     }
     for (const relation of record.relations ?? []) {

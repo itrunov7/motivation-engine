@@ -518,13 +518,14 @@ function NodeSection({
     <section className="rounded-lg border border-[#243329] bg-[#151F1A] p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-col gap-1.5">
-          <div className="flex items-baseline gap-3">
+          <div className="flex flex-wrap items-baseline gap-3">
             <span className="font-mono text-sm text-[#34D399]">
               {entry.node.id}
             </span>
             <h3 className="font-display text-base font-medium text-[#E6EFE8]">
               {entry.node.name}
             </h3>
+            {entry.node.cross_cutting && <Tag>cross-cutting</Tag>}
           </div>
           <p className="max-w-2xl text-xs leading-relaxed text-[#8CA495]">
             {entry.node.description}
