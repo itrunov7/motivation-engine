@@ -6,27 +6,40 @@
   ],
   "connector_version": "2.4.0",
   "last_run": {
-    "timestamp": "2026-07-20T15:43:16.017Z",
-    "status": "partial",
+    "timestamp": "2026-07-20T16:04:50.221Z",
+    "status": "success",
     "params": {
-      "mechanism": "IF-18"
+      "mechanism": "SC-17"
     },
-    "records_fetched": 175,
+    "records_fetched": 390,
     "files_written": 1,
-    "duration_s": 550,
-    "error": "semantic-scholar boundary \"information foraging theory Pirolli boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar canon \"information scent user navigation\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar boundary \"information scent user navigation boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar critique \"web navigation cue judgment critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar critique \"information seeking behaviour interface critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-    "warnings": {
-      "s2_throttled": true
-    },
+    "duration_s": 71.23,
     "cost": {
-      "api_calls": 141,
-      "duration_s": 550,
+      "api_calls": 62,
+      "duration_s": 71.23,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-20T16:04:50.221Z",
+      "status": "success",
+      "params": {
+        "mechanism": "SC-17"
+      },
+      "records_fetched": 390,
+      "files_written": 1,
+      "duration_s": 71.23,
+      "cost": {
+        "api_calls": 62,
+        "duration_s": 71.23,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-20T15:43:16.017Z",
       "status": "partial",
@@ -423,28 +436,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-17T13:46:58.468Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FR-11",
-        "terms": "framing effect risky choice saas onboarding;anchoring adjustment heuristic saas onboarding;anchoring effect replication saas onboarding"
-      },
-      "records_fetched": 18,
-      "files_written": 1,
-      "duration_s": 6.57,
-      "error": "regression suspected: re-harvest produced 18 records vs 222 already in the corpus — corpus NOT overwritten; wrote FR-11.regression.json for review (D-038)",
-      "warnings": {
-        "regression_suspected": true
-      },
-      "cost": {
-        "api_calls": 9,
-        "duration_s": 6.57,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -642,14 +633,14 @@
     },
     {
       "path": "SC-17.json",
-      "records": 307,
-      "bytes": 2199751,
+      "records": 390,
+      "bytes": 2348416,
       "categories": {
         "foundational": 3,
         "meta-analysis": 6,
-        "replication": 24,
-        "dissent": 87,
-        "recent": 111
+        "replication": 25,
+        "dissent": 102,
+        "recent": 165
       }
     },
     {
@@ -718,6 +709,11 @@
       "bytes": 15982
     },
     {
+      "path": "digests/IF-18.md",
+      "records": 0,
+      "bytes": 11163
+    },
+    {
       "path": "digests/MM-15.md",
       "records": 0,
       "bytes": 17119
@@ -731,6 +727,11 @@
       "path": "digests/PS-13.md",
       "records": 0,
       "bytes": 17246
+    },
+    {
+      "path": "digests/SC-17.md",
+      "records": 0,
+      "bytes": 14227
     }
   ]
 }
