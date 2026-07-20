@@ -22,8 +22,12 @@
     "level": { "const": "L1" },
     "parent": {
       "type": "string",
-      "pattern": "^S[1-6]$",
+      "pattern": "^S[1-7]$",
       "description": "L0 taxonomy node id"
+    },
+    "cross_cutting": {
+      "type": "boolean",
+      "description": "A record under a cross-cutting L0 node (D-062, e.g. S7) applies to every generated element, not to specific funnel stages. Optional; absent === false."
     },
     "lifecycle_status": {
       "type": "string",
