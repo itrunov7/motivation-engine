@@ -4,30 +4,48 @@
     "openalex",
     "semantic-scholar"
   ],
-  "connector_version": "2.3.0",
+  "connector_version": "2.4.0",
   "last_run": {
-    "timestamp": "2026-07-17T14:36:28.736Z",
-    "status": "partial",
+    "timestamp": "2026-07-20T07:54:24.181Z",
+    "status": "success",
     "params": {
-      "mechanism": "FR-11",
-      "terms": "framing effect risky choice subscription retention;anchoring adjustment heuristic subscription retention;anchoring effect replication subscription retention"
+      "mechanism": "PS-13"
     },
-    "records_fetched": 34,
+    "records_fetched": 352,
     "files_written": 1,
-    "duration_s": 6.86,
-    "error": "regression suspected: re-harvest produced 34 records vs 222 already in the corpus — corpus NOT overwritten; wrote FR-11.regression.json for review (D-038)",
+    "duration_s": 95.02,
     "warnings": {
-      "regression_suspected": true
+      "s2_throttled": true
     },
     "cost": {
-      "api_calls": 9,
-      "duration_s": 6.86,
+      "api_calls": 57,
+      "duration_s": 95.02,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-20T07:54:24.181Z",
+      "status": "success",
+      "params": {
+        "mechanism": "PS-13"
+      },
+      "records_fetched": 352,
+      "files_written": 1,
+      "duration_s": 95.02,
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 57,
+        "duration_s": 95.02,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-17T14:36:28.736Z",
       "status": "partial",
@@ -383,27 +401,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T10:45:37.388Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "ZE-07"
-      },
-      "records_fetched": 139,
-      "files_written": 1,
-      "duration_s": 330.24,
-      "error": "semantic-scholar \"endowed progress effect\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 50,
-        "duration_s": 330.24,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -501,6 +498,18 @@
         "replication": 25,
         "dissent": 36,
         "recent": 61
+      }
+    },
+    {
+      "path": "PS-13.json",
+      "records": 352,
+      "bytes": 2197764,
+      "categories": {
+        "foundational": 42,
+        "meta-analysis": 10,
+        "replication": 42,
+        "dissent": 142,
+        "recent": 115
       }
     },
     {
