@@ -6,27 +6,48 @@
   ],
   "connector_version": "2.4.0",
   "last_run": {
-    "timestamp": "2026-07-20T14:45:40.036Z",
+    "timestamp": "2026-07-20T14:48:59.474Z",
     "status": "success",
     "params": {
-      "mechanism": "CL-14"
+      "mechanism": "IF-18"
     },
-    "records_fetched": 367,
+    "records_fetched": 316,
     "files_written": 1,
-    "duration_s": 79.75,
+    "duration_s": 83.03,
     "warnings": {
       "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 49,
-      "duration_s": 79.75,
+      "api_calls": 51,
+      "duration_s": 83.03,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-20T14:48:59.474Z",
+      "status": "success",
+      "params": {
+        "mechanism": "IF-18"
+      },
+      "records_fetched": 316,
+      "files_written": 1,
+      "duration_s": 83.03,
+      "warnings": {
+        "s2_throttled": true,
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 51,
+        "duration_s": 83.03,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-20T14:45:40.036Z",
       "status": "success",
@@ -401,26 +422,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T13:45:30.667Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FR-11"
-      },
-      "records_fetched": 222,
-      "files_written": 1,
-      "duration_s": 77.43,
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 35,
-        "duration_s": 77.43,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -523,7 +524,7 @@
     {
       "path": "IF-18.json",
       "records": 316,
-      "bytes": 1737284,
+      "bytes": 1737280,
       "categories": {
         "foundational": 10,
         "meta-analysis": 13,
