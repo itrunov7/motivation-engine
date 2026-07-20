@@ -6,26 +6,46 @@
   ],
   "connector_version": "2.4.0",
   "last_run": {
-    "timestamp": "2026-07-20T07:54:24.181Z",
+    "timestamp": "2026-07-20T07:56:47.041Z",
     "status": "success",
     "params": {
-      "mechanism": "PS-13"
+      "mechanism": "CL-14"
     },
-    "records_fetched": 352,
+    "records_fetched": 366,
     "files_written": 1,
-    "duration_s": 95.02,
+    "duration_s": 80.84,
     "warnings": {
       "s2_throttled": true
     },
     "cost": {
-      "api_calls": 57,
-      "duration_s": 95.02,
+      "api_calls": 51,
+      "duration_s": 80.84,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-20T07:56:47.041Z",
+      "status": "success",
+      "params": {
+        "mechanism": "CL-14"
+      },
+      "records_fetched": 366,
+      "files_written": 1,
+      "duration_s": 80.84,
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 51,
+        "duration_s": 80.84,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-20T07:54:24.181Z",
       "status": "success",
@@ -384,23 +404,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T12:32:11.210Z",
-      "status": "success",
-      "params": {
-        "mechanism": "EN-03"
-      },
-      "records_fetched": 173,
-      "files_written": 1,
-      "duration_s": 22.2,
-      "cost": {
-        "api_calls": 17,
-        "duration_s": 22.2,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -426,6 +429,18 @@
         "replication": 1,
         "dissent": 6,
         "recent": 14
+      }
+    },
+    {
+      "path": "CL-14.json",
+      "records": 366,
+      "bytes": 2027569,
+      "categories": {
+        "foundational": 33,
+        "meta-analysis": 4,
+        "replication": 52,
+        "dissent": 111,
+        "recent": 160
       }
     },
     {
