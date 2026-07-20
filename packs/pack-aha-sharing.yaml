@@ -48,7 +48,45 @@ mechanisms:
 # ─────────────────────────────────────────────
 cross_cutting_perception:
 
-  [] # fills automatically when S7 seeds are promoted to full records (docs/s7-drafting-brief.md); pack-map needs no change (D-066)
+  - id: CL-14
+    name: cognitive load
+    fact: "Working memory is narrow: only a few elements can be held and related at once."
+    grade: A
+    source: Working memory processes only a few elements at once (Baddeley 1974); when presentation consumes that capacity with load unrelated to the task (extraneous load), comprehension and performance degrade. Sweller 1988 and the 1998 architecture paper established the framework; split-attention (Chandler & Sweller 1991) and the 20-years-later review (Sweller et al. 2019) sustain it across four decades.; doi:10.1207/s15516709cog1202_4; doi:10.1023/A:1022193728205
+    boundary: expertise reversal what helps novices can hurt experts; load measurement relies on subjective scales; germane load construct contested; evidence base is instructional not commercial interfaces
+    active_when: ""
+    realizations: [extraneous-reduction, chunking-progressive-disclosure, split-attention-avoidance]
+    forbidden: [no-load-as-obstruction, no-essential-omission]
+
+  - id: MM-15
+    name: multimedia design principles
+    fact: How words and images are combined determines whether anything is understood.
+    grade: A
+    source: "Three decades of controlled experiments on how words and images should be combined. Established principles with the strongest support: multimedia (words plus relevant images beat words alone), coherence (removing interesting-but-extraneous material improves understanding — Mayer, Heiser & Lonn 2001), signalling (cueing the essential improves outcomes — Richter, Scheiter & Eitel meta-analysis), spatial and temporal contiguity (Ginns meta-analysis), and redundancy (duplicating identical content across channels harms rather than helps).; doi:10.1207/S15326985EP3801_6; doi:10.1017/CBO9781139547369"
+    boundary: evidence base is learning outcomes not conversion; expertise reversal applies; redundancy effect has boundary conditions; richer media not automatically better
+    active_when: artifact.conveys_explanatory_content
+    realizations: [multimedia-substitution, coherence-pruning, signaling, contiguity-and-redundancy]
+    forbidden: [no-explanatory-omission, no-misleading-visual, accessibility-preserved]
+
+  - id: PF-16
+    name: processing fluency
+    fact: "When something is easy to read, see or grasp, that ease is felt as a mild positive signal and is attributed to the thing itself rather than to the processing: fluent material is liked more, trusted more and judged more true."
+    grade: A-
+    source: "Ease of mental processing is experienced as a positive feeling and is misattributed to the object being processed: fluently processed material is judged more likeable, more familiar, more confidently, and — critically — more true. Reber, Schwarz & Winkielman (2004) for aesthetic preference; Alter & Oppenheimer (2009) integrating the fluency literatures; Dechêne et al. (2009) meta-analysis of the truth effect.; doi:10.1207/s15327957pspr0804_3; doi:10.1177/1088868309341564"
+    boundary: fluency signal meaning is learned not fixed; measurement of fluency contested; disfluency preferred in some contexts; truth effect is an ethical hazard not a tool
+    active_when: ""
+    realizations: [legibility-and-plain-language, familiar-structure]
+    forbidden: [no-fluency-for-false-claims, no-disfluency-obstruction, material-information-fluent]
+
+  - id: PS-13
+    name: picture superiority
+    fact: An image of a concrete thing is remembered better than its name, and is recognised faster.
+    grade: A-
+    source: Pictures of concrete things are recognised and recalled better than the words naming them — the picture superiority effect, one of the most reliably reproduced findings in memory research. Paivio's dual coding account (verbal and imaginal systems encoding separately, giving pictures two routes) is the classic explanation and remains the standard applied framing.; doi:10.1093/acprof:oso/9780195066661.001.0001; doi:10.1007/BF01320076
+    boundary: holds for concrete nameable items not abstract content; text superior for precise sequential technical information; dual coding explanation contested even where effect holds; memory advantage is not automatically a comprehension or conversion advantage
+    active_when: content.is_concrete_depictable
+    realizations: [show-the-outcome, visual-state-encoding]
+    forbidden: [no-replacing-precise-information, image-must-be-content, no-misleading-depiction, accessibility-preserved]
 
 # ─────────────────────────────────────────────
 # LAYER 2 — INTERACTIONS (often stronger than any single mechanism)
