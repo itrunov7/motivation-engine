@@ -554,6 +554,8 @@ export interface InteractionAuthoringPair {
 
 export interface InteractionAuthoring {
   pairs: InteractionAuthoringPair[];
+  /** Count of authored records on disk in /interactions (D-057), NOT a
+   * queue-derived tally — see computeInteractionAuthoring for why. */
   authoredCount: number;
   missingCount: number;
 }
@@ -564,6 +566,15 @@ export interface InteractionAuthoring {
  * need it; importance is the max across those cells; the authored flag/type is
  * read from the /interactions store on disk. Everything here is READ from files
  * and computed — never asserted.
+ *
+ * IMPORTANT (D-069): `authoredCount` is the number of records in the
+ * /interactions store, taken from `authored`, NOT `pairs.filter(p =>
+ * p.authored)`. The analyzer DROPS an authored pair from a cell's
+ * missing_interaction_pairs the moment its record lands (D-057), so an authored
+ * pair never appears in `queue.tasks` again — a queue-derived authored tally is
+ * therefore structurally pinned at ~0 (the exact "AUTHORED 0" bug). The store
+ * on disk is the source of truth for how many interactions are authored, which
+ * is also what the panel hint ("records in /interactions/") promises.
  */
 export function computeInteractionAuthoring(
   queue: AuthoringQueue,
@@ -618,7 +629,7 @@ export function computeInteractionAuthoring(
 
   return {
     pairs,
-    authoredCount: pairs.filter((p) => p.authored).length,
+    authoredCount: authored.size,
     missingCount: pairs.filter((p) => !p.authored).length,
   };
 }
