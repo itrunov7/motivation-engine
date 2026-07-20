@@ -186,6 +186,13 @@ cross_cutting_perception:
 # ─────────────────────────────────────────────
 interactions:
 
+  - combination: [VR-02, ZE-07]
+    type: reinforcing
+    fact: Uncertainty about the size or nature of a reward can motivate goal pursuit more than a certain reward of equal or greater expected value — the motivating-uncertainty effect — but only while the person is actively engaged in pursuit rather than deliberating whether to start. Within a progress structure, variable rewards along the path sustain effort; at the decision to begin, uncertainty suppresses.
+    grade: B
+    boundary: "Directional reversal is the key constraint: uncertain rewards demotivate at the deliberation stage and motivate during pursuit. Effect also depends on the uncertainty being resolvable and the pursuit being ongoing; open-ended uncertainty with no resolution point produces fatigue rather than drive."
+    source: "Shen, Fishbach & Hsee 2015, The Motivating-Uncertainty Effect, J Consumer Research doi:10.1086/679418 (directly studied); goal-gradient: Kivetz et al. 2006 doi:10.1509/jmkr.43.1.39."
+
   - combination: [VR-02, HA-04]
     type: noted
     fact: Variable reward is the reward component that makes habit loops (HA-04) sticky; HA-04 is the full loop, VR-02 is one part
@@ -413,6 +420,34 @@ cross_cutting_perception:
 # ─────────────────────────────────────────────
 interactions:
 
+  - combination: [CG-05, FR-11]
+    type: reinforcing
+    fact: "Curiosity depends on the reference point the question is framed against. In information-gap theory the drive scales with awareness of what one does not know: a gap framed too broadly reads as unanswerable and produces no pull, one framed as trivially known produces none either. Curiosity is highest at intermediate perceived knowledge — which makes the framing of the question, not the question itself, the operative variable."
+    grade: C+
+    boundary: Inferred from Loewenstein's account of gap salience rather than from a study of the two mechanisms combined. The inverted-U over perceived knowledge is theory-supported but its precise shape in applied contexts is not well established; framing that misrepresents what will be revealed collapses the effect and damages trust.
+    source: Loewenstein 1994 doi:10.1037/0033-2909.116.1.75 (information-gap theory, gap salience); Tversky & Kahneman 1981 doi:10.1126/science.7455683 (framing). Interaction claim is inferred.
+
+  - combination: [CG-05, RE-10]
+    type: sequence-amplifying
+    fact: "An opened curiosity gap that is closed with genuinely useful information delivers value before anything is asked — which is the precondition for reciprocity. The sequence matters: the gap creates attention, the resolution creates the gift, and only then does an ask land on an obligation. The same sequence with a hollow resolution inverts it — an unmet gap is experienced as a taking rather than a giving, and generates reactance instead of obligation."
+    grade: C
+    boundary: Inference; no direct study of the pair. Depends entirely on the resolution being independently valuable — the reciprocity component is carried by the value delivered, not by the curiosity. Clickbait is the failure case of this exact pairing.
+    source: Loewenstein 1994 doi:10.1037/0033-2909.116.1.75; Gouldner 1960 doi:10.2307/2092623 (norm of reciprocity). Interaction claim is inferred convergence.
+
+  - combination: [CG-05, SP-08]
+    type: reinforcing
+    fact: "Social signals act as curiosity triggers as well as evidence: knowing that many others found something worthwhile creates a gap about what they found. The social cue both certifies that the answer is worth having and marks that one does not yet have it — the two mechanisms load the same cue from different directions."
+    grade: C+
+    boundary: "Inferred convergence, not a studied interaction. Shares a failure mode with any social cue: if the popularity signal is not credible, both the evidential and the curiosity value collapse together. Weak where the user has a formed opinion of the topic — no gap remains to open."
+    source: Loewenstein 1994 doi:10.1037/0033-2909.116.1.75; Cialdini Reno & Kallgren 1990 doi:10.1037/0022-3514.58.6.1015. Interaction claim is inferred.
+
+  - combination: [FR-11, RE-10]
+    type: reinforcing
+    fact: Whether something free is experienced as a gift or as a transaction is a framing decision, and it determines whether reciprocity engages at all. The same object presented as an unconditional gift generates reciprocal response; presented as a sample with an expected return, it is processed as the opening of a negotiation and the obligation weakens. Reciprocity is thus gated by framing rather than by the value transferred.
+    grade: C+
+    boundary: Inferred from the gift-exchange and framing literatures rather than a direct test of the pair. Transparent quid-pro-quo framing does not merely weaken the effect — it can trigger reactance. The gift must also be genuinely useful; framing cannot rescue a hollow offering.
+    source: Gouldner 1960 doi:10.2307/2092623; Tversky & Kahneman 1981 doi:10.1126/science.7455683; gift-exchange field literature. Interaction claim is inferred.
+
   - combination: [FR-11, SP-08]
     type: reinforcing
     fact: "Social signals function simultaneously as evidence and as reference points: a 'most popular' or 'most chosen' marker acts as social proof and as an anchor/default in the same element, so the two mechanisms operate on one cue rather than competing for attention. Under uncertainty this compounds — the socially validated option becomes both the safe choice and the reference against which alternatives are judged."
@@ -541,7 +576,26 @@ cross_cutting_perception:
 # ─────────────────────────────────────────────
 interactions:
 
-  [] # no relations or authored interactions among this element's mechanisms
+  - combination: [EN-03, VR-02]
+    type: reinforcing
+    fact: When a variable reward produces something the user keeps — a generated artifact, unlocked state, saved result — the reward stops being a momentary hit and becomes accumulated property. The unpredictable delivery drives the return, the retained output builds the endowment that makes leaving costly. Reward systems that leave nothing behind decay when novelty fades; ones that deposit ownable state compound.
+    grade: C+
+    boundary: Inference from the convergence of two literatures, not a directly studied interaction — graded accordingly. Requires the variable output to be genuinely retained and personally attributable; a reward the user cannot keep, see, or claim as theirs produces no endowment. Where the reward is purely consumptive (a one-off view), the pair does not apply.
+    source: Skinner variable-ratio schedules; Schultz Dayan & Montague 1997 doi:10.1126/science.275.5306.1593 (reward prediction error); Kahneman Knetsch & Thaler 1990 doi:10.1086/261737 (endowment). Interaction claim is inferred convergence.
+
+  - combination: [EN-03, ZE-07]
+    type: sequence-amplifying
+    fact: "Progress itself becomes owned. The endowed-progress effect is the studied case of exactly this intersection: participants given artificial advancement toward a goal (a card pre-stamped with bonus stamps, same net requirement) completed faster than those starting from zero — the granted progress is treated as a possession worth continuing rather than an empty start. Accumulated progress therefore functions as endowment, which is why abandoning a partially-complete goal feels like giving something up rather than merely stopping."
+    grade: B+
+    boundary: The head-start must correspond to something real or credibly attributed; participants who perceive the advancement as arbitrary padding show weaker effects. Applies to goals with visible, countable progress — diffuse or unmeasurable goals do not accumulate ownable progress.
+    source: "Nunes & Dreze 2006 doi:10.1086/500480 (endowed progress effect — the directly studied intersection); Kivetz Urminsky & Zheng 2006 doi:10.1509/jmkr.43.1.39; endowment: KKT 1990 doi:10.1086/261737."
+
+  - combination: [VR-02, ZE-07]
+    type: reinforcing
+    fact: Uncertainty about the size or nature of a reward can motivate goal pursuit more than a certain reward of equal or greater expected value — the motivating-uncertainty effect — but only while the person is actively engaged in pursuit rather than deliberating whether to start. Within a progress structure, variable rewards along the path sustain effort; at the decision to begin, uncertainty suppresses.
+    grade: B
+    boundary: "Directional reversal is the key constraint: uncertain rewards demotivate at the deliberation stage and motivate during pursuit. Effect also depends on the uncertainty being resolvable and the pursuit being ongoing; open-ended uncertainty with no resolution point produces fatigue rather than drive."
+    source: "Shen, Fishbach & Hsee 2015, The Motivating-Uncertainty Effect, J Consumer Research doi:10.1086/679418 (directly studied); goal-gradient: Kivetz et al. 2006 doi:10.1509/jmkr.43.1.39."
 
 # ─────────────────────────────────────────────
 # LAYER 3 — CONTEXT WEIGHTS (what fits what)
@@ -663,6 +717,34 @@ cross_cutting_perception:
 # LAYER 2 — INTERACTIONS (often stronger than any single mechanism)
 # ─────────────────────────────────────────────
 interactions:
+
+  - combination: [EN-03, VR-02]
+    type: reinforcing
+    fact: When a variable reward produces something the user keeps — a generated artifact, unlocked state, saved result — the reward stops being a momentary hit and becomes accumulated property. The unpredictable delivery drives the return, the retained output builds the endowment that makes leaving costly. Reward systems that leave nothing behind decay when novelty fades; ones that deposit ownable state compound.
+    grade: C+
+    boundary: Inference from the convergence of two literatures, not a directly studied interaction — graded accordingly. Requires the variable output to be genuinely retained and personally attributable; a reward the user cannot keep, see, or claim as theirs produces no endowment. Where the reward is purely consumptive (a one-off view), the pair does not apply.
+    source: Skinner variable-ratio schedules; Schultz Dayan & Montague 1997 doi:10.1126/science.275.5306.1593 (reward prediction error); Kahneman Knetsch & Thaler 1990 doi:10.1086/261737 (endowment). Interaction claim is inferred convergence.
+
+  - combination: [EN-03, ZE-07]
+    type: sequence-amplifying
+    fact: "Progress itself becomes owned. The endowed-progress effect is the studied case of exactly this intersection: participants given artificial advancement toward a goal (a card pre-stamped with bonus stamps, same net requirement) completed faster than those starting from zero — the granted progress is treated as a possession worth continuing rather than an empty start. Accumulated progress therefore functions as endowment, which is why abandoning a partially-complete goal feels like giving something up rather than merely stopping."
+    grade: B+
+    boundary: The head-start must correspond to something real or credibly attributed; participants who perceive the advancement as arbitrary padding show weaker effects. Applies to goals with visible, countable progress — diffuse or unmeasurable goals do not accumulate ownable progress.
+    source: "Nunes & Dreze 2006 doi:10.1086/500480 (endowed progress effect — the directly studied intersection); Kivetz Urminsky & Zheng 2006 doi:10.1509/jmkr.43.1.39; endowment: KKT 1990 doi:10.1086/261737."
+
+  - combination: [ID-12, VR-02]
+    type: reinforcing
+    fact: "Rewards that confirm a self-image the user has declared are processed differently from generic rewards: identity-based motivation holds that people act in line with salient identities, so an unpredictable reward that reads as evidence of being the kind of person they said they are ('you're building something') carries motivational weight beyond its face value. Rewards inconsistent with the declared identity are discounted or ignored."
+    grade: C+
+    boundary: Inference from identity-based motivation applied to reward structure, not a studied pair. Requires a genuinely self-chosen identity or goal — an imposed label does not confer the effect and can produce resistance. Effect is weak where the identity is peripheral to the user's self-concept.
+    source: Oyserman 2009 doi:10.1086/651257 (identity-based motivation); Schultz Dayan & Montague 1997 doi:10.1126/science.275.5306.1593. Interaction claim is inferred.
+
+  - combination: [VR-02, ZE-07]
+    type: reinforcing
+    fact: Uncertainty about the size or nature of a reward can motivate goal pursuit more than a certain reward of equal or greater expected value — the motivating-uncertainty effect — but only while the person is actively engaged in pursuit rather than deliberating whether to start. Within a progress structure, variable rewards along the path sustain effort; at the decision to begin, uncertainty suppresses.
+    grade: B
+    boundary: "Directional reversal is the key constraint: uncertain rewards demotivate at the deliberation stage and motivate during pursuit. Effect also depends on the uncertainty being resolvable and the pursuit being ongoing; open-ended uncertainty with no resolution point produces fatigue rather than drive."
+    source: "Shen, Fishbach & Hsee 2015, The Motivating-Uncertainty Effect, J Consumer Research doi:10.1086/679418 (directly studied); goal-gradient: Kivetz et al. 2006 doi:10.1509/jmkr.43.1.39."
 
   - combination: [ID-12, EN-03]
     type: noted
@@ -941,6 +1023,20 @@ cross_cutting_perception:
 # LAYER 2 — INTERACTIONS (often stronger than any single mechanism)
 # ─────────────────────────────────────────────
 interactions:
+
+  - combination: [EN-03, ST-09]
+    type: reinforcing
+    fact: Earned status is held as property, not merely enjoyed as position. Research on hierarchical loyalty programmes finds that customers treat an attained tier as something owned, with consequences that differ from never having held it — the standing is defended rather than simply pursued. Accumulated status therefore behaves as an endowment whose maintenance motivates continued participation, including continued payment.
+    grade: B-
+    boundary: Effect depends on the status being visibly earned rather than purchased outright; bought status is weaker property psychologically. Also depends on the hierarchy being credible and the standing being genuinely attained — inflated tiers where everyone is 'gold' confer neither status nor ownership.
+    source: Loyalty-programme status literature (customer tier attainment and defence); Kahneman Knetsch & Thaler 1990 doi:10.1086/261737; Festinger 1954 doi:10.1177/001872675400700202. Partially studied in the loyalty context, inferred for general product state.
+
+  - combination: [LA-01, ST-09]
+    type: sequence-amplifying
+    fact: Status demotion is felt more strongly than equivalent status never attained — the loss of standing is asymmetric with its gain. Studies of hierarchical loyalty programmes find demoted customers reduce engagement more sharply than their pre-attainment baseline, and that anticipated demotion drives effort to retain tier. This is loss aversion operating on a social-standing asset rather than a material one, and it is a principal reason recurring participation continues after the initial motivation fades.
+    grade: B
+    boundary: "The asymmetry requires the status to have been genuinely held and publicly or self-evidently attained. Demotion mechanics also carry a documented backfire: customers who lose status may disengage entirely rather than re-earn it, so the effect can invert from retention to churn where re-attainment appears unreachable."
+    source: Loyalty-programme status-demotion research (tier attainment and demotion effects on engagement); Kahneman & Tversky 1979 doi:10.2307/1914185; Festinger 1954 doi:10.1177/001872675400700202.
 
   - combination: [EN-03, LA-01]
     type: sequence-amplifying

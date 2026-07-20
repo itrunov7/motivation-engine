@@ -65,6 +65,34 @@ cross_cutting_perception:
 # ─────────────────────────────────────────────
 interactions:
 
+  - combination: [EN-03, VR-02]
+    type: reinforcing
+    fact: When a variable reward produces something the user keeps — a generated artifact, unlocked state, saved result — the reward stops being a momentary hit and becomes accumulated property. The unpredictable delivery drives the return, the retained output builds the endowment that makes leaving costly. Reward systems that leave nothing behind decay when novelty fades; ones that deposit ownable state compound.
+    grade: C+
+    boundary: Inference from the convergence of two literatures, not a directly studied interaction — graded accordingly. Requires the variable output to be genuinely retained and personally attributable; a reward the user cannot keep, see, or claim as theirs produces no endowment. Where the reward is purely consumptive (a one-off view), the pair does not apply.
+    source: Skinner variable-ratio schedules; Schultz Dayan & Montague 1997 doi:10.1126/science.275.5306.1593 (reward prediction error); Kahneman Knetsch & Thaler 1990 doi:10.1086/261737 (endowment). Interaction claim is inferred convergence.
+
+  - combination: [EN-03, ZE-07]
+    type: sequence-amplifying
+    fact: "Progress itself becomes owned. The endowed-progress effect is the studied case of exactly this intersection: participants given artificial advancement toward a goal (a card pre-stamped with bonus stamps, same net requirement) completed faster than those starting from zero — the granted progress is treated as a possession worth continuing rather than an empty start. Accumulated progress therefore functions as endowment, which is why abandoning a partially-complete goal feels like giving something up rather than merely stopping."
+    grade: B+
+    boundary: The head-start must correspond to something real or credibly attributed; participants who perceive the advancement as arbitrary padding show weaker effects. Applies to goals with visible, countable progress — diffuse or unmeasurable goals do not accumulate ownable progress.
+    source: "Nunes & Dreze 2006 doi:10.1086/500480 (endowed progress effect — the directly studied intersection); Kivetz Urminsky & Zheng 2006 doi:10.1509/jmkr.43.1.39; endowment: KKT 1990 doi:10.1086/261737."
+
+  - combination: [ID-12, VR-02]
+    type: reinforcing
+    fact: "Rewards that confirm a self-image the user has declared are processed differently from generic rewards: identity-based motivation holds that people act in line with salient identities, so an unpredictable reward that reads as evidence of being the kind of person they said they are ('you're building something') carries motivational weight beyond its face value. Rewards inconsistent with the declared identity are discounted or ignored."
+    grade: C+
+    boundary: Inference from identity-based motivation applied to reward structure, not a studied pair. Requires a genuinely self-chosen identity or goal — an imposed label does not confer the effect and can produce resistance. Effect is weak where the identity is peripheral to the user's self-concept.
+    source: Oyserman 2009 doi:10.1086/651257 (identity-based motivation); Schultz Dayan & Montague 1997 doi:10.1126/science.275.5306.1593. Interaction claim is inferred.
+
+  - combination: [VR-02, ZE-07]
+    type: reinforcing
+    fact: Uncertainty about the size or nature of a reward can motivate goal pursuit more than a certain reward of equal or greater expected value — the motivating-uncertainty effect — but only while the person is actively engaged in pursuit rather than deliberating whether to start. Within a progress structure, variable rewards along the path sustain effort; at the decision to begin, uncertainty suppresses.
+    grade: B
+    boundary: "Directional reversal is the key constraint: uncertain rewards demotivate at the deliberation stage and motivate during pursuit. Effect also depends on the uncertainty being resolvable and the pursuit being ongoing; open-ended uncertainty with no resolution point produces fatigue rather than drive."
+    source: "Shen, Fishbach & Hsee 2015, The Motivating-Uncertainty Effect, J Consumer Research doi:10.1086/679418 (directly studied); goal-gradient: Kivetz et al. 2006 doi:10.1509/jmkr.43.1.39."
+
   - combination: [ID-12, EN-03]
     type: noted
     fact: "'Mine' (endowment) shades into 'part of who I am' (identity); distinct drivers — ownership valuation vs self-consistency"

@@ -65,6 +65,34 @@ cross_cutting_perception:
 # ─────────────────────────────────────────────
 interactions:
 
+  - combination: [CG-05, FR-11]
+    type: reinforcing
+    fact: "Curiosity depends on the reference point the question is framed against. In information-gap theory the drive scales with awareness of what one does not know: a gap framed too broadly reads as unanswerable and produces no pull, one framed as trivially known produces none either. Curiosity is highest at intermediate perceived knowledge — which makes the framing of the question, not the question itself, the operative variable."
+    grade: C+
+    boundary: Inferred from Loewenstein's account of gap salience rather than from a study of the two mechanisms combined. The inverted-U over perceived knowledge is theory-supported but its precise shape in applied contexts is not well established; framing that misrepresents what will be revealed collapses the effect and damages trust.
+    source: Loewenstein 1994 doi:10.1037/0033-2909.116.1.75 (information-gap theory, gap salience); Tversky & Kahneman 1981 doi:10.1126/science.7455683 (framing). Interaction claim is inferred.
+
+  - combination: [CG-05, RE-10]
+    type: sequence-amplifying
+    fact: "An opened curiosity gap that is closed with genuinely useful information delivers value before anything is asked — which is the precondition for reciprocity. The sequence matters: the gap creates attention, the resolution creates the gift, and only then does an ask land on an obligation. The same sequence with a hollow resolution inverts it — an unmet gap is experienced as a taking rather than a giving, and generates reactance instead of obligation."
+    grade: C
+    boundary: Inference; no direct study of the pair. Depends entirely on the resolution being independently valuable — the reciprocity component is carried by the value delivered, not by the curiosity. Clickbait is the failure case of this exact pairing.
+    source: Loewenstein 1994 doi:10.1037/0033-2909.116.1.75; Gouldner 1960 doi:10.2307/2092623 (norm of reciprocity). Interaction claim is inferred convergence.
+
+  - combination: [CG-05, SP-08]
+    type: reinforcing
+    fact: "Social signals act as curiosity triggers as well as evidence: knowing that many others found something worthwhile creates a gap about what they found. The social cue both certifies that the answer is worth having and marks that one does not yet have it — the two mechanisms load the same cue from different directions."
+    grade: C+
+    boundary: "Inferred convergence, not a studied interaction. Shares a failure mode with any social cue: if the popularity signal is not credible, both the evidential and the curiosity value collapse together. Weak where the user has a formed opinion of the topic — no gap remains to open."
+    source: Loewenstein 1994 doi:10.1037/0033-2909.116.1.75; Cialdini Reno & Kallgren 1990 doi:10.1037/0022-3514.58.6.1015. Interaction claim is inferred.
+
+  - combination: [FR-11, RE-10]
+    type: reinforcing
+    fact: Whether something free is experienced as a gift or as a transaction is a framing decision, and it determines whether reciprocity engages at all. The same object presented as an unconditional gift generates reciprocal response; presented as a sample with an expected return, it is processed as the opening of a negotiation and the obligation weakens. Reciprocity is thus gated by framing rather than by the value transferred.
+    grade: C+
+    boundary: Inferred from the gift-exchange and framing literatures rather than a direct test of the pair. Transparent quid-pro-quo framing does not merely weaken the effect — it can trigger reactance. The gift must also be genuinely useful; framing cannot rescue a hollow offering.
+    source: Gouldner 1960 doi:10.2307/2092623; Tversky & Kahneman 1981 doi:10.1126/science.7455683; gift-exchange field literature. Interaction claim is inferred.
+
   - combination: [FR-11, SP-08]
     type: reinforcing
     fact: "Social signals function simultaneously as evidence and as reference points: a 'most popular' or 'most chosen' marker acts as social proof and as an anchor/default in the same element, so the two mechanisms operate on one cue rather than competing for attention. Under uncertainty this compounds — the socially validated option becomes both the safe choice and the reference against which alternatives are judged."

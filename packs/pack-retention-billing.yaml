@@ -55,6 +55,20 @@ cross_cutting_perception:
 # ─────────────────────────────────────────────
 interactions:
 
+  - combination: [EN-03, ST-09]
+    type: reinforcing
+    fact: Earned status is held as property, not merely enjoyed as position. Research on hierarchical loyalty programmes finds that customers treat an attained tier as something owned, with consequences that differ from never having held it — the standing is defended rather than simply pursued. Accumulated status therefore behaves as an endowment whose maintenance motivates continued participation, including continued payment.
+    grade: B-
+    boundary: Effect depends on the status being visibly earned rather than purchased outright; bought status is weaker property psychologically. Also depends on the hierarchy being credible and the standing being genuinely attained — inflated tiers where everyone is 'gold' confer neither status nor ownership.
+    source: Loyalty-programme status literature (customer tier attainment and defence); Kahneman Knetsch & Thaler 1990 doi:10.1086/261737; Festinger 1954 doi:10.1177/001872675400700202. Partially studied in the loyalty context, inferred for general product state.
+
+  - combination: [LA-01, ST-09]
+    type: sequence-amplifying
+    fact: Status demotion is felt more strongly than equivalent status never attained — the loss of standing is asymmetric with its gain. Studies of hierarchical loyalty programmes find demoted customers reduce engagement more sharply than their pre-attainment baseline, and that anticipated demotion drives effort to retain tier. This is loss aversion operating on a social-standing asset rather than a material one, and it is a principal reason recurring participation continues after the initial motivation fades.
+    grade: B
+    boundary: "The asymmetry requires the status to have been genuinely held and publicly or self-evidently attained. Demotion mechanics also carry a documented backfire: customers who lose status may disengage entirely rather than re-earn it, so the effect can invert from retention to churn where re-attainment appears unreachable."
+    source: Loyalty-programme status-demotion research (tier attainment and demotion effects on engagement); Kahneman & Tversky 1979 doi:10.2307/1914185; Festinger 1954 doi:10.1177/001872675400700202.
+
   - combination: [EN-03, LA-01]
     type: sequence-amplifying
     fact: "Endowment creates the value that LA-01 protects. Sequence: EN-03 → LA-01"
