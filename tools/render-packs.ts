@@ -8,9 +8,16 @@
  * Change a registry record and re-render with `npm run packs`.
  *
  * The output structure is pinned to the reference file
- * packs/pack-paywall-conversion.yaml: header + LAYER 1 mechanisms + LAYER 2
- * interactions + LAYER 3 context_weights + hard_boundaries + signals + wiring.
- * Knowledge-base tone: facts only, no instructions.
+ * packs/pack-paywall-conversion.yaml: header + LAYER 1 mechanisms +
+ * cross_cutting_perception + LAYER 2 interactions + LAYER 3 context_weights +
+ * hard_boundaries + signals + wiring. Knowledge-base tone: facts only, no
+ * instructions.
+ *
+ * Cross-cutting perception (Step 5, D-066): every full record whose L0 parent
+ * is flagged cross_cutting in registry/taxonomy.json (today only S7) is emitted
+ * into EVERY pack as the distinct top-level section cross_cutting_perception,
+ * separate from the pack's own motivational LAYER 1. The pack map never lists
+ * these — inclusion is automatic. Empty until the S7 seeds become full records.
  *
  * LAYER 2 draws from TWO sources (D-057): owner-authored interaction records
  * (/interactions/{A}__{B}.json) and registry relations. An authored record is
@@ -47,10 +54,12 @@ import type {
   PackMapFile,
   PackMechanism,
   Relation,
+  Taxonomy,
 } from "../lib/types";
 
 const ROOT = join(__dirname, "..");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
+const TAXONOMY = join(ROOT, "registry", "taxonomy.json");
 const DOSSIERS_DIR = join(ROOT, "dossiers");
 const INTERACTIONS_DIR = join(ROOT, "interactions");
 const PACKS_DIR = join(ROOT, "packs");
@@ -199,6 +208,7 @@ function interactionFor(
 
 function buildInteractions(
   members: Mechanism[],
+  crossCutting: Mechanism[],
   gradeOf: Map<string, EvidenceGrade>,
   authored: Map<string, InteractionRecord>,
 ): PackInteraction[] {
@@ -206,10 +216,15 @@ function buildInteractions(
   const interactions: PackInteraction[] = [];
   const authoredPairKeys = new Set<string>();
 
-  // Authored records first (D-057): richer and owner-curated. One per member
-  // pair, ordered locale-stable, carrying the full type/fact/grade/boundary/
-  // source — and it REPLACES any relation-derived entry for the same pair.
-  const ids = members.map((m) => m.id).sort((a, b) => a.localeCompare(b));
+  // Authored records first (D-057): richer and owner-curated. Pairs are drawn
+  // from the pack's own mechanisms UNION the cross-cutting perception
+  // mechanisms (Step 5), so an authored interaction between a perception
+  // mechanism and a pack mechanism surfaces in LAYER 2. One per pair, ordered
+  // locale-stable, carrying the full type/fact/grade/boundary/source — and it
+  // REPLACES any relation-derived entry for the same pair.
+  const ids = [...members, ...crossCutting]
+    .map((m) => m.id)
+    .sort((a, b) => a.localeCompare(b));
   for (let i = 0; i < ids.length; i += 1) {
     for (let j = i + 1; j < ids.length; j += 1) {
       const key = pairKey(ids[i], ids[j]);
@@ -321,6 +336,7 @@ function buildMeasured(members: Mechanism[]): string[] {
 function buildDatasheet(
   element: PackMapElement,
   members: Mechanism[],
+  crossCutting: Mechanism[],
   authored: Map<string, InteractionRecord>,
 ): PackDatasheet {
   const gradeOf = new Map(members.map((m) => [m.id, m.evidence.grade] as const));
@@ -332,7 +348,8 @@ function buildDatasheet(
     nature: NATURE,
     source: `projection of registry records ${members.map((m) => m.id).join(" ")}`,
     mechanisms: members.map((m) => buildMechanism(m, loadDossier(m.id))),
-    interactions: buildInteractions(members, gradeOf, authored),
+    cross_cutting_perception: crossCutting.map((m) => buildMechanism(m, loadDossier(m.id))),
+    interactions: buildInteractions(members, crossCutting, gradeOf, authored),
     context_weights: buildContextWeights(members),
     hard_boundaries: buildHardBoundaries(members),
     signals: { measured: buildMeasured(members), tag: SIGNAL_TAG, learning: SIGNAL_LEARNING },
@@ -400,6 +417,22 @@ function renderDatasheet(sheet: PackDatasheet): string {
     "",
   );
   for (const pm of sheet.mechanisms) lines.push(...renderMechanism(pm));
+
+  lines.push(
+    BANNER,
+    "# CROSS-CUTTING — PERCEPTION & COMPREHENSION (S7 · applies to every element)",
+    BANNER,
+    "cross_cutting_perception:",
+    "",
+  );
+  if (sheet.cross_cutting_perception.length === 0) {
+    lines.push(
+      "  [] # fills automatically when S7 seeds are promoted to full records (docs/s7-drafting-brief.md); pack-map needs no change (D-066)",
+      "",
+    );
+  } else {
+    for (const pm of sheet.cross_cutting_perception) lines.push(...renderMechanism(pm));
+  }
 
   lines.push(
     BANNER,
@@ -523,6 +556,20 @@ function main(): void {
     mechanisms.set(m.id, m);
   }
 
+  // Cross-cutting perception (Step 5, D-066): every full record whose L0 parent
+  // is flagged cross_cutting (today only S7) is emitted into EVERY pack as a
+  // distinct top-level section — no pack-map entry, no per-element listing.
+  // Empty until the S7 seeds are promoted to full records (the renderer never
+  // reads _seed/).
+  const taxonomy = JSON.parse(readFileSync(TAXONOMY, "utf-8")) as Taxonomy;
+  const crossCuttingL0 = new Set(
+    taxonomy.nodes.filter((n) => n.cross_cutting).map((n) => n.id),
+  );
+  const crossCuttingMechanisms = Array.from(mechanisms.values())
+    .filter((m) => crossCuttingL0.has(m.parent))
+    .sort((a, b) => a.id.localeCompare(b.id));
+  const crossCuttingIds = new Set(crossCuttingMechanisms.map((m) => m.id));
+
   // Owner-authored interaction records (D-057) — the richer LAYER 2 source,
   // keyed by pairKey. Missing store = empty map = relations-only LAYER 2.
   const authoredInteractions = new Map<string, InteractionRecord>();
@@ -539,13 +586,19 @@ function main(): void {
 
   for (const element of packMap.elements) {
     if (packsFilter && !packsFilter.has(element.id)) continue;
-    const members = element.mechanisms.map((id) => {
-      const m = mechanisms.get(id);
-      if (!m) throw new Error(`pack "${element.id}" references unknown mechanism "${id}"`);
-      return m;
-    });
+    // Cross-cutting mechanisms are emitted automatically, never via the map, so
+    // any that slip into an element's list are dropped from LAYER 1 (the
+    // validator makes listing one an error; this keeps the projection honest
+    // even if that guard is bypassed).
+    const members = element.mechanisms
+      .filter((id) => !crossCuttingIds.has(id))
+      .map((id) => {
+        const m = mechanisms.get(id);
+        if (!m) throw new Error(`pack "${element.id}" references unknown mechanism "${id}"`);
+        return m;
+      });
 
-    const sheet = buildDatasheet(element, members, authoredInteractions);
+    const sheet = buildDatasheet(element, members, crossCuttingMechanisms, authoredInteractions);
     const text = renderDatasheet(sheet);
 
     // Self-check 1: the emitted file must parse back as YAML.

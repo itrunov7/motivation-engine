@@ -963,6 +963,14 @@ export interface PackDatasheet {
   nature: string;
   source: string;
   mechanisms: PackMechanism[];
+  /**
+   * Cross-cutting perception & comprehension mechanisms (S7): every mechanism
+   * whose L0 parent is cross_cutting, emitted into EVERY pack automatically
+   * (Step 5). Same atom shape as LAYER 1 but a distinct top-level section, kept
+   * separate from the pack's own motivational mechanisms; pack-map never lists
+   * these (D-066). Empty until the S7 seeds are promoted to full records.
+   */
+  cross_cutting_perception: PackMechanism[];
   interactions: PackInteraction[];
   context_weights: PackContextWeight[];
   /** Each entry is a single-key map, e.g. { "fake-scarcity": "forbidden — ..." }. */

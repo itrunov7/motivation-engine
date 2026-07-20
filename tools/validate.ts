@@ -814,10 +814,19 @@ function main(): void {
   console.log(`  ✓ ${rel(PATHS.mechanismSchema)} compiles (full record + seedStub)`);
 
   // 2. Taxonomy (needed for cross-checks below).
-  const taxonomy = readJson(PATHS.taxonomy) as { nodes?: { id: string }[] } | undefined;
+  const taxonomy = readJson(PATHS.taxonomy) as
+    | { nodes?: { id: string; cross_cutting?: boolean }[] }
+    | undefined;
   const taxonomyIds = new Set<string>();
+  // L0 nodes flagged cross_cutting (D-062): their mechanisms are emitted into
+  // every pack automatically and must NOT be listed per element in the pack map
+  // (D-066).
+  const crossCuttingL0 = new Set<string>();
   if (taxonomy !== undefined && validateAgainst(ajv.compile(taxonomySchema), PATHS.taxonomy, taxonomy)) {
-    for (const node of taxonomy.nodes ?? []) taxonomyIds.add(node.id);
+    for (const node of taxonomy.nodes ?? []) {
+      taxonomyIds.add(node.id);
+      if (node.cross_cutting) crossCuttingL0.add(node.id);
+    }
     if (taxonomyIds.size !== 7) {
       fail(PATHS.taxonomy, `expected 7 unique node ids S1–S7, found ${taxonomyIds.size}`);
     } else {
@@ -828,6 +837,7 @@ function main(): void {
   // 3. Full mechanism records.
   const fullFiles = listJsonFiles(PATHS.mechanismsDir);
   const rosterIds = new Map<string, string>(); // id -> file
+  const parentById = new Map<string, string>(); // id -> L0 parent (full + seed)
   const fullRecords: { file: string; record: MechanismLike }[] = [];
 
   for (const file of fullFiles) {
@@ -886,6 +896,7 @@ function main(): void {
         fail(file, `duplicate mechanism id "${record.id}" (also in ${rel(rosterIds.get(record.id)!)})`);
       } else {
         rosterIds.set(record.id, file);
+        if (typeof record.parent === "string") parentById.set(record.id, record.parent);
       }
     }
 
@@ -912,6 +923,7 @@ function main(): void {
         fail(file, `duplicate mechanism id "${stub.id}" (also in ${rel(rosterIds.get(stub.id)!)})`);
       } else {
         rosterIds.set(stub.id, file);
+        if (typeof stub.parent === "string") parentById.set(stub.id, stub.parent);
       }
     }
     if (typeof stub.parent === "string" && taxonomyIds.size === 7 && !taxonomyIds.has(stub.parent)) {
@@ -1304,6 +1316,18 @@ function main(): void {
               fail(
                 PATHS.packMap,
                 `element "${element.id}" references mechanism "${mechanismId}" which is not in the registry roster`,
+              );
+              ok = false;
+            }
+            // The pack map stays motivational-only (D-066): cross-cutting
+            // mechanisms (S7 perception) are emitted into every pack
+            // automatically by render-packs, never listed per element. Listing
+            // one would duplicate it in LAYER 1.
+            const parent = parentById.get(mechanismId);
+            if (parent !== undefined && crossCuttingL0.has(parent)) {
+              fail(
+                PATHS.packMap,
+                `element "${element.id}" lists cross-cutting mechanism "${mechanismId}" (parent ${parent}) — cross-cutting mechanisms are emitted into every pack automatically and must not appear in the pack map (D-066)`,
               );
               ok = false;
             }
