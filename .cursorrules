@@ -8,7 +8,8 @@
 Motivation Engine — Ventora's knowledge layer: an ontology of human motivation
 mechanisms (science → mechanisms → interface implementations) + the Control Center
 showcase. Current stage: PHASE 2 — shelves, showcase, and tools-level source
-fetching from a whitelist of public APIs. NO engine, NO LLM calls, NO database.
+fetching from a whitelist of public APIs. NO engine, NO database; LLM calls
+exist ONLY in the tools/ corpus-extraction pipeline (rule 12), never in the app.
 
 ## Architectural invariants (violation = stop and ask the owner)
 1. SOURCE OF TRUTH — files in the repo. Data lives ONLY in:
@@ -39,11 +40,16 @@ fetching from a whitelist of public APIs. NO engine, NO LLM calls, NO database.
    same PR.
 
 ## Content rules (critical)
-8. DO NOT INVENT SCIENCE OR MECHANISMS. Cursor writes code, schemas, UI. The
-   content of mechanisms, evidence grades, scientific claims, and dossier texts
-   are entered only by the owner (Igor) or arrive from the future derivation
-   pipeline. If a record example is needed for layout work — use the existing
-   LA-01, do not generate new "plausible" mechanisms.
+8. NO COMPONENT INVENTS SCIENCE. Cursor writes code, schemas, UI; the app never
+   invents science. The content of mechanisms, evidence grades, scientific
+   claims, and dossier texts is entered by the owner (Igor) or PROPOSED by the
+   tools/ extraction pipeline — and the pipeline may only propose claims
+   GROUNDED in harvested sources, each carrying provenance (source corpus record
+   ids + DOIs) and a confidence score. Every such proposal lands in the proposal
+   queue for the owner to approve or reject; unapproved proposals have NO effect
+   on any artifact (registry, dossiers, interactions, packs, cards). If a record
+   example is needed for layout work — use the existing LA-01, do not generate
+   new "plausible" mechanisms.
 9. Seed mechanisms (11 items) have lifecycle_status: "candidate" and contain
    only: id, name, grade (draft), oneliner, parent. Do not flesh them out.
 10. Language: everything is in English — data content, UI copy, documents, code,
@@ -62,8 +68,16 @@ fetching from a whitelist of public APIs. NO engine, NO LLM calls, NO database.
     tools/ MAY call ONLY these public APIs: api.openalex.org,
     api.semanticscholar.org, PubMed E-utilities (eutils.ncbi.nlm.nih.gov),
     web.archive.org (CDX API). Any other external endpoint requires a new
-    decisions.json entry first. LLM API calls remain forbidden everywhere in
-    this repo.
+    decisions.json entry first. LLM API calls are permitted ONLY in the tools/
+    corpus-extraction pipeline, via the existing OpenRouter setup (D-075), and
+    ONLY under ALL of these conditions: (a) extraction runs solely in GitHub
+    Actions or as an explicitly dispatched job — never from the Next.js app
+    (app/, middleware, server actions); (b) every extracted item carries
+    provenance (source corpus record ids + DOIs) and a confidence score; (c)
+    extracted items land in a proposal queue and NEVER directly in the registry,
+    dossiers, interactions, or packs; (d) all LLM spend is counted by the budget
+    system against the monthly cap (/corpora/_ops/budget.json). LLM API calls
+    remain forbidden everywhere else — the app makes no LLM calls, ever.
 13. Data types are generated from JSON schemas (or declared in /lib/types.ts
     mirroring the schemas). `any` is forbidden.
 14. Design tokens — from the Control Center v0.1 reference: dark background
@@ -84,7 +98,8 @@ fetching from a whitelist of public APIs. NO engine, NO LLM calls, NO database.
   decisions.json entry added
 
 ## Never do at the current stage (Phase 2)
-- Do not connect LLM APIs (OpenRouter/Anthropic/OpenAI) — there is no engine yet
+- Do not connect LLM APIs (OpenRouter/Anthropic/OpenAI) in the app, or anywhere
+  outside the tools/ corpus-extraction pipeline defined in rule 12 (D-075)
 - Do not build general scrapers; source connectors are allowed ONLY as scripts
   under tools/ calling the whitelisted APIs in rule 12
 - Do not build data-editing forms in the UI for KNOWLEDGE (registry, dossiers,
