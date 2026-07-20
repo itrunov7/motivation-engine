@@ -19,7 +19,7 @@
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { parse as parseYaml } from "yaml";
+import { parse as parseYaml, parseAllDocuments } from "yaml";
 import { loadFullMechanisms, loadTaxonomy } from "./data";
 import { COVERAGE_BAND_ORDER, computeCellRoute, type CoverageBand } from "./status";
 import type {
@@ -30,6 +30,7 @@ import type {
   InteractionType,
   MaturationLog,
   MaturationLogEntry,
+  PackBundleManifest,
   PackMapFile,
   ResearchQueue,
   Segment,
@@ -52,6 +53,7 @@ export const MATURATION_PATHS = {
   segments: join(ROOT, "segments", "segments.yaml"),
   segmentCandidates: join(ROOT, "segments", "candidates.json"),
   packMap: join(ROOT, "packs", "pack-map.yaml"),
+  packBundle: join(ROOT, "packs", "export", "packs-bundle.yaml"),
   interactionsDir: join(ROOT, "interactions"),
 } as const;
 
@@ -147,6 +149,25 @@ export function loadSegmentCandidates(): SegmentCandidateQueue | null {
 
 export function loadPackMap(): PackMapFile | null {
   return readYamlOrNull<PackMapFile>(MATURATION_PATHS.packMap);
+}
+
+/**
+ * Manifest of the committed pack export bundle (D-068) — the first document of
+ * the multi-document packs/export/packs-bundle.yaml written by every
+ * `npm run packs` run. Absent or malformed yields null so the cockpit renders
+ * an honest empty state; validate.ts is the gate on bundle/pack drift.
+ */
+export function loadPackBundleManifest(): PackBundleManifest | null {
+  const file = MATURATION_PATHS.packBundle;
+  if (!existsSync(file)) return null;
+  try {
+    const docs = parseAllDocuments(readFileSync(file, "utf-8"));
+    if (docs.length === 0 || docs[0].errors.length > 0) return null;
+    const manifest = docs[0].toJS() as PackBundleManifest;
+    return manifest?.bundle === "pack-export" ? manifest : null;
+  } catch {
+    return null;
+  }
 }
 
 /** The reserved row id of the cross-cutting perception row group (D-067). */

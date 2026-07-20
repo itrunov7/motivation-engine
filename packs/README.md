@@ -9,6 +9,12 @@
   (`npm run packs`, D-049). These are computed projections over the pack map +
   the registry; **never edit them by hand** — change a registry record (or the
   map) and re-render. Stale packs are removed automatically on regenerate.
+- `export/packs-bundle.yaml` — **generated** export artifact for team testing
+  (D-068): a multi-document YAML stream — a manifest (pack count, pack-map
+  version, pack ids) followed by every `pack-{id}.yaml` verbatim. Rebuilt from
+  the packs on disk by every `npm run packs` run (full or scoped), carries no
+  timestamp (pure function of the packs — it only diffs when a pack diffs).
+  The team consumes it directly from git; never edit it by hand.
 
 ## Why this is the only judgment call
 
@@ -44,8 +50,13 @@ write surface.
 `tools/validate.ts` (`npm run validate`), run in CI on every push. The file
 must parse as YAML, every entry must match the schema, element ids must be
 unique, and every referenced mechanism id must resolve to a registry record.
+The export bundle, when present, must parse as multi-document YAML and its
+manifest must exactly match the pack files on disk (D-068) — a mismatch means
+a stale or hand-edited bundle.
 
 ## Renders
 
-Nowhere yet — this is data only. No app screen reads or displays the pack map
-at this step.
+The pack datasheets render nowhere yet — they are data only. The `/maturation`
+cockpit shows the export bundle's manifest (pack count, version, handoff path)
+read from `export/packs-bundle.yaml` at render time (D-068); no app screen
+displays the pack map or datasheet contents at this step.
