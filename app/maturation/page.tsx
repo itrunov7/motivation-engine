@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import {
   ALTERNATIVE_FILL_META,
@@ -25,6 +26,7 @@ import {
   coverageBreakdown,
   loadAuthoredInteractions,
   loadAuthoringQueue,
+  loadCrossCuttingIds,
   loadHarvestHistory,
   loadMaturationLog,
   loadPackMap,
@@ -151,13 +153,13 @@ function CoverageRowLine({ label, counts }: { label: string; counts: StatusCount
 }
 
 function CoverageSummary({ coverage }: { coverage: Coverage }) {
-  const { overall } = coverage;
+  const { overall, perception } = coverage;
   return (
     <div className="flex flex-col gap-6">
       <div>
         <div className="flex items-baseline justify-between gap-4">
           <span className="font-mono text-xs uppercase tracking-wider text-[#7C93A8]">
-            overall green
+            overall green <span className="text-[#8CA495]">· packs</span>
           </span>
           <span className="font-display text-2xl font-semibold text-[#34D399]">
             {overall.pctGreen}%
@@ -177,9 +179,30 @@ function CoverageSummary({ coverage }: { coverage: Coverage }) {
             </span>
           ))}
           <span className="font-mono text-xs text-[#7C93A8]">
-            {overall.total} cells scored
+            {overall.total} pack cells scored
           </span>
         </div>
+      </div>
+
+      {/* Perception coverage (D-067): reported apart from pack coverage — the
+          cross-cutting row is scored once per segment, never counted 11 times. */}
+      <div className="rounded-md border border-[#243329] bg-[#1A2620] px-4 py-3">
+        <div className="flex items-baseline justify-between gap-4">
+          <span className="font-mono text-xs uppercase tracking-wider text-[#7C93A8]">
+            perception green <span className="text-[#8CA495]">· cross-cutting (S7)</span>
+          </span>
+          <span className="font-display text-lg font-semibold text-[#34D399]">
+            {perception.pctGreen}%
+          </span>
+        </div>
+        <div className="mt-2">
+          <CoverageBar counts={perception} />
+        </div>
+        <p className="mt-2 font-mono text-[11px] text-[#7C93A8]">
+          {perception.total > 0
+            ? `${perception.total} perception cells scored — kept out of the pack figure so cross-cutting knowledge is not counted 11 times`
+            : "no perception row in the matrix yet — re-run npm run analyze to score the cross-cutting row"}
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -441,27 +464,41 @@ function HeatmapTable({
           </tr>
         </thead>
         <tbody>
-          {heatmap.rows.map((row) => (
-            <tr key={row.pack}>
-              <th className="pr-2 text-right font-mono text-[11px] font-normal text-[#8CA495]">
-                {row.pack}
-              </th>
-              {row.cells.map((cell, i) => (
-                <td key={heatmap.columns[i].id} className="p-0">
-                  <HeatCell
-                    pack={row.pack}
-                    segment={heatmap.columns[i].id}
-                    cell={cell}
-                    stage={stage}
-                    novelty={
-                      novelty.get(
-                        `${row.pack}\u0000${heatmap.columns[i].id}`,
-                      ) ?? null
-                    }
-                  />
-                </td>
+          {heatmap.rowGroups.map((rowGroup) => (
+            <Fragment key={rowGroup.group}>
+              {rowGroup.group !== "packs" && (
+                <tr>
+                  <th
+                    colSpan={heatmap.columns.length + 1}
+                    className="pt-3 pb-1 text-left font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]"
+                  >
+                    {rowGroup.label}
+                  </th>
+                </tr>
+              )}
+              {rowGroup.rows.map((row) => (
+                <tr key={row.pack}>
+                  <th className="pr-2 text-right font-mono text-[11px] font-normal text-[#8CA495]">
+                    {row.pack}
+                  </th>
+                  {row.cells.map((cell, i) => (
+                    <td key={heatmap.columns[i].id} className="p-0">
+                      <HeatCell
+                        pack={row.pack}
+                        segment={heatmap.columns[i].id}
+                        cell={cell}
+                        stage={stage}
+                        novelty={
+                          novelty.get(
+                            `${row.pack}\u0000${heatmap.columns[i].id}`,
+                          ) ?? null
+                        }
+                      />
+                    </td>
+                  ))}
+                </tr>
               ))}
-            </tr>
+            </Fragment>
           ))}
         </tbody>
       </table>
@@ -566,7 +603,7 @@ export default function MaturationPage() {
   const packMap = loadPackMap();
 
   const harvestHistory = loadHarvestHistory();
-  const cellNovelty = computeCellNovelty(harvestHistory, packMap);
+  const cellNovelty = computeCellNovelty(harvestHistory, packMap, loadCrossCuttingIds());
 
   const coverage = matrix ? computeCoverage(matrix) : null;
   const heatmap = matrix ? buildHeatmap(matrix, packMap, segmentsFile) : null;
@@ -634,7 +671,7 @@ export default function MaturationPage() {
         {/* Coverage */}
         <Panel
           title="Coverage summary"
-          subtitle="Share of scored pack × segment cells that are green — overall, per pack, per segment."
+          subtitle="Share of scored pack × segment cells that are green — overall, per pack, per segment. The cross-cutting perception row (S7) is reported separately, never folded into the pack figure (D-067)."
           footer={
             matrix
               ? `computed from ${matrixRel} · generated ${fmtDateTime(matrix.generated_at)}`
@@ -654,7 +691,7 @@ export default function MaturationPage() {
         {/* Heatmap */}
         <Panel
           title="Sufficiency matrix"
-          subtitle="Packs (rows) × active segments (columns). Cell color = computed status; hover for gaps split by fix type (harvest vs author), the low-novelty and evidence flags, and the maturity stage."
+          subtitle="Packs (rows) × active segments (columns), plus the cross-cutting perception row (S7) scored once per segment as its own group (D-067). Cell color = computed status; hover for gaps split by fix type (harvest vs author), the low-novelty and evidence flags, and the maturity stage."
           footer={
             matrix
               ? `computed from ${matrixRel}${segmentsFile ? ` + ${segmentsRel}` : ""} · ${matrix.cells.length} cells · config ${matrix.config_version} · stage ${matrix.maturity_stage}`

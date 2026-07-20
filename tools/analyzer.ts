@@ -69,6 +69,7 @@ import type {
   GradeLetter,
   HarvestHistory,
   MaturityStage,
+  MatrixRowGroup,
   Mechanism,
   PackMapFile,
   SegmentsFile,
@@ -79,11 +80,13 @@ import type {
   SufficiencyScores,
   SufficiencyStatus,
   SufficiencyThreshold,
+  Taxonomy,
   TypedGap,
 } from "../lib/types";
 
 const ROOT = join(__dirname, "..");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
+const TAXONOMY = join(ROOT, "registry", "taxonomy.json");
 const DOSSIERS_DIR = join(ROOT, "dossiers");
 const INTERACTIONS_DIR = join(ROOT, "interactions");
 const PACK_MAP = join(ROOT, "packs", "pack-map.yaml");
@@ -93,7 +96,15 @@ const CONFIG = join(ANALYSIS_DIR, "analyzer.config.yaml");
 const MATRIX = join(ANALYSIS_DIR, "sufficiency-matrix.json");
 const HARVEST_HISTORY = join(ANALYSIS_DIR, "harvest-history.json");
 
-const MATRIX_VERSION = "0.2.0";
+const MATRIX_VERSION = "0.3.0";
+
+/**
+ * The reserved row id of the cross-cutting perception row group (Step 6, D-067):
+ * cross-cutting mechanisms (S7, cross_cutting: true) are scored ONCE per segment
+ * as this single row, NOT multiplied into all 11 pack rows. The pack map may not
+ * use this id for a motivational element (validate.ts enforces it).
+ */
+const PERCEPTION_ROW = "perception";
 
 const CRITERIA: SufficiencyCriterion[] = [
   "dissent_completeness",
@@ -331,7 +342,12 @@ function loadConfig(activeSegmentIds: string[], rosterIds: Set<string>): LoadedC
  * is demonstrated for this segment yet, so red is the truthful state and the
  * maximal gap feeds the segment straight into the maturation loop.
  */
-function bootstrapCell(packId: string, segmentId: string, config: AnalyzerConfig): SufficiencyCell {
+function bootstrapCell(
+  packId: string,
+  segmentId: string,
+  config: AnalyzerConfig,
+  rowGroup: MatrixRowGroup,
+): SufficiencyCell {
   const scores = Object.fromEntries(
     CRITERIA.map((criterion) => [criterion, 0]),
   ) as SufficiencyScores;
@@ -339,6 +355,7 @@ function bootstrapCell(packId: string, segmentId: string, config: AnalyzerConfig
   return {
     pack: packId,
     segment: segmentId,
+    row_group: rowGroup,
     scores,
     status: "red",
     gaps,
@@ -504,6 +521,7 @@ function scoreCell(
   dossiers: Map<string, Dossier>,
   config: AnalyzerConfig,
   authoredPairs: Set<string>,
+  rowGroup: MatrixRowGroup,
 ): SufficiencyCell {
   const segmentStages = config.segment_stages[segmentId];
   const affinity = config.segment_affinity[segmentId] ?? {};
@@ -573,6 +591,7 @@ function scoreCell(
   return {
     pack: packId,
     segment: segmentId,
+    row_group: rowGroup,
     scores,
     status,
     gaps,
@@ -701,6 +720,17 @@ function loadExistingCells(): Map<string, SufficiencyCell> {
     );
     process.exit(1);
   }
+  // Row grouping (Step 6, D-067): a preserved cell without row_group predates
+  // the perception row group and would leave the merged matrix half-tagged.
+  // Fail loudly so a scoped run can never emit a matrix mixing tagged and
+  // untagged cells — one full `npm run analyze` upgrades the whole grid.
+  const untagged = matrix.cells.find((cell) => cell.row_group === undefined);
+  if (untagged) {
+    console.error(
+      `  ✗ existing matrix at ${rel(MATRIX)} predates the perception row group (cell ${untagged.pack}×${untagged.segment} has no row_group) — run a full \`npm run analyze\`.`,
+    );
+    process.exit(1);
+  }
   return new Map(matrix.cells.map((cell) => [`${cell.pack}|${cell.segment}`, cell]));
 }
 
@@ -722,8 +752,22 @@ function main(): void {
   const segmentsFile = parseYaml(readFileSync(SEGMENTS, "utf-8")) as SegmentsFile;
   const activeSegments = segmentsFile.segments.filter((s) => s.status === "active");
 
+  // The perception row id is reserved (Step 6, D-067): a motivational pack may
+  // not claim it, or its cells would collide with the cross-cutting row. The
+  // validator gates this too, but the analyzer must never silently overwrite.
+  if (packMap.elements.some((e) => e.id === PERCEPTION_ROW)) {
+    console.error(
+      `  ✗ pack map lists an element "${PERCEPTION_ROW}" — that id is reserved for the ` +
+        "cross-cutting perception row group (D-067). Rename the pack.",
+    );
+    process.exit(1);
+  }
+
   if (packsFilter) {
-    const known = new Set(packMap.elements.map((e) => e.id));
+    // The perception row is a filterable pseudo-row alongside the packs, so a
+    // scoped run can re-score just the cross-cutting row after an S7 harvest
+    // (`npm run analyze -- packs=perception`) without touching the pack grid.
+    const known = new Set([...packMap.elements.map((e) => e.id), PERCEPTION_ROW]);
     for (const id of Array.from(packsFilter)) {
       if (!known.has(id)) {
         console.error(`  ✗ packs= filter names unknown pack "${id}" — not in ${rel(PACK_MAP)}.`);
@@ -738,6 +782,21 @@ function main(): void {
     const m = JSON.parse(readFileSync(file, "utf-8")) as Mechanism;
     mechanisms.set(m.id, m);
   }
+
+  // Cross-cutting perception roster (Step 6, D-067): every full record whose L0
+  // parent is flagged cross_cutting in the taxonomy (today only S7) — the SAME
+  // collection render-packs emits into every pack (D-066). It is scored ONCE
+  // per segment as the perception row, not multiplied into the pack rows.
+  // Empty until the S7 seeds are promoted to full records (the analyzer never
+  // reads _seed/), so the perception row starts honestly all-red.
+  const taxonomy = JSON.parse(readFileSync(TAXONOMY, "utf-8")) as Taxonomy;
+  const crossCuttingL0 = new Set(
+    taxonomy.nodes.filter((n) => n.cross_cutting).map((n) => n.id),
+  );
+  const crossCuttingRoster = Array.from(mechanisms.values())
+    .filter((m) => crossCuttingL0.has(m.parent))
+    .sort((a, b) => a.id.localeCompare(b.id));
+  const crossCuttingIds = crossCuttingRoster.map((m) => m.id);
 
   const dossiers = new Map<string, Dossier>();
   for (const file of listJsonFiles(DOSSIERS_DIR)) {
@@ -813,8 +872,8 @@ function main(): void {
     });
     for (const segment of activeSegments) {
       const scored = bootstrapSegmentIds.has(segment.id)
-        ? bootstrapCell(element.id, segment.id, config)
-        : scoreCell(element.id, segment.id, members, dossiers, config, authoredPairs);
+        ? bootstrapCell(element.id, segment.id, config, "pack")
+        : scoreCell(element.id, segment.id, members, dossiers, config, authoredPairs, "pack");
       const cell = applyExhaustion(scored, element.mechanisms, harvestHistory, exhaustionK);
       cells.push(cell);
       statusCounts[cell.status] += 1;
@@ -823,6 +882,57 @@ function main(): void {
     }
     rescored += 1;
     console.log(`  ✓ ${element.id} scored across ${activeSegments.length} segments`);
+  }
+
+  // ---------- perception row group (Step 6, D-067) ----------
+  // Score the cross-cutting roster ONCE per segment as the single perception
+  // row, instead of multiplying it into all 11 pack rows. Its gaps are typed by
+  // the SAME fix_type logic as the packs (harvest vs structural). When the
+  // roster is empty (today: S7 still seed-only) the row is an honest all-red
+  // bootstrap row — every criterion 0, all five as typed gaps — rather than the
+  // vacuous greens an empty member list would score (interaction/freshness = 1).
+  const perceptionStatusCounts: Record<SufficiencyStatus, number> = { red: 0, amber: 0, green: 0 };
+  let perceptionRescored = false;
+  if (packsFilter && !packsFilter.has(PERCEPTION_ROW)) {
+    // Scoped run not touching perception: preserve its cells verbatim.
+    for (const segment of activeSegments) {
+      const existing = existingCells?.get(`${PERCEPTION_ROW}|${segment.id}`);
+      if (!existing) {
+        console.error(
+          `  ✗ existing matrix has no cell ${PERCEPTION_ROW}×${segment.id} — the grid changed; run a full \`npm run analyze\`.`,
+        );
+        process.exit(1);
+      }
+      cells.push(existing);
+      perceptionStatusCounts[existing.status] += 1;
+      if (existing.segment_evidence === "general_only") generalOnly += 1;
+      if (existing.evidence_exhausted) exhausted += 1;
+    }
+  } else {
+    for (const segment of activeSegments) {
+      const scored =
+        bootstrapSegmentIds.has(segment.id) || crossCuttingRoster.length === 0
+          ? bootstrapCell(PERCEPTION_ROW, segment.id, config, "perception")
+          : scoreCell(
+              PERCEPTION_ROW,
+              segment.id,
+              crossCuttingRoster,
+              dossiers,
+              config,
+              authoredPairs,
+              "perception",
+            );
+      const cell = applyExhaustion(scored, crossCuttingIds, harvestHistory, exhaustionK);
+      cells.push(cell);
+      perceptionStatusCounts[cell.status] += 1;
+      if (cell.segment_evidence === "general_only") generalOnly += 1;
+      if (cell.evidence_exhausted) exhausted += 1;
+    }
+    perceptionRescored = true;
+    console.log(
+      `  ✓ ${PERCEPTION_ROW} scored across ${activeSegments.length} segments ` +
+        `(${crossCuttingRoster.length} cross-cutting mechanism${crossCuttingRoster.length === 1 ? "" : "s"})`,
+    );
   }
 
   const matrix: SufficiencyMatrix = {
@@ -841,12 +951,21 @@ function main(): void {
     ? `${rescored} of ${packMap.elements.length} packs re-scored (packs= filter), rest preserved`
     : `${packMap.elements.length} packs`;
   console.log(
-    `\nOK — ${cells.length} cells (${scope} × ${activeSegments.length} segments) → ${rel(MATRIX)}.`,
+    `\nOK — ${cells.length} cells (${scope} + perception row × ${activeSegments.length} segments) → ${rel(MATRIX)}.`,
   );
   console.log(
     `     stage: ${config.maturity_stage} (D-060); ` +
-      `status: ${statusCounts.green} green / ${statusCounts.amber} amber / ${statusCounts.red} red; ` +
+      `pack status: ${statusCounts.green} green / ${statusCounts.amber} amber / ${statusCounts.red} red; ` +
       `${generalOnly} cell${generalOnly === 1 ? "" : "s"} on general evidence only.`,
+  );
+  // Perception is reported apart from pack coverage (D-067): the cross-cutting
+  // row is scored once per segment, never counted 11 times, so it never
+  // inflates or deflates the pack overall-green figure.
+  console.log(
+    `     perception row (D-067): ${activeSegments.length} cells — ` +
+      `${perceptionStatusCounts.green} green / ${perceptionStatusCounts.amber} amber / ${perceptionStatusCounts.red} red ` +
+      `(${crossCuttingRoster.length} cross-cutting mechanism${crossCuttingRoster.length === 1 ? "" : "s"}${perceptionRescored ? "" : ", preserved"}); ` +
+      "scored as its own row group, cross-cutting knowledge is not counted 11 times.",
   );
   if (exhaustionK) {
     console.log(

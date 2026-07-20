@@ -60,14 +60,19 @@ import type {
   SufficiencyCriterion,
   SufficiencyMatrix,
   SufficiencyStatus,
+  Taxonomy,
   TypedGap,
 } from "../lib/types";
 
 const ROOT = join(__dirname, "..");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
+const TAXONOMY = join(ROOT, "registry", "taxonomy.json");
 const EVIDENCE_DIR = join(ROOT, "corpora", "evidence");
 const PACK_MAP = join(ROOT, "packs", "pack-map.yaml");
 const SEGMENTS = join(ROOT, "segments", "segments.yaml");
+
+/** Reserved row id of the cross-cutting perception row group (Step 6, D-067). */
+const PERCEPTION_ROW = "perception";
 const ANALYSIS_DIR = join(ROOT, "analysis");
 const CONFIG = join(ANALYSIS_DIR, "analyzer.config.yaml");
 const MATRIX = join(ANALYSIS_DIR, "sufficiency-matrix.json");
@@ -425,6 +430,22 @@ function main(): void {
     const m = JSON.parse(readFileSync(path, "utf-8")) as Mechanism;
     mechanisms.set(m.id, m);
   }
+
+  // Perception row (Step 6, D-067): register the cross-cutting roster (full
+  // records whose L0 parent is cross_cutting, today only S7 — the same set the
+  // analyzer scores and render-packs emits) under the reserved perception row
+  // id, so a perception cell with a scored harvest gap expands to the roster's
+  // (mechanism × segment) harvest candidates once S7 has full records. Empty
+  // today, so the perception row surfaces only structural/authoring gaps.
+  const taxonomy = JSON.parse(readFileSync(TAXONOMY, "utf-8")) as Taxonomy;
+  const crossCuttingL0 = new Set(
+    taxonomy.nodes.filter((n) => n.cross_cutting).map((n) => n.id),
+  );
+  const crossCuttingIds = Array.from(mechanisms.values())
+    .filter((m) => crossCuttingL0.has(m.parent))
+    .map((m) => m.id)
+    .sort((a, b) => a.localeCompare(b));
+  packMechanisms.set(PERCEPTION_ROW, crossCuttingIds);
 
   // Only red/amber cells feed either queue; green cells are saturated.
   const gapCells = matrix.cells.filter((cell) => cell.status !== "green");

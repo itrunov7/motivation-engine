@@ -20,6 +20,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
+import { loadFullMechanisms, loadTaxonomy } from "./data";
 import { COVERAGE_BAND_ORDER, computeCellRoute, type CoverageBand } from "./status";
 import type {
   AuthoringQueue,
@@ -148,6 +149,30 @@ export function loadPackMap(): PackMapFile | null {
   return readYamlOrNull<PackMapFile>(MATURATION_PATHS.packMap);
 }
 
+/** The reserved row id of the cross-cutting perception row group (D-067). */
+export const PERCEPTION_ROW = "perception";
+
+/**
+ * The cross-cutting roster ids (Step 6, D-067): full L1 records whose L0 parent
+ * is flagged cross_cutting (today only S7) — the same set the analyzer scores
+ * as the perception row and render-packs emits into every pack. Read from the
+ * registry + taxonomy; a missing/broken file yields [] (honest absence), so the
+ * cockpit fabricates no perception novelty flag.
+ */
+export function loadCrossCuttingIds(): string[] {
+  try {
+    const crossCuttingL0 = new Set(
+      loadTaxonomy().nodes.filter((n) => n.cross_cutting).map((n) => n.id),
+    );
+    return loadFullMechanisms()
+      .filter((m) => crossCuttingL0.has(m.parent))
+      .map((m) => m.id)
+      .sort((a, b) => a.localeCompare(b));
+  } catch {
+    return [];
+  }
+}
+
 // ---------- Segment grouping ----------
 
 /** Segment groups in display order (mirrors segments.yaml section order). */
@@ -191,12 +216,29 @@ export interface HeatmapRow {
   cells: (SufficiencyCell | null)[];
 }
 
+/** A banded group of heatmap rows (Step 6, D-067): the packs, then perception. */
+export type HeatmapRowGroupId = "packs" | "perception";
+
+export interface HeatmapRowGroup {
+  group: HeatmapRowGroupId;
+  /** Display label for the group's separator header row. */
+  label: string;
+  rows: HeatmapRow[];
+}
+
 export interface Heatmap {
   /** Flat column order = concatenation of the grouped segment columns. */
   columns: Segment[];
   /** Grouped columns, for the two-tier header. */
   groups: SegmentGroupColumns[];
+  /** Flat pack rows in pack-map order (perception excluded); kept for callers. */
   rows: HeatmapRow[];
+  /**
+   * Rows banded by group (D-067): the motivational pack rows, then the single
+   * cross-cutting perception row — so the cockpit renders perception apart from
+   * the 11 packs instead of multiplying it into them.
+   */
+  rowGroups: HeatmapRowGroup[];
   /** Active segments with no scored cell in the matrix (new/empty segments). */
   unscoredSegments: string[];
 }
@@ -241,24 +283,41 @@ export function buildHeatmap(
   }
   const columns = groups.flatMap((g) => g.segments);
 
-  // Rows: pack-map order when present, else distinct packs in the matrix.
-  const packOrder = packMap
-    ? packMap.elements.map((e) => e.id)
-    : Array.from(new Set(matrix.cells.map((c) => c.pack))).sort();
+  const cellsFor = (rowId: string): (SufficiencyCell | null)[] =>
+    columns.map((col) => cellIndex.get(`${rowId}\u0000${col.id}`) ?? null);
+
+  // Pack rows: pack-map order when present, else distinct packs in the matrix,
+  // ALWAYS excluding the reserved perception row — it is rendered as its own
+  // group below (D-067), never as a pack row.
+  const packOrder = (
+    packMap
+      ? packMap.elements.map((e) => e.id)
+      : Array.from(new Set(matrix.cells.map((c) => c.pack))).sort()
+  ).filter((id) => id !== PERCEPTION_ROW);
 
   const rows: HeatmapRow[] = packOrder.map((pack) => ({
     pack,
-    cells: columns.map(
-      (col) => cellIndex.get(`${pack}\u0000${col.id}`) ?? null,
-    ),
+    cells: cellsFor(pack),
   }));
+
+  // The perception group always renders one row (D-067). When the on-disk
+  // matrix predates the row group its cells are null → the neutral "not
+  // analyzed" state, a designed empty state, never a fabricated red.
+  const rowGroups: HeatmapRowGroup[] = [
+    { group: "packs", label: "packs", rows },
+    {
+      group: "perception",
+      label: "perception (cross-cutting)",
+      rows: [{ pack: PERCEPTION_ROW, cells: cellsFor(PERCEPTION_ROW) }],
+    },
+  ];
 
   const scoredSegments = new Set(matrix.cells.map((c) => c.segment));
   const unscoredSegments = columns
     .map((c) => c.id)
     .filter((id) => !scoredSegments.has(id));
 
-  return { columns, groups, rows, unscoredSegments };
+  return { columns, groups, rows, rowGroups, unscoredSegments };
 }
 
 // ---------- Coverage summary ----------
@@ -294,9 +353,17 @@ export interface CoverageRow {
 }
 
 export interface Coverage {
+  /** Pack-cell rollup only (D-067) — the overall-green figure over 11×15. */
   overall: StatusCounts;
   perPack: CoverageRow[];
   perSegment: CoverageRow[];
+  /**
+   * The cross-cutting perception row's rollup (D-067), reported APART from pack
+   * coverage: the row is scored once per segment, never counted 11 times, so it
+   * neither inflates nor deflates the pack overall-green figure. Zero-count when
+   * the matrix predates the row group.
+   */
+  perception: StatusCounts;
 }
 
 function emptyCounts(): StatusCounts {
@@ -365,10 +432,16 @@ function groupBy(
  * from the file, never asserted.
  */
 export function computeCoverage(matrix: SufficiencyMatrix): Coverage {
+  // Partition by row group (D-067): a cell without row_group predates the group
+  // and is a legacy pack cell. Pack coverage tallies pack cells only, so the
+  // overall-green figure stays over the 11×15 pack grid; perception is separate.
+  const packCells = matrix.cells.filter((c) => (c.row_group ?? "pack") === "pack");
+  const perceptionCells = matrix.cells.filter((c) => c.row_group === "perception");
   return {
-    overall: tally(matrix.cells),
-    perPack: groupBy(matrix.cells, (c) => c.pack),
-    perSegment: groupBy(matrix.cells, (c) => c.segment),
+    overall: tally(packCells),
+    perPack: groupBy(packCells, (c) => c.pack),
+    perSegment: groupBy(packCells, (c) => c.segment),
+    perception: tally(perceptionCells),
   };
 }
 
@@ -564,6 +637,7 @@ export interface CellNovelty {
 export function computeCellNovelty(
   history: HarvestHistory | null,
   packMap: PackMapFile | null,
+  crossCuttingIds: string[] = [],
 ): Map<string, CellNovelty> {
   const result = new Map<string, CellNovelty>();
   if (!history || !packMap) return result;
@@ -573,8 +647,14 @@ export function computeCellNovelty(
     if (idx >= 0) segments.add(key.slice(idx + 1));
   }
   const segmentIds = Array.from(segments);
-  for (const element of packMap.elements) {
-    const members = element.mechanisms;
+  // The pack rows plus the cross-cutting perception row (D-067): the perception
+  // row's members are the cross-cutting roster, so its low-novelty flag is
+  // computed the same way as any pack's.
+  const rows: { id: string; members: string[] }[] = [
+    ...packMap.elements.map((e) => ({ id: e.id, members: e.mechanisms })),
+    { id: PERCEPTION_ROW, members: crossCuttingIds },
+  ];
+  for (const { id, members } of rows) {
     if (members.length === 0) continue;
     for (const segment of segmentIds) {
       let streaking = 0;
@@ -583,7 +663,7 @@ export function computeCellNovelty(
         if (target && target.low_novelty_streak >= 1) streaking += 1;
       }
       if (streaking > 0) {
-        result.set(`${element.id}\u0000${segment}`, {
+        result.set(`${id}\u0000${segment}`, {
           streaking,
           members: members.length,
         });

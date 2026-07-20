@@ -205,7 +205,16 @@ jobs:
         if: steps.harvest.outputs.failed != 'true' && steps.reanalyze.outputs.flipped_packs != ''
         run: |
           set -euo pipefail
-          npm run packs -- "packs=${{ steps.reanalyze.outputs.flipped_packs }}"
+          flipped="${{ steps.reanalyze.outputs.flipped_packs }}"
+          # A perception flip (D-067) is not a renderable pack: the cross-cutting
+          # row's evidence lands in the cross_cutting_perception section of EVERY
+          # pack, so a full re-render is required. A pack flip re-renders only
+          # that pack. Detect perception in the flipped set and branch.
+          if printf '%s' "$flipped" | tr ',' '\n' | grep -qx perception; then
+            npm run packs
+          else
+            npm run packs -- "packs=$flipped"
+          fi
 
       # ---------- Job summary: red→green diff, packs regenerated, spend ----------
       - name: Maturation summary

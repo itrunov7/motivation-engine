@@ -1310,6 +1310,16 @@ function main(): void {
           fail(PATHS.packMap, "duplicate element ids");
           ok = false;
         }
+        // The "perception" id is reserved for the cross-cutting matrix row group
+        // (Step 6, D-067): the analyzer scores S7 once per segment under that
+        // row, so a pack claiming it would collide with the perception cells.
+        if (ids.has("perception")) {
+          fail(
+            PATHS.packMap,
+            'element id "perception" is reserved for the cross-cutting matrix row group (D-067) — rename the pack',
+          );
+          ok = false;
+        }
         for (const element of elements) {
           for (const mechanismId of element.mechanisms) {
             if (!rosterIds.has(mechanismId)) {

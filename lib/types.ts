@@ -1162,10 +1162,25 @@ export interface CellExhaustion {
   best_scores: Partial<SufficiencyScores>;
 }
 
-/** One scored [pack × segment] cell of the sufficiency matrix. */
+/**
+ * Which matrix row group a cell belongs to (Step 6, D-067):
+ * - "pack" — one of the 11 motivational pack-map rows (D-048), scored per
+ *   segment against the pack's own mechanisms.
+ * - "perception" — the single cross-cutting row (S7, cross_cutting: true),
+ *   scored ONCE per segment against the whole cross-cutting roster instead of
+ *   being multiplied into every pack. Reported apart from pack coverage so the
+ *   overall-green figure is not distorted by counting the same knowledge 11
+ *   times. A cell without this field predates the row group (legacy = pack).
+ */
+export type MatrixRowGroup = "pack" | "perception";
+
+/** One scored [row × segment] cell of the sufficiency matrix. */
 export interface SufficiencyCell {
+  /** The row id: a pack id (D-048) or the reserved "perception" row (D-067). */
   pack: string;
   segment: string;
+  /** The row group this cell belongs to (D-067); absent = legacy pack cell. */
+  row_group?: MatrixRowGroup;
   scores: SufficiencyScores;
   status: SufficiencyStatus;
   /** Criteria below their green threshold, i.e. what fails this cell. */
