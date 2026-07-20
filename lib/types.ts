@@ -162,6 +162,9 @@ export interface Mechanism {
   level: "L1";
   parent: TaxonomyNodeId;
   lifecycle_status: LifecycleStatus;
+  /** A record under a cross-cutting L0 node (D-062, e.g. S7) applies to every
+   *  generated element, not to specific funnel stages. Optional; absent === false. */
+  cross_cutting?: boolean;
   /** Path to the dossier when it exists; null until then. */
   dossier_ref: string | null;
   provenance: Provenance;
@@ -419,6 +422,198 @@ export interface CorpusManifest {
     /** Category checklist counts (D-019); absent for unclassified files. */
     categories?: CategoryCounts;
   }[];
+}
+
+// ---------- Evidence corpus file (read-only mirror of tools/connectors/evidence.ts) ----------
+
+/**
+ * The full evidence corpus file written per mechanism at
+ * /corpora/evidence/{id}.json. The writer (and its private interfaces) live in
+ * tools/connectors/evidence.ts; lib/ never imports from tools/. tools/corpus-
+ * digest.ts reads this shape to build the drafting hand-off digest (D-065). Only
+ * the fields the digest reads are typed here — the corpus itself is the authority.
+ */
+
+/** OpenAlex + Semantic Scholar, plus the two owner/structural provenances. */
+export type CorpusSourceApi =
+  | "openalex"
+  | "semantic-scholar"
+  | "pinned"
+  | "snowball";
+
+/** Viewpoint an angle query targeted (D-058). */
+export type CorpusSearchAngle =
+  | "canon"
+  | "recent"
+  | "application"
+  | "critique"
+  | "replication"
+  | "boundary"
+  | "cross-domain";
+
+/** One harvested work in a corpus file. */
+export interface EvidenceCorpusRecord {
+  title: string;
+  authors: string[];
+  year: number | null;
+  venue: string | null;
+  doi: string | null;
+  citations: number | null;
+  abstract: string | null;
+  openalex_id: string | null;
+  openalex_type: string | null;
+  referenced_works_count: number | null;
+  /** Category checklist (D-019): non-exclusive, metadata-only classification. */
+  categories: EvidenceCategory[];
+  source_api: CorpusSourceApi;
+  /** Only on owner-pinned records (D-017): why this work is pinned. */
+  pin_reason?: string;
+  /** Only on a pinned record whose DOI did not resolve on OpenAlex (D-017). */
+  pin_unresolved?: boolean;
+  /** Only on snowballed records (D-019): review ids that surfaced this work. */
+  snowball_from?: string[];
+  /** Angles whose queries surfaced this record (D-058). */
+  search_angles?: CorpusSearchAngle[];
+}
+
+/** One query's metadata line, as recorded in the corpus (D-058). */
+export interface CorpusQueryMeta {
+  api: "openalex" | "semantic-scholar";
+  angle: CorpusSearchAngle;
+  term: string;
+  requested: number;
+  returned: number;
+}
+
+/** Per-review snowball outcome (D-019). */
+export interface CorpusReviewCoverage {
+  title: string;
+  doi: string | null;
+  openalex_id: string;
+  citations: number | null;
+  references_total: number;
+  references_resolved: number;
+  references_in_corpus: number;
+  coverage: number | null;
+}
+
+/** Review-reference snowball accounting for the harvest (D-019/D-034). */
+export interface CorpusCoverageReport {
+  review_found: boolean;
+  reviews: CorpusReviewCoverage[];
+  snowball_added: number;
+  note?: string;
+}
+
+/** Per-angle query outcome + unique deduped records surfaced (D-058). */
+export interface CorpusAngleSpread {
+  angle: CorpusSearchAngle;
+  queries: number;
+  returned: number;
+  unique_records: number;
+}
+
+/** Per-API query outcome + unique deduped records the API contributed (D-058). */
+export interface CorpusSourceSpread {
+  api: "openalex" | "semantic-scholar";
+  queries: number;
+  returned: number;
+  unique_records: number;
+}
+
+/** Dedup-aware novelty vs the previous corpus (D-058). */
+export interface CorpusNoveltyReport {
+  previous_corpus_records: number | null;
+  unique_records: number;
+  already_in_corpus: number;
+  new_records: number;
+  novelty_rate: number;
+  low_novelty: boolean;
+  known_share_threshold: number;
+}
+
+/** Diversity + novelty accounting for the harvest (D-058). */
+export interface CorpusDiversityReport {
+  viewpoint_spread: CorpusAngleSpread[];
+  source_spread: CorpusSourceSpread[];
+  recent_records: number;
+  recency_rate: number;
+  novelty: CorpusNoveltyReport;
+}
+
+/** The full /corpora/evidence/{id}.json file. */
+export interface EvidenceCorpusFile {
+  mechanism_id: string;
+  fetched_at: string;
+  /** Where the search terms came from (D-015). */
+  terms_source: "param" | "record" | "name";
+  terms: string[];
+  queries: CorpusQueryMeta[];
+  coverage_report: CorpusCoverageReport;
+  category_counts: CategoryCounts;
+  /** Diversity + novelty accounting (D-058); absent on pre-D-058 harvests. */
+  diversity_report?: CorpusDiversityReport;
+  records: EvidenceCorpusRecord[];
+}
+
+// ---------- Corpus digest (tools/corpus-digest.ts, D-065) ----------
+
+/**
+ * The standard harvest -> record-drafting hand-off (D-065): a compact,
+ * human-readable projection of one evidence corpus. tools/corpus-digest.ts
+ * builds it from EvidenceCorpusFile + the registry stub/record and renders it
+ * to markdown; the raw corpus stays on disk as provenance but is no longer
+ * read by hand while drafting.
+ */
+
+/** One work as it appears in a digest category list. */
+export interface CorpusDigestEntry {
+  title: string;
+  /** First author + "et al." when there are more. */
+  authors: string;
+  year: number | null;
+  venue: string | null;
+  citations: number | null;
+  doi: string | null;
+  source_api: CorpusSourceApi;
+  /** Every category this work belongs to (so cross-listing is visible). */
+  categories: EvidenceCategory[];
+  search_angles: CorpusSearchAngle[];
+}
+
+/** Pin-resolution accounting: stub/record pins vs what landed in the corpus. */
+export interface CorpusDigestPins {
+  declared: number;
+  resolved: number;
+  unresolved: number;
+  /** DOIs declared in pinned_evidence but absent from the corpus. */
+  missing_dois: string[];
+}
+
+/** The computed digest for one mechanism, before markdown rendering. */
+export interface CorpusDigest {
+  mechanism_id: string;
+  name: string;
+  fetched_at: string;
+  record_count: number;
+  terms: string[];
+  query_count: number;
+  terms_source: string;
+  pins: CorpusDigestPins;
+  snowball_added: number;
+  review_found: boolean;
+  coverage_note: string | null;
+  category_counts: CategoryCounts;
+  /** Diversity is absent on pre-D-058 harvests; the numeric fields are null then. */
+  has_diversity: boolean;
+  recency_rate: number | null;
+  recent_records: number | null;
+  novelty_rate: number | null;
+  low_novelty: boolean | null;
+  viewpoint_spread: CorpusAngleSpread[];
+  source_spread: CorpusSourceSpread[];
+  /** top-N per category, keyed by EVIDENCE_CATEGORIES. */
+  top_by_category: Record<EvidenceCategory, CorpusDigestEntry[]>;
 }
 
 // ---------- Benchmark corpus (read-only mirror of tools/ingest-report.ts, D-029) ----------
