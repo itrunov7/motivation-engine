@@ -6,27 +6,46 @@
   ],
   "connector_version": "2.4.0",
   "last_run": {
-    "timestamp": "2026-07-20T14:59:19.535Z",
+    "timestamp": "2026-07-20T15:05:17.965Z",
     "status": "success",
     "params": {
-      "mechanism": "PS-13"
+      "mechanism": "SC-17"
     },
-    "records_fetched": 352,
+    "records_fetched": 298,
     "files_written": 1,
-    "duration_s": 168.69,
+    "duration_s": 56.78,
     "warnings": {
-      "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 60,
-      "duration_s": 168.69,
+      "api_calls": 54,
+      "duration_s": 56.78,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-20T15:05:17.965Z",
+      "status": "success",
+      "params": {
+        "mechanism": "SC-17"
+      },
+      "records_fetched": 298,
+      "files_written": 1,
+      "duration_s": 56.78,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 54,
+        "duration_s": 56.78,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-20T14:59:19.535Z",
       "status": "success",
@@ -416,23 +435,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T15:10:03.202Z",
-      "status": "success",
-      "params": {
-        "mechanism": "ST-09"
-      },
-      "records_fetched": 187,
-      "files_written": 1,
-      "duration_s": 19.99,
-      "cost": {
-        "api_calls": 20,
-        "duration_s": 19.99,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -631,7 +633,7 @@
     {
       "path": "SC-17.json",
       "records": 298,
-      "bytes": 1656827,
+      "bytes": 1655915,
       "categories": {
         "foundational": 8,
         "meta-analysis": 3,
