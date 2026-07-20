@@ -1,6 +1,6 @@
 {
   "mechanism_id": "IF-18",
-  "fetched_at": "2026-07-20T15:52:26.004Z",
+  "fetched_at": "2026-07-20T16:09:16.831Z",
   "terms_source": "record",
   "terms": [
     "information foraging theory Pirolli",
@@ -57,7 +57,7 @@
       "angle": "boundary",
       "term": "information foraging theory Pirolli boundary conditions moderators",
       "requested": 10,
-      "returned": 0
+      "returned": 10
     },
     {
       "api": "openalex",
@@ -77,8 +77,8 @@
       "api": "semantic-scholar",
       "angle": "canon",
       "term": "information scent user navigation",
-      "requested": 10,
-      "returned": 0
+      "requested": 15,
+      "returned": 15
     },
     {
       "api": "openalex",
@@ -113,7 +113,7 @@
       "angle": "boundary",
       "term": "information scent user navigation boundary conditions moderators",
       "requested": 10,
-      "returned": 0
+      "returned": 10
     },
     {
       "api": "openalex",
@@ -133,8 +133,8 @@
       "api": "semantic-scholar",
       "angle": "canon",
       "term": "information scent hypertext browsing",
-      "requested": 10,
-      "returned": 10
+      "requested": 15,
+      "returned": 15
     },
     {
       "api": "openalex",
@@ -189,8 +189,8 @@
       "api": "semantic-scholar",
       "angle": "canon",
       "term": "web navigation cue judgment",
-      "requested": 10,
-      "returned": 10
+      "requested": 15,
+      "returned": 15
     },
     {
       "api": "openalex",
@@ -211,7 +211,7 @@
       "angle": "critique",
       "term": "web navigation cue judgment critique criticism",
       "requested": 10,
-      "returned": 0
+      "returned": 10
     },
     {
       "api": "openalex",
@@ -245,8 +245,8 @@
       "api": "semantic-scholar",
       "angle": "canon",
       "term": "information seeking behaviour interface",
-      "requested": 10,
-      "returned": 10
+      "requested": 15,
+      "returned": 15
     },
     {
       "api": "openalex",
@@ -267,7 +267,7 @@
       "angle": "critique",
       "term": "information seeking behaviour interface critique criticism",
       "requested": 10,
-      "returned": 0
+      "returned": 10
     },
     {
       "api": "openalex",
@@ -299,18 +299,18 @@
   },
   "category_counts": {
     "foundational": 1,
-    "meta-analysis": 2,
+    "meta-analysis": 5,
     "replication": 9,
-    "dissent": 53,
-    "recent": 58
+    "dissent": 74,
+    "recent": 82
   },
   "diversity_report": {
     "viewpoint_spread": [
       {
         "angle": "canon",
         "queries": 10,
-        "returned": 125,
-        "unique_records": 112
+        "returned": 155,
+        "unique_records": 133
       },
       {
         "angle": "recent",
@@ -327,8 +327,8 @@
       {
         "angle": "critique",
         "queries": 5,
-        "returned": 30,
-        "unique_records": 30
+        "returned": 50,
+        "unique_records": 50
       },
       {
         "angle": "replication",
@@ -339,8 +339,8 @@
       {
         "angle": "boundary",
         "queries": 5,
-        "returned": 16,
-        "unique_records": 16
+        "returned": 36,
+        "unique_records": 36
       },
       {
         "angle": "cross-domain",
@@ -359,18 +359,18 @@
       {
         "api": "semantic-scholar",
         "queries": 15,
-        "returned": 91,
-        "unique_records": 80
+        "returned": 161,
+        "unique_records": 137
       }
     ],
-    "recent_records": 58,
-    "recency_rate": 0.3314,
+    "recent_records": 82,
+    "recency_rate": 0.3612,
     "novelty": {
-      "previous_corpus_records": null,
-      "unique_records": 175,
-      "already_in_corpus": 0,
-      "new_records": 175,
-      "novelty_rate": 1,
+      "previous_corpus_records": 175,
+      "unique_records": 227,
+      "already_in_corpus": 175,
+      "new_records": 52,
+      "novelty_rate": 0.2291,
       "low_novelty": false,
       "known_share_threshold": 0.8
     }
@@ -398,6 +398,28 @@
         "critique"
       ],
       "pin_reason": "foundational — Pirolli & Card"
+    },
+    {
+      "title": "Spatial Cognition III",
+      "authors": [
+        "C. Freksa",
+        "W. Brauer",
+        "C. Habel",
+        "K. Wender"
+      ],
+      "year": 2003,
+      "venue": "Lecture Notes in Computer Science",
+      "doi": "10.1007/3-540-45004-1",
+      "citations": 553,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
+      ]
     },
     {
       "title": "Information foraging in information access environments",
@@ -671,6 +693,26 @@
       ]
     },
     {
+      "title": "Navigation in hyperspace: An evaluation of the effects of navigational tools and subject matter expertise on browsing and information retrieval in hypertext",
+      "authors": [
+        "Sharon McDonald",
+        "R. Stevenson"
+      ],
+      "year": 1998,
+      "venue": "Interacting with computers",
+      "doi": "10.1016/s0953-5438(98)00017-4",
+      "citations": 185,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
       "title": "e-Health: a position statement of the European Society of Cardiology",
       "authors": [
         "Martín Cowie",
@@ -905,6 +947,26 @@
       ]
     },
     {
+      "title": "Effects of scent and breadth on use of site-specific search on e-commerce Web sites",
+      "authors": [
+        "Michel A. Katz",
+        "M. Byrne"
+      ],
+      "year": 2003,
+      "venue": "ACM Trans. Comput. Hum. Interact.",
+      "doi": "10.1145/937549.937551",
+      "citations": 95,
+      "abstract": "Users faced with Web sites containing many possibly relevant pages often have a decision to make about navigation: use the menu of links or use the provided site search function. Two studies were conducted to examine what users do when faced with this decision on e-commerce Web sites, and how users go about deciding which method to attempt. An exploratory study revealed a wide distribution of searching and browsing behavior across sites and users. Counter to some predictions, use of the site search functions did not yield faster or more accurate performance in locating products. Questionnaire data suggested that factors relevant to the menu structure, interface element prominence, information scent and user dispositions all influenced the decision of whether to browse or search a site for a product. A second experiment utilizing novel e-commerce sites and allowing for more control of factors found to be important in the first study found that browsing behavior was influenced by both the breadth and information scent of the menus. These results suggest that providing site search should not be used to compensate for poor menu design, and provide further evidence regarding the design of effective menu structures.",
+      "openalex_id": "W2128872089",
+      "openalex_type": "article",
+      "referenced_works_count": 32,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
       "title": "Endocrine intervention for transsexuals",
       "authors": [
         "Andy Levy",
@@ -987,26 +1049,6 @@
       ]
     },
     {
-      "title": "Effects of scent and breadth on use of site-specific search on e-commerce Web sites",
-      "authors": [
-        "Michael A. Katz",
-        "Michael D. Byrne"
-      ],
-      "year": 2003,
-      "venue": "ACM Transactions on Computer-Human Interaction",
-      "doi": "10.1145/937549.937551",
-      "citations": 80,
-      "abstract": "Users faced with Web sites containing many possibly relevant pages often have a decision to make about navigation: use the menu of links or use the provided site search function. Two studies were conducted to examine what users do when faced with this decision on e-commerce Web sites, and how users go about deciding which method to attempt. An exploratory study revealed a wide distribution of searching and browsing behavior across sites and users. Counter to some predictions, use of the site search functions did not yield faster or more accurate performance in locating products. Questionnaire data suggested that factors relevant to the menu structure, interface element prominence, information scent and user dispositions all influenced the decision of whether to browse or search a site for a product. A second experiment utilizing novel e-commerce sites and allowing for more control of factors found to be important in the first study found that browsing behavior was influenced by both the breadth and information scent of the menus. These results suggest that providing site search should not be used to compensate for poor menu design, and provide further evidence regarding the design of effective menu structures.",
-      "openalex_id": "W2128872089",
-      "openalex_type": "article",
-      "referenced_works_count": 32,
-      "categories": [],
-      "source_api": "openalex",
-      "search_angles": [
-        "canon"
-      ]
-    },
-    {
       "title": "Disability studies today and tomorrow",
       "authors": [
         "Tom Shakespeare"
@@ -1072,6 +1114,51 @@
       "source_api": "openalex",
       "search_angles": [
         "canon"
+      ]
+    },
+    {
+      "title": "Modeling Semantic and Structural Knowledge in Web Navigation",
+      "authors": [
+        "I. Juvina",
+        "H. van Oostendorp"
+      ],
+      "year": 2008,
+      "venue": "Discourse Processes",
+      "doi": "10.1080/01638530802145205",
+      "citations": 74,
+      "abstract": "Research on cognitive modeling of information search and Web navigation emphasizes the importance of “information scent” (the relevance of semantic cues such as link labels and headings to a reader's goal; Pirolli & Card, 1999 Pirolli, P. and Card, S. K. 1999. Information foraging.. Psychological Review, 106: 643–675. [Crossref], [Web of Science ®] , [Google Scholar]). This article shows that not only semantic but also structural knowledge is involved in navigating the Web (Juvina, 2006 Juvina, I. 2006. Development of a cognitive model for navigating on the Web, The Netherlands: Unpublished doctoral dissertation, Utrecht University. [Google Scholar]). This article argues for considering both semantic and structural knowledge in modelling Web navigation. A cognitive model is proposed that uses information scent to account for user's judgments of relevance (a semantic dimension) and “path adequacy” (the semantic similarity between a navigation path and a user's goal) to account for user's efficiency in traversing a Web structure (a structural dimension). Two empirical studies show that abilities to represent and manipulate spatial structures are complementary to semantic abilities in accounting for Web navigation performance.",
+      "openalex_id": "W1967044109",
+      "openalex_type": "article",
+      "referenced_works_count": 39,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon",
+        "recent",
+        "critique"
+      ]
+    },
+    {
+      "title": "The Antecedents and Moderators of Offline Information Search: A Meta-Analysis",
+      "authors": [
+        "Moutusy Maity",
+        "Mayukh Dass",
+        "N. Malhotra"
+      ],
+      "year": 2014,
+      "venue": null,
+      "doi": "10.1016/j.jretai.2014.03.001",
+      "citations": 73,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "meta-analysis"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
       ]
     },
     {
@@ -1219,24 +1306,35 @@
       ]
     },
     {
-      "title": "Modeling Semantic and Structural Knowledge in Web Navigation",
+      "title": "Mind, rationality, and cognition: An interdisciplinary debate",
       "authors": [
-        "Ion Juvina",
-        "Herre van Oostendorp"
+        "N. Chater",
+        "Teppo Felin",
+        "D. Funder",
+        "G. Gigerenzer",
+        "J. Koenderink",
+        "J. Krueger",
+        "D. Noble",
+        "Samuel A. Nordli",
+        "M. Oaksford",
+        "B. Schwartz",
+        "K. Stanovich",
+        "P. Todd"
       ],
-      "year": 2008,
-      "venue": "Discourse Processes",
-      "doi": "10.1080/01638530802145205",
+      "year": 2017,
+      "venue": "Psychonomic Bulletin & Review",
+      "doi": "10.3758/s13423-017-1333-5",
       "citations": 65,
-      "abstract": "Research on cognitive modeling of information search and Web navigation emphasizes the importance of “information scent” (the relevance of semantic cues such as link labels and headings to a reader's goal; Pirolli & Card, 1999 Pirolli, P. and Card, S. K. 1999. Information foraging.. Psychological Review, 106: 643–675. [Crossref], [Web of Science ®] , [Google Scholar]). This article shows that not only semantic but also structural knowledge is involved in navigating the Web (Juvina, 2006 Juvina, I. 2006. Development of a cognitive model for navigating on the Web, The Netherlands: Unpublished doctoral dissertation, Utrecht University. [Google Scholar]). This article argues for considering both semantic and structural knowledge in modelling Web navigation. A cognitive model is proposed that uses information scent to account for user's judgments of relevance (a semantic dimension) and “path adequacy” (the semantic similarity between a navigation path and a user's goal) to account for user's efficiency in traversing a Web structure (a structural dimension). Two empirical studies show that abilities to represent and manipulate spatial structures are complementary to semantic abilities in accounting for Web navigation performance.",
-      "openalex_id": "W1967044109",
-      "openalex_type": "article",
-      "referenced_works_count": 39,
-      "categories": [],
-      "source_api": "openalex",
+      "abstract": "This paper features an interdisciplinary debate and dialogue about the nature of mind, perception, and rationality. Scholars from a range of disciplines — cognitive science, applied and experimental psychology, behavioral economics, biology and physiology — offer critiques and commentaries of a target article by Felin, Koenderink and Krueger (2017), “Rationality, perception, and the all-seeing eye,” Psychonomic Bulletin and Review. The commentaries raise a number of criticisms and issues about rationality and the all-seeing eye argument, including: the nature of judgment and reasoning, biases versus heuristics, organism-environment relations, perception and situational construal, equilibrium analysis in economics, efficient markets, and the nature of empirical observation and the scientific method. The debated topics have far-reaching consequences for the rationality literature specifically and the cognitive, psychological and economic sciences more broadly. The commentaries are followed by a response by the authors of the target article. The response is organized around three central issues: 1) the problem of cues, 2) what is the question? and 3) equilibria, $500 bills, and the axioms of rationality.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "semantic-scholar",
       "search_angles": [
-        "canon",
-        "recent"
+        "critique"
       ]
     },
     {
@@ -1257,6 +1355,25 @@
         "dissent"
       ],
       "source_api": "openalex",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
+      "title": "Analytical Searching vs. Browsing in Hypertext Information Retrieval Systems.",
+      "authors": [
+        "Liwen Qiu"
+      ],
+      "year": 1993,
+      "venue": null,
+      "doi": null,
+      "citations": 62,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
       "search_angles": [
         "canon"
       ]
@@ -1324,7 +1441,8 @@
       "source_api": "semantic-scholar",
       "search_angles": [
         "canon",
-        "recent"
+        "recent",
+        "critique"
       ]
     },
     {
@@ -1510,6 +1628,25 @@
       ]
     },
     {
+      "title": "RETRACTED: Wave vibration and simulation in dissipative media described by irregular boundary surfaces: a mathematical formulation",
+      "authors": [
+        "Chen‐Yuan Chen"
+      ],
+      "year": 2014,
+      "venue": null,
+      "doi": "10.1177/1077546312464258",
+      "citations": 50,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
       "title": "Chapter 10 How Search Engine Users Evaluate and Select Web Search Results: The Impact of the Search Engine Interface on Credibility Assessments",
       "authors": [
         "Yvonne Kammerer",
@@ -1625,6 +1762,27 @@
       ]
     },
     {
+      "title": "Implicit Affect Primes Effort: Basic Processes, Moderators, and Boundary Conditions",
+      "authors": [
+        "G. Gendolla"
+      ],
+      "year": 2015,
+      "venue": null,
+      "doi": "10.1111/spc3.12208",
+      "citations": 38,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
       "title": "Information architecture: Facetag: Integrating bottom‐up and top‐down classification in a social tagging system",
       "authors": [
         "Emanuele Quintarelli",
@@ -1663,7 +1821,8 @@
       "categories": [],
       "source_api": "semantic-scholar",
       "search_angles": [
-        "canon"
+        "canon",
+        "critique"
       ]
     },
     {
@@ -1729,6 +1888,25 @@
       "referenced_works_count": 27,
       "categories": [],
       "source_api": "openalex",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
+      "title": "Exploring the information behaviour of users of Welsh Newspapers Online through web log analysis",
+      "authors": [
+        "P. Gooding"
+      ],
+      "year": 2016,
+      "venue": "J. Documentation",
+      "doi": "10.1108/jd-10-2014-0149",
+      "citations": 29,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
       "search_angles": [
         "canon"
       ]
@@ -1816,6 +1994,52 @@
       ]
     },
     {
+      "title": "Boundary conditions of a curvilinear relationship between decision comprehensiveness and performance: The role of functional and national diversity",
+      "authors": [
+        "R. Mitchell",
+        "B. Boyle",
+        "S. Nicholas",
+        "E. Maitland",
+        "Shuming Zhao"
+      ],
+      "year": 2016,
+      "venue": null,
+      "doi": "10.1016/j.jbusres.2015.12.049",
+      "citations": 25,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
+      "title": "Vigilante Science",
+      "authors": [
+        "Michael R. Blatt"
+      ],
+      "year": 2015,
+      "venue": "Plant Physiology",
+      "doi": "10.1104/pp.15.01443",
+      "citations": 25,
+      "abstract": "The founders of PubPeer (Brandon Stell, Richard Smith, and George Smith) came out this past month. Some Plant Physiology readers will be familiar with the PubPeer Web site, but for others, this editorial may be the first you will have heard of this by-product of the social media age. Since its launch in October 2012, PubPeer has sought to facilitate community-wide, postpublication critique of scientific articles. The Web site has also attracted much controversy around its policies and, until recently, the secrecy shrouding its founders. PubPeer operates as a blog on which anyone can post comments, either to a published article or to comments posted by other participants, and authors may respond. It is a bit like an extended journal club; not a bad idea to promote communication among scientists, you might think, so why the controversy? The problems arising are twofold, and their roots are self-evident on a quick trawl through the PubPeer site. First, most individuals posting on PubPeer—let’s use the euphemism commenters for now—take advantage of the anonymity afforded by the site in full knowledge that their posts will be available to the public at large. Second, the vast majority of comments that are posted focus on image data (gels, blots, and micrographs) that contribute to the development of scientific ideas but are not ideas in themselves. With few exceptions, commenters on PubPeer do no more than flag perceived faults and query the associated content. Of course, such detail generally informs discussion, but no journal club I ever organized or contributed to was so obsessed with the minutiae of data presentation. From the perspective of an author (and, I suspect, many readers), missing all too often are courtesy and common sense. In any other setting, the majority of comments on PubPeer would be reserved for quiet discussion, perhaps by e-mail or after a seminar when the commenter might draw an author aside for questioning. This discussion would benefit both the commenter and the author. It would avoid any possible awkwardness on either side, and if the discussionwere constructive, then both author and commenter would profit from the outcome. The majority of posts on PubPeer are mounted anonymously. So, while there is no danger of public embarrassment for the commenter, likewise there is no opportunity to gain from a personal exchange with the author. What is the rationale? Given that the majority of comments show the most petty kind of scientific criticism, can there be any doubt that the intent often is to pillory, to do so publicly and without accountability? I would like to think that this was not the original intentwhen PubPeerwas launched in 2012. Its founders present the site as a forum“to accelerate the exchange of ideas and scientific progress.” True, the site does allow for postpublication discussion, but I suggest all too often these discussions are one-sided from the outset simply because PubPeer commenters and moderators remain hidden from the scientific community at large. Nodoubt, Stell and his colleagues anticipated the nature of much of the content when they wrote that “questioning the work of other researchers can have negative consequences for a young scientist’s career.” Anyone with experience of online forums, regardless of the context, will not be surprised that the overwhelming majority of posts on PubPeer are negative and occasionally malicious. The very language in the guidance for would-be commenters on PubPeer is tendentious, if not confrontational: “What none of us can verify is any conclusion regarding precisely how orwhy an apparent instance of misconduct occurred,” so “there is absolutely no need to spell out any suspicions youmay have . [as your] readers will be able to draw their own conclusion without the slightest difficulty.” Often enough, posts take on a triumphal tone, even when couched in terms of a question, as if the commenters were already reveling in the discomfiture of the authors. Certainly, there can be little room for worthwhile discussion or an “exchange of ideas” when the discussion is devoid of ideas and polarized from the outset. My overriding concern with PubPeer is the lack of transparency that arises from concealing the identities of both commenters and moderators. I accept that there is a case for anonymity as part of the peer-review process. However, the argument for anonymity in postpublication discussion fallaciously equates such discussionwith prepublication peer review. The essence of prepublication review is amutual agreement, a social contract between author and editor, who are known to one another. The author submitting a manuscript for review agrees to accept the judgment of the editor, and the editor agrees to judge the worthiness of the manuscript for publication. To make this assessment, the editor may obtain independent reviews of the author’s work before passing judgment, but (and here is the fundamental flaw in the argument for “postpublication peer review” as championed by PubPeer) the reviewers and their anonymity are secondary to the contract between author and editor. In short, anonymity makes sense when reviews are offered in confidence to be assessed and moderated by an editor, someone whose identity is known and who takes responsibility for the decision informed by the reviews. Obviously, this same situation does not apply postpublication, not when the commenters enter into a discussion anonymously and the moderators are also unknown. I would argue, too, that the consequences of anonymity are more far reaching than PubPeer is prepared to concede, even if comments are factual, scientific, and civil. I concurwithHilda Bastian, who notes, on the one www.plantphysiol.org/cgi/doi/10.1104/pp.15.01443",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
+      ]
+    },
+    {
       "title": "Evaluating evidence-based health information from generative AI using a cross-sectional study with laypeople seeking screening information",
       "authors": [
         "F. G. Rebitschek",
@@ -1884,6 +2108,29 @@
       ]
     },
     {
+      "title": "Evaluating CoLiDeS + Pic: the role of relevance of pictures in user navigation behaviour",
+      "authors": [
+        "Saraschandra Karanam",
+        "H. Oostendorp",
+        "B. Indurkhya"
+      ],
+      "year": 2012,
+      "venue": "Behavior and Information Technology",
+      "doi": "10.1080/0144929x.2011.606335",
+      "citations": 22,
+      "abstract": "CoLiDeS + Pic is a cognitive model of web-navigation that incorporates semantic information from pictures intoCoLiDeS. In our earlier research, we have demonstrated that by incorporating semantic information from pictures, CoLiDeS + Pic can predict the hyperlinks on the shortest path more frequently, and also with greater information scent, compared to earlier cognitive models of web-navigation like CoLiDeS that relied only on textualinformation from hyperlinks. In this article, we investigate the following research questions. First, would the increase in information scent have an impact on the actual user navigation behaviour? Second, do users actually follow the navigation path predicted by CoLiDeS + Pic? In other words, would CoLiDeS + Pic predict actual user navigation behaviour more accurately than CoLiDeS? We investigate these questions by varying the relevance of pictures on aweb page and studying the impact of varying relevance on the user navigation patterns. We found that under the highly relevant picture condition, users were more accurate and took less time to finish their tasks. Also, under thehighly relevant picture condition, CoLiDeS + Pic predicts significantly greater number of actual user clicks. There was no significant difference in model predictions between the lowly relevant picture condition and no-picture condition. These results validate the predictions made by CoLiDeS + Pic.",
+      "openalex_id": "W2033980127",
+      "openalex_type": "article",
+      "referenced_works_count": 31,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
       "title": "A Proxy For All Your Semantic Needs",
       "authors": [
         "Vladislav D. Veksler",
@@ -1901,6 +2148,28 @@
       "referenced_works_count": 7,
       "categories": [],
       "source_api": "openalex",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
+      "title": "Toward Modeling Contextual Information in Web Navigation",
+      "authors": [
+        "I. Juvina",
+        "H. Oostendorp",
+        "Poyan Karbor",
+        "B. Pauw"
+      ],
+      "year": 2005,
+      "venue": null,
+      "doi": null,
+      "citations": 20,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
       "search_angles": [
         "canon"
       ]
@@ -1924,6 +2193,25 @@
       "source_api": "openalex",
       "search_angles": [
         "canon",
+        "critique"
+      ]
+    },
+    {
+      "title": "The Art of Criticism in the Age of Interactive Technology: Critics, Participatory Culture, and the Avant-Garde",
+      "authors": [
+        "Ryan Gillespie"
+      ],
+      "year": 2012,
+      "venue": null,
+      "doi": null,
+      "citations": 19,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
         "critique"
       ]
     },
@@ -1974,6 +2262,25 @@
       ]
     },
     {
+      "title": "Pioneering models for information interaction in the context of information seeking and retrieval",
+      "authors": [
+        "Reijo Savolainen"
+      ],
+      "year": 2018,
+      "venue": "J. Documentation",
+      "doi": "10.1108/jd-11-2017-0154",
+      "citations": 18,
+      "abstract": "Purpose \n \n \n \n \nThe purpose of this paper is to clarify the conceptual issues of information behaviour research by reviewing the approaches to information interaction in the context of information seeking and retrieval (IS&R). \n \n \n \n \nDesign/methodology/approach \n \n \n \n \nThe study uses the conceptual analysis focussing on four pioneering models for interactive IS&R proposed by Belkin, Ingwersen and Ingwersen and Jarvelin. \n \n \n \n \nFindings \n \n \n \n \nA main characteristic of models for information interaction is the tripartite setting identifying information resources accessible through information systems, intermediary/interface and user. Dialogue is a fundamental constituent of information interaction. Early models proposed by Belkin and Ingwersen focussed on the dialogue occurring in user-intermediary interaction, while more recent frameworks developed by Ingwersen and Jarvelin devote more attention to dialogue constitutive of user-information system interaction. \n \n \n \n \nResearch limitations/implications \n \n \n \n \nAs the study focusses on four models developed within the period of 1984-2005, the findings cannot be generalised to depict the phenomena of information interaction as a whole. Further research is needed to model the specific features of information interaction occurring in the networked information environments in particular. \n \n \n \n \nOriginality/value \n \n \n \n \nThe study pioneers by providing an in-depth analysis of the ways in which pioneering researchers have conceptualised the phenomena of interaction in the context of IS&R. The findings contribute to the elaboration of the conceptual space of information behaviour research.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
       "title": "Technology for Chronic Pain",
       "authors": [
         "Suyi Zhang",
@@ -1991,29 +2298,6 @@
       "source_api": "openalex",
       "search_angles": [
         "application"
-      ]
-    },
-    {
-      "title": "Evaluating CoLiDeS + Pic: the role of relevance of pictures in user navigation behaviour",
-      "authors": [
-        "Saraschandra Karanam",
-        "Herre van Oostendorp",
-        "Bipin Indurkhya"
-      ],
-      "year": 2011,
-      "venue": "Behaviour and Information Technology",
-      "doi": "10.1080/0144929x.2011.606335",
-      "citations": 16,
-      "abstract": "CoLiDeS + Pic is a cognitive model of web-navigation that incorporates semantic information from pictures intoCoLiDeS. In our earlier research, we have demonstrated that by incorporating semantic information from pictures, CoLiDeS + Pic can predict the hyperlinks on the shortest path more frequently, and also with greater information scent, compared to earlier cognitive models of web-navigation like CoLiDeS that relied only on textualinformation from hyperlinks. In this article, we investigate the following research questions. First, would the increase in information scent have an impact on the actual user navigation behaviour? Second, do users actually follow the navigation path predicted by CoLiDeS + Pic? In other words, would CoLiDeS + Pic predict actual user navigation behaviour more accurately than CoLiDeS? We investigate these questions by varying the relevance of pictures on aweb page and studying the impact of varying relevance on the user navigation patterns. We found that under the highly relevant picture condition, users were more accurate and took less time to finish their tasks. Also, under thehighly relevant picture condition, CoLiDeS + Pic predicts significantly greater number of actual user clicks. There was no significant difference in model predictions between the lowly relevant picture condition and no-picture condition. These results validate the predictions made by CoLiDeS + Pic.",
-      "openalex_id": "W2033980127",
-      "openalex_type": "article",
-      "referenced_works_count": 31,
-      "categories": [
-        "dissent"
-      ],
-      "source_api": "openalex",
-      "search_angles": [
-        "canon"
       ]
     },
     {
@@ -2085,6 +2369,28 @@
       ]
     },
     {
+      "title": "Real-time Monitoring System of Agricultural Machinery Operation Information Based on ARM11 and GNSS",
+      "authors": [
+        "M. Xiang",
+        "S. Wei",
+        "Man Zhang",
+        "Minzan Li"
+      ],
+      "year": 2016,
+      "venue": null,
+      "doi": "10.1016/j.ifacol.2016.10.023",
+      "citations": 14,
+      "abstract": "Abstract: In order to measure the information of agricultural machinery working condition in real time, a monitoring system based on ARM11 and GNSS (Global Navigation Satellite System) was developed. The system includes three parts, including data receiving module, data processing module and UI (User Interface) screen display module. Furthermore, it not only can display and store the information such as the position coordinates, the boundary of operating area and the real-time working path, but also can calculate the area of the total field, the completed area, the operating speed and so on. This system was developed in Android environment, and Android’s Canvas class was used to draw the total area of farmland, the real work area and the vehicle turning area with different colors. According to the color value of image pixels, detail information about the working vehicle can be calculated, such as the total area of farmland, operating area, skip area, overlap area and turning area out of the farmland. And then, the working accuracy can be analyzed further. Field experiments and analysis results shown that, while using Si Nan M300 GNSS receiver, the maximum measurement error of the field total area is 1.9% and the average error is 0.96% for rectangles and polygons farmland, the maximum measurement error is 3.6% and the average error is 1.88% for irregularly shaped field. The largest area measurement error is 3.3% and the average error is 1.1% at the real-time operating conditions. Therefore, the system could improve the efficiency of agricultural operations, facilitate the work to assess the quality and reduce the resource consumption.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
       "title": "Inferring a Learner's Cognitive, Motivational and Emotional State in a Digital Educational Game.",
       "authors": [
         "Michael Bedek",
@@ -2104,6 +2410,29 @@
       "source_api": "openalex",
       "search_angles": [
         "canon"
+      ]
+    },
+    {
+      "title": "Navigation assistance for ice-infested waters through automatic iceberg detection and ice classification based on TerraSAR-X imagery",
+      "authors": [
+        "Rudolf Ressel",
+        "A. Frost",
+        "S. Lehner"
+      ],
+      "year": 2015,
+      "venue": null,
+      "doi": "10.5194/isprsarchives-xl-7-w3-1049-2015",
+      "citations": 13,
+      "abstract": "Abstract. Most icebergs present in northern latitudes originate from western Greenland glaciers, from where they drift into Baffin Bay, circulating north along Greenland coast and south along Canadian coast. Some of them drift more southwards up to Newfoundland, where they frequently cross shipping routes. Furthermore, the Arctic summer sea ice coverage significantly decreased over the last three decades. This has attracted numerous attentions from maritime end-users. To keep Arctic shipping routes safe, the monitoring of sea ice and icebergs is crucial. For this purpose, satellite-based Synthetic Aperture Radar (SAR) is well suited. Equipped with an active radar antenna, SAR satellites provide image data of the ocean and frozen waters independent of weather conditions, cloud cover or absence of daylight. In this paper, we present a processor for sea ice classification and (subsequent) iceberg detection based on TerraSAR-X imagery. In the classification step, texture features are extracted from the images and fed into a neural network, indicating areas of low sea ice concentration. Then, an adapted Constant False Alarm Rate (CFAR) detector is executed in order to detect icebergs. In the end, sea ice boundary and iceberg positions are output. Our experiments deal with HH polarized TerraSAR-X images taken in spring season in the Baffin Bay off the western Greenland coast, where both, sea ice and icebergs are present. Our results exemplify how a comprehensive ice processor with complementary information can be set up for near real time (NRT) service in ice infested waters.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
       ]
     },
     {
@@ -2190,6 +2519,28 @@
       ]
     },
     {
+      "title": "Consumer Health Information: a Brief Critique on Information Needs and Information Seeking Behaviour",
+      "authors": [
+        "Ferida Enolil",
+        "M. Khalil"
+      ],
+      "year": 1970,
+      "venue": null,
+      "doi": null,
+      "citations": 10,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
+      ]
+    },
+    {
       "title": "Finding cultural heritage images through a Dual-Perspective Navigation Framework",
       "authors": [
         "Yiling Lin",
@@ -2230,6 +2581,28 @@
       "source_api": "semantic-scholar",
       "search_angles": [
         "boundary"
+      ]
+    },
+    {
+      "title": "\"My words were completely gone.\" A qualitative study of the information seeking behaviour of people with aphasia",
+      "authors": [
+        "Birgit Kvikne",
+        "G. Berget"
+      ],
+      "year": 2022,
+      "venue": "Information Research",
+      "doi": "10.47989/irpaper916",
+      "citations": 8,
+      "abstract": "Introduction. Aphasia is an acquired language impairment, which affects the production and comprehension of speech, reading and writing. Aphasia is associated with great cognitive variation, but a common marker is impaired word retrieval. Searching for information requires several language related skills, such as naming, spelling and reading skills. Consequently, aphasia may have an impact on information seeking behaviour. Method. Seven participants with aphasia were interviewed about their information seeking. Analysis. The data were analysed and organized into categories, derived from themes in the interview guide and the dataset. Results. Information needs were typically solved by asking someone, or through word mobilising search strategies. The participants reported extensive searching for images and synonyms, with the overall purpose to identify adequate query terms. Browsing was preferred over direct searching. Furthermore, certain information needs did not result in any information seeking, because searching activities were considered too strenuous. Conclusions. The findings from this study suggest that an information architecture that facilitates browsing and image search can make Web content more accessible for people with aphasia. Moreover, there is a need for future research on search user interface design that better accommodate people with aphasia in general and impaired word retrieval skills in particular.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
       ]
     },
     {
@@ -2296,6 +2669,94 @@
       ]
     },
     {
+      "title": "Concrete or Abstract? The Impact of Green Advertising Appeals and Information Framing on Consumer Responses",
+      "authors": [
+        "Jiahong Yu",
+        "Xixiang Sun",
+        "Ying Huang",
+        "Yige Jia"
+      ],
+      "year": 2025,
+      "venue": "Journal of Theoretical and Applied Electronic Commerce Research",
+      "doi": "10.3390/jtaer20020130",
+      "citations": 8,
+      "abstract": "Green advertising messages often face challenges of abstraction and outcome ambiguity. To address this, we apply the framing effect theory to explore how concrete versus abstract expressions in green advertising interact with consumer perceptions. Drawing on the Stereotype Content Model (SCM), we propose a congruence framework: concrete messages align with competence appeals, while abstract messages align with warmth appeals. Through two experiments, we demonstrate that such congruence significantly enhances green purchase intention. Experiment 1 establishes the interaction effect between message framing (concrete vs. abstract) and appeal type (competence vs. warmth), revealing that concrete–competence and abstract–warmth pairings outperform mismatched conditions. Experiment 2 further validates advertising attitudes as a mediator and product involvement as a moderator, clarifying boundary conditions. These findings advance the theoretical understanding of framing effects in sustainability communication and offer actionable strategies for marketers: aligning message specificity (concrete/abstract) with appeal dimensions (competence/warmth) can amplify consumer engagement, particularly when tailored to product contexts.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
+      "title": "Query by Browsing: An Alternative Hypertext Information Retrieval Method.",
+      "authors": [
+        "M. Frisse",
+        "S. Cousins"
+      ],
+      "year": 1989,
+      "venue": null,
+      "doi": null,
+      "citations": 8,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
+      "title": "Vibrotactile pitfalls: arm guidance for moderators in virtual TV studios",
+      "authors": [
+        "Monika Klapdohr",
+        "Björn Wöldecke",
+        "D. Marinos",
+        "J. Herder",
+        "C. Geiger",
+        "Wolfgang Vonolfen"
+      ],
+      "year": 2010,
+      "venue": "Humans and Computers",
+      "doi": null,
+      "citations": 8,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
+      "title": "A model of scientists' information seeking and a user-interface design",
+      "authors": [
+        "Tamar Sadeh"
+      ],
+      "year": 2010,
+      "venue": null,
+      "doi": null,
+      "citations": 7,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
       "title": "Information Foraging in the Unknown Patches across the Life Span",
       "authors": [
         "Jessie Chin",
@@ -2343,6 +2804,25 @@
       "source_api": "semantic-scholar",
       "search_angles": [
         "canon"
+      ]
+    },
+    {
+      "title": "EU Agencies 2.0: the new constitution of supranational administration beyond the EU Commission",
+      "authors": [
+        "John R. Saurer"
+      ],
+      "year": 2017,
+      "venue": null,
+      "doi": "10.4337/9781784718671.00050",
+      "citations": 6,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
       ]
     },
     {
@@ -2436,7 +2916,8 @@
       ],
       "source_api": "semantic-scholar",
       "search_angles": [
-        "canon"
+        "canon",
+        "critique"
       ]
     },
     {
@@ -2489,6 +2970,48 @@
       "source_api": "semantic-scholar",
       "search_angles": [
         "boundary"
+      ]
+    },
+    {
+      "title": "Using the Social of Tagging: The Interplay of Social Tags and the Strength of Association in Navigation and Learning Processes",
+      "authors": [
+        "Christoph Held",
+        "U. Cress"
+      ],
+      "year": 2010,
+      "venue": null,
+      "doi": null,
+      "citations": 5,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
+      ]
+    },
+    {
+      "title": "Brain-Machine Interfaces & Information Retrieval Challenges and Opportunities",
+      "authors": [
+        "Yashar Moshfeghi",
+        "Niall McGuire"
+      ],
+      "year": 2025,
+      "venue": "Annual International ACM SIGIR Conference on Research and Development in Information Retrieval",
+      "doi": "10.1145/3726302.3730350",
+      "citations": 4,
+      "abstract": "The fundamental goal of Information Retrieval (IR) systems lies in their capacity to effectively satisfy human information needs - a challenge that encompasses not just the technical delivery of information, but the nuanced understanding of human cognition during information seeking. Contemporary IR platforms rely primarily on observable interaction signals, creating a fundamental gap between system capabilities and users' cognitive processes. Brain-Machine Interface (BMI) technologies now offer unprecedented potential to bridge this gap through direct measurement of previously inaccessible aspects of information-seeking behaviour. This perspective paper offers a broad examination of the IR landscape, providing a comprehensive analysis of how BMI technology could transform IR systems, drawing from advances at the intersection of both neuroscience and IR research. We present our analysis through three identified fundamental vertices: (1) understanding the neural correlates of core IR concepts to advance theoretical models of search behaviour (2) enhancing existing IR systems through contextual integration of neurophysiological signals, and (3) developing proactive IR capabilities through direct neurophysiological measurement. For each vertex, we identify specific research opportunities and propose concrete directions for developing BMI-enhanced IR systems. We conclude by examining critical technical and ethical challenges in implementing these advances, providing a structured roadmap for future research at the intersection of neuroscience and IR.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
       ]
     },
     {
@@ -2605,6 +3128,25 @@
       ]
     },
     {
+      "title": "Hypertext und Information Retrieval - mehr als Browsing und Suche",
+      "authors": [
+        "R. Kuhlen"
+      ],
+      "year": 1992,
+      "venue": null,
+      "doi": null,
+      "citations": 4,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
       "title": "Interactive Information Seeking, Behaviour and Retrieval. Edited by Ian Ruthven and Diane Kelly. London: Facet publishing, 2011, 296 pp. $ 89.95 (paperback). (isbn: 978-1-85604-707-4)",
       "authors": [
         "P. Ingwersen"
@@ -2668,6 +3210,30 @@
       "source_api": "semantic-scholar",
       "search_angles": [
         "canon"
+      ]
+    },
+    {
+      "title": "Something Just Like This: A Secret History of the Role of Analogues in Information Seeking",
+      "authors": [
+        "Huiwen Zhang",
+        "Dana Mckay",
+        "Michael Twidale",
+        "G. Buchanan"
+      ],
+      "year": 2024,
+      "venue": "Conference on Human Information Interaction and Retrieval",
+      "doi": "10.1145/3627508.3638317",
+      "citations": 4,
+      "abstract": "Information seekers often want 'something just like this', an information object (song, book, movie) like one they already know about. This approach is the premise of many modern recommender systems, which ask information seekers for examples of things they like in order to return similar things. This type of information seeking, though, is not particularly well supported by search engines, partly because the ways in which objects can be alike are multifaceted and difficult to articulate, partly because the analogue might emerge in the process of information seeking. This approach to information seeking has been touched on repeatedly in information science literature but not examined in detail. In this paper, we present a pair of studies that explore both how people seek information using analogues online and the ways in which information objects might be alike. Our results offer a novel understanding of a previously underexplored but common behaviour, addressing how analogues are identified, how they are used in information seeking, and the ways in which objects can be analogous from an information seeker's perspective. Our work can support the development of recommender systems, conversational search approaches, and digital interfaces that support this common but little-examined type of information seeking.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
       ]
     },
     {
@@ -2745,6 +3311,31 @@
       ]
     },
     {
+      "title": "AR/VR based Campus Navigation System (CNS)",
+      "authors": [
+        "R. Rajkumar",
+        "Ripunjay Kashyap",
+        "M. A.",
+        "A. J"
+      ],
+      "year": 2025,
+      "venue": "International Conferences on Information Science and System",
+      "doi": "10.1109/iciss63372.2025.11076255",
+      "citations": 3,
+      "abstract": "Considering a large and complex academic campus is a tough procedure; hence, time students, faculties, and visitors waste to trace certain buildings, rooms, and facilities frequently create some frustrating feelings. The new generation navigation systems based on paper-based maps or based on a static digital map fail to help it out with all these aforementioned features. This paper addresses the problems identified above by developing an AR and VR-enabled navigation system to optimize the navigation process within a college campus environment. The proposed system is fully based on the application of AR and VR to implement an immersive, intuitive interaction, and real-time visualization of navigation within both outdoor and indoor spaces. The integrated solution, assembled into a mobile app or web platform, offers dynamic, interactive maps, step-by-step directions, and turn-by-turn guidance through AR overlays. This system greatly reduces the cognitive load that comes from navigating the campus by greatly improving spatial awareness; this contributes a great deal to enhancing the general experience and lessening time usage in trying to find one’s way across campus. This system is designed to be used by different groups of users, including students, faculty, staff, and visitors. Accessibility for users with disabilities has been taken into consideration. Voice-Guided navigation, visual cues, and customizable routes make it inclusive and adaptable. Additionally, the system will allow for real-time updates to include events occurring on campus, construction, or temporary closures and thus provide a current and accurate tool for users. The initial experimental results include the successful development of a 2D navigation system, integration of a CAD-based 3D campus model, and implementation of satellite view navigation for broader spatial awareness. The proposed AR/VR navigation system will revolutionize the campus environment with a modern, user-oriented solution that will further enhance efficiency and convenience.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
       "title": "Are Ten Participants Enough for Evaluating Information Scent of Web Page Hyperlinks?",
       "authors": [
         "C. Katsanos",
@@ -2762,7 +3353,31 @@
       "categories": [],
       "source_api": "semantic-scholar",
       "search_angles": [
+        "canon",
         "critique"
+      ]
+    },
+    {
+      "title": "DASK: Driving-Assisted Secret Key Establishment",
+      "authors": [
+        "Edwin Yang",
+        "Song Fang",
+        "Dakun Shen"
+      ],
+      "year": 2022,
+      "venue": "IEEE Conference on Communications and Network Security",
+      "doi": "10.1109/cns56114.2022.9947241",
+      "citations": 3,
+      "abstract": "Low-cost and easily obtained Global Navigation Satellite System (e.g., GPS) receivers are broadly embedded into various devices for providing location information. In this work, we develop a secret key establishment by utilizing the driving data obtained from GPS. Those data may exhibit randomness as the driver may alternatively step on the accelerator and brake pedals from time to time with varying force in order to adapt to the road traffic during driving. A driving vehicle provides a physically secure boundary as the devices co-located within the vehicle can observe common GPS data, as opposed to devices that do not experience the trip. We implement this key establishment in a real-world environment on top of off-the-shelf GPS-equipped devices as well as widely deployed GPS modules each connected with Raspberry Pi. Extensive experimental results show that when a user drives around 1.36 km for 1.32 minutes on average under moderate traffic conditions, two legitimate GPS-equipped devices in the vehicle can successfully establish a 128-bit secret key. Meanwhile, an attacker following the target vehicle is unable to establish a secret key with the legitimate devices.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
       ]
     },
     {
@@ -2783,6 +3398,31 @@
       "search_angles": [
         "canon",
         "critique"
+      ]
+    },
+    {
+      "title": "No place to hide: how supply chain digitalization curbs environmental moral hazard",
+      "authors": [
+        "Qiaozhe Guo",
+        "Yu Zhen",
+        "Song Nie",
+        "Nengzhi Yao"
+      ],
+      "year": 2025,
+      "venue": "Industrial Management &amp; Data Systems",
+      "doi": "10.1108/imds-04-2025-0440",
+      "citations": 3,
+      "abstract": "\n \n Drawing upon agency theory and digitalization research, this study investigates how supply chain digitalization (SCD) affects corporate environmental misconduct (CEM). We examine whether SCD can act as a monitoring mechanism that reduces information asymmetry between supply chain partners, thereby reducing the risk of environmental moral hazards such as CEM and explore how regional institutional factors–specifically gambling culture and social trust–moderate this relationship.\n \n \n \n We leverage China's Supply Chain Innovation and Application Pilot Program as a quasi-natural experiment to establish causal inference. Using a difference-in-differences approach, we analyze panel data from Chinese listed firms spanning from 2010 to 2023. The policy variation in SCD adoption, combined with regional heterogeneity in institutional contexts, enables us to test both the main effect of SCD on CEM and its boundary conditions.\n \n \n \n Our results demonstrate that SCD significantly reduces CEM. This effect is strengthened by regional social trust, where stakeholders are more willing to share information and coordinate monitoring activities. Unexpectedly, we find that regional gambling culture also enhances rather than weakens the effectiveness of SCD.\n \n \n \n First, by focusing on SCD, our study provides a novel perspective on addressing CEM that extends beyond traditional pressure-dominated approaches such as regulatory oversight or public supervision. Second, it identifies regional institutional factors as critical moderators of digitalization's effectiveness, advancing understanding of how local norms and values shape the reduction of agency risk through digital transformation. These insights address an underexplored area in agency theory regarding environmental contingencies that influence when digitalization reduces organizational misconduct more effectively.\n",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
       ]
     },
     {
@@ -3013,6 +3653,27 @@
       ]
     },
     {
+      "title": "User interface sketching to improve low and high literacy user information seeking on government and social service websites",
+      "authors": [
+        "N. Kodagoda",
+        "B. Wong",
+        "Nawaz Khan"
+      ],
+      "year": 2009,
+      "venue": "European Conference on Cognitive Ergonomics",
+      "doi": null,
+      "citations": 2,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
       "title": "Viki LibraRy: A virtual reality library for collaborative browsing and navigation through hypertext",
       "authors": [
         "Shaduan Babbili",
@@ -3183,6 +3844,53 @@
       ]
     },
     {
+      "title": "Changing Designs for Internet Information System Navigation , Usability and Acceptance",
+      "authors": [],
+      "year": 2004,
+      "venue": null,
+      "doi": null,
+      "citations": 1,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
+      "title": "Coastal Modeling System user's manual",
+      "authors": [
+        "Honghai Li",
+        "Mitchell E. Brown",
+        "Lihwa. Lin",
+        "Yan Ding",
+        "T.R. Beck",
+        "Alejandro Sánchez",
+        "Weiming Wu",
+        "C. Reed",
+        "A. Zundel"
+      ],
+      "year": 2024,
+      "venue": null,
+      "doi": "10.21079/11681/48392",
+      "citations": 1,
+      "abstract": "The Coastal Modeling System (CMS) is a suite of coupled 2D numerical models for simulating nearshore waves, currents, water levels, sediment transport, morphology change, and salinity and temperature. Developed by the Coastal Inlets Research Program of the US Army Corps of Engineers, the CMS provides coastal engineers and scientists a PC-based, easy-to-use, accurate, and efficient tool for understanding of coastal processes and for designing and managing of coastal inlets research, navigation projects, and sediment exchange between inlets and adjacent beaches. The present technical report acts as a user guide for the CMS, which contains comprehensive information on model theory, model setup, and model features. The detailed descriptions include creation of a new project, configuration of model grid, various types of boundary conditions, representation of coastal structures, numerical methods, and coupled simulations of waves, hydrodynamics, and sediment transport. Pre- and post-model data processing and CMS modeling procedures are also described through operation within a graphic user interface—the Surface- water Modeling System.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
       "title": "CommSense: Facilitating Bias-Aware and Reflective Navigation of Online Comments for Rational Judgment",
       "authors": [
         "Ouyang Yang",
@@ -3207,6 +3915,56 @@
       "source_api": "semantic-scholar",
       "search_angles": [
         "canon"
+      ]
+    },
+    {
+      "title": "Design and Usability Evaluation of a Web-Based Edutainment for Grade VII Science: Task Performance and System Usability Scale Findings",
+      "authors": [
+        "Nurhuda Budi Pamungkas",
+        "Sanriomi Sintaro"
+      ],
+      "year": 2025,
+      "venue": "JURNAL SISFOTEK GLOBAL",
+      "doi": "10.38101/sisfotek.v15i2.16008",
+      "citations": 1,
+      "abstract": "This study designed and evaluated a browser-based edutainment prototype for Grade VII science (gravity and Newton’s laws). Usability was examined through task-performance metrics and the System Usability Scale (SUS). Thirty students at SMPN 27, Bandar Lampung, completed an eight-task scenario covering core flows: launching the app, entering and navigating the World Map, starting and stopping gameplay, and accessing Learn and Credits. Core navigation tasks showed high effectiveness with short median times (e.g., launch: 96.7% success, 6.53 s; enter World Map: 93.3%, 7.79 s). The in-level physics puzzle was purposely more demanding (83.3% success, 35.74 s; 0.52 errors per participant), indicating a need for clearer in-level cues. Perceived usability was excellent (mean SUS 87.42, SD 5.02). Overall, the prototype appears classroom-ready; targeted refinements inside levels (first-run micro-tutorials, stronger affordances, on-demand hints) should further smooth first-time play. Future work will examine multi-session learnability, broaden device/browser coverage, and link gameplay to learning outcomes via pretest–posttest designs.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
+      "title": "Development of a stand-alone eHealth treatment: iCamperdown.",
+      "authors": [
+        "Constance Alateras",
+        "S. O'brian",
+        "M. Onslow",
+        "Anna Hearne",
+        "Brenda Carey",
+        "R. Menzies",
+        "A. Packman",
+        "Robyn Lowe"
+      ],
+      "year": 2025,
+      "venue": "Journal of Fluency Disorders",
+      "doi": "10.1016/j.jfludis.2025.106189",
+      "citations": 1,
+      "abstract": "PURPOSE\neHealth treatments have been developed for a range of conditions. They provide an accessible, cost-effective, and convenient model for clients and families to access treatment. The aim of this paper is to provide details and results of user testing of an eHealth speech treatment for adults who stutter: iCamperdown.\n\n\nMETHOD\nAn iterative user-testing process was conducted using a think-aloud method and structured questionnaires. End users were adults who stutter and speech-language pathologists (SLPs).\n\n\nRESULTS\nBased on user feedback, the program underwent several modifications. Changes made to the program included functional enhancements. These include automatic activation of audio instructions on each page to improve navigation, aesthetic modifications to improve acceptability such as rearranging of information, changes to instructions provided to users to improve clarity, and enhancing the quality of audio recordings to increase efficiency.\n\n\nCONCLUSION\nThe iCamperdown program is now ready to be evaluated with a Phase I clinical trial, focussing on evaluating safety, compliance, and preliminary outcomes. Further clinical trialing could investigate baseline predictors and treatment moderators to identify which individuals are most likely to benefit from the program. iCamperdown has advantages and disadvantages, which we explore. We explore the prospect of automating iCamperdown with advanced machine learning techniques. Potentially, the iCamperdown Program for stuttering reduction, with translation into other world languages besides English, could be a transformative change to SLP practices internationally.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
       ]
     },
     {
@@ -3257,6 +4015,31 @@
       ]
     },
     {
+      "title": "Influence of leader humility on subordinates’ knowledge-sharing: exploring the boundary conditions",
+      "authors": [
+        "Shivam Upadhyay",
+        "Pankaj Singh",
+        "Piyali Ghosh",
+        "Sobhan Sarkar"
+      ],
+      "year": 2025,
+      "venue": "Journal of Knowledge Management",
+      "doi": "10.1108/jkm-03-2025-0386",
+      "citations": 1,
+      "abstract": "\n \n Among the human aspects of leaders, humility has gained traction in recent explorations. Subordinates’ psychological safety has been established to mediate between leader humility and subordinates’ knowledge sharing. However, because knowledge sharing is a complicated phenomenon driven by situational demands and individual characteristics, the authors project the presence of boundary conditions in the influence of leader humility on knowledge sharing through psychological safety. The purpose of this study is to investigate the moderating effect of leader competence on the relationship between leader humility and psychological safety, as well as the moderating effect of subordinates’ occupational self-efficacy (OSE) on the relationship between psychological safety and subordinates’ knowledge sharing, within the framework of the social information processing (SIP) theory.\n \n \n \n The authors used a time-lagged, three-wave survey-based questionnaire. Responses from 392 employees working in the Indian IT organizations, collected by using judgmental sampling techniques, were analyzed using partial least squares structural equation modeling.\n \n \n \n Results confirm that leader humility influences subordinates’ knowledge sharing through psychological safety. Findings also prove moderation by leader competence between leader humility and psychological safety and by OSE between psychological safety and subordinates’ knowledge sharing.\n \n \n \n The authors have considered leader humility as a human aspect of a leader and examined the boundary conditions of knowledge sharing through leader humility. Results demonstrate that psychological safety promotes knowledge sharing as a mediator and is strengthened by leader competence and subordinates’ OSE as relatively under-explored moderators. This study illustrates how leader humility and competence jointly influence subordinates’ knowledge sharing via psychological safety. The authors have also positioned OSE as a moderator within the SIP framework and substantiated that knowledge sharing is influenced by subordinates’ cognitive and motivational inclination, besides leader competence.\n",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
       "title": "Information Retrieval Based on the Sequential Hypertext Induced Topic Search in Web Pages",
       "authors": [
         "Amanveer Singh"
@@ -3275,6 +4058,31 @@
       "source_api": "semantic-scholar",
       "search_angles": [
         "canon"
+      ]
+    },
+    {
+      "title": "Information seeking and communication model (ISCM): application and extension",
+      "authors": [
+        "E. Baggs",
+        "Kaitlyn O'Neal",
+        "A. Robson",
+        "Lyn Robinson"
+      ],
+      "year": 2024,
+      "venue": "J. Documentation",
+      "doi": "10.1108/jd-03-2024-0053",
+      "citations": 1,
+      "abstract": "PurposeThe paper reports on developments in the Information Seeking and Communication Model (ISCM) since it was first presented in 2013, focussing on how the model, derived by explicitly drawing on previous models, frameworks, and concepts, has been applied, adapted and extended. This paper summarises the reception of the ISCM, and describes two new applications in different contexts.Design/methodology/approachA literature review details applications of, comments on and critiques of, the ISCM since its introduction. Two exploratory studies of health information seeking behaviour show the application of the ISCM in novel contexts.FindingsThe literature cited here, and the two studies outlined show the applicability and extendibility of the ISCM, as well as its value in helping to capture the holistic context of information seeking, the interplay between providers and seekers of information, including fluidity of provider/seeker roles, and emotional dimensions of information seeking and use.Originality/valueThe paper responds to the call by Case and Given (2016) for further empirical testing of the ISCM and similar conceptual models. It shows the range of applicability of this model, and models drawn from it, and makes recommendations for further development.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
       ]
     },
     {
@@ -3297,6 +4105,53 @@
       ]
     },
     {
+      "title": "Rationality and Optimizing Behaviour of Technology-aided Consumers: A Critique on Perspectives of Behavioural Economists",
+      "authors": [
+        "V. Prakash"
+      ],
+      "year": 2025,
+      "venue": "FIIB Business Review",
+      "doi": "10.1177/23197145251358316",
+      "citations": 1,
+      "abstract": "Behavioural economics grew to prominence by challenging the foundational assumptions of standard economic theory, raising questions about the future trajectory of economic thought. This study presents arguments to reinstate trust in the assumptions of consumers’ rationality and their optimizing behaviour. The study brings out how this criticism is inappropriate. Perspectives of leading behavioural economist such as Dan Ariely, Richard Thaler, Daniel Kahneman and Amos Tversky are critically synthesized and startling gaps are spotted. The study motivates researchers to evaluate the impact of technology on rationality of consumers. On one hand, technology has enhanced access to information and processing capability, but on the other hand, it has brought data deluge and confusion. Contemporary innovations such as GenAI-enabled smartphones, e-commerce platforms, chatbots and robots tend to increase consumers’ access to information and processing ability. Thus, aiding humans in achieving full rationality against popular belief of humans having ‘bounded rationality’ which implied inability of humans to possess optimising behaviour. The aid received from technological prowess has been named ‘Aided Rationality’. The study argues for resurgence of faith in standard economic theory and prompts the researchers to study the interaction of ‘Aided rationality’ with ‘data deluge’ and concludes by identifying compelling questions for future research.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
+      ]
+    },
+    {
+      "title": "Relationship Between Emotional Reactions and Information Sharing: A Meta-Analysis",
+      "authors": [
+        "Yunze Zhao",
+        "Hongyu Fu",
+        "Jing Xu"
+      ],
+      "year": 2026,
+      "venue": "Journal of Broadcasting &amp; Electronic Media",
+      "doi": "10.1080/08838151.2026.2635387",
+      "citations": 1,
+      "abstract": "ABSTRACT Based on a three-level meta-analysis of 55 studies (188 effect sizes; N = 40,924), emotional reactions were positively associated with information sharing (r = 0.32). Moderator analyses revealed stronger associations for positive (r = 0.46) than negative (r = 0.25) emotions, interpersonal (r = 0.39) than media (r = 0.24) channels, and sharing behavior (r = 0.35) than intention (r = 0.28). The strength of association varied by topic, with larger estimates for multi-topic (r = 0.56) and commercial content (r = 0.45). This meta-analysis offers a cross-study test of Emotional Broadcaster Theory and identifies boundary conditions shaping the relationship between emotional reactions and information sharing.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "meta-analysis",
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
       "title": "Role of Information Scent and Link Position in a Successful Navigation on Web",
       "authors": [
         "Vamshi Velagapuri",
@@ -3313,6 +4168,7 @@
       "categories": [],
       "source_api": "semantic-scholar",
       "search_angles": [
+        "canon",
         "critique"
       ]
     },
@@ -3336,6 +4192,28 @@
       "search_angles": [
         "canon",
         "recent"
+      ]
+    },
+    {
+      "title": "Unveiling the Connection Between\n ESG\n Performance and Corporate Competitiveness: Evidence From Industrial Firms in Europe and the\n UK",
+      "authors": [
+        "H. Dkhili"
+      ],
+      "year": 2025,
+      "venue": "Corporate Social Responsibility and Environmental Management",
+      "doi": "10.1002/csr.70279",
+      "citations": 1,
+      "abstract": "\n This study examines the conditional relationship between Environmental, Social, and Governance (ESG) performance and corporate competitiveness among 15,450 firm‐year observations of listed industrial firms in Europe and the UK from 2008 to 2022. We employ a robust multi‐method approach encompassing system GMM, CS‐ARDL, difference‐in‐differences, propensity score matching and quantile regression. We provide causal evidence that ESG performance improves firm competitiveness. However, this relationship is significantly moderated by financial constraints, capital costs, information asymmetry and agency conflicts. This study is the first to integrate these four moderators within a unified theoretical and empirical framework, offering a more nuanced perspective on ESG's strategic impact. Our results complement agency and signal theories by identifying key boundary conditions that shape ESG effectiveness. The results offer novel insights into how firm‐specific financial and governance contexts influence the competitiveness of ESG engagements. We draw implications for corporate strategists, investors and policymakers who aim to align ESG priorities with their competitive advantages.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
       ]
     },
     {
@@ -3488,7 +4366,38 @@
       "categories": [],
       "source_api": "semantic-scholar",
       "search_angles": [
+        "canon",
         "critique"
+      ]
+    },
+    {
+      "title": "Autonomous multisensory enhancement of a visual neuroprosthesis for navigation: technical proof-of-concept with simulated prosthetic vision and single-subject case study of a visual prosthesis user",
+      "authors": [
+        "Breanne P. Christie",
+        "Nicolas Norena Acosta",
+        "Roksana Sadeghi",
+        "A. Kartha",
+        "Chigozie Ewulum",
+        "Avi Caspi",
+        "Francesco V. Tenore",
+        "G. Dagnelie",
+        "R. Klatzky",
+        "Seth D. Billings"
+      ],
+      "year": 2026,
+      "venue": "Journal of Neural Engineering",
+      "doi": "10.1088/1741-2552/ae3d67",
+      "citations": 0,
+      "abstract": "Objective. Visual impairments create significant challenges for navigation. This work explored the potential for an autonomous navigation aid with multisensory feedback to improve navigational performance for users of visual neuroprostheses. Approach. An autonomous navigation system was developed that maps the environment in real time and provides guidance using combinations of prosthetic vision, haptic, and auditory cues. Navigational performance was evaluated in 20 sighted participants using simulated prosthetic vision and in a single-subject case study of an Argus II visual neuroprosthesis user. Participants completed three tasks: navigate to destination, obstacle field traversal, and relative distance judgment. Multiple sensory feedback configurations incorporating visual, haptic, and auditory cues were compared. Performance metrics included collision rate, distance traveled, task completion time, navigation success rate, and accuracy of relative distance judgments. Main results. Performance differences across sensory configurations were most pronounced in navigation success and collision rates. Haptic plus audio feedback was highly effective for navigation tasks, enabling successful navigation in nearly all trials involving haptic guidance. Argus vision (AV) alone was inadequate for navigation. Depth vision (DV) provided modest improvements over AV but did not enhance performance beyond haptic and audio guidance when combined. Wide field-of-view DV yielded additional benefits, particularly for obstacle field traversal where its performance exceeded other modes. Adding AV to haptic and audio also provided no benefit and, in some cases, degraded performance. Performance trends for the Argus user were generally comparable to those of sighted participants across sensory modes, with the exception of the relative distance judgment task, in which the Argus user demonstrated better performance. Among sighted participants, increased field of view and resolution independently improved relative distance judgment accuracy. Significance. These findings demonstrate the potential of multimodal feedback systems to improve navigation for prosthetic vision users. (ClinicalTrials.gov NCT04359108).",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
       ]
     },
     {
@@ -3634,6 +4543,29 @@
       ]
     },
     {
+      "title": "Cue Polarity Effects in Learning : A “ Matching Bias ” for Multiple Cue Judgment",
+      "authors": [
+        "Esther Kaufmann",
+        "J. Athanasou",
+        "R. Hamm",
+        "J. Afonso",
+        "Mesquita"
+      ],
+      "year": null,
+      "venue": null,
+      "doi": null,
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
       "title": "Decision letter: RatInABox, a toolkit for modelling locomotion and neuronal activity in continuous environments",
       "authors": [
         "Antonio Fernández‐Ruiz"
@@ -3762,6 +4694,31 @@
       ]
     },
     {
+      "title": "G-SAN: Rethinking Audio Navigation Beyond Time in Podcasts",
+      "authors": [
+        "Liuziyu Zhao",
+        "Xiaoyu Yang",
+        "Weipeng Chen",
+        "Pan Hui"
+      ],
+      "year": 2026,
+      "venue": "Symposium on Designing Interactive Systems",
+      "doi": "10.1145/3800645.3812915",
+      "citations": 0,
+      "abstract": "Podcasts have become a primary medium for information access and informal learning. However, mainstream audio players still rely on time-based navigation, treating listening as moving through time. This mismatch forces listeners to translate comprehension regulation intentions into trial-and-error seeking on the timeline. While generative AI enables rich semantic analysis of long-form audio, existing tools often demand visual attention and fine-grained interaction, which is a poor fit for mobile, multitasking listening. We present Generative Semantic Audio Navigation (G-SAN), a prototype that brings support for comprehension regulation from the information layer to the control layer by remapping familiar playback controls into meaning-oriented actions over semantic units for local clarification, main-thread grasping, and global orientation. A user study shows that participants were able to understand and adopt these controls during real-time listening, and generally perceived them as helpful for regulating understanding, while also revealing boundary conditions. We conclude with design implications for meaning-oriented audio navigation.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
       "title": "GIFT: Maximizing first-year students’ ‘least effort’ information gathering habits using Information Foraging Theory",
       "authors": [
         "Michael Fosmire"
@@ -3850,7 +4807,8 @@
       ],
       "source_api": "semantic-scholar",
       "search_angles": [
-        "canon"
+        "canon",
+        "critique"
       ]
     },
     {
@@ -3949,7 +4907,36 @@
       ],
       "source_api": "openalex",
       "search_angles": [
-        "canon"
+        "canon",
+        "boundary"
+      ]
+    },
+    {
+      "title": "Integrating evidence and causal mapping of help-seeking behaviour of migrant women with postpartum depression in Shanghai, China: a scoping review protocol",
+      "authors": [
+        "Yin Jien Lee",
+        "Anita Taft",
+        "Rithika Kacham",
+        "Connie Wong",
+        "Yuyang Cai",
+        "Hong Li",
+        "G. L. Darmstadt"
+      ],
+      "year": 2024,
+      "venue": "BMJ Open",
+      "doi": "10.1136/bmjopen-2023-082571",
+      "citations": 0,
+      "abstract": "Introduction The estimated prevalence of postpartum depression (PPD) worldwide, in China, and Shanghai is 17.2%, 18.0% and 23.2%, respectively. In 2021, Shanghai housed a population of 3.2 million childbearing-age migrant women, most of whom migrated to the city with their husbands for economic reasons. There is a general lack of help-seeking behaviour for mental disorders in China due to the perceived risk of social stigmatisation. In Shanghai, 70% of women did not seek professional help for perinatal mental health problems. We aim to gather information from multiple perspectives, such as the migrant women with PPD and perinatal depression (PND), their caregivers, health service providers and communities, to understand the help-seeking behaviour of postpartum migrant women with PPD or PND in China. Methods and analysis The Preferred Reporting Items for Systematic Reviews and Meta-Analyses framework for Scoping Reviews will guide this review. A bilingual research librarian developed a comprehensive search strategy to retrieve published and unpublished English and Chinese studies involving factors influencing women’s PPD or PND help-seeking behaviour in China. This literature includes perceptions, views, patterns, acceptance and refusal, tendencies, probability, service accessibility and utilisation, and facts. We will search PubMed, Embase, Web of Science and CINAHL for English literature and CINKI for Chinese literature. Backward and forward snowball approaches will be used to identify additional relevant papers from the reference lists of selected papers. Two independent reviewers will screen the title and abstract and review the full text of selected papers to identify eligible articles for data extraction. We will build a Microsoft Access database to record the extracted data. The results will be presented in tables and a causal map to demonstrate the relationships between extracted variables and help-seeking behaviours for PPD and PND. A conceptual simulation model will be formulated based on the information from the literature to validate the logic of the relationships between variables, identify knowledge gaps and gain insights into potential intervention approaches. Experts and stakeholders will be invited to critique and comment on the results during group model building (GMB) workshops in Shanghai. These comments will be essential to validate the findings, receive feedback and obtain additional insights. Ethics and dissemination The literature review component of our study does not require ethical approval because the information and data collected will be obtained from publicly available sources and will not involve human subjects. Our collaborating research partner, International Peach Maternal Child Hospital, obtained the IRB approval (GKLW-A-2023-020-01) for screening and enrolling participants in GMB workshops. Stanford University received IRB approval under protocol number 67 419. The full review will be presented at a relevant conference and submitted to a peer-reviewed scientific journal for publication to report findings.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
       ]
     },
     {
@@ -4019,6 +5006,32 @@
       ]
     },
     {
+      "title": "Linking boundary organizations to co-produce actionable knowledge: A case study of ice forecasting for Great Lakes navigation",
+      "authors": [
+        "Devin Gill",
+        "Kripa Jagannathan",
+        "A. Fujisaki‐Manome",
+        "V. Field",
+        "Kimberly Channell",
+        "M. C. Lemos"
+      ],
+      "year": 2024,
+      "venue": "Weather, Climate, and Society",
+      "doi": "10.1175/wcas-d-24-0012.1",
+      "citations": 0,
+      "abstract": "\nNavigating the Great Lakes during icy conditions poses significant safety challenges for the shipping sector. Available ice information is uncertain and fragmented, and navigators must seek out multiple sources for information at the spatial and temporal scales they require, if the information is available at all. Navigators have expressed that they require more highly localized and easily usable information for current and predicted ice conditions to support decision-making. In this study, we seek to meet this information need by applying a boundary organizations chain (BOC) approach to facilitate the co-production of an actionable short-term Great Lakes ice forecast. We focus on two main aspects of this research: 1) producing an actionable decision-support product that meets the needs of Great Lakes ice navigators, and 2) contributing to the knowledge co-production scholarship on BOCs by providing a detailed account of our methods to create a BOC and co-produce an actionable ice forecast. Our results support incorporating existing communities of practice (COPs) into BOCs to enhance the co-production of actionable knowledge, specifically through increasing their complementarity and embeddedness. COPs are informal networks of users that meet voluntarily to share knowledge and develop professional skills, which we found naturally builds the co-production capacities of participants (e.g. embeddedness and complementarity). We also find that COP members are well positioned to disseminate co-produced knowledge across wider user groups.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
       "title": "Local Conceptions of Authority and Political Legitimacy in Africa",
       "authors": [
         "Laurent Fourchard"
@@ -4039,6 +5052,31 @@
       "source_api": "openalex",
       "search_angles": [
         "replication"
+      ]
+    },
+    {
+      "title": "Machine Learning Approaches to Classification of Online Users by Exploiting Information Seeking Behaviours",
+      "authors": [
+        "Shaik. Allabhakshu",
+        "Manam Om Rupesh",
+        "K. Jayasri",
+        "Thungaturthi Satya Sai Himaja",
+        "Katikam Mahesh"
+      ],
+      "year": 2025,
+      "venue": "International Journal of Innovative Science and Research Technology",
+      "doi": "10.38124/ijisrt/25apr1128",
+      "citations": 0,
+      "abstract": "In today’s digital age, understanding how users interact with online platforms has become more important than\never, especially for reshape experiences and protect security. This project introduces an innovative approach to analyzing\nand classifying user behavior by using machine learning, with a focus on predicting information-seeking patterns based on\nsocial media and locating data. Inspired by real world needs, we developed a system that uses a fine-tuned Random Forest\nClassifier to categorize user activities into \"uncertain Behavior, Good Behavior, or Neutral Behavior using features like\ngender, age, location latitude and longitude, and social metrics such as followers, friends, favorites, and statuses. The\nmodel does a great job reaching an impressive accuracy of 90.21%. What makes this project special is its interactive edge\nwe built a user friendly interface using Jupyter allowing anyone to input their own data think of it like filling out a digital\nprofile and get instant predictions about their behavior type. It is for marketer wanting to personalize ads, security teams\ndetecting possible risk, or researcher studying online habits, this tool delivers action able insights with a simple click. The\nsystem also save predictions to a CSV file for future reference and offers a peek into advanced possibilitie with plans for\nreal time deployment using Flask and Drawing from established research on user direction and machine learning, this\nproject balances technical culture with practical usability aiming to enhance our understanding of digital behavior while\nkeeping privacy and ethics in mind. It a step toward smarter more natural online environments crafted with care and\nInterest.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
       ]
     },
     {
@@ -4089,6 +5127,29 @@
       ]
     },
     {
+      "title": "Parental Leadership in Educational Mobility Decisions: How Indonesian Parents Lead Family Choices for European Higher Education (Germany–France)",
+      "authors": [
+        "Ardin Sianipar",
+        "Fransiska Wahyu Ari Susilawati"
+      ],
+      "year": 2026,
+      "venue": "Feedforward Journal of Human Resource",
+      "doi": "10.19166/ff.v6i1.10964",
+      "citations": 0,
+      "abstract": "This systematic review examines how parental leadership influences Indonesian families' decisions to pursue higher education in Europe, specifically in Germany and France. Following PRISMA (2020) guidelines and assessed with MMAT (2022), we reviewed multidisciplinary databases and included 67 studies. We synthesize evidence across five mechanisms to propose and evaluate a sequential pathway: (1) autonomy-supportive parental leadership encourages (2) student participation and agency, which enhances (3) decision quality and satisfaction, enabling (4) pre-departure readiness, and predicting (5) early academic and sociocultural adjustment. Three links—leadership to agency, agency to decision quality, and decision quality to preparedness—are consistently supported, while preparedness to adjustment depends on boundary conditions. Two key moderators are identified: (a) advising and information quality (clarity, credibility, task–fit) strengthens the link from agency to decision quality; (b) cultural and linguistic capital (prior exposure, host-language proficiency) enhances preparedness and sociocultural adjustment. Germany–France policy requirements (e.g., language thresholds, administrative steps, financial documentation) highlight the importance of structured counseling and family role-sharing. The review connects parental leadership theory with family decision-making and study-abroad research, reframing decision quality as justified choice and positioning preparedness as the mechanism driving outcomes. We propose a Family Leadership Playbook and advising protocols (including quality gates, pre-departure sprints, and ERP/CRM tracking). Future research should test dyadic (parent–child) and longitudinal designs, standardize indicators, and incorporate digital traces to identify families at risk.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ]
+    },
+    {
       "title": "Platforms, algorithms, and the shifting boundaries of information horizons",
       "authors": [
         "Kayla Burt"
@@ -4107,6 +5168,35 @@
       "source_api": "semantic-scholar",
       "search_angles": [
         "boundary"
+      ]
+    },
+    {
+      "title": "Quantifying expert resistance perception from vessel wall deformation in intracranial catheter navigation",
+      "authors": [
+        "Takeshi Uno",
+        "Masaaki Shojima",
+        "Makoto Ohta",
+        "H. Kosukegawa",
+        "Yuta Oyama",
+        "Riko Hasegawa",
+        "Ayami Omiya",
+        "Yoichi Haga",
+        "Masahiro Shin"
+      ],
+      "year": 2026,
+      "venue": "Journal of NeuroInterventional Surgery",
+      "doi": "10.1136/jnis-2026-025559",
+      "citations": 0,
+      "abstract": "Background Intracranial catheter navigation relies on haptic cues interpreted as resistance. However, resistance perception is subjective, limiting standardized training. Prior studies measured forces at the proximal device end, but vessel-wall deformation during catheter advancement has not been synchronized with expert resistance judgment. In this feasibility study, outer-wall strain was used as a relative index of wall deformation in a tortuous vascular phantom. Methods Six board-certified neurointerventionalists, each performing one navigation trial, advanced a 0.021 inch microcatheter over a 0.014 inch microguidewire through a tortuous vascular phantom with nine sequential bends, eight instrumented with outer-wall strain gauges. Operators reported mild resistance and unacceptable resistance, defined as resistance beyond which advancement was judged unsafe in this phantom. Vessel strain was recorded continuously without real-time feedback. Results In this phantom, when mild resistance was first reported, maximum strain among instrumented gauges reached 410.8±102.9 µε, localized approximately two bends proximal to the catheter tip, on average. At unacceptable resistance, maximum strain increased to 850.3±219.8 µε at the most proximal gauge. Peak strain location shifted proximally as perceived resistance escalated, and further distal tip advancement ceased. Strain at unacceptable resistance consistently exceeded that at mild resistance. Conclusions In this phantom, expert resistance perception was associated with reproducible vessel-wall strain patterns. Because microstrain values are model-specific, they should be viewed as relative deformation indices, not patient-applicable thresholds or measures of in vivo wall stress. Linking subjective resistance to quantifiable wall deformation may support objective assessment of resistance perception and proficiency-based simulation training, pending validation.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
       ]
     },
     {
@@ -4172,6 +5262,28 @@
       ]
     },
     {
+      "title": "Soccer in Mind",
+      "authors": [
+        "Robert Podhurst"
+      ],
+      "year": 2023,
+      "venue": "Contemporary Sociology",
+      "doi": "10.1177/00943061231181316b",
+      "citations": 0,
+      "abstract": "With Soccer in Mind: A Thinking Fan’s Guide to the Global Game, Andrew Guest has written an excellent, highly relevant book that examines topics including soccer’s extraordinary popularity and untapped potential for nation-building (more about this aspirational potential later). The unanswered question is, ‘‘can soccer, as a globally shared cultural form, actually do good in the world?’’ Here, the author’s obvious affection for the game somewhat clouds his judgment. The gatekeepers of soccer—and their American counterparts responsible for football, basketball, and baseball—share one absolute objective: to grow their respective sport by promoting elite youth programs to produce the next generation of superstars. The author provides an important service to readers by accurately capturing the sexist history of FIFA. One of many examples is Canada conducting the Women’s World Cup tournament on artificial turf fields, ‘‘a surface expressly prohibited for the men’s tournament.’’ I do have several issues with Guest. One revolves around his well-intended aspiration that soccer can actually do good in the world. Another involves applying social science to prioritize people and neglected regions over profit and winning. In reality, irrespective of geography, the more important the game becomes—from soccer in Europe and South America to American football and basketball—the more the objective is winning and the intense emotional and psychological joy derived from being a fan and supporting winning teams. Guest engages in a bit of wishful thinking by suggesting that we utilize social science to develop ‘‘a more enjoyable, enriching, and effectual experience of the game.’’ Fanhood ‘‘transports the individual into a special world . . . filled with exceptionally intense forces that take hold of the fan.’’ Jerseys, scarves, and flags are used to signify fandom and publicly solidify one’s unquestioned loyalty and identity. The inclusive acronym BIRG—‘‘Basking in Reflected Glory’’—describes the satisfaction of supporting a successful team. This mindset is consistent with the pronoun ‘‘WE’’ after defeating an archrival. Guest also does an admirable job in describing FIFA’s opposition to the Women’s World Cup, muting its criticism after the 2015 World Cup when the women’s games garnered the largest TV audiences of any soccer games ever televised in the United States. I disagree with Guest when he writes, ‘‘more than any nation, the U.S. has politicized its Olympic participation.’’ Russia conveniently waited until after the Chinese Winter Olympics was concluded before invading Ukraine. Another example is blatant doping among medal winners, which has become a familiar narrative involving specific Russian athletes. An important critique involves the author’s utopian perspective that ‘‘soccer can be fashioned as a social good’’ and the hope that the game will ‘‘prioritize people and places over profit and performance.’’ This idealistic aspiration is overcome by the absolute importance attached to the outcome and the ecstasy of winning. Throughout the book, Guest connects relevant sociological and psychological concepts developed by Durkheim, Weber, Simmel, and James to aid in describing the intense emotional experiences produced by being a devoted sports fan. The author correctly describes how ‘‘fandom’’ frequently brings out the worst in us while producing Soccer in Mind: A Thinking Fan’s Guide to the Global Game, by Andrew M. Guest. New Brunswick, NJ: Rutgers University Press, 2021. 211 pp. $26.95 paper. ISBN: 9781978817319. 302 Review Essays",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
+      ]
+    },
+    {
       "title": "Societal allostatic load under chronic threat: defensive dominance and collective efficacy (Iran as a case example)",
       "authors": [
         "Jamshid Faraji"
@@ -4212,6 +5324,67 @@
       "search_angles": [
         "canon",
         "recent"
+      ]
+    },
+    {
+      "title": "The Dual Dimension of Critique and the Predicament of Revolution “Utopia”——On the Meaning of Modernity Critique by Lukac′s “Reification” Thought",
+      "authors": [
+        "Han Qiu-hong"
+      ],
+      "year": 2007,
+      "venue": null,
+      "doi": null,
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "critique"
+      ]
+    },
+    {
+      "title": "The Effect of Scent on User Recall and Navigation",
+      "authors": [
+        "M. Resnick",
+        "Amir Baker"
+      ],
+      "year": 2009,
+      "venue": null,
+      "doi": "10.1177/154193120905301501",
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ]
+    },
+    {
+      "title": "THE EFFECT OF SCENT ON USER RECALL OF WEB SITE NAVIGATION",
+      "authors": [
+        "M. Resnick",
+        "A. Baker"
+      ],
+      "year": 2008,
+      "venue": null,
+      "doi": null,
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
       ]
     },
     {
@@ -4386,6 +5559,30 @@
       "source_api": "openalex",
       "search_angles": [
         "recent"
+      ]
+    },
+    {
+      "title": "What drives tourists' travel intentions in the context of travel video experiences: A systematic review and future research agenda",
+      "authors": [
+        "Giang Nu To Truong",
+        "P. Nguyen"
+      ],
+      "year": 2026,
+      "venue": "Multidisciplinary Reviews",
+      "doi": "10.31893/multirev.2026460",
+      "citations": 0,
+      "abstract": "This systematic literature review synthesizes evidence from 51 peer-reviewed quantitative studies to clarify how travel videos influence tourists’ travel intentions and to propose a future research agenda. Following PRISMA guidelines, 1,149 records were identified across five databases and screened to retain high-quality articles published before December 2024. Descriptive analysis shows that scholarly attention has accelerated markedly, peaking at 20 publications in 2024, indicating rapid field maturation. Research is geographically concentrated, with China accounting for 26 of the 51 studies, followed by the United States (5) and India/Pakistan (4 each), highlighting a strong Asia-centric focus and the need for broader cross-cultural inquiry. Thematically, 2D and user-generated videos (vlogs and short videos on YouTube, TikTok, and Instagram) dominate the literature, confirming their superior persuasive power over organization-produced content. The most frequently applied theories are the Stimulus–Organism–Response model and Source Credibility Theory, together appearing in 43.14% of studies, demonstrating their central role in explaining how video stimuli shape cognitive and affective responses that drive intention. Methodologically, all studies employ cross-sectional designs, with online surveys prevailing (15 author-distributed links; 13 panel-based surveys) and 21 experimental studies requiring participants to watch videos prior to responding, underscoring the field’s reliance on digital data collection. The nomological synthesis reveals that presenter credibility, content quality, destination image, and emotional engagement consistently predict intention, while mediators such as attitude, trust, inspiration, and flow experience explain indirect effects. Moderators—including narrative structure, consumption orientation, and cultural cognition—shape boundary conditions. These findings demonstrate that travel videos are not merely informational but powerful emotional and relational stimuli. The review advances theory by mapping an integrated nomological network and offers actionable insights for destination marketers to leverage credible creators and emotionally engaging content to enhance destination branding and visitation outcomes.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "meta-analysis",
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
       ]
     }
   ]

@@ -6,23 +6,46 @@
   ],
   "connector_version": "2.4.0",
   "last_run": {
-    "timestamp": "2026-07-20T16:04:50.221Z",
+    "timestamp": "2026-07-20T16:07:39.292Z",
     "status": "success",
     "params": {
-      "mechanism": "SC-17"
+      "mechanism": "IF-18"
     },
-    "records_fetched": 390,
+    "records_fetched": 227,
     "files_written": 1,
-    "duration_s": 71.23,
+    "duration_s": 97.55,
+    "warnings": {
+      "s2_throttled": true
+    },
     "cost": {
-      "api_calls": 62,
-      "duration_s": 71.23,
+      "api_calls": 57,
+      "duration_s": 97.55,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-20T16:07:39.292Z",
+      "status": "success",
+      "params": {
+        "mechanism": "IF-18"
+      },
+      "records_fetched": 227,
+      "files_written": 1,
+      "duration_s": 97.55,
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 57,
+        "duration_s": 97.55,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-20T16:04:50.221Z",
       "status": "success",
@@ -414,28 +437,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-17T14:35:49.711Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FR-11",
-        "terms": "framing effect risky choice saas onboarding;anchoring adjustment heuristic saas onboarding;anchoring effect replication saas onboarding"
-      },
-      "records_fetched": 18,
-      "files_written": 1,
-      "duration_s": 12.81,
-      "error": "regression suspected: re-harvest produced 18 records vs 222 already in the corpus — corpus NOT overwritten; wrote FR-11.regression.json for review (D-038)",
-      "warnings": {
-        "regression_suspected": true
-      },
-      "cost": {
-        "api_calls": 11,
-        "duration_s": 12.81,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -537,14 +538,14 @@
     },
     {
       "path": "IF-18.json",
-      "records": 175,
-      "bytes": 1021223,
+      "records": 227,
+      "bytes": 1105878,
       "categories": {
         "foundational": 1,
-        "meta-analysis": 2,
+        "meta-analysis": 5,
         "replication": 9,
-        "dissent": 53,
-        "recent": 58
+        "dissent": 74,
+        "recent": 82
       }
     },
     {
