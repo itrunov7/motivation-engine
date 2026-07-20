@@ -288,6 +288,13 @@ completeness-checked corpus. The rules that keep that corpus honest:
   fails any dossier whose mechanism corpus has `dissent` count `0` (or is
   missing/unclassified). A corpus that can only *confirm* is treated as broken —
   this is a hard gate, not a warning.
+- **Digests are committed artifacts of the hand-off, not throwaway local files.**
+  The `npm run digest` output under `corpora/evidence/digests/{id}.md` (D-065) is
+  the ~2-page projection an author reads to write the record + dossier; it is
+  versioned in git alongside the corpus it summarizes so the harvest→authoring
+  trail is auditable. Regenerating a digest is deterministic (its timestamps come
+  from the corpus, not wall-clock), so a re-run over an unchanged corpus produces
+  a byte-identical file and no diff.
 - **Review-reference coverage.** For the top reviews, their references are
   resolved via OpenAlex and the coverage ratio is written into
   `coverage_report`; any reference cited by ≥2 reviews but missing from the
