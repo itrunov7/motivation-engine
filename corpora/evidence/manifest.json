@@ -6,26 +6,70 @@
   ],
   "connector_version": "2.4.0",
   "last_run": {
-    "timestamp": "2026-07-20T15:05:17.965Z",
-    "status": "success",
+    "timestamp": "2026-07-20T15:43:16.017Z",
+    "status": "partial",
     "params": {
-      "mechanism": "SC-17"
+      "mechanism": "IF-18"
     },
-    "records_fetched": 298,
+    "records_fetched": 175,
     "files_written": 1,
-    "duration_s": 56.78,
+    "duration_s": 550,
+    "error": "semantic-scholar boundary \"information foraging theory Pirolli boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar canon \"information scent user navigation\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar boundary \"information scent user navigation boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar critique \"web navigation cue judgment critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar critique \"information seeking behaviour interface critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
     "warnings": {
-      "low_novelty": true
+      "s2_throttled": true
     },
     "cost": {
-      "api_calls": 54,
-      "duration_s": 56.78,
+      "api_calls": 141,
+      "duration_s": 550,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-20T15:43:16.017Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "IF-18"
+      },
+      "records_fetched": 175,
+      "files_written": 1,
+      "duration_s": 550,
+      "error": "semantic-scholar boundary \"information foraging theory Pirolli boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar canon \"information scent user navigation\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar boundary \"information scent user navigation boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar critique \"web navigation cue judgment critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar critique \"information seeking behaviour interface critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 141,
+        "duration_s": 550,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-20T15:32:56.513Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "SC-17"
+      },
+      "records_fetched": 307,
+      "files_written": 1,
+      "duration_s": 573.35,
+      "error": "semantic-scholar critique \"visual attention web page critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar critique \"eye movements reading screen critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar boundary \"eye movements reading screen boundary conditions moderators\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar canon \"banner blindness advertising\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar critique \"banner blindness advertising critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar boundary \"banner blindness advertising boundary conditions moderators\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar critique \"web page fixation attention advertisement critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar canon \"visual hierarchy attention interface\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar critique \"visual hierarchy attention interface critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar critique \"attention capture web design critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar boundary \"attention capture web design boundary conditions moderators\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional).",
+      "warnings": {
+        "s2_throttled": true,
+        "capped": true
+      },
+      "cost": {
+        "api_calls": 150,
+        "duration_s": 573.35,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-20T15:05:17.965Z",
       "status": "success",
@@ -401,40 +445,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T15:15:10.278Z",
-      "status": "success",
-      "params": {
-        "mechanism": "ID-12"
-      },
-      "records_fetched": 175,
-      "files_written": 1,
-      "duration_s": 17.35,
-      "cost": {
-        "api_calls": 18,
-        "duration_s": 17.35,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-15T15:12:55.044Z",
-      "status": "success",
-      "params": {
-        "mechanism": "RE-10"
-      },
-      "records_fetched": 171,
-      "files_written": 1,
-      "duration_s": 13.55,
-      "cost": {
-        "api_calls": 12,
-        "duration_s": 13.55,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -536,14 +546,14 @@
     },
     {
       "path": "IF-18.json",
-      "records": 316,
-      "bytes": 1737280,
+      "records": 175,
+      "bytes": 1021223,
       "categories": {
-        "foundational": 10,
-        "meta-analysis": 13,
-        "replication": 46,
-        "dissent": 106,
-        "recent": 107
+        "foundational": 1,
+        "meta-analysis": 2,
+        "replication": 9,
+        "dissent": 53,
+        "recent": 58
       }
     },
     {
@@ -632,14 +642,14 @@
     },
     {
       "path": "SC-17.json",
-      "records": 298,
-      "bytes": 1655915,
+      "records": 307,
+      "bytes": 2199751,
       "categories": {
-        "foundational": 8,
-        "meta-analysis": 3,
-        "replication": 8,
-        "dissent": 77,
-        "recent": 124
+        "foundational": 3,
+        "meta-analysis": 6,
+        "replication": 24,
+        "dissent": 87,
+        "recent": 111
       }
     },
     {
@@ -708,11 +718,6 @@
       "bytes": 15982
     },
     {
-      "path": "digests/IF-18.md",
-      "records": 0,
-      "bytes": 17917
-    },
-    {
       "path": "digests/MM-15.md",
       "records": 0,
       "bytes": 17119
@@ -726,11 +731,6 @@
       "path": "digests/PS-13.md",
       "records": 0,
       "bytes": 17246
-    },
-    {
-      "path": "digests/SC-17.md",
-      "records": 0,
-      "bytes": 12581
     }
   ]
 }
