@@ -6,26 +6,48 @@
   ],
   "connector_version": "2.4.0",
   "last_run": {
-    "timestamp": "2026-07-20T08:07:54.709Z",
+    "timestamp": "2026-07-20T14:45:40.036Z",
     "status": "success",
     "params": {
-      "mechanism": "IF-18"
+      "mechanism": "CL-14"
     },
-    "records_fetched": 316,
+    "records_fetched": 367,
     "files_written": 1,
-    "duration_s": 80.33,
+    "duration_s": 79.75,
     "warnings": {
-      "s2_throttled": true
+      "s2_throttled": true,
+      "low_novelty": true
     },
     "cost": {
-      "api_calls": 50,
-      "duration_s": 80.33,
+      "api_calls": 49,
+      "duration_s": 79.75,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-20T14:45:40.036Z",
+      "status": "success",
+      "params": {
+        "mechanism": "CL-14"
+      },
+      "records_fetched": 367,
+      "files_written": 1,
+      "duration_s": 79.75,
+      "warnings": {
+        "s2_throttled": true,
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 49,
+        "duration_s": 79.75,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-20T08:07:54.709Z",
       "status": "success",
@@ -399,23 +421,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T13:37:02.811Z",
-      "status": "success",
-      "params": {
-        "mechanism": "SC-06"
-      },
-      "records_fetched": 214,
-      "files_written": 1,
-      "duration_s": 31.82,
-      "cost": {
-        "api_calls": 24,
-        "duration_s": 31.82,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -445,14 +450,14 @@
     },
     {
       "path": "CL-14.json",
-      "records": 366,
-      "bytes": 2027569,
+      "records": 367,
+      "bytes": 2027083,
       "categories": {
         "foundational": 33,
-        "meta-analysis": 4,
-        "replication": 52,
+        "meta-analysis": 3,
+        "replication": 53,
         "dissent": 111,
-        "recent": 160
+        "recent": 161
       }
     },
     {
@@ -682,6 +687,36 @@
         "dissent": 25,
         "recent": 25
       }
+    },
+    {
+      "path": "digests/CL-14.md",
+      "records": 0,
+      "bytes": 15982
+    },
+    {
+      "path": "digests/IF-18.md",
+      "records": 0,
+      "bytes": 17917
+    },
+    {
+      "path": "digests/MM-15.md",
+      "records": 0,
+      "bytes": 17119
+    },
+    {
+      "path": "digests/PF-16.md",
+      "records": 0,
+      "bytes": 14901
+    },
+    {
+      "path": "digests/PS-13.md",
+      "records": 0,
+      "bytes": 17246
+    },
+    {
+      "path": "digests/SC-17.md",
+      "records": 0,
+      "bytes": 12581
     }
   ]
 }
