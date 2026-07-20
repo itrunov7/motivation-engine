@@ -68,6 +68,16 @@ cross_cutting_perception:
     realizations: [extraneous-reduction, chunking-progressive-disclosure, split-attention-avoidance]
     forbidden: [no-load-as-obstruction, no-essential-omission]
 
+  - id: IF-18
+    name: information foraging
+    fact: Users do not read to find what they want; they follow cues that predict where it is.
+    grade: B+
+    source: "People seeking information behave like foragers: they judge, from local cues, whether a path is likely to lead to what they want ('information scent'), pursue high-scent paths, and abandon low-scent ones — behaviour governed by a cost–benefit calculus rather than exhaustive reading. Pirolli & Card (1999) formalised the theory; computational models (SNIF-ACT) predict navigation choices from scent, and applied work (the scent-of-a-site analyses, scented widgets) tests scent manipulation directly.; doi:10.1037/0033-295X.106.4.643"
+    boundary: validated mainly on hypertext search and browse tasks; computational models validated on limited datasets; less established for feeds apps and mobile; scent is a perception and can be wrong
+    active_when: artifact.has_navigation_or_choice_between_paths
+    realizations: [specific-predictive-labels, preview-cues]
+    forbidden: [no-false-scent, no-scent-suppression-for-exit-paths]
+
   - id: MM-15
     name: multimedia design principles
     fact: How words and images are combined determines whether anything is understood.
@@ -97,6 +107,16 @@ cross_cutting_perception:
     active_when: content.is_concrete_depictable
     realizations: [show-the-outcome, visual-state-encoding]
     forbidden: [no-replacing-precise-information, image-must-be-content, no-misleading-depiction, accessibility-preserved]
+
+  - id: SC-17
+    name: scanning & visual attention
+    fact: People do not read interfaces; they sample them.
+    grade: B
+    source: Interfaces are not read linearly. Initial visual judgements form within tens of milliseconds and are highly consistent (Lindgaard et al. 2006; Tractinsky et al. on immediate aesthetic perception), attention is allocated selectively by visual salience and expected relevance, and elements that look like advertising are systematically avoided regardless of their content (advertising-avoidance and banner-blindness literature).; doi:10.1080/01449290500330448; doi:10.1080/00913367.2004.10639175
+    boundary: specific scan patterns are task and layout dependent; much practitioner canon is folklore from small samples; findings predate or ignore mobile and feed interfaces; banner blindness reducible by relevance and native placement
+    active_when: ""
+    realizations: [single-dominant-element, front-loaded-meaning, avoid-ad-resemblance]
+    forbidden: [no-disguised-advertising, no-hidden-material-information, no-attention-hijacking]
 
 # ─────────────────────────────────────────────
 # LAYER 2 — INTERACTIONS (often stronger than any single mechanism)

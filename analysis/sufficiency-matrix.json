@@ -1,6 +1,6 @@
 {
   "version": "0.3.0",
-  "generated_at": "2026-07-20T14:16:12.507Z",
+  "generated_at": "2026-07-20T16:17:58.878Z",
   "config_version": "0.2.0",
   "maturity_stage": "seed",
   "thresholds": {
@@ -3127,64 +3127,15 @@
       "segment": "transactional-ecommerce",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3192,64 +3143,15 @@
       "segment": "subscription",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3257,64 +3159,15 @@
       "segment": "freemium",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3322,64 +3175,15 @@
       "segment": "marketplace",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3387,64 +3191,15 @@
       "segment": "lead-gen-service",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3452,64 +3207,15 @@
       "segment": "one-time-digital",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3517,64 +3223,15 @@
       "segment": "web-saas",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3582,64 +3239,15 @@
       "segment": "mobile-app",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3647,64 +3255,15 @@
       "segment": "content-media",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3712,64 +3271,15 @@
       "segment": "local-offline-bridge",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 0.6667,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3777,64 +3287,15 @@
       "segment": "b2b",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3842,64 +3303,15 @@
       "segment": "b2c-mass",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3907,64 +3319,15 @@
       "segment": "creator-prosumer",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -3972,64 +3335,15 @@
       "segment": "daily-habit",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     },
     {
@@ -4037,64 +3351,15 @@
       "segment": "occasional-high-consideration",
       "row_group": "perception",
       "scores": {
-        "dissent_completeness": 0,
-        "grade_sufficiency": 0,
-        "interaction_coverage": 0,
-        "context_coverage": 0,
-        "freshness": 0
+        "dissent_completeness": 1,
+        "grade_sufficiency": 0.8667,
+        "interaction_coverage": 0.6667,
+        "context_coverage": 1,
+        "freshness": 1
       },
-      "status": "red",
-      "gaps": [
-        "dissent_completeness",
-        "grade_sufficiency",
-        "interaction_coverage",
-        "context_coverage",
-        "freshness"
-      ],
-      "typed_gaps": [
-        {
-          "criterion": "dissent_completeness",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "structural",
-          "what_would_close_it": "dissent text in the member dossiers (owner-authored, git)"
-        },
-        {
-          "criterion": "grade_sufficiency",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)"
-        },
-        {
-          "criterion": "interaction_coverage",
-          "value": 0,
-          "threshold": 0.4,
-          "fix_type": "structural",
-          "what_would_close_it": "registry relations between the pack's member mechanisms (owner edit, git)"
-        },
-        {
-          "criterion": "context_coverage",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "structural",
-          "what_would_close_it": "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)"
-        },
-        {
-          "criterion": "freshness",
-          "value": 0,
-          "threshold": 0.5,
-          "fix_type": "harvest",
-          "what_would_close_it": "replication-supporting evidence so the owner can clear replication_flags (harvest)"
-        },
-        {
-          "criterion": "segment_evidence",
-          "value": 0,
-          "threshold": 1,
-          "fix_type": "harvest",
-          "what_would_close_it": "segment-qualified evidence plus a segment_affinity entry touching this pack (harvest)"
-        }
-      ],
+      "status": "green",
+      "gaps": [],
+      "typed_gaps": [],
       "segment_evidence": "general_only"
     }
   ]

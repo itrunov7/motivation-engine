@@ -1,0 +1,73 @@
+{
+  "$schema": "../mechanism.schema.json",
+  "id": "IF-18",
+  "slug": "information_foraging",
+  "name": "Information foraging",
+  "version": "1.0.0",
+  "level": "L1",
+  "parent": "S7",
+  "cross_cutting": true,
+  "lifecycle_status": "incubating",
+  "dossier_ref": "dossiers/IF-18.json",
+  "provenance": { "proposed_by": "owner", "date": "2026-07-20" },
+  "evidence_terms": ["information foraging theory Pirolli", "information scent user navigation", "information scent hypertext browsing", "web navigation cue judgment", "information seeking behaviour interface"],
+  "pinned_evidence": [
+    { "doi": "10.1037/0033-295X.106.4.643", "title": "Information Foraging", "reason": "foundational — Pirolli & Card 1999" }
+  ],
+  "evidence": {
+    "grade": "B+",
+    "basis": "People seeking information behave like foragers: they judge, from local cues, whether a path is likely to lead to what they want ('information scent'), pursue high-scent paths, and abandon low-scent ones — behaviour governed by a cost–benefit calculus rather than exhaustive reading. Pirolli & Card (1999) formalised the theory; computational models (SNIF-ACT) predict navigation choices from scent, and applied work (the scent-of-a-site analyses, scented widgets) tests scent manipulation directly.",
+    "effect_size_note": "The theory is well formalised and its computational models predict navigation behaviour with reasonable accuracy in the studied contexts. Validation is concentrated in hypertext search and browse tasks; effects in modern app, feed and mobile contexts are largely untested.",
+    "caveats": ["validated_mainly_on_hypertext_search_and_browse_tasks", "computational_models_validated_on_limited_datasets", "less_established_for_feeds_apps_and_mobile", "scent_is_a_perception_and_can_be_wrong"]
+  },
+  "prior_weight": 0.7,
+  "mechanism_summary_for_context": "Users do not read to find what they want; they follow cues that predict where it is. Every label, link and heading emits a signal about what lies behind it, and paths whose signal is weak or generic are abandoned rather than explored — the decision to continue is a running judgement of expected value against effort. This makes the specificity and predictiveness of labels a functional property rather than a stylistic one: a generic label suppresses exploration of good content, and an accurate, specific label makes the same content findable without adding anything to it.",
+  "applicability": {
+    "funnel_stages": ["cold_acquisition", "activation", "onboarding", "conversion", "retention"],
+    "excluded_stages": [],
+    "artifact_types": ["landing_hero", "dashboard_widget", "onboarding", "pricing_page", "email"],
+    "preconditions": [
+      { "predicate": "artifact.has_navigation_or_choice_between_paths == true", "reason": "foraging behaviour concerns choosing among paths; a single linear step with no alternatives has no scent decision to make" }
+    ],
+    "culture_note": "The cost–benefit logic is general; what reads as a specific, promising cue depends on language, domain vocabulary and prior familiarity — an L3 surface parameter"
+  },
+  "implementations": [
+    {
+      "id": "IF-18-specific-predictive-labels",
+      "artifact_types": ["landing_hero", "dashboard_widget", "pricing_page", "onboarding", "email"],
+      "product_requirements": [],
+      "generation_directive": "Write labels, links and headings that state specifically what lies behind them, in the user's own vocabulary rather than internal or invented terms. Generic, clever or branded labels emit no scent and cause abandonment of paths the user actually wanted. The test is whether the label alone predicts the destination.",
+      "copy_formulas": [],
+      "metrics": ["navigation_success_rate", "task_completion_rate", "drop_off_by_step"],
+      "observed_effects": []
+    },
+    {
+      "id": "IF-18-preview-cues",
+      "artifact_types": ["dashboard_widget", "landing_hero", "onboarding"],
+      "product_requirements": [],
+      "generation_directive": "Provide cues that let a path be assessed without entering it — counts, previews, summaries, sample content. Reducing the cost of evaluating an option increases exploration of worthwhile paths; where assessment is expensive, users abandon rather than investigate.",
+      "copy_formulas": [],
+      "metrics": ["exploration_rate", "task_completion_rate", "time_to_first_value"],
+      "observed_effects": []
+    }
+  ],
+  "constraints": {
+    "hard_rules": [
+      { "id": "no_false_scent", "rule": "Labels, previews and cues must accurately predict what they lead to; promising content or outcomes the destination does not deliver is deceptive regardless of intent", "severity": "block" },
+      { "id": "no_scent_suppression_for_exit_paths", "rule": "Cancellation, unsubscribe, downgrade and support paths must carry scent as clearly as commercial paths; deliberately vague labelling of exits is a regulated dark pattern", "severity": "block" }
+    ],
+    "compliance_refs": ["EU_DSA_dark_patterns", "ftc_negative_option_click_to_cancel", "eu_ucpd_misleading_actions"],
+    "boundary_test": "Does the cue accurately predict what is behind it — including for the paths the user might want in order to leave?"
+  },
+  "relations": [
+    { "type": "adjacent", "target": "SC-17", "note": "Scanning describes how attention samples a view; foraging describes how the resulting cues drive path choice. Sequential and complementary rather than identical" },
+    { "type": "adjacent", "target": "CG-05", "note": "Curiosity gap opens an information gap deliberately; foraging concerns judging whether a path will close one. Distinct — one creates the want, the other governs the search" },
+    { "type": "enabled_by", "target": "CL-14", "note": "Foraging is an economising strategy under limited capacity and effort budgets" }
+  ],
+  "telemetry": { "tag_format": "me:IF-18:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "reference_examples": [
+    { "product": "Search result snippets", "what": "Title plus contextual excerpt as an explicit scent mechanism — assessment of a path without entering it" },
+    { "product": "Well-labelled settings and documentation navigation", "what": "Specific destination-predicting labels in user vocabulary rather than internal product terms" },
+    { "product": "Item counts and previews in list interfaces", "what": "Cues that lower the cost of evaluating whether a path is worth taking" }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "../mechanism.schema.json",
+  "id": "SC-17",
+  "slug": "scanning_visual_attention",
+  "name": "Scanning & visual attention",
+  "version": "1.0.0",
+  "level": "L1",
+  "parent": "S7",
+  "cross_cutting": true,
+  "lifecycle_status": "incubating",
+  "dossier_ref": "dossiers/SC-17.json",
+  "provenance": { "proposed_by": "owner", "date": "2026-07-20" },
+  "evidence_terms": ["visual attention web page", "eye movements reading screen", "banner blindness advertising", "web page fixation attention advertisement", "visual hierarchy attention interface", "attention capture web design"],
+  "pinned_evidence": [
+    { "doi": "10.1080/01449290500330448", "title": "Attention web designers: You have 50 milliseconds to make a good first impression", "reason": "foundational — speed of initial visual judgement (Lindgaard et al. 2006)" },
+    { "doi": "10.1080/00913367.2004.10639175", "title": "Why do people avoid advertising on the internet?", "reason": "ad avoidance / banner blindness (Cho & Cheon 2004)" }
+  ],
+  "evidence": {
+    "grade": "B",
+    "basis": "Interfaces are not read linearly. Initial visual judgements form within tens of milliseconds and are highly consistent (Lindgaard et al. 2006; Tractinsky et al. on immediate aesthetic perception), attention is allocated selectively by visual salience and expected relevance, and elements that look like advertising are systematically avoided regardless of their content (advertising-avoidance and banner-blindness literature).",
+    "effect_size_note": "The general phenomena — extremely fast first impressions, selective scanning, avoidance of ad-like elements — are reproduced across studies. Specific patterns (fixation order, the popular F-shaped path, scroll behaviour) vary substantially by task, layout and device and are far less stable than practitioner literature implies.",
+    "caveats": ["specific_scan_patterns_are_task_and_layout_dependent", "much_practitioner_canon_is_folklore_from_small_samples", "findings_predate_or_ignore_mobile_and_feed_interfaces", "banner_blindness_reducible_by_relevance_and_native_placement"]
+  },
+  "prior_weight": 0.65,
+  "mechanism_summary_for_context": "People do not read interfaces; they sample them. A judgement of the page forms almost instantly and shapes what is examined afterwards, attention goes to what looks salient and relevant, and anything resembling an advertisement is skipped without being read. The practical consequence is that meaning must be carried by what a fast, partial sample would pick up — clear visual hierarchy with a single dominant element, front-loaded meaning in headings and labels, structure that survives being skimmed — because content that requires linear reading to be understood is, for most visitors, not read at all.",
+  "applicability": {
+    "funnel_stages": ["cold_acquisition", "activation", "conversion", "retention"],
+    "excluded_stages": [],
+    "artifact_types": ["landing_hero", "pricing_page", "paywall", "dashboard_widget", "email", "checkout"],
+    "preconditions": [],
+    "culture_note": "Scanning is universal but its geometry follows reading direction and layout convention; specific fixation patterns are strongly culture- and device-specific — an L3 surface parameter, and one reason not to hard-code any single scan pattern"
+  },
+  "implementations": [
+    {
+      "id": "SC-17-single-dominant-element",
+      "artifact_types": ["landing_hero", "paywall", "pricing_page", "dashboard_widget"],
+      "product_requirements": [],
+      "generation_directive": "Give each view one visually dominant element carrying the primary message or action, with clear subordination of the rest. Competing elements of equal weight fragment the fast initial sample and leave no message received. Hierarchy is what a two-second glance resolves.",
+      "copy_formulas": [],
+      "metrics": ["cvr", "attention_to_primary_action", "bounce_rate"],
+      "observed_effects": []
+    },
+    {
+      "id": "SC-17-front-loaded-meaning",
+      "artifact_types": ["landing_hero", "email", "pricing_page", "dashboard_widget"],
+      "product_requirements": [],
+      "generation_directive": "Place the informative part of headings, labels and first lines at the start, and make each stand alone. Scanning samples beginnings; meaning deferred to the end of a sentence or paragraph is not collected. Structure content so that reading only the headings still conveys the substance.",
+      "copy_formulas": [],
+      "metrics": ["landing_engagement", "cvr", "email_click_through"],
+      "observed_effects": []
+    },
+    {
+      "id": "SC-17-avoid-ad-resemblance",
+      "artifact_types": ["landing_hero", "dashboard_widget", "email"],
+      "product_requirements": [],
+      "generation_directive": "Do not style genuine, important content in the visual idiom of advertising — banner proportions, promotional badges, isolated boxed callouts in peripheral positions. Such content is skipped unread. Conversely, never disguise promotional content as native content to evade that avoidance (see hard rules).",
+      "copy_formulas": [],
+      "metrics": ["attention_to_primary_action", "cvr"],
+      "observed_effects": []
+    }
+  ],
+  "constraints": {
+    "hard_rules": [
+      { "id": "no_disguised_advertising", "rule": "Promotional or paid content must not be disguised as native content to bypass ad avoidance; deceptive native advertising is regulated and prohibited", "severity": "block" },
+      { "id": "no_hidden_material_information", "rule": "Prices, terms, recurring charges and limitations may not be placed or styled so that scanning predictably misses them; visual de-emphasis of material information is a dark pattern", "severity": "block" },
+      { "id": "no_attention_hijacking", "rule": "Do not use aggressive salience techniques (flashing, motion, false notification cues, fake system alerts) to capture attention against the user's intent", "severity": "block" }
+    ],
+    "compliance_refs": ["EU_DSA_dark_patterns", "ftc_native_advertising_guides", "eu_ucpd_hidden_advertising", "wcag_2_2_motion"],
+    "boundary_test": "Is hierarchy directing attention to what the user came for — or steering it away from what they needed to see?"
+  },
+  "relations": [
+    { "type": "enabled_by", "target": "CL-14", "note": "Scanning is partly an adaptation to limited capacity; CL-14 is the constraint, SC-17 the observed allocation behaviour" },
+    { "type": "adjacent", "target": "MM-15", "note": "Signalling (MM-15) is the design response to selective attention; distinct — MM-15 is validated on comprehension outcomes, SC-17 describes attention allocation" },
+    { "type": "adjacent", "target": "PF-16", "note": "The near-instant first impression is largely a fluency judgement; the two mechanisms meet at the first-glance evaluation" }
+  ],
+  "telemetry": { "tag_format": "me:SC-17:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "reference_examples": [
+    { "product": "Search result pages", "what": "Front-loaded, self-contained titles designed for sampling rather than reading — meaning available from the first words of each item" },
+    { "product": "Stripe and Linear marketing pages", "what": "One dominant claim per view with strict subordination of supporting content — hierarchy resolvable at a glance" },
+    { "product": "Well-formed transactional emails", "what": "Single primary action, front-loaded subject and first line, no promotional styling around essential information" }
+  ]
+}
