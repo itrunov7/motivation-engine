@@ -6,26 +6,46 @@
   ],
   "connector_version": "2.4.0",
   "last_run": {
-    "timestamp": "2026-07-20T08:05:40.884Z",
+    "timestamp": "2026-07-20T08:07:54.709Z",
     "status": "success",
     "params": {
-      "mechanism": "SC-17"
+      "mechanism": "IF-18"
     },
-    "records_fetched": 298,
+    "records_fetched": 316,
     "files_written": 1,
-    "duration_s": 91.73,
+    "duration_s": 80.33,
     "warnings": {
       "s2_throttled": true
     },
     "cost": {
-      "api_calls": 57,
-      "duration_s": 91.73,
+      "api_calls": 50,
+      "duration_s": 80.33,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-20T08:07:54.709Z",
+      "status": "success",
+      "params": {
+        "mechanism": "IF-18"
+      },
+      "records_fetched": 316,
+      "files_written": 1,
+      "duration_s": 80.33,
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 50,
+        "duration_s": 80.33,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-20T08:05:40.884Z",
       "status": "success",
@@ -396,23 +416,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T13:32:50.389Z",
-      "status": "success",
-      "params": {
-        "mechanism": "HA-04"
-      },
-      "records_fetched": 205,
-      "files_written": 1,
-      "duration_s": 30.54,
-      "cost": {
-        "api_calls": 26,
-        "duration_s": 30.54,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -510,6 +513,18 @@
         "replication": 32,
         "dissent": 34,
         "recent": 31
+      }
+    },
+    {
+      "path": "IF-18.json",
+      "records": 316,
+      "bytes": 1737284,
+      "categories": {
+        "foundational": 10,
+        "meta-analysis": 13,
+        "replication": 46,
+        "dissent": 106,
+        "recent": 107
       }
     },
     {
