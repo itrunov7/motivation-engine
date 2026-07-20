@@ -60,6 +60,7 @@ import {
   type SufficiencyCell,
   type SufficiencyStatus,
   type TaxonomyNode,
+  type TaxonomyNodeId,
 } from "./types";
 
 // ---------- Status vocabulary ----------
@@ -912,6 +913,57 @@ export function computeRegistryTree(): RegistryNode[] {
       })),
     };
   });
+}
+
+// ---------- Mechanism → L0 node index ----------
+
+/**
+ * A mechanism (full record or seed stub) resolved to its L0 parent node, for
+ * the many places a bare mechanism id needs its parent shown so an operator can
+ * tell a cross-cutting perception mechanism (S7, D-062) apart from a
+ * motivational one (S1–S6). `crossCutting` is true when either the parent node
+ * or the record itself carries the flag.
+ */
+export interface MechanismNodeRef {
+  id: string;
+  name: string;
+  parent: TaxonomyNodeId;
+  parentName: string;
+  crossCutting: boolean;
+}
+
+/**
+ * Maps every known mechanism id (full records + seed stubs) to its L0 parent
+ * node. Read from the registry + taxonomy files — never hardcoded — so it stays
+ * honest as records are added or promoted.
+ */
+export function loadMechanismNodeIndex(): Map<string, MechanismNodeRef> {
+  const nodeById = new Map(loadTaxonomy().nodes.map((n) => [n.id, n]));
+  const index = new Map<string, MechanismNodeRef>();
+
+  const add = (
+    id: string,
+    name: string,
+    parent: TaxonomyNodeId,
+    ownCrossCutting: boolean | undefined,
+  ): void => {
+    const node = nodeById.get(parent);
+    index.set(id, {
+      id,
+      name,
+      parent,
+      parentName: node?.name ?? parent,
+      crossCutting: Boolean(node?.cross_cutting) || Boolean(ownCrossCutting),
+    });
+  };
+
+  for (const record of loadFullMechanisms()) {
+    add(record.id, record.name, record.parent, record.cross_cutting);
+  }
+  for (const stub of loadSeedStubs()) {
+    add(stub.id, stub.name, stub.parent, stub.cross_cutting);
+  }
+  return index;
 }
 
 // ---------- The seven system blocks ----------

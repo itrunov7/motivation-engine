@@ -11,7 +11,9 @@ import {
   FIX_TYPE_META,
   INTERACTION_AUTHORING_META,
   SEGMENT_EVIDENCE_META,
+  loadMechanismNodeIndex,
   needsSegmentHarvest,
+  type MechanismNodeRef,
 } from "@/lib/status";
 import {
   MATURATION_PATHS,
@@ -113,6 +115,28 @@ function EmptyState({ message, command }: { message: string; command: string }) 
       <p className="text-sm leading-relaxed text-[#8CA495]">{message}</p>
       <p className="mt-2 font-mono text-[11px] text-[#7C93A8]">{command}</p>
     </div>
+  );
+}
+
+/**
+ * The L0 parent node of a bare mechanism id, so a cross-cutting perception
+ * mechanism (S7, D-062) is distinguishable from a motivational one (S1–S6)
+ * everywhere an id appears alone (D-071). Cross-cutting nodes are amber-tagged.
+ */
+function NodeBadge({ node }: { node: MechanismNodeRef | undefined }) {
+  if (!node) return null;
+  return (
+    <span
+      title={`${node.parent} · ${node.parentName}`}
+      className="inline-flex items-center gap-1 rounded border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider"
+      style={{
+        color: node.crossCutting ? "#E4B54E" : "#7C93A8",
+        borderColor: node.crossCutting ? "#E4B54E55" : "#243329",
+      }}
+    >
+      {node.parent}
+      {node.crossCutting && <span>cross-cutting</span>}
+    </span>
   );
 }
 
@@ -607,6 +631,10 @@ export default function MaturationPage() {
   const harvestHistory = loadHarvestHistory();
   const cellNovelty = computeCellNovelty(harvestHistory, packMap, loadCrossCuttingIds());
 
+  // Resolve bare mechanism ids to their L0 node so the queue and interaction
+  // pairs show perception (S7) apart from motivational mechanisms (D-071).
+  const nodeIndex = loadMechanismNodeIndex();
+
   const coverage = matrix ? computeCoverage(matrix) : null;
   const heatmap = matrix ? buildHeatmap(matrix, packMap, segmentsFile) : null;
   const provenance = segmentsFile ? computeSegmentProvenance(segmentsFile) : null;
@@ -761,7 +789,11 @@ export default function MaturationPage() {
                 ) : (
                   <ul className="flex flex-col gap-3">
                     {queue.tasks.map((task, i) => (
-                      <QueueTask key={`${task.mechanism}-${task.segment}-${i}`} task={task} />
+                      <QueueTask
+                        key={`${task.mechanism}-${task.segment}-${i}`}
+                        task={task}
+                        node={nodeIndex.get(task.mechanism)}
+                      />
                     ))}
                   </ul>
                 )}
@@ -893,6 +925,8 @@ export default function MaturationPage() {
                       key={pair.filename}
                       pair={pair}
                       interactionsRel={interactionsRel}
+                      nodeA={nodeIndex.get(pair.pair[0])}
+                      nodeB={nodeIndex.get(pair.pair[1])}
                     />
                   ))}
                 </ul>
@@ -1152,13 +1186,20 @@ function AuthoringQueueRow({ task }: { task: AuthoringTask }) {
   );
 }
 
-function QueueTask({ task }: { task: ResearchTask }) {
+function QueueTask({
+  task,
+  node,
+}: {
+  task: ResearchTask;
+  node: MechanismNodeRef | undefined;
+}) {
   const cell = task.gap_cell;
   return (
     <li className="rounded-md border border-[#243329] bg-[#1A2620] p-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <div className="flex items-baseline gap-2">
           <span className="font-mono text-xs text-[#34D399]">{task.mechanism}</span>
+          <NodeBadge node={node} />
           <span className="font-mono text-xs text-[#8CA495]">
             {cell.pack} <span className="text-[#7C93A8]">×</span> {task.segment}
           </span>
@@ -1239,9 +1280,13 @@ function ThinLiteratureRow({ task }: { task: AuthoringTask }) {
 function InteractionPairRow({
   pair,
   interactionsRel,
+  nodeA,
+  nodeB,
 }: {
   pair: InteractionAuthoringPair;
   interactionsRel: string;
+  nodeA: MechanismNodeRef | undefined;
+  nodeB: MechanismNodeRef | undefined;
 }) {
   const meta = INTERACTION_AUTHORING_META[pair.authored ? "authored" : "not_authored"];
   return (
@@ -1249,8 +1294,10 @@ function InteractionPairRow({
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <div className="flex items-baseline gap-2">
           <span className="font-mono text-xs text-[#34D399]">{pair.pair[0]}</span>
+          <NodeBadge node={nodeA} />
           <span className="text-[#7C93A8]">×</span>
           <span className="font-mono text-xs text-[#34D399]">{pair.pair[1]}</span>
+          <NodeBadge node={nodeB} />
           <span className="font-mono text-[11px]" style={{ color: meta.color }}>
             {meta.label}
             {pair.authored && pair.type ? ` · ${pair.type}` : ""}

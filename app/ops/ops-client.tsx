@@ -37,11 +37,89 @@ export interface ConnectorView {
   lastRun: LastRunView | null;
 }
 
+/** A selectable evidence target resolved to its L0 parent node (D-071). */
+export interface MechanismOption {
+  id: string;
+  name: string;
+  /** L0 node id, e.g. "S1" … "S7". */
+  parent: string;
+  parentName: string;
+  /** True for cross-cutting perception mechanisms (S7, D-062). */
+  crossCutting: boolean;
+}
+
 export interface OpsClientProps {
   writeEnabled: boolean;
   budget: BudgetSnapshot;
   connectors: ConnectorView[];
-  availableMechanismIds: string[];
+  mechanismOptions: MechanismOption[];
+}
+
+/** Options grouped under their L0 node, node order preserved from the input. */
+interface NodeGroup {
+  parent: string;
+  parentName: string;
+  crossCutting: boolean;
+  options: MechanismOption[];
+}
+
+/** A node heading label, e.g. "S7 · Perception & comprehension (cross-cutting)". */
+function nodeHeading(group: Pick<NodeGroup, "parent" | "parentName" | "crossCutting">): string {
+  return `${group.parent} · ${group.parentName}${group.crossCutting ? " (cross-cutting)" : ""}`;
+}
+
+/**
+ * Groups the given mechanism ids under their L0 node using `optionById`, in the
+ * node order of `optionOrder` (already sorted parent-then-id upstream). Ids with
+ * no known option fall into a trailing "unknown" group so a hand-typed target
+ * is never silently dropped.
+ */
+function groupIdsByNode(
+  ids: string[],
+  optionById: Map<string, MechanismOption>,
+  optionOrder: MechanismOption[],
+): NodeGroup[] {
+  const wanted = new Set(ids);
+  const groups: NodeGroup[] = [];
+  const byParent = new Map<string, NodeGroup>();
+
+  for (const option of optionOrder) {
+    if (!wanted.has(option.id)) continue;
+    let group = byParent.get(option.parent);
+    if (!group) {
+      group = {
+        parent: option.parent,
+        parentName: option.parentName,
+        crossCutting: option.crossCutting,
+        options: [],
+      };
+      byParent.set(option.parent, group);
+      groups.push(group);
+    }
+    group.options.push(option);
+  }
+
+  const unknown = ids
+    .filter((id) => !optionById.has(id))
+    .sort((a, b) => a.localeCompare(b))
+    .map(
+      (id): MechanismOption => ({
+        id,
+        name: id,
+        parent: "?",
+        parentName: "not in registry",
+        crossCutting: false,
+      }),
+    );
+  if (unknown.length > 0) {
+    groups.push({
+      parent: "?",
+      parentName: "not in registry",
+      crossCutting: false,
+      options: unknown,
+    });
+  }
+  return groups;
 }
 
 // ---------- Presentation helpers (no status literals leak to knowledge) ----------
@@ -267,11 +345,16 @@ function RunFlow({
   writeEnabled,
   connectorId,
   targets,
+  optionById,
+  optionOrder,
 }: {
   writeEnabled: boolean;
   connectorId: string;
   targets: string[];
+  optionById: Map<string, MechanismOption>;
+  optionOrder: MechanismOption[];
 }) {
+  const targetGroups = groupIdsByNode(targets, optionById, optionOrder);
   const [target, setTarget] = useState<string>(targets[0] ?? "");
   const [phase, setPhase] = useState<RunPhase>({ kind: "idle" });
 
@@ -369,10 +452,14 @@ function RunFlow({
               onChange={(e) => onSelectTarget(e.target.value)}
               className="rounded-md border border-[#243329] bg-[#0E1512] px-2.5 py-1.5 font-mono text-sm text-[#E6EFE8] outline-none focus:border-[#34D399] disabled:opacity-50"
             >
-              {targets.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
+              {targetGroups.map((group) => (
+                <optgroup key={group.parent} label={nodeHeading(group)}>
+                  {group.options.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.id}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </label>
@@ -557,16 +644,29 @@ function QuoteConfirm({
 function ConnectorCard({
   writeEnabled,
   view,
-  availableMechanismIds,
+  mechanismOptions,
+  optionById,
 }: {
   writeEnabled: boolean;
   view: ConnectorView;
-  availableMechanismIds: string[];
+  mechanismOptions: MechanismOption[];
+  optionById: Map<string, MechanismOption>;
 }) {
   const [config, setConfig] = useState<OpsConnectorConfig>(view.config);
   const [newTarget, setNewTarget] = useState("");
   const [msg, setMsg] = useState<{ tone: "ok" | "err"; text: string } | null>(null);
   const [pending, start] = useTransition();
+
+  // The current targets and the still-addable options, both grouped under their
+  // L0 node so the operator sees what they are targeting by node (D-071).
+  const targetGroups = groupIdsByNode(config.targets, optionById, mechanismOptions);
+  const addableGroups = groupIdsByNode(
+    mechanismOptions
+      .filter((option) => !config.targets.includes(option.id))
+      .map((option) => option.id),
+    optionById,
+    mechanismOptions,
+  );
 
   const patch = (p: Partial<OpsConnectorConfig>) => setConfig((c) => ({ ...c, ...p }));
 
@@ -721,54 +821,70 @@ function ConnectorCard({
           whatever files happen to exist. A target only runs on the schedule if its record changed
           in the last week.
         </p>
-        <div className="mt-2 flex flex-wrap gap-1.5">
+        <div className="mt-3 flex flex-col gap-3">
           {config.targets.length === 0 && (
             <span className="text-xs text-[#8CA495]">No targets — nothing runs on the schedule.</span>
           )}
-          {config.targets.map((t) => (
-            <span
-              key={t}
-              className="inline-flex items-center gap-1.5 rounded border border-[#243329] bg-[#1A2620] px-2 py-0.5 font-mono text-[11px] text-[#E6EFE8]"
-            >
-              {t}
-              {writeEnabled && (
-                <button
-                  type="button"
-                  onClick={() => removeTarget(t)}
-                  className="text-[#7C93A8] hover:text-[#F87171]"
-                  aria-label={`remove ${t}`}
-                >
-                  ×
-                </button>
-              )}
-            </span>
+          {targetGroups.map((group) => (
+            <div key={group.parent}>
+              <p
+                className="font-mono text-[10px] uppercase tracking-widest"
+                style={{ color: group.crossCutting ? C.amber : C.slate }}
+              >
+                {nodeHeading(group)}
+              </p>
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
+                {group.options.map((option) => (
+                  <span
+                    key={option.id}
+                    title={option.name}
+                    className="inline-flex items-center gap-1.5 rounded border px-2 py-0.5 font-mono text-[11px] text-[#E6EFE8]"
+                    style={{
+                      borderColor: option.crossCutting ? `${C.amber}55` : C.border,
+                      backgroundColor: C.inner,
+                    }}
+                  >
+                    {option.id}
+                    {writeEnabled && (
+                      <button
+                        type="button"
+                        onClick={() => removeTarget(option.id)}
+                        className="text-[#7C93A8] hover:text-[#F87171]"
+                        aria-label={`remove ${option.id}`}
+                      >
+                        ×
+                      </button>
+                    )}
+                  </span>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
         {writeEnabled && (
-          <div className="mt-2 flex items-center gap-2">
-            <input
-              list={`mech-${config.connector_id}`}
+          <div className="mt-3 flex items-center gap-2">
+            <select
               value={newTarget}
               disabled={pending}
-              placeholder="add a mechanism id (e.g. LA-01)"
               onChange={(e) => setNewTarget(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  addTarget();
-                }
-              }}
-              className="w-56 rounded-md border border-[#243329] bg-[#0E1512] px-2.5 py-1.5 font-mono text-xs text-[#E6EFE8] outline-none focus:border-[#34D399]"
-            />
-            <datalist id={`mech-${config.connector_id}`}>
-              {availableMechanismIds.map((id) => (
-                <option key={id} value={id} />
+              className="w-64 rounded-md border border-[#243329] bg-[#0E1512] px-2.5 py-1.5 font-mono text-xs text-[#E6EFE8] outline-none focus:border-[#34D399] disabled:opacity-50"
+            >
+              <option value="">add a target by node…</option>
+              {addableGroups.map((group) => (
+                <optgroup key={group.parent} label={nodeHeading(group)}>
+                  {group.options.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.id} — {option.name}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
-            </datalist>
+            </select>
             <button
               type="button"
               onClick={addTarget}
-              className="rounded-md border border-[#243329] px-2.5 py-1.5 font-mono text-xs uppercase tracking-wider text-[#8CA495] transition hover:border-[#34D399] hover:text-[#34D399]"
+              disabled={!newTarget}
+              className="rounded-md border border-[#243329] px-2.5 py-1.5 font-mono text-xs uppercase tracking-wider text-[#8CA495] transition hover:border-[#34D399] hover:text-[#34D399] disabled:cursor-not-allowed disabled:opacity-40"
             >
               add
             </button>
@@ -791,7 +907,13 @@ function ConnectorCard({
       </div>
       {msg && <Notice tone={msg.tone}>{msg.text}</Notice>}
 
-      <RunFlow writeEnabled={writeEnabled} connectorId={config.connector_id} targets={config.targets} />
+      <RunFlow
+        writeEnabled={writeEnabled}
+        connectorId={config.connector_id}
+        targets={config.targets}
+        optionById={optionById}
+        optionOrder={mechanismOptions}
+      />
     </section>
   );
 }
@@ -804,8 +926,9 @@ export default function OpsClient({
   writeEnabled,
   budget,
   connectors,
-  availableMechanismIds,
+  mechanismOptions,
 }: OpsClientProps) {
+  const optionById = new Map(mechanismOptions.map((o) => [o.id, o]));
   // The page renders from the deploy-time filesystem snapshot; config saved
   // since the last deploy is invisible there, so showing that snapshot would
   // display stale settings that "change" once the live read lands — the
@@ -895,7 +1018,8 @@ export default function OpsClient({
             key={`${view.config.connector_id}-${configVersion}`}
             writeEnabled={writeEnabled}
             view={view}
-            availableMechanismIds={availableMechanismIds}
+            mechanismOptions={mechanismOptions}
+            optionById={optionById}
           />
         ))}
     </div>

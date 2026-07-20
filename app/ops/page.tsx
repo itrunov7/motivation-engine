@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { loadFullMechanisms, loadSeedStubs } from "@/lib/data";
+import { loadMechanismNodeIndex } from "@/lib/status";
 import { isOpsWriteEnabled } from "@/lib/github";
 import {
   KNOWN_CONNECTOR_IDS,
@@ -8,7 +8,10 @@ import {
   loadConnectorLastRun,
   loadOpsConnectorConfigFromDisk,
 } from "@/lib/ops";
-import OpsClient, { type ConnectorView } from "./ops-client";
+import OpsClient, {
+  type ConnectorView,
+  type MechanismOption,
+} from "./ops-client";
 
 export const metadata = {
   title: "Operations — Motivation Engine",
@@ -21,10 +24,22 @@ export default function OpsPage() {
   const writeEnabled = isOpsWriteEnabled();
   const budget = computeBudgetSnapshot();
 
-  const availableMechanismIds = [
-    ...loadFullMechanisms().map((m) => m.id),
-    ...loadSeedStubs().map((s) => s.id),
-  ].sort();
+  // Every known mechanism resolved to its L0 parent node, so the target picker
+  // can group ids under node headings (motivational S1–S6 vs cross-cutting S7)
+  // instead of showing one flat, unlabeled list (D-071).
+  const mechanismOptions: MechanismOption[] = Array.from(
+    loadMechanismNodeIndex().values(),
+  )
+    .map((ref) => ({
+      id: ref.id,
+      name: ref.name,
+      parent: ref.parent,
+      parentName: ref.parentName,
+      crossCutting: ref.crossCutting,
+    }))
+    .sort(
+      (a, b) => a.parent.localeCompare(b.parent) || a.id.localeCompare(b.id),
+    );
 
   const connectors: ConnectorView[] = KNOWN_CONNECTOR_IDS.map((id) => ({
     config: loadOpsConnectorConfigFromDisk(id) ?? defaultConnectorConfig(id, []),
@@ -62,7 +77,7 @@ export default function OpsPage() {
         writeEnabled={writeEnabled}
         budget={budget}
         connectors={connectors}
-        availableMechanismIds={availableMechanismIds}
+        mechanismOptions={mechanismOptions}
       />
     </main>
   );
