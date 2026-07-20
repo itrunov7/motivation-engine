@@ -6,27 +6,46 @@
   ],
   "connector_version": "2.4.0",
   "last_run": {
-    "timestamp": "2026-07-20T14:52:31.751Z",
+    "timestamp": "2026-07-20T14:55:59.246Z",
     "status": "success",
     "params": {
-      "mechanism": "MM-15"
+      "mechanism": "PF-16"
     },
-    "records_fetched": 282,
+    "records_fetched": 310,
     "files_written": 1,
-    "duration_s": 90.96,
+    "duration_s": 43.41,
     "warnings": {
-      "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 57,
-      "duration_s": 90.96,
+      "api_calls": 50,
+      "duration_s": 43.41,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-20T14:55:59.246Z",
+      "status": "success",
+      "params": {
+        "mechanism": "PF-16"
+      },
+      "records_fetched": 310,
+      "files_written": 1,
+      "duration_s": 43.41,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 50,
+        "duration_s": 43.41,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-20T14:52:31.751Z",
       "status": "success",
@@ -409,23 +428,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-15T15:04:35.585Z",
-      "status": "success",
-      "params": {
-        "mechanism": "SP-08"
-      },
-      "records_fetched": 234,
-      "files_written": 1,
-      "duration_s": 17.44,
-      "cost": {
-        "api_calls": 18,
-        "duration_s": 17.44,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -564,12 +566,12 @@
     {
       "path": "PF-16.json",
       "records": 310,
-      "bytes": 953244,
+      "bytes": 943021,
       "categories": {
         "foundational": 8,
         "meta-analysis": 7,
-        "replication": 58,
-        "dissent": 100,
+        "replication": 59,
+        "dissent": 99,
         "recent": 127
       }
     },
