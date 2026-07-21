@@ -7,18 +7,15 @@
  *         gap_planner block of analysis/analyzer.config.yaml (segment weights,
  *         segment qualifiers, budget knobs).
  * Output: analysis/research-queue.json    — harvest tasks (COMPUTED, never hand-edited)
+ *         analysis/extraction-queue.json  — Actions-only reader tasks (same)
  *         analysis/authoring-queue.json   — structural tasks for the owner (same)
  *
  * The essence: turn red cells into a RANKED, BUDGETED queue of targeted
  * harvests, not "research everything".
  *
- * - ROUTING BY FIX_TYPE (D-055/D-056): a cell's gaps are typed harvest vs
- *   structural. Only HARVEST gaps (grade_sufficiency, freshness, the
- *   segment_evidence flag) can be closed by fetching evidence; STRUCTURAL gaps
- *   (interaction_coverage, context_coverage, dissent_completeness) close only
- *   by owner edits in git. So harvest gaps → research-queue.json (consume
- *   budget, dispatch connectors); structural gaps → authoring-queue.json
- *   (owner-facing, per pack×segment, ranked by importance, NEVER harvested).
+ * - ROUTING BY FIX_TYPE (D-055/D-056/D-083): harvest gaps fetch evidence,
+ *   pipeline gaps run grounded extraction, and only genuine structural gaps
+ *   (interaction/context coverage) wait for owner judgment in git.
  *   A cell whose scored gaps are ALL structural is never harvested — no amount
  *   of segment-qualified evidence flips it, so harvesting it is pure budget
  *   burn. The segment_evidence flag alone does NOT make a cell harvestable.
@@ -47,6 +44,10 @@ import type {
   AuthoringQueue,
   AuthoringTask,
   EvidenceGrade,
+  ExtractionQueue,
+  ExtractionTask,
+  ExtractionTaskMode,
+  ExtractionTaskSourceCell,
   GapPlannerConfig,
   MaturityStage,
   Mechanism,
@@ -68,6 +69,7 @@ const ROOT = join(__dirname, "..");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
 const TAXONOMY = join(ROOT, "registry", "taxonomy.json");
 const EVIDENCE_DIR = join(ROOT, "corpora", "evidence");
+const REALIZATION_CORPUS_DIR = join(ROOT, "corpora", "realizations");
 const PACK_MAP = join(ROOT, "packs", "pack-map.yaml");
 const SEGMENTS = join(ROOT, "segments", "segments.yaml");
 
@@ -77,9 +79,11 @@ const ANALYSIS_DIR = join(ROOT, "analysis");
 const CONFIG = join(ANALYSIS_DIR, "analyzer.config.yaml");
 const MATRIX = join(ANALYSIS_DIR, "sufficiency-matrix.json");
 const QUEUE = join(ANALYSIS_DIR, "research-queue.json");
+const EXTRACTION_QUEUE = join(ANALYSIS_DIR, "extraction-queue.json");
 const AUTHORING_QUEUE = join(ANALYSIS_DIR, "authoring-queue.json");
 
 const QUEUE_VERSION = "0.1.0";
+const EXTRACTION_QUEUE_VERSION = "0.1.0";
 const AUTHORING_QUEUE_VERSION = "0.1.0";
 
 /** Strong → weak; a higher index is a WEAKER grade (mirrors the analyzer). */
@@ -204,6 +208,15 @@ function loadGapPlannerConfig(
       problems.push("gap_planner.budget.monthly_budget_share must be a number in (0, 1]");
     }
   }
+  const pipelineBudget = gp.pipeline_budget;
+  if (!pipelineBudget || typeof pipelineBudget !== "object") {
+    problems.push("gap_planner.pipeline_budget is required");
+  } else if (
+    !Number.isInteger(pipelineBudget.max_tasks) ||
+    pipelineBudget.max_tasks < 1
+  ) {
+    problems.push("gap_planner.pipeline_budget.max_tasks must be an integer ≥ 1");
+  }
 
   // Weights are optional per segment but, when present, must name a real active
   // segment and be a positive number — a typo shouldn't silently vanish.
@@ -286,7 +299,7 @@ function gapSize(
  * harvest gap too but is NOT a scored criterion, so it never appears here and
  * cannot, on its own, make a cell harvestable.
  */
-function harvestCriteria(cell: SufficiencyCell): SufficiencyCriterion[] {
+export function harvestCriteria(cell: SufficiencyCell): SufficiencyCriterion[] {
   const harvestTyped = new Set(
     cell.typed_gaps
       .filter((g) => g.fix_type === "harvest" && g.criterion !== "segment_evidence")
@@ -300,7 +313,75 @@ function isHarvestable(cell: SufficiencyCell): boolean {
   return harvestCriteria(cell).length > 0;
 }
 
-/** The cell's structural typed gaps (interaction/context/dissent), detail intact. */
+/** The cell's scored Actions-only pipeline gaps. */
+export function pipelineCriteria(cell: SufficiencyCell): SufficiencyCriterion[] {
+  const pipelineTyped = new Set(
+    cell.typed_gaps
+      .filter((gap) => gap.fix_type === "pipeline")
+      .map((gap) => gap.criterion as SufficiencyCriterion),
+  );
+  return cell.gaps.filter((criterion) => pipelineTyped.has(criterion));
+}
+
+/**
+ * Map a cell's pipeline criteria to reader modes that can actually move them.
+ * Extraction completeness follows the corpus kind: evidence is read through
+ * effects, realization observations through realizations.
+ */
+export function pipelineModesForCriteria(
+  criteria: SufficiencyCriterion[],
+  hasEvidenceCorpus: boolean,
+  hasRealizationCorpus: boolean,
+): ExtractionTaskMode[] {
+  const modes = new Set<ExtractionTaskMode>();
+  if (
+    hasEvidenceCorpus &&
+    (criteria.includes("effect_coverage") || criteria.includes("extraction_completeness"))
+  ) {
+    modes.add("effects");
+  }
+  if (
+    hasRealizationCorpus &&
+    (criteria.includes("realization_density") ||
+      criteria.includes("extraction_completeness"))
+  ) {
+    modes.add("realizations");
+  }
+  if (hasEvidenceCorpus && criteria.includes("dissent_completeness")) {
+    modes.add("dissent");
+  }
+  return ["effects", "realizations", "dissent"].filter((mode) =>
+    modes.has(mode as ExtractionTaskMode),
+  ) as ExtractionTaskMode[];
+}
+
+function criteriaForMode(
+  criteria: SufficiencyCriterion[],
+  mode: ExtractionTaskMode,
+): SufficiencyCriterion[] {
+  return criteria.filter((criterion) => {
+    if (mode === "effects") {
+      return criterion === "effect_coverage" || criterion === "extraction_completeness";
+    }
+    if (mode === "realizations") {
+      return criterion === "realization_density" || criterion === "extraction_completeness";
+    }
+    return criterion === "dissent_completeness";
+  });
+}
+
+/** True only when a corpus exists and contains at least one extractable record. */
+function hasCorpusRecords(path: string): boolean {
+  if (!existsSync(path)) return false;
+  try {
+    const value = JSON.parse(readFileSync(path, "utf-8")) as { records?: unknown[] };
+    return Array.isArray(value.records) && value.records.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+/** The cell's genuinely structural typed gaps, detail intact. */
 function structuralGaps(cell: SufficiencyCell): TypedGap[] {
   return cell.typed_gaps.filter((g) => g.fix_type === "structural");
 }
@@ -324,6 +405,13 @@ interface Candidate {
   cell: SufficiencyCell;
 }
 
+interface PipelineCandidate {
+  mechanism: string;
+  mode: ExtractionTaskMode;
+  importance: number;
+  sourceCells: ExtractionTaskSourceCell[];
+}
+
 /**
  * Deterministic queue order: importance desc → red before amber →
  * general_only before segment_specific → weaker mechanism first →
@@ -338,6 +426,14 @@ function compareCandidates(a: Candidate, b: Candidate): number {
   if (b.weakness !== a.weakness) return b.weakness - a.weakness;
   if (a.cell.pack !== b.cell.pack) return a.cell.pack < b.cell.pack ? -1 : 1;
   return a.mechanism < b.mechanism ? -1 : 1;
+}
+
+function comparePipelineCandidates(a: PipelineCandidate, b: PipelineCandidate): number {
+  return (
+    b.importance - a.importance ||
+    a.mechanism.localeCompare(b.mechanism) ||
+    a.mode.localeCompare(b.mode)
+  );
 }
 
 // ---------- task construction ----------
@@ -595,6 +691,86 @@ function main(): void {
     tasks,
   };
 
+  // PIPELINE PATH — expand pipeline gaps to mechanism × extraction-mode tasks.
+  // A task is emitted only when its required corpus has records, because an
+  // empty reader run cannot close the gap. Mixed cells may feed both automated
+  // queues; each queue ranks only the gap size its filler can move.
+  const pipelineByKey = new Map<string, PipelineCandidate>();
+  for (const cell of gapCells) {
+    const criteria = pipelineCriteria(cell);
+    if (criteria.length === 0) continue;
+    const members = packMechanisms.get(cell.pack) ?? [];
+    const weight = gp.segment_weights?.[cell.segment] ?? 1;
+    for (const mechanism of members) {
+      const hasEvidence = hasCorpusRecords(join(EVIDENCE_DIR, `${mechanism}.json`));
+      const hasRealizations = hasCorpusRecords(
+        join(REALIZATION_CORPUS_DIR, mechanism, "records.json"),
+      );
+      for (const mode of pipelineModesForCriteria(criteria, hasEvidence, hasRealizations)) {
+        const routedCriteria = criteriaForMode(criteria, mode);
+        const importance = round(weight * gapSize(cell, file, routedCriteria));
+        const sourceCell: ExtractionTaskSourceCell = {
+          pack: cell.pack,
+          segment: cell.segment,
+          status: cell.status as Exclude<SufficiencyStatus, "green">,
+          criteria: routedCriteria,
+        };
+        const key = `${mechanism}|${mode}`;
+        const existing = pipelineByKey.get(key);
+        if (!existing) {
+          pipelineByKey.set(key, {
+            mechanism,
+            mode,
+            importance,
+            sourceCells: [sourceCell],
+          });
+          continue;
+        }
+        existing.importance = Math.max(existing.importance, importance);
+        const sourceKey = `${sourceCell.pack}|${sourceCell.segment}`;
+        const prior = existing.sourceCells.find(
+          (source) => `${source.pack}|${source.segment}` === sourceKey,
+        );
+        if (prior) {
+          prior.criteria = Array.from(
+            new Set([...prior.criteria, ...sourceCell.criteria]),
+          ).sort() as SufficiencyCriterion[];
+        } else {
+          existing.sourceCells.push(sourceCell);
+        }
+      }
+    }
+  }
+  const rankedPipeline = Array.from(pipelineByKey.values()).sort(comparePipelineCandidates);
+  const extractionTasks: ExtractionTask[] = rankedPipeline
+    .slice(0, gp.pipeline_budget.max_tasks)
+    .map((candidate) => {
+      candidate.sourceCells.sort(
+        (a, b) =>
+          a.pack.localeCompare(b.pack) ||
+          a.segment.localeCompare(b.segment),
+      );
+      const criteria = Array.from(
+        new Set(candidate.sourceCells.flatMap((source) => source.criteria)),
+      ).sort();
+      return {
+        mechanism: candidate.mechanism,
+        mode: candidate.mode,
+        importance: candidate.importance,
+        source_cells: candidate.sourceCells,
+        reason: `${candidate.mode} reader can close ${criteria.join(", ")} across ${candidate.sourceCells.length} source cell(s)`,
+      };
+    });
+  const extractionQueue: ExtractionQueue = {
+    version: EXTRACTION_QUEUE_VERSION,
+    generated_at: new Date().toISOString(),
+    config_version: file.version,
+    matrix_generated_at: matrix.generated_at,
+    candidate_count: rankedPipeline.length,
+    config_max_tasks: gp.pipeline_budget.max_tasks,
+    tasks: extractionTasks,
+  };
+
   // STRUCTURAL PATH — every cell with ≥1 structural gap becomes an owner-facing
   // authoring task (per pack×segment, ranked by segment_weight × structural
   // gap-size). No budget, no connector: these close only by an owner edit in
@@ -645,6 +821,7 @@ function main(): void {
 
   mkdirSync(ANALYSIS_DIR, { recursive: true });
   writeFileSync(QUEUE, `${JSON.stringify(queue, null, 2)}\n`, "utf-8");
+  writeFileSync(EXTRACTION_QUEUE, `${JSON.stringify(extractionQueue, null, 2)}\n`, "utf-8");
   writeFileSync(AUTHORING_QUEUE, `${JSON.stringify(authoringQueue, null, 2)}\n`, "utf-8");
 
   const top = tasks[0];
@@ -656,6 +833,10 @@ function main(): void {
       `${remainingCalls} monthly calls remaining` +
       `${lowNoveltySkipped > 0 ? `; ${lowNoveltySkipped} low-novelty repeat(s) skipped, D-058` : ""}` +
       `${evidenceExhaustedSkipped > 0 ? `; ${evidenceExhaustedSkipped} evidence-exhausted candidate(s) skipped, D-059` : ""}) → ${rel(QUEUE)}.`,
+  );
+  console.log(
+    `     ${rankedPipeline.length} extraction candidate(s) → ${extractionTasks.length} queued ` +
+      `(config max ${gp.pipeline_budget.max_tasks}) → ${rel(EXTRACTION_QUEUE)}.`,
   );
   console.log(
     `     ${authoringTasks.length} cell(s) with structural gaps → ${rel(AUTHORING_QUEUE)} ` +
@@ -674,10 +855,10 @@ function main(): void {
         `(importance ${topStructural.importance}) — ${gapNames}`,
     );
   }
-  // Decision log (D-056): the routing policy this pair of queues encodes.
+  // Decision log (D-083): the routing policy this trio of queues encodes.
   console.log(
-    "\n     loop routes by fix_type; structural gaps go to an authoring queue, not the API. " +
-      "Harvest gaps prioritized by segment-weight × gap-size, budget-bounded; saturated cells excluded.",
+    "\n     loop routes by fix_type: breadth/grade/freshness → harvest; " +
+      "depth/dissent → Actions-only extraction; genuine structural gaps → owner authoring.",
   );
   // Decision log (D-059): evidence exhaustion is detected and surfaced honestly;
   // the loop never harvests indefinitely against thin literature.
@@ -690,4 +871,4 @@ function main(): void {
   }
 }
 
-main();
+if (require.main === module) main();

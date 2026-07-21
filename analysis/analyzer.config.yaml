@@ -164,7 +164,7 @@ exhaustion:
 # own evidence terms. Neither is a scientific claim; both are owner-tunable
 # and change only WHICH gaps are harvested first, never the evidence itself.
 gap_planner:
-  version: 0.1.0
+  version: 0.2.0
 
   # Segment → importance weight. Omitted segments default to 1.0. A weight > 1
   # pulls that segment's gaps up the queue; < 1 pushes them down.
@@ -208,3 +208,9 @@ gap_planner:
     max_tasks: 12
     estimated_calls_per_task: 150
     monthly_budget_share: 0.5
+
+  # Extraction is ranked here but budgeted from deterministic per-task quotes
+  # in Actions. This ceiling bounds weekly work; extraction.json remains the
+  # authority for per-run/monthly token and shared USD/call caps.
+  pipeline_budget:
+    max_tasks: 24

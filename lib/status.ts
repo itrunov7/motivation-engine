@@ -668,9 +668,9 @@ export const CELL_EXHAUSTED_META: StatusMeta = {
 
 /**
  * Presentation metadata for a gap's filler route (D-055/D-061): a harvest gap
- * is closed by the automated connector (amber, in-progress work the loop
- * drives), a structural gap by the owner in git (slate — owner-facing, never
- * machine-fillable). The literals live here; the cockpit maps typed_gaps
+ * is closed by the automated connector, a pipeline gap by Actions-only
+ * extraction plus review, and a structural gap by the owner in git. The
+ * literals live here; the cockpit maps typed_gaps
  * through this table so a hover reads "harvest" vs "author" per gap, never
  * red/green alone. Reuses existing tokens; no new palette.
  */
@@ -682,16 +682,18 @@ export const FIX_TYPE_META: Record<GapFixType, StatusMeta> = {
 
 /**
  * The filler route a whole cell needs (D-061), mirroring the gap planner's
- * routing (D-056) so the cockpit shows the same split the loop acts on
+ * routing (D-056/D-083) so the cockpit shows the same split the loop acts on
  * (lib/ never imports tools/, so the policy is duplicated, not shared):
  * - green: saturated, no work
  * - exhausted: evidence_exhausted — thin literature, best-available (owner
  *   alternative fillers, D-059), counted apart from red-forever
- * - harvest: has ≥1 SCORED harvest gap (grade_sufficiency / freshness) — a
+ * - harvest: has ≥1 SCORED harvest gap (breadth / grade / freshness) — a
  *   segment-qualified evidence fetch can still move it. The segment_evidence
  *   pseudo-gap alone never makes a cell harvestable (D-056), so it is excluded.
- * - authoring: a red/amber cell whose only gaps are structural — no harvest
- *   can flip it; it awaits an owner edit in git.
+ * - pipeline: no harvest gap remains, but extraction can still move depth or dissent
+ * - authoring: a red/amber cell whose remaining gaps genuinely need owner judgment.
+ * Mixed cells use harvest as their summary band while all applicable automated
+ * tasks are still emitted by the planner.
  */
 export type CellRoute =
   | "green"

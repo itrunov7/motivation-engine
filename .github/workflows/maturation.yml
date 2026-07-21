@@ -2,8 +2,9 @@
 #
 # The spiral turns on a schedule, on a budget, forever:
 #   (1) npm run analyze          → analysis/sufficiency-matrix.json (full grid)
-#   (2) npm run gaps             → routes gaps by fix_type (D-055/D-056):
+#   (2) npm run gaps             → routes gaps by fix_type (D-055/D-056/D-083):
 #         analysis/research-queue.json    — HARVEST gaps only (ranked, budget-bounded, D-051)
+#         analysis/extraction-queue.json  — PIPELINE gaps (Actions-only, quote-gated)
 #         analysis/authoring-queue.json   — STRUCTURAL gaps for the owner (never harvested)
 #       A cell whose scored gaps are all structural is never harvested — no
 #       evidence fetch flips it, so it consumes no budget and dispatches no
@@ -69,6 +70,7 @@ jobs:
       MAX_TASKS: ${{ inputs.max_tasks || '' }}
       S2_API_KEY: ${{ secrets.S2_API_KEY }}
       CONNECTOR_MAILTO: ${{ vars.CONNECTOR_MAILTO }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -196,19 +198,62 @@ jobs:
             --queue-plan queue-plan.json \
             --week "$(date -u +%Y-%m-%d)"
 
+      # ---------- Run Actions-only extraction tasks (D-083) ----------
+      # Each task is quoted immediately before it runs. The quote reads the
+      # manifest left by prior tasks, so token/USD/call accounting is cumulative
+      # across the batch. A blocked quote is deferred, never forced.
+      - name: Run budget-approved extraction tasks
+        id: extraction
+        if: steps.harvest.outputs.failed != 'true'
+        run: |
+          set -euo pipefail
+          jq -n '{ entries: [] }' > extraction-plan.json
+          jq -c '.tasks[]' analysis/extraction-queue.json | while IFS= read -r task; do
+            mode=$(jq -r '.mode' <<<"$task")
+            mechanism=$(jq -r '.mechanism' <<<"$task")
+            if npm run extract -- quote "mode=$mode" "mechanism=$mechanism" > extraction-quote.log 2>&1; then
+              npm run extract -- run "mode=$mode" "mechanism=$mechanism"
+              action=run
+              reason="quote allowed; extraction completed"
+            else
+              action=defer
+              reason=$(< extraction-quote.log)
+              reason="${reason: -1000}"
+            fi
+            jq \
+              --arg action "$action" \
+              --arg reason "$reason" \
+              --argjson task "$task" \
+              '.entries += [$task + { action: $action, reason: $reason }]' \
+              extraction-plan.json > extraction-plan.next.json
+            mv extraction-plan.next.json extraction-plan.json
+          done
+          echo "dispatched=$(jq '[.entries[] | select(.action == "run")] | length' extraction-plan.json)" >> "$GITHUB_OUTPUT"
+          echo "deferred=$(jq '[.entries[] | select(.action == "defer")] | length' extraction-plan.json)" >> "$GITHUB_OUTPUT"
+
       # ---------- (4) re-analyze ONLY the affected cells ----------
-      # Affected = the packs whose gap cells the harvested tasks addressed;
+      # Affected = the packs whose gap cells the harvested/extraction tasks addressed;
       # every other pack's cells are preserved from the baseline matrix.
       - name: Re-analyze affected cells
         id: reanalyze
         if: steps.harvest.outputs.failed != 'true'
         run: |
           set -euo pipefail
-          affected=$(jq -r '[.entries[] | select(.action == "run") | .pack] | unique | join(",")' queue-plan.json)
+          affected=$(jq -nr \
+            --slurpfile harvest queue-plan.json \
+            --slurpfile extraction extraction-plan.json \
+            '[ ($harvest[0].entries[] | select(.action == "run") | .pack),
+               ($extraction[0].entries[] | select(.action == "run") | .source_cells[].pack) ]
+             | unique | join(",")')
           if [ -n "$affected" ]; then
-            npm run analyze -- "packs=$affected"
+            if printf '%s' "$affected" | tr ',' '\n' | grep -qx perception; then
+              npm run analyze
+            else
+              npm run analyze -- "packs=$affected"
+            fi
+            npm run gaps
           else
-            echo "No harvests ran — matrix left at the step-1 baseline."
+            echo "No automated filler ran — matrix and queues remain at the step-1 baseline."
           fi
           jq -n \
             --slurpfile before matrix-before.json \
@@ -271,7 +316,9 @@ jobs:
             echo ""
             harvest_dispatched=$(jq '[.entries[] | select(.action == "run")] | length' queue-plan.json)
             structural_queued=$(jq '.tasks | length' analysis/authoring-queue.json 2>/dev/null || echo 0)
-            echo "Routing (D-056): $harvest_dispatched harvest task(s) dispatched, $structural_queued structural task(s) queued for authoring (analysis/authoring-queue.json)."
+            extraction_dispatched=$(jq '[.entries[] | select(.action == "run")] | length' extraction-plan.json)
+            extraction_deferred=$(jq '[.entries[] | select(.action == "defer")] | length' extraction-plan.json)
+            echo "Routing (D-083): $harvest_dispatched harvest task(s) dispatched, $extraction_dispatched extraction task(s) dispatched, $extraction_deferred extraction task(s) deferred, $structural_queued structural task(s) queued for authoring."
             deferred=$(jq '[.entries[] | select(.action == "defer")] | length' queue-plan.json)
             if [ "$deferred" -gt 0 ]; then
               echo ""
@@ -300,6 +347,7 @@ jobs:
             --budget-after budget-after.json \
             --queue-plan queue-plan.json \
             --authoring-queue analysis/authoring-queue.json \
+            --extraction-plan extraction-plan.json \
             --low-novelty "${{ steps.novelty.outputs.low_novelty || '0' }}" \
             --evidence-exhausted "${{ steps.reanalyze.outputs.exhausted || '0' }}" \
             --week "$(date -u +%Y-%m-%d)"
@@ -308,10 +356,10 @@ jobs:
       - name: Commit maturation results if changed
         if: steps.harvest.outputs.failed != 'true'
         run: |
-          if [ -n "$(git status --porcelain analysis corpora packs)" ]; then
+          if [ -n "$(git status --porcelain analysis corpora packs proposals)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add analysis corpora packs
+            git add analysis corpora packs proposals
             git commit -m "maturation: week $(date -u +%Y-%m-%d) — filled ${{ steps.reanalyze.outputs.filled || '0' }} gaps"
             git push
           else

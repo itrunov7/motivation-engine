@@ -13,6 +13,7 @@
  *   - budget-before.json / budget-after.json — ops-gate budget snapshots
  *   - queue-plan.json      — the gated plan (for the deferred-task count)
  *   - authoring-queue.json — structural gaps routed to owner authoring (D-056)
+ *   - extraction-plan.json — Actions-only reader tasks run/deferred (D-083)
  *
  * packs_regenerated is derived from cell-diff exactly as the workflow derives
  * flipped_packs (packs with a cell that flipped to green) — the packs the loop
@@ -24,6 +25,7 @@
  *     [--cell-diff cell-diff.json] \
  *     [--budget-before budget-before.json] [--budget-after budget-after.json] \
  *     [--queue-plan queue-plan.json] [--authoring-queue analysis/authoring-queue.json] \
+ *     [--extraction-plan extraction-plan.json] \
  *     [--low-novelty N] [--week YYYY-MM-DD]
  *
  * Re-running for the same week REPLACES that week's entry (idempotent for
@@ -99,6 +101,10 @@ function main(): void {
     ROOT,
     args["authoring-queue"] ?? "analysis/authoring-queue.json",
   );
+  const extractionPlanFile = join(
+    ROOT,
+    args["extraction-plan"] ?? "extraction-plan.json",
+  );
   const week = args["week"] ?? new Date().toISOString().slice(0, 10);
 
   // Cell status changes (a missing/empty diff = a truthful zero-flip week).
@@ -131,6 +137,15 @@ function main(): void {
   // Structural gaps routed to owner authoring this run (D-056), not harvested.
   const authoringQueue = readJsonOrNull<{ tasks?: unknown[] }>(authoringQueueFile);
   const structuralQueued = (authoringQueue?.tasks ?? []).length;
+  const extractionPlan = readJsonOrNull<{
+    entries?: { action?: string }[];
+  }>(extractionPlanFile);
+  const extractionDispatched = (extractionPlan?.entries ?? []).filter(
+    (entry) => entry.action === "run",
+  ).length;
+  const extractionDeferred = (extractionPlan?.entries ?? []).filter(
+    (entry) => entry.action === "defer",
+  ).length;
 
   // Harvests this run that returned mostly already-known records (D-058) — a
   // re-fetch of the same canon, recorded so the cockpit history shows it was
@@ -150,6 +165,8 @@ function main(): void {
     packs_regenerated: packsRegenerated,
     spend,
     deferred,
+    extraction_dispatched: extractionDispatched,
+    extraction_deferred: extractionDeferred,
     structural_queued: structuralQueued,
     low_novelty_harvests: lowNoveltyHarvests,
     evidence_exhausted: evidenceExhausted,
@@ -175,6 +192,7 @@ function main(): void {
       `${cellsChanged.length} status change(s) (${flips} → green), ` +
       `${packsRegenerated.length} pack(s) regenerated, ` +
       `${spend.calls} calls / $${spend.usd}, ${deferred} deferred, ` +
+      `${extractionDispatched} extraction dispatched / ${extractionDeferred} deferred, ` +
       `${structuralQueued} structural queued, ` +
       `${lowNoveltyHarvests} low-novelty harvest(s), ` +
       `${evidenceExhausted} evidence-exhausted cell(s) ` +

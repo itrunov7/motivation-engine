@@ -1648,6 +1648,12 @@ export interface GapPlannerBudgetConfig {
   monthly_budget_share: number;
 }
 
+/** gap_planner.pipeline_budget — planner ceiling; quotes enforce the real token/USD caps. */
+export interface GapPlannerPipelineBudgetConfig {
+  /** Hard ceiling on extraction tasks offered to the weekly Actions run. */
+  max_tasks: number;
+}
+
 /**
  * The gap_planner block of analysis/analyzer.config.yaml — owner-tunable
  * priority judgment (segment_weights) and segment vocabulary
@@ -1660,6 +1666,7 @@ export interface GapPlannerConfig {
   /** Segment id → qualifier tokens appended to a mechanism's evidence terms. */
   segment_qualifiers: Record<string, string>;
   budget: GapPlannerBudgetConfig;
+  pipeline_budget: GapPlannerPipelineBudgetConfig;
 }
 
 /** The gap cell a research task addresses (a subset of a SufficiencyCell). */
@@ -1728,6 +1735,39 @@ export interface ResearchQueue {
    */
   evidence_exhausted_skipped?: number;
   tasks: ResearchTask[];
+}
+
+// ---------- Extraction queue (/analysis/extraction-queue.json, D-083) ----------
+
+export type ExtractionTaskMode = "effects" | "realizations" | "dissent";
+
+export interface ExtractionTaskSourceCell {
+  pack: string;
+  segment: string;
+  status: Exclude<SufficiencyStatus, "green">;
+  criteria: SufficiencyCriterion[];
+}
+
+/** One deterministic Actions-only reader task, deduped by mechanism × mode. */
+export interface ExtractionTask {
+  mechanism: string;
+  mode: ExtractionTaskMode;
+  /** Maximum segment_weight × pipeline gap size among the source cells. */
+  importance: number;
+  /** Cells whose pipeline gaps this run can move, in deterministic order. */
+  source_cells: ExtractionTaskSourceCell[];
+  reason: string;
+}
+
+/** /analysis/extraction-queue.json — generated pipeline work, never hand-edited. */
+export interface ExtractionQueue {
+  version: string;
+  generated_at: string;
+  config_version: string;
+  matrix_generated_at: string;
+  candidate_count: number;
+  config_max_tasks: number;
+  tasks: ExtractionTask[];
 }
 
 // ---------- Authoring queue (/analysis/authoring-queue.json, D-056) ----------
@@ -1821,6 +1861,10 @@ export interface MaturationLogEntry {
   };
   /** Tasks the plan-queue gate deferred to next week over budget (D-052). */
   deferred: number;
+  /** Actions-only extraction tasks successfully run this week (D-083). */
+  extraction_dispatched?: number;
+  /** Extraction tasks deferred by quote/configuration/budget gates (D-083). */
+  extraction_deferred?: number;
   /**
    * Structural gaps routed to analysis/authoring-queue.json this run (D-056) —
    * cells needing an owner edit in git, never a harvest. Optional so entries

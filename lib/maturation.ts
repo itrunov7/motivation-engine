@@ -8,6 +8,7 @@
  * hardcoded in app/. Sources:
  * - analysis/sufficiency-matrix.json  (generated, D-050) — the heatmap + coverage
  * - analysis/research-queue.json      (generated, D-051) — this week's queue
+ * - analysis/extraction-queue.json    (generated, D-083) — reader work
  * - analysis/maturation-log.json      (generated, D-053) — the weekly log
  * - segments/segments.yaml            (git-only, D-047) — columns + provenance
  * - segments/candidates.json          (generated, D-054) — segment-suggest queue
@@ -25,6 +26,7 @@ import { COVERAGE_BAND_ORDER, computeCellRoute, type CoverageBand } from "./stat
 import type {
   AuthoringQueue,
   AuthoringTask,
+  ExtractionQueue,
   HarvestHistory,
   InteractionRecord,
   InteractionType,
@@ -47,6 +49,7 @@ const ROOT = process.cwd();
 export const MATURATION_PATHS = {
   matrix: join(ROOT, "analysis", "sufficiency-matrix.json"),
   queue: join(ROOT, "analysis", "research-queue.json"),
+  extractionQueue: join(ROOT, "analysis", "extraction-queue.json"),
   authoringQueue: join(ROOT, "analysis", "authoring-queue.json"),
   harvestHistory: join(ROOT, "analysis", "harvest-history.json"),
   log: join(ROOT, "analysis", "maturation-log.json"),
@@ -88,6 +91,10 @@ export function loadSufficiencyMatrix(): SufficiencyMatrix | null {
 
 export function loadResearchQueue(): ResearchQueue | null {
   return readJsonOrNull<ResearchQueue>(MATURATION_PATHS.queue);
+}
+
+export function loadExtractionQueue(): ExtractionQueue | null {
+  return readJsonOrNull<ExtractionQueue>(MATURATION_PATHS.extractionQueue);
 }
 
 export function loadAuthoringQueue(): AuthoringQueue | null {

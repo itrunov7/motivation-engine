@@ -164,8 +164,8 @@ const MATURITY_STAGES: MaturityStage[] = ["seed", "growing", "mature"];
  * the connector; structural gaps are closed only by owner edits in git —
  * registry relations, pack composition, dossier dissent — and NO harvest can
  * touch them. The maturation loop must never dispatch a harvest against a
- * structural gap. dissent_completeness is structural: dossier dissent is
- * owner-authored (rule 8), so no fetch can fill it.
+ * structural gap. Dissent is pipeline work: the grounded reader can propose
+ * dossier dissent from harvested evidence, but owner approval remains required.
  */
 const FIX_TYPE: Record<SufficiencyCriterion, GapFixType> = {
   saturation_reached: "harvest",
@@ -174,7 +174,7 @@ const FIX_TYPE: Record<SufficiencyCriterion, GapFixType> = {
   recency_balance: "harvest",
   effect_coverage: "pipeline",
   realization_density: "pipeline",
-  dissent_completeness: "structural",
+  dissent_completeness: "pipeline",
   grade_sufficiency: "harvest",
   interaction_coverage: "structural",
   extraction_completeness: "pipeline",

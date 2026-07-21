@@ -29,6 +29,7 @@ import {
   loadAuthoredInteractions,
   loadAuthoringQueue,
   loadCrossCuttingIds,
+  loadExtractionQueue,
   loadHarvestHistory,
   loadMaturationLog,
   loadPackBundleManifest,
@@ -47,6 +48,7 @@ import {
 } from "@/lib/maturation";
 import type {
   AuthoringTask,
+  ExtractionTask,
   MaturationLogEntry,
   MaturityStage,
   ResearchTask,
@@ -733,6 +735,7 @@ function ThresholdStrip({
 export default function MaturationPage() {
   const matrix = loadSufficiencyMatrix();
   const queue = loadResearchQueue();
+  const extractionQueue = loadExtractionQueue();
   const authoringQueue = loadAuthoringQueue();
   const log = loadMaturationLog();
   const segmentsFile = loadSegmentsFile();
@@ -758,6 +761,7 @@ export default function MaturationPage() {
 
   const matrixRel = repoRelative(MATURATION_PATHS.matrix);
   const queueRel = repoRelative(MATURATION_PATHS.queue);
+  const extractionQueueRel = repoRelative(MATURATION_PATHS.extractionQueue);
   const authoringQueueRel = repoRelative(MATURATION_PATHS.authoringQueue);
   const interactionsRel = repoRelative(MATURATION_PATHS.interactionsDir);
   const logRel = repoRelative(MATURATION_PATHS.log);
@@ -867,8 +871,8 @@ export default function MaturationPage() {
           )}
         </Panel>
 
-        {/* Two queues side by side: harvest (automated) vs authoring (manual) */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {/* Three filler routes: harvest, extraction, and owner authoring */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Harvest queue — automated, budget-bounded */}
           <Panel
             title="Harvest queue — automated"
@@ -924,10 +928,65 @@ export default function MaturationPage() {
             )}
           </Panel>
 
+          {/* Extraction queue — automated in Actions, quote-gated */}
+          <Panel
+            title="Extraction queue — automated"
+            subtitle="Depth and dissent gaps the grounded reader can close through pending proposals. Each task is quoted immediately before its Actions-only run; owner approval still gates authoritative knowledge."
+            footer={
+              extractionQueue
+                ? `computed from ${extractionQueueRel} · generated ${fmtDateTime(extractionQueue.generated_at)} · from matrix ${fmtDateTime(extractionQueue.matrix_generated_at)}`
+                : extractionQueueRel
+            }
+          >
+            {extractionQueue ? (
+              extractionQueue.tasks.length === 0 ? (
+                <EmptyState
+                  message="The extraction queue is empty. Pipeline gaps appear here only when the mechanism has eligible evidence or realization corpus records for the reader."
+                  command={`npm run gaps → ${extractionQueueRel}`}
+                />
+              ) : (
+                <div className="flex flex-col gap-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    <BudgetStat
+                      label="queued"
+                      value={`${extractionQueue.tasks.length} / ${extractionQueue.candidate_count}`}
+                      hint="tasks / candidates"
+                    />
+                    <BudgetStat
+                      label="weekly max"
+                      value={`${extractionQueue.config_max_tasks}`}
+                      hint="quotes enforce actual caps"
+                    />
+                  </div>
+                  <ul className="flex flex-col gap-3">
+                    {extractionQueue.tasks.slice(0, MAX_AUTHORING_ROWS).map((task) => (
+                      <ExtractionQueueRow
+                        key={`${task.mechanism}-${task.mode}`}
+                        task={task}
+                        node={nodeIndex.get(task.mechanism)}
+                      />
+                    ))}
+                  </ul>
+                  {extractionQueue.tasks.length > MAX_AUTHORING_ROWS && (
+                    <p className="font-mono text-[11px] text-[#7C93A8]">
+                      + {extractionQueue.tasks.length - MAX_AUTHORING_ROWS} more in{" "}
+                      {extractionQueueRel}
+                    </p>
+                  )}
+                </div>
+              )
+            ) : (
+              <EmptyState
+                message="No extraction queue yet. The gap planner routes depth and grounded dissent gaps into Actions-only reader tasks."
+                command={`npm run gaps → ${extractionQueueRel}`}
+              />
+            )}
+          </Panel>
+
           {/* Authoring queue — owner tasks, manual */}
           <Panel
             title="Authoring queue — manual"
-            subtitle="Gaps no harvest can close: registry relations, pack composition, dossier dissent, and thin-literature cells handed to owner judgment. Each is an owner edit in git — never a connector call, never budget."
+            subtitle="Gaps that genuinely require human judgment: registry relations, pack composition/context, and thin-literature alternatives. Each is an owner edit in git — never a connector or reader call."
             footer={
               authoringQueue
                 ? `computed from ${authoringQueueRel} · generated ${fmtDateTime(authoringQueue.generated_at)} · from matrix ${fmtDateTime(authoringQueue.matrix_generated_at)}`
@@ -937,7 +996,7 @@ export default function MaturationPage() {
             {authoringQueue ? (
               authoringQueue.tasks.length === 0 ? (
                 <EmptyState
-                  message="The authoring queue is empty — every scored red/amber cell has a harvest gap the loop can still close. Structural gaps (interaction, context, dissent) and evidence-exhausted cells appear here for the owner to author in git."
+                  message="The authoring queue is empty. Structural interaction/context gaps and evidence-exhausted alternatives appear here when only owner judgment can close them."
                   command={`npm run gaps → ${authoringQueueRel}`}
                 />
               ) : (
@@ -1247,6 +1306,45 @@ function BudgetStat({ label, value, hint }: { label: string; value: string; hint
 /** Cap on authoring rows shown inline; the rest live in the queue file. */
 const MAX_AUTHORING_ROWS = 10;
 
+function ExtractionQueueRow({
+  task,
+  node,
+}: {
+  task: ExtractionTask;
+  node: MechanismNodeRef | undefined;
+}) {
+  const criteria = Array.from(
+    new Set(task.source_cells.flatMap((cell) => cell.criteria)),
+  );
+  return (
+    <li className="rounded-md border border-[#243329] bg-[#1A2620] p-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <div className="flex items-baseline gap-2">
+          <span className="font-mono text-xs text-[#34D399]">{task.mechanism}</span>
+          <NodeBadge node={node} />
+          <span className="font-mono text-[11px] uppercase tracking-wider text-[#E4B54E]">
+            {task.mode}
+          </span>
+        </div>
+        <span className="font-mono text-[11px] text-[#7C93A8]">
+          importance {task.importance}
+        </span>
+      </div>
+      <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">{task.reason}</p>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {criteria.map((criterion) => (
+          <span
+            key={criterion}
+            className="rounded border border-[#243329] bg-[#0E1512] px-1.5 py-0.5 font-mono text-[11px] text-[#8CA495]"
+          >
+            {criterion.split("_").join(" ")}
+          </span>
+        ))}
+      </div>
+    </li>
+  );
+}
+
 /** One authoring-queue task: pack×segment, its structural gaps typed by route. */
 function AuthoringQueueRow({ task }: { task: AuthoringTask }) {
   return (
@@ -1465,6 +1563,12 @@ function LogEntry({ entry }: { entry: MaturationLogEntry }) {
         <span className="font-mono text-[11px] text-[#7C93A8]">
           {entry.spend.calls} calls · ${entry.spend.usd}
           {entry.deferred > 0 ? ` · ${entry.deferred} deferred` : ""}
+          {entry.extraction_dispatched
+            ? ` · ${entry.extraction_dispatched} extracted`
+            : ""}
+          {entry.extraction_deferred
+            ? ` · ${entry.extraction_deferred} extraction deferred`
+            : ""}
           {entry.low_novelty_harvests && entry.low_novelty_harvests > 0
             ? ` · ${entry.low_novelty_harvests} low-novelty`
             : ""}
