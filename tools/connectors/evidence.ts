@@ -286,6 +286,9 @@ interface QueryMeta {
   records_added: number;
   novelty_rate: number;
   rolling_novelty_rate: number | null;
+  /** Total matching works reported by the upstream search API; null for graph
+   * expansion or when the upstream omitted a count. */
+  upstream_total_results: number | null;
 }
 
 /** One planned search query — one (api, angle, term) triple. */
@@ -417,6 +420,14 @@ export interface SaturationReport {
   topical_rejected: number;
   topical_confirmation_rate: number;
   graph_anchors_expanded: number;
+  field_union_estimate: {
+    estimate: number | null;
+    method: "sample_overlap_adjusted_union";
+    measured_queries: number;
+    total_search_queries: number;
+    summed_upstream_results: number;
+    observed_sample_multiplicity: number | null;
+  };
   saturation_reached: boolean;
   stop_reason: "saturation" | "storage_tier_record_cap" | "call_cap" | "time_slice";
   cap: {
@@ -505,6 +516,11 @@ interface S2Paper {
   citationCount: number | null;
   abstract: string | null;
   externalIds: { DOI?: string | null } | null;
+}
+
+interface SearchResult {
+  records: EvidenceRecord[];
+  totalResults: number | null;
 }
 
 // ---------- Normalization helpers ----------
@@ -674,7 +690,7 @@ async function searchOpenAlex(
   sort = "cited_by_count:desc",
   limit = OPENALEX_PER_TERM,
   page = 1,
-): Promise<EvidenceRecord[]> {
+): Promise<SearchResult> {
   const url = new URL("https://api.openalex.org/works");
   // Commas separate OpenAlex filters — strip them from the term defensively.
   url.searchParams.set("filter", `title_and_abstract.search:${term.replace(/,/g, " ")}`);
@@ -683,11 +699,21 @@ async function searchOpenAlex(
   url.searchParams.set("page", String(page));
   url.searchParams.set("select", OPENALEX_SELECT);
 
-  const data = await fetchJson<{ results?: OpenAlexWork[] }>(fetch, url);
-  return (data.results ?? []).flatMap((work) => {
+  const data = await fetchJson<{
+    meta?: { count?: number };
+    results?: OpenAlexWork[];
+  }>(fetch, url);
+  const records = (data.results ?? []).flatMap((work) => {
     const record = fromOpenAlexWork(work, "openalex");
     return record ? [record] : [];
   });
+  return {
+    records,
+    totalResults:
+      typeof data.meta?.count === "number" && data.meta.count >= 0
+        ? data.meta.count
+        : null,
+  };
 }
 
 /**
@@ -745,7 +771,7 @@ async function searchSemanticScholar(
   term: string,
   limit: number,
   page = 1,
-): Promise<EvidenceRecord[]> {
+): Promise<SearchResult> {
   const url = new URL("https://api.semanticscholar.org/graph/v1/paper/search");
   url.searchParams.set("query", term);
   url.searchParams.set("limit", String(limit));
@@ -753,12 +779,12 @@ async function searchSemanticScholar(
   url.searchParams.set("fields", "title,authors,year,venue,externalIds,citationCount,abstract");
 
   const apiKey = s2ApiKey();
-  const data = await fetchJson<{ data?: S2Paper[] }>(
+  const data = await fetchJson<{ total?: number; data?: S2Paper[] }>(
     fetch,
     url,
     apiKey ? { "x-api-key": apiKey } : undefined,
   );
-  return (data.data ?? []).flatMap((paper) => {
+  const records = (data.data ?? []).flatMap((paper) => {
     if (!paper.title) return [];
     return [
       {
@@ -779,6 +805,11 @@ async function searchSemanticScholar(
       },
     ];
   });
+  return {
+    records,
+    totalResults:
+      typeof data.total === "number" && data.total >= 0 ? data.total : null,
+  };
 }
 
 // ---------- Category checklist (D-019) ----------
@@ -1187,6 +1218,59 @@ function round4(value: number): number {
   return Math.round(value * 10000) / 10000;
 }
 
+/**
+ * Estimate the union of all search-result sets from upstream totals. API totals
+ * overlap heavily across terms and providers, so the raw sum is divided by the
+ * multiplicity observed in the fetched samples. Pagination and sort variants
+ * of the same (api, term) universe contribute one upstream total.
+ */
+export function estimateFieldUnion(
+  tasks: readonly QueryTask[],
+  corpusRecords: number,
+): SaturationReport["field_union_estimate"] {
+  const scopes = new Map<
+    string,
+    { total: number; records: EvidenceRecord[] }
+  >();
+  let totalSearchQueries = 0;
+  for (const task of tasks) {
+    if (task.kind !== "search" || task.error) continue;
+    totalSearchQueries += 1;
+    const total = task.meta.upstream_total_results;
+    if (typeof total !== "number" || !Number.isFinite(total) || total < 0) continue;
+    const key = `${task.api}\u0000${task.term}`;
+    const scope = scopes.get(key) ?? { total, records: [] };
+    scope.total = Math.max(scope.total, total);
+    scope.records.push(...task.records);
+    scopes.set(key, scope);
+  }
+  const measured = Array.from(scopes.values());
+  const summedUpstreamResults = measured.reduce((sum, scope) => sum + scope.total, 0);
+  const perScopeUnique = measured.map(
+    (scope) => dedupeRecords(scope.records).records,
+  );
+  const observedUnion = dedupeRecords(perScopeUnique.flat()).records.length;
+  const observedMemberships = perScopeUnique.reduce(
+    (sum, records) => sum + records.length,
+    0,
+  );
+  const multiplicity =
+    observedUnion > 0 ? observedMemberships / observedUnion : null;
+  const estimate =
+    measured.length > 0 && multiplicity !== null && multiplicity > 0
+      ? Math.max(corpusRecords, Math.round(summedUpstreamResults / multiplicity))
+      : null;
+  return {
+    estimate,
+    method: "sample_overlap_adjusted_union",
+    measured_queries: measured.length,
+    total_search_queries: totalSearchQueries,
+    summed_upstream_results: summedUpstreamResults,
+    observed_sample_multiplicity:
+      multiplicity === null ? null : round4(multiplicity),
+  };
+}
+
 /** Deterministic weighted retrieval cycle; defaults produce 1:1:1 shares. */
 function retrievalCycle(
   shares: EvidenceSaturationConfig["retrieval_shares"],
@@ -1247,6 +1331,7 @@ export function buildQueryTasks(
       records_added: 0,
       novelty_rate: 0,
       rolling_novelty_rate: null,
+      upstream_total_results: null,
     },
     records: [],
   });
@@ -1676,6 +1761,7 @@ export const evidenceConnector: Connector = {
           records_added: 0,
           novelty_rate: 0,
           rolling_novelty_rate: null,
+          upstream_total_results: null,
         },
         records: [],
       };
@@ -1696,6 +1782,23 @@ export const evidenceConnector: Connector = {
         task.api === "semantic-scholar" && task.throttleable ? s2Limit() : task.limit;
       if (task.api === "semantic-scholar") task.meta.requested = limit;
       try {
+        const searchResult =
+          task.kind === "search"
+            ? task.api === "openalex"
+              ? await searchOpenAlex(
+                  ctx.fetch,
+                  task.term,
+                  task.sort,
+                  task.limit,
+                  task.page,
+                )
+              : await searchSemanticScholar(
+                  ctx.fetch,
+                  task.term,
+                  limit,
+                  task.page,
+                )
+            : null;
         const rawRecords =
           task.kind === "backward-reference"
             ? await fetchBackwardReferences(
@@ -1709,20 +1812,9 @@ export const evidenceConnector: Connector = {
                   task.anchorId as string,
                   task.limit,
                 )
-              : task.api === "openalex"
-                ? await searchOpenAlex(
-                    ctx.fetch,
-                    task.term,
-                    task.sort,
-                    task.limit,
-                    task.page,
-                  )
-                : await searchSemanticScholar(
-                    ctx.fetch,
-                    task.term,
-                    limit,
-                    task.page,
-                  );
+            : searchResult?.records ?? [];
+        task.meta.upstream_total_results =
+          searchResult?.totalResults ?? null;
         const records =
           task.kind === "search"
             ? rawRecords
@@ -1914,7 +2006,10 @@ export const evidenceConnector: Connector = {
     const completedTasks = checkpoint.tasks.slice(0, checkpoint.cursor);
     const searchTasks = completedTasks.filter((task) => task.kind === "search");
     const searchDedupe = dedupeRecords(searchTasks.flatMap((task) => task.records));
-    const queries = completedTasks.map((task) => task.meta);
+    const queries = completedTasks.map((task) => ({
+      ...task.meta,
+      upstream_total_results: task.meta.upstream_total_results ?? null,
+    }));
     const failures = completedTasks
       .filter((task) => task.error)
       .map((task) => task.error as string);
@@ -2027,6 +2122,10 @@ export const evidenceConnector: Connector = {
           ? round4(checkpoint.topical_confirmed / topicalTotal)
           : 0,
       graph_anchors_expanded: completedGraphAnchors.size,
+      field_union_estimate: estimateFieldUnion(
+        completedTasks,
+        recordsWithIds.length,
+      ),
       saturation_reached: stopReason === "saturation",
       stop_reason: stopReason,
       cap: {

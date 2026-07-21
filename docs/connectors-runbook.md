@@ -436,7 +436,8 @@ What happens on the **next analyzer run** (`npm run analyze`, or the weekly
 maturation loop, D-052), with **no further configuration**:
 
 1. The segment appears in the matrix as a new column, scored **all-red** — every
-   `pack × new-segment` cell is 0 on all five criteria, status red,
+   `pack × new-segment` cell is unmeasured across breadth, depth, and quality,
+   status red,
    `segment_evidence: general_only`. This is honest: nothing has been
    demonstrated *for this segment* yet, so red is the truth, not a bug. The
    analyzer prints `· segment "…" unconfigured — enters the matrix all-red`.
@@ -455,7 +456,7 @@ scored on real product judgment instead of all-red, add it to the hand-authored
 
 - `segment_stages.{id}` — the funnel stages this segment type typically lives on
   (**required** to leave bootstrap; this is what makes the cells score on the
-  five criteria instead of a flat red).
+   grouped criteria instead of a flat red).
 - `segment_affinity.{id}` — optional per-mechanism boosts marking which
   mechanisms are load-bearing for the segment (presence flips cells from
   `general_only` to `segment_specific`).

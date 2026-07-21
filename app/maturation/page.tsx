@@ -53,6 +53,7 @@ import type {
   StageThresholds,
   SufficiencyCell,
   SufficiencyCriterion,
+  SufficiencyGroup,
   SufficiencyStatus,
   TypedGap,
 } from "@/lib/types";
@@ -61,17 +62,49 @@ export const metadata = {
   title: "Maturation — Motivation Engine",
 };
 
-/** Display labels for the 5 sufficiency criteria (order matches the tooltip). */
-const CRITERIA: { key: SufficiencyCriterion; label: string }[] = [
-  { key: "dissent_completeness", label: "dissent completeness" },
-  { key: "grade_sufficiency", label: "grade sufficiency" },
-  { key: "interaction_coverage", label: "interaction coverage" },
-  { key: "context_coverage", label: "context coverage" },
-  { key: "freshness", label: "freshness" },
+const CRITERION_GROUPS: {
+  key: SufficiencyGroup;
+  label: string;
+  criteria: { key: SufficiencyCriterion; label: string }[];
+}[] = [
+  {
+    key: "breadth",
+    label: "breadth",
+    criteria: [
+      { key: "saturation_reached", label: "saturation reached" },
+      {
+        key: "corpus_size_vs_field_estimate",
+        label: "corpus size vs field estimate",
+      },
+      { key: "source_diversity", label: "source diversity" },
+      { key: "recency_balance", label: "recency balance" },
+    ],
+  },
+  {
+    key: "depth",
+    label: "depth",
+    criteria: [
+      { key: "effect_coverage", label: "effect coverage" },
+      { key: "realization_density", label: "realization density" },
+      { key: "interaction_coverage", label: "interaction coverage" },
+      { key: "extraction_completeness", label: "extraction completeness" },
+    ],
+  },
+  {
+    key: "quality",
+    label: "quality",
+    criteria: [
+      { key: "dissent_completeness", label: "dissent completeness" },
+      { key: "grade_sufficiency", label: "grade sufficiency" },
+      { key: "context_coverage", label: "context coverage" },
+      { key: "freshness", label: "freshness" },
+    ],
+  },
 ];
+const CRITERIA = CRITERION_GROUPS.flatMap((group) => group.criteria);
 
-function fmtScore(value: number): string {
-  return value.toFixed(2);
+function fmtScore(value: number | null): string {
+  return value === null ? "unmeasured" : value.toFixed(2);
 }
 
 function fmtDateTime(iso: string): string {
@@ -274,26 +307,64 @@ function typedGapLabel(gap: TypedGap): string {
 }
 
 /** One typed-gap line: criterion, its score vs threshold, and its filler route chip. */
-function GapLine({ gap }: { gap: TypedGap }) {
+function GapLine({
+  gap,
+  measurement,
+}: {
+  gap: TypedGap;
+  measurement?: SufficiencyCell["measurements"][SufficiencyCriterion];
+}) {
   const meta = FIX_TYPE_META[gap.fix_type];
   return (
-    <div className="flex items-baseline justify-between gap-2">
-      <dt className="font-mono text-[11px] text-[#E6EFE8]">{typedGapLabel(gap)}</dt>
-      <dd className="flex items-baseline gap-2">
-        <span className="font-mono text-[11px] text-[#8CA495]">
-          {fmtScore(gap.value)}
-          <span className="text-[#7C93A8]"> &lt; </span>
-          {fmtScore(gap.threshold)}
-        </span>
-        <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: meta.color }}>
-          {meta.label}
-        </span>
-      </dd>
+    <div>
+      <div className="flex items-baseline justify-between gap-2">
+        <dt className="font-mono text-[11px] text-[#E6EFE8]">{typedGapLabel(gap)}</dt>
+        <dd className="flex items-baseline gap-2">
+          <span className="font-mono text-[11px] text-[#8CA495]">
+            {gap.value === null ? (
+              "unmeasured"
+            ) : (
+              <>
+                {fmtScore(gap.value)}
+                <span className="text-[#7C93A8]"> &lt; </span>
+                {fmtScore(gap.threshold)}
+              </>
+            )}
+          </span>
+          <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: meta.color }}>
+            {meta.label}
+          </span>
+          {measurement?.estimate_source === "owner_override" && (
+            <span
+              className="font-mono text-[9px] uppercase tracking-wider text-[#E4B54E]"
+              title={measurement.override_rationale}
+            >
+              owner override
+            </span>
+          )}
+        </dd>
+      </div>
+      {measurement && (
+        <p
+          className="mt-0.5 truncate font-mono text-[9px] text-[#7C93A8]"
+          title={measurement.sources.join(" + ")}
+        >
+          source: {measurement.sources.join(" + ")}
+        </p>
+      )}
     </div>
   );
 }
 
-function GapGroup({ heading, gaps }: { heading: string; gaps: TypedGap[] }) {
+function GapGroup({
+  heading,
+  gaps,
+  cell,
+}: {
+  heading: string;
+  gaps: TypedGap[];
+  cell: SufficiencyCell;
+}) {
   if (gaps.length === 0) return null;
   return (
     <div className="mt-2">
@@ -302,7 +373,15 @@ function GapGroup({ heading, gaps }: { heading: string; gaps: TypedGap[] }) {
       </p>
       <dl className="mt-1 flex flex-col gap-1">
         {gaps.map((gap) => (
-          <GapLine key={gap.criterion} gap={gap} />
+          <GapLine
+            key={gap.criterion}
+            gap={gap}
+            measurement={
+              gap.criterion === "segment_evidence"
+                ? undefined
+                : cell.measurements[gap.criterion]
+            }
+          />
         ))}
       </dl>
     </div>
@@ -322,12 +401,6 @@ function CellTooltip({
   stage: MaturityStage | null;
   novelty: CellNovelty | null;
 }) {
-  const harvestGaps = cell
-    ? cell.typed_gaps.filter((g) => g.fix_type === "harvest")
-    : [];
-  const authoringGaps = cell
-    ? cell.typed_gaps.filter((g) => g.fix_type === "structural")
-    : [];
   const passing = cell ? CRITERIA.filter(({ key }) => !cell.gaps.includes(key)) : [];
   return (
     <div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 hidden w-72 -translate-x-1/2 rounded-md border border-[#243329] bg-[#0E1512] p-3 text-left shadow-lg group-hover:block">
@@ -345,8 +418,38 @@ function CellTooltip({
               {CELL_STATUS_META[cell.status].label}
             </p>
           )}
-          <GapGroup heading="harvest gaps" gaps={harvestGaps} />
-          <GapGroup heading="authoring gaps" gaps={authoringGaps} />
+          <div className="mt-2 flex flex-wrap gap-2">
+            {CRITERION_GROUPS.map((group) => (
+              <span
+                key={group.key}
+                className="font-mono text-[10px] uppercase tracking-wider text-[#8CA495]"
+              >
+                {group.label}:{" "}
+                <span className="text-[#E6EFE8]">
+                  {cell.group_statuses[group.key]}
+                </span>
+              </span>
+            ))}
+          </div>
+          {CRITERION_GROUPS.map((group) => (
+            <GapGroup
+              key={group.key}
+              heading={`${group.label} gaps`}
+              cell={cell}
+              gaps={cell.typed_gaps.filter(
+                (gap) =>
+                  gap.criterion !== "segment_evidence" &&
+                  group.criteria.some(({ key }) => key === gap.criterion),
+              )}
+            />
+          ))}
+          <GapGroup
+            heading="segment evidence"
+            cell={cell}
+            gaps={cell.typed_gaps.filter(
+              (gap) => gap.criterion === "segment_evidence",
+            )}
+          />
           {passing.length > 0 && (
             <div className="mt-2">
               <p className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">
@@ -596,18 +699,27 @@ function ThresholdStrip({
         </span>
         <span className="text-xs text-[#8CA495]">{STAGE_MEANING[stage]}</span>
       </div>
-      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
-        {CRITERIA.map(({ key, label }) => {
-          const t = thresholds[key] ?? thresholds.default;
-          return (
-            <span key={key} className="inline-flex items-center gap-2 font-mono text-[11px]">
-              <span className="text-[#8CA495]">{label}</span>
-              <span className="text-[#34D399]">≥ {fmtScore(t.green)}</span>
-              <span className="text-[#7C93A8]">/</span>
-              <span className="text-[#E4B54E]">≥ {fmtScore(t.amber)}</span>
-            </span>
-          );
-        })}
+      <div className="mt-3 grid gap-3 lg:grid-cols-3">
+        {CRITERION_GROUPS.map((group) => (
+          <div key={group.key}>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">
+              {group.label}
+            </p>
+            <div className="mt-1 flex flex-col gap-1">
+              {group.criteria.map(({ key, label }) => {
+                const t = thresholds[key] ?? thresholds.default;
+                return (
+                  <span key={key} className="inline-flex items-center gap-2 font-mono text-[11px]">
+                    <span className="text-[#8CA495]">{label}</span>
+                    <span className="text-[#34D399]">≥ {fmtScore(t.green)}</span>
+                    <span className="text-[#7C93A8]">/</span>
+                    <span className="text-[#E4B54E]">≥ {fmtScore(t.amber)}</span>
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </div>
       <p className="mt-3 border-t border-[#243329] pt-2 font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
         green ≥ · amber ≥ · below amber = red · thresholds are stage-aware and explicit (D-060)
@@ -696,6 +808,12 @@ export default function MaturationPage() {
           and computed at render time — no status is hardcoded. A red or absent
           cell is shown honestly, never dressed up as done.
         </p>
+        <p className="mt-2 border-t border-[#243329] pt-2 text-sm leading-relaxed text-[#8CA495]">
+          Previous five-criterion green figures are superseded. Cells now must
+          pass breadth, depth, and quality together, so the initial green share
+          is expected to fall sharply while extraction and realization gaps
+          become visible.
+        </p>
       </div>
 
       <div className="mt-8 flex flex-col gap-6">
@@ -722,7 +840,7 @@ export default function MaturationPage() {
         {/* Heatmap */}
         <Panel
           title="Sufficiency matrix"
-          subtitle="Packs (rows) × active segments (columns), plus the cross-cutting perception row (S7) scored once per segment as its own group (D-067). Cell color = computed status; hover for gaps split by fix type (harvest vs author), the low-novelty and evidence flags, and the maturity stage."
+          subtitle="Packs (rows) × active segments (columns), plus the cross-cutting perception row (S7) scored once per segment as its own group (D-067). Cell color = computed status; hover for breadth, depth, and quality gaps with their source files and filler routes."
           footer={
             matrix
               ? `computed from ${matrixRel}${segmentsFile ? ` + ${segmentsRel}` : ""} · ${matrix.cells.length} cells · config ${matrix.config_version} · stage ${matrix.maturity_stage}`

@@ -1,19 +1,333 @@
 {
   "version": "0.1.0",
-  "generated_at": "2026-07-20T14:16:13.469Z",
-  "config_version": "0.2.0",
-  "matrix_generated_at": "2026-07-20T14:16:12.507Z",
+  "generated_at": "2026-07-21T16:31:37.585Z",
+  "config_version": "0.3.0",
+  "matrix_generated_at": "2026-07-21T16:31:37.359Z",
   "budget": {
     "month": "2026-07",
-    "monthly_remaining_calls": 19432,
+    "monthly_remaining_calls": 18690,
     "monthly_budget_share": 0.5,
     "estimated_calls_per_task": 150,
-    "budget_max_tasks": 64,
+    "budget_max_tasks": 62,
     "config_max_tasks": 12,
     "effective_max_tasks": 12
   },
-  "candidate_count": 0,
+  "candidate_count": 270,
   "low_novelty_skipped": 0,
   "evidence_exhausted_skipped": 0,
-  "tasks": []
+  "tasks": [
+    {
+      "gap_cell": {
+        "pack": "paywall-conversion",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "SC-06",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "scarcity effect consumer b2b enterprise",
+        "scarcity persuasion compliance b2b enterprise",
+        "commodity scarcity value b2b enterprise"
+      ],
+      "reason": "red cell paywall-conversion×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "aha-sharing",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "RE-10",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "reciprocity norm compliance b2b enterprise",
+        "reciprocity persuasion gift b2b enterprise",
+        "rule of reciprocation b2b enterprise"
+      ],
+      "reason": "red cell aha-sharing×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "core-ux",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "ZE-07",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "goal gradient hypothesis b2b enterprise",
+        "Zeigarnik effect b2b enterprise",
+        "Zeigarnik effect replication b2b enterprise"
+      ],
+      "reason": "red cell core-ux×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "engagement-loops",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness",
+          "context_coverage"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "CG-05",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "information gap theory curiosity b2b enterprise",
+        "curiosity gap attention b2b enterprise",
+        "need for cognition curiosity b2b enterprise"
+      ],
+      "reason": "red cell engagement-loops×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "entry",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "FR-11",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "framing effect risky choice b2b enterprise",
+        "anchoring adjustment heuristic b2b enterprise",
+        "anchoring effect replication b2b enterprise"
+      ],
+      "reason": "red cell entry×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "onboarding",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "ID-12",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "commitment and consistency persuasion b2b enterprise",
+        "self-perception theory behavior b2b enterprise",
+        "foot in the door compliance b2b enterprise"
+      ],
+      "reason": "red cell onboarding×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "aha-sharing",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "SP-08",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "social proof conformity b2b enterprise",
+        "social influence compliance descriptive norms b2b enterprise",
+        "social proof replication b2b enterprise"
+      ],
+      "reason": "red cell aha-sharing×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "aha-sharing",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "ST-09",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "social comparison theory b2b enterprise",
+        "status seeking consumer behavior b2b enterprise",
+        "positional goods status b2b enterprise"
+      ],
+      "reason": "red cell aha-sharing×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "core-ux",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "HA-04",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "habit formation b2b enterprise",
+        "habit formation automaticity b2b enterprise",
+        "context-dependent repetition habit b2b enterprise"
+      ],
+      "reason": "red cell core-ux×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "first-value",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "EN-03",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "endowment effect b2b enterprise",
+        "endowment effect meta-analysis b2b enterprise",
+        "willingness to accept willingness to pay gap b2b enterprise"
+      ],
+      "reason": "red cell first-value×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "core-ux",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "VR-02",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "variable ratio reinforcement b2b enterprise",
+        "reward prediction error b2b enterprise",
+        "intermittent reinforcement b2b enterprise"
+      ],
+      "reason": "red cell core-ux×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    },
+    {
+      "gap_cell": {
+        "pack": "paywall-conversion",
+        "segment": "b2b",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "effect_coverage",
+          "realization_density",
+          "extraction_completeness"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "LA-01",
+      "segment": "b2b",
+      "importance": 2.85,
+      "suggested_evidence_terms": [
+        "loss aversion b2b enterprise",
+        "prospect theory meta-analysis b2b enterprise",
+        "loss aversion replication b2b enterprise"
+      ],
+      "reason": "red cell paywall-conversion×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed)"
+    }
+  ]
 }

@@ -19,6 +19,7 @@ import {
   buildQuote,
   extractionSummaryParams,
   groundedProvenance,
+  mergeReaderCoverage,
   proposalIdentity,
   resolveScope,
   toProposal,
@@ -108,6 +109,37 @@ test("pricing freshness is computed from the verification date", () => {
     ),
     "unconfigured",
   );
+});
+
+test("reader coverage unions exact record ids and modes", () => {
+  const first = mergeReaderCoverage(
+    null,
+    "effects",
+    new Map([["CL-14", ["cr_111111111111111111111111"]]]),
+    "2026-07-21T10:00:00.000Z",
+  );
+  const second = mergeReaderCoverage(
+    first,
+    "dissent",
+    new Map([
+      [
+        "CL-14",
+        [
+          "cr_111111111111111111111111",
+          "cr_222222222222222222222222",
+        ],
+      ],
+    ]),
+    "2026-07-21T11:00:00.000Z",
+  );
+  assert.deepEqual(second.mechanisms["CL-14"].evidence, {
+    processed_record_ids: [
+      "cr_111111111111111111111111",
+      "cr_222222222222222222222222",
+    ],
+    processed_at: "2026-07-21T11:00:00.000Z",
+    modes: ["dissent", "effects"],
+  });
 });
 
 test("grounding accepts exact loci and rejects invented or unknown citations", () => {

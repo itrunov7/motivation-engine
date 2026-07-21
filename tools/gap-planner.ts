@@ -267,7 +267,13 @@ function gapSize(
   criteria: SufficiencyCriterion[],
 ): number {
   return criteria.reduce((sum, criterion) => {
-    const distance = greenThreshold(file, criterion) - (cell.scores[criterion] ?? 0);
+    const score = cell.scores[criterion];
+    // Unknown is prioritized for measurement, but remains null in every
+    // artifact and explanation — it is never represented as a measured zero.
+    const distance =
+      score === null
+        ? greenThreshold(file, criterion)
+        : greenThreshold(file, criterion) - score;
     return sum + Math.max(0, distance);
   }, 0);
 }
@@ -301,7 +307,10 @@ function structuralGaps(cell: SufficiencyCell): TypedGap[] {
 
 /** Σ over the cell's structural gaps of (threshold − value), floored at 0. */
 function structuralGapSize(cell: SufficiencyCell): number {
-  return structuralGaps(cell).reduce((sum, g) => sum + Math.max(0, g.threshold - g.value), 0);
+  return structuralGaps(cell).reduce(
+    (sum, g) => sum + Math.max(0, g.threshold - (g.value ?? 0)),
+    0,
+  );
 }
 
 interface Candidate {
@@ -380,9 +389,11 @@ function reasonFor(
 ): string {
   const failed = criteria
     .map((criterion) => {
-      const score = cell.scores[criterion] ?? 0;
+      const score = cell.scores[criterion];
       const green = greenThreshold(file, criterion);
-      return `${criterion} ${score.toFixed(2)}<${green.toFixed(2)}`;
+      return score === null
+        ? `${criterion} unmeasured (needs ≥${green.toFixed(2)})`
+        : `${criterion} ${score.toFixed(2)}<${green.toFixed(2)}`;
     })
     .join(", ");
   const evidenceNote =

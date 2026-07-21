@@ -676,6 +676,7 @@ export const CELL_EXHAUSTED_META: StatusMeta = {
  */
 export const FIX_TYPE_META: Record<GapFixType, StatusMeta> = {
   harvest: { label: "harvest", color: "#E4B54E" },
+  pipeline: { label: "extract / review", color: "#7C93A8" },
   structural: { label: "author", color: "#7C93A8" },
 };
 
@@ -692,7 +693,12 @@ export const FIX_TYPE_META: Record<GapFixType, StatusMeta> = {
  * - authoring: a red/amber cell whose only gaps are structural — no harvest
  *   can flip it; it awaits an owner edit in git.
  */
-export type CellRoute = "green" | "exhausted" | "harvest" | "authoring";
+export type CellRoute =
+  | "green"
+  | "exhausted"
+  | "harvest"
+  | "pipeline"
+  | "authoring";
 
 export function computeCellRoute(cell: SufficiencyCell): CellRoute {
   if (cell.status === "green") return "green";
@@ -700,7 +706,9 @@ export function computeCellRoute(cell: SufficiencyCell): CellRoute {
   const hasScoredHarvestGap = cell.typed_gaps.some(
     (g) => g.fix_type === "harvest" && g.criterion !== "segment_evidence",
   );
-  return hasScoredHarvestGap ? "harvest" : "authoring";
+  if (hasScoredHarvestGap) return "harvest";
+  if (cell.typed_gaps.some((g) => g.fix_type === "pipeline")) return "pipeline";
+  return "authoring";
 }
 
 /**
@@ -714,6 +722,7 @@ export function computeCellRoute(cell: SufficiencyCell): CellRoute {
 export const COVERAGE_BAND_ORDER = [
   "red",
   "amber",
+  "pipeline",
   "authoring",
   "exhausted",
   "green",
@@ -730,9 +739,15 @@ export const COVERAGE_AUTHORING_META: StatusMeta = {
   color: "#8CA495",
 };
 
+export const COVERAGE_PIPELINE_META: StatusMeta = {
+  label: "awaiting extraction / review",
+  color: "#7C93A8",
+};
+
 export const COVERAGE_BAND_META: Record<CoverageBand, StatusMeta> = {
   red: CELL_STATUS_META.red,
   amber: CELL_STATUS_META.amber,
+  pipeline: COVERAGE_PIPELINE_META,
   authoring: COVERAGE_AUTHORING_META,
   exhausted: CELL_EXHAUSTED_META,
   green: CELL_STATUS_META.green,

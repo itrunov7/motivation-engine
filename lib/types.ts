@@ -647,6 +647,8 @@ export interface CorpusQueryMeta {
   records_added?: number;
   novelty_rate?: number;
   rolling_novelty_rate?: number | null;
+  /** Total matches reported by the upstream search API; null when unavailable. */
+  upstream_total_results?: number | null;
 }
 
 /** Per-review snowball outcome (D-019). */
@@ -731,6 +733,14 @@ export interface CorpusSaturationReport {
   topical_rejected: number;
   topical_confirmation_rate: number;
   graph_anchors_expanded: number;
+  field_union_estimate?: {
+    estimate: number | null;
+    method: "sample_overlap_adjusted_union";
+    measured_queries: number;
+    total_search_queries: number;
+    summed_upstream_results: number;
+    observed_sample_multiplicity: number | null;
+  };
   saturation_reached: boolean;
   stop_reason: "saturation" | "storage_tier_record_cap" | "call_cap" | "time_slice";
   cap: {
@@ -954,6 +964,31 @@ export interface ExtractionOpsConfig {
     duplicate_similarity: number;
     max_proposals_per_mechanism: number;
   };
+}
+
+export type ReaderCoverageMode =
+  | "effects"
+  | "realizations"
+  | "interactions"
+  | "dissent";
+
+export interface ReaderCoverageCorpus {
+  processed_record_ids: string[];
+  processed_at: string;
+  modes: ReaderCoverageMode[];
+}
+
+/** Exact cumulative reader ledger written by successful Actions extraction runs. */
+export interface ReaderCoverageFile {
+  version: "1.0.0";
+  updated_at: string;
+  mechanisms: Record<
+    string,
+    {
+      evidence?: ReaderCoverageCorpus;
+      realization?: ReaderCoverageCorpus;
+    }
+  >;
 }
 
 /**
@@ -1356,16 +1391,25 @@ export interface InteractionRecord {
 // (analysis/sufficiency-matrix.json) is a COMPUTED projection, never
 // hand-edited.
 
-/** The five sufficiency criteria a cell is scored on (each 0–1). */
+export type SufficiencyGroup = "breadth" | "depth" | "quality";
+
+/** Breadth, depth, and quality criteria scored per cell (each 0–1 or unmeasured). */
 export type SufficiencyCriterion =
+  | "saturation_reached"
+  | "corpus_size_vs_field_estimate"
+  | "source_diversity"
+  | "recency_balance"
+  | "effect_coverage"
+  | "realization_density"
   | "dissent_completeness"
   | "grade_sufficiency"
   | "interaction_coverage"
+  | "extraction_completeness"
   | "context_coverage"
   | "freshness";
 
 /** Criterion scores for one cell, keyed by SufficiencyCriterion. */
-export type SufficiencyScores = Record<SufficiencyCriterion, number>;
+export type SufficiencyScores = Record<SufficiencyCriterion, number | null>;
 
 export type SufficiencyStatus = "red" | "amber" | "green";
 
@@ -1383,7 +1427,7 @@ export type SegmentEvidence = "segment_specific" | "general_only";
  * relations, pack composition, dossier dissent) and NO harvest can touch them.
  * The maturation loop must never dispatch a harvest against a structural gap.
  */
-export type GapFixType = "harvest" | "structural";
+export type GapFixType = "harvest" | "pipeline" | "structural";
 
 /**
  * A failing criterion in a cell, typed by its filler (D-055). criterion is a
@@ -1394,7 +1438,7 @@ export type GapFixType = "harvest" | "structural";
 export interface TypedGap {
   criterion: SufficiencyCriterion | "segment_evidence";
   /** The cell's score for this criterion (0 for the segment_evidence pseudo-gap). */
-  value: number;
+  value: number | null;
   /** The green threshold the value falls short of (1 for segment_evidence). */
   threshold: number;
   fix_type: GapFixType;
@@ -1479,6 +1523,18 @@ export interface AnalyzerConfig {
   segment_affinity: Record<string, Record<string, number>>;
   /** Mechanism ids flagged replication-shaky by the owner (freshness). */
   replication_flags: string[];
+  depth_targets: {
+    effects_per_mechanism: number;
+    realizations_per_mechanism: number;
+  };
+  field_estimate_overrides?: Record<
+    string,
+    {
+      estimate: number;
+      rationale: string;
+      reviewed_at: string;
+    }
+  >;
   /** Evidence-exhaustion thresholds (D-059); absent → exhaustion never fires. */
   exhaustion?: ExhaustionConfig;
 }
@@ -1520,6 +1576,20 @@ export interface SufficiencyCell {
   /** The row group this cell belongs to (D-067); absent = legacy pack cell. */
   row_group?: MatrixRowGroup;
   scores: SufficiencyScores;
+  group_statuses: Record<
+    SufficiencyGroup,
+    SufficiencyStatus | "unmeasured"
+  >;
+  measurements: Record<
+    SufficiencyCriterion,
+    {
+      measured: boolean;
+      sources: string[];
+      note?: string;
+      estimate_source?: "upstream_union" | "owner_override";
+      override_rationale?: string;
+    }
+  >;
   status: SufficiencyStatus;
   /** Criteria below their green threshold, i.e. what fails this cell. */
   gaps: SufficiencyCriterion[];

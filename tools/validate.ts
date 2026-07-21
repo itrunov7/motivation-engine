@@ -76,6 +76,7 @@ import type {
   PackMapElement,
   RunQuote,
   RealizationCorpusFile,
+  ReaderCoverageFile,
   RealizationCorpusProvenanceItem,
   Segment,
   SegmentCandidate,
@@ -108,6 +109,13 @@ const PATHS = {
     "realizations",
     "realization-corpus.schema.json",
   ),
+  readerCoverageSchema: join(
+    ROOT,
+    "corpora",
+    "_ops",
+    "reader-coverage.schema.json",
+  ),
+  readerCoverage: join(ROOT, "corpora", "extraction", "coverage.json"),
   heartbeat: join(ROOT, "corpora", "_health", "heartbeat.json"),
   segments: join(ROOT, "segments", "segments.yaml"),
   segmentCandidates: join(ROOT, "segments", "candidates.json"),
@@ -826,6 +834,29 @@ const saturationReportSchema = {
     topical_rejected: { type: "integer", minimum: 0 },
     topical_confirmation_rate: { type: "number", minimum: 0, maximum: 1 },
     graph_anchors_expanded: { type: "integer", minimum: 0 },
+    field_union_estimate: {
+      type: "object",
+      properties: {
+        estimate: { type: ["integer", "null"], minimum: 0 },
+        method: { const: "sample_overlap_adjusted_union" },
+        measured_queries: { type: "integer", minimum: 0 },
+        total_search_queries: { type: "integer", minimum: 0 },
+        summed_upstream_results: { type: "integer", minimum: 0 },
+        observed_sample_multiplicity: {
+          type: ["number", "null"],
+          minimum: 1,
+        },
+      },
+      required: [
+        "estimate",
+        "method",
+        "measured_queries",
+        "total_search_queries",
+        "summed_upstream_results",
+        "observed_sample_multiplicity",
+      ],
+      additionalProperties: false,
+    },
     saturation_reached: { type: "boolean" },
     stop_reason: {
       enum: ["saturation", "storage_tier_record_cap", "call_cap", "time_slice"],
@@ -1192,9 +1223,11 @@ function main(): void {
     const dirName = basename(corpusDir);
     // Internal (framework smoke-test) corpora live under "_"-prefixed dirs
     // at any level; the app ignores them (lib/status.ts).
-    const isInternal = relative(PATHS.corporaDir, corpusDir)
-      .split(sep)
-      .some((segment) => segment.startsWith("_"));
+    const isInternal =
+      dirName === "extraction" ||
+      relative(PATHS.corporaDir, corpusDir)
+        .split(sep)
+        .some((segment) => segment.startsWith("_"));
     const data = readJson(manifestFile);
     if (data === undefined) continue;
     let ok = validateAgainst(validateManifest, manifestFile, data);
@@ -1279,7 +1312,75 @@ function main(): void {
     fail(PATHS.realizationCorpusSchema, "missing realization corpus schema");
   }
 
-  // 9b. Benchmark files (D-029): every /corpora/benchmarks/{source_id}.json
+  // 9b. Exact reader coverage (D-082): optional until the first post-D1
+  // extraction run, but when present it must validate and reference real
+  // current corpus records only.
+  if (existsSync(PATHS.readerCoverageSchema)) {
+    const schema = readJson(PATHS.readerCoverageSchema);
+    if (schema !== undefined) {
+      const validateReaderCoverage = ajv.compile(schema as object);
+      if (existsSync(PATHS.readerCoverage)) {
+        const data = readJson(PATHS.readerCoverage);
+        if (data !== undefined) {
+          let ok = validateAgainst(
+            validateReaderCoverage,
+            PATHS.readerCoverage,
+            data,
+          );
+          const coverage = data as ReaderCoverageFile;
+          for (const [mechanismId, entry] of Object.entries(
+            coverage.mechanisms ?? {},
+          )) {
+            for (const [kind, corpusCoverage] of Object.entries(entry)) {
+              const corpusPath =
+                kind === "realization"
+                  ? join(
+                      PATHS.realizationCorporaDir,
+                      mechanismId,
+                      "records.json",
+                    )
+                  : join(
+                      PATHS.corporaDir,
+                      "evidence",
+                      `${mechanismId}.json`,
+                    );
+              if (!existsSync(corpusPath)) {
+                fail(
+                  PATHS.readerCoverage,
+                  `${mechanismId}.${kind} references a missing corpus`,
+                );
+                ok = false;
+                continue;
+              }
+              const corpus = readJson(corpusPath) as
+                | EvidenceCorpusFile
+                | RealizationCorpusFile
+                | undefined;
+              const currentIds = new Set(
+                corpus?.records.map((record) => record.record_id) ?? [],
+              );
+              for (const id of corpusCoverage?.processed_record_ids ?? []) {
+                if (!currentIds.has(id)) {
+                  fail(
+                    PATHS.readerCoverage,
+                    `${mechanismId}.${kind} references unknown record ${id}`,
+                  );
+                  ok = false;
+                }
+              }
+            }
+          }
+          if (ok) console.log(`  ✓ ${rel(PATHS.readerCoverage)} valid (reader coverage)`);
+        }
+      } else {
+        console.log("  · no reader coverage ledger yet (unmeasured until extraction runs)");
+      }
+    }
+  } else {
+    fail(PATHS.readerCoverageSchema, "missing reader coverage schema");
+  }
+
+  // 9c. Benchmark files (D-029): every /corpora/benchmarks/{source_id}.json
   // is owner-prepared data normalized by tools/ingest-report.ts. Beyond the
   // manifest contract above, the RECORD shape is validated here, and the
   // filename stem must be a report-mode source in sources.json — a benchmark

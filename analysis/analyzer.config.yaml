@@ -1,9 +1,9 @@
-version: 0.2.0
+version: 0.3.0
 
 # Analyzer config — the ONE hand-authored input to sufficiency scoring (D-050).
 #
-# tools/analyzer.ts scores every [pack × active segment] cell on 5 computable
-# criteria against the registry + dossiers; everything downstream
+# tools/analyzer.ts scores every [pack × active segment] cell across breadth,
+# depth, and quality using traceable repository data; everything downstream
 # (analysis/sufficiency-matrix.json) is a COMPUTED projection over this config
 # + the pack map + the registry. Edited in git only, no UI write surface.
 #
@@ -43,6 +43,12 @@ maturity_stage: seed
 stage_thresholds:
   seed:
     default: { green: 0.5, amber: 0.3 }
+    saturation_reached: { green: 0.8, amber: 0.5 }
+    corpus_size_vs_field_estimate: { green: 0.2, amber: 0.1 }
+    source_diversity: { green: 0.75, amber: 0.5 }
+    recency_balance: { green: 0.15, amber: 0.08 }
+    realization_density: { green: 0.34, amber: 0.17 }
+    extraction_completeness: { green: 0.5, amber: 0.25 }
     interaction_coverage: { green: 0.4, amber: 0.2 }
     # Dissent is a hard hygiene bar at EVERY stage: one stripped dossier in a
     # 3–4 mechanism pack (share ≤ 0.75) must turn the cell red, not amber.
@@ -50,11 +56,36 @@ stage_thresholds:
     dissent_completeness: { green: 1.0, amber: 0.8 }
   growing:
     default: { green: 0.65, amber: 0.4 }
+    saturation_reached: { green: 0.9, amber: 0.65 }
+    corpus_size_vs_field_estimate: { green: 0.4, amber: 0.2 }
+    source_diversity: { green: 1.0, amber: 0.75 }
+    recency_balance: { green: 0.2, amber: 0.1 }
+    effect_coverage: { green: 0.75, amber: 0.5 }
+    realization_density: { green: 0.67, amber: 0.34 }
+    extraction_completeness: { green: 0.75, amber: 0.5 }
     interaction_coverage: { green: 0.6, amber: 0.35 }
     dissent_completeness: { green: 1.0, amber: 0.8 }
   mature:
     default: { green: 0.8, amber: 0.5 }
+    saturation_reached: { green: 1.0, amber: 0.8 }
+    corpus_size_vs_field_estimate: { green: 0.7, amber: 0.4 }
+    source_diversity: { green: 1.0, amber: 0.8 }
+    recency_balance: { green: 0.25, amber: 0.15 }
+    effect_coverage: { green: 1.0, amber: 0.75 }
+    realization_density: { green: 1.0, amber: 0.67 }
+    extraction_completeness: { green: 1.0, amber: 0.75 }
     dissent_completeness: { green: 1.0, amber: 0.8 }
+
+# Approved L2/L3 density targets. Scores cap at 1.0 once every pack member
+# reaches the target; pending proposals never count.
+depth_targets:
+  effects_per_mechanism: 2
+  realizations_per_mechanism: 3
+
+# Optional correction for a demonstrably inflated automatic field estimate.
+# Every override must remain reviewable and dated; absence means the analyzer
+# uses saturation_report.field_union_estimate.
+field_estimate_overrides: {}
 
 # Segment → typical funnel stages (registry applicability vocabulary:
 # cold_acquisition | onboarding | activation | conversion | retention |

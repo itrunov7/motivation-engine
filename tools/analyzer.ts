@@ -3,8 +3,8 @@
  *
  * For every pack-map element (/packs/pack-map.yaml, D-048) × every ACTIVE
  * segment (/segments/segments.yaml, D-047), computes whether the knowledge is
- * mature: 5 criteria scored 0–1 against the registry
- * (/registry/mechanisms/*.json) + dossiers (/dossiers/*.json), plus an
+ * mature: breadth, depth, and quality criteria scored against traceable
+ * repository data, plus an
  * overall status (red/amber/green). Output: analysis/sufficiency-matrix.json
  * — a COMPUTED projection, never hand-edited (same pattern as render-cards /
  * render-packs). The ONE hand-authored input is
@@ -20,7 +20,7 @@
  * requires an existing matrix whose preserved packs cover every active
  * segment; anything else fails loudly and asks for a full `npm run analyze`.
  *
- * The five criteria:
+ * The quality criteria include:
  * - dissent_completeness — share of the pack's mechanisms whose dossier
  *   dissent is non-empty (missing dossier or blank dissent = 0). Deliberately
  *   UNWEIGHTED: dissent is a knowledge-hygiene bar, and a stripped dossier is
@@ -49,7 +49,7 @@
  * mapped its funnel stages / affinities yet. Rather than fail loudly (which
  * would block adding a segment), the analyzer admits it into the matrix as an
  * honest all-red column: every pack × bootstrap-segment cell scores 0 on all
- * five criteria, status red, all criteria as gaps, segment_evidence
+ * configured criteria, status red, all criteria as gaps, segment_evidence
  * general_only. Nothing is demonstrated FOR this segment yet, so red is the
  * truthful state, and the maximal gap_size pushes it to the top of the gap
  * planner's queue — the segment starts maturing through the loop. The owner
@@ -58,11 +58,14 @@
  */
 
 import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
-import { join, relative } from "node:path";
+import { basename, join, relative } from "node:path";
 import { parse as parseYaml } from "yaml";
 import type {
   AnalyzerConfig,
+  CorpusManifest,
   Dossier,
+  Effect,
+  EvidenceCorpusFile,
   EvidenceGrade,
   FunnelStage,
   GapFixType,
@@ -71,11 +74,15 @@ import type {
   MaturityStage,
   MatrixRowGroup,
   Mechanism,
+  ReaderCoverageFile,
+  Realization,
+  RealizationCorpusFile,
   PackMapFile,
   SegmentsFile,
   StageThresholds,
   SufficiencyCell,
   SufficiencyCriterion,
+  SufficiencyGroup,
   SufficiencyMatrix,
   SufficiencyScores,
   SufficiencyStatus,
@@ -89,6 +96,12 @@ const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
 const TAXONOMY = join(ROOT, "registry", "taxonomy.json");
 const DOSSIERS_DIR = join(ROOT, "dossiers");
 const INTERACTIONS_DIR = join(ROOT, "interactions");
+const EFFECTS_DIR = join(ROOT, "effects");
+const REALIZATIONS_DIR = join(ROOT, "realizations");
+const EVIDENCE_DIR = join(ROOT, "corpora", "evidence");
+const EVIDENCE_MANIFEST = join(EVIDENCE_DIR, "manifest.json");
+const REALIZATION_CORPUS_DIR = join(ROOT, "corpora", "realizations");
+const READER_COVERAGE = join(ROOT, "corpora", "extraction", "coverage.json");
 const PACK_MAP = join(ROOT, "packs", "pack-map.yaml");
 const SEGMENTS = join(ROOT, "segments", "segments.yaml");
 const ANALYSIS_DIR = join(ROOT, "analysis");
@@ -96,7 +109,7 @@ const CONFIG = join(ANALYSIS_DIR, "analyzer.config.yaml");
 const MATRIX = join(ANALYSIS_DIR, "sufficiency-matrix.json");
 const HARVEST_HISTORY = join(ANALYSIS_DIR, "harvest-history.json");
 
-const MATRIX_VERSION = "0.3.0";
+const MATRIX_VERSION = "0.4.0";
 
 /**
  * The reserved row id of the cross-cutting perception row group (Step 6, D-067):
@@ -107,12 +120,40 @@ const MATRIX_VERSION = "0.3.0";
 const PERCEPTION_ROW = "perception";
 
 const CRITERIA: SufficiencyCriterion[] = [
+  "saturation_reached",
+  "corpus_size_vs_field_estimate",
+  "source_diversity",
+  "recency_balance",
+  "effect_coverage",
+  "realization_density",
+  "interaction_coverage",
+  "extraction_completeness",
   "dissent_completeness",
   "grade_sufficiency",
-  "interaction_coverage",
   "context_coverage",
   "freshness",
 ];
+
+const CRITERION_GROUPS: Record<SufficiencyGroup, SufficiencyCriterion[]> = {
+  breadth: [
+    "saturation_reached",
+    "corpus_size_vs_field_estimate",
+    "source_diversity",
+    "recency_balance",
+  ],
+  depth: [
+    "effect_coverage",
+    "realization_density",
+    "interaction_coverage",
+    "extraction_completeness",
+  ],
+  quality: [
+    "dissent_completeness",
+    "grade_sufficiency",
+    "context_coverage",
+    "freshness",
+  ],
+};
 
 /** Maturity stages (D-060) in ascending-bar order — monotonicity is checked over this. */
 const MATURITY_STAGES: MaturityStage[] = ["seed", "growing", "mature"];
@@ -127,21 +168,42 @@ const MATURITY_STAGES: MaturityStage[] = ["seed", "growing", "mature"];
  * owner-authored (rule 8), so no fetch can fill it.
  */
 const FIX_TYPE: Record<SufficiencyCriterion, GapFixType> = {
+  saturation_reached: "harvest",
+  corpus_size_vs_field_estimate: "harvest",
+  source_diversity: "harvest",
+  recency_balance: "harvest",
+  effect_coverage: "pipeline",
+  realization_density: "pipeline",
   dissent_completeness: "structural",
   grade_sufficiency: "harvest",
   interaction_coverage: "structural",
+  extraction_completeness: "pipeline",
   context_coverage: "structural",
   freshness: "harvest",
 };
 
 /** What would close each criterion's gap — the fix that stops the wheel spinning. */
 const WHAT_WOULD_CLOSE_IT: Record<SufficiencyCriterion, string> = {
+  saturation_reached:
+    "a completed evidence harvest whose saturation report reaches the novelty frontier",
+  corpus_size_vs_field_estimate:
+    "upstream result totals from a successful harvest, or a reviewed owner override when the automatic estimate is demonstrably inflated",
+  source_diversity:
+    "records contributed by the evidence connector's configured upstream literature sources",
+  recency_balance:
+    "a harvest that adds enough recent literature to meet the active-stage bar",
+  effect_coverage:
+    "grounded effect extraction followed by owner approval into /effects",
+  realization_density:
+    "realization-corpus reading followed by owner approval into /realizations",
   dissent_completeness:
     "dissent text in the member dossiers (owner-authored, git)",
   grade_sufficiency:
     "higher-grade evidence for the pack's weak mechanisms (harvest, then owner re-grade)",
   interaction_coverage:
     "registry relations between the pack's member mechanisms (owner edit, git)",
+  extraction_completeness:
+    "a successful Actions-only reader run covering the current eligible corpus records",
   context_coverage:
     "a grade≥B mechanism whose applicability covers the segment's uncovered funnel stages (owner edit / pack composition, git)",
   freshness:
@@ -174,6 +236,19 @@ function listJsonFiles(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true })
     .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
     .map((entry) => join(dir, entry.name))
+    .sort();
+}
+
+function listJsonFilesRecursive(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir, { withFileTypes: true })
+    .flatMap((entry) =>
+      entry.isDirectory()
+        ? listJsonFilesRecursive(join(dir, entry.name))
+        : entry.isFile() && entry.name.endsWith(".json")
+          ? [join(dir, entry.name)]
+          : [],
+    )
     .sort();
 }
 
@@ -212,6 +287,34 @@ function loadConfig(activeSegmentIds: string[], rosterIds: Set<string>): LoadedC
     const weight = config.grade_weights?.[letter];
     if (typeof weight !== "number" || weight < 0 || weight > 1) {
       problems.push(`grade_weights.${letter} must be a number in [0, 1]`);
+    }
+  }
+
+  for (const [name, target] of Object.entries(config.depth_targets ?? {})) {
+    if (!Number.isInteger(target) || target < 1) {
+      problems.push(`depth_targets.${name} must be an integer ≥ 1`);
+    }
+  }
+  if (!config.depth_targets?.effects_per_mechanism) {
+    problems.push("depth_targets.effects_per_mechanism is required");
+  }
+  if (!config.depth_targets?.realizations_per_mechanism) {
+    problems.push("depth_targets.realizations_per_mechanism is required");
+  }
+  for (const [mechanismId, override] of Object.entries(
+    config.field_estimate_overrides ?? {},
+  )) {
+    if (!rosterIds.has(mechanismId)) {
+      problems.push(`field_estimate_overrides names unknown mechanism "${mechanismId}"`);
+    }
+    if (!Number.isInteger(override.estimate) || override.estimate < 1) {
+      problems.push(`field_estimate_overrides.${mechanismId}.estimate must be an integer ≥ 1`);
+    }
+    if (!override.rationale?.trim()) {
+      problems.push(`field_estimate_overrides.${mechanismId}.rationale is required`);
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(override.reviewed_at ?? "")) {
+      problems.push(`field_estimate_overrides.${mechanismId}.reviewed_at must be YYYY-MM-DD`);
     }
   }
 
@@ -338,7 +441,7 @@ function loadConfig(activeSegmentIds: string[], rosterIds: Set<string>): LoadedC
 /**
  * An honest all-red bootstrap cell for an active segment the owner has added
  * to segments.yaml but not yet configured in segment_stages (D-054): every
- * criterion scores 0, so the cell is red on all five and general_only. Nothing
+ * criterion is unmeasured, so the cell is red and general_only. Nothing
  * is demonstrated for this segment yet, so red is the truthful state and the
  * maximal gap feeds the segment straight into the maturation loop.
  */
@@ -349,14 +452,30 @@ function bootstrapCell(
   rowGroup: MatrixRowGroup,
 ): SufficiencyCell {
   const scores = Object.fromEntries(
-    CRITERIA.map((criterion) => [criterion, 0]),
+    CRITERIA.map((criterion) => [criterion, null]),
   ) as SufficiencyScores;
   const gaps = [...CRITERIA];
+  const measurements = Object.fromEntries(
+    CRITERIA.map((criterion) => [
+      criterion,
+      {
+        measured: false,
+        sources: [rel(CONFIG)],
+        note: "segment is not configured for scoring",
+      },
+    ]),
+  ) as SufficiencyCell["measurements"];
   return {
     pack: packId,
     segment: segmentId,
     row_group: rowGroup,
     scores,
+    group_statuses: {
+      breadth: "unmeasured",
+      depth: "unmeasured",
+      quality: "unmeasured",
+    },
+    measurements,
     status: "red",
     gaps,
     typed_gaps: buildTypedGaps(gaps, scores, config, "general_only", "red"),
@@ -514,6 +633,63 @@ function contextCoverage(
   return { coverage: covered / segmentStages.length, uncovered };
 }
 
+interface ArtifactSummary {
+  count: number;
+  files: string[];
+}
+
+interface AnalyzerKnowledge {
+  evidence: Map<string, EvidenceCorpusFile>;
+  realizationCorpora: Map<string, RealizationCorpusFile>;
+  expectedEvidenceSources: number;
+  effects: Map<string, ArtifactSummary>;
+  realizations: Map<string, ArtifactSummary>;
+  readerCoverage: ReaderCoverageFile | null;
+}
+
+function measuredMean(values: (number | null)[]): number | null {
+  if (values.length === 0 || values.some((value) => value === null)) return null;
+  let sum = 0;
+  for (const value of values) sum += value as number;
+  return round(sum / values.length);
+}
+
+function groupStatus(
+  group: SufficiencyGroup,
+  scores: SufficiencyScores,
+  config: AnalyzerConfig,
+): SufficiencyStatus | "unmeasured" {
+  const criteria = CRITERION_GROUPS[group];
+  if (criteria.some((criterion) => scores[criterion] === null)) return "unmeasured";
+  let result: SufficiencyStatus = "green";
+  for (const criterion of criteria) {
+    const status = statusFor(
+      scores[criterion] as number,
+      thresholdFor(config, criterion),
+    );
+    if (STATUS_RANK[status] > STATUS_RANK[result]) result = status;
+  }
+  return result;
+}
+
+function corpusRecordIds(corpus: EvidenceCorpusFile | undefined): string[] {
+  return (corpus?.records ?? [])
+    .filter(
+      (record) =>
+        typeof record.abstract === "string" &&
+        record.abstract.trim().length > 0,
+    )
+    .map((record) => record.record_id);
+}
+
+function realizationRecordIds(
+  corpus: RealizationCorpusFile | undefined,
+): string[] {
+  return (corpus?.records ?? [])
+    .filter((record) => record.observation.trim().length > 0)
+    .map((record) => record.record_id);
+}
+
 function scoreCell(
   packId: string,
   segmentId: string,
@@ -522,6 +698,7 @@ function scoreCell(
   config: AnalyzerConfig,
   authoredPairs: Set<string>,
   rowGroup: MatrixRowGroup,
+  knowledge: AnalyzerKnowledge,
 ): SufficiencyCell {
   const segmentStages = config.segment_stages[segmentId];
   const affinity = config.segment_affinity[segmentId] ?? {};
@@ -553,23 +730,215 @@ function scoreCell(
   const interaction = interactionCoverage(members, authoredPairs);
   const context = contextCoverage(members, segmentStages, config.min_context_grade);
 
+  const evidenceSources = members.map((member) =>
+    rel(join(EVIDENCE_DIR, `${member.id}.json`)),
+  );
+  const saturationValues = members.map((member) => {
+    const report = knowledge.evidence.get(member.id)?.saturation_report;
+    return report ? (report.saturation_reached ? 1 : 0) : null;
+  });
+  const estimateMeta = members.map((member) => {
+    const override = config.field_estimate_overrides?.[member.id];
+    const automatic =
+      knowledge.evidence.get(member.id)?.saturation_report?.field_union_estimate
+        ?.estimate ?? null;
+    return {
+      member,
+      estimate: override?.estimate ?? automatic,
+      override,
+    };
+  });
+  const corpusRatioValues = estimateMeta.map(({ member, estimate }) =>
+    estimate && estimate > 0
+      ? Math.min(1, (knowledge.evidence.get(member.id)?.records.length ?? 0) / estimate)
+      : null,
+  );
+  const diversityValues = members.map((member) => {
+    const spread = knowledge.evidence.get(member.id)?.diversity_report?.source_spread;
+    if (!spread || knowledge.expectedEvidenceSources < 1) return null;
+    const contributing = new Set(
+      spread
+        .filter((source) => source.unique_records > 0)
+        .map((source) => source.api),
+    ).size;
+    return Math.min(1, contributing / knowledge.expectedEvidenceSources);
+  });
+  const recencyValues = members.map(
+    (member) =>
+      knowledge.evidence.get(member.id)?.diversity_report?.recency_rate ?? null,
+  );
+  const effectValues = members.map(
+    (member) =>
+      Math.min(
+        1,
+        (knowledge.effects.get(member.id)?.count ?? 0) /
+          config.depth_targets.effects_per_mechanism,
+      ),
+  );
+  const realizationValues = members.map(
+    (member) =>
+      Math.min(
+        1,
+        (knowledge.realizations.get(member.id)?.count ?? 0) /
+          config.depth_targets.realizations_per_mechanism,
+      ),
+  );
+  const extractionValues = members.map((member) => {
+    const evidenceIds = corpusRecordIds(knowledge.evidence.get(member.id));
+    const realizationIds = realizationRecordIds(
+      knowledge.realizationCorpora.get(member.id),
+    );
+    const totalIds = [...evidenceIds, ...realizationIds];
+    if (totalIds.length === 0) return null;
+    const ledger = knowledge.readerCoverage?.mechanisms[member.id];
+    if (evidenceIds.length > 0 && !ledger?.evidence) return null;
+    if (realizationIds.length > 0 && !ledger?.realization) return null;
+    const processed = new Set([
+      ...(ledger?.evidence?.processed_record_ids ?? []),
+      ...(ledger?.realization?.processed_record_ids ?? []),
+    ]);
+    return totalIds.filter((id) => processed.has(id)).length / totalIds.length;
+  });
+
   const scores: SufficiencyScores = {
+    saturation_reached: measuredMean(saturationValues),
+    corpus_size_vs_field_estimate: measuredMean(corpusRatioValues),
+    source_diversity: measuredMean(diversityValues),
+    recency_balance: measuredMean(recencyValues),
+    effect_coverage: measuredMean(effectValues),
+    realization_density: measuredMean(realizationValues),
     dissent_completeness: round(dissentShare),
     grade_sufficiency: round(
       weightedMean(contexts, (m) => config.grade_weights[gradeLetter(m.mechanism.evidence.grade)]),
     ),
     interaction_coverage: round(interaction.coverage),
+    extraction_completeness: measuredMean(extractionValues),
     context_coverage: round(context.coverage),
     freshness: round(1 - weightedMean(contexts, (m) => (m.replicationFlagged ? 1 : 0))),
+  };
+
+  const overrideMembers = estimateMeta.filter((entry) => entry.override);
+  const measurements: SufficiencyCell["measurements"] = {
+    saturation_reached: {
+      measured: scores.saturation_reached !== null,
+      sources: evidenceSources,
+      ...(scores.saturation_reached === null
+        ? { note: "one or more member corpora have no saturation report" }
+        : {}),
+    },
+    corpus_size_vs_field_estimate: {
+      measured: scores.corpus_size_vs_field_estimate !== null,
+      sources: [
+        ...evidenceSources,
+        ...(overrideMembers.length > 0 ? [rel(CONFIG)] : []),
+      ],
+      ...(scores.corpus_size_vs_field_estimate === null
+        ? { note: "upstream field-size estimate is unavailable for one or more members" }
+        : {}),
+      estimate_source:
+        overrideMembers.length > 0 ? "owner_override" : "upstream_union",
+      ...(overrideMembers.length > 0
+        ? {
+            override_rationale: overrideMembers
+              .map(
+                ({ member, override }) =>
+                  `${member.id}: ${override?.rationale ?? ""}`,
+              )
+              .join(" · "),
+          }
+        : {}),
+    },
+    source_diversity: {
+      measured: scores.source_diversity !== null,
+      sources: [...evidenceSources, rel(EVIDENCE_MANIFEST)],
+      ...(scores.source_diversity === null
+        ? { note: "source-spread or configured-source data is unavailable" }
+        : {}),
+    },
+    recency_balance: {
+      measured: scores.recency_balance !== null,
+      sources: evidenceSources,
+      ...(scores.recency_balance === null
+        ? { note: "recency report is unavailable for one or more members" }
+        : {}),
+    },
+    effect_coverage: {
+      measured: true,
+      sources: [
+        "effects/effect.schema.json",
+        ...members.flatMap((member) => knowledge.effects.get(member.id)?.files ?? []),
+        rel(CONFIG),
+      ],
+    },
+    realization_density: {
+      measured: true,
+      sources: [
+        "realizations/realization.schema.json",
+        ...members.flatMap(
+          (member) => knowledge.realizations.get(member.id)?.files ?? [],
+        ),
+        rel(CONFIG),
+      ],
+    },
+    interaction_coverage: {
+      measured: true,
+      sources: [
+        ...members.map((member) =>
+          rel(join(MECHANISMS_DIR, `${member.id}.json`)),
+        ),
+        "interactions/",
+      ],
+    },
+    extraction_completeness: {
+      measured: scores.extraction_completeness !== null,
+      sources: [rel(READER_COVERAGE), ...evidenceSources],
+      ...(scores.extraction_completeness === null
+        ? { note: "the reader has no exact coverage ledger for one or more current corpora" }
+        : {}),
+    },
+    dissent_completeness: {
+      measured: true,
+      sources: members.map((member) =>
+        rel(join(DOSSIERS_DIR, `${member.id}.json`)),
+      ),
+    },
+    grade_sufficiency: {
+      measured: true,
+      sources: members.map((member) =>
+        rel(join(MECHANISMS_DIR, `${member.id}.json`)),
+      ),
+    },
+    context_coverage: {
+      measured: true,
+      sources: [
+        ...members.map((member) =>
+          rel(join(MECHANISMS_DIR, `${member.id}.json`)),
+        ),
+        rel(CONFIG),
+      ],
+    },
+    freshness: {
+      measured: true,
+      sources: [rel(CONFIG)],
+    },
   };
 
   let status: SufficiencyStatus = "green";
   const gaps: SufficiencyCriterion[] = [];
   for (const criterion of CRITERIA) {
-    const criterionStatus = statusFor(scores[criterion], thresholdFor(config, criterion));
+    const score = scores[criterion];
+    const criterionStatus =
+      score === null
+        ? "red"
+        : statusFor(score, thresholdFor(config, criterion));
     if (criterionStatus !== "green") gaps.push(criterion);
     if (STATUS_RANK[criterionStatus] > STATUS_RANK[status]) status = criterionStatus;
   }
+  const groupStatuses: SufficiencyCell["group_statuses"] = {
+    breadth: groupStatus("breadth", scores, config),
+    depth: groupStatus("depth", scores, config),
+    quality: groupStatus("quality", scores, config),
+  };
 
   // Segment-specific judgment exists for this cell iff an affinity entry
   // touches one of the pack's mechanisms; otherwise the cell scored on
@@ -593,6 +962,8 @@ function scoreCell(
     segment: segmentId,
     row_group: rowGroup,
     scores,
+    group_statuses: groupStatuses,
+    measurements,
     status,
     gaps,
     typed_gaps: buildTypedGaps(gaps, scores, config, segmentEvidence, status, detail),
@@ -640,7 +1011,9 @@ function applyExhaustion(
   // Mirror the gap planner: only a SCORED harvest gap makes a cell harvestable,
   // so only such a cell can be "exhausted" of harvesting (the segment_evidence
   // pseudo-gap alone never queues a harvest, D-056).
-  const hasScoredHarvestGap = cell.gaps.some((c) => FIX_TYPE[c] === "harvest");
+  const hasScoredHarvestGap = cell.gaps.some(
+    (c) => FIX_TYPE[c] === "harvest" && cell.scores[c] !== null,
+  );
   if (!hasScoredHarvestGap) return cell;
 
   let lowNoveltyAttempts = 0;
@@ -710,6 +1083,12 @@ function loadExistingCells(): Map<string, SufficiencyCell> {
     process.exit(1);
   }
   const matrix = JSON.parse(readFileSync(MATRIX, "utf-8")) as SufficiencyMatrix;
+  if (matrix.version !== MATRIX_VERSION) {
+    console.error(
+      `  ✗ existing matrix ${matrix.version} cannot be mixed with analyzer ${MATRIX_VERSION} — run a full \`npm run analyze\`.`,
+    );
+    process.exit(1);
+  }
   // Gap typing (D-055): a preserved cell without typed_gaps predates the typing
   // and would leave untyped gaps in the merged matrix. Fail loudly so a scoped
   // run can never emit a partially-typed matrix.
@@ -731,10 +1110,19 @@ function loadExistingCells(): Map<string, SufficiencyCell> {
     );
     process.exit(1);
   }
+  const ungrouped = matrix.cells.find(
+    (cell) => !cell.group_statuses || !cell.measurements,
+  );
+  if (ungrouped) {
+    console.error(
+      `  ✗ existing matrix lacks grouped sufficiency metadata at ${ungrouped.pack}×${ungrouped.segment} — run a full \`npm run analyze\`.`,
+    );
+    process.exit(1);
+  }
   return new Map(matrix.cells.map((cell) => [`${cell.pack}|${cell.segment}`, cell]));
 }
 
-function main(): void {
+export function main(): void {
   console.log("Motivation Engine sufficiency analyzer\n");
 
   if (!existsSync(PACK_MAP)) {
@@ -822,6 +1210,64 @@ function main(): void {
     }
   }
 
+  const evidence = new Map<string, EvidenceCorpusFile>();
+  for (const file of listJsonFiles(EVIDENCE_DIR)) {
+    if (
+      basename(file) === "manifest.json" ||
+      file.endsWith(".regression.json")
+    ) {
+      continue;
+    }
+    const corpus = JSON.parse(readFileSync(file, "utf-8")) as EvidenceCorpusFile;
+    evidence.set(corpus.mechanism_id, corpus);
+  }
+  const realizationCorpora = new Map<string, RealizationCorpusFile>();
+  for (const file of listJsonFilesRecursive(REALIZATION_CORPUS_DIR)) {
+    if (basename(file) !== "records.json") continue;
+    const corpus = JSON.parse(readFileSync(file, "utf-8")) as RealizationCorpusFile;
+    realizationCorpora.set(corpus.mechanism_id, corpus);
+  }
+  const expectedEvidenceSources = existsSync(EVIDENCE_MANIFEST)
+    ? (
+        JSON.parse(
+          readFileSync(EVIDENCE_MANIFEST, "utf-8"),
+        ) as CorpusManifest
+      ).source_ids.length
+    : 0;
+
+  const effects = new Map<string, ArtifactSummary>();
+  for (const file of listJsonFilesRecursive(EFFECTS_DIR)) {
+    if (file.endsWith("effect.schema.json")) continue;
+    const effect = JSON.parse(readFileSync(file, "utf-8")) as Effect;
+    const summary = effects.get(effect.mechanism_id) ?? { count: 0, files: [] };
+    summary.count += 1;
+    summary.files.push(rel(file));
+    effects.set(effect.mechanism_id, summary);
+  }
+  const realizations = new Map<string, ArtifactSummary>();
+  for (const file of listJsonFilesRecursive(REALIZATIONS_DIR)) {
+    if (file.endsWith("realization.schema.json")) continue;
+    const realization = JSON.parse(readFileSync(file, "utf-8")) as Realization;
+    const summary = realizations.get(realization.mechanism_id) ?? {
+      count: 0,
+      files: [],
+    };
+    summary.count += 1;
+    summary.files.push(rel(file));
+    realizations.set(realization.mechanism_id, summary);
+  }
+  const readerCoverage = existsSync(READER_COVERAGE)
+    ? (JSON.parse(readFileSync(READER_COVERAGE, "utf-8")) as ReaderCoverageFile)
+    : null;
+  const knowledge: AnalyzerKnowledge = {
+    evidence,
+    realizationCorpora,
+    expectedEvidenceSources,
+    effects,
+    realizations,
+    readerCoverage,
+  };
+
   const { config, bootstrapSegmentIds } = loadConfig(
     activeSegments.map((s) => s.id),
     new Set(mechanisms.keys()),
@@ -873,7 +1319,16 @@ function main(): void {
     for (const segment of activeSegments) {
       const scored = bootstrapSegmentIds.has(segment.id)
         ? bootstrapCell(element.id, segment.id, config, "pack")
-        : scoreCell(element.id, segment.id, members, dossiers, config, authoredPairs, "pack");
+        : scoreCell(
+            element.id,
+            segment.id,
+            members,
+            dossiers,
+            config,
+            authoredPairs,
+            "pack",
+            knowledge,
+          );
       const cell = applyExhaustion(scored, element.mechanisms, harvestHistory, exhaustionK);
       cells.push(cell);
       statusCounts[cell.status] += 1;
@@ -889,7 +1344,7 @@ function main(): void {
   // row, instead of multiplying it into all 11 pack rows. Its gaps are typed by
   // the SAME fix_type logic as the packs (harvest vs structural). When the
   // roster is empty (today: S7 still seed-only) the row is an honest all-red
-  // bootstrap row — every criterion 0, all five as typed gaps — rather than the
+  // bootstrap row — every criterion unmeasured and typed as a gap — rather than the
   // vacuous greens an empty member list would score (interaction/freshness = 1).
   const perceptionStatusCounts: Record<SufficiencyStatus, number> = { red: 0, amber: 0, green: 0 };
   let perceptionRescored = false;
@@ -921,6 +1376,7 @@ function main(): void {
               config,
               authoredPairs,
               "perception",
+              knowledge,
             );
       const cell = applyExhaustion(scored, crossCuttingIds, harvestHistory, exhaustionK);
       cells.push(cell);
@@ -975,4 +1431,4 @@ function main(): void {
   }
 }
 
-main();
+if (require.main === module) main();

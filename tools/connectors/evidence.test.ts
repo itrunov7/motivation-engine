@@ -6,6 +6,7 @@ import {
   buildQueryTasks,
   checkpointIsCompatible,
   enabledGraphDirections,
+  estimateFieldUnion,
   isTopicalGraphAnchor,
   rollingNoveltyRate,
   saturationReached,
@@ -123,4 +124,40 @@ test("stale checkpoints are rejected", () => {
   assert.equal(checkpointIsCompatible(checkpoint, "CL-14", "abc"), true);
   assert.equal(checkpointIsCompatible(checkpoint, "CL-14", "changed"), false);
   assert.equal(checkpointIsCompatible(checkpoint, "LA-01", "abc"), false);
+});
+
+test("field union estimate uses upstream totals adjusted by sampled overlap", () => {
+  const tasks = buildQueryTasks(["alpha", "beta"], config()).filter(
+    (task) =>
+      task.bucket === "relevance" &&
+      task.angle === "canon" &&
+      task.page === 1,
+  );
+  assert.equal(tasks.length, 2);
+  const record = (title: string, id: string) => ({
+    title,
+    authors: [],
+    year: 2025,
+    venue: null,
+    doi: null,
+    citations: 1,
+    abstract: title,
+    openalex_id: id,
+    openalex_type: "article",
+    referenced_works_count: 0,
+    categories: [],
+    source_api: "openalex" as const,
+  });
+  tasks[0].meta.upstream_total_results = 100;
+  tasks[0].records = [record("A", "W1"), record("B", "W2")];
+  tasks[1].meta.upstream_total_results = 200;
+  tasks[1].records = [record("B", "W2"), record("C", "W3")];
+  assert.deepEqual(estimateFieldUnion(tasks, 3), {
+    estimate: 225,
+    method: "sample_overlap_adjusted_union",
+    measured_queries: 2,
+    total_search_queries: 2,
+    summed_upstream_results: 300,
+    observed_sample_multiplicity: 1.3333,
+  });
 });

@@ -16,6 +16,7 @@ import {
   mkdirSync,
   readFileSync,
   readdirSync,
+  statSync,
   writeFileSync,
 } from "node:fs";
 import { basename, join } from "node:path";
@@ -47,6 +48,7 @@ import type {
   Mechanism,
   PackMapFile,
   Proposal,
+  ReaderCoverageFile,
   Realization,
   RealizationCorpusFile,
   RealizationCorpusRecord,
@@ -61,6 +63,7 @@ const REALIZATION_CORPUS_DIR = join(ROOT, "corpora", "realizations");
 const PROPOSALS_DIR = join(ROOT, "proposals");
 const EXTRACTION_DIR = join(ROOT, "corpora", "extraction");
 const MANIFEST_FILE = join(EXTRACTION_DIR, "manifest.json");
+const READER_COVERAGE_FILE = join(EXTRACTION_DIR, "coverage.json");
 const QUOTE_FILE = join(ROOT, "quote.json");
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const ABSTRACT_LIMIT = 6000;
@@ -131,6 +134,48 @@ export interface ExtractionStats {
   held_low_confidence: number;
   dropped_volume_cap: number;
   dropped_volume_cap_high_confidence: number;
+}
+
+export function mergeReaderCoverage(
+  previous: ReaderCoverageFile | null,
+  mode: ExtractionMode,
+  processed: ReadonlyMap<string, readonly string[]>,
+  processedAt: string,
+): ReaderCoverageFile {
+  const kind = mode === "realizations" ? "realization" : "evidence";
+  const mechanisms = structuredClone(previous?.mechanisms ?? {});
+  for (const [mechanismId, recordIds] of Array.from(processed.entries())) {
+    const mechanism = mechanisms[mechanismId] ?? {};
+    const prior = mechanism[kind];
+    mechanism[kind] = {
+      processed_record_ids: Array.from(
+        new Set([...(prior?.processed_record_ids ?? []), ...recordIds]),
+      ).sort(),
+      processed_at: processedAt,
+      modes: Array.from(new Set([...(prior?.modes ?? []), mode])).sort(),
+    };
+    mechanisms[mechanismId] = mechanism;
+  }
+  return {
+    version: "1.0.0",
+    updated_at: processedAt,
+    mechanisms,
+  };
+}
+
+function writeReaderCoverage(
+  mode: ExtractionMode,
+  processed: ReadonlyMap<string, readonly string[]>,
+  processedAt: string,
+): void {
+  mkdirSync(EXTRACTION_DIR, { recursive: true });
+  const previous = existsSync(READER_COVERAGE_FILE)
+    ? readJson<ReaderCoverageFile>(READER_COVERAGE_FILE)
+    : null;
+  writeFileSync(
+    READER_COVERAGE_FILE,
+    json(mergeReaderCoverage(previous, mode, processed, processedAt)),
+  );
 }
 
 export function extractionSummaryParams(
@@ -1059,15 +1104,29 @@ function writeManifest(
     ? readJson<CorpusManifest>(MANIFEST_FILE)
     : null;
   const history = [run, ...(previous?.run_history ?? [])].slice(0, 20);
+  const coverage = readJson<ReaderCoverageFile>(READER_COVERAGE_FILE);
+  const coveredRecords = Object.values(coverage.mechanisms).reduce(
+    (sum, mechanism) =>
+      sum +
+      (mechanism.evidence?.processed_record_ids.length ?? 0) +
+      (mechanism.realization?.processed_record_ids.length ?? 0),
+    0,
+  );
   writeFileSync(
     MANIFEST_FILE,
     json({
       source_id: "extraction",
       source_ids: [],
-      connector_version: "1.0.0",
+      connector_version: "1.1.0",
       last_run: run,
       run_history: history,
-      data_files: [],
+      data_files: [
+        {
+          path: "coverage.json",
+          records: coveredRecords,
+          bytes: statSync(READER_COVERAGE_FILE).size,
+        },
+      ],
     }),
   );
 }
@@ -1108,6 +1167,7 @@ export async function runExtraction(args: {
   const proposals: Proposal[] = [];
   const existing = existingMatches();
   const pendingWrites = new Map<string, Proposal>();
+  const processedByMechanism = new Map<string, string[]>();
   const validate = proposalValidator();
   const runId = process.env.GITHUB_RUN_ID
     ? `github-actions-${process.env.GITHUB_RUN_ID}`
@@ -1117,6 +1177,10 @@ export async function runExtraction(args: {
     const corpus = corpusFor(args.mode, mechanismId);
     const records = eligibleRecords(corpus);
     if (records.length === 0) continue;
+    processedByMechanism.set(
+      mechanismId,
+      records.map((record) => record.record_id),
+    );
     const candidates: DraftItem[] = [];
     for (const batch of batches(records, args.config.limits.records_per_batch)) {
       candidates.push(
@@ -1261,6 +1325,11 @@ export async function runExtraction(args: {
     mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, `${proposal.id}.json`), json(proposal));
   }
+  writeReaderCoverage(
+    args.mode,
+    processedByMechanism,
+    startedAt.toISOString(),
+  );
   writeManifest(
     args.mode,
     args.scope,

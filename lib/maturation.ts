@@ -356,6 +356,8 @@ export interface StatusCounts {
    * gaps, and the owner sees what to author vs what to harvest.
    */
   authoring: number;
+  /** Cells waiting on Actions-only extraction and owner review. */
+  pipeline: number;
   /**
    * Cells counted as evidence-exhausted (D-059) instead of red/amber — thin
    * literature the loop stopped harvesting. Kept apart from red so the cockpit
@@ -393,6 +395,7 @@ function emptyCounts(): StatusCounts {
     amber: 0,
     green: 0,
     authoring: 0,
+    pipeline: 0,
     exhausted: 0,
     total: 0,
     pctGreen: 0,
@@ -416,6 +419,9 @@ function tally(cells: SufficiencyCell[]): StatusCounts {
         break;
       case "authoring":
         counts.authoring += 1;
+        break;
+      case "pipeline":
+        counts.pipeline += 1;
         break;
       case "green":
         counts.green += 1;

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ventora.dev/motivation-engine/reader-coverage.schema.json",
+  "title": "Extraction reader coverage ledger",
+  "type": "object",
+  "properties": {
+    "version": { "const": "1.0.0" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "mechanisms": {
+      "type": "object",
+      "patternProperties": {
+        "^[A-Z]{2}-\\d{2}$": {
+          "type": "object",
+          "properties": {
+            "evidence": { "$ref": "#/$defs/corpusCoverage" },
+            "realization": { "$ref": "#/$defs/corpusCoverage" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["version", "updated_at", "mechanisms"],
+  "additionalProperties": false,
+  "$defs": {
+    "corpusCoverage": {
+      "type": "object",
+      "properties": {
+        "processed_record_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(?:cr|rr)_[a-f0-9]{24}$"
+          }
+        },
+        "processed_at": { "type": "string", "format": "date-time" },
+        "modes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["effects", "realizations", "interactions", "dissent"]
+          }
+        }
+      },
+      "required": ["processed_record_ids", "processed_at", "modes"],
+      "additionalProperties": false
+    }
+  }
+}
