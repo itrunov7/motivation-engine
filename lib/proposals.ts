@@ -6,6 +6,7 @@ import type {
   DecisionsLog,
   Dossier,
   Effect,
+  EvidenceCorpusFile,
   InteractionRecord,
   Mechanism,
   Proposal,
@@ -13,6 +14,7 @@ import type {
   Segment,
   SegmentsFile,
 } from "./types";
+export { isActionableProposal, PROPOSAL_STATUS_META } from "./proposal-meta";
 
 export const PROPOSAL_TYPES = [
   "effect",
@@ -38,7 +40,7 @@ export interface FileMutation {
 
 export interface ProposalDecisionRequest {
   proposalPath: string;
-  action: "approve" | "reject" | "edit";
+  action: "approve" | "reject" | "edit" | "edit_approve";
   decidedBy: string;
   decidedAt: string;
   /** Required for rejection; optional audit note for approval. */
@@ -58,10 +60,42 @@ export interface PreparedProposalTransaction {
   mutations: FileMutation[];
 }
 
+export interface BatchProposalDecisionRequest {
+  proposalPaths: string[];
+  action: "approve" | "reject";
+  decidedBy: string;
+  decidedAt: string;
+  reason?: string;
+  schemaRoot?: string;
+}
+
+export interface BatchProposalReport {
+  proposalPath: string;
+  proposalId: string | null;
+  outcome: "approved" | "rejected" | "invalid";
+  error?: string;
+}
+
+export interface PreparedBatchProposalTransaction {
+  action: BatchProposalDecisionRequest["action"];
+  proposalIds: string[];
+  decisionId: string;
+  commitMessage: string;
+  mutations: FileMutation[];
+  reports: BatchProposalReport[];
+}
+
 export class ProposalValidationError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "ProposalValidationError";
+  }
+}
+
+export class BatchProposalValidationError extends ProposalValidationError {
+  constructor(readonly reports: BatchProposalReport[]) {
+    super("The batch was not committed because one or more proposals are invalid");
+    this.name = "BatchProposalValidationError";
   }
 }
 
@@ -203,6 +237,34 @@ function assertPayloadProvenance(proposal: Proposal): void {
           `Effect source DOI ${doi} is absent from proposal provenance`,
         );
       }
+    }
+  }
+}
+
+async function assertResolvableProvenance(
+  snapshot: RepositorySnapshot,
+  proposal: Proposal,
+): Promise<void> {
+  for (const item of proposal.provenance) {
+    if (!MECHANISM_ID.test(item.mechanism_id)) {
+      throw new ProposalValidationError(
+        `Provenance mechanism id is invalid: ${item.mechanism_id}`,
+      );
+    }
+    const path = `corpora/evidence/${item.mechanism_id}.json`;
+    const corpus = parseJson<EvidenceCorpusFile>(path, await requireText(snapshot, path));
+    const record = corpus.records.find(
+      (candidate) => candidate.record_id === item.corpus_record_id,
+    );
+    if (!record) {
+      throw new ProposalValidationError(
+        `Provenance record ${item.corpus_record_id} was not found in ${path}`,
+      );
+    }
+    if (record.title !== item.title || record.doi !== item.doi) {
+      throw new ProposalValidationError(
+        `Provenance metadata does not match corpus record ${item.corpus_record_id}`,
+      );
     }
   }
 }
@@ -520,10 +582,24 @@ function validateDecisionLog(log: DecisionsLog): void {
   }
 }
 
-export async function prepareProposalDecision(
-  snapshot: RepositorySnapshot,
+interface AppliedProposalDecision {
+  proposalId: string;
+  proposalType: Proposal["type"];
+  target: string;
+  actionPast: "approved" | "rejected" | "edited";
+}
+
+function actionPast(action: ProposalDecisionRequest["action"]): AppliedProposalDecision["actionPast"] {
+  if (action === "reject") return "rejected";
+  if (action === "edit") return "edited";
+  return "approved";
+}
+
+async function applyProposalDecision(
+  builder: MutationBuilder,
   request: ProposalDecisionRequest,
-): Promise<PreparedProposalTransaction> {
+  validators: Validators,
+): Promise<AppliedProposalDecision> {
   assertSafePath(request.proposalPath);
   assertIsoTimestamp(request.decidedAt);
   if (!request.decidedBy.trim()) {
@@ -533,12 +609,14 @@ export async function prepareProposalDecision(
   if (request.action === "reject" && !reason) {
     throw new ProposalValidationError("A non-empty reason is required to reject a proposal");
   }
-  if (request.action === "edit" && request.editedPayload === undefined) {
+  if (
+    (request.action === "edit" || request.action === "edit_approve") &&
+    request.editedPayload === undefined
+  ) {
     throw new ProposalValidationError("A complete payload is required to edit a proposal");
   }
 
-  const validators = await getValidators(request.schemaRoot ?? process.cwd());
-  const proposalText = await requireText(snapshot, request.proposalPath);
+  const proposalText = await requireText(builder, request.proposalPath);
   const proposal = parseJson<Proposal>(request.proposalPath, proposalText);
   assertSchema("proposal envelope/payload", validators.proposal, proposal);
   assertSafeComponent("proposal id", proposal.id);
@@ -552,14 +630,14 @@ export async function prepareProposalDecision(
   assertPayloadProvenance(proposal);
 
   const workingProposal =
-    request.action === "edit"
+    request.action === "edit" || request.action === "edit_approve"
       ? ({ ...proposal, payload: request.editedPayload } as Proposal)
       : proposal;
   assertSchema("edited proposal envelope/payload", validators.proposal, workingProposal);
   assertPayloadProvenance(workingProposal);
 
-  const builder = new MutationBuilder(snapshot);
-  if (request.action === "approve") {
+  if (request.action === "approve" || request.action === "edit_approve") {
+    await assertResolvableProvenance(builder, workingProposal);
     await projectApprovedProposal(builder, workingProposal, validators);
   }
 
@@ -574,7 +652,10 @@ export async function prepareProposalDecision(
         }
       : {
           ...workingProposal,
-          status: request.action === "approve" ? "approved" : "rejected",
+          status:
+            request.action === "approve" || request.action === "edit_approve"
+              ? "approved"
+              : "rejected",
           decided_by: request.decidedBy.trim(),
           decided_at: request.decidedAt,
           decision_note: reason ?? null,
@@ -582,6 +663,32 @@ export async function prepareProposalDecision(
   assertSchema("decided proposal", validators.proposal, decidedProposal);
   await builder.write(request.proposalPath, json(decidedProposal));
 
+  const past = actionPast(request.action);
+  if (request.action !== "approve" && request.action !== "edit_approve") {
+    const allowed = new Set([request.proposalPath]);
+    const artifactMutation = builder
+      .mutations()
+      .find((mutation) => !allowed.has(mutation.path));
+    if (artifactMutation) {
+      throw new ProposalValidationError(
+        `${past} proposal unexpectedly mutated artifact ${artifactMutation.path}`,
+      );
+    }
+  }
+  return {
+    proposalId: proposal.id,
+    proposalType: proposal.type,
+    target: proposal.target,
+    actionPast: past,
+  };
+}
+
+async function appendDecision(
+  builder: MutationBuilder,
+  decidedAt: string,
+  title: string,
+  body: string,
+): Promise<string> {
   const decisionsPath = "decisions/decisions.json";
   const decisions = parseJson<DecisionsLog>(
     decisionsPath,
@@ -589,50 +696,154 @@ export async function prepareProposalDecision(
   );
   validateDecisionLog(decisions);
   const decisionId = nextDecisionId(decisions);
-  const actionPast =
-    request.action === "approve"
-      ? "approved"
-      : request.action === "reject"
-        ? "rejected"
-        : "edited";
   const nextDecisions: DecisionsLog = {
     decisions: [
       ...decisions.decisions,
       {
         id: decisionId,
-        date: request.decidedAt.slice(0, 10),
-        title: `Proposal ${proposal.id} ${actionPast}`,
-        body:
-          `Owner ${request.decidedBy.trim()} ${actionPast} ${proposal.type} proposal ` +
-          `${proposal.id} for ${proposal.target}. ` +
-          (request.action === "approve"
-            ? "The validated proposal status and authoritative projection were committed atomically."
-            : request.action === "reject"
-              ? `No authoritative artifact was changed. Reason: ${reason}`
-              : "The validated proposal payload was updated for further review. No authoritative artifact was changed."),
+        date: decidedAt.slice(0, 10),
+        title,
+        body,
         area: "data",
       },
     ],
   };
   validateDecisionLog(nextDecisions);
   await builder.write(decisionsPath, json(nextDecisions));
+  return decisionId;
+}
+
+export async function prepareProposalPreview(
+  snapshot: RepositorySnapshot,
+  proposalPath: string,
+  editedPayload?: unknown,
+  schemaRoot = process.cwd(),
+): Promise<FileMutation[]> {
+  assertSafePath(proposalPath);
+  const validators = await getValidators(schemaRoot);
+  const proposal = parseJson<Proposal>(proposalPath, await requireText(snapshot, proposalPath));
+  assertSchema("proposal envelope/payload", validators.proposal, proposal);
+  const working =
+    editedPayload === undefined ? proposal : ({ ...proposal, payload: editedPayload } as Proposal);
+  assertSchema("preview proposal envelope/payload", validators.proposal, working);
+  assertPayloadProvenance(working);
+  await assertResolvableProvenance(snapshot, working);
+  const builder = new MutationBuilder(snapshot);
+  await projectApprovedProposal(builder, working, validators);
+  return builder.mutations();
+}
+
+export async function prepareProposalDecision(
+  snapshot: RepositorySnapshot,
+  request: ProposalDecisionRequest,
+): Promise<PreparedProposalTransaction> {
+  const validators = await getValidators(request.schemaRoot ?? process.cwd());
+  const builder = new MutationBuilder(snapshot);
+  const applied = await applyProposalDecision(builder, request, validators);
+  const reason = request.reason?.trim();
+  const decisionId = await appendDecision(
+    builder,
+    request.decidedAt,
+    `Proposal ${applied.proposalId} ${applied.actionPast}`,
+    `Owner ${request.decidedBy.trim()} ${applied.actionPast} ${applied.proposalType} proposal ` +
+      `${applied.proposalId} for ${applied.target}. ` +
+      (applied.actionPast === "approved"
+        ? "The validated proposal status and authoritative projection were committed atomically."
+        : applied.actionPast === "rejected"
+          ? `No authoritative artifact was changed. Reason: ${reason}`
+          : "The validated proposal payload was updated for further review. No authoritative artifact was changed."),
+  );
 
   const mutations = builder.mutations();
-  if (request.action !== "approve") {
-    const allowed = new Set([request.proposalPath, decisionsPath]);
-    const artifactMutation = mutations.find((mutation) => !allowed.has(mutation.path));
-    if (artifactMutation) {
-      throw new ProposalValidationError(
-        `${actionPast} proposal unexpectedly mutated artifact ${artifactMutation.path}`,
-      );
-    }
-  }
   return {
     action: request.action,
-    proposalId: proposal.id,
-    proposalType: proposal.type,
+    proposalId: applied.proposalId,
+    proposalType: applied.proposalType,
     decisionId,
-    commitMessage: `data: ${actionPast} ${proposal.type} proposal ${proposal.id}`,
+    commitMessage: `data: ${applied.actionPast} ${applied.proposalType} proposal ${applied.proposalId}`,
     mutations,
+  };
+}
+
+export async function prepareBatchProposalDecision(
+  snapshot: RepositorySnapshot,
+  request: BatchProposalDecisionRequest,
+): Promise<PreparedBatchProposalTransaction> {
+  assertIsoTimestamp(request.decidedAt);
+  if (!request.decidedBy.trim()) throw new ProposalValidationError("decidedBy is required");
+  if (request.proposalPaths.length === 0) {
+    throw new ProposalValidationError("Select at least one proposal");
+  }
+  const uniquePaths = Array.from(new Set(request.proposalPaths)).sort();
+  if (uniquePaths.length !== request.proposalPaths.length) {
+    throw new ProposalValidationError("A batch cannot contain duplicate proposal paths");
+  }
+  if (request.action === "reject" && !request.reason?.trim()) {
+    throw new ProposalValidationError("A non-empty reason is required to reject a batch");
+  }
+
+  const validators = await getValidators(request.schemaRoot ?? process.cwd());
+  const builder = new MutationBuilder(snapshot);
+  const reports: BatchProposalReport[] = [];
+  const appliedItems: AppliedProposalDecision[] = [];
+
+  for (const proposalPath of uniquePaths) {
+    const child = new MutationBuilder(builder);
+    try {
+      const applied = await applyProposalDecision(
+        child,
+        {
+          proposalPath,
+          action: request.action,
+          decidedBy: request.decidedBy,
+          decidedAt: request.decidedAt,
+          reason: request.reason,
+          schemaRoot: request.schemaRoot,
+        },
+        validators,
+      );
+      for (const mutation of child.mutations()) {
+        if (mutation.content === null) await builder.delete(mutation.path);
+        else await builder.write(mutation.path, mutation.content);
+      }
+      appliedItems.push(applied);
+      reports.push({
+        proposalPath,
+        proposalId: applied.proposalId,
+        outcome: request.action === "approve" ? "approved" : "rejected",
+      });
+    } catch (error) {
+      reports.push({
+        proposalPath,
+        proposalId: null,
+        outcome: "invalid",
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
+  if (reports.some((report) => report.outcome === "invalid")) {
+    throw new BatchProposalValidationError(reports);
+  }
+
+  const enumeration = appliedItems
+    .map((item) => `${item.proposalId}: ${item.actionPast}`)
+    .join("; ");
+  const decisionId = await appendDecision(
+    builder,
+    request.decidedAt,
+    `Batch ${actionPast(request.action)} ${appliedItems.length} proposals`,
+    `Owner ${request.decidedBy.trim()} completed one atomic batch. Outcomes: ${enumeration}. ` +
+      (request.action === "approve"
+        ? "Every proposal and projected artifact was validated before the single commit."
+        : `No authoritative artifact was changed. Shared reason: ${request.reason?.trim()}`),
+  );
+  return {
+    action: request.action,
+    proposalIds: appliedItems.map((item) => item.proposalId),
+    decisionId,
+    commitMessage: `data: batch ${actionPast(request.action)} — ${enumeration}`,
+    mutations: builder.mutations(),
+    reports,
   };
 }

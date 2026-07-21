@@ -153,6 +153,7 @@ function topInCategory(
     })
     .slice(0, top)
     .map((r) => ({
+      record_id: r.record_id,
       title: r.title,
       authors: formatAuthors(r.authors),
       year: r.year,
@@ -213,7 +214,7 @@ function renderEntry(e: CorpusDigestEntry): string {
   const cross = e.categories.length > 1 ? ` · also: ${e.categories.join(", ")}` : "";
   const angles = e.search_angles.length > 0 ? ` · angles: ${e.search_angles.join(", ")}` : "";
   const src = e.source_api !== "openalex" && e.source_api !== "semantic-scholar" ? ` · **${e.source_api}**` : "";
-  return `- **${e.title}** — ${e.authors} (${year})${venue} · ${cites}${doi}${src}${cross}${angles}`;
+  return `- **${e.title}** — ${e.authors} (${year})${venue} · ${cites}${doi}${src}${cross}${angles} · record:${e.record_id}`;
 }
 
 function renderMarkdown(d: CorpusDigest, top: number): string {

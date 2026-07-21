@@ -58,7 +58,21 @@ import type {
   RunQuote as WriterRunQuote,
 } from "./connectors/types";
 import { CONNECTORS } from "./connectors";
-import type { BenchmarkFile, BenchmarkMetric, CorpusManifest, HeartbeatFile, OpsBudget, OpsConnectorConfig, PackMapElement, RunQuote, Segment, SegmentCandidate } from "../lib/types";
+import { deriveCorpusRecordId, CORPUS_RECORD_ID_PATTERN } from "../lib/corpus-record-id";
+import type {
+  BenchmarkFile,
+  BenchmarkMetric,
+  CorpusManifest,
+  EvidenceCorpusFile,
+  HeartbeatFile,
+  KnowledgeProvenanceItem,
+  OpsBudget,
+  OpsConnectorConfig,
+  PackMapElement,
+  RunQuote,
+  Segment,
+  SegmentCandidate,
+} from "../lib/types";
 import {
   KNOWN_CONNECTOR_IDS,
   OPS_PATHS,
@@ -1155,9 +1169,27 @@ function main(): void {
   for (const file of evidenceFiles) {
     const data = readJson(file);
     if (data === undefined) continue;
+    const corpus = data as EvidenceCorpusFile;
+    const recordIds = new Set<string>();
+    for (const record of corpus.records ?? []) {
+      if (!CORPUS_RECORD_ID_PATTERN.test(record.record_id ?? "")) {
+        fail(file, `record "${record.title}" has no valid stable record_id`);
+        continue;
+      }
+      if (recordIds.has(record.record_id)) {
+        fail(file, `duplicate record_id "${record.record_id}"`);
+      }
+      recordIds.add(record.record_id);
+      const expectedId = deriveCorpusRecordId(record);
+      if (record.record_id !== expectedId) {
+        fail(
+          file,
+          `record_id "${record.record_id}" does not match deterministic id "${expectedId}"`,
+        );
+      }
+    }
     const report = (data as { diversity_report?: unknown }).diversity_report;
-    if (report === undefined) continue;
-    if (validateAgainst(validateDiversity, file, report)) {
+    if (report !== undefined && validateAgainst(validateDiversity, file, report)) {
       console.log(`  ✓ ${rel(file)} valid (diversity report, D-058)`);
     }
   }
@@ -1683,7 +1715,7 @@ function main(): void {
             decided_by?: string | null;
             decided_at?: string | null;
             decision_note?: string | null;
-            provenance?: unknown;
+            provenance?: KnowledgeProvenanceItem[];
             payload?: { provenance?: unknown };
           };
           const parts = relative(PATHS.proposalsDir, file).split(sep);
@@ -1727,6 +1759,35 @@ function main(): void {
           ) {
             fail(file, "effect payload provenance must exactly match envelope provenance");
             ok = false;
+          }
+          for (const source of proposal.provenance ?? []) {
+            const corpusPath = join(
+              PATHS.corporaDir,
+              "evidence",
+              `${source.mechanism_id}.json`,
+            );
+            if (!existsSync(corpusPath)) {
+              fail(file, `provenance corpus does not exist: ${source.mechanism_id}`);
+              ok = false;
+              continue;
+            }
+            const corpus = readJson(corpusPath) as EvidenceCorpusFile | undefined;
+            const record = corpus?.records.find(
+              (item) => item.record_id === source.corpus_record_id,
+            );
+            if (!record) {
+              fail(
+                file,
+                `provenance record ${source.corpus_record_id} is absent from ${source.mechanism_id}`,
+              );
+              ok = false;
+            } else if (record.title !== source.title || record.doi !== source.doi) {
+              fail(
+                file,
+                `provenance metadata does not match record ${source.corpus_record_id}`,
+              );
+              ok = false;
+            }
           }
           if (ok) console.log(`  ✓ ${rel(file)} valid (${proposal.status} proposal)`);
         }

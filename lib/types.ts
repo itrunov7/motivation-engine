@@ -222,6 +222,8 @@ export interface SeedStub {
 
 /** One harvested source locus grounding an effect or proposal. */
 export interface KnowledgeProvenanceItem {
+  /** Evidence corpus containing the cited record. */
+  mechanism_id: string;
   corpus_record_id: string;
   /** Null when the source record has no DOI. */
   doi: string | null;
@@ -560,6 +562,8 @@ export type CorpusSearchAngle =
 
 /** One harvested work in a corpus file. */
 export interface EvidenceCorpusRecord {
+  /** Stable deterministic id derived from DOI, or normalized title + year. */
+  record_id: string;
   title: string;
   authors: string[];
   year: number | null;
@@ -675,6 +679,7 @@ export interface EvidenceCorpusFile {
 
 /** One work as it appears in a digest category list. */
 export interface CorpusDigestEntry {
+  record_id: string;
   title: string;
   /** First author + "et al." when there are more. */
   authors: string;

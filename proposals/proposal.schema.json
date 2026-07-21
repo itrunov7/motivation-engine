@@ -159,7 +159,8 @@
     "provenanceItem": {
       "type": "object",
       "properties": {
-        "corpus_record_id": { "type": "string", "minLength": 1 },
+        "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+        "corpus_record_id": { "type": "string", "pattern": "^cr_[a-f0-9]{24}$" },
         "doi": {
           "anyOf": [
             { "$ref": "#/$defs/doi" },
@@ -169,7 +170,7 @@
         "title": { "type": "string", "minLength": 1 },
         "quote_or_locus": { "type": "string", "minLength": 1 }
       },
-      "required": ["corpus_record_id", "doi", "title", "quote_or_locus"],
+      "required": ["mechanism_id", "corpus_record_id", "doi", "title", "quote_or_locus"],
       "additionalProperties": false
     },
     "artifactType": {

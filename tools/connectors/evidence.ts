@@ -84,6 +84,7 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { assignCorpusRecordIds, normalizeCorpusDoi } from "../../lib/corpus-record-id";
 import {
   EVIDENCE_CATEGORIES,
   type CategoryCounts,
@@ -219,6 +220,8 @@ const CONTRAST_S2_COUNT = CONTRAST_ANGLES.length - CONTRAST_OPENALEX_COUNT;
 const LOW_NOVELTY_KNOWN_SHARE = 0.8;
 
 interface EvidenceRecord {
+  /** Assigned after final deduplication, immediately before the corpus is written. */
+  record_id?: string;
   title: string;
   authors: string[];
   year: number | null;
@@ -410,13 +413,7 @@ function normalizeOpenAlexId(raw: string | null | undefined): string | null {
 
 /** "https://doi.org/10.1037/…" / "DOI:10.1037/…" → "10.1037/…" (lowercase). */
 function normalizeDoi(raw: string | null | undefined): string | null {
-  if (!raw) return null;
-  const doi = raw
-    .trim()
-    .replace(/^https?:\/\/(dx\.)?doi\.org\//i, "")
-    .replace(/^doi:/i, "")
-    .toLowerCase();
-  return doi.startsWith("10.") ? doi : null;
+  return normalizeCorpusDoi(raw);
 }
 
 /** Normalized title: lowercase, punctuation and asterisks stripped. */
@@ -1230,7 +1227,7 @@ export const evidenceConnector: Connector = {
   id: "evidence",
   sourceId: "evidence",
   sourceIds: ["openalex", "semantic-scholar"],
-  connectorVersion: "2.4.0",
+  connectorVersion: "2.5.0",
   description:
     "Evidence harvester: OpenAlex + Semantic Scholar literature for one mechanism → {mechanism_id}.json. Each term fans out across viewpoints (canon, recent, and five contrast angles) alternating both APIs for diversity, with a dedup-aware novelty gate and a diversity_report per harvest (D-058). Terms from the record's evidence_terms; owner pins merged from pinned_evidence; review-reference snowballing and a category checklist verify completeness structurally (D-019). Fetch and structure only.",
 
@@ -1411,6 +1408,7 @@ export const evidenceConnector: Connector = {
       (a, b) => (b.citations ?? -1) - (a.citations ?? -1) || a.title.localeCompare(b.title),
     );
 
+    const recordsWithIds = assignCorpusRecordIds(records);
     const file: EvidenceFile = {
       mechanism_id: mechanismId as string,
       fetched_at: new Date().toISOString(),
@@ -1420,7 +1418,7 @@ export const evidenceConnector: Connector = {
       coverage_report: coverageReport,
       category_counts: categoryCounts,
       diversity_report: diversityReport,
-      records,
+      records: recordsWithIds,
     };
 
     // Run warnings shared across both return paths (D-018/D-058): degradation
@@ -1435,29 +1433,29 @@ export const evidenceConnector: Connector = {
     // silently overwrite hard-won breadth with a weaker pull. Write to a side
     // file for review instead and flag the run; the existing corpus is kept.
     const existingCount = previousRecords?.length ?? null;
-    if (existingCount !== null && records.length < existingCount) {
+    if (existingCount !== null && recordsWithIds.length < existingCount) {
       const sideFile = `${mechanismId}.regression.json`;
       ctx.writeJson(sideFile, file);
       const message =
-        `regression suspected: re-harvest produced ${records.length} records vs ${existingCount} ` +
+        `regression suspected: re-harvest produced ${recordsWithIds.length} records vs ${existingCount} ` +
         `already in the corpus — corpus NOT overwritten; wrote ${sideFile} for review (D-038)`;
       ctx.log(`WARNING ${message}`);
       return {
         status: "partial",
-        recordsFetched: records.length,
-        files: [{ path: sideFile, records: records.length, categories: categoryCounts }],
+        recordsFetched: recordsWithIds.length,
+        files: [{ path: sideFile, records: recordsWithIds.length, categories: categoryCounts }],
         error: [message, ...failures].join(" · "),
         warnings: { regression_suspected: true, ...warnings },
       };
     }
 
     ctx.writeJson(fileName, file);
-    ctx.log(`wrote ${records.length} deduplicated records to ${fileName}`);
+    ctx.log(`wrote ${recordsWithIds.length} deduplicated records to ${fileName}`);
 
     return {
       status: failures.length > 0 ? "partial" : "success",
-      recordsFetched: records.length,
-      files: [{ path: fileName, records: records.length, categories: categoryCounts }],
+      recordsFetched: recordsWithIds.length,
+      files: [{ path: fileName, records: recordsWithIds.length, categories: categoryCounts }],
       ...(failures.length > 0 ? { error: failures.join(" · ") } : {}),
       ...(Object.keys(warnings).length > 0 ? { warnings } : {}),
     };

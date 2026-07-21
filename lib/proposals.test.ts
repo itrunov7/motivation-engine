@@ -10,16 +10,27 @@ import {
   LocalRepositorySnapshot,
 } from "./local-transaction";
 import { commitGitDataTransaction, type GithubOpsEnv } from "./github";
-import { prepareProposalDecision, type RepositorySnapshot } from "./proposals";
+import { deriveCorpusRecordId } from "./corpus-record-id";
+import {
+  BatchProposalValidationError,
+  prepareBatchProposalDecision,
+  prepareProposalDecision,
+  type RepositorySnapshot,
+} from "./proposals";
 import type { Mechanism, ProposalType, SegmentsFile } from "./types";
 
 const ROOT = join(__dirname, "..");
 const decidedAt = "2026-07-20T18:00:00.000Z";
 const provenance = [
   {
-    corpus_record_id: "test-record",
+    mechanism_id: "LA-01",
+    corpus_record_id: deriveCorpusRecordId({
+      doi: "10.2307/1914185",
+      title: "Prospect Theory: An Analysis of Decision under Risk",
+      year: 1979,
+    }),
     doi: "10.2307/1914185",
-    title: "Test source",
+    title: "Prospect Theory: An Analysis of Decision under Risk",
     quote_or_locus: "Test locus",
   },
 ];
@@ -89,6 +100,7 @@ async function temporaryRepository(): Promise<string> {
     "proposals",
     "decisions",
     "segments",
+    "corpora",
   ]) {
     await cp(join(ROOT, path), join(root, path), { recursive: true });
   }
@@ -235,6 +247,97 @@ test("approves a hand-made effect proposal into authoritative files", async () =
     assert(mechanism.effect_refs?.includes("hand-made-effect"));
     assert.equal(decided.status, "approved");
     assert.equal(afterDecisions.decisions.length, beforeDecisions.decisions.length + 1);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("prepares one atomic batch with one enumerated decision entry", async () => {
+  const root = await temporaryRepository();
+  const paths = [
+    "proposals/dossier_section/batch-one.json",
+    "proposals/dossier_section/batch-two.json",
+  ];
+  try {
+    await mkdir(join(root, "proposals/dossier_section"), { recursive: true });
+    await writeFile(
+      join(root, paths[0]),
+      `${JSON.stringify(envelope("dossier_section", "batch-one", "LA-01", {
+        field: "notes",
+        value: "Batch fixture one",
+      }), null, 2)}\n`,
+    );
+    await writeFile(
+      join(root, paths[1]),
+      `${JSON.stringify(envelope("dossier_section", "batch-two", "ST-09", {
+        field: "notes",
+        value: "Batch fixture two",
+      }), null, 2)}\n`,
+    );
+    const transaction = await prepareBatchProposalDecision(
+      new LocalRepositorySnapshot(root),
+      {
+        proposalPaths: paths,
+        action: "approve",
+        decidedBy: "test-owner",
+        decidedAt,
+        schemaRoot: root,
+      },
+    );
+    assert.deepEqual(transaction.proposalIds, ["batch-one", "batch-two"]);
+    assert.match(transaction.commitMessage, /batch-one: approved/);
+    assert.match(transaction.commitMessage, /batch-two: approved/);
+    const decisionsMutation = transaction.mutations.find(
+      (mutation) => mutation.path === "decisions/decisions.json",
+    );
+    assert(decisionsMutation?.content);
+    const decisions = JSON.parse(decisionsMutation.content) as {
+      decisions: { id: string; body: string }[];
+    };
+    const entry = decisions.decisions.at(-1);
+    assert.equal(entry?.id, transaction.decisionId);
+    assert.match(entry?.body ?? "", /batch-one: approved/);
+    assert.match(entry?.body ?? "", /batch-two: approved/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("invalid batch returns per-item reports and no transaction", async () => {
+  const root = await temporaryRepository();
+  const validPath = "proposals/dossier_section/batch-valid.json";
+  const invalidPath = "proposals/dossier_section/batch-invalid.json";
+  try {
+    await mkdir(join(root, "proposals/dossier_section"), { recursive: true });
+    await writeFile(
+      join(root, validPath),
+      `${JSON.stringify(envelope("dossier_section", "batch-valid", "LA-01", {
+        field: "notes",
+        value: "Valid",
+      }), null, 2)}\n`,
+    );
+    await writeFile(
+      join(root, invalidPath),
+      `${JSON.stringify(envelope("dossier_section", "batch-invalid", "LA-01", {
+        field: "not_a_dossier_field",
+        value: "Invalid",
+      }), null, 2)}\n`,
+    );
+    await assert.rejects(
+      prepareBatchProposalDecision(new LocalRepositorySnapshot(root), {
+        proposalPaths: [validPath, invalidPath],
+        action: "approve",
+        decidedBy: "test-owner",
+        decidedAt,
+        schemaRoot: root,
+      }),
+      (error: unknown) => {
+        assert(error instanceof BatchProposalValidationError);
+        assert.equal(error.reports.length, 2);
+        assert(error.reports.some((report) => report.outcome === "invalid"));
+        return true;
+      },
+    );
   } finally {
     await rm(root, { recursive: true, force: true });
   }

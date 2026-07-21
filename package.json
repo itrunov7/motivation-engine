@@ -15,12 +15,13 @@
     "maturation-log": "tsx tools/maturation-log.ts",
     "harvest-history": "tsx tools/harvest-history.ts",
     "digest": "tsx tools/corpus-digest.ts",
+    "backfill:corpus-record-ids": "tsx tools/backfill-corpus-record-ids.ts",
     "connector": "tsx tools/run-connector.ts",
     "ingest": "tsx tools/ingest-report.ts",
     "health": "tsx tools/health-check.ts",
     "ops-gate": "tsx tools/ops-gate.ts",
     "proposal": "tsx tools/proposal.ts",
-    "test:proposals": "tsx --test lib/proposals.test.ts"
+    "test:proposals": "tsx --test lib/corpus-record-id.test.ts lib/proposals.test.ts"
   },
   "dependencies": {
     "ajv": "^8.20.0",

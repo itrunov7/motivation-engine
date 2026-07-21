@@ -180,7 +180,7 @@ export default function Overview() {
         <h2 className="font-mono text-xs uppercase tracking-widest text-[#7C93A8]">
           live counts — pulled from files
         </h2>
-        <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <CountPanel
             title="Mechanisms by lifecycle"
             rows={counts.mechanismsByLifecycle.map((r) => ({
@@ -204,6 +204,15 @@ export default function Overview() {
             rows={[{ label: "logged", value: counts.decisionsCount }]}
             footer="/decisions/decisions.json"
             href="/decisions"
+          />
+          <CountPanel
+            title="Proposal review"
+            rows={counts.proposalsByStatus.map((row) => ({
+              label: row.label,
+              value: row.count,
+            }))}
+            footer={`${counts.proposalsTotal} total · /proposals/{type}`}
+            href="/review"
           />
         </div>
       </section>

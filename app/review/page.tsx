@@ -1,22 +1,34 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import Link from "next/link";
+import { getRepoFile, listRepoDirectory, readGithubOpsEnv, type GithubOpsEnv } from "@/lib/github";
 import {
-  getRepoFile,
-  listRepoDirectory,
-  readGithubOpsEnv,
-} from "@/lib/github";
-import { PROPOSAL_TYPES } from "@/lib/proposals";
-import type { Proposal } from "@/lib/types";
+  isActionableProposal,
+  prepareProposalPreview,
+  PROPOSAL_TYPES,
+  type RepositorySnapshot,
+} from "@/lib/proposals";
+import type { Proposal, ProposalType } from "@/lib/types";
 import ReviewClient, { type ReviewProposal } from "./review-client";
 
-export const metadata = {
-  title: "Proposal Review — Motivation Engine",
-};
-
+export const metadata = { title: "Proposal Review — Motivation Engine" };
 export const dynamic = "force-dynamic";
 
-function localProposals(): ReviewProposal[] {
+class LocalSnapshot implements RepositorySnapshot {
+  async read(path: string): Promise<string | null> {
+    const file = join(process.cwd(), path);
+    return existsSync(file) ? readFileSync(file, "utf8") : null;
+  }
+}
+
+class GithubSnapshot implements RepositorySnapshot {
+  constructor(private readonly env: GithubOpsEnv) {}
+  async read(path: string): Promise<string | null> {
+    return (await getRepoFile(this.env, path))?.text ?? null;
+  }
+}
+
+function localProposalPaths(): string[] {
   const root = join(process.cwd(), "proposals");
   if (!existsSync(root)) return [];
   return PROPOSAL_TYPES.flatMap((type) => {
@@ -25,24 +37,57 @@ function localProposals(): ReviewProposal[] {
     return readdirSync(directory)
       .filter((name) => name.endsWith(".json"))
       .sort()
-      .map((name) => {
-        const path = `proposals/${type}/${name}`;
-        return {
-          path,
-          proposal: JSON.parse(readFileSync(join(directory, name), "utf8")) as Proposal,
-        };
-      });
+      .map((name) => `proposals/${type}/${name}`);
   });
 }
 
-async function liveProposals(): Promise<{
+async function enrich(
+  snapshot: RepositorySnapshot,
+  paths: string[],
+): Promise<ReviewProposal[]> {
+  return Promise.all(
+    paths.map(async (path) => {
+      const text = await snapshot.read(path);
+      if (!text) throw new Error(`Proposal disappeared while loading: ${path}`);
+      const proposal = JSON.parse(text) as Proposal;
+      if (!isActionableProposal(proposal)) return { path, proposal, preview: [] };
+      try {
+        const preview = await prepareProposalPreview(snapshot, path);
+        return {
+          path,
+          proposal,
+          preview: preview.map((mutation) => ({
+            path: mutation.path,
+            before: mutation.expectedContent,
+            after: mutation.content,
+          })),
+        };
+      } catch (previewError) {
+        return {
+          path,
+          proposal,
+          preview: [],
+          previewError:
+            previewError instanceof Error ? previewError.message : String(previewError),
+        };
+      }
+    }),
+  );
+}
+
+async function loadQueue(): Promise<{
   proposals: ReviewProposal[];
   writeEnabled: boolean;
   error: string | null;
 }> {
   const env = readGithubOpsEnv();
   if (!env) {
-    return { proposals: localProposals(), writeEnabled: false, error: null };
+    const snapshot = new LocalSnapshot();
+    return {
+      proposals: await enrich(snapshot, localProposalPaths()),
+      writeEnabled: false,
+      error: null,
+    };
   }
   try {
     const directories = await Promise.all(
@@ -53,93 +98,144 @@ async function liveProposals(): Promise<{
       .filter((entry) => entry.type === "file" && entry.name.endsWith(".json"))
       .map((entry) => entry.path)
       .sort();
-    const files = await Promise.all(paths.map((path) => getRepoFile(env, path)));
     return {
-      proposals: files.flatMap((file, index) =>
-        file
-          ? [
-              {
-                path: paths[index],
-                proposal: JSON.parse(file.text) as Proposal,
-              },
-            ]
-          : [],
-      ),
+      proposals: await enrich(new GithubSnapshot(env), paths),
       writeEnabled: true,
       error: null,
     };
-  } catch (error) {
+  } catch (loadError) {
+    const snapshot = new LocalSnapshot();
     return {
-      proposals: localProposals(),
+      proposals: await enrich(snapshot, localProposalPaths()),
       writeEnabled: false,
-      error: error instanceof Error ? error.message : String(error),
+      error: loadError instanceof Error ? loadError.message : String(loadError),
     };
   }
 }
 
-export default async function ReviewPage() {
-  const { proposals, writeEnabled, error } = await liveProposals();
-  const ordered = [...proposals].sort(
-    (left, right) =>
-      Number(right.proposal.status === "pending" || right.proposal.status === "edited") -
-        Number(left.proposal.status === "pending" || left.proposal.status === "edited") ||
-      right.proposal.proposed_at.localeCompare(left.proposal.proposed_at),
-  );
+type ConfidenceFilter = "high" | "medium" | "low";
+function confidenceMatches(value: number, filter?: string): boolean {
+  if (filter === "high") return value >= 0.8;
+  if (filter === "medium") return value >= 0.5 && value < 0.8;
+  if (filter === "low") return value < 0.5;
+  return true;
+}
+
+function filterHref(
+  current: { type?: string; target?: string; confidence?: string },
+  key: "type" | "target" | "confidence",
+  value: string,
+): string {
+  const params = new URLSearchParams();
+  for (const [name, selected] of Object.entries(current)) {
+    if (selected && name !== key) params.set(name, selected);
+  }
+  if (current[key] !== value) params.set(key, value);
+  const query = params.toString();
+  return query ? `/review?${query}` : "/review";
+}
+
+export default async function ReviewPage({
+  searchParams,
+}: {
+  searchParams?: { type?: string; target?: string; confidence?: string };
+}) {
+  const { proposals, writeEnabled, error } = await loadQueue();
+  const filters = searchParams ?? {};
+  const validType = PROPOSAL_TYPES.includes(filters.type as ProposalType)
+    ? filters.type
+    : undefined;
+  const validConfidence = (["high", "medium", "low"] as ConfidenceFilter[]).includes(
+    filters.confidence as ConfidenceFilter,
+  )
+    ? filters.confidence
+    : undefined;
+  const targets = Array.from(new Set(proposals.map((item) => item.proposal.target))).sort();
+  const ordered = proposals
+    .filter(
+      (item) =>
+        (!validType || item.proposal.type === validType) &&
+        (!filters.target || item.proposal.target === filters.target) &&
+        confidenceMatches(item.proposal.confidence, validConfidence),
+    )
+    .sort(
+      (left, right) =>
+        Number(isActionableProposal(right.proposal)) -
+          Number(isActionableProposal(left.proposal)) ||
+        left.proposal.type.localeCompare(right.proposal.type) ||
+        left.proposal.target.localeCompare(right.proposal.target) ||
+        right.proposal.proposed_at.localeCompare(left.proposal.proposed_at),
+    );
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-10">
+    <main className="mx-auto max-w-6xl px-6 py-10">
       <header>
-        <Link
-          href="/"
-          className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8] hover:text-[#34D399]"
-        >
+        <Link href="/" className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8] hover:text-[#34D399]">
           ← control center
         </Link>
         <div className="mt-2 flex flex-wrap items-baseline justify-between gap-3">
           <div>
-            <h1 className="font-display text-2xl font-semibold tracking-tight text-[#E6EFE8]">
-              Proposal review
-            </h1>
+            <h1 className="font-display text-2xl font-semibold tracking-tight text-[#E6EFE8]">Proposal review</h1>
             <p className="mt-1 max-w-3xl text-sm leading-relaxed text-[#8CA495]">
-              The only path from extracted claims to authoritative knowledge.
-              Approval validates the proposal and resulting artifact, then commits
-              the artifact, proposal status, and decision trail together.
+              Check the proposed change against its source, then approve or reject it.
+              Nothing enters the knowledge layer before this review.
             </p>
           </div>
           <span className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8]">
-            {ordered.length} proposal{ordered.length === 1 ? "" : "s"}
+            {ordered.length} of {proposals.length} shown
           </span>
         </div>
       </header>
 
       {!writeEnabled && (
         <div className="mt-6 rounded-lg border border-[#E4B54E]/30 bg-[#151F1A] p-4 text-sm text-[#8CA495]">
-          Review is read-only. Configure GH_OPS_TOKEN and GH_OPS_REPO to approve
-          from the Control Center.
+          Review is read-only. Configure GH_OPS_TOKEN and GH_OPS_REPO to make decisions here.
+        </div>
+      )}
+      {error && (
+        <div className="mt-4 rounded-lg border border-[#F87171]/30 bg-[#151F1A] p-4 text-sm text-[#F87171]">
+          Live proposals could not be loaded: {error}. Showing the deployed snapshot.
         </div>
       )}
 
-      {error && (
-        <div className="mt-4 rounded-lg border border-[#F87171]/30 bg-[#151F1A] p-4 text-sm text-[#F87171]">
-          Live GitHub proposals could not be loaded: {error}. Showing the deployed
-          repository snapshot.
-        </div>
-      )}
+      <section className="mt-6 space-y-3 rounded-lg border border-[#243329] bg-[#151F1A] p-4">
+        {[
+          { key: "type" as const, label: "Kind", values: PROPOSAL_TYPES },
+          { key: "target" as const, label: "Target", values: targets },
+          { key: "confidence" as const, label: "Confidence", values: ["high", "medium", "low"] },
+        ].map((group) => (
+          <div key={group.key} className="flex flex-wrap items-center gap-2">
+            <span className="w-24 font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">{group.label}</span>
+            {group.values.map((value) => (
+              <Link
+                key={value}
+                href={filterHref(filters, group.key, value)}
+                className={`rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider ${
+                  filters[group.key] === value
+                    ? "border-[#34D399]/60 text-[#34D399]"
+                    : "border-[#243329] text-[#8CA495] hover:text-[#E6EFE8]"
+                }`}
+              >
+                {value.replaceAll("_", " ")}
+              </Link>
+            ))}
+          </div>
+        ))}
+      </section>
 
       {ordered.length === 0 ? (
         <section className="mt-8 rounded-lg border border-dashed border-[#243329] bg-[#151F1A] p-8 text-center">
-          <h2 className="font-display text-lg text-[#E6EFE8]">No proposals yet</h2>
-          <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-[#8CA495]">
-            Grounded extraction runs will write files to{" "}
-            <code className="font-mono text-[#34D399]">
-              proposals/{"{type}"}/{"{id}"}.json
-            </code>
-            . They appear here after the workflow commits them and remain
-            non-authoritative until the owner approves.
+          <h2 className="font-display text-lg text-[#E6EFE8]">
+            {proposals.length === 0 ? "No proposals yet" : "Nothing matches these filters"}
+          </h2>
+          <p className="mt-2 text-sm text-[#8CA495]">
+            {proposals.length === 0
+              ? "Grounded extraction will place review items in proposals/{type}/{id}.json."
+              : "Clear a filter to see the rest of the queue."}
           </p>
         </section>
       ) : (
-        <ReviewClient proposals={ordered} />
+        <ReviewClient proposals={ordered} writeEnabled={writeEnabled} />
       )}
     </main>
   );

@@ -53,6 +53,8 @@ import {
   type HeartbeatFile,
   type LifecycleStatus,
   type Mechanism,
+  type Proposal,
+  type ProposalStatus,
   type SeedStub,
   type SegmentEvidence,
   type Source,
@@ -62,6 +64,7 @@ import {
   type TaxonomyNode,
   type TaxonomyNodeId,
 } from "./types";
+import { PROPOSAL_STATUS_META } from "./proposal-meta";
 
 // ---------- Status vocabulary ----------
 
@@ -1147,6 +1150,8 @@ export interface SystemCounts {
   sourcesByMode: SourceModeCount[];
   sourcesTotal: number;
   decisionsCount: number;
+  proposalsByStatus: { status: ProposalStatus; label: string; count: number }[];
+  proposalsTotal: number;
 }
 
 export function computeCounts(): SystemCounts {
@@ -1161,6 +1166,27 @@ export function computeCounts(): SystemCounts {
   }
 
   const sources = loadSources().classes.flatMap((c) => c.sources);
+  const proposalsDir = join(process.cwd(), "proposals");
+  const proposals = existsSync(proposalsDir)
+    ? readdirSync(proposalsDir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .flatMap((entry) => {
+          const directory = join(proposalsDir, entry.name);
+          return readdirSync(directory)
+            .filter((name) => name.endsWith(".json"))
+            .map(
+              (name) =>
+                JSON.parse(readFileSync(join(directory, name), "utf8")) as Proposal,
+            );
+        })
+    : [];
+  const proposalCounts = new Map<ProposalStatus, number>();
+  for (const proposal of proposals) {
+    proposalCounts.set(
+      proposal.status,
+      (proposalCounts.get(proposal.status) ?? 0) + 1,
+    );
+  }
 
   return {
     mechanismsByLifecycle: LIFECYCLE_ORDER.filter((s) =>
@@ -1170,5 +1196,13 @@ export function computeCounts(): SystemCounts {
     sourcesByMode: computeSourceModeCounts(),
     sourcesTotal: sources.length,
     decisionsCount: loadDecisions().decisions.length,
+    proposalsByStatus: (
+      Object.keys(PROPOSAL_STATUS_META) as ProposalStatus[]
+    ).map((status) => ({
+      status,
+      label: PROPOSAL_STATUS_META[status].label,
+      count: proposalCounts.get(status) ?? 0,
+    })),
+    proposalsTotal: proposals.length,
   };
 }
