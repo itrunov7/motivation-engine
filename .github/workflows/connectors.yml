@@ -51,6 +51,7 @@ concurrency:
 permissions:
   contents: write
   issues: write
+  actions: write
 
 jobs:
   # ---------- Source health heartbeat (D-021/D-022) ----------
@@ -159,6 +160,7 @@ jobs:
   harvest-scheduled:
     if: github.event.schedule == '0 5 * * 1' || github.event.schedule == '0 6 1 * *'
     runs-on: ubuntu-latest
+    timeout-minutes: 330
     env:
       CONNECTOR_ID: ${{ github.event.schedule == '0 6 1 * *' && 'wayback' || 'evidence' }}
       S2_API_KEY: ${{ secrets.S2_API_KEY }}
@@ -253,6 +255,26 @@ jobs:
           else
             echo "Corpus unchanged — nothing to commit."
           fi
+
+      - name: Queue checkpoint continuations
+        if: steps.harvest.outputs.failed != 'true' && env.CONNECTOR_ID == 'evidence'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for checkpoint in corpora/_ops/checkpoints/evidence/*.json; do
+            [ -f "$checkpoint" ] || continue
+            target="${checkpoint##*/}"
+            target="${target%.json}"
+            gh workflow run harvest.yml \
+              --ref "${GITHUB_REF_NAME}" \
+              -f connector=evidence \
+              -f target="$target" \
+              -f dry_run=false \
+              -f dispatch_id="scheduled-${GITHUB_RUN_ID}-${target}" \
+              -f raise_cap=false
+            echo "Queued continuation for $target."
+          done
 
       - name: Open ops issue on persistent failure
         if: steps.harvest.outputs.failed == 'true'

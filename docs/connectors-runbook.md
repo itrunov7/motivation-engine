@@ -316,6 +316,23 @@ completeness-checked corpus. The rules that keep that corpus honest:
   last harvest with the *same terms* came back low-novelty (counted as
   `low_novelty_skipped` in `research-queue.json`) — change the terms or the
   segment qualifier to re-enable it.
+- **Saturation-driven depth** (D-080). Evidence v3 walks a deterministic
+  breadth-first frontier of owner-authored terms × viewpoints × ranking
+  buckets. Relevance, recency, and citation retrieval receive balanced shares;
+  OpenAlex backward references and forward citations are inserted only from
+  records that pass the metadata-only topical gate. The run stops when rolling
+  novelty over the configured K-query window falls below threshold, or a
+  configured call/record cap stops it. `saturation_report` records every point
+  on the novelty curve, the stop reason, and the topical-confirmation rate.
+- **Checkpoint/resume** (D-080). The connector atomically checkpoints after
+  each configured query interval. It exits before the six-hour Actions ceiling,
+  the workflow commits that operational checkpoint, and a queued continuation
+  resumes the same logical call budget. An unfinished slice is not maturation
+  progress.
+- **Storage gate is active.** The 1,000-unique-record evidence cap is the
+  current git-tier boundary. The requested full-depth harvest would produce
+  thousands of rows, so the architecture escalation trigger fired as designed:
+  migrate corpus storage first, then raise this cap. Do not route around it.
 
 ---
 

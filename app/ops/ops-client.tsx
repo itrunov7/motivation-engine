@@ -914,6 +914,119 @@ function ConnectorCard({
         </Field>
       </div>
 
+      {config.connector_id === "evidence" && config.saturation && (
+        <div className="mt-4 rounded-md border border-[#243329] p-4">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">
+            saturation policy
+          </p>
+          <p className="mt-1 text-[11px] text-[#8CA495]">
+            The harvest stops when the rolling novelty window flattens or a configured cap is reached.
+          </p>
+          <div className="mt-3 grid gap-4 sm:grid-cols-4">
+            {(
+              [
+                ["window_queries", "window queries", 1],
+                ["novelty_threshold", "novelty threshold", 0.001],
+                ["minimum_queries", "minimum queries", 1],
+                ["records_per_query", "records / query", 1],
+                ["checkpoint_every_queries", "checkpoint every", 1],
+                ["soft_time_limit_minutes", "soft minutes", 1],
+              ] as const
+            ).map(([key, label, step]) => (
+              <Field key={key} label={label} help={`Evidence saturation setting: ${key}.`}>
+                <input
+                  type="number"
+                  min={step}
+                  max={key === "novelty_threshold" ? 1 : undefined}
+                  step={step}
+                  value={config.saturation?.[key] ?? ""}
+                  disabled={!writeEnabled || pending}
+                  onChange={(e) =>
+                    patch({
+                      saturation: {
+                        ...config.saturation!,
+                        [key]: Number(e.target.value),
+                      },
+                    })
+                  }
+                  className={numberInputClass(!writeEnabled)}
+                />
+              </Field>
+            ))}
+            {(["relevance", "recency", "citation"] as const).map((key) => (
+              <Field key={key} label={`${key} share`} help="Relative share of search queries.">
+                <input
+                  type="number"
+                  min={1}
+                  value={config.saturation?.retrieval_shares[key] ?? ""}
+                  disabled={!writeEnabled || pending}
+                  onChange={(e) =>
+                    patch({
+                      saturation: {
+                        ...config.saturation!,
+                        retrieval_shares: {
+                          ...config.saturation!.retrieval_shares,
+                          [key]: Number(e.target.value),
+                        },
+                      },
+                    })
+                  }
+                  className={numberInputClass(!writeEnabled)}
+                />
+              </Field>
+            ))}
+            <Field label="graph anchors" help="Maximum metadata-confirmed records expanded per run.">
+              <input
+                type="number"
+                min={1}
+                value={config.saturation.citation_graph.max_anchors}
+                disabled={!writeEnabled || pending}
+                onChange={(e) =>
+                  patch({
+                    saturation: {
+                      ...config.saturation!,
+                      citation_graph: {
+                        ...config.saturation!.citation_graph,
+                        max_anchors: Number(e.target.value),
+                      },
+                    },
+                  })
+                }
+                className={numberInputClass(!writeEnabled)}
+              />
+            </Field>
+          </div>
+          <div className="mt-3 flex flex-wrap gap-5 text-xs text-[#E6EFE8]">
+            {(
+              [
+                ["backward_references", "Expand references"],
+                ["forward_citations", "Expand forward citations"],
+              ] as const
+            ).map(([key, label]) => (
+              <label key={key} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={config.saturation?.citation_graph[key] ?? false}
+                  disabled={!writeEnabled || pending}
+                  onChange={(e) =>
+                    patch({
+                      saturation: {
+                        ...config.saturation!,
+                        citation_graph: {
+                          ...config.saturation!.citation_graph,
+                          [key]: e.target.checked,
+                        },
+                      },
+                    })
+                  }
+                />
+                {label}
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Targets */}
       <div className="mt-4">
         <p className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">

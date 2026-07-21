@@ -129,6 +129,7 @@ async function main(): Promise<void> {
     corpusDir,
     fetch: politeFetch,
     writeJson: (path, data) => writeJsonPretty(join(corpusDir, path), data),
+    apiCalls: () => fetchStats.apiCalls,
     log: (message) => console.log(`  [${connector.id}] ${message}`),
   };
 

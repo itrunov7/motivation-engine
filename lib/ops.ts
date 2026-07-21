@@ -89,6 +89,21 @@ export const DEFAULT_BUDGET: OpsBudget = {
   monthly_caps: { usd: 5, calls: 20000 },
 };
 
+export const DEFAULT_EVIDENCE_SATURATION = {
+  window_queries: 10,
+  novelty_threshold: 0.05,
+  minimum_queries: 30,
+  records_per_query: 25,
+  retrieval_shares: { relevance: 1, recency: 1, citation: 1 },
+  citation_graph: {
+    backward_references: true,
+    forward_citations: true,
+    max_anchors: 20,
+  },
+  checkpoint_every_queries: 1,
+  soft_time_limit_minutes: 300,
+} as const;
+
 /** A sane default config for a connector with the given harvest targets. */
 export function defaultConnectorConfig(
   connectorId: string,
@@ -100,6 +115,9 @@ export function defaultConnectorConfig(
     paused_reason: null,
     cadence: { every_days: 7 },
     limits: { max_calls_per_run: 500, max_records_per_run: 5000 },
+    ...(connectorId === "evidence"
+      ? { saturation: { ...DEFAULT_EVIDENCE_SATURATION } }
+      : {}),
     targets,
   };
 }
@@ -255,12 +273,13 @@ export function validateOpsConnectorConfig(
     "paused_reason",
     "cadence",
     "limits",
+    "saturation",
     "targets",
   ]);
   const extraTop = Object.keys(data).filter((k) => !allowedTop.has(k));
   if (extraTop.length > 0) errors.push(`unexpected field(s): ${extraTop.join(", ")}`);
 
-  const { connector_id, paused, paused_reason, cadence, limits, targets } = data;
+  const { connector_id, paused, paused_reason, cadence, limits, saturation, targets } = data;
 
   if (typeof connector_id !== "string" || !/^[a-z0-9-]+$/.test(connector_id)) {
     errors.push("connector_id must be a lowercase slug string");
@@ -307,6 +326,82 @@ export function validateOpsConnectorConfig(
       (k) => k !== "max_calls_per_run" && k !== "max_records_per_run",
     );
     if (extra.length > 0) errors.push(`unexpected limits field(s): ${extra.join(", ")}`);
+  }
+
+  if (connector_id === "evidence") {
+    if (!isPlainObject(saturation)) {
+      errors.push("saturation is required for the evidence connector");
+    } else {
+      const allowed = new Set([
+        "window_queries",
+        "novelty_threshold",
+        "minimum_queries",
+        "records_per_query",
+        "retrieval_shares",
+        "citation_graph",
+        "checkpoint_every_queries",
+        "soft_time_limit_minutes",
+      ]);
+      const extras = Object.keys(saturation).filter((key) => !allowed.has(key));
+      if (extras.length > 0) errors.push(`unexpected saturation field(s): ${extras.join(", ")}`);
+      for (const key of [
+        "window_queries",
+        "minimum_queries",
+        "records_per_query",
+        "checkpoint_every_queries",
+        "soft_time_limit_minutes",
+      ] as const) {
+        if (!isNonNegativeInteger(saturation[key]) || saturation[key] < 1) {
+          errors.push(`saturation.${key} must be an integer ≥ 1`);
+        }
+      }
+      if (
+        !isNonNegativeNumber(saturation.novelty_threshold) ||
+        saturation.novelty_threshold <= 0 ||
+        saturation.novelty_threshold > 1
+      ) {
+        errors.push("saturation.novelty_threshold must be a number in (0, 1]");
+      }
+      if (!isPlainObject(saturation.retrieval_shares)) {
+        errors.push("saturation.retrieval_shares must be an object");
+      } else {
+        const shares = saturation.retrieval_shares;
+        const shareKeys = ["relevance", "recency", "citation"] as const;
+        const shareExtras = Object.keys(shares).filter(
+          (key) => !shareKeys.includes(key as (typeof shareKeys)[number]),
+        );
+        if (shareExtras.length > 0) {
+          errors.push(`unexpected saturation.retrieval_shares field(s): ${shareExtras.join(", ")}`);
+        }
+        for (const key of shareKeys) {
+          if (!isNonNegativeInteger(shares[key]) || shares[key] < 1) {
+            errors.push(`saturation.retrieval_shares.${key} must be an integer ≥ 1`);
+          }
+        }
+      }
+      if (!isPlainObject(saturation.citation_graph)) {
+        errors.push("saturation.citation_graph must be an object");
+      } else {
+        const graph = saturation.citation_graph;
+        const graphExtras = Object.keys(graph).filter(
+          (key) => !["backward_references", "forward_citations", "max_anchors"].includes(key),
+        );
+        if (graphExtras.length > 0) {
+          errors.push(`unexpected saturation.citation_graph field(s): ${graphExtras.join(", ")}`);
+        }
+        if (typeof graph.backward_references !== "boolean") {
+          errors.push("saturation.citation_graph.backward_references must be a boolean");
+        }
+        if (typeof graph.forward_citations !== "boolean") {
+          errors.push("saturation.citation_graph.forward_citations must be a boolean");
+        }
+        if (!isNonNegativeInteger(graph.max_anchors) || graph.max_anchors < 1) {
+          errors.push("saturation.citation_graph.max_anchors must be an integer ≥ 1");
+        }
+      }
+    }
+  } else if (saturation !== undefined) {
+    errors.push("saturation is only valid for the evidence connector");
   }
 
   if (!Array.isArray(targets) || !targets.every((t) => typeof t === "string")) {

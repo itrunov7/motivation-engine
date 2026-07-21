@@ -759,6 +759,94 @@ const diversityReportSchema = {
   additionalProperties: false,
 } as const;
 
+const saturationReportSchema = {
+  type: "object",
+  properties: {
+    queries_issued: { type: "integer", minimum: 0 },
+    records_added: { type: "integer", minimum: 0 },
+    novelty_curve: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          query_index: { type: "integer", minimum: 1 },
+          query_id: { type: "string", minLength: 1 },
+          bucket: { enum: ["relevance", "recency", "citation"] },
+          kind: { enum: ["search", "backward-reference", "forward-citation"] },
+          returned: { type: "integer", minimum: 0 },
+          unique_returned: { type: "integer", minimum: 0 },
+          records_added: { type: "integer", minimum: 0 },
+          novelty_rate: { type: "number", minimum: 0, maximum: 1 },
+          rolling_novelty_rate: { type: ["number", "null"], minimum: 0, maximum: 1 },
+          cumulative_records: { type: "integer", minimum: 0 },
+        },
+        required: [
+          "query_index",
+          "query_id",
+          "bucket",
+          "kind",
+          "returned",
+          "unique_returned",
+          "records_added",
+          "novelty_rate",
+          "rolling_novelty_rate",
+          "cumulative_records",
+        ],
+        additionalProperties: false,
+      },
+    },
+    window_queries: { type: "integer", minimum: 1 },
+    novelty_threshold: { type: "number", exclusiveMinimum: 0, maximum: 1 },
+    minimum_queries: { type: "integer", minimum: 1 },
+    retrieval_counts: {
+      type: "object",
+      properties: {
+        relevance: { type: "integer", minimum: 0 },
+        recency: { type: "integer", minimum: 0 },
+        citation: { type: "integer", minimum: 0 },
+      },
+      required: ["relevance", "recency", "citation"],
+      additionalProperties: false,
+    },
+    topical_candidates: { type: "integer", minimum: 0 },
+    topical_confirmed: { type: "integer", minimum: 0 },
+    topical_rejected: { type: "integer", minimum: 0 },
+    topical_confirmation_rate: { type: "number", minimum: 0, maximum: 1 },
+    graph_anchors_expanded: { type: "integer", minimum: 0 },
+    saturation_reached: { type: "boolean" },
+    stop_reason: {
+      enum: ["saturation", "storage_tier_record_cap", "call_cap", "time_slice"],
+    },
+    cap: {
+      type: "object",
+      properties: {
+        max_calls: { type: "integer", minimum: 1 },
+        max_unique_records: { type: "integer", minimum: 1 },
+      },
+      required: ["max_calls", "max_unique_records"],
+      additionalProperties: false,
+    },
+  },
+  required: [
+    "queries_issued",
+    "records_added",
+    "novelty_curve",
+    "window_queries",
+    "novelty_threshold",
+    "minimum_queries",
+    "retrieval_counts",
+    "topical_candidates",
+    "topical_confirmed",
+    "topical_rejected",
+    "topical_confirmation_rate",
+    "graph_anchors_expanded",
+    "saturation_reached",
+    "stop_reason",
+    "cap",
+  ],
+  additionalProperties: false,
+} as const;
+
 // ---------- Validation passes ----------
 
 interface MechanismLike {
@@ -1171,6 +1259,7 @@ function main(): void {
   // corpus harvested before D-058 has no report and is skipped — the block is
   // additive, not a new hard requirement on old data.
   const validateDiversity = ajv.compile(diversityReportSchema);
+  const validateSaturation = ajv.compile(saturationReportSchema);
   const evidenceDir = join(PATHS.corporaDir, "evidence");
   const evidenceFiles = listJsonFiles(evidenceDir).filter(
     (f) => basename(f) !== "manifest.json",
@@ -1200,6 +1289,45 @@ function main(): void {
     const report = (data as { diversity_report?: unknown }).diversity_report;
     if (report !== undefined && validateAgainst(validateDiversity, file, report)) {
       console.log(`  ✓ ${rel(file)} valid (diversity report, D-058)`);
+    }
+    const saturation = (data as { saturation_report?: unknown }).saturation_report;
+    const isV3Harvest =
+      Array.isArray((data as { queries?: unknown[] }).queries) &&
+      ((data as { queries: { query_id?: unknown }[] }).queries[0]?.query_id !== undefined);
+    if (isV3Harvest && saturation === undefined) {
+      fail(file, "v3 evidence harvest is missing required saturation_report (D-080)");
+    } else if (
+      saturation !== undefined &&
+      validateAgainst(validateSaturation, file, saturation)
+    ) {
+      const value = saturation as {
+        queries_issued: number;
+        novelty_curve: unknown[];
+        topical_candidates: number;
+        topical_confirmed: number;
+        topical_rejected: number;
+        saturation_reached: boolean;
+        stop_reason: string;
+      };
+      if (value.queries_issued !== value.novelty_curve.length) {
+        fail(file, "saturation_report.queries_issued must equal novelty_curve.length");
+      }
+      if (
+        value.topical_confirmed + value.topical_rejected !==
+        value.topical_candidates
+      ) {
+        fail(
+          file,
+          "saturation_report topical_confirmed + topical_rejected must equal topical_candidates",
+        );
+      }
+      if (value.saturation_reached !== (value.stop_reason === "saturation")) {
+        fail(
+          file,
+          "saturation_report.saturation_reached must be true exactly when stop_reason is saturation",
+        );
+      }
+      console.log(`  ✓ ${rel(file)} valid (saturation report, D-080)`);
     }
   }
 
@@ -1285,6 +1413,55 @@ function main(): void {
   }
   if (opsFiles.length === 0) {
     console.log("  · no ops connector configs yet (defaults apply)");
+  }
+
+  const evidenceCheckpointDir = join(
+    OPS_PATHS.dir,
+    "checkpoints",
+    "evidence",
+  );
+  if (existsSync(evidenceCheckpointDir)) {
+    for (const file of listJsonFiles(evidenceCheckpointDir)) {
+      const value = readJson(file) as
+        | {
+            version?: unknown;
+            mechanism_id?: unknown;
+            terms?: unknown;
+            fingerprint?: unknown;
+            cursor?: unknown;
+            tasks?: unknown;
+            novelty_curve?: unknown;
+            api_calls_spent?: unknown;
+          }
+        | undefined;
+      if (!value) continue;
+      if (value.version !== 1) fail(file, "checkpoint version must be 1");
+      if (
+        typeof value.mechanism_id !== "string" ||
+        basename(file, ".json") !== value.mechanism_id
+      ) {
+        fail(file, "checkpoint mechanism_id must equal its filename");
+      }
+      if (!Array.isArray(value.terms) || !value.terms.every((term) => typeof term === "string")) {
+        fail(file, "checkpoint terms must be an array of strings");
+      }
+      if (typeof value.fingerprint !== "string" || !/^[a-f0-9]{64}$/.test(value.fingerprint)) {
+        fail(file, "checkpoint fingerprint must be a SHA-256 hex string");
+      }
+      if (!Number.isInteger(value.cursor) || (value.cursor as number) < 0) {
+        fail(file, "checkpoint cursor must be a non-negative integer");
+      }
+      if (!Array.isArray(value.tasks) || !Array.isArray(value.novelty_curve)) {
+        fail(file, "checkpoint tasks and novelty_curve must be arrays");
+      }
+      if (
+        !Number.isInteger(value.api_calls_spent) ||
+        (value.api_calls_spent as number) < 0
+      ) {
+        fail(file, "checkpoint api_calls_spent must be a non-negative integer");
+      }
+      console.log(`  ✓ ${rel(file)} valid (evidence saturation checkpoint, D-080)`);
+    }
   }
 
   // 12. Product segments (D-047): /segments/segments.yaml is the

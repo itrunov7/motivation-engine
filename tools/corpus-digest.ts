@@ -177,6 +177,7 @@ function buildDigest(
     EVIDENCE_CATEGORIES.map((c) => [c, topInCategory(records, c, top)]),
   ) as Record<EvidenceCategory, CorpusDigestEntry[]>;
   const div = corpus.diversity_report;
+  const saturation = corpus.saturation_report;
 
   return {
     mechanism_id: id,
@@ -198,6 +199,10 @@ function buildDigest(
     low_novelty: div?.novelty.low_novelty ?? null,
     viewpoint_spread: div?.viewpoint_spread ?? [],
     source_spread: div?.source_spread ?? [],
+    saturation_reached: saturation?.saturation_reached ?? null,
+    saturation_stop_reason: saturation?.stop_reason ?? null,
+    saturation_queries: saturation?.queries_issued ?? null,
+    topical_confirmation_rate: saturation?.topical_confirmation_rate ?? null,
     top_by_category: topByCategory,
   };
 }
@@ -252,6 +257,15 @@ function renderMarkdown(d: CorpusDigest, top: number): string {
     );
   } else {
     lines.push("- Novelty/recency: not recorded (pre-D-058 harvest)");
+  }
+  if (d.saturation_reached !== null) {
+    lines.push(
+      `- Saturation: ${d.saturation_reached ? "reached" : "not reached"} · ` +
+        `stop ${d.saturation_stop_reason} · ${d.saturation_queries} queries · ` +
+        `topical confirmation ${d.topical_confirmation_rate}`,
+    );
+  } else {
+    lines.push("- Saturation: not recorded (pre-D-080 harvest)");
   }
   lines.push("");
 

@@ -618,11 +618,18 @@ export interface EvidenceCorpusRecord {
 
 /** One query's metadata line, as recorded in the corpus (D-058). */
 export interface CorpusQueryMeta {
+  query_id?: string;
   api: "openalex" | "semantic-scholar";
   angle: CorpusSearchAngle;
   term: string;
+  bucket?: "relevance" | "recency" | "citation";
+  kind?: "search" | "backward-reference" | "forward-citation";
   requested: number;
   returned: number;
+  unique_returned?: number;
+  records_added?: number;
+  novelty_rate?: number;
+  rolling_novelty_rate?: number | null;
 }
 
 /** Per-review snowball outcome (D-019). */
@@ -681,6 +688,40 @@ export interface CorpusDiversityReport {
   novelty: CorpusNoveltyReport;
 }
 
+export interface CorpusSaturationPoint {
+  query_index: number;
+  query_id: string;
+  bucket: "relevance" | "recency" | "citation";
+  kind: "search" | "backward-reference" | "forward-citation";
+  returned: number;
+  unique_returned: number;
+  records_added: number;
+  novelty_rate: number;
+  rolling_novelty_rate: number | null;
+  cumulative_records: number;
+}
+
+export interface CorpusSaturationReport {
+  queries_issued: number;
+  records_added: number;
+  novelty_curve: CorpusSaturationPoint[];
+  window_queries: number;
+  novelty_threshold: number;
+  minimum_queries: number;
+  retrieval_counts: Record<"relevance" | "recency" | "citation", number>;
+  topical_candidates: number;
+  topical_confirmed: number;
+  topical_rejected: number;
+  topical_confirmation_rate: number;
+  graph_anchors_expanded: number;
+  saturation_reached: boolean;
+  stop_reason: "saturation" | "storage_tier_record_cap" | "call_cap" | "time_slice";
+  cap: {
+    max_calls: number;
+    max_unique_records: number;
+  };
+}
+
 /** The full /corpora/evidence/{id}.json file. */
 export interface EvidenceCorpusFile {
   mechanism_id: string;
@@ -693,6 +734,8 @@ export interface EvidenceCorpusFile {
   category_counts: CategoryCounts;
   /** Diversity + novelty accounting (D-058); absent on pre-D-058 harvests. */
   diversity_report?: CorpusDiversityReport;
+  /** Adaptive stopping report (D-080); absent on pre-v3 harvests. */
+  saturation_report?: CorpusSaturationReport;
   records: EvidenceCorpusRecord[];
 }
 
@@ -753,6 +796,10 @@ export interface CorpusDigest {
   low_novelty: boolean | null;
   viewpoint_spread: CorpusAngleSpread[];
   source_spread: CorpusSourceSpread[];
+  saturation_reached: boolean | null;
+  saturation_stop_reason: string | null;
+  saturation_queries: number | null;
+  topical_confirmation_rate: number | null;
   /** top-N per category, keyed by EVIDENCE_CATEGORIES. */
   top_by_category: Record<EvidenceCategory, CorpusDigestEntry[]>;
 }
@@ -881,7 +928,28 @@ export interface OpsConnectorConfig {
     max_calls_per_run: number;
     max_records_per_run: number;
   };
+  /** Evidence-only adaptive harvest policy (D-080). */
+  saturation?: EvidenceSaturationConfig;
   targets: string[];
+}
+
+export interface EvidenceSaturationConfig {
+  window_queries: number;
+  novelty_threshold: number;
+  minimum_queries: number;
+  records_per_query: number;
+  retrieval_shares: {
+    relevance: number;
+    recency: number;
+    citation: number;
+  };
+  citation_graph: {
+    backward_references: boolean;
+    forward_citations: boolean;
+    max_anchors: number;
+  };
+  checkpoint_every_queries: number;
+  soft_time_limit_minutes: number;
 }
 
 /**

@@ -82,9 +82,24 @@
  * warnings.regression_suspected, and keeps the prior corpus for review.
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  renameSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
+import { createHash } from "node:crypto";
 import { join } from "node:path";
 import { assignCorpusRecordIds, normalizeCorpusDoi } from "../../lib/corpus-record-id";
+import {
+  DEFAULT_EVIDENCE_SATURATION,
+  loadOpsConnectorConfigFromDisk,
+  type OpsConnectorConfig,
+} from "../../lib/ops";
+import type { EvidenceSaturationConfig } from "../../lib/types";
+import { UpstreamCooldownError } from "./lib/http";
 import {
   EVIDENCE_CATEGORIES,
   type CategoryCounts,
@@ -146,6 +161,8 @@ const QUOTE_SNOWBALL_RECORDS = OPENALEX_BATCH_SIZE;
 
 type SearchApi = "openalex" | "semantic-scholar";
 type SourceApi = SearchApi | "pinned" | "snowball";
+export type RetrievalBucket = "relevance" | "recency" | "citation";
+type QueryKind = "search" | "backward-reference" | "forward-citation";
 
 /**
  * Search angle (D-058): a harvest fans each term out across contrasting
@@ -256,16 +273,25 @@ interface EvidenceRecord {
 }
 
 interface QueryMeta {
+  query_id: string;
   api: SearchApi;
   /** The viewpoint this query targeted (D-058). */
   angle: SearchAngle;
   term: string;
+  bucket: RetrievalBucket;
+  kind: QueryKind;
   requested: number;
   returned: number;
+  unique_returned: number;
+  records_added: number;
+  novelty_rate: number;
+  rolling_novelty_rate: number | null;
 }
 
 /** One planned search query — one (api, angle, term) triple. */
 interface QueryTask {
+  id: string;
+  kind: QueryKind;
   api: SearchApi;
   angle: SearchAngle;
   /** The query string actually sent (a contrast angle appends its suffix). */
@@ -273,10 +299,15 @@ interface QueryTask {
   /** Planned batch size; for the throttleable canon S2 query the keyless 429
    *  path may reduce it at run time. */
   limit: number;
+  page: number;
   /** OpenAlex sort override; unused for Semantic Scholar. */
   sort?: string;
   /** True only for the canon Semantic Scholar query (keyless throttle path). */
   throttleable: boolean;
+  bucket: RetrievalBucket;
+  /** OpenAlex anchor for citation-graph tasks. */
+  anchorId?: string;
+  anchorTitle?: string;
   meta: QueryMeta;
   records: EvidenceRecord[];
   error?: string;
@@ -360,6 +391,78 @@ interface DiversityReport {
   novelty: NoveltyReport;
 }
 
+export interface SaturationPoint {
+  query_index: number;
+  query_id: string;
+  bucket: RetrievalBucket;
+  kind: QueryKind;
+  returned: number;
+  unique_returned: number;
+  records_added: number;
+  novelty_rate: number;
+  rolling_novelty_rate: number | null;
+  cumulative_records: number;
+}
+
+export interface SaturationReport {
+  queries_issued: number;
+  records_added: number;
+  novelty_curve: SaturationPoint[];
+  window_queries: number;
+  novelty_threshold: number;
+  minimum_queries: number;
+  retrieval_counts: Record<RetrievalBucket, number>;
+  topical_candidates: number;
+  topical_confirmed: number;
+  topical_rejected: number;
+  topical_confirmation_rate: number;
+  graph_anchors_expanded: number;
+  saturation_reached: boolean;
+  stop_reason: "saturation" | "storage_tier_record_cap" | "call_cap" | "time_slice";
+  cap: {
+    max_calls: number;
+    max_unique_records: number;
+  };
+}
+
+export function rollingNoveltyRate(
+  previous: readonly Pick<SaturationPoint, "novelty_rate">[],
+  next: number,
+  windowQueries: number,
+): number | null {
+  const values = [
+    ...previous.slice(-(windowQueries - 1)).map((point) => point.novelty_rate),
+    next,
+  ];
+  return values.length === windowQueries
+    ? round4(values.reduce((sum, value) => sum + value, 0) / values.length)
+    : null;
+}
+
+export function saturationReached(
+  completedQueries: number,
+  rollingRate: number | null,
+  config: Pick<
+    EvidenceSaturationConfig,
+    "minimum_queries" | "novelty_threshold"
+  >,
+): boolean {
+  return (
+    completedQueries >= config.minimum_queries &&
+    rollingRate !== null &&
+    rollingRate < config.novelty_threshold
+  );
+}
+
+export function enabledGraphDirections(
+  graph: EvidenceSaturationConfig["citation_graph"],
+): Exclude<QueryKind, "search">[] {
+  return [
+    ...(graph.backward_references ? (["backward-reference"] as const) : []),
+    ...(graph.forward_citations ? (["forward-citation"] as const) : []),
+  ];
+}
+
 interface EvidenceFile {
   mechanism_id: string;
   fetched_at: string;
@@ -373,6 +476,8 @@ interface EvidenceFile {
   category_counts: CategoryCounts;
   /** Diversity + novelty accounting for this harvest (D-058). */
   diversity_report: DiversityReport;
+  /** Adaptive query stopping and graph-expansion accounting (D-080). */
+  saturation_report: SaturationReport;
   records: EvidenceRecord[];
 }
 
@@ -568,12 +673,14 @@ async function searchOpenAlex(
   term: string,
   sort = "cited_by_count:desc",
   limit = OPENALEX_PER_TERM,
+  page = 1,
 ): Promise<EvidenceRecord[]> {
   const url = new URL("https://api.openalex.org/works");
   // Commas separate OpenAlex filters — strip them from the term defensively.
   url.searchParams.set("filter", `title_and_abstract.search:${term.replace(/,/g, " ")}`);
   url.searchParams.set("sort", sort);
   url.searchParams.set("per-page", String(limit));
+  url.searchParams.set("page", String(page));
   url.searchParams.set("select", OPENALEX_SELECT);
 
   const data = await fetchJson<{ results?: OpenAlexWork[] }>(fetch, url);
@@ -637,10 +744,12 @@ async function searchSemanticScholar(
   fetch: PoliteFetch,
   term: string,
   limit: number,
+  page = 1,
 ): Promise<EvidenceRecord[]> {
   const url = new URL("https://api.semanticscholar.org/graph/v1/paper/search");
   url.searchParams.set("query", term);
   url.searchParams.set("limit", String(limit));
+  url.searchParams.set("offset", String((page - 1) * limit));
   url.searchParams.set("fields", "title,authors,year,venue,externalIds,citationCount,abstract");
 
   const apiKey = s2ApiKey();
@@ -761,6 +870,17 @@ function isTopicalReview(record: EvidenceRecord, keys: string[]): boolean {
   );
 }
 
+/** Conservative graph-anchor gate: title hit + two abstract core-keyword hits. */
+export function isTopicalGraphAnchor(record: EvidenceRecord, keys: string[]): boolean {
+  if (!record.openalex_id || !record.abstract || keys.length === 0) return false;
+  const titleMinimum = Math.min(2, keys.length);
+  const abstractMinimum = Math.min(3, keys.length);
+  return (
+    countCoreKeywords(record.title, keys) >= titleMinimum &&
+    countCoreKeywords(record.abstract, keys) >= abstractMinimum
+  );
+}
+
 function classifyRecord(record: EvidenceRecord, currentYear: number): EvidenceCategory[] {
   const titleAbstract = `${record.title} ${record.abstract ?? ""}`;
   const dissentText = `${titleAbstract} ${record.pin_reason ?? ""}`;
@@ -828,6 +948,43 @@ async function fetchWorksByIds(
       if (record?.openalex_id) cache.set(record.openalex_id, record);
     }
   }
+}
+
+async function fetchBackwardReferences(
+  fetch: PoliteFetch,
+  anchorId: string,
+  limit: number,
+): Promise<EvidenceRecord[]> {
+  const url = new URL(`https://api.openalex.org/works/${anchorId}`);
+  url.searchParams.set("select", "id,referenced_works");
+  const work = await fetchJson<{ referenced_works?: string[] | null }>(fetch, url);
+  const ids = (work.referenced_works ?? [])
+    .map(normalizeOpenAlexId)
+    .filter((id): id is string => id !== null)
+    .slice(0, limit);
+  const resolved = new Map<string, EvidenceRecord>();
+  await fetchWorksByIds(fetch, ids, resolved);
+  return ids.flatMap((id) => {
+    const record = resolved.get(id);
+    return record ? [{ ...record, source_api: "snowball" as const, snowball_from: [anchorId] }] : [];
+  });
+}
+
+async function fetchForwardCitations(
+  fetch: PoliteFetch,
+  anchorId: string,
+  limit: number,
+): Promise<EvidenceRecord[]> {
+  const url = new URL("https://api.openalex.org/works");
+  url.searchParams.set("filter", `cites:${anchorId}`);
+  url.searchParams.set("sort", "publication_date:desc");
+  url.searchParams.set("per-page", String(limit));
+  url.searchParams.set("select", OPENALEX_SELECT);
+  const data = await fetchJson<{ results?: OpenAlexWork[] }>(fetch, url);
+  return (data.results ?? []).flatMap((work) => {
+    const record = fromOpenAlexWork(work, "snowball");
+    return record ? [{ ...record, snowball_from: [anchorId] }] : [];
+  });
 }
 
 /**
@@ -959,7 +1116,7 @@ async function snowball(
   let added = 0;
   for (const id of missingIds) {
     const record = resolved.get(id);
-    if (!record) continue;
+    if (!record || !isTopicalGraphAnchor(record, coreKeys)) continue;
     records.push({
       ...record,
       snowball_from: Array.from(new Set(referencedBy.get(id) ?? [])),
@@ -1030,53 +1187,110 @@ function round4(value: number): number {
   return Math.round(value * 10000) / 10000;
 }
 
+/** Deterministic weighted retrieval cycle; defaults produce 1:1:1 shares. */
+function retrievalCycle(
+  shares: EvidenceSaturationConfig["retrieval_shares"],
+): RetrievalBucket[] {
+  const buckets: RetrievalBucket[] = [];
+  for (const bucket of ["relevance", "recency", "citation"] as const) {
+    for (let i = 0; i < shares[bucket]; i++) buckets.push(bucket);
+  }
+  return buckets;
+}
+
+function angleTerm(term: string, angle: SearchAngle): string {
+  if (angle === "canon" || angle === "recent") return term;
+  const contrast = CONTRAST_ANGLES.find((entry) => entry.angle === angle);
+  return `${term} ${contrast?.suffix ?? ""}`.trim();
+}
+
 /**
- * Build every search query for a run (D-058): per term, the canon pair
- * (OpenAlex most-cited + Semantic Scholar relevance), a recency query
- * (OpenAlex by publication date), and the five contrast angles alternating
- * across the two APIs. This is where "more data" becomes "broader data".
+ * Build the deterministic term × angle × retrieval-bucket frontier (D-080).
+ * Relevance alternates OpenAlex/S2; recency and citation use OpenAlex because
+ * those explicit orderings are available without adding a new endpoint.
  */
-function buildQueryTasks(terms: string[]): QueryTask[] {
+export function buildQueryTasks(
+  terms: string[],
+  saturation: EvidenceSaturationConfig,
+): QueryTask[] {
   const mk = (
+    id: string,
     api: SearchApi,
     angle: SearchAngle,
     term: string,
+    bucket: RetrievalBucket,
     limit: number,
+    page: number,
     sort: string | undefined,
     throttleable: boolean,
   ): QueryTask => ({
+    id,
+    kind: "search",
     api,
     angle,
     term,
+    bucket,
     limit,
+    page,
     sort,
     throttleable,
-    meta: { api, angle, term, requested: limit, returned: 0 },
+    meta: {
+      query_id: id,
+      api,
+      angle,
+      term,
+      bucket,
+      kind: "search",
+      requested: limit,
+      returned: 0,
+      unique_returned: 0,
+      records_added: 0,
+      novelty_rate: 0,
+      rolling_novelty_rate: null,
+    },
     records: [],
   });
 
   const tasks: QueryTask[] = [];
-  for (const term of terms) {
-    // canon — the mainstream, most-cited view (unchanged behavior).
-    tasks.push(mk("openalex", "canon", term, OPENALEX_PER_TERM, "cited_by_count:desc", false));
-    tasks.push(mk("semantic-scholar", "canon", term, S2_PER_TERM, undefined, true));
-    // recent — recency balance so newer product forms aren't starved.
-    tasks.push(mk("openalex", "recent", term, RECENT_PER_TERM, "publication_date:desc", false));
-    // contrast angles — alternating source for spread.
-    CONTRAST_ANGLES.forEach((c, i) => {
-      const api = contrastApi(i);
-      const query = `${term} ${c.suffix}`.trim();
-      tasks.push(
-        mk(
-          api,
-          c.angle,
-          query,
-          CONTRAST_PER_TERM,
-          api === "openalex" ? "cited_by_count:desc" : undefined,
-          false,
-        ),
-      );
-    });
+  const cycle = retrievalCycle(saturation.retrieval_shares);
+  let relevanceIndex = 0;
+  // Breadth-first pagination: exhaust every variation's first page before any
+  // second page, avoiding a deep canon pull that would reintroduce rank bias.
+  const maxPages = 10;
+  for (let page = 1; page <= maxPages; page++) {
+    for (const term of terms) {
+      for (const angle of ALL_ANGLES) {
+        const query = angleTerm(term, angle);
+        for (const bucket of cycle) {
+        const api: SearchApi =
+          bucket === "relevance" && relevanceIndex++ % 2 === 1
+            ? "semantic-scholar"
+            : "openalex";
+        const sort =
+          bucket === "recency"
+            ? "publication_date:desc"
+            : bucket === "citation"
+              ? "cited_by_count:desc"
+              : api === "openalex"
+                ? "relevance_score:desc"
+                : undefined;
+          const id = `search:${bucket}:${api}:${angle}:p${page}:${query}`;
+          tasks.push(
+            mk(
+              id,
+              api,
+              angle,
+              query,
+              bucket,
+              saturation.records_per_query,
+              page,
+              sort,
+              api === "semantic-scholar",
+            ),
+          );
+        }
+      }
+    }
   }
   return tasks;
 }
@@ -1221,13 +1435,111 @@ function resolveTerms(
   throw new Error("No search terms: record has no evidence_terms and no name.");
 }
 
+function saturationConfig(): EvidenceSaturationConfig {
+  const configured = loadOpsConnectorConfigFromDisk("evidence")?.saturation;
+  if (configured) return configured;
+  return {
+    ...DEFAULT_EVIDENCE_SATURATION,
+    retrieval_shares: { ...DEFAULT_EVIDENCE_SATURATION.retrieval_shares },
+    citation_graph: { ...DEFAULT_EVIDENCE_SATURATION.citation_graph },
+  };
+}
+
+const EVIDENCE_CHECKPOINT_DIR = join(
+  __dirname,
+  "..",
+  "..",
+  "corpora",
+  "_ops",
+  "checkpoints",
+  "evidence",
+);
+
+interface EvidenceCheckpoint {
+  version: 1;
+  mechanism_id: string;
+  logical_run_id: string;
+  started_at: string;
+  terms: string[];
+  fingerprint: string;
+  cursor: number;
+  tasks: QueryTask[];
+  novelty_curve: SaturationPoint[];
+  expanded_anchor_ids: string[];
+  topical_candidates: number;
+  topical_confirmed: number;
+  topical_rejected: number;
+  s2_throttled?: boolean;
+  slice_stop_reason?: "time_slice" | "upstream_quota";
+  api_calls_spent: number;
+}
+
+function checkpointPath(mechanismId: string): string {
+  return join(EVIDENCE_CHECKPOINT_DIR, `${mechanismId}.json`);
+}
+
+function runFingerprint(
+  mechanismId: string,
+  terms: string[],
+  saturation: EvidenceSaturationConfig,
+  previous: EvidenceRecord[] | null,
+): string {
+  const baseKeys = (previous ?? []).map((record) =>
+    record.record_id ?? record.doi ?? `${titleKey(record)}:${record.year ?? "undated"}`,
+  );
+  return createHash("sha256")
+    .update(JSON.stringify({ mechanismId, terms, saturation, baseKeys }))
+    .digest("hex");
+}
+
+function readCheckpoint(
+  mechanismId: string,
+  fingerprint: string,
+): EvidenceCheckpoint | null {
+  const path = checkpointPath(mechanismId);
+  if (!existsSync(path)) return null;
+  const checkpoint = JSON.parse(readFileSync(path, "utf-8")) as EvidenceCheckpoint;
+  if (!checkpointIsCompatible(checkpoint, mechanismId, fingerprint)) {
+    throw new Error(
+      `stale saturation checkpoint for ${mechanismId} — terms, config, or base corpus changed; ` +
+        `remove ${path} only after reviewing it`,
+    );
+  }
+  return checkpoint;
+}
+
+export function checkpointIsCompatible(
+  checkpoint: Pick<EvidenceCheckpoint, "version" | "mechanism_id" | "fingerprint">,
+  mechanismId: string,
+  fingerprint: string,
+): boolean {
+  return (
+    checkpoint.version === 1 &&
+    checkpoint.mechanism_id === mechanismId &&
+    checkpoint.fingerprint === fingerprint
+  );
+}
+
+function writeCheckpoint(checkpoint: EvidenceCheckpoint): void {
+  mkdirSync(EVIDENCE_CHECKPOINT_DIR, { recursive: true });
+  const path = checkpointPath(checkpoint.mechanism_id);
+  const temp = `${path}.tmp`;
+  writeFileSync(temp, `${JSON.stringify(checkpoint, null, 2)}\n`, "utf-8");
+  renameSync(temp, path);
+}
+
+function removeCheckpoint(mechanismId: string): void {
+  const path = checkpointPath(mechanismId);
+  if (existsSync(path)) unlinkSync(path);
+}
+
 // ---------- The connector ----------
 
 export const evidenceConnector: Connector = {
   id: "evidence",
   sourceId: "evidence",
   sourceIds: ["openalex", "semantic-scholar"],
-  connectorVersion: "2.5.0",
+  connectorVersion: "3.0.0",
   description:
     "Evidence harvester: OpenAlex + Semantic Scholar literature for one mechanism → {mechanism_id}.json. Each term fans out across viewpoints (canon, recent, and five contrast angles) alternating both APIs for diversity, with a dedup-aware novelty gate and a diversity_report per harvest (D-058). Terms from the record's evidence_terms; owner pins merged from pinned_evidence; review-reference snowballing and a category checklist verify completeness structurally (D-019). Fetch and structure only.",
 
@@ -1242,31 +1554,26 @@ export const evidenceConnector: Connector = {
   quote(params): RunQuote {
     const record = loadMechanism(params.mechanism);
     const { terms } = resolveTerms(record, params.terms);
-    const pins = record.pinned_evidence?.length ?? 0;
-
-    // Per term: canon OpenAlex + recency OpenAlex + the contrast angles routed
-    // to OpenAlex; canon S2 + the contrast angles routed to S2.
-    const openAlexPerTerm = 2 + CONTRAST_OPENALEX_COUNT;
-    const s2PerTerm = 1 + CONTRAST_S2_COUNT;
-    const openAlexCalls = terms.length * openAlexPerTerm + pins + QUOTE_SNOWBALL_CALLS;
-    const s2Calls = terms.length * s2PerTerm;
-    const calls = openAlexCalls + s2Calls;
-
-    const recordsPerTerm =
-      OPENALEX_PER_TERM +
-      S2_PER_TERM +
-      RECENT_PER_TERM +
-      CONTRAST_ANGLES.length * CONTRAST_PER_TERM;
-    const records = terms.length * recordsPerTerm + pins + QUOTE_SNOWBALL_RECORDS;
-
-    const duration_s =
-      Math.round(
-        (openAlexCalls * QUOTE_POLITE_INTERVAL_S + s2Calls * QUOTE_S2_INTERVAL_S) * 10,
-      ) / 10;
-
-    // estimated_usd is COMPUTED, not asserted: every D-011 API is free, so a
-    // pure-fetch run is 0 until a priced (LLM) job exists.
-    return { calls, records, duration_s, estimated_usd: 0 };
+    const ops = loadOpsConnectorConfigFromDisk("evidence");
+    const maxCalls = ops?.limits.max_calls_per_run ?? 150;
+    const records = ops?.limits.max_records_per_run ?? 1000;
+    const previous = readExistingRecords(
+      join(__dirname, "..", "..", "corpora", "evidence", `${params.mechanism}.json`),
+    );
+    const fingerprint = runFingerprint(
+      params.mechanism as string,
+      terms,
+      saturationConfig(),
+      previous,
+    );
+    const checkpoint = readCheckpoint(params.mechanism as string, fingerprint);
+    const calls = Math.max(0, maxCalls - (checkpoint?.api_calls_spent ?? 0));
+    return {
+      calls,
+      records,
+      duration_s: Math.round(calls * QUOTE_S2_INTERVAL_S * 10) / 10,
+      estimated_usd: 0,
+    };
   },
 
   async run(ctx, params): Promise<RunResult> {
@@ -1274,35 +1581,171 @@ export const evidenceConnector: Connector = {
     const record = loadMechanism(mechanismId);
     const { terms, source: termsSource } = resolveTerms(record, params.terms);
     ctx.log(`terms (${termsSource}): ${terms.join(" · ")}`);
+    const saturation = saturationConfig();
+    const ops = loadOpsConnectorConfigFromDisk("evidence");
+    const maxCalls = ops?.limits.max_calls_per_run ?? 150;
+    const maxRecords = ops?.limits.max_records_per_run ?? 1000;
+    const fileName = `${mechanismId}.json`;
+    const previousRecords = readExistingRecords(join(ctx.corpusDir, fileName));
+    const fingerprint = runFingerprint(
+      mechanismId as string,
+      terms,
+      saturation,
+      previousRecords,
+    );
+    const existingCheckpoint = readCheckpoint(mechanismId as string, fingerprint);
+    const checkpoint: EvidenceCheckpoint = existingCheckpoint ?? {
+      version: 1,
+      mechanism_id: mechanismId as string,
+      logical_run_id: `${mechanismId}-${Date.now().toString(36)}`,
+      started_at: new Date().toISOString(),
+      terms,
+      fingerprint,
+      cursor: 0,
+      tasks: buildQueryTasks(terms, saturation),
+      novelty_curve: [],
+      expanded_anchor_ids: [],
+      topical_candidates: 0,
+      topical_confirmed: 0,
+      topical_rejected: 0,
+      s2_throttled: false,
+      api_calls_spent: 0,
+    };
+    if (existingCheckpoint) {
+      ctx.log(
+        `resuming logical run ${checkpoint.logical_run_id} at query ${checkpoint.cursor + 1} ` +
+          `(${checkpoint.api_calls_spent}/${maxCalls} calls spent)`,
+      );
+    }
+    const baseApiCalls = existingCheckpoint?.api_calls_spent ?? 0;
 
-    // Any Semantic Scholar 429 — even keyed, despite the global queue —
-    // records s2_throttled in the manifest (D-018/D-027); keyless runs
-    // additionally drop the per-term batch to 10 for the retry passes.
-    let s2Throttled = false;
+    let s2Throttled = checkpoint.s2_throttled === true;
     const s2Limit = (): number =>
-      s2Throttled && !s2ApiKey() ? S2_THROTTLED_PER_TERM : S2_PER_TERM;
+      s2Throttled && !s2ApiKey()
+        ? Math.min(S2_THROTTLED_PER_TERM, saturation.records_per_query)
+        : saturation.records_per_query;
+    const coreKeys = coreKeywords(terms);
+    const expandedAnchors = new Set(checkpoint.expanded_anchor_ids);
+    const startedSliceAt = Date.now();
+    const softDeadline =
+      startedSliceAt + saturation.soft_time_limit_minutes * 60_000;
+    const reserveCalls = (record.pinned_evidence?.length ?? 0) + 6;
+    let stopReason: SaturationReport["stop_reason"] | null = null;
+    let upstreamCooldownMessage: string | null = null;
 
-    // Fan each term out across viewpoints and both APIs (D-058).
-    const tasks = buildQueryTasks(terms);
+    ctx.log(`rebuilding ${checkpoint.cursor} completed query result(s) from checkpoint`);
+    let accumulated = dedupeRecords([
+      ...(previousRecords ?? []),
+      ...checkpoint.tasks
+        .slice(0, checkpoint.cursor)
+        .flatMap((task) => task.records),
+    ]).records.slice(0, maxRecords);
+    ctx.log(`checkpoint state rebuilt: ${accumulated.length} cumulative records`);
+
+    const graphTask = (
+      kind: "backward-reference" | "forward-citation",
+      anchor: EvidenceRecord,
+    ): QueryTask => {
+      const anchorId = anchor.openalex_id as string;
+      const bucket: RetrievalBucket =
+        kind === "forward-citation" ? "recency" : "citation";
+      const id = `graph:${kind}:${anchorId}`;
+      const angle = anchor.search_angles?.[0] ?? "canon";
+      return {
+        id,
+        kind,
+        api: "openalex",
+        angle,
+        term: anchor.title,
+        bucket,
+        limit: saturation.records_per_query,
+        page: 1,
+        throttleable: false,
+        anchorId,
+        anchorTitle: anchor.title,
+        meta: {
+          query_id: id,
+          api: "openalex",
+          angle,
+          term: anchor.title,
+          bucket,
+          kind,
+          requested: saturation.records_per_query,
+          returned: 0,
+          unique_returned: 0,
+          records_added: 0,
+          novelty_rate: 0,
+          rolling_novelty_rate: null,
+        },
+        records: [],
+      };
+    };
 
     const runTask = async (task: QueryTask): Promise<void> => {
-      // Only the canon S2 query throttles; contrast S2 queries keep their
-      // fixed CONTRAST_PER_TERM batch.
+      if (
+        task.api === "semantic-scholar" &&
+        s2Throttled &&
+        !s2ApiKey()
+      ) {
+        task.error =
+          `${task.kind} semantic-scholar "${task.term}": skipped after keyless throttling`;
+        ctx.log(`SKIPPED ${task.error}`);
+        return;
+      }
       const limit =
         task.api === "semantic-scholar" && task.throttleable ? s2Limit() : task.limit;
       if (task.api === "semantic-scholar") task.meta.requested = limit;
       try {
+        const rawRecords =
+          task.kind === "backward-reference"
+            ? await fetchBackwardReferences(
+                ctx.fetch,
+                task.anchorId as string,
+                task.limit,
+              )
+            : task.kind === "forward-citation"
+              ? await fetchForwardCitations(
+                  ctx.fetch,
+                  task.anchorId as string,
+                  task.limit,
+                )
+              : task.api === "openalex"
+                ? await searchOpenAlex(
+                    ctx.fetch,
+                    task.term,
+                    task.sort,
+                    task.limit,
+                    task.page,
+                  )
+                : await searchSemanticScholar(
+                    ctx.fetch,
+                    task.term,
+                    limit,
+                    task.page,
+                  );
         const records =
-          task.api === "openalex"
-            ? await searchOpenAlex(ctx.fetch, task.term, task.sort, task.limit)
-            : await searchSemanticScholar(ctx.fetch, task.term, limit);
-        for (const r of records) r.search_angles = [task.angle];
+          task.kind === "search"
+            ? rawRecords
+            : rawRecords.filter((result) =>
+                isTopicalGraphAnchor(result, coreKeys),
+              );
+        if (task.kind === "search") {
+          for (const result of records) result.search_angles = [task.angle];
+        }
         task.meta.returned = records.length;
         task.records = records;
         task.error = undefined;
-        ctx.log(`${task.api} ${task.angle} "${task.term}": ${records.length} records`);
+        ctx.log(
+          `${task.kind} ${task.api} ${task.bucket} ${task.angle} "${task.term}": ` +
+            `${records.length} records`,
+        );
       } catch (err) {
-        task.error = `${task.api} ${task.angle} "${task.term}": ${(err as Error).message}`;
+        if (err instanceof UpstreamCooldownError) {
+          upstreamCooldownMessage = err.message;
+        }
+        task.error =
+          `${task.kind} ${task.api} ${task.angle} "${task.term}": ` +
+          `${(err as Error).message}`;
         ctx.log(`FAILED ${task.error}`);
         if (
           task.api === "semantic-scholar" &&
@@ -1310,6 +1753,7 @@ export const evidenceConnector: Connector = {
           /HTTP 429/.test(task.error)
         ) {
           s2Throttled = true;
+          checkpoint.s2_throttled = true;
           ctx.log(
             s2ApiKey()
               ? "WARNING s2_throttled: Semantic Scholar hit 429 despite the 1 rps queue (D-027) — recorded in the manifest"
@@ -1319,42 +1763,170 @@ export const evidenceConnector: Connector = {
       }
     };
 
-    for (const task of tasks) await runTask(task);
+    while (checkpoint.cursor < checkpoint.tasks.length) {
+      if (Date.now() >= softDeadline) {
+        stopReason = "time_slice";
+        break;
+      }
+      if (
+        baseApiCalls + ctx.apiCalls() >=
+        Math.max(1, maxCalls - reserveCalls)
+      ) {
+        stopReason = "call_cap";
+        break;
+      }
+      if (accumulated.length >= maxRecords) {
+        stopReason = "storage_tier_record_cap";
+        break;
+      }
 
-    // Retry passes with exponential backoff (30s, 60s, 120s): the keyless
-    // Semantic Scholar pool 429s in bursts.
-    const failed = () => tasks.filter((t) => t.error);
-    for (let pass = 1; pass <= MAX_RETRY_PASSES; pass++) {
-      if (failed().length === 0 || failed().length === tasks.length) break;
-      const cooldownMs = RETRY_COOLDOWN_MS * 2 ** (pass - 1);
-      ctx.log(
-        `retry pass ${pass}/${MAX_RETRY_PASSES}: ${failed().length} failed queries after ${cooldownMs / 1000}s cooldown`,
+      const task = checkpoint.tasks[checkpoint.cursor];
+      ctx.log(`issuing query ${checkpoint.cursor + 1}: ${task.id}`);
+      await runTask(task);
+      checkpoint.cursor++;
+      if (task.error) {
+        checkpoint.api_calls_spent = baseApiCalls + ctx.apiCalls();
+        if (upstreamCooldownMessage !== null) {
+          checkpoint.slice_stop_reason = "upstream_quota";
+          stopReason = "time_slice";
+        }
+        writeCheckpoint(checkpoint);
+        if (upstreamCooldownMessage !== null) break;
+        continue;
+      }
+
+      const uniqueReturned = dedupeRecords(task.records).records;
+      const before = accumulated.length;
+      accumulated = dedupeRecords([...accumulated, ...uniqueReturned]).records.slice(
+        0,
+        maxRecords,
       );
-      await new Promise((resolve) => setTimeout(resolve, cooldownMs));
-      for (const task of failed()) await runTask(task);
+      const added = accumulated.length - before;
+      const noveltyRate =
+        uniqueReturned.length > 0 ? round4(added / uniqueReturned.length) : 0;
+      const rolling = rollingNoveltyRate(
+        checkpoint.novelty_curve,
+        noveltyRate,
+        saturation.window_queries,
+      );
+      task.meta.unique_returned = uniqueReturned.length;
+      task.meta.records_added = added;
+      task.meta.novelty_rate = noveltyRate;
+      task.meta.rolling_novelty_rate = rolling;
+      checkpoint.novelty_curve.push({
+        query_index: checkpoint.novelty_curve.length + 1,
+        query_id: task.id,
+        bucket: task.bucket,
+        kind: task.kind,
+        returned: task.records.length,
+        unique_returned: uniqueReturned.length,
+        records_added: added,
+        novelty_rate: noveltyRate,
+        rolling_novelty_rate: rolling,
+        cumulative_records: accumulated.length,
+      });
+
+      if (task.kind === "search" && expandedAnchors.size < saturation.citation_graph.max_anchors) {
+        const graphTasks: QueryTask[] = [];
+        for (const candidate of uniqueReturned) {
+          if (
+            !candidate.openalex_id ||
+            expandedAnchors.has(candidate.openalex_id) ||
+            expandedAnchors.size >= saturation.citation_graph.max_anchors
+          ) {
+            continue;
+          }
+          checkpoint.topical_candidates++;
+          if (!isTopicalGraphAnchor(candidate, coreKeys)) {
+            checkpoint.topical_rejected++;
+            continue;
+          }
+          checkpoint.topical_confirmed++;
+          expandedAnchors.add(candidate.openalex_id);
+          for (const direction of enabledGraphDirections(saturation.citation_graph)) {
+            graphTasks.push(graphTask(direction, candidate));
+          }
+        }
+        if (graphTasks.length > 0) {
+          // Preserve a balanced search triplet before graph work so dynamic
+          // expansion cannot starve recency/citation retrieval.
+          const insertion = Math.min(
+            checkpoint.tasks.length,
+            checkpoint.cursor + 2,
+          );
+          checkpoint.tasks.splice(insertion, 0, ...graphTasks);
+          checkpoint.expanded_anchor_ids = Array.from(expandedAnchors);
+        }
+      }
+
+      checkpoint.api_calls_spent = baseApiCalls + ctx.apiCalls();
+      if (
+        checkpoint.cursor % saturation.checkpoint_every_queries === 0
+      ) {
+        writeCheckpoint(checkpoint);
+      }
+
+      if (
+        saturationReached(
+          checkpoint.novelty_curve.length,
+          rolling,
+          saturation,
+        )
+      ) {
+        stopReason = "saturation";
+        break;
+      }
     }
 
-    const queries = tasks.map((t) => t.meta);
-    const failures = failed().map((t) => t.error as string);
-    if (failures.length === tasks.length) {
+    if (stopReason === null) {
+      // The deterministic frontier was fully consumed. Its final complete
+      // window is the best available saturation signal.
+      const last = checkpoint.novelty_curve.at(-1);
+      stopReason =
+        checkpoint.novelty_curve.length >= saturation.minimum_queries &&
+        last?.rolling_novelty_rate !== null &&
+        (last?.rolling_novelty_rate ?? 1) < saturation.novelty_threshold
+          ? "saturation"
+          : "call_cap";
+    }
+
+    checkpoint.api_calls_spent =
+      baseApiCalls + ctx.apiCalls();
+    if (stopReason === "time_slice") {
+      checkpoint.slice_stop_reason = upstreamCooldownMessage
+        ? "upstream_quota"
+        : "time_slice";
+      writeCheckpoint(checkpoint);
+      return {
+        status: "partial",
+        recordsFetched: accumulated.length,
+        files: [],
+        error: checkpoint.slice_stop_reason === "upstream_quota"
+          ? `upstream API quota requires a later continuation; logical run ${checkpoint.logical_run_id} checkpointed ` +
+            `at query ${checkpoint.cursor}/${checkpoint.tasks.length}`
+          : `soft time limit reached; logical run ${checkpoint.logical_run_id} checkpointed ` +
+            `at query ${checkpoint.cursor}/${checkpoint.tasks.length}`,
+        warnings: { resume_required: true },
+      };
+    }
+    removeCheckpoint(mechanismId as string);
+
+    const completedTasks = checkpoint.tasks.slice(0, checkpoint.cursor);
+    const searchTasks = completedTasks.filter((task) => task.kind === "search");
+    const searchDedupe = dedupeRecords(searchTasks.flatMap((task) => task.records));
+    const queries = completedTasks.map((task) => task.meta);
+    const failures = completedTasks
+      .filter((task) => task.error)
+      .map((task) => task.error as string);
+    if (queries.length > 0 && failures.length === queries.length) {
       throw new Error(`All queries failed — ${failures.join(" · ")}`);
     }
 
-    const { records, groups } = dedupeRecords(tasks.flatMap((t) => t.records));
-
     const currentYear = new Date().getUTCFullYear();
-    const fileName = `${mechanismId}.json`;
-
-    // Dedup-aware novelty + diversity (D-058), computed over the deduped SEARCH
-    // records BEFORE pins/snowball (owner pins and snowballed references are
-    // structural completeness, not query diversity). A harvest that mostly
-    // re-fetched the canon already on disk is flagged low_novelty and must not
-    // count as progress.
-    const previousRecords = readExistingRecords(join(ctx.corpusDir, fileName));
     const diversityReport = buildDiversityReport(
-      tasks,
-      records,
-      groups,
+      searchTasks,
+      searchDedupe.records,
+      searchDedupe.groups,
       previousRecords,
       currentYear,
     );
@@ -1368,6 +1940,8 @@ export const evidenceConnector: Connector = {
           ? ` — LOW-NOVELTY: >${Math.round(LOW_NOVELTY_KNOWN_SHARE * 100)}% already in corpus; not progress (D-058)`
           : ""),
     );
+
+    let records = accumulated;
 
     // Owner-pinned works (D-017): merge into the corpus with source_api
     // "pinned". A pin overlapping a harvested record fills its gaps and wins
@@ -1395,6 +1969,19 @@ export const evidenceConnector: Connector = {
       ctx.log,
     );
 
+    // The storage-tier cap is a runtime invariant, including pins and legacy
+    // review snowballing. Pins win, then the most cited records fill the tier.
+    records = dedupeRecords(records).records
+      .sort(
+        (a, b) =>
+          Number(b.source_api === "pinned") - Number(a.source_api === "pinned") ||
+          (b.citations ?? -1) - (a.citations ?? -1),
+      )
+      .slice(0, maxRecords);
+    if (records.length >= maxRecords && stopReason !== "saturation") {
+      stopReason = "storage_tier_record_cap";
+    }
+
     // Category checklist (D-019): metadata-only classification of every
     // record, including snowballed ones.
     for (const r of records) r.categories = classifyRecord(r, currentYear);
@@ -1409,6 +1996,44 @@ export const evidenceConnector: Connector = {
     );
 
     const recordsWithIds = assignCorpusRecordIds(records);
+    const retrievalCounts: Record<RetrievalBucket, number> = {
+      relevance: 0,
+      recency: 0,
+      citation: 0,
+    };
+    for (const task of searchTasks) retrievalCounts[task.bucket]++;
+    const completedGraphAnchors = new Set(
+      completedTasks
+        .filter((task) => task.kind !== "search")
+        .flatMap((task) => (task.anchorId ? [task.anchorId] : [])),
+    );
+    const topicalTotal = checkpoint.topical_candidates;
+    const saturationReport: SaturationReport = {
+      queries_issued: checkpoint.novelty_curve.length,
+      records_added: Math.max(
+        0,
+        recordsWithIds.length - (previousRecords?.length ?? 0),
+      ),
+      novelty_curve: checkpoint.novelty_curve,
+      window_queries: saturation.window_queries,
+      novelty_threshold: saturation.novelty_threshold,
+      minimum_queries: saturation.minimum_queries,
+      retrieval_counts: retrievalCounts,
+      topical_candidates: topicalTotal,
+      topical_confirmed: checkpoint.topical_confirmed,
+      topical_rejected: checkpoint.topical_rejected,
+      topical_confirmation_rate:
+        topicalTotal > 0
+          ? round4(checkpoint.topical_confirmed / topicalTotal)
+          : 0,
+      graph_anchors_expanded: completedGraphAnchors.size,
+      saturation_reached: stopReason === "saturation",
+      stop_reason: stopReason,
+      cap: {
+        max_calls: maxCalls,
+        max_unique_records: maxRecords,
+      },
+    };
     const file: EvidenceFile = {
       mechanism_id: mechanismId as string,
       fetched_at: new Date().toISOString(),
@@ -1418,6 +2043,7 @@ export const evidenceConnector: Connector = {
       coverage_report: coverageReport,
       category_counts: categoryCounts,
       diversity_report: diversityReport,
+      saturation_report: saturationReport,
       records: recordsWithIds,
     };
 
@@ -1426,6 +2052,9 @@ export const evidenceConnector: Connector = {
     const warnings: Record<string, boolean> = {};
     if (s2Throttled) warnings.s2_throttled = true;
     if (lowNovelty) warnings.low_novelty = true;
+    if (stopReason === "call_cap" || stopReason === "storage_tier_record_cap") {
+      warnings.capped = true;
+    }
 
     // Anti-regression guardrail (D-038): a re-harvest that produces FEWER
     // records than the existing corpus is suspicious — a dropped evidence_terms

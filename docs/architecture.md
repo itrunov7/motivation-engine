@@ -54,7 +54,7 @@ In the solo phase the "engine" is not a service but a set of pipelines. All of t
 
 Before a derivation reaches the review queue, STEP B2 applies four ordered quality gates (D-079): corpus-record/DOI/quote grounding, deterministic near-duplicate resolution, a configurable confidence floor, and a configurable per-mechanism volume cap. Pending duplicates are merged by provenance union. A match against authoritative knowledge becomes an owner-reviewed `operation: enrich` proposal with an explicit before/after diff; extraction never writes the artifact itself. Low-confidence or no-material-change enrichments remain visible under `status: held_low_confidence`, collapsed by default. The extraction manifest and `/ops` report proposed, merged, ungrounded, held, capped, and high-confidence-overflow counts so dropped knowledge is never silent.
 
-Why Actions and not a server: every run is an open log with full output. The "no black box" requirement is satisfied by the platform itself: open the Actions tab and see what ran, when, and with what result. Limits (6h per job) suffice for our batches; if a batch outgrows them, it moves to the harvest worker without changing the scheme.
+Why Actions and not a server: every run is an open log with full output. The "no black box" requirement is satisfied by the platform itself: open the Actions tab and see what ran, when, and with what result. Evidence saturation runs use a five-hour soft slice under an explicit 330-minute job timeout, atomically checkpoint under `/corpora/_ops/checkpoints/evidence`, and continue in a queued Actions run with the same logical budget (D-080). Work that cannot fit this resumable pattern moves to the harvest worker without changing the scheme.
 
 **Runtime selection** (the mechanism filter at generation time) is a local script during the solo phase for M3 runs. In August it moves **inside Ventora's backend** as a pure function — the registry is baked into the build from git. A separate "engine server" does not exist by design: the engine is a layer of Ventora, not an island.
 
@@ -95,7 +95,11 @@ Harvesting is **isolated from everything else** — it is the only component wit
 
 ## Escalation triggers (do not act before they fire)
 
-- Corpora arrive (thousands of rows) → activate Postgres.
+- Corpora arrive (thousands of rows) → activate Postgres. **Triggered for
+  saturation harvesting (D-080):** full-depth evidence harvesting is now
+  storage-migration-gated. Until that separate migration is complete, the git
+  tier remains capped at 1,000 unique records per mechanism; no 3,500+ record
+  harvest may be run by exception.
 - Millions of examples requiring semantic search → pgvector over examples; the core stays a registry.
 - >500 implementations or conflicting selection rules → registry moves from git to a DB.
 - Enough telemetry `implementations[].observed_effects` → learned ranking replaces manual weights. These measured product outcomes are distinct from first-class scientific L2 records under `/effects`.

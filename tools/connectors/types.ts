@@ -74,6 +74,8 @@ export interface RunContext {
   fetch: PoliteFetch;
   /** Pretty-printing JSON writer; `path` is relative to corpusDir. */
   writeJson: (path: string, data: unknown) => void;
+  /** Outbound attempts made in the current process, including retries. */
+  apiCalls: () => number;
   log: (message: string) => void;
 }
 
@@ -248,6 +250,25 @@ export interface OpsConnectorConfig {
     max_calls_per_run: number;
     /** Pre-run ceiling on the estimated records (D-025). */
     max_records_per_run: number;
+  };
+  /** Evidence-only adaptive harvest policy (D-080). */
+  saturation?: {
+    window_queries: number;
+    novelty_threshold: number;
+    minimum_queries: number;
+    records_per_query: number;
+    retrieval_shares: {
+      relevance: number;
+      recency: number;
+      citation: number;
+    };
+    citation_graph: {
+      backward_references: boolean;
+      forward_citations: boolean;
+      max_anchors: number;
+    };
+    checkpoint_every_queries: number;
+    soft_time_limit_minutes: number;
   };
   /** Explicit harvest scope (mechanism ids). */
   targets: string[];

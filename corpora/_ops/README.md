@@ -38,8 +38,22 @@ One file per registered connector; the filename stem must equal
   "paused_reason": null,          // required (non-empty) when paused is true
   "cadence": { "every_days": 7 }, // a due target runs at most this often
   "limits": {
-    "max_calls_per_run": 500,     // pre-run ceiling on the estimated calls
-    "max_records_per_run": 5000   // pre-run ceiling on the estimated records
+    "max_calls_per_run": 150,
+    "max_records_per_run": 1000   // current git storage-tier ceiling
+  },
+  "saturation": {
+    "window_queries": 10,
+    "novelty_threshold": 0.05,
+    "minimum_queries": 30,
+    "records_per_query": 25,
+    "retrieval_shares": { "relevance": 1, "recency": 1, "citation": 1 },
+    "citation_graph": {
+      "backward_references": true,
+      "forward_citations": true,
+      "max_anchors": 20
+    },
+    "checkpoint_every_queries": 1,
+    "soft_time_limit_minutes": 300
   },
   "targets": ["LA-01"]            // what the machine harvests (mechanism ids)
 }
@@ -59,6 +73,18 @@ One file per registered connector; the filename stem must equal
   that call Semantic Scholar, size it so a run stays within minutes even if
   every call were S2 at the 1 rps cumulative key allowance (100 S2 calls ≈
   2 min; evidence defaults to 150).
+- Evidence uses `saturation` to stop only after the rolling novelty rate over
+  the last 10 completed queries falls below 5% (after at least 30 queries), or
+  a cap is reached. Retrieval is balanced across relevance, recency, and
+  citation ordering. Both backward references and forward citations are
+  expanded from metadata-confirmed on-topic records.
+- `max_records_per_run: 1000` is intentionally the current git storage-tier
+  gate (D-080), not the intended full-depth limit. Raise it only after the
+  separately planned evidence-corpus storage migration.
+- Multi-hour runs checkpoint after each query under
+  `_ops/checkpoints/evidence/`. A soft five-hour slice exits green/partial;
+  Actions commits the checkpoint and queues a continuation. Calls already
+  spent remain part of the same logical-run cap.
 
 ## Validation (D-024)
 

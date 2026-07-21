@@ -59,10 +59,12 @@ concurrency:
 permissions:
   contents: write
   issues: write
+  actions: write
 
 jobs:
   maturation:
     runs-on: ubuntu-latest
+    timeout-minutes: 330
     env:
       MAX_TASKS: ${{ inputs.max_tasks || '' }}
       S2_API_KEY: ${{ secrets.S2_API_KEY }}
@@ -131,6 +133,28 @@ jobs:
           done < due.tsv
           echo "ran=true" >> "$GITHUB_OUTPUT"
           if [ "$overall" -ne 0 ]; then echo "failed=true" >> "$GITHUB_OUTPUT"; else echo "failed=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Defer checkpointed saturation tasks
+        if: steps.harvest.outputs.ran == 'true' && steps.harvest.outputs.failed != 'true'
+        run: |
+          set -euo pipefail
+          for checkpoint in corpora/_ops/checkpoints/evidence/*.json; do
+            [ -f "$checkpoint" ] || continue
+            mechanism="${checkpoint##*/}"
+            mechanism="${mechanism%.json}"
+            jq --arg mechanism "$mechanism" '
+              .entries |= map(
+                if .mechanism == $mechanism and .action == "run"
+                then .action = "defer"
+                  | .reason = "saturation time slice checkpointed; continuation queued"
+                else .
+                end
+              )
+            ' queue-plan.json > queue-plan.next.json
+            mv queue-plan.next.json queue-plan.json
+          done
+          jq -r '.entries[] | select(.action == "run") | [.mechanism, .terms] | @tsv' \
+            queue-plan.json > due.tsv
 
       # ---------- Count low-novelty harvests (D-058) ----------
       # A harvest that returned mostly records already in the corpus is a
@@ -293,6 +317,28 @@ jobs:
           else
             echo "Nothing changed — no commit."
           fi
+
+      - name: Queue checkpoint continuations
+        if: steps.harvest.outputs.failed != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for checkpoint in corpora/_ops/checkpoints/evidence/*.json; do
+            [ -f "$checkpoint" ] || continue
+            target="${checkpoint##*/}"
+            target="${target%.json}"
+            terms=$(jq -r '.terms | join(";")' "$checkpoint")
+            gh workflow run harvest.yml \
+              --ref "${GITHUB_REF_NAME}" \
+              -f connector=evidence \
+              -f target="$target" \
+              -f terms="$terms" \
+              -f dry_run=false \
+              -f dispatch_id="maturation-${GITHUB_RUN_ID}-${target}" \
+              -f raise_cap=false
+            echo "Queued continuation for $target."
+          done
 
       - name: Open ops issue on persistent failure
         if: steps.harvest.outputs.failed == 'true'

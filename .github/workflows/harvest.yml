@@ -37,6 +37,11 @@ on:
         required: false
         type: string
         default: ""
+      terms:
+        description: "Optional semicolon-separated evidence terms (preserved across resume)"
+        required: false
+        type: string
+        default: ""
       dry_run:
         description: "true = estimate only (no harvest)"
         required: false
@@ -60,6 +65,7 @@ concurrency:
 permissions:
   contents: write
   issues: write
+  actions: write
 
 jobs:
   # ---------- Dry-run estimate (D-025): quote artifact, no harvest ----------
@@ -78,7 +84,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ -n "${{ inputs.target }}" ]; then
-            npx tsx tools/run-connector.ts quote "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" "raise_cap=${{ inputs.raise_cap }}" 2>&1 | tee quote-run.log
+            npx tsx tools/run-connector.ts quote "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" "terms=${{ inputs.terms }}" "raise_cap=${{ inputs.raise_cap }}" 2>&1 | tee quote-run.log
           else
             npx tsx tools/run-connector.ts quote "${{ inputs.connector }}" "raise_cap=${{ inputs.raise_cap }}" 2>&1 | tee quote-run.log
           fi
@@ -102,6 +108,7 @@ jobs:
   run:
     if: github.event_name == 'workflow_dispatch' && inputs.dry_run != 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 330
     env:
       CONNECTOR_ID: ${{ inputs.connector }}
       S2_API_KEY: ${{ secrets.S2_API_KEY }}
@@ -122,7 +129,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ -n "${{ inputs.target }}" ]; then
-            npx tsx tools/ops-gate.ts check "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" "raise_cap=${{ inputs.raise_cap }}"
+            npx tsx tools/ops-gate.ts check "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" "terms=${{ inputs.terms }}" "raise_cap=${{ inputs.raise_cap }}"
           else
             npx tsx tools/ops-gate.ts check "${{ inputs.connector }}" "raise_cap=${{ inputs.raise_cap }}"
           fi
@@ -135,7 +142,7 @@ jobs:
           set +e
           harvest() {
             if [ -n "${{ inputs.target }}" ]; then
-              npm run connector -- "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" 2>&1 | tee harvest.log
+              npm run connector -- "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" "terms=${{ inputs.terms }}" 2>&1 | tee harvest.log
             else
               npm run connector -- "${{ inputs.connector }}" 2>&1 | tee harvest.log
             fi
@@ -150,6 +157,12 @@ jobs:
             code=$?
           fi
           if [ "$code" -ne 0 ]; then echo "failed=true" >> "$GITHUB_OUTPUT"; else echo "failed=false" >> "$GITHUB_OUTPUT"; fi
+          checkpoint="corpora/_ops/checkpoints/evidence/${{ inputs.target }}.json"
+          if [ "${{ inputs.connector }}" = "evidence" ] && [ -f "$checkpoint" ]; then
+            echo "resume_required=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "resume_required=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Commit corpus if changed
         if: steps.harvest.outputs.failed != 'true'
@@ -163,6 +176,22 @@ jobs:
           else
             echo "Corpus unchanged — nothing to commit."
           fi
+
+      - name: Queue checkpoint continuation
+        if: steps.harvest.outputs.failed != 'true' && steps.harvest.outputs.resume_required == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run harvest.yml \
+            --ref "${GITHUB_REF_NAME}" \
+            -f connector="${{ inputs.connector }}" \
+            -f target="${{ inputs.target }}" \
+            -f terms="${{ inputs.terms }}" \
+            -f dry_run=false \
+            -f dispatch_id="${{ inputs.dispatch_id || github.run_id }}-resume-${GITHUB_RUN_ATTEMPT}" \
+            -f raise_cap="${{ inputs.raise_cap }}"
+          echo "Queued continuation from committed evidence checkpoint."
 
       - name: Open ops issue on persistent failure
         if: steps.harvest.outputs.failed == 'true'

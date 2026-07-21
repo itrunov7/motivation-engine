@@ -42,6 +42,18 @@ export class RunBudgetExceededError extends Error {
   }
 }
 
+/** The upstream asked us not to retry within the current Actions slice. */
+export class UpstreamCooldownError extends Error {
+  readonly retryAfterSeconds: number;
+  constructor(hostname: string, retryAfterSeconds: number) {
+    super(
+      `${hostname} upstream cooldown is ${retryAfterSeconds}s; checkpoint and resume later`,
+    );
+    this.name = "UpstreamCooldownError";
+    this.retryAfterSeconds = retryAfterSeconds;
+  }
+}
+
 /** D-011: the only external hosts tools/ scripts may call. */
 export const ALLOWED_HOSTS = [
   "api.openalex.org",
@@ -55,6 +67,7 @@ const MAILTO_PARAM_HOSTS = new Set<string>(["api.openalex.org"]);
 
 const MAX_ATTEMPTS = 3;
 const BACKOFF_BASE_MS = 1000;
+const REQUEST_TIMEOUT_MS = 30_000;
 
 // ---------- Global Semantic Scholar queue (D-027) ----------
 
@@ -168,7 +181,27 @@ export function createPoliteFetch(options: PoliteFetchOptions): PoliteFetchHandl
 
     const attemptFetch = (): Promise<Response> => {
       stats.apiCalls++;
-      return fetch(url, { ...init, headers });
+      const timeout = new AbortController();
+      const signal = init?.signal
+        ? AbortSignal.any([init.signal, timeout.signal])
+        : timeout.signal;
+      let timer: ReturnType<typeof setTimeout>;
+      const timedOut = new Promise<Response>((_, reject) => {
+        timer = setTimeout(() => {
+          timeout.abort();
+          reject(
+            new Error(
+              `request timed out after ${REQUEST_TIMEOUT_MS}ms for ${url.hostname}${url.pathname}`,
+            ),
+          );
+        }, REQUEST_TIMEOUT_MS);
+      });
+      const request = fetch(url, {
+        ...init,
+        headers,
+        signal,
+      });
+      return Promise.race([request, timedOut]).finally(() => clearTimeout(timer));
     };
 
     let lastError: Error | undefined;
@@ -196,6 +229,14 @@ export function createPoliteFetch(options: PoliteFetchOptions): PoliteFetchHandl
         const retryable = response.status === 429 || response.status >= 500;
         if (!retryable) return response;
         lastError = new Error(`HTTP ${response.status} ${response.statusText} for ${url.hostname}${url.pathname}`);
+        const retryAfterSeconds = Number(response.headers.get("retry-after"));
+        if (
+          response.status === 429 &&
+          Number.isFinite(retryAfterSeconds) &&
+          retryAfterSeconds > 60
+        ) {
+          throw new UpstreamCooldownError(url.hostname, retryAfterSeconds);
+        }
       }
 
       if (attempt < MAX_ATTEMPTS) {

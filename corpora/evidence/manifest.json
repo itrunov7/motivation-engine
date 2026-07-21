@@ -4,28 +4,132 @@
     "openalex",
     "semantic-scholar"
   ],
-  "connector_version": "2.4.0",
+  "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-07-20T16:07:39.292Z",
-    "status": "success",
+    "timestamp": "2026-07-21T13:19:12.562Z",
+    "status": "partial",
     "params": {
-      "mechanism": "IF-18"
+      "mechanism": "CL-14",
+      "terms": "split attention effect;cognitive load measurement replication;working memory limits information processing;extraneous cognitive load instructional;cognitive load theory"
     },
-    "records_fetched": 227,
-    "files_written": 1,
-    "duration_s": 97.55,
+    "records_fetched": 790,
+    "files_written": 0,
+    "duration_s": 0.31,
+    "error": "api.openalex.org upstream cooldown is 38448s; checkpoint and resume later; logical run CL-14-mrun56vs checkpointed at query 70/1090",
     "warnings": {
-      "s2_throttled": true
+      "resume_required": true
     },
     "cost": {
-      "api_calls": 57,
-      "duration_s": 97.55,
+      "api_calls": 1,
+      "duration_s": 0.31,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-07-21T13:19:12.562Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "CL-14",
+        "terms": "split attention effect;cognitive load measurement replication;working memory limits information processing;extraneous cognitive load instructional;cognitive load theory"
+      },
+      "records_fetched": 790,
+      "files_written": 0,
+      "duration_s": 0.31,
+      "error": "api.openalex.org upstream cooldown is 38448s; checkpoint and resume later; logical run CL-14-mrun56vs checkpointed at query 70/1090",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.31,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-21T12:35:46.249Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "CL-14"
+      },
+      "records_fetched": 497,
+      "files_written": 1,
+      "duration_s": 234.16,
+      "error": "search semantic-scholar critique \"cognitive load theory critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar boundary \"cognitive load theory boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar canon \"extraneous cognitive load instructional\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar application \"extraneous cognitive load instructional applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar replication \"extraneous cognitive load instructional replication\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar cross-domain \"extraneous cognitive load instructional cross-domain generalization\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar recent \"working memory limits information processing\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar critique \"working memory limits information processing critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar boundary \"working memory limits information processing boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar canon \"cognitive load measurement replication\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true,
+        "capped": true
+      },
+      "cost": {
+        "api_calls": 150,
+        "duration_s": 234.16,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-21T12:33:35.528Z",
+      "status": "success",
+      "params": {
+        "mechanism": "CL-14",
+        "terms": "extraneous cognitive load instructional;working memory limits information processing;cognitive load measurement replication;split attention effect;cognitive load theory"
+      },
+      "records_fetched": 1000,
+      "files_written": 1,
+      "duration_s": 34.81,
+      "warnings": {
+        "capped": true
+      },
+      "cost": {
+        "api_calls": 28,
+        "duration_s": 34.81,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-21T12:31:45.827Z",
+      "status": "success",
+      "params": {
+        "mechanism": "CL-14"
+      },
+      "records_fetched": 896,
+      "files_written": 1,
+      "duration_s": 60.05,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 49,
+        "duration_s": 60.05,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-21T12:29:58.963Z",
+      "status": "success",
+      "params": {
+        "mechanism": "CL-14"
+      },
+      "records_fetched": 896,
+      "files_written": 1,
+      "duration_s": 72.55,
+      "cost": {
+        "api_calls": 60,
+        "duration_s": 72.55,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-20T16:07:39.292Z",
       "status": "success",
@@ -329,121 +433,13 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-20T07:54:24.181Z",
-      "status": "success",
-      "params": {
-        "mechanism": "PS-13"
-      },
-      "records_fetched": 352,
-      "files_written": 1,
-      "duration_s": 95.02,
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 57,
-        "duration_s": 95.02,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-17T14:36:28.736Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FR-11",
-        "terms": "framing effect risky choice subscription retention;anchoring adjustment heuristic subscription retention;anchoring effect replication subscription retention"
-      },
-      "records_fetched": 34,
-      "files_written": 1,
-      "duration_s": 6.86,
-      "error": "regression suspected: re-harvest produced 34 records vs 222 already in the corpus — corpus NOT overwritten; wrote FR-11.regression.json for review (D-038)",
-      "warnings": {
-        "regression_suspected": true
-      },
-      "cost": {
-        "api_calls": 9,
-        "duration_s": 6.86,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-17T14:36:20.422Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RE-10",
-        "terms": "reciprocity norm compliance saas onboarding;reciprocity persuasion gift saas onboarding;rule of reciprocation saas onboarding"
-      },
-      "records_fetched": 2,
-      "files_written": 1,
-      "duration_s": 8.09,
-      "error": "regression suspected: re-harvest produced 2 records vs 171 already in the corpus — corpus NOT overwritten; wrote RE-10.regression.json for review (D-038)",
-      "warnings": {
-        "regression_suspected": true
-      },
-      "cost": {
-        "api_calls": 9,
-        "duration_s": 8.09,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-17T14:36:12.222Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "CG-05",
-        "terms": "information gap theory curiosity saas onboarding;curiosity gap attention saas onboarding;need for cognition curiosity saas onboarding"
-      },
-      "records_fetched": 17,
-      "files_written": 1,
-      "duration_s": 7.97,
-      "error": "regression suspected: re-harvest produced 17 records vs 185 already in the corpus — corpus NOT overwritten; wrote CG-05.regression.json for review (D-038)",
-      "warnings": {
-        "regression_suspected": true
-      },
-      "cost": {
-        "api_calls": 9,
-        "duration_s": 7.97,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-17T14:36:02.749Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "SP-08",
-        "terms": "social proof conformity saas onboarding;social influence compliance descriptive norms saas onboarding;social proof replication saas onboarding"
-      },
-      "records_fetched": 18,
-      "files_written": 1,
-      "duration_s": 9.24,
-      "error": "regression suspected: re-harvest produced 18 records vs 234 already in the corpus — corpus NOT overwritten; wrote SP-08.regression.json for review (D-038)",
-      "warnings": {
-        "regression_suspected": true
-      },
-      "cost": {
-        "api_calls": 10,
-        "duration_s": 9.24,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
     {
       "path": "CG-05.json",
       "records": 185,
-      "bytes": 968374,
+      "bytes": 977624,
       "categories": {
         "foundational": 4,
         "meta-analysis": 14,
@@ -455,7 +451,7 @@
     {
       "path": "CG-05.regression.json",
       "records": 17,
-      "bytes": 34703,
+      "bytes": 35553,
       "categories": {
         "foundational": 1,
         "meta-analysis": 0,
@@ -466,20 +462,20 @@
     },
     {
       "path": "CL-14.json",
-      "records": 367,
-      "bytes": 2027083,
+      "records": 497,
+      "bytes": 3824137,
       "categories": {
         "foundational": 33,
-        "meta-analysis": 3,
-        "replication": 53,
-        "dissent": 111,
-        "recent": 161
+        "meta-analysis": 12,
+        "replication": 91,
+        "dissent": 187,
+        "recent": 245
       }
     },
     {
       "path": "EN-03.json",
       "records": 173,
-      "bytes": 787672,
+      "bytes": 796322,
       "categories": {
         "foundational": 13,
         "meta-analysis": 23,
@@ -491,7 +487,7 @@
     {
       "path": "FR-11.json",
       "records": 222,
-      "bytes": 875795,
+      "bytes": 886895,
       "categories": {
         "foundational": 37,
         "meta-analysis": 52,
@@ -503,7 +499,7 @@
     {
       "path": "FR-11.regression.json",
       "records": 34,
-      "bytes": 56891,
+      "bytes": 58591,
       "categories": {
         "foundational": 2,
         "meta-analysis": 1,
@@ -515,7 +511,7 @@
     {
       "path": "HA-04.json",
       "records": 205,
-      "bytes": 895657,
+      "bytes": 905907,
       "categories": {
         "foundational": 51,
         "meta-analysis": 43,
@@ -527,7 +523,7 @@
     {
       "path": "ID-12.json",
       "records": 175,
-      "bytes": 564691,
+      "bytes": 573441,
       "categories": {
         "foundational": 45,
         "meta-analysis": 9,
@@ -539,7 +535,7 @@
     {
       "path": "IF-18.json",
       "records": 227,
-      "bytes": 1105878,
+      "bytes": 1117228,
       "categories": {
         "foundational": 1,
         "meta-analysis": 5,
@@ -551,7 +547,7 @@
     {
       "path": "LA-01.json",
       "records": 209,
-      "bytes": 573622,
+      "bytes": 584072,
       "categories": {
         "foundational": 31,
         "meta-analysis": 28,
@@ -563,7 +559,7 @@
     {
       "path": "MM-15.json",
       "records": 282,
-      "bytes": 842069,
+      "bytes": 856169,
       "categories": {
         "foundational": 10,
         "meta-analysis": 49,
@@ -575,7 +571,7 @@
     {
       "path": "PF-16.json",
       "records": 310,
-      "bytes": 943021,
+      "bytes": 958521,
       "categories": {
         "foundational": 8,
         "meta-analysis": 7,
@@ -587,7 +583,7 @@
     {
       "path": "PS-13.json",
       "records": 352,
-      "bytes": 2195164,
+      "bytes": 2212764,
       "categories": {
         "foundational": 42,
         "meta-analysis": 10,
@@ -599,7 +595,7 @@
     {
       "path": "RE-10.json",
       "records": 171,
-      "bytes": 556549,
+      "bytes": 565099,
       "categories": {
         "foundational": 5,
         "meta-analysis": 7,
@@ -611,7 +607,7 @@
     {
       "path": "RE-10.regression.json",
       "records": 2,
-      "bytes": 3544,
+      "bytes": 3644,
       "categories": {
         "foundational": 1,
         "meta-analysis": 0,
@@ -623,7 +619,7 @@
     {
       "path": "SC-06.json",
       "records": 214,
-      "bytes": 1061113,
+      "bytes": 1071813,
       "categories": {
         "foundational": 4,
         "meta-analysis": 16,
@@ -635,7 +631,7 @@
     {
       "path": "SC-17.json",
       "records": 390,
-      "bytes": 2348416,
+      "bytes": 2367916,
       "categories": {
         "foundational": 3,
         "meta-analysis": 6,
@@ -647,7 +643,7 @@
     {
       "path": "SP-08.json",
       "records": 234,
-      "bytes": 1222397,
+      "bytes": 1234097,
       "categories": {
         "foundational": 10,
         "meta-analysis": 13,
@@ -659,7 +655,7 @@
     {
       "path": "SP-08.regression.json",
       "records": 18,
-      "bytes": 38706,
+      "bytes": 39606,
       "categories": {
         "foundational": 2,
         "meta-analysis": 0,
@@ -671,7 +667,7 @@
     {
       "path": "ST-09.json",
       "records": 187,
-      "bytes": 786755,
+      "bytes": 796105,
       "categories": {
         "foundational": 51,
         "meta-analysis": 12,
@@ -683,7 +679,7 @@
     {
       "path": "VR-02.json",
       "records": 201,
-      "bytes": 569914,
+      "bytes": 579964,
       "categories": {
         "foundational": 40,
         "meta-analysis": 35,
@@ -695,7 +691,7 @@
     {
       "path": "ZE-07.json",
       "records": 139,
-      "bytes": 778871,
+      "bytes": 785821,
       "categories": {
         "foundational": 20,
         "meta-analysis": 32,
@@ -707,32 +703,32 @@
     {
       "path": "digests/CL-14.md",
       "records": 0,
-      "bytes": 15982
+      "bytes": 21533
     },
     {
       "path": "digests/IF-18.md",
       "records": 0,
-      "bytes": 11163
+      "bytes": 13540
     },
     {
       "path": "digests/MM-15.md",
       "records": 0,
-      "bytes": 17119
+      "bytes": 19794
     },
     {
       "path": "digests/PF-16.md",
       "records": 0,
-      "bytes": 14901
+      "bytes": 17207
     },
     {
       "path": "digests/PS-13.md",
       "records": 0,
-      "bytes": 17246
+      "bytes": 19907
     },
     {
       "path": "digests/SC-17.md",
       "records": 0,
-      "bytes": 14227
+      "bytes": 16469
     }
   ]
 }
