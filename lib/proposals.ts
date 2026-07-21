@@ -7,15 +7,22 @@ import type {
   Dossier,
   Effect,
   EvidenceCorpusFile,
+  CorpusManifest,
   InteractionRecord,
   Mechanism,
   Proposal,
   ProposalStatus,
   Realization,
+  RealizationCorpusFile,
+  RealizationCorpusProvenanceItem,
+  RealizationCorpusRecord,
+  SourcesRegistry,
   Segment,
   SegmentsFile,
 } from "./types";
-import { groundingErrors } from "./proposal-quality";
+import { groundingErrors, realizationGroundingErrors } from "./proposal-quality";
+import { isRealizationProvenance } from "./realization-corpus";
+import { deriveRealizationRecordId } from "./realization-corpus";
 export { isActionableProposal, PROPOSAL_STATUS_META } from "./proposal-meta";
 
 export const PROPOSAL_TYPES = [
@@ -58,6 +65,26 @@ export interface PreparedProposalTransaction {
   proposalId: string;
   proposalType: Proposal["type"];
   decisionId: string;
+  commitMessage: string;
+  mutations: FileMutation[];
+}
+
+export interface OwnerObservationRequest {
+  mechanismId: string;
+  sourceId: string;
+  sourceUrl: string;
+  sourceLocator: string;
+  observation: string;
+  artifactContext: string[];
+  observedAt: string;
+  contributedBy: string;
+  submittedAt: string;
+  attested: boolean;
+  schemaRoot?: string;
+}
+
+export interface PreparedOwnerObservationTransaction {
+  recordId: string;
   commitMessage: string;
   mutations: FileMutation[];
 }
@@ -108,6 +135,7 @@ interface Validators {
   realization: ValidateFunction;
   interaction: ValidateFunction;
   dossier: ValidateFunction;
+  realizationCorpus: ValidateFunction;
 }
 
 const validatorsByRoot = new Map<string, Validators>();
@@ -146,6 +174,7 @@ async function getValidators(root: string): Promise<Validators> {
     realizationSchema,
     interactionSchema,
     dossierSchema,
+    realizationCorpusSchema,
   ] =
     await Promise.all([
       readSchema(root, "proposals/proposal.schema.json"),
@@ -154,6 +183,7 @@ async function getValidators(root: string): Promise<Validators> {
       readSchema(root, "realizations/realization.schema.json"),
       readSchema(root, "interactions/interaction.schema.json"),
       readSchema(root, "dossiers/dossier.schema.json"),
+      readSchema(root, "corpora/realizations/realization-corpus.schema.json"),
     ]);
   const ajv = new Ajv2020({ allErrors: true, allowUnionTypes: true, strict: true });
   addFormats(ajv);
@@ -175,6 +205,7 @@ async function getValidators(root: string): Promise<Validators> {
       "https://ventora.dev/motivation-engine/interaction.schema.json",
     )!,
     dossier: ajv.getSchema("https://ventora.dev/motivation-engine/dossier.schema.json")!,
+    realizationCorpus: ajv.compile(realizationCorpusSchema),
   };
   validatorsByRoot.set(root, validators);
   return validators;
@@ -246,7 +277,9 @@ function assertPayloadProvenance(proposal: Proposal): void {
   }
   if (proposal.type === "effect") {
     const provenanceDois = new Set(
-      proposal.provenance.flatMap((item) => (item.doi === null ? [] : [item.doi])),
+      proposal.provenance.flatMap((item) =>
+        "doi" in item && item.doi !== null ? [item.doi] : [],
+      ),
     );
     for (const doi of proposal.payload.source) {
       if (!provenanceDois.has(doi)) {
@@ -268,9 +301,18 @@ async function assertResolvableProvenance(
         `Provenance mechanism id is invalid: ${item.mechanism_id}`,
       );
     }
-    const path = `corpora/evidence/${item.mechanism_id}.json`;
-    const corpus = parseJson<EvidenceCorpusFile>(path, await requireText(snapshot, path));
-    const errors = groundingErrors([item], corpus);
+    const path = isRealizationProvenance(item)
+      ? `corpora/realizations/${item.mechanism_id}/records.json`
+      : `corpora/evidence/${item.mechanism_id}.json`;
+    const errors = isRealizationProvenance(item)
+      ? realizationGroundingErrors(
+          [item as RealizationCorpusProvenanceItem],
+          parseJson<RealizationCorpusFile>(path, await requireText(snapshot, path)),
+        )
+      : groundingErrors(
+          [item],
+          parseJson<EvidenceCorpusFile>(path, await requireText(snapshot, path)),
+        );
     if (errors.length > 0) {
       throw new ProposalValidationError(
         `Provenance does not resolve in ${path}: ${errors.join("; ")}`,
@@ -788,6 +830,162 @@ async function appendDecision(
   validateDecisionLog(nextDecisions);
   await builder.write(decisionsPath, json(nextDecisions));
   return decisionId;
+}
+
+export async function prepareOwnerObservationTransaction(
+  snapshot: RepositorySnapshot,
+  request: OwnerObservationRequest,
+): Promise<PreparedOwnerObservationTransaction> {
+  if (!request.attested) {
+    throw new ProposalValidationError(
+      "Owner attestation is required for a manual-source observation",
+    );
+  }
+  assertIsoTimestamp(request.submittedAt);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(request.observedAt)) {
+    throw new ProposalValidationError("observedAt must be YYYY-MM-DD");
+  }
+  if (!request.contributedBy.trim()) {
+    throw new ProposalValidationError("contributedBy is required");
+  }
+  if (!request.observation.trim()) {
+    throw new ProposalValidationError("observation is required");
+  }
+  const artifactContext = Array.from(
+    new Set(request.artifactContext.map((item) => item.trim()).filter(Boolean)),
+  );
+  if (artifactContext.length === 0) {
+    throw new ProposalValidationError("At least one artifact context is required");
+  }
+  let sourceUrl: URL;
+  try {
+    sourceUrl = new URL(request.sourceUrl);
+  } catch {
+    throw new ProposalValidationError("sourceUrl must be an absolute URL");
+  }
+  if (sourceUrl.protocol !== "https:") {
+    throw new ProposalValidationError("sourceUrl must use https");
+  }
+
+  const sourcesPath = "sources/sources.json";
+  const sources = parseJson<SourcesRegistry>(
+    sourcesPath,
+    await requireText(snapshot, sourcesPath),
+  );
+  const source = sources.classes
+    .flatMap((sourceClass) => sourceClass.sources)
+    .find((candidate) => candidate.id === request.sourceId);
+  if (!source) throw new ProposalValidationError(`Unknown source ${request.sourceId}`);
+  if (source.connection_mode !== "manual") {
+    throw new ProposalValidationError(
+      `Owner-assisted ingest requires a manual source; ${source.id} is ${source.connection_mode}`,
+    );
+  }
+  if (!source.feeds.includes("L3")) {
+    throw new ProposalValidationError(`Source ${source.id} does not feed L3`);
+  }
+  if (!(await mechanismExists(snapshot, request.mechanismId))) {
+    throw new ProposalValidationError(`Unknown mechanism ${request.mechanismId}`);
+  }
+
+  const builder = new MutationBuilder(snapshot);
+  const corpusPath = `corpora/realizations/${request.mechanismId}/records.json`;
+  const previousText = await builder.read(corpusPath);
+  const previous = previousText
+    ? parseJson<RealizationCorpusFile>(corpusPath, previousText)
+    : null;
+  if (previous && previous.mechanism_id !== request.mechanismId) {
+    throw new ProposalValidationError("Existing realization corpus mechanism mismatch");
+  }
+  const base = {
+    mechanism_id: request.mechanismId,
+    source_id: source.id,
+    origin: "owner" as const,
+    title: `${source.name} owner observation — ${request.observedAt}`,
+    source_url: sourceUrl.toString(),
+    source_locator: request.sourceLocator.trim(),
+    observed_at: request.observedAt,
+    observation: request.observation.trim(),
+    artifact_context: artifactContext,
+    contributed_by: request.contributedBy.trim(),
+    license_note: source.legal_note ?? "Manual source; human curation only",
+  };
+  const record: RealizationCorpusRecord = {
+    record_id: deriveRealizationRecordId(base),
+    ...base,
+  };
+  if (previous?.records.some((item) => item.record_id === record.record_id)) {
+    throw new ProposalValidationError(
+      `Observation already exists as ${record.record_id}`,
+    );
+  }
+  const corpus: RealizationCorpusFile = {
+    mechanism_id: request.mechanismId,
+    updated_at: request.submittedAt,
+    records: [...(previous?.records ?? []), record].sort((left, right) =>
+      left.record_id.localeCompare(right.record_id),
+    ),
+  };
+  const validators = await getValidators(request.schemaRoot ?? process.cwd());
+  assertSchema("realization corpus", validators.realizationCorpus, corpus);
+  const corpusText = json(corpus);
+  await builder.write(corpusPath, corpusText);
+
+  const manifestPath = "corpora/realizations/manifest.json";
+  const previousManifestText = await builder.read(manifestPath);
+  const previousManifest = previousManifestText
+    ? parseJson<CorpusManifest>(manifestPath, previousManifestText)
+    : null;
+  const run = {
+    timestamp: request.submittedAt,
+    status: "success" as const,
+    params: {
+      mode: "owner-assisted",
+      mechanism: request.mechanismId,
+      source_id: source.id,
+      record_id: record.record_id,
+    },
+    records_fetched: 1,
+    files_written: 1,
+    duration_s: 0,
+    cost: {
+      api_calls: 0,
+      duration_s: 0,
+      tokens_in: null,
+      tokens_out: null,
+      estimated_usd: 0,
+    },
+  };
+  const relativeCorpusPath = `${request.mechanismId}/records.json`;
+  const dataFiles = [
+    ...(previousManifest?.data_files ?? []).filter(
+      (item) => item.path !== relativeCorpusPath,
+    ),
+    {
+      path: relativeCorpusPath,
+      records: corpus.records.length,
+      bytes: Buffer.byteLength(corpusText, "utf8"),
+    },
+  ].sort((left, right) => left.path.localeCompare(right.path));
+  const manifest: CorpusManifest = {
+    source_id: "realizations",
+    source_ids: Array.from(
+      new Set([...(previousManifest?.source_ids ?? []), source.id]),
+    ).sort(),
+    connector_version: previousManifest?.connector_version ?? "owner-assist-1.0.0",
+    // Do not let a human Mobbin note overwrite the honest last-run status of
+    // the Wayback connector sharing this corpus. Owner-only corpora use the
+    // zero-network run until a connector manifest exists.
+    last_run: previousManifest?.last_run ?? run,
+    run_history: previousManifest?.run_history ?? [run],
+    data_files: dataFiles,
+  };
+  await builder.write(manifestPath, json(manifest));
+  return {
+    recordId: record.record_id,
+    commitMessage: `data: add owner realization observation ${record.record_id}`,
+    mutations: builder.mutations(),
+  };
 }
 
 export async function prepareProposalPreview(

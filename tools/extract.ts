@@ -33,6 +33,7 @@ import {
   mergeProposals,
   normalizeQualityText,
   proposalSimilarity,
+  realizationGroundingErrors,
 } from "../lib/proposal-quality";
 import type {
   CorpusManifest,
@@ -47,12 +48,16 @@ import type {
   PackMapFile,
   Proposal,
   Realization,
+  RealizationCorpusFile,
+  RealizationCorpusRecord,
+  RealizationCorpusProvenanceItem,
   Segment,
   SegmentsFile,
 } from "../lib/types";
 
 const ROOT = join(__dirname, "..");
 const CORPUS_DIR = join(ROOT, "corpora", "evidence");
+const REALIZATION_CORPUS_DIR = join(ROOT, "corpora", "realizations");
 const PROPOSALS_DIR = join(ROOT, "proposals");
 const EXTRACTION_DIR = join(ROOT, "corpora", "extraction");
 const MANIFEST_FILE = join(EXTRACTION_DIR, "manifest.json");
@@ -261,20 +266,44 @@ export function resolveScope(params: Record<string, string>): ExtractionScope {
   return { kind, id, mechanismIds };
 }
 
-function corpusFor(mechanismId: string): EvidenceCorpusFile {
-  const path = join(CORPUS_DIR, `${mechanismId}.json`);
-  if (!existsSync(path)) throw new Error(`Missing harvested corpus ${path}`);
-  return readJson<EvidenceCorpusFile>(path);
+type ExtractionCorpus = EvidenceCorpusFile | RealizationCorpusFile;
+type ExtractionRecord = EvidenceCorpusRecord | RealizationCorpusRecord;
+
+function isRealizationCorpus(corpus: ExtractionCorpus): corpus is RealizationCorpusFile {
+  return "updated_at" in corpus;
 }
 
-function eligibleRecords(corpus: EvidenceCorpusFile): EvidenceCorpusRecord[] {
+function isRealizationRecord(
+  record: ExtractionRecord,
+): record is RealizationCorpusRecord {
+  return "observation" in record;
+}
+
+function corpusFor(mode: ExtractionMode, mechanismId: string): ExtractionCorpus {
+  const path =
+    mode === "realizations"
+      ? join(REALIZATION_CORPUS_DIR, mechanismId, "records.json")
+      : join(CORPUS_DIR, `${mechanismId}.json`);
+  if (!existsSync(path) && mode === "realizations") {
+    return {
+      mechanism_id: mechanismId,
+      updated_at: "1970-01-01T00:00:00.000Z",
+      records: [],
+    };
+  }
+  if (!existsSync(path)) throw new Error(`Missing harvested corpus ${path}`);
+  return readJson<ExtractionCorpus>(path);
+}
+
+function eligibleRecords(corpus: ExtractionCorpus): ExtractionRecord[] {
   return corpus.records
     .filter(
       (record) =>
         typeof record.record_id === "string" &&
         record.record_id.length > 0 &&
-        typeof record.abstract === "string" &&
-        record.abstract.trim().length > 0,
+        (isRealizationRecord(record)
+          ? record.observation.trim().length > 0
+          : typeof record.abstract === "string" && record.abstract.trim().length > 0),
     )
     .sort((a, b) => a.record_id.localeCompare(b.record_id));
 }
@@ -287,7 +316,21 @@ function batches<T>(items: T[], size: number): T[][] {
   return result;
 }
 
-function compactRecord(record: EvidenceCorpusRecord): object {
+function compactRecord(record: ExtractionRecord): object {
+  if (isRealizationRecord(record)) {
+    return {
+      record_id: record.record_id,
+      title: record.title,
+      observation: record.observation.slice(0, ABSTRACT_LIMIT),
+      source_id: record.source_id,
+      source_url: record.source_url,
+      source_locator: record.source_locator,
+      observed_at: record.observed_at,
+      artifact_context: record.artifact_context,
+      origin: record.origin,
+      contributed_by: record.contributed_by,
+    };
+  }
   return {
     record_id: record.record_id,
     title: record.title,
@@ -303,8 +346,11 @@ function compactRecord(record: EvidenceCorpusRecord): object {
 }
 
 function taskInstruction(mode: ExtractionMode, mechanismId: string): string {
-  const shared =
-    "Return JSON {\"items\":[]}. Every item must include citations [{record_id,quote_or_locus}] using only supplied records. quote_or_locus must be an exact span from a supplied title or abstract. If an item cannot be grounded, omit it.";
+  const locus =
+    mode === "realizations"
+      ? "a supplied title or observation"
+      : "a supplied title or abstract";
+  const shared = `Return JSON {"items":[]}. Every item must include citations [{record_id,quote_or_locus}] using only supplied records. quote_or_locus must be an exact span from ${locus}. If an item cannot be grounded, omit it.`;
   switch (mode) {
     case "effects":
       return `${shared} Extract distinct named phenomena produced by ${mechanismId}. Fields: id, name, fact, boundary, grade (A+..C-), confidence, citations.`;
@@ -320,7 +366,7 @@ function taskInstruction(mode: ExtractionMode, mechanismId: string): string {
 function cheapPrompt(
   mode: ExtractionMode,
   mechanismId: string,
-  records: EvidenceCorpusRecord[],
+  records: ExtractionRecord[],
 ): string {
   return `${taskInstruction(mode, mechanismId)}\n\nRECORDS:\n${JSON.stringify(
     records.map(compactRecord),
@@ -397,7 +443,7 @@ export function buildQuote(
   let inputUpper = 0;
   let mechanismsWithRecords = 0;
   for (const mechanismId of scope.mechanismIds) {
-    const records = eligibleRecords(corpusFor(mechanismId));
+    const records = eligibleRecords(corpusFor(mode, mechanismId));
     if (records.length === 0) continue;
     mechanismsWithRecords += 1;
     for (const batch of batches(records, config.limits.records_per_batch)) {
@@ -565,7 +611,7 @@ const normalizeText = normalizeQualityText;
 
 export function groundedProvenance(
   item: DraftItem,
-  corpus: EvidenceCorpusFile,
+  corpus: ExtractionCorpus,
 ): KnowledgeProvenanceItem[] | null {
   if (!Array.isArray(item.citations) || item.citations.length === 0) return null;
   const records = new Map(corpus.records.map((record) => [record.record_id, record]));
@@ -581,15 +627,29 @@ export function groundedProvenance(
     const record = records.get(citation.record_id);
     if (!record) return null;
     const locus = normalizeText(citation.quote_or_locus);
-    const sourceText = normalizeText(`${record.title}\n${record.abstract ?? ""}`);
+    const sourceText = normalizeText(
+      `${record.title}\n${isRealizationRecord(record) ? record.observation : record.abstract ?? ""}`,
+    );
     if (!sourceText.includes(locus)) return null;
-    provenance.push({
-      mechanism_id: corpus.mechanism_id,
-      corpus_record_id: record.record_id,
-      doi: record.doi,
-      title: record.title,
-      quote_or_locus: citation.quote_or_locus.trim(),
-    });
+    provenance.push(
+      isRealizationRecord(record)
+        ? {
+            corpus_kind: "realization",
+            mechanism_id: corpus.mechanism_id,
+            corpus_record_id: record.record_id,
+            source_id: record.source_id,
+            title: record.title,
+            quote_or_locus: citation.quote_or_locus.trim(),
+            contributed_by: record.contributed_by,
+          }
+        : {
+            mechanism_id: corpus.mechanism_id,
+            corpus_record_id: record.record_id,
+            doi: record.doi,
+            title: record.title,
+            quote_or_locus: citation.quote_or_locus.trim(),
+          },
+    );
   }
   const unique = new Map(
     provenance.map((item) => [
@@ -598,6 +658,16 @@ export function groundedProvenance(
     ]),
   );
   const result = Array.from(unique.values());
+  if (isRealizationCorpus(corpus)) {
+    const realizationProvenance = result.filter(
+      (entry): entry is RealizationCorpusProvenanceItem =>
+        entry.corpus_kind === "realization",
+    );
+    return realizationProvenance.length === result.length &&
+      realizationGroundingErrors(realizationProvenance, corpus).length === 0
+      ? result
+      : null;
+  }
   return groundingErrors(result, corpus).length === 0 ? result : null;
 }
 
@@ -680,7 +750,9 @@ export function toProposal(
     const id = slug(item.id ?? item.name);
     const dois = Array.from(
       new Set(
-        provenance.flatMap((source) => (source.doi === null ? [] : [source.doi])),
+        provenance.flatMap((source) =>
+          "doi" in source && source.doi !== null ? [source.doi] : [],
+        ),
       ),
     );
     if (!id || dois.length === 0) return null;
@@ -1042,7 +1114,7 @@ export async function runExtraction(args: {
     : `extract-${startedAt.toISOString()}`;
 
   for (const mechanismId of args.scope.mechanismIds) {
-    const corpus = corpusFor(mechanismId);
+    const corpus = corpusFor(args.mode, mechanismId);
     const records = eligibleRecords(corpus);
     if (records.length === 0) continue;
     const candidates: DraftItem[] = [];

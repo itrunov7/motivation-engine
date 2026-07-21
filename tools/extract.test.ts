@@ -13,6 +13,7 @@ import type {
   ExtractionOpsConfig,
   KnowledgeProvenanceItem,
   Proposal,
+  RealizationCorpusFile,
 } from "../lib/types";
 import {
   buildQuote,
@@ -22,6 +23,7 @@ import {
   resolveScope,
   toProposal,
 } from "./extract";
+import { visibleReplayText } from "./connectors/realization-wayback";
 
 const ROOT = join(__dirname, "..");
 const configured: ExtractionOpsConfig = {
@@ -142,17 +144,79 @@ test("grounding accepts exact loci and rejects invented or unknown citations", (
     ),
     null,
   );
+  const groundedSource = grounded![0];
+  assert("doi" in groundedSource);
   assert.match(
     groundingErrors(
       [
         {
-          ...grounded![0],
+          ...groundedSource,
           doi: "10.9999/fabricated",
         },
       ],
       file,
     ).join(" "),
     /DOI does not resolve/,
+  );
+});
+
+test("realization mode grounds interface observations without a DOI", () => {
+  const file: RealizationCorpusFile = {
+    mechanism_id: "ZE-07",
+    updated_at: "2026-07-21T10:00:00.000Z",
+    records: [
+      {
+        record_id: "rr_111111111111111111111111",
+        mechanism_id: "ZE-07",
+        source_id: "wayback-cdx",
+        origin: "harvested",
+        title: "Fixture interface capture",
+        source_url: "https://web.archive.org/example",
+        source_locator: "capture-1",
+        observed_at: "2026-07-21",
+        observation: "The interface shows a visible progress counter beside the lesson list.",
+        artifact_context: ["dashboard_widget"],
+        contributed_by: null,
+        license_note: "Fixture public archive",
+      },
+    ],
+  };
+  const provenance = groundedProvenance(
+    {
+      citations: [
+        {
+          record_id: file.records[0].record_id,
+          quote_or_locus: "visible progress counter",
+        },
+      ],
+    },
+    file,
+  );
+  assert(provenance);
+  assert.equal(provenance[0].corpus_kind, "realization");
+  const proposal = toProposal(
+    "realizations",
+    "ZE-07",
+    {
+      term: "Visible progress counter",
+      description_as_reported:
+        "The captured interface shows a visible progress counter.",
+      artifact_context: ["dashboard_widget"],
+      confidence: 0.8,
+    },
+    provenance,
+    "fixture-run",
+    "2026-07-21T10:00:00.000Z",
+  );
+  assert.equal(proposal?.type, "realization");
+});
+
+test("Wayback realization ingestion retains text but discards scripts and markup", () => {
+  assert.equal(
+    visibleReplayText(
+      "<html><style>.hidden{}</style><body><h1>Daily progress</h1><script>steal()</script><p>Lesson 3</p></body></html>",
+    ),
+    "Daily progress Lesson 3",
   );
 });
 

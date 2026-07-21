@@ -11,6 +11,7 @@ export default function CorpusRecordPage({
 }) {
   const record = findCorpusRecord(params.mechanism_id, params.record_id);
   if (!record) notFound();
+  const isInterface = "observation" in record;
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
@@ -29,15 +30,22 @@ export default function CorpusRecordPage({
           {record.title}
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-[#8CA495]">
-          {record.authors.length > 0 ? record.authors.join(", ") : "Authors not recorded"}
+          {isInterface
+            ? `${record.source_id} · ${record.origin === "owner" ? `owner: ${record.contributed_by}` : "harvested"}`
+            : record.authors.length > 0
+              ? record.authors.join(", ")
+              : "Authors not recorded"}
         </p>
         <p className="mt-1 font-mono text-xs text-[#7C93A8]">
-          {[record.year ?? "Year not recorded", record.venue ?? "Venue not recorded"]
-            .join(" · ")}
+          {isInterface
+            ? `${record.observed_at} · ${record.source_locator}`
+            : [record.year ?? "Year not recorded", record.venue ?? "Venue not recorded"].join(
+                " · ",
+              )}
         </p>
       </header>
 
-      <section className="mt-6 grid gap-4 sm:grid-cols-3">
+      {!isInterface && <section className="mt-6 grid gap-4 sm:grid-cols-3">
         <div className="rounded-lg border border-[#243329] bg-[#151F1A] p-4">
           <p className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">
             citations
@@ -59,12 +67,16 @@ export default function CorpusRecordPage({
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
       <section className="mt-6 rounded-lg border border-[#243329] bg-[#151F1A] p-5">
-        <h2 className="font-display text-lg text-[#E6EFE8]">Abstract</h2>
+        <h2 className="font-display text-lg text-[#E6EFE8]">
+          {isInterface ? "Interface observation" : "Abstract"}
+        </h2>
         <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-[#8CA495]">
-          {record.abstract ?? "No abstract was returned by the source API."}
+          {isInterface
+            ? record.observation
+            : record.abstract ?? "No abstract was returned by the source API."}
         </p>
       </section>
 
@@ -77,16 +89,27 @@ export default function CorpusRecordPage({
           </div>
           <div className="flex flex-wrap justify-between gap-2">
             <dt className="text-[#7C93A8]">Source</dt>
-            <dd className="text-[#E6EFE8]">{record.source_api}</dd>
+            <dd className="text-[#E6EFE8]">
+              {isInterface ? record.source_id : record.source_api}
+            </dd>
           </div>
-          {record.openalex_id && (
+          {!isInterface && record.openalex_id && (
             <div className="flex flex-wrap justify-between gap-2">
               <dt className="text-[#7C93A8]">OpenAlex id</dt>
               <dd className="font-mono text-xs text-[#E6EFE8]">{record.openalex_id}</dd>
             </div>
           )}
         </dl>
-        {record.doi && (
+        {isInterface ? (
+          <a
+            href={record.source_url}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-5 inline-flex rounded-md border border-[#34D399]/40 px-3 py-2 font-mono text-xs uppercase tracking-wider text-[#34D399] hover:bg-[#1A2620]"
+          >
+            Open source locator ↗
+          </a>
+        ) : record.doi ? (
           <a
             href={`https://doi.org/${record.doi}`}
             target="_blank"
@@ -95,7 +118,7 @@ export default function CorpusRecordPage({
           >
             Open full text via DOI ↗
           </a>
-        )}
+        ) : null}
       </section>
     </main>
   );

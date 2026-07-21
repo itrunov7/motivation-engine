@@ -2,7 +2,10 @@ import type {
   EvidenceCorpusFile,
   KnowledgeProvenanceItem,
   Proposal,
+  RealizationCorpusFile,
+  RealizationCorpusProvenanceItem,
 } from "./types";
+import { isRealizationProvenance } from "./realization-corpus";
 
 export function normalizeQualityText(value: string): string {
   return value
@@ -183,6 +186,10 @@ export function groundingErrors(
   const records = new Map(corpus.records.map((record) => [record.record_id, record]));
   const errors: string[] = [];
   for (const source of provenance) {
+    if (isRealizationProvenance(source)) {
+      errors.push(`wrong corpus kind for ${source.corpus_record_id}`);
+      continue;
+    }
     const record = records.get(source.corpus_record_id);
     if (!record) {
       errors.push(`missing corpus record ${source.corpus_record_id}`);
@@ -199,6 +206,39 @@ export function groundingErrors(
     }
     const locus = normalizeQualityText(source.quote_or_locus);
     const sourceText = normalizeQualityText(`${record.title}\n${record.abstract ?? ""}`);
+    if (!locus || !sourceText.includes(locus)) {
+      errors.push(`quote does not resolve for ${source.corpus_record_id}`);
+    }
+  }
+  return errors;
+}
+
+export function realizationGroundingErrors(
+  provenance: RealizationCorpusProvenanceItem[],
+  corpus: RealizationCorpusFile,
+): string[] {
+  const records = new Map(corpus.records.map((record) => [record.record_id, record]));
+  const errors: string[] = [];
+  for (const source of provenance) {
+    const record = records.get(source.corpus_record_id);
+    if (!record) {
+      errors.push(`missing realization corpus record ${source.corpus_record_id}`);
+      continue;
+    }
+    if (source.mechanism_id !== corpus.mechanism_id) {
+      errors.push(`mechanism mismatch for ${source.corpus_record_id}`);
+    }
+    if (source.source_id !== record.source_id) {
+      errors.push(`source mismatch for ${source.corpus_record_id}`);
+    }
+    if (source.title !== record.title) {
+      errors.push(`title mismatch for ${source.corpus_record_id}`);
+    }
+    if (source.contributed_by !== record.contributed_by) {
+      errors.push(`contributor mismatch for ${source.corpus_record_id}`);
+    }
+    const locus = normalizeQualityText(source.quote_or_locus);
+    const sourceText = normalizeQualityText(`${record.title}\n${record.observation}`);
     if (!locus || !sourceText.includes(locus)) {
       errors.push(`quote does not resolve for ${source.corpus_record_id}`);
     }

@@ -59,7 +59,11 @@ import type {
 } from "./connectors/types";
 import { CONNECTORS } from "./connectors";
 import { deriveCorpusRecordId, CORPUS_RECORD_ID_PATTERN } from "../lib/corpus-record-id";
-import { groundingErrors } from "../lib/proposal-quality";
+import {
+  groundingErrors,
+  realizationGroundingErrors,
+} from "../lib/proposal-quality";
+import { isRealizationProvenance } from "../lib/realization-corpus";
 import type {
   BenchmarkFile,
   BenchmarkMetric,
@@ -71,6 +75,8 @@ import type {
   OpsConnectorConfig,
   PackMapElement,
   RunQuote,
+  RealizationCorpusFile,
+  RealizationCorpusProvenanceItem,
   Segment,
   SegmentCandidate,
 } from "../lib/types";
@@ -95,6 +101,13 @@ const PATHS = {
   dossiersDir: join(ROOT, "dossiers"),
   corporaDir: join(ROOT, "corpora"),
   benchmarksDir: join(ROOT, "corpora", "benchmarks"),
+  realizationCorporaDir: join(ROOT, "corpora", "realizations"),
+  realizationCorpusSchema: join(
+    ROOT,
+    "corpora",
+    "realizations",
+    "realization-corpus.schema.json",
+  ),
   heartbeat: join(ROOT, "corpora", "_health", "heartbeat.json"),
   segments: join(ROOT, "segments", "segments.yaml"),
   segmentCandidates: join(ROOT, "segments", "candidates.json"),
@@ -1221,6 +1234,51 @@ function main(): void {
     console.log("  · no harvested corpora yet (honest empty state)");
   }
 
+  // 9a. Interface realization corpora (D-081): mechanism-scoped, bounded
+  // text records only. Schema and file paths are validated independently of
+  // the connector manifest so owner-assisted records use the same contract.
+  if (existsSync(PATHS.realizationCorpusSchema)) {
+    const schema = readJson(PATHS.realizationCorpusSchema);
+    if (schema !== undefined) {
+      const validateRealizationCorpus = ajv.compile(schema as object);
+      const corpusFiles = listJsonFilesRecursive(PATHS.realizationCorporaDir).filter(
+        (file) =>
+          basename(file) === "records.json" &&
+          file !== PATHS.realizationCorpusSchema,
+      );
+      for (const file of corpusFiles) {
+        const data = readJson(file);
+        if (data === undefined) continue;
+        let ok = validateAgainst(validateRealizationCorpus, file, data);
+        const corpus = data as RealizationCorpusFile;
+        const expected = join(
+          PATHS.realizationCorporaDir,
+          corpus.mechanism_id,
+          "records.json",
+        );
+        if (file !== expected) {
+          fail(file, "path must match corpora/realizations/{mechanism_id}/records.json");
+          ok = false;
+        }
+        const ids = new Set<string>();
+        for (const record of corpus.records ?? []) {
+          if (record.mechanism_id !== corpus.mechanism_id) {
+            fail(file, `record ${record.record_id} mechanism_id does not match corpus`);
+            ok = false;
+          }
+          if (ids.has(record.record_id)) {
+            fail(file, `duplicate realization corpus record ${record.record_id}`);
+            ok = false;
+          }
+          ids.add(record.record_id);
+        }
+        if (ok) console.log(`  ✓ ${rel(file)} valid (realization corpus)`);
+      }
+    }
+  } else {
+    fail(PATHS.realizationCorpusSchema, "missing realization corpus schema");
+  }
+
   // 9b. Benchmark files (D-029): every /corpora/benchmarks/{source_id}.json
   // is owner-prepared data normalized by tools/ingest-report.ts. Beyond the
   // manifest contract above, the RECORD shape is validated here, and the
@@ -2043,18 +2101,31 @@ function main(): void {
             ok = false;
           }
           for (const source of proposal.provenance ?? []) {
-            const corpusPath = join(
-              PATHS.corporaDir,
-              "evidence",
-              `${source.mechanism_id}.json`,
-            );
+            const corpusPath = isRealizationProvenance(source)
+              ? join(
+                  PATHS.realizationCorporaDir,
+                  source.mechanism_id,
+                  "records.json",
+                )
+              : join(
+                  PATHS.corporaDir,
+                  "evidence",
+                  `${source.mechanism_id}.json`,
+                );
             if (!existsSync(corpusPath)) {
               fail(file, `provenance corpus does not exist: ${source.mechanism_id}`);
               ok = false;
               continue;
             }
-            const corpus = readJson(corpusPath) as EvidenceCorpusFile | undefined;
-            const errors = corpus ? groundingErrors([source], corpus) : ["corpus is invalid"];
+            const corpus = readJson(corpusPath);
+            const errors = corpus
+              ? isRealizationProvenance(source)
+                ? realizationGroundingErrors(
+                    [source as RealizationCorpusProvenanceItem],
+                    corpus as RealizationCorpusFile,
+                  )
+                : groundingErrors([source], corpus as EvidenceCorpusFile)
+              : ["corpus is invalid"];
             if (errors.length > 0) {
               fail(file, `provenance does not resolve: ${errors.join("; ")}`);
               ok = false;

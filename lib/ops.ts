@@ -35,7 +35,12 @@ export type { ExtractionOpsConfig, OpsBudget, OpsConnectorConfig, RunQuote } fro
  * imports tools/; tools/validate.ts asserts this equals the connector
  * registry keys, so it cannot silently drift.
  */
-export const KNOWN_CONNECTOR_IDS = ["dummy", "evidence", "wayback"] as const;
+export const KNOWN_CONNECTOR_IDS = [
+  "dummy",
+  "evidence",
+  "realization-wayback",
+  "wayback",
+] as const;
 
 export type KnownConnectorId = (typeof KNOWN_CONNECTOR_IDS)[number];
 

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ventora.dev/motivation-engine/realization-corpus.schema.json",
+  "title": "Mechanism-scoped interface evidence corpus",
+  "type": "object",
+  "properties": {
+    "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "records": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/record" }
+    }
+  },
+  "required": ["mechanism_id", "updated_at", "records"],
+  "additionalProperties": false,
+  "$defs": {
+    "record": {
+      "type": "object",
+      "properties": {
+        "record_id": { "type": "string", "pattern": "^rr_[a-f0-9]{24}$" },
+        "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+        "source_id": { "type": "string", "minLength": 1 },
+        "origin": { "type": "string", "enum": ["harvested", "owner"] },
+        "title": { "type": "string", "minLength": 1 },
+        "source_url": { "type": "string", "format": "uri" },
+        "source_locator": { "type": "string", "minLength": 1 },
+        "observed_at": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "observation": { "type": "string", "minLength": 1, "maxLength": 12000 },
+        "artifact_context": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "contributed_by": { "type": ["string", "null"], "minLength": 1 },
+        "license_note": { "type": "string", "minLength": 1 }
+      },
+      "required": [
+        "record_id",
+        "mechanism_id",
+        "source_id",
+        "origin",
+        "title",
+        "source_url",
+        "source_locator",
+        "observed_at",
+        "observation",
+        "artifact_context",
+        "contributed_by",
+        "license_note"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

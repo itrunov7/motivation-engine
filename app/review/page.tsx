@@ -9,6 +9,7 @@ import {
   type RepositorySnapshot,
 } from "@/lib/proposals";
 import type { Proposal, ProposalType } from "@/lib/types";
+import { loadFullMechanisms, loadSources } from "@/lib/data";
 import ReviewClient, { type ReviewProposal } from "./review-client";
 
 export const metadata = { title: "Proposal Review — Motivation Engine" };
@@ -146,6 +147,21 @@ export default async function ReviewPage({
   searchParams?: { type?: string; target?: string; confidence?: string };
 }) {
   const { proposals, writeEnabled, error } = await loadQueue();
+  const mechanisms = loadFullMechanisms()
+    .map((mechanism) => ({ id: mechanism.id, name: mechanism.name }))
+    .sort((left, right) => left.id.localeCompare(right.id));
+  const manualSources = loadSources()
+    .classes.flatMap((sourceClass) => sourceClass.sources)
+    .filter(
+      (source) =>
+        source.connection_mode === "manual" && source.feeds.includes("L3"),
+    )
+    .map((source) => ({
+      id: source.id,
+      name: source.name,
+      legalNote: source.legal_note ?? "Manual source; human curation only",
+    }))
+    .sort((left, right) => left.name.localeCompare(right.name));
   const filters = searchParams ?? {};
   const validType = PROPOSAL_TYPES.includes(filters.type as ProposalType)
     ? filters.type
@@ -228,6 +244,13 @@ export default async function ReviewPage({
         ))}
       </section>
 
+      <ReviewClient
+        proposals={ordered}
+        writeEnabled={writeEnabled}
+        mechanisms={mechanisms}
+        manualSources={manualSources}
+      />
+
       {ordered.length === 0 ? (
         <section className="mt-8 rounded-lg border border-dashed border-[#243329] bg-[#151F1A] p-8 text-center">
           <h2 className="font-display text-lg text-[#E6EFE8]">
@@ -239,9 +262,7 @@ export default async function ReviewPage({
               : "Clear a filter to see the rest of the queue."}
           </p>
         </section>
-      ) : (
-        <ReviewClient proposals={ordered} writeEnabled={writeEnabled} />
-      )}
+      ) : null}
     </main>
   );
 }

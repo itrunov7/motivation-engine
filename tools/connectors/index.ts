@@ -9,10 +9,12 @@
 import type { Connector } from "./types";
 import { dummyConnector } from "./dummy";
 import { evidenceConnector } from "./evidence";
+import { realizationWaybackConnector } from "./realization-wayback";
 import { waybackConnector } from "./wayback";
 
 export const CONNECTORS: Record<string, Connector> = {
   [dummyConnector.id]: dummyConnector,
   [evidenceConnector.id]: evidenceConnector,
+  [realizationWaybackConnector.id]: realizationWaybackConnector,
   [waybackConnector.id]: waybackConnector,
 };

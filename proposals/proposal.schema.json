@@ -192,8 +192,15 @@
       "pattern": "^10\\.\\d{4,9}/\\S+$"
     },
     "provenanceItem": {
+      "oneOf": [
+        { "$ref": "#/$defs/evidenceProvenanceItem" },
+        { "$ref": "#/$defs/realizationProvenanceItem" }
+      ]
+    },
+    "evidenceProvenanceItem": {
       "type": "object",
       "properties": {
+        "corpus_kind": { "const": "evidence" },
         "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
         "corpus_record_id": { "type": "string", "pattern": "^cr_[a-f0-9]{24}$" },
         "doi": {
@@ -206,6 +213,28 @@
         "quote_or_locus": { "type": "string", "minLength": 1 }
       },
       "required": ["mechanism_id", "corpus_record_id", "doi", "title", "quote_or_locus"],
+      "additionalProperties": false
+    },
+    "realizationProvenanceItem": {
+      "type": "object",
+      "properties": {
+        "corpus_kind": { "const": "realization" },
+        "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+        "corpus_record_id": { "type": "string", "pattern": "^rr_[a-f0-9]{24}$" },
+        "source_id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "quote_or_locus": { "type": "string", "minLength": 1 },
+        "contributed_by": { "type": ["string", "null"], "minLength": 1 }
+      },
+      "required": [
+        "corpus_kind",
+        "mechanism_id",
+        "corpus_record_id",
+        "source_id",
+        "title",
+        "quote_or_locus",
+        "contributed_by"
+      ],
       "additionalProperties": false
     },
     "artifactType": {

@@ -15,6 +15,7 @@ import {
   BatchProposalValidationError,
   isActionableProposal,
   prepareBatchProposalDecision,
+  prepareOwnerObservationTransaction,
   prepareProposalDecision,
   type RepositorySnapshot,
 } from "./proposals";
@@ -419,6 +420,63 @@ test("held low-confidence proposals are visible state but never actionable", () 
     hold_reason: "below_confidence_floor",
   } as Proposal;
   assert.equal(isActionableProposal(held), false);
+});
+
+test("owner-assisted manual observation writes corpus only and performs no fetch", async () => {
+  const transaction = await prepareOwnerObservationTransaction(
+    new FixtureSnapshot("unused", {}),
+    {
+      mechanismId: "CL-14",
+      sourceId: "mobbin",
+      sourceUrl: "https://mobbin.com/library/example",
+      sourceLocator: "fixture paywall screen",
+      observation:
+        "A single primary action is shown below three plan choices in the fixture screen.",
+      artifactContext: ["paywall"],
+      observedAt: "2026-07-21",
+      contributedBy: "test-owner",
+      submittedAt: "2026-07-21T18:00:00.000Z",
+      attested: true,
+      schemaRoot: ROOT,
+    },
+  );
+  assert.match(transaction.recordId, /^rr_[a-f0-9]{24}$/);
+  assert.deepEqual(
+    transaction.mutations.map((mutation) => mutation.path),
+    [
+      "corpora/realizations/CL-14/records.json",
+      "corpora/realizations/manifest.json",
+    ],
+  );
+  const corpusMutation = transaction.mutations.find((mutation) =>
+    mutation.path.endsWith("/records.json"),
+  );
+  assert(corpusMutation?.content);
+  const corpus = JSON.parse(corpusMutation.content) as {
+    records: { origin: string; source_id: string; contributed_by: string }[];
+  };
+  assert.equal(corpus.records.at(-1)?.origin, "owner");
+  assert.equal(corpus.records.at(-1)?.source_id, "mobbin");
+  assert.equal(corpus.records.at(-1)?.contributed_by, "test-owner");
+});
+
+test("owner-assisted ingest rejects API sources", async () => {
+  await assert.rejects(
+    prepareOwnerObservationTransaction(new FixtureSnapshot("unused", {}), {
+      mechanismId: "ZE-07",
+      sourceId: "wayback-cdx",
+      sourceUrl: "https://web.archive.org/example",
+      sourceLocator: "fixture",
+      observation: "Fixture observation.",
+      artifactContext: ["landing_hero"],
+      observedAt: "2026-07-21",
+      contributedBy: "test-owner",
+      submittedAt: "2026-07-21T18:00:00.000Z",
+      attested: true,
+      schemaRoot: ROOT,
+    }),
+    /requires a manual source/,
+  );
 });
 
 test("rejection requires a reason and never mutates an artifact", async () => {

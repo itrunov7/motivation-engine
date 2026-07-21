@@ -10,8 +10,18 @@ import {
   batchProposalAction,
   editThenApproveProposalAction,
   rejectProposalAction,
+  submitOwnerObservationAction,
   type ReviewActionResult,
 } from "./actions";
+
+interface ReviewOption {
+  id: string;
+  name: string;
+}
+
+interface ManualSourceOption extends ReviewOption {
+  legalNote: string;
+}
 
 export interface ReviewProposal {
   path: string;
@@ -219,7 +229,7 @@ function ProposalCard({
               >
                 {source.title} →
               </Link>
-              {source.doi && (
+              {"doi" in source && source.doi && (
                 <a
                   href={`https://doi.org/${source.doi}`}
                   target="_blank"
@@ -232,6 +242,11 @@ function ProposalCard({
               <br />
               <span className="font-mono text-[11px] text-[#7C93A8]">
                 {source.mechanism_id} · {source.corpus_record_id}
+                {"corpus_kind" in source && source.corpus_kind === "realization"
+                  ? ` · interface · ${source.source_id}${
+                      source.contributed_by ? ` · ${source.contributed_by}` : ""
+                    }`
+                  : " · literature"}
               </span>
               <p className="mt-1">{source.quote_or_locus}</p>
             </li>
@@ -351,12 +366,201 @@ function ProposalCard({
   );
 }
 
+function OwnerObservationForm({
+  writeEnabled,
+  mechanisms,
+  manualSources,
+}: {
+  writeEnabled: boolean;
+  mechanisms: ReviewOption[];
+  manualSources: ManualSourceOption[];
+}) {
+  const [mechanismId, setMechanismId] = useState(mechanisms[0]?.id ?? "");
+  const [sourceId, setSourceId] = useState(manualSources[0]?.id ?? "");
+  const [sourceUrl, setSourceUrl] = useState("");
+  const [sourceLocator, setSourceLocator] = useState("");
+  const [observation, setObservation] = useState("");
+  const [artifactContext, setArtifactContext] = useState("");
+  const [observedAt, setObservedAt] = useState(() =>
+    new Date().toISOString().slice(0, 10),
+  );
+  const [attested, setAttested] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const selectedSource = manualSources.find((source) => source.id === sourceId);
+
+  const canSubmit =
+    writeEnabled &&
+    mechanismId.length > 0 &&
+    sourceId.length > 0 &&
+    sourceUrl.trim().length > 0 &&
+    sourceLocator.trim().length > 0 &&
+    observation.trim().length > 0 &&
+    artifactContext.trim().length > 0 &&
+    attested &&
+    !isPending;
+
+  return (
+    <section className="rounded-lg border border-[#243329] bg-[#151F1A] p-5">
+      <h2 className="font-display text-lg text-[#E6EFE8]">
+        Add a licensed-source observation
+      </h2>
+      <p className="mt-2 text-sm leading-relaxed text-[#8CA495]">
+        Enter your own short observation and item locator. The app never opens or
+        harvests the named source; Actions only structures this note into a pending
+        realization proposal.
+      </p>
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <label className="text-xs text-[#8CA495]">
+          Mechanism
+          <select
+            value={mechanismId}
+            onChange={(event) => setMechanismId(event.target.value)}
+            disabled={!writeEnabled || isPending}
+            className="mt-1 w-full rounded border border-[#243329] bg-[#0E1512] px-3 py-2 text-[#E6EFE8]"
+          >
+            {mechanisms.map((mechanism) => (
+              <option key={mechanism.id} value={mechanism.id}>
+                {mechanism.id} · {mechanism.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="text-xs text-[#8CA495]">
+          Manual source
+          <select
+            value={sourceId}
+            onChange={(event) => setSourceId(event.target.value)}
+            disabled={!writeEnabled || isPending}
+            className="mt-1 w-full rounded border border-[#243329] bg-[#0E1512] px-3 py-2 text-[#E6EFE8]"
+          >
+            {manualSources.map((source) => (
+              <option key={source.id} value={source.id}>
+                {source.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="text-xs text-[#8CA495]">
+          Item URL
+          <input
+            type="url"
+            value={sourceUrl}
+            onChange={(event) => setSourceUrl(event.target.value)}
+            disabled={!writeEnabled || isPending}
+            className="mt-1 w-full rounded border border-[#243329] bg-[#0E1512] px-3 py-2 text-[#E6EFE8]"
+          />
+        </label>
+        <label className="text-xs text-[#8CA495]">
+          Item locator / screen name
+          <input
+            value={sourceLocator}
+            onChange={(event) => setSourceLocator(event.target.value)}
+            disabled={!writeEnabled || isPending}
+            className="mt-1 w-full rounded border border-[#243329] bg-[#0E1512] px-3 py-2 text-[#E6EFE8]"
+          />
+        </label>
+        <label className="text-xs text-[#8CA495]">
+          Artifact contexts (comma-separated)
+          <input
+            value={artifactContext}
+            onChange={(event) => setArtifactContext(event.target.value)}
+            disabled={!writeEnabled || isPending}
+            placeholder="paywall, onboarding"
+            className="mt-1 w-full rounded border border-[#243329] bg-[#0E1512] px-3 py-2 text-[#E6EFE8]"
+          />
+        </label>
+        <label className="text-xs text-[#8CA495]">
+          Observed date
+          <input
+            type="date"
+            value={observedAt}
+            onChange={(event) => setObservedAt(event.target.value)}
+            disabled={!writeEnabled || isPending}
+            className="mt-1 w-full rounded border border-[#243329] bg-[#0E1512] px-3 py-2 text-[#E6EFE8]"
+          />
+        </label>
+      </div>
+      <label className="mt-4 block text-xs text-[#8CA495]">
+        Descriptive observation
+        <textarea
+          value={observation}
+          onChange={(event) => setObservation(event.target.value)}
+          disabled={!writeEnabled || isPending}
+          rows={5}
+          className="mt-1 w-full rounded border border-[#243329] bg-[#0E1512] p-3 text-sm text-[#E6EFE8]"
+        />
+      </label>
+      <p className="mt-3 text-xs text-[#E4B54E]">
+        Licence boundary: {selectedSource?.legalNote ?? "Select a manual source."}
+      </p>
+      <label className="mt-3 flex items-start gap-2 text-xs text-[#8CA495]">
+        <input
+          type="checkbox"
+          checked={attested}
+          onChange={(event) => setAttested(event.target.checked)}
+          disabled={!writeEnabled || isPending}
+          className="mt-0.5 accent-[#34D399]"
+        />
+        I authored this observation from permitted human use. No screenshot or
+        licensed source content is being uploaded.
+      </label>
+      <button
+        type="button"
+        disabled={!canSubmit}
+        onClick={() => {
+          setMessage(null);
+          startTransition(async () => {
+            const result = await submitOwnerObservationAction({
+              mechanismId,
+              sourceId,
+              sourceUrl,
+              sourceLocator,
+              observation,
+              artifactContext: artifactContext
+                .split(",")
+                .map((item) => item.trim())
+                .filter(Boolean),
+              observedAt,
+              attested,
+            });
+            setMessage(
+              result.ok
+                ? result.warning ??
+                    `Observation ${result.recordId} committed and extraction dispatched.`
+                : result.error,
+            );
+            if (result.ok) {
+              setObservation("");
+              setSourceLocator("");
+              setSourceUrl("");
+              setAttested(false);
+            }
+          });
+        }}
+        className="mt-4 rounded-md bg-[#34D399] px-3 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-[#0E1512] disabled:opacity-50"
+      >
+        Submit observation
+      </button>
+      {message && (
+        <p role="status" className="mt-3 text-xs text-[#E6EFE8]">
+          {message}
+        </p>
+      )}
+    </section>
+  );
+}
+
 export default function ReviewClient({
   proposals,
   writeEnabled,
+  mechanisms,
+  manualSources,
 }: {
   proposals: ReviewProposal[];
   writeEnabled: boolean;
+  mechanisms: ReviewOption[];
+  manualSources: ManualSourceOption[];
 }) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [batchReason, setBatchReason] = useState("");
@@ -402,6 +606,11 @@ export default function ReviewClient({
 
   return (
     <div className="mt-6 space-y-8">
+      <OwnerObservationForm
+        writeEnabled={writeEnabled}
+        mechanisms={mechanisms}
+        manualSources={manualSources}
+      />
       {Array.from(groups.entries()).map(([key, items]) => (
         <section key={key}>
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2 border-b border-[#243329] pb-2">

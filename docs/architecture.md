@@ -68,11 +68,11 @@ Three tiers by data type:
 | Structure | high-volume corpora (tagged flows, reviews→labels) and telemetry observations | **managed Postgres** (only when an escalation trigger fires) | SQL joins for the loop and pgvector if volume eventually requires it |
 | Raw | interface screenshots, flow recordings, html dumps | **object store (R2/S3)** | no egress fees, pennies per TB |
 
-Boundary rule: anything a human edits or approves — git. Pipeline-extracted knowledge first lands in `/proposals/{type}/{id}.json`; it does not affect `/registry`, `/effects`, `/realizations`, `/interactions`, `/dossiers`, or `/segments` before approval. Anything pipelines produce by the thousands may move to Postgres only after an escalation trigger. Anything binary — object store.
+Boundary rule: anything a human edits or approves — git. Pipeline-extracted knowledge first lands in `/proposals/{type}/{id}.json`; it does not affect `/registry`, `/effects`, `/realizations`, `/interactions`, `/dossiers`, or `/segments` before approval. Bounded text records in `/corpora/realizations/{mechanism_id}/` are interface evidence, not approved knowledge. Anything pipelines produce by the thousands may move to Postgres only after an escalation trigger. Anything binary — object store.
 
 ### File write surfaces
 
-The app remains read-only for knowledge except for the owner approval path at `/review` (D-076). Its server action may use the existing GitHub token path only to apply a validated proposal. Proposal status, target artifact mutation, and the append-only decision entry must land as one atomic commit. `/corpora/_ops/**` remains the separate operational write surface (D-023). No general-purpose knowledge editor is permitted.
+The app remains read-only for knowledge except for the owner approval path at `/review` (D-076) and the narrow notes-only manual realization ingest (D-081). Approval commits proposal status, target artifact mutation, and the append-only decision entry atomically. Manual ingest may append one validated owner observation to `/corpora/realizations/{mechanism_id}/records.json` and then dispatch Actions-only extraction; it never fetches the named source or calls an LLM. `/corpora/_ops/**` remains the separate operational write surface (D-023). No general-purpose knowledge editor is permitted.
 
 ## Where harvesting connects
 

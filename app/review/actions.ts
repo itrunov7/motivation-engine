@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { SESSION_COOKIE, verifySessionToken } from "@/lib/auth";
 import {
   commitGitDataTransaction,
+  dispatchExtraction,
   getRepoFile,
   GithubTransactionConflictError,
   readGithubOpsEnv,
@@ -13,6 +14,7 @@ import {
 import {
   BatchProposalValidationError,
   prepareBatchProposalDecision,
+  prepareOwnerObservationTransaction,
   prepareProposalDecision,
   type ProposalDecisionRequest,
   type RepositorySnapshot,
@@ -25,6 +27,10 @@ export type ReviewActionResult =
       error: string;
       reports?: { proposalPath: string; proposalId: string | null; error?: string }[];
     };
+
+export type OwnerObservationResult =
+  | { ok: true; recordId: string; extractionDispatched: boolean; warning?: string }
+  | { ok: false; error: string };
 
 class GithubRepositorySnapshot implements RepositorySnapshot {
   constructor(private readonly env: GithubOpsEnv) {}
@@ -184,6 +190,66 @@ export async function batchProposalAction(
             })),
           }
         : {}),
+    };
+  }
+}
+
+export async function submitOwnerObservationAction(input: {
+  mechanismId: string;
+  sourceId: string;
+  sourceUrl: string;
+  sourceLocator: string;
+  observation: string;
+  artifactContext: string[];
+  observedAt: string;
+  attested: boolean;
+}): Promise<OwnerObservationResult> {
+  try {
+    await requireOwner();
+    const env = readGithubOpsEnv();
+    if (!env) {
+      throw new Error(
+        "Review writes are disabled — set GH_OPS_TOKEN and GH_OPS_REPO.",
+      );
+    }
+    const transaction = await prepareOwnerObservationTransaction(
+      new GithubRepositorySnapshot(env),
+      {
+        ...input,
+        contributedBy: process.env.REVIEW_DECIDED_BY ?? "owner",
+        submittedAt: new Date().toISOString(),
+      },
+    );
+    await commitGitDataTransaction(env, transaction);
+    let warning: string | undefined;
+    try {
+      await dispatchExtraction(env, {
+        mode: "realizations",
+        scope_kind: "mechanism",
+        scope_id: input.mechanismId,
+        dry_run: "false",
+      });
+    } catch (dispatchError) {
+      warning =
+        "Observation was committed, but extraction dispatch failed: " +
+        (dispatchError instanceof Error ? dispatchError.message : String(dispatchError));
+    }
+    revalidatePath("/review");
+    return {
+      ok: true,
+      recordId: transaction.recordId,
+      extractionDispatched: warning === undefined,
+      ...(warning ? { warning } : {}),
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error:
+        error instanceof GithubTransactionConflictError
+          ? "The repository changed while this observation was prepared. Refresh and try again."
+          : error instanceof Error
+            ? error.message
+            : String(error),
     };
   }
 }

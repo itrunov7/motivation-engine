@@ -222,9 +222,10 @@ export interface SeedStub {
 
 // ---------- Effects, first-class L2 records (/effects, D-076) ----------
 
-/** One harvested source locus grounding an effect or proposal. */
-export interface KnowledgeProvenanceItem {
-  /** Evidence corpus containing the cited record. */
+/** One literature locus grounding an effect or proposal. */
+export interface EvidenceProvenanceItem {
+  /** Omitted for backwards compatibility with pre-C2 evidence records. */
+  corpus_kind?: "evidence";
   mechanism_id: string;
   corpus_record_id: string;
   /** Null when the source record has no DOI. */
@@ -232,6 +233,22 @@ export interface KnowledgeProvenanceItem {
   title: string;
   quote_or_locus: string;
 }
+
+/** One interface-evidence locus from the realization corpus (D-081). */
+export interface RealizationCorpusProvenanceItem {
+  corpus_kind: "realization";
+  mechanism_id: string;
+  corpus_record_id: string;
+  source_id: string;
+  title: string;
+  quote_or_locus: string;
+  /** Present only for owner-assisted records from manual sources. */
+  contributed_by: string | null;
+}
+
+export type KnowledgeProvenanceItem =
+  | EvidenceProvenanceItem
+  | RealizationCorpusProvenanceItem;
 
 /**
  * /effects/{mechanism_id}/{effect_id}.json — a scientific phenomenon between
@@ -737,6 +754,32 @@ export interface EvidenceCorpusFile {
   /** Adaptive stopping report (D-080); absent on pre-v3 harvests. */
   saturation_report?: CorpusSaturationReport;
   records: EvidenceCorpusRecord[];
+}
+
+// ---------- Realization corpus (interface evidence, D-081) ----------
+
+export type RealizationCorpusOrigin = "harvested" | "owner";
+
+export interface RealizationCorpusRecord {
+  record_id: string;
+  mechanism_id: string;
+  source_id: string;
+  origin: RealizationCorpusOrigin;
+  title: string;
+  source_url: string;
+  source_locator: string;
+  observed_at: string;
+  observation: string;
+  artifact_context: string[];
+  contributed_by: string | null;
+  license_note: string;
+}
+
+/** /corpora/realizations/{mechanism_id}/records.json. */
+export interface RealizationCorpusFile {
+  mechanism_id: string;
+  updated_at: string;
+  records: RealizationCorpusRecord[];
 }
 
 // ---------- Corpus digest (tools/corpus-digest.ts, D-065) ----------

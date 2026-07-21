@@ -15,6 +15,7 @@ const API_BASE = "https://api.github.com";
 
 /** The workflow the app dispatches; must exist at .github/workflows/. */
 export const HARVEST_WORKFLOW_FILE = "harvest.yml";
+export const EXTRACTION_WORKFLOW_FILE = "extract.yml";
 
 /** Resolved GitHub target for the write + run surface. */
 export interface GithubOpsEnv {
@@ -358,6 +359,24 @@ export async function dispatchHarvest(
   );
   if (!res.ok) {
     throw new GithubApiError(res.status, `workflow_dispatch failed: ${await res.text()}`);
+  }
+}
+
+/** Dispatch the Actions-only extraction workflow (D-075/D-081). */
+export async function dispatchExtraction(
+  env: GithubOpsEnv,
+  inputs: Record<string, string>,
+): Promise<void> {
+  const res = await ghFetch(
+    env,
+    `/repos/${env.owner}/${env.repo}/actions/workflows/${EXTRACTION_WORKFLOW_FILE}/dispatches`,
+    { method: "POST", body: JSON.stringify({ ref: env.branch, inputs }) },
+  );
+  if (!res.ok) {
+    throw new GithubApiError(
+      res.status,
+      `extraction workflow_dispatch failed: ${await res.text()}`,
+    );
   }
 }
 

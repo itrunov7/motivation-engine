@@ -1,0 +1,76 @@
+{
+  "source_id": "realizations",
+  "source_ids": [
+    "wayback-cdx"
+  ],
+  "connector_version": "1.0.0",
+  "last_run": {
+    "timestamp": "2026-07-21T15:05:44.171Z",
+    "status": "success",
+    "params": {
+      "mechanism": "ZE-07",
+      "capture": "2015-01-01"
+    },
+    "records_fetched": 1,
+    "files_written": 1,
+    "duration_s": 9.97,
+    "cost": {
+      "api_calls": 1,
+      "duration_s": 9.97,
+      "tokens_in": null,
+      "tokens_out": null,
+      "estimated_usd": 0
+    }
+  },
+  "run_history": [
+    {
+      "timestamp": "2026-07-21T15:05:44.171Z",
+      "status": "success",
+      "params": {
+        "mechanism": "ZE-07",
+        "capture": "2015-01-01"
+      },
+      "records_fetched": 1,
+      "files_written": 1,
+      "duration_s": 9.97,
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 9.97,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-07-21T15:05:25.453Z",
+      "status": "failed",
+      "params": {
+        "mechanism": "ZE-07",
+        "capture": "2026-07-01"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 14.63,
+      "error": "Wayback replay produced no useful visible text",
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 14.63,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    }
+  ],
+  "data_files": [
+    {
+      "path": "ZE-07/records.json",
+      "records": 1,
+      "bytes": 863
+    },
+    {
+      "path": "realization-corpus.schema.json",
+      "records": 0,
+      "bytes": 1936
+    }
+  ]
+}

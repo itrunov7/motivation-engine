@@ -71,6 +71,16 @@ corpora such as earnings calls or enforcement actions (class D).
   every `source_ids` entry must exist in `sources.json`, and a
   non-internal corpus must harvest at least one source.
 
+### Realization corpus (`realizations/`, D-081)
+
+Interface evidence is stored separately from literature at
+`/corpora/realizations/{mechanism_id}/records.json`. A record contains bounded
+quotable text, a source locator, artifact context, and either `origin:
+"harvested"` or `origin: "owner"`. Harvested records may use only legally
+permitted public sources such as Wayback. Owner records may name a
+`connection_mode: "manual"` source, but neither the app nor tools may fetch
+that source. Screenshots, video, and raw HTML are never stored here.
+
 ## Ops config (`_ops/`, D-024)
 
 `/corpora/_ops/` is not a corpus — it holds the fleet's operating
