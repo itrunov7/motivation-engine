@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ventora.dev/motivation-engine/effect.schema.json",
+  "title": "Effect (L2 record)",
+  "description": "A first-class scientific phenomenon between an L1 mechanism and its L3 realizations. This is not a measured product outcome; implementations[].observed_effects remains reserved for telemetry.",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "mechanism_id": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}-\\d{2}$"
+    },
+    "name": { "type": "string", "minLength": 1 },
+    "fact": { "type": "string", "minLength": 1 },
+    "grade": { "$ref": "#/$defs/evidenceGrade" },
+    "source": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/doi" },
+      "description": "DOIs supporting the effect."
+    },
+    "boundary": { "type": "string", "minLength": 1 },
+    "realization_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/provenanceItem" }
+    }
+  },
+  "required": [
+    "id",
+    "mechanism_id",
+    "name",
+    "fact",
+    "grade",
+    "source",
+    "boundary",
+    "realization_ids",
+    "provenance"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "evidenceGrade": {
+      "type": "string",
+      "enum": ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-"]
+    },
+    "doi": {
+      "type": "string",
+      "pattern": "^10\\.\\d{4,9}/\\S+$"
+    },
+    "provenanceItem": {
+      "type": "object",
+      "properties": {
+        "corpus_record_id": { "type": "string", "minLength": 1 },
+        "doi": {
+          "anyOf": [
+            { "$ref": "#/$defs/doi" },
+            { "type": "null" }
+          ]
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "quote_or_locus": { "type": "string", "minLength": 1 }
+      },
+      "required": ["corpus_record_id", "doi", "title", "quote_or_locus"],
+      "additionalProperties": false
+    }
+  }
+}

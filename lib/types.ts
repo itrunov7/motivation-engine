@@ -2,6 +2,8 @@
  * Data types mirroring the JSON schemas (SPEC.md §3).
  * Sources of truth:
  * - /registry/mechanism.schema.json (full L1 record + seed stub sub-schema)
+ * - /effects/effect.schema.json (first-class L2 records)
+ * - /proposals/proposal.schema.json (universal proposal envelope)
  * - /registry/taxonomy.json shape (SPEC.md §3.1)
  * - /dossiers/dossier.schema.json (SPEC.md §3.3)
  * - /sources/sources.json shape (SPEC.md §3.4)
@@ -105,12 +107,15 @@ export interface Applicability {
 
 export interface Implementation {
   id: string;
+  /** Optional first-class L2 effect this L3 realization embodies. */
+  effect_id?: string;
   artifact_types: ArtifactType[];
   product_requirements: string[];
   generation_directive: string;
   copy_formulas: string[];
   /** Hard rule: must be non-empty, otherwise the record is invalid. */
   metrics: string[];
+  /** Measured product outcomes from telemetry; never references to L2 effects. */
   observed_effects: string[];
 }
 
@@ -180,6 +185,8 @@ export interface Mechanism {
   /** 0–1 */
   prior_weight: number;
   mechanism_summary_for_context: string;
+  /** First-class L2 effect ids under /effects/{id}/; absent until effects are approved. */
+  effect_refs?: string[];
   applicability: Applicability;
   implementations: Implementation[];
   constraints: Constraints;
@@ -209,6 +216,36 @@ export interface SeedStub {
   /** Owner-pinned works the connector cannot surface (D-017), permitted on a
    *  stub; merged into the evidence corpus with source_api "pinned". */
   pinned_evidence?: PinnedEvidence[];
+}
+
+// ---------- Effects, first-class L2 records (/effects, D-076) ----------
+
+/** One harvested source locus grounding an effect or proposal. */
+export interface KnowledgeProvenanceItem {
+  corpus_record_id: string;
+  /** Null when the source record has no DOI. */
+  doi: string | null;
+  title: string;
+  quote_or_locus: string;
+}
+
+/**
+ * /effects/{mechanism_id}/{effect_id}.json — a scientific phenomenon between
+ * an L1 mechanism and its L3 realizations. This is intentionally distinct from
+ * Implementation.observed_effects, which remains telemetry output.
+ */
+export interface Effect {
+  $schema?: string;
+  id: string;
+  mechanism_id: string;
+  name: string;
+  fact: string;
+  grade: EvidenceGrade;
+  /** Supporting DOIs. */
+  source: string[];
+  boundary: string;
+  realization_ids: string[];
+  provenance: KnowledgeProvenanceItem[];
 }
 
 // ---------- Dossier, admission gate (§3.3) ----------
@@ -271,6 +308,76 @@ export interface Dossier {
   /** Optional owner flag: the dossier that completes the 12-mechanism core admission (D-045). */
   flag_completes_core?: boolean;
 }
+
+// ---------- Universal proposal store (/proposals, D-076) ----------
+
+export type ProposalType =
+  | "effect"
+  | "realization"
+  | "interaction"
+  | "mechanism"
+  | "dossier_section"
+  | "segment";
+
+export type ProposalStatus = "pending" | "approved" | "rejected" | "edited";
+
+export type DossierSectionPayload =
+  | { field: "scores"; value: DossierScores }
+  | { field: "total"; value: number }
+  | { field: "core_condition"; value: string }
+  | { field: "dissent"; value: string }
+  | { field: "evidence_sources"; value: DossierEvidenceSource[] }
+  | { field: "verdict"; value: DossierVerdict }
+  | { field: "decided_by"; value: string }
+  | { field: "date"; value: string }
+  | { field: "notes"; value: string }
+  | {
+      field: "flag_lowest_admitted" | "flag_completes_core";
+      value: boolean;
+    };
+
+export interface ProposalEnvelope<TType extends ProposalType, TPayload> {
+  $schema?: string;
+  id: string;
+  type: TType;
+  /** Mechanism, pack, or segment id. */
+  target: string;
+  payload: TPayload;
+  /** Must contain at least one item; enforced by proposal.schema.json. */
+  provenance: KnowledgeProvenanceItem[];
+  /** 0–1 */
+  confidence: number;
+  /** Pipeline run id. */
+  proposed_by: string;
+  /** ISO timestamp. */
+  proposed_at: string;
+  status: ProposalStatus;
+  decided_by: string | null;
+  /** ISO timestamp, or null before a decision. */
+  decided_at: string | null;
+  decision_note: string | null;
+}
+
+export type EffectProposal = ProposalEnvelope<"effect", Effect>;
+export type RealizationProposal = ProposalEnvelope<"realization", Implementation>;
+export type InteractionProposal = ProposalEnvelope<
+  "interaction",
+  InteractionRecord
+>;
+export type MechanismProposal = ProposalEnvelope<"mechanism", Mechanism>;
+export type DossierSectionProposal = ProposalEnvelope<
+  "dossier_section",
+  DossierSectionPayload
+>;
+export type SegmentProposal = ProposalEnvelope<"segment", Segment>;
+
+export type Proposal =
+  | EffectProposal
+  | RealizationProposal
+  | InteractionProposal
+  | MechanismProposal
+  | DossierSectionProposal
+  | SegmentProposal;
 
 // ---------- Data-source registry (§3.4) ----------
 
@@ -875,14 +982,13 @@ export interface PackMapFile {
   elements: PackMapElement[];
 }
 
-// ---------- Pack datasheet (/packs/pack-{id}.yaml, D-049) ----------
+// ---------- Pack datasheet (/packs/pack-{id}.yaml, D-049/D-076) ----------
 //
-// A pack is a COMPUTED projection over the pack map + the registry, generated
-// by tools/render-packs.ts (`npm run packs`) and never hand-authored. Its
-// structure is pinned to the reference file pack-paywall-conversion.yaml:
-// header + LAYER 1 mechanisms + LAYER 2 interactions + LAYER 3 context_weights
-// + hard_boundaries + signals + wiring. Knowledge-base tone: facts only, no
-// instructions.
+// A pack is a COMPUTED projection over the pack map + registry + first-class
+// effects, generated by tools/render-packs.ts (`npm run packs`) and never
+// hand-authored. The numbered ontology is explicit: L1 mechanisms, L2 effects,
+// and L3 realizations. Interactions and context weights are separate,
+// unnumbered dimensions rather than ontology levels.
 
 /** LAYER 1 — one mechanism atom, projected from a registry record. */
 export interface PackMechanism {
@@ -898,10 +1004,37 @@ export interface PackMechanism {
   boundary: string;
   /** Precondition predicates, joined with OR when several. */
   active_when: string;
-  /** Implementation ids with the "{ID}-" prefix stripped. */
-  realizations: string[];
   /** Hard-rule ids, kebab-cased. */
   forbidden: string[];
+}
+
+/** LAYER 2 — one first-class scientific effect projected from /effects. */
+export interface PackEffect {
+  id: string;
+  mechanism_id: string;
+  name: string;
+  fact: string;
+  grade: EvidenceGrade;
+  /** Supporting DOIs. */
+  source: string[];
+  boundary: string;
+  /** Full implementation ids, matching PackRealization.id. */
+  realization_ids: string[];
+}
+
+/** LAYER 3 — one concrete realization projected from mechanism.implementations. */
+export interface PackRealization {
+  id: string;
+  mechanism_id: string;
+  /** Optional first-class L2 effect this realization embodies. */
+  effect_id?: string;
+  artifact_types: ArtifactType[];
+  product_requirements: string[];
+  generation_directive: string;
+  copy_formulas: string[];
+  metrics: string[];
+  /** Measured telemetry outcomes, not ontology L2 effects. */
+  observed_effects: string[];
 }
 
 /**
@@ -917,7 +1050,7 @@ export type PackInteractionType =
   | "neutral"
   | "noted";
 
-/** LAYER 2 — one interaction between two of the pack's mechanisms. */
+/** One interaction between two of the pack's mechanisms (not ontology L2). */
 export interface PackInteraction {
   combination: string[];
   type: PackInteractionType;
@@ -931,7 +1064,7 @@ export interface PackInteraction {
   source?: string;
 }
 
-/** LAYER 3 — a context and the mechanisms it makes strong or inactive. */
+/** A context and the mechanisms it makes strong or inactive (not ontology L3). */
 export interface PackContextWeight {
   context: string;
   strong?: string[];
@@ -971,6 +1104,8 @@ export interface PackDatasheet {
    * these (D-066). Empty until the S7 seeds are promoted to full records.
    */
   cross_cutting_perception: PackMechanism[];
+  effects: PackEffect[];
+  realizations: PackRealization[];
   interactions: PackInteraction[];
   context_weights: PackContextWeight[];
   /** Each entry is a single-key map, e.g. { "fake-scarcity": "forbidden — ..." }. */

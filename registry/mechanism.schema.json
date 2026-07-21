@@ -100,6 +100,15 @@
       "minLength": 1,
       "description": "The text future generation will consume"
     },
+    "effect_refs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      },
+      "description": "Optional references to first-class L2 records under effects/{id}/. Existing mechanisms may omit this until effects are approved."
+    },
     "applicability": {
       "type": "object",
       "properties": {
@@ -141,6 +150,11 @@
         "type": "object",
         "properties": {
           "id": { "type": "string", "minLength": 1 },
+          "effect_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Optional L2 effect this L3 realization embodies."
+          },
           "artifact_types": {
             "type": "array",
             "items": { "$ref": "#/$defs/artifactType" },

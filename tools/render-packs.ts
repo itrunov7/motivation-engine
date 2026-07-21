@@ -1,17 +1,17 @@
 /**
- * tools/render-packs.ts — projects the pack map (/packs/pack-map.yaml) + the
- * registry (/registry/mechanisms/*.json, /dossiers/*.json) into one YAML
- * datasheet per Development-Plan element at /packs/pack-{id}.yaml (D-049).
+ * tools/render-packs.ts — projects the pack map (/packs/pack-map.yaml), registry
+ * (/registry/mechanisms/*.json, /dossiers/*.json), and first-class effects
+ * (/effects/{mechanism}/{effect}.json) into one YAML datasheet per
+ * Development-Plan element at /packs/pack-{id}.yaml (D-049, D-076).
  *
  * Packs are GENERATED projections, never hand-authored (same pattern as
  * render-cards, D-002): the only hand-written input is the pack map (D-048).
  * Change a registry record and re-render with `npm run packs`.
  *
- * The output structure is pinned to the reference file
- * packs/pack-paywall-conversion.yaml: header + LAYER 1 mechanisms +
- * cross_cutting_perception + LAYER 2 interactions + LAYER 3 context_weights +
- * hard_boundaries + signals + wiring. Knowledge-base tone: facts only, no
- * instructions.
+ * The numbered ontology is explicit in the output: LAYER 1 mechanisms,
+ * LAYER 2 first-class effects, and LAYER 3 realizations. Interactions and
+ * context_weights remain separate unnumbered sections; neither is an ontology
+ * level. hard_boundaries + signals + wiring follow.
  *
  * Cross-cutting perception (Step 5, D-066): every full record whose L0 parent
  * is flagged cross_cutting in registry/taxonomy.json (today only S7) is emitted
@@ -19,15 +19,16 @@
  * separate from the pack's own motivational LAYER 1. The pack map never lists
  * these — inclusion is automatic. Empty until the S7 seeds become full records.
  *
- * LAYER 2 draws from TWO sources (D-057): owner-authored interaction records
+ * Interactions draw from TWO sources (D-057): owner-authored records
  * (/interactions/{A}__{B}.json) and registry relations. An authored record is
  * richer (type incl. suppressing/neutral, boundary, source) and REPLACES the
  * relation-derived entry for the same pair; relations still fill pairs with no
  * authored record.
  *
  * Two self-checks run before writing: every emitted file must parse back as
- * YAML, and no emitted prose (outside comments) may carry instruction-voice
- * tokens (you / your / should / prefer).
+ * YAML, and non-L3 knowledge prose (outside comments) may not carry
+ * instruction-voice tokens (you / your / should / prefer). L3 intentionally
+ * preserves the owner-authored generation directives and copy formulas.
  *
  * Stale pack-*.yaml files whose element no longer exists are removed;
  * pack-map.yaml and README.md are never touched.
@@ -50,16 +51,20 @@ import { join, relative } from "node:path";
 import { parse as parseYaml, parseAllDocuments, stringify as stringifyYaml } from "yaml";
 import type {
   Dossier,
+  Effect,
   EvidenceGrade,
+  Implementation,
   InteractionRecord,
   Mechanism,
   PackContextWeight,
   PackDatasheet,
+  PackEffect,
   PackInteraction,
   PackInteractionType,
   PackMapElement,
   PackMapFile,
   PackMechanism,
+  PackRealization,
   Relation,
   Taxonomy,
 } from "../lib/types";
@@ -68,20 +73,22 @@ const ROOT = join(__dirname, "..");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
 const TAXONOMY = join(ROOT, "registry", "taxonomy.json");
 const DOSSIERS_DIR = join(ROOT, "dossiers");
+const EFFECTS_DIR = join(ROOT, "effects");
 const INTERACTIONS_DIR = join(ROOT, "interactions");
 const PACKS_DIR = join(ROOT, "packs");
 const PACK_MAP = join(PACKS_DIR, "pack-map.yaml");
 const EXPORT_DIR = join(PACKS_DIR, "export");
 const EXPORT_BUNDLE = join(EXPORT_DIR, "packs-bundle.yaml");
 
-// Constant knowledge-voice blocks, verbatim from the reference datasheet.
-const NATURE = "knowledge base. facts with evidence strength. no instructions.";
+// Constant metadata blocks shared by every generated datasheet.
+const NATURE =
+  "knowledge base. L1/L2 facts with evidence strength; L3 preserves authored realization directives.";
 const SIGNAL_TAG = "each generated element carries its mechanism id";
 const SIGNAL_LEARNING =
   "weak/negative signal demotes a realization; strong signal spreads it — the palette evolves from outcomes";
 const WIRING = {
   where: "planning stage of the Development Plan, when the planned element matches applies_to",
-  how: "pack is provided to the generator as knowledge to reason from; nothing here instructs how to build",
+  how: "pack provides L1/L2 knowledge plus owner-authored L3 realization directives to the generator",
   selection_now: "by element type",
   selection_later:
     "planning agent pre-filters mechanisms via active_when against the product spec, narrowing the evidence in context",
@@ -111,6 +118,17 @@ function listJsonFiles(dir: string): string[] {
     .sort();
 }
 
+function listJsonFilesRecursive(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+  const files: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) files.push(...listJsonFilesRecursive(path));
+    else if (entry.isFile() && entry.name.endsWith(".json")) files.push(path);
+  }
+  return files.sort();
+}
+
 /** A single YAML scalar (quoted only when required), no trailing newline. */
 function scalar(value: string): string {
   return stringifyYaml(value, { lineWidth: 0 }).replace(/\n+$/, "");
@@ -119,6 +137,11 @@ function scalar(value: string): string {
 /** A flow sequence of identifier-like tokens (no quoting needed for our data). */
 function flow(items: string[]): string {
   return `[${items.join(", ")}]`;
+}
+
+/** A flow sequence whose values may contain spaces or YAML punctuation. */
+function scalarFlow(items: string[]): string {
+  return `[${items.map((item) => JSON.stringify(item)).join(", ")}]`;
 }
 
 function weakerGrade(a: EvidenceGrade, b: EvidenceGrade): EvidenceGrade {
@@ -143,14 +166,6 @@ function humanize(token: string): string {
 /** Strip the "== true" tail so predicates read as conditions. */
 function stripPredicate(predicate: string): string {
   return predicate.replace(/\s*==\s*true\b/g, "").trim();
-}
-
-/** Implementation id with its "{MECH}-" prefix removed. */
-function realization(mechanismId: string, implementationId: string): string {
-  const prefix = `${mechanismId}-`;
-  return implementationId.startsWith(prefix)
-    ? implementationId.slice(prefix.length)
-    : implementationId;
 }
 
 /**
@@ -191,12 +206,75 @@ function buildMechanism(m: Mechanism, dossier: Dossier | null): PackMechanism {
     source: [m.evidence.basis, ...dois].join("; "),
     boundary,
     active_when: activeWhen,
-    realizations: m.implementations.map((impl) => realization(m.id, impl.id)),
     forbidden: m.constraints.hard_rules.map((r) => r.id.replace(/_/g, "-")),
   };
 }
 
-// ---------- LAYER 2 ----------
+// ---------- LAYER 2 — effects ----------
+
+function buildEffect(effect: Effect): PackEffect {
+  return {
+    id: effect.id,
+    mechanism_id: effect.mechanism_id,
+    name: effect.name,
+    fact: effect.fact,
+    grade: effect.grade,
+    source: effect.source,
+    boundary: effect.boundary,
+    realization_ids: effect.realization_ids,
+  };
+}
+
+function effectsFor(
+  mechanisms: Mechanism[],
+  effectsByMechanism: Map<string, Map<string, Effect>>,
+): PackEffect[] {
+  const effects: PackEffect[] = [];
+  for (const mechanism of mechanisms) {
+    const indexed = effectsByMechanism.get(mechanism.id);
+    for (const effectId of mechanism.effect_refs ?? []) {
+      const effect = indexed?.get(effectId);
+      if (!effect) {
+        throw new Error(
+          `mechanism "${mechanism.id}" references missing effect "${effectId}"`,
+        );
+      }
+      effects.push(buildEffect(effect));
+    }
+  }
+  return effects;
+}
+
+// ---------- LAYER 3 — realizations ----------
+
+function buildRealization(
+  mechanismId: string,
+  implementation: Implementation,
+): PackRealization {
+  return {
+    id: implementation.id,
+    mechanism_id: mechanismId,
+    ...(implementation.effect_id === undefined
+      ? {}
+      : { effect_id: implementation.effect_id }),
+    artifact_types: implementation.artifact_types,
+    product_requirements: implementation.product_requirements,
+    generation_directive: implementation.generation_directive,
+    copy_formulas: implementation.copy_formulas,
+    metrics: implementation.metrics,
+    observed_effects: implementation.observed_effects,
+  };
+}
+
+function realizationsFor(mechanisms: Mechanism[]): PackRealization[] {
+  return mechanisms.flatMap((mechanism) =>
+    mechanism.implementations.map((implementation) =>
+      buildRealization(mechanism.id, implementation),
+    ),
+  );
+}
+
+// ---------- interactions (separate from ontology levels) ----------
 
 function interactionFor(
   type: Relation["type"],
@@ -277,7 +355,7 @@ function buildInteractions(
   return interactions;
 }
 
-// ---------- LAYER 3 ----------
+// ---------- context weights (separate from ontology levels) ----------
 
 function buildContextWeights(members: Mechanism[]): PackContextWeight[] {
   const byPredicate = new Map<string, string[]>();
@@ -347,17 +425,21 @@ function buildDatasheet(
   members: Mechanism[],
   crossCutting: Mechanism[],
   authored: Map<string, InteractionRecord>,
+  effectsByMechanism: Map<string, Map<string, Effect>>,
 ): PackDatasheet {
   const gradeOf = new Map(members.map((m) => [m.id, m.evidence.grade] as const));
+  const ontologyMechanisms = [...members, ...crossCutting];
   return {
     pack: element.id,
     applies_to: element.applies_to,
     funnel_stage: element.funnel_stage,
     version: PACK_MAP_VERSION,
     nature: NATURE,
-    source: `projection of registry records ${members.map((m) => m.id).join(" ")}`,
+    source: `projection of registry records and first-class effects for ${ontologyMechanisms.map((m) => m.id).join(" ")}`,
     mechanisms: members.map((m) => buildMechanism(m, loadDossier(m.id))),
     cross_cutting_perception: crossCutting.map((m) => buildMechanism(m, loadDossier(m.id))),
+    effects: effectsFor(ontologyMechanisms, effectsByMechanism),
+    realizations: realizationsFor(ontologyMechanisms),
     interactions: buildInteractions(members, crossCutting, gradeOf, authored),
     context_weights: buildContextWeights(members),
     hard_boundaries: buildHardBoundaries(members),
@@ -377,10 +459,43 @@ function renderMechanism(pm: PackMechanism): string[] {
     `    source: ${scalar(pm.source)}`,
     `    boundary: ${scalar(pm.boundary)}`,
     `    active_when: ${scalar(pm.active_when)}`,
-    `    realizations: ${flow(pm.realizations)}`,
     `    forbidden: ${flow(pm.forbidden)}`,
     "",
   ];
+}
+
+function renderEffect(effect: PackEffect): string[] {
+  return [
+    `  - id: ${effect.id}`,
+    `    mechanism_id: ${effect.mechanism_id}`,
+    `    name: ${scalar(effect.name)}`,
+    `    fact: ${scalar(effect.fact)}`,
+    `    grade: ${effect.grade}`,
+    `    source: ${scalarFlow(effect.source)}`,
+    `    boundary: ${scalar(effect.boundary)}`,
+    `    realization_ids: ${flow(effect.realization_ids)}`,
+    "",
+  ];
+}
+
+function renderRealization(realization: PackRealization): string[] {
+  const lines = [
+    `  - id: ${realization.id}`,
+    `    mechanism_id: ${realization.mechanism_id}`,
+  ];
+  if (realization.effect_id !== undefined) {
+    lines.push(`    effect_id: ${realization.effect_id}`);
+  }
+  lines.push(
+    `    artifact_types: ${flow(realization.artifact_types)}`,
+    `    product_requirements: ${scalarFlow(realization.product_requirements)}`,
+    `    generation_directive: ${scalar(realization.generation_directive)}`,
+    `    copy_formulas: ${scalarFlow(realization.copy_formulas)}`,
+    `    metrics: ${flow(realization.metrics)}`,
+    `    observed_effects: ${scalarFlow(realization.observed_effects)}`,
+    "",
+  );
+  return lines;
 }
 
 function renderInteraction(pi: PackInteraction): string[] {
@@ -410,7 +525,8 @@ function renderDatasheet(sheet: PackDatasheet): string {
 
   lines.push(
     "# GENERATED FILE — do not edit by hand.",
-    "# Source: packs/pack-map.yaml + registry/mechanisms/*.json · regenerate with `npm run packs` (D-049).",
+    "# Source: packs/pack-map.yaml + registry/mechanisms/*.json + effects/*/*.json",
+    "#         + dossiers/*.json + interactions/*.json · regenerate with `npm run packs` (D-049, D-076).",
     "",
     `pack: ${scalar(sheet.pack)}`,
     `applies_to: ${flow(sheet.applies_to)}`,
@@ -445,7 +561,41 @@ function renderDatasheet(sheet: PackDatasheet): string {
 
   lines.push(
     BANNER,
-    "# LAYER 2 — INTERACTIONS (often stronger than any single mechanism)",
+    "# LAYER 2 — EFFECTS (first-class scientific phenomena)",
+    BANNER,
+    "effects:",
+    "",
+  );
+  if (sheet.effects.length === 0) {
+    lines.push(
+      "  [] # no approved first-class effects referenced by this pack's mechanisms",
+      "",
+    );
+  } else {
+    for (const effect of sheet.effects) lines.push(...renderEffect(effect));
+  }
+
+  lines.push(
+    BANNER,
+    "# LAYER 3 — REALIZATIONS (concrete implementations)",
+    BANNER,
+    "realizations:",
+    "",
+  );
+  if (sheet.realizations.length === 0) {
+    lines.push(
+      "  [] # no realizations exist in this pack's mechanism records",
+      "",
+    );
+  } else {
+    for (const realization of sheet.realizations) {
+      lines.push(...renderRealization(realization));
+    }
+  }
+
+  lines.push(
+    BANNER,
+    "# INTERACTIONS (separate relationship records; not ontology L2)",
     BANNER,
     "interactions:",
     "",
@@ -461,7 +611,7 @@ function renderDatasheet(sheet: PackDatasheet): string {
 
   lines.push(
     BANNER,
-    "# LAYER 3 — CONTEXT WEIGHTS (what fits what)",
+    "# CONTEXT WEIGHTS (separate contextual dimension; not ontology L3)",
     BANNER,
     "context_weights:",
   );
@@ -507,10 +657,20 @@ function renderDatasheet(sheet: PackDatasheet): string {
 // ---------- self-checks ----------
 
 function voiceViolations(text: string): string[] {
-  return text
-    .split("\n")
-    .filter((line) => !line.trimStart().startsWith("#") && VOICE_TOKENS.test(line))
-    .map((line) => line.trim());
+  const violations: string[] = [];
+  let inRealizations = false;
+  for (const line of text.split("\n")) {
+    if (line === "realizations:") inRealizations = true;
+    if (line === "interactions:") inRealizations = false;
+    if (
+      !inRealizations &&
+      !line.trimStart().startsWith("#") &&
+      VOICE_TOKENS.test(line)
+    ) {
+      violations.push(line.trim());
+    }
+  }
+  return violations;
 }
 
 // ---------- export bundle (D-068) ----------
@@ -622,6 +782,19 @@ function main(): void {
     mechanisms.set(m.id, m);
   }
 
+  // First-class L2 effects (D-076), indexed under their owning L1 mechanism.
+  // The renderer follows mechanism.effect_refs; tools/validate.ts enforces the
+  // reciprocal mechanism/effect/realization links before data enters the repo.
+  const effectsByMechanism = new Map<string, Map<string, Effect>>();
+  for (const file of listJsonFilesRecursive(EFFECTS_DIR)) {
+    if (file.endsWith("effect.schema.json")) continue;
+    const effect = JSON.parse(readFileSync(file, "utf-8")) as Effect;
+    const indexed =
+      effectsByMechanism.get(effect.mechanism_id) ?? new Map<string, Effect>();
+    indexed.set(effect.id, effect);
+    effectsByMechanism.set(effect.mechanism_id, indexed);
+  }
+
   // Cross-cutting perception (Step 5, D-066): every full record whose L0 parent
   // is flagged cross_cutting (today only S7) is emitted into EVERY pack as a
   // distinct top-level section — no pack-map entry, no per-element listing.
@@ -636,7 +809,7 @@ function main(): void {
     .sort((a, b) => a.id.localeCompare(b.id));
   const crossCuttingIds = new Set(crossCuttingMechanisms.map((m) => m.id));
 
-  // Owner-authored interaction records (D-057) — the richer LAYER 2 source,
+  // Owner-authored interaction records (D-057) — the richer interaction source,
   // keyed by pairKey. Missing store = empty map = relations-only LAYER 2.
   const authoredInteractions = new Map<string, InteractionRecord>();
   if (existsSync(INTERACTIONS_DIR)) {
@@ -664,7 +837,13 @@ function main(): void {
         return m;
       });
 
-    const sheet = buildDatasheet(element, members, crossCuttingMechanisms, authoredInteractions);
+    const sheet = buildDatasheet(
+      element,
+      members,
+      crossCuttingMechanisms,
+      authoredInteractions,
+      effectsByMechanism,
+    );
     const text = renderDatasheet(sheet);
 
     // Self-check 1: the emitted file must parse back as YAML.

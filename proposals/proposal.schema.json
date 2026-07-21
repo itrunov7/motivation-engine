@@ -1,0 +1,393 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ventora.dev/motivation-engine/proposal.schema.json",
+  "title": "Knowledge proposal",
+  "description": "The universal provenance-gated envelope for proposed knowledge. Files live at proposals/{type}/{id}.json and have no effect on authoritative artifacts until owner approval.",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "type": "string", "minLength": 1 },
+    "type": {
+      "type": "string",
+      "enum": [
+        "effect",
+        "realization",
+        "interaction",
+        "mechanism",
+        "dossier_section",
+        "segment"
+      ]
+    },
+    "target": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The mechanism, pack, or segment id the proposal targets."
+    },
+    "payload": true,
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/provenanceItem" }
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "proposed_by": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Pipeline run id."
+    },
+    "proposed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "approved", "rejected", "edited"]
+    },
+    "decided_by": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "decided_at": {
+      "anyOf": [
+        { "type": "string", "format": "date-time" },
+        { "type": "null" }
+      ]
+    },
+    "decision_note": {
+      "type": ["string", "null"],
+      "minLength": 1
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "target",
+    "payload",
+    "provenance",
+    "confidence",
+    "proposed_by",
+    "proposed_at",
+    "status",
+    "decided_by",
+    "decided_at",
+    "decision_note"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": { "type": { "const": "effect" } },
+        "required": ["type"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "https://ventora.dev/motivation-engine/effect.schema.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "realization" } },
+        "required": ["type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/implementation" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "interaction" } },
+        "required": ["type"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "https://ventora.dev/motivation-engine/interaction.schema.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "mechanism" } },
+        "required": ["type"]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "https://ventora.dev/motivation-engine/mechanism.schema.json"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "dossier_section" } },
+        "required": ["type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/dossierSection" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "segment" } },
+        "required": ["type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/segment" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "doi": {
+      "type": "string",
+      "pattern": "^10\\.\\d{4,9}/\\S+$"
+    },
+    "provenanceItem": {
+      "type": "object",
+      "properties": {
+        "corpus_record_id": { "type": "string", "minLength": 1 },
+        "doi": {
+          "anyOf": [
+            { "$ref": "#/$defs/doi" },
+            { "type": "null" }
+          ]
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "quote_or_locus": { "type": "string", "minLength": 1 }
+      },
+      "required": ["corpus_record_id", "doi", "title", "quote_or_locus"],
+      "additionalProperties": false
+    },
+    "artifactType": {
+      "type": "string",
+      "enum": [
+        "paywall",
+        "cancellation_flow",
+        "retention_push",
+        "checkout",
+        "email",
+        "pricing_page",
+        "dashboard_widget",
+        "onboarding",
+        "landing_hero"
+      ]
+    },
+    "implementation": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "effect_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "artifact_types": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/artifactType" }
+        },
+        "product_requirements": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "generation_directive": { "type": "string", "minLength": 1 },
+        "copy_formulas": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "metrics": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "observed_effects": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Measured product outcomes from telemetry, not L2 effects."
+        }
+      },
+      "required": [
+        "id",
+        "artifact_types",
+        "product_requirements",
+        "generation_directive",
+        "copy_formulas",
+        "metrics",
+        "observed_effects"
+      ],
+      "additionalProperties": false
+    },
+    "axis": {
+      "type": "object",
+      "properties": {
+        "score": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "rationale": { "type": "string", "minLength": 1 }
+      },
+      "required": ["score", "rationale"],
+      "additionalProperties": false
+    },
+    "scores": {
+      "type": "object",
+      "properties": {
+        "evidence": { "$ref": "#/$defs/axis" },
+        "product_applicability": { "$ref": "#/$defs/axis" },
+        "measurability": { "$ref": "#/$defs/axis" },
+        "orthogonality": { "$ref": "#/$defs/axis" },
+        "safety": { "$ref": "#/$defs/axis" }
+      },
+      "required": [
+        "evidence",
+        "product_applicability",
+        "measurability",
+        "orthogonality",
+        "safety"
+      ],
+      "additionalProperties": false
+    },
+    "evidenceSource": {
+      "type": "object",
+      "properties": {
+        "ref": { "type": "string", "minLength": 1 },
+        "doi": { "type": "string", "minLength": 1 }
+      },
+      "required": ["ref"],
+      "additionalProperties": false
+    },
+    "dossierSection": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "field": { "const": "scores" },
+            "value": { "$ref": "#/$defs/scores" }
+          },
+          "required": ["field", "value"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": { "const": "total" },
+            "value": { "type": "integer", "minimum": 0, "maximum": 15 }
+          },
+          "required": ["field", "value"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": { "const": "core_condition" },
+            "value": { "type": "string", "minLength": 1 }
+          },
+          "required": ["field", "value"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": { "const": "dissent" },
+            "value": { "type": "string", "minLength": 1 }
+          },
+          "required": ["field", "value"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": { "const": "evidence_sources" },
+            "value": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/evidenceSource" }
+            }
+          },
+          "required": ["field", "value"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": { "const": "verdict" },
+            "value": {
+              "type": "string",
+              "enum": ["incubating", "core", "rejected", "hold"]
+            }
+          },
+          "required": ["field", "value"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": { "const": "decided_by" },
+            "value": { "type": "string", "minLength": 1 }
+          },
+          "required": ["field", "value"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": { "const": "date" },
+            "value": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          "required": ["field", "value"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": { "const": "notes" },
+            "value": { "type": "string" }
+          },
+          "required": ["field", "value"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "field": {
+              "enum": ["flag_lowest_admitted", "flag_completes_core"]
+            },
+            "value": { "type": "boolean" }
+          },
+          "required": ["field", "value"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "segment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "group": {
+          "type": "string",
+          "enum": ["business-model", "form", "audience", "usage-rhythm"]
+        },
+        "definition": { "type": "string", "minLength": 1 },
+        "status": { "const": "active" },
+        "provenance": { "type": "string", "minLength": 1 }
+      },
+      "required": ["id", "group", "definition", "status", "provenance"],
+      "additionalProperties": false
+    }
+  }
+}

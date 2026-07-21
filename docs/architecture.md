@@ -11,9 +11,10 @@ Principle: minimum moving parts, maximum transparency. Every component is a mana
  ┌─────────────────┐      ┌──────────────────────┐      ┌──────────────┐
  │  GitHub repo    │      │  Postgres (managed,  │      │ Object store │
  │  registry JSON  │      │  e.g. Supabase)      │      │ (R2/S3)      │
- │  dossiers,      │      │  corpora, tags,      │      │ screenshots, │
- │  schema,        │      │  effects, candidate  │      │ flow dumps,  │
- │  decision log   │      │  queue               │      │ html         │
+ │  dossiers, L2   │      │  high-volume corpora,│      │ screenshots, │
+ │  effects,       │      │  tags, telemetry     │      │ flow dumps,  │
+ │  proposals,     │      │  (after trigger)     │      │ html         │
+ │  decision log   │      │                      │      │              │
  └───────┬─────────┘      └──────────┬───────────┘      └──────┬───────┘
          │                           │                          │
          ▼                           ▼                          │
@@ -37,9 +38,9 @@ Principle: minimum moving parts, maximum transparency. Every component is a mana
 
  ┌──────────────────────────────────────────────┐
  │     SHOWCASE · Control Center (Vercel)       │
- │  reads: repo files (registry, statuses,      │
- │  Actions logs) + Postgres API (effects,      │
- │  corpora) when those exist                   │
+ │  reads: repo files (registry, effects,       │
+ │  proposals, statuses, Actions logs) +        │
+ │  Postgres API for high-volume data later     │
  └──────────────────────────────────────────────┘
 ```
 
@@ -48,7 +49,7 @@ Principle: minimum moving parts, maximum transparency. Every component is a mana
 In the solo phase the "engine" is not a service but a set of pipelines. All of them live in **GitHub Actions**:
 - **Validator** — on every commit to /registry: a record without metrics/constraints does not pass.
 - **Card generator** — on every merge: cards regenerate from JSON.
-- **Derivation pipeline** — scheduled and manual (workflow_dispatch): mining meta-analyses → dossier drafts → candidate queue.
+- **Derivation pipeline** — scheduled and manual (workflow_dispatch): mining grounded corpus records → provenance-gated proposals.
 - **Corpus tagging** — batches on demand.
 
 Why Actions and not a server: every run is an open log with full output. The "no black box" requirement is satisfied by the platform itself: open the Actions tab and see what ran, when, and with what result. Limits (6h per job) suffice for our batches; if a batch outgrows them, it moves to the harvest worker without changing the scheme.
@@ -61,11 +62,15 @@ Three tiers by data type:
 
 | Tier | What | Where | Why |
 |---|---|---|---|
-| Knowledge | mechanism registry, dossiers, schema, decision log | **GitHub repo (private)** | versioning, review, status history = git history |
-| Structure | corpora (tagged flows, reviews→labels), effects table, candidate queue | **managed Postgres** (when corpora arrive) | SQL joins for the loop, instant REST API for the showcase, pgvector inside — when embeddings are needed, same DB |
+| Knowledge | mechanism registry, dossiers, L2 effects, interactions, proposals, schema, decision log | **GitHub repo (private)** | versioning, review, provenance, status history = git history |
+| Structure | high-volume corpora (tagged flows, reviews→labels) and telemetry observations | **managed Postgres** (only when an escalation trigger fires) | SQL joins for the loop and pgvector if volume eventually requires it |
 | Raw | interface screenshots, flow recordings, html dumps | **object store (R2/S3)** | no egress fees, pennies per TB |
 
-Boundary rule: anything a human edits and reviews — git. Anything pipelines produce by the thousands — Postgres. Anything binary — object store.
+Boundary rule: anything a human edits or approves — git. Pipeline-extracted knowledge first lands in `/proposals/{type}/{id}.json`; it does not affect `/registry`, `/effects`, `/interactions`, `/dossiers`, or `/segments` before approval. Anything pipelines produce by the thousands may move to Postgres only after an escalation trigger. Anything binary — object store.
+
+### File write surfaces
+
+The app remains read-only for knowledge except for the owner approval path at `/review` (D-076). Its server action may use the existing GitHub token path only to apply a validated proposal. Proposal status, target artifact mutation, and the append-only decision entry must land as one atomic commit. `/corpora/_ops/**` remains the separate operational write surface (D-023). No general-purpose knowledge editor is permitted.
 
 ## Where harvesting connects
 
@@ -91,7 +96,7 @@ Harvesting is **isolated from everything else** — it is the only component wit
 - Corpora arrive (thousands of rows) → activate Postgres.
 - Millions of examples requiring semantic search → pgvector over examples; the core stays a registry.
 - >500 implementations or conflicting selection rules → registry moves from git to a DB.
-- Enough observed_effects → learned ranking replaces manual weights.
+- Enough telemetry `implementations[].observed_effects` → learned ranking replaces manual weights. These measured product outcomes are distinct from first-class scientific L2 records under `/effects`.
 
 ## What matters for the August handoff
 

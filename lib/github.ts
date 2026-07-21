@@ -1,17 +1,15 @@
 /**
- * lib/github.ts — the GitHub API client for the Operations UI (D-023).
+ * lib/github.ts — the GitHub API client for authorized app write surfaces.
  *
- * This is the ONLY module in the app that touches the network at runtime, and
- * it is imported ONLY by the app/ops server actions (D-023 amendment to rule
- * 12): the app never harvests — it commits the narrow _ops write surface via
- * the Contents API and triggers/reads the harvest workflow via the Actions
- * API. All calls go to api.github.com; nothing else. Auth is a fine-grained,
- * repo-scoped PAT read from env GH_OPS_TOKEN (never committed). Without the
- * token the whole surface is disabled and /ops renders read-only.
+ * Operations use the Contents + Actions APIs (D-023). Proposal approval uses
+ * the Git Data API to create one tree/commit and advances the branch ref once
+ * (D-076). All calls go to api.github.com; nothing else. Auth is a fine-
+ * grained, repo-scoped PAT read from env GH_OPS_TOKEN (never committed).
  */
 
 import { Buffer } from "node:buffer";
 import { inflateRawSync } from "node:zlib";
+import type { FileMutation, PreparedProposalTransaction } from "./proposals";
 
 const API_BASE = "https://api.github.com";
 
@@ -56,6 +54,13 @@ export class GithubApiError extends Error {
   }
 }
 
+export class GithubTransactionConflictError extends GithubApiError {
+  constructor(message: string) {
+    super(409, message);
+    this.name = "GithubTransactionConflictError";
+  }
+}
+
 async function ghFetch(
   env: GithubOpsEnv,
   path: string,
@@ -76,6 +81,37 @@ export interface RepoFile {
   text: string;
   /** Blob sha, required to update the file (optimistic concurrency). */
   sha: string;
+}
+
+export interface RepoDirectoryEntry {
+  name: string;
+  path: string;
+  type: "file" | "dir";
+}
+
+/** List one repository directory at the configured branch. */
+export async function listRepoDirectory(
+  env: GithubOpsEnv,
+  path: string,
+): Promise<RepoDirectoryEntry[]> {
+  const res = await ghFetch(
+    env,
+    `/repos/${env.owner}/${env.repo}/contents/${encodeURIComponent(path).replace(/%2F/g, "/")}?ref=${encodeURIComponent(env.branch)}`,
+  );
+  if (res.status === 404) return [];
+  if (!res.ok) {
+    throw new GithubApiError(res.status, `GET directory ${path} failed: ${await res.text()}`);
+  }
+  const body = (await res.json()) as {
+    name: string;
+    path: string;
+    type: "file" | "dir";
+  }[];
+  return body.map(({ name, path: entryPath, type }) => ({
+    name,
+    path: entryPath,
+    type,
+  }));
 }
 
 /** GET a file's contents + sha, or null when it does not exist (404). */
@@ -126,6 +162,186 @@ export async function putRepoFile(
   }
   const body = (await res.json()) as { commit: { sha: string } };
   return { commitSha: body.commit.sha };
+}
+
+// ---------- Git Data API (atomic multi-file knowledge transactions) ----------
+
+async function getRepoFileAtRef(
+  env: GithubOpsEnv,
+  path: string,
+  ref: string,
+): Promise<RepoFile | null> {
+  const res = await ghFetch(
+    env,
+    `/repos/${env.owner}/${env.repo}/contents/${encodeURIComponent(path).replace(/%2F/g, "/")}?ref=${encodeURIComponent(ref)}`,
+  );
+  if (res.status === 404) return null;
+  if (!res.ok) {
+    throw new GithubApiError(
+      res.status,
+      `GET contents ${path} at ${ref} failed: ${await res.text()}`,
+    );
+  }
+  const body = (await res.json()) as { content?: string; sha: string };
+  return {
+    text: body.content ? Buffer.from(body.content, "base64").toString("utf8") : "",
+    sha: body.sha,
+  };
+}
+
+async function getBranchHead(env: GithubOpsEnv): Promise<string> {
+  const branchPath = encodeURIComponent(env.branch).replace(/%2F/g, "/");
+  const res = await ghFetch(
+    env,
+    `/repos/${env.owner}/${env.repo}/git/ref/heads/${branchPath}`,
+  );
+  if (!res.ok) {
+    throw new GithubApiError(res.status, `get branch ref failed: ${await res.text()}`);
+  }
+  return ((await res.json()) as { object: { sha: string } }).object.sha;
+}
+
+export interface GitDataTransactionOptions {
+  message: string;
+  mutations: FileMutation[];
+  /** Optional caller-observed head for an additional whole-repo stale check. */
+  expectedHeadSha?: string;
+}
+
+/**
+ * Creates blobs, one tree, and one commit, then advances the branch ref once.
+ * Per-file expectedContent guards prevent stale proposal/artifact decisions;
+ * the non-forced ref update rejects a concurrent branch advance. A null
+ * mutation content emits a Git tree deletion.
+ */
+export async function commitGitDataTransaction(
+  env: GithubOpsEnv,
+  transaction:
+    | GitDataTransactionOptions
+    | (Pick<PreparedProposalTransaction, "commitMessage" | "mutations"> & {
+        expectedHeadSha?: string;
+      }),
+): Promise<{ commitSha: string; previousHeadSha: string }> {
+  const message =
+    "message" in transaction ? transaction.message : transaction.commitMessage;
+  const mutations = transaction.mutations;
+  const uniquePaths = new Set<string>();
+  for (const mutation of mutations) {
+    if (uniquePaths.has(mutation.path)) {
+      throw new Error(`Duplicate transaction path: ${mutation.path}`);
+    }
+    uniquePaths.add(mutation.path);
+  }
+
+  const headSha = await getBranchHead(env);
+  if (transaction.expectedHeadSha && transaction.expectedHeadSha !== headSha) {
+    throw new GithubTransactionConflictError(
+      `Branch ${env.branch} advanced from ${transaction.expectedHeadSha} to ${headSha}`,
+    );
+  }
+  for (const mutation of mutations) {
+    const current = await getRepoFileAtRef(env, mutation.path, headSha);
+    if ((current?.text ?? null) !== mutation.expectedContent) {
+      throw new GithubTransactionConflictError(
+        `${mutation.path} changed after the proposal transaction was prepared`,
+      );
+    }
+  }
+  if (mutations.length === 0) {
+    return { commitSha: headSha, previousHeadSha: headSha };
+  }
+
+  const commitRes = await ghFetch(
+    env,
+    `/repos/${env.owner}/${env.repo}/git/commits/${headSha}`,
+  );
+  if (!commitRes.ok) {
+    throw new GithubApiError(
+      commitRes.status,
+      `get base commit failed: ${await commitRes.text()}`,
+    );
+  }
+  const baseTreeSha = ((await commitRes.json()) as { tree: { sha: string } }).tree.sha;
+
+  const blobShas = await Promise.all(
+    mutations.map(async (mutation): Promise<string | null> => {
+      if (mutation.content === null) return null;
+      const res = await ghFetch(
+        env,
+        `/repos/${env.owner}/${env.repo}/git/blobs`,
+        {
+          method: "POST",
+          body: JSON.stringify({ content: mutation.content, encoding: "utf-8" }),
+        },
+      );
+      if (!res.ok) {
+        throw new GithubApiError(
+          res.status,
+          `create blob for ${mutation.path} failed: ${await res.text()}`,
+        );
+      }
+      return ((await res.json()) as { sha: string }).sha;
+    }),
+  );
+
+  const treeRes = await ghFetch(
+    env,
+    `/repos/${env.owner}/${env.repo}/git/trees`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        base_tree: baseTreeSha,
+        tree: mutations.map((mutation, index) => ({
+          path: mutation.path,
+          mode: "100644",
+          type: "blob",
+          sha: blobShas[index],
+        })),
+      }),
+    },
+  );
+  if (!treeRes.ok) {
+    throw new GithubApiError(treeRes.status, `create tree failed: ${await treeRes.text()}`);
+  }
+  const treeSha = ((await treeRes.json()) as { sha: string }).sha;
+
+  const newCommitRes = await ghFetch(
+    env,
+    `/repos/${env.owner}/${env.repo}/git/commits`,
+    {
+      method: "POST",
+      body: JSON.stringify({ message, tree: treeSha, parents: [headSha] }),
+    },
+  );
+  if (!newCommitRes.ok) {
+    throw new GithubApiError(
+      newCommitRes.status,
+      `create commit failed: ${await newCommitRes.text()}`,
+    );
+  }
+  const newCommitSha = ((await newCommitRes.json()) as { sha: string }).sha;
+
+  const branchPath = encodeURIComponent(env.branch).replace(/%2F/g, "/");
+  const refRes = await ghFetch(
+    env,
+    `/repos/${env.owner}/${env.repo}/git/refs/heads/${branchPath}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ sha: newCommitSha, force: false }),
+    },
+  );
+  if (refRes.status === 409 || refRes.status === 422) {
+    throw new GithubTransactionConflictError(
+      `Branch ${env.branch} advanced while the transaction commit was being created`,
+    );
+  }
+  if (!refRes.ok) {
+    throw new GithubApiError(
+      refRes.status,
+      `update branch ref failed: ${await refRes.text()}`,
+    );
+  }
+  return { commitSha: newCommitSha, previousHeadSha: headSha };
 }
 
 // ---------- Actions API (dispatch, poll, artifact) ----------

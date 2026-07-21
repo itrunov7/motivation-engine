@@ -14,13 +14,18 @@ exist ONLY in the tools/ corpus-extraction pipeline (rule 12), never in the app.
 ## Architectural invariants (violation = stop and ask the owner)
 1. SOURCE OF TRUTH — files in the repo. Data lives ONLY in:
  /registry/**.json, /sources/sources.json, /decisions/decisions.json,
- /dossiers/**, /docs/**.md, /segments/segments.yaml (product-segment axis,
- D-047), /packs/pack-map.yaml (pack map — sole hand-authored pack input,
- D-048), /corpora/_ops/**.json (operational config).
+ /dossiers/**, /effects/**.json (first-class L2 effects, D-076),
+ /interactions/**.json, /proposals/**.json (provenance-gated proposal queue,
+ D-076), /docs/**.md, /segments/segments.yaml (product-segment axis, D-047),
+ /packs/pack-map.yaml (pack map — sole hand-authored pack input, D-048),
+ /corpora/_ops/**.json (operational config).
    No data inside components, no databases. Knowledge files (registry,
-   dossiers, docs, sources, decisions) are edited ONLY in git; the app has a
-   NARROW write surface limited to /corpora/_ops/** and append-only auto-
-   entries in decisions.json (D-023).
+   dossiers, effects, interactions, proposals, docs, sources, decisions) are
+   edited ONLY in git. The app has a NARROW write surface: operational writes
+   under /corpora/_ops/** (D-023), plus owner decisions through /review
+   (D-076). A /review approval must atomically commit the validated proposal
+   status, validated target artifact mutation, and append-only decision entry;
+   unapproved proposals never affect authoritative artifacts.
 2. HONEST STATUSES — statuses in the showcase are COMPUTED from data.
    Hardcoding a status ("live", "connected", coverage numbers) in JSX/TS is
    forbidden. No data → show an honest empty state explaining what will appear
@@ -61,10 +66,13 @@ exist ONLY in the tools/ corpus-extraction pipeline (rule 12), never in the app.
 12. Data reading in the app: fs in server components / static generation. The
     Next.js app remains file-based — no runtime external fetches from app/
     (including middleware and server actions), with ONE exception (D-023):
-    server actions under app/ops/ MAY call api.github.com to commit the
-    allowlisted /corpora/_ops/** write surface, to dispatch harvest workflows
-    (workflow_dispatch), to poll a run, and to download a run's quote artifact
-    — nothing else, and harvesting itself never runs in the app. Scripts under
+   server actions under app/ops/ MAY call api.github.com to commit the
+   allowlisted /corpora/_ops/** write surface, to dispatch harvest workflows
+   (workflow_dispatch), to poll a run, and to download a run's quote artifact.
+   Server actions under app/review/ MAY call api.github.com only to commit an
+   owner approval/rejection transaction prepared by the shared proposal
+   library (D-076). Nothing else is allowed, and harvesting itself never runs
+   in the app. Scripts under
     tools/ MAY call ONLY these public APIs: api.openalex.org,
     api.semanticscholar.org, PubMed E-utilities (eutils.ncbi.nlm.nih.gov),
     web.archive.org (CDX API). Any other external endpoint requires a new
@@ -102,7 +110,10 @@ exist ONLY in the tools/ corpus-extraction pipeline (rule 12), never in the app.
   outside the tools/ corpus-extraction pipeline defined in rule 12 (D-075)
 - Do not build general scrapers; source connectors are allowed ONLY as scripts
   under tools/ calling the whitelisted APIs in rule 12
-- Do not build data-editing forms in the UI for KNOWLEDGE (registry, dossiers,
-  docs, sources, decisions) — that is edited in git. The ONLY UI write surface
-  is operational config under /corpora/_ops/** and run triggering (D-023)
+- Do not build general data-editing forms in the UI for KNOWLEDGE (registry,
+  dossiers, effects, interactions, docs, sources, decisions) — that is edited
+  in git. UI writes are limited to operational config/run triggering under
+  /corpora/_ops/** (D-023) and the owner approval/rejection workflow under
+  /review (D-076); /review may apply only validated proposal payloads through
+  one atomic git transaction.
 - Do not add dependencies "for the future"

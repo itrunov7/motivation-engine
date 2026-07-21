@@ -1,0 +1,72 @@
+name: proposal-review
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: Proposal action
+        required: true
+        type: choice
+        options:
+          - approve
+          - reject
+          - edit
+      proposal_path:
+        description: Repository path, e.g. proposals/effect/run-123.json
+        required: true
+        type: string
+      actor:
+        description: Owner/auditor name recorded in the decision
+        required: true
+        default: owner
+        type: string
+      reason:
+        description: Required rejection reason; optional approval note
+        required: false
+        type: string
+      payload_json:
+        description: Complete replacement payload JSON (edit only)
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: proposal-review-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  decide:
+    runs-on: ubuntu-latest
+    env:
+      ACTION: ${{ inputs.action }}
+      PROPOSAL_PATH: ${{ inputs.proposal_path }}
+      ACTOR: ${{ inputs.actor }}
+      REASON: ${{ inputs.reason }}
+      PAYLOAD_JSON: ${{ inputs.payload_json }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Apply shared proposal transaction
+        shell: bash
+        run: |
+          args=("$ACTION" "$PROPOSAL_PATH" "--actor=$ACTOR")
+          if [[ -n "$REASON" ]]; then args+=("--reason=$REASON"); fi
+          if [[ "$ACTION" == "edit" ]]; then args+=("--payload-json=$PAYLOAD_JSON"); fi
+          npm run proposal -- "${args[@]}"
+      - run: npm run validate
+      - run: npm run test:proposals
+      - name: Commit atomic proposal decision
+        shell: bash
+        run: |
+          git add proposals effects registry/mechanisms interactions dossiers segments/segments.yaml decisions/decisions.json
+          git diff --cached --quiet && { echo "No proposal changes to commit."; exit 1; }
+          git commit -m "data: ${ACTION} proposal ${PROPOSAL_PATH##*/}"
+          git push

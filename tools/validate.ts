@@ -87,6 +87,10 @@ const PATHS = {
   packBundle: join(ROOT, "packs", "export", "packs-bundle.yaml"),
   interactionSchema: join(ROOT, "interactions", "interaction.schema.json"),
   interactionsDir: join(ROOT, "interactions"),
+  effectSchema: join(ROOT, "effects", "effect.schema.json"),
+  effectsDir: join(ROOT, "effects"),
+  proposalSchema: join(ROOT, "proposals", "proposal.schema.json"),
+  proposalsDir: join(ROOT, "proposals"),
 };
 
 /** /corpora dirs that are ops surfaces, not harvested corpora — no manifest. */
@@ -124,6 +128,17 @@ function listJsonFiles(dir: string): string[] {
     .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
     .map((entry) => join(dir, entry.name))
     .sort();
+}
+
+function listJsonFilesRecursive(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+  const files: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) files.push(...listJsonFilesRecursive(path));
+    else if (entry.isFile() && entry.name.endsWith(".json")) files.push(path);
+  }
+  return files.sort();
 }
 
 /** Every manifest.json under `dir` at any depth (D-020), sorted. */
@@ -733,7 +748,8 @@ interface MechanismLike {
   parent?: string;
   dossier_ref?: string | null;
   evidence_terms?: unknown;
-  implementations?: { id?: string; metrics?: unknown }[];
+  effect_refs?: unknown;
+  implementations?: { id?: string; effect_id?: string; metrics?: unknown }[];
   constraints?: { hard_rules?: unknown };
   relations?: { target?: string }[];
 }
@@ -1487,6 +1503,240 @@ function main(): void {
     }
   } else {
     console.log("  · no interaction schema yet (interactions/interaction.schema.json)");
+  }
+
+  // 15. First-class effects (D-076): validate the actual schema and every
+  // effects/{mechanism}/{effect}.json record, then enforce both sides of the
+  // mechanism/effect/realization references.
+  const effectsByKey = new Map<string, { file: string; realizationIds: string[] }>();
+  const fullRecordById = new Map(
+    fullRecords.flatMap(({ record }) =>
+      typeof record.id === "string" ? [[record.id, record] as const] : [],
+    ),
+  );
+  if (existsSync(PATHS.effectSchema)) {
+    const effectSchemaDoc = readJson(PATHS.effectSchema);
+    if (effectSchemaDoc !== undefined) {
+      let validateEffect: ValidateFunction | undefined;
+      try {
+        validateEffect = ajv.compile(effectSchemaDoc as object);
+        console.log(`  ✓ ${rel(PATHS.effectSchema)} compiles`);
+      } catch (err) {
+        fail(PATHS.effectSchema, `schema does not compile — ${(err as Error).message}`);
+      }
+      if (validateEffect) {
+        const effectFiles = listJsonFilesRecursive(PATHS.effectsDir).filter(
+          (file) => file !== PATHS.effectSchema,
+        );
+        for (const file of effectFiles) {
+          const data = readJson(file);
+          if (data === undefined) continue;
+          let ok = validateAgainst(validateEffect, file, data);
+          const effect = data as {
+            id?: string;
+            mechanism_id?: string;
+            realization_ids?: string[];
+            source?: string[];
+            provenance?: { doi?: string | null }[];
+          };
+          const parts = relative(PATHS.effectsDir, file).split(sep);
+          const expected =
+            typeof effect.mechanism_id === "string" && typeof effect.id === "string"
+              ? [effect.mechanism_id, `${effect.id}.json`]
+              : [];
+          if (parts.length !== 2 || parts[0] !== expected[0] || parts[1] !== expected[1]) {
+            fail(file, `path must match effects/{mechanism_id}/{id}.json`);
+            ok = false;
+          }
+          if (
+            typeof effect.mechanism_id === "string" &&
+            !fullRecordById.has(effect.mechanism_id)
+          ) {
+            fail(file, `mechanism_id "${effect.mechanism_id}" is not a full mechanism record`);
+            ok = false;
+          }
+          const provenanceDois = new Set(
+            (effect.provenance ?? []).flatMap((item) =>
+              typeof item.doi === "string" ? [item.doi] : [],
+            ),
+          );
+          for (const doi of effect.source ?? []) {
+            if (!provenanceDois.has(doi)) {
+              fail(file, `source DOI "${doi}" is absent from effect provenance`);
+              ok = false;
+            }
+          }
+          if (typeof effect.mechanism_id === "string" && typeof effect.id === "string") {
+            const key = `${effect.mechanism_id}\u0000${effect.id}`;
+            if (effectsByKey.has(key)) {
+              fail(file, `duplicate effect ${effect.mechanism_id}/${effect.id}`);
+              ok = false;
+            } else {
+              effectsByKey.set(key, {
+                file,
+                realizationIds: effect.realization_ids ?? [],
+              });
+            }
+          }
+          if (ok) console.log(`  ✓ ${rel(file)} valid (effect record)`);
+        }
+        if (effectFiles.length === 0) {
+          console.log("  · no effect records yet (honest empty state)");
+        }
+      }
+    }
+  } else {
+    console.log("  · no effect schema yet (effects/effect.schema.json)");
+  }
+
+  for (const [key, effect] of Array.from(effectsByKey.entries())) {
+    const [mechanismId, effectId] = key.split("\u0000");
+    const mechanism = fullRecordById.get(mechanismId);
+    const refs = Array.isArray(mechanism?.effect_refs)
+      ? mechanism.effect_refs.filter((id): id is string => typeof id === "string")
+      : [];
+    if (!refs.includes(effectId)) {
+      fail(
+        effect.file,
+        `effect is not referenced by registry/mechanisms/${mechanismId}.json effect_refs`,
+      );
+    }
+  }
+
+  for (const { file, record } of fullRecords) {
+    const implementationsById = new Map(
+      (record.implementations ?? []).flatMap((implementation) =>
+        typeof implementation.id === "string"
+          ? [[implementation.id, implementation] as const]
+          : [],
+      ),
+    );
+    const effectRefs = Array.isArray(record.effect_refs)
+      ? record.effect_refs.filter((id): id is string => typeof id === "string")
+      : [];
+    for (const effectId of effectRefs) {
+      const key = `${record.id}\u0000${effectId}`;
+      const effect = effectsByKey.get(key);
+      if (!effect) {
+        fail(file, `effect_refs entry "${effectId}" has no effects/${record.id}/${effectId}.json`);
+        continue;
+      }
+      for (const realizationId of effect.realizationIds) {
+        const implementation = implementationsById.get(realizationId);
+        if (!implementation) {
+          fail(effect.file, `realization_id "${realizationId}" is not in ${record.id}.implementations`);
+        } else if (implementation.effect_id !== effectId) {
+          fail(
+            effect.file,
+            `realization_id "${realizationId}" must link back with effect_id "${effectId}"`,
+          );
+        }
+      }
+    }
+    for (const implementation of record.implementations ?? []) {
+      if (typeof implementation.effect_id !== "string") continue;
+      if (!effectRefs.includes(implementation.effect_id)) {
+        fail(
+          file,
+          `implementation "${implementation.id ?? "?"}" effect_id "${implementation.effect_id}" is not in effect_refs`,
+        );
+        continue;
+      }
+      const effect = effectsByKey.get(`${record.id}\u0000${implementation.effect_id}`);
+      if (
+        effect &&
+        typeof implementation.id === "string" &&
+        !effect.realizationIds.includes(implementation.id)
+      ) {
+        fail(
+          file,
+          `implementation "${implementation.id}" links effect_id "${implementation.effect_id}" but the effect does not list it in realization_ids`,
+        );
+      }
+    }
+  }
+
+  // 16. Universal proposal queue (D-076): compile proposal.schema.json only
+  // after all externally referenced schemas have been registered with Ajv.
+  if (existsSync(PATHS.proposalSchema)) {
+    const proposalSchemaDoc = readJson(PATHS.proposalSchema);
+    if (proposalSchemaDoc !== undefined) {
+      let validateProposal: ValidateFunction | undefined;
+      try {
+        validateProposal = ajv.compile(proposalSchemaDoc as object);
+        console.log(`  ✓ ${rel(PATHS.proposalSchema)} compiles`);
+      } catch (err) {
+        fail(PATHS.proposalSchema, `schema does not compile — ${(err as Error).message}`);
+      }
+      if (validateProposal) {
+        const proposalFiles = listJsonFilesRecursive(PATHS.proposalsDir).filter(
+          (file) => file !== PATHS.proposalSchema,
+        );
+        for (const file of proposalFiles) {
+          const data = readJson(file);
+          if (data === undefined) continue;
+          let ok = validateAgainst(validateProposal, file, data);
+          const proposal = data as {
+            id?: string;
+            type?: string;
+            status?: string;
+            decided_by?: string | null;
+            decided_at?: string | null;
+            decision_note?: string | null;
+            provenance?: unknown;
+            payload?: { provenance?: unknown };
+          };
+          const parts = relative(PATHS.proposalsDir, file).split(sep);
+          const expected =
+            typeof proposal.type === "string" && typeof proposal.id === "string"
+              ? [proposal.type, `${proposal.id}.json`]
+              : [];
+          if (parts.length !== 2 || parts[0] !== expected[0] || parts[1] !== expected[1]) {
+            fail(file, "path must match proposals/{type}/{id}.json");
+            ok = false;
+          }
+          if (
+            (proposal.status === "pending" || proposal.status === "edited") &&
+            (proposal.decided_by !== null ||
+              proposal.decided_at !== null ||
+              proposal.decision_note !== null)
+          ) {
+            fail(file, `${proposal.status} proposal must not carry decision metadata`);
+            ok = false;
+          }
+          if (
+            (proposal.status === "approved" || proposal.status === "rejected") &&
+            (typeof proposal.decided_by !== "string" ||
+              typeof proposal.decided_at !== "string")
+          ) {
+            fail(file, `${proposal.status} proposal must carry decided_by and decided_at`);
+            ok = false;
+          }
+          if (
+            proposal.status === "rejected" &&
+            (typeof proposal.decision_note !== "string" ||
+              proposal.decision_note.trim().length === 0)
+          ) {
+            fail(file, "rejected proposal must carry a non-empty decision_note");
+            ok = false;
+          }
+          if (
+            proposal.type === "effect" &&
+            JSON.stringify(proposal.payload?.provenance) !==
+              JSON.stringify(proposal.provenance)
+          ) {
+            fail(file, "effect payload provenance must exactly match envelope provenance");
+            ok = false;
+          }
+          if (ok) console.log(`  ✓ ${rel(file)} valid (${proposal.status} proposal)`);
+        }
+        if (proposalFiles.length === 0) {
+          console.log("  · no proposals yet (honest empty state)");
+        }
+      }
+    }
+  } else {
+    console.log("  · no proposal schema yet (proposals/proposal.schema.json)");
   }
 
   finish();

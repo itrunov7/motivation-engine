@@ -18,9 +18,13 @@
     "connector": "tsx tools/run-connector.ts",
     "ingest": "tsx tools/ingest-report.ts",
     "health": "tsx tools/health-check.ts",
-    "ops-gate": "tsx tools/ops-gate.ts"
+    "ops-gate": "tsx tools/ops-gate.ts",
+    "proposal": "tsx tools/proposal.ts",
+    "test:proposals": "tsx --test lib/proposals.test.ts"
   },
   "dependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "next": "^14.2.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
@@ -32,8 +36,6 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "ajv": "^8.20.0",
-    "ajv-formats": "^3.0.1",
     "autoprefixer": "^10.4.0",
     "postcss": "^8.4.0",
     "tailwindcss": "^3.4.0",

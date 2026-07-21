@@ -1,12 +1,13 @@
 # GENERATED FILE — do not edit by hand.
-# Source: packs/pack-map.yaml + registry/mechanisms/*.json · regenerate with `npm run packs` (D-049).
+# Source: packs/pack-map.yaml + registry/mechanisms/*.json + effects/*/*.json
+#         + dossiers/*.json + interactions/*.json · regenerate with `npm run packs` (D-049, D-076).
 
 pack: engagement-loops
 applies_to: [in-product-loops]
 funnel_stage: activation
 version: 0.1.0
-nature: knowledge base. facts with evidence strength. no instructions.
-source: projection of registry records VR-02 CG-05
+nature: knowledge base. L1/L2 facts with evidence strength; L3 preserves authored realization directives.
+source: projection of registry records and first-class effects for VR-02 CG-05 CL-14 IF-18 MM-15 PF-16 PS-13 SC-17
 
 # ─────────────────────────────────────────────
 # LAYER 1 — MECHANISMS (atoms of evidence)
@@ -20,7 +21,6 @@ mechanisms:
     source: "Variable-ratio schedules produce the highest, most persistent response rates (Skinner). Neural basis: dopamine reward-prediction-error (Schultz, Dayan & Montague 1997) — unpredictable reward drives the strongest dopamine signal.; doi:10.1126/science.275.5306.1593; doi:10.1007/s00213-006-0578-x"
     boundary: reward must be genuinely valued; unpredictability can frustrate if reward never arrives; highest abuse potential of the core set
     active_when: product.has_repeatable_reward_moment
-    realizations: [variable-discovery, surprise-reward]
     forbidden: [genuine-reward-only, no-gambling-mechanics, no-compulsion-loops, vulnerable-users]
 
   - id: CG-05
@@ -30,7 +30,6 @@ mechanisms:
     source: Curiosity arises from an information gap between what one knows and wants to know; the gap creates a drive to close it (Loewenstein 1994, information-gap theory). Neuroscience links curiosity states to reward and memory circuitry (Gruber, Kang et al.).; doi:10.1037/0033-2909.116.1.75; doi:10.1016/j.neuron.2014.08.060
     boundary: gap must be moderate known enough to care; clickbait backlash if payoff disappoints; attention effect stronger than lasting engagement
     active_when: artifact.can_pose_a_resolvable_question
-    realizations: [personalized-reveal, progressive-reveal]
     forbidden: [real-payoff, no-deceptive-teaser]
 
 # ─────────────────────────────────────────────
@@ -45,7 +44,6 @@ cross_cutting_perception:
     source: Working memory processes only a few elements at once (Baddeley 1974); when presentation consumes that capacity with load unrelated to the task (extraneous load), comprehension and performance degrade. Sweller 1988 and the 1998 architecture paper established the framework; split-attention (Chandler & Sweller 1991) and the 20-years-later review (Sweller et al. 2019) sustain it across four decades.; doi:10.1207/s15516709cog1202_4; doi:10.1023/A:1022193728205
     boundary: expertise reversal what helps novices can hurt experts; load measurement relies on subjective scales; germane load construct contested; evidence base is instructional not commercial interfaces
     active_when: ""
-    realizations: [extraneous-reduction, chunking-progressive-disclosure, split-attention-avoidance]
     forbidden: [no-load-as-obstruction, no-essential-omission]
 
   - id: IF-18
@@ -55,7 +53,6 @@ cross_cutting_perception:
     source: "People seeking information behave like foragers: they judge, from local cues, whether a path is likely to lead to what they want ('information scent'), pursue high-scent paths, and abandon low-scent ones — behaviour governed by a cost–benefit calculus rather than exhaustive reading. Pirolli & Card (1999) formalised the theory; computational models (SNIF-ACT) predict navigation choices from scent, and applied work (the scent-of-a-site analyses, scented widgets) tests scent manipulation directly.; doi:10.1037/0033-295X.106.4.643"
     boundary: validated mainly on hypertext search and browse tasks; computational models validated on limited datasets; less established for feeds apps and mobile; scent is a perception and can be wrong
     active_when: artifact.has_navigation_or_choice_between_paths
-    realizations: [specific-predictive-labels, preview-cues]
     forbidden: [no-false-scent, no-scent-suppression-for-exit-paths]
 
   - id: MM-15
@@ -65,7 +62,6 @@ cross_cutting_perception:
     source: "Three decades of controlled experiments on how words and images should be combined. Established principles with the strongest support: multimedia (words plus relevant images beat words alone), coherence (removing interesting-but-extraneous material improves understanding — Mayer, Heiser & Lonn 2001), signalling (cueing the essential improves outcomes — Richter, Scheiter & Eitel meta-analysis), spatial and temporal contiguity (Ginns meta-analysis), and redundancy (duplicating identical content across channels harms rather than helps).; doi:10.1207/S15326985EP3801_6; doi:10.1017/CBO9781139547369"
     boundary: evidence base is learning outcomes not conversion; expertise reversal applies; redundancy effect has boundary conditions; richer media not automatically better
     active_when: artifact.conveys_explanatory_content
-    realizations: [multimedia-substitution, coherence-pruning, signaling, contiguity-and-redundancy]
     forbidden: [no-explanatory-omission, no-misleading-visual, accessibility-preserved]
 
   - id: PF-16
@@ -75,7 +71,6 @@ cross_cutting_perception:
     source: "Ease of mental processing is experienced as a positive feeling and is misattributed to the object being processed: fluently processed material is judged more likeable, more familiar, more confidently, and — critically — more true. Reber, Schwarz & Winkielman (2004) for aesthetic preference; Alter & Oppenheimer (2009) integrating the fluency literatures; Dechêne et al. (2009) meta-analysis of the truth effect.; doi:10.1207/s15327957pspr0804_3; doi:10.1177/1088868309341564"
     boundary: fluency signal meaning is learned not fixed; measurement of fluency contested; disfluency preferred in some contexts; truth effect is an ethical hazard not a tool
     active_when: ""
-    realizations: [legibility-and-plain-language, familiar-structure]
     forbidden: [no-fluency-for-false-claims, no-disfluency-obstruction, material-information-fluent]
 
   - id: PS-13
@@ -85,7 +80,6 @@ cross_cutting_perception:
     source: Pictures of concrete things are recognised and recalled better than the words naming them — the picture superiority effect, one of the most reliably reproduced findings in memory research. Paivio's dual coding account (verbal and imaginal systems encoding separately, giving pictures two routes) is the classic explanation and remains the standard applied framing.; doi:10.1093/acprof:oso/9780195066661.001.0001; doi:10.1007/BF01320076
     boundary: holds for concrete nameable items not abstract content; text superior for precise sequential technical information; dual coding explanation contested even where effect holds; memory advantage is not automatically a comprehension or conversion advantage
     active_when: content.is_concrete_depictable
-    realizations: [show-the-outcome, visual-state-encoding]
     forbidden: [no-replacing-precise-information, image-must-be-content, no-misleading-depiction, accessibility-preserved]
 
   - id: SC-17
@@ -95,11 +89,202 @@ cross_cutting_perception:
     source: Interfaces are not read linearly. Initial visual judgements form within tens of milliseconds and are highly consistent (Lindgaard et al. 2006; Tractinsky et al. on immediate aesthetic perception), attention is allocated selectively by visual salience and expected relevance, and elements that look like advertising are systematically avoided regardless of their content (advertising-avoidance and banner-blindness literature).; doi:10.1080/01449290500330448; doi:10.1080/00913367.2004.10639175
     boundary: specific scan patterns are task and layout dependent; much practitioner canon is folklore from small samples; findings predate or ignore mobile and feed interfaces; banner blindness reducible by relevance and native placement
     active_when: ""
-    realizations: [single-dominant-element, front-loaded-meaning, avoid-ad-resemblance]
     forbidden: [no-disguised-advertising, no-hidden-material-information, no-attention-hijacking]
 
 # ─────────────────────────────────────────────
-# LAYER 2 — INTERACTIONS (often stronger than any single mechanism)
+# LAYER 2 — EFFECTS (first-class scientific phenomena)
+# ─────────────────────────────────────────────
+effects:
+
+  [] # no approved first-class effects referenced by this pack's mechanisms
+
+# ─────────────────────────────────────────────
+# LAYER 3 — REALIZATIONS (concrete implementations)
+# ─────────────────────────────────────────────
+realizations:
+
+  - id: VR-02-variable-discovery
+    mechanism_id: VR-02
+    artifact_types: [dashboard_widget, landing_hero]
+    product_requirements: ["has_content_or_results_feed"]
+    generation_directive: When the product surfaces results, recommendations, or content, introduce genuine variability in what appears each visit so returning yields discovery, not repetition. The reward (new, relevant content) must be real — variability of junk is frustration, not delight.
+    copy_formulas: ["See what's new for you", "Fresh {items} today"]
+    metrics: [d7_retention, sessions_per_week, return_rate_without_push]
+    observed_effects: []
+
+  - id: VR-02-surprise-reward
+    mechanism_id: VR-02
+    artifact_types: [onboarding, dashboard_widget]
+    product_requirements: ["has_reward_system"]
+    generation_directive: Where the product grants rewards (credits, unlocks, bonuses), make a portion variable and occasional rather than fully predictable — an unexpected bonus after a completed action. Never make core value contingent on the variable reward; it augments, it does not gate.
+    copy_formulas: ["You earned a surprise bonus", "Something extra for you"]
+    metrics: [activation_rate, d7_retention]
+    observed_effects: []
+
+  - id: CG-05-personalized-reveal
+    mechanism_id: CG-05
+    artifact_types: [landing_hero, onboarding]
+    product_requirements: ["produces_personalized_result"]
+    generation_directive: Pose a specific, personally-relevant question the product will answer ('See what your {input} reveals', 'Find your {result}'). The reveal must deliver genuine, specific value — a real personalized result, not a generic payoff. The gap should be resolvable within the flow, not endlessly deferred.
+    copy_formulas: ["See your {result}", "What does your {input} say about {topic}?"]
+    metrics: [cvr, landing_engagement, flow_start_rate]
+    observed_effects: []
+
+  - id: CG-05-progressive-reveal
+    mechanism_id: CG-05
+    artifact_types: [onboarding, email]
+    product_requirements: []
+    generation_directive: Open a specific loop and resolve it with real information ('Here's what we found — one thing stands out'). Reveal enough to make the gap felt, deliver the resolution as genuine value. Never tease a payoff the product cannot deliver.
+    copy_formulas: ["One thing stood out in your {data}", "Here's what we found"]
+    metrics: [open_rate, click_through, completion_rate]
+    observed_effects: []
+
+  - id: CL-14-extraneous-reduction
+    mechanism_id: CL-14
+    artifact_types: [landing_hero, paywall, checkout, pricing_page, dashboard_widget]
+    product_requirements: []
+    generation_directive: "Remove elements that do not serve the current decision or action: decorative content competing for attention, secondary explanations, redundant restatements, unnecessary choices. Every element retained should be justifiable as intrinsic to the task. Reducing extraneous load is not minimalism as taste — it is preserving capacity for the part that matters."
+    copy_formulas: []
+    metrics: [task_completion_rate, time_to_complete, cvr, error_rate]
+    observed_effects: []
+
+  - id: CL-14-chunking-progressive-disclosure
+    mechanism_id: CL-14
+    artifact_types: [onboarding, checkout, landing_hero, email]
+    product_requirements: []
+    generation_directive: Split information and input demands into sequenced chunks rather than presenting the full set at once. Reveal detail progressively as it becomes relevant to the step at hand, keeping simultaneous elements few. Long unbroken text and multi-field forms presented in one block impose load that sequencing removes at no cost to completeness.
+    copy_formulas: []
+    metrics: [onboarding_completion, form_completion_rate, drop_off_by_step]
+    observed_effects: []
+
+  - id: CL-14-split-attention-avoidance
+    mechanism_id: CL-14
+    artifact_types: [onboarding, dashboard_widget, checkout, pricing_page]
+    product_requirements: []
+    generation_directive: Place related pieces of information together in space and time rather than requiring the user to hold one while searching for the other. Labels adjacent to what they label rather than in a legend; explanation beside the control rather than in a separate section; error message at the field, not summarized elsewhere. Splitting related information forces integration in working memory and measurably degrades performance.
+    copy_formulas: []
+    metrics: [error_rate, task_completion_rate, time_to_complete]
+    observed_effects: []
+
+  - id: IF-18-specific-predictive-labels
+    mechanism_id: IF-18
+    artifact_types: [landing_hero, dashboard_widget, pricing_page, onboarding, email]
+    product_requirements: []
+    generation_directive: Write labels, links and headings that state specifically what lies behind them, in the user's own vocabulary rather than internal or invented terms. Generic, clever or branded labels emit no scent and cause abandonment of paths the user actually wanted. The test is whether the label alone predicts the destination.
+    copy_formulas: []
+    metrics: [navigation_success_rate, task_completion_rate, drop_off_by_step]
+    observed_effects: []
+
+  - id: IF-18-preview-cues
+    mechanism_id: IF-18
+    artifact_types: [dashboard_widget, landing_hero, onboarding]
+    product_requirements: []
+    generation_directive: Provide cues that let a path be assessed without entering it — counts, previews, summaries, sample content. Reducing the cost of evaluating an option increases exploration of worthwhile paths; where assessment is expensive, users abandon rather than investigate.
+    copy_formulas: []
+    metrics: [exploration_rate, task_completion_rate, time_to_first_value]
+    observed_effects: []
+
+  - id: MM-15-multimedia-substitution
+    mechanism_id: MM-15
+    artifact_types: [landing_hero, onboarding, pricing_page, email]
+    product_requirements: []
+    generation_directive: Where the content explains how something works, what a product does, or what a result looks like, present it as relevant image or demonstration together with concise words rather than as prose alone. The image must carry the explanatory content, not decorate it — decorative imagery adds load without adding understanding (see coherence).
+    copy_formulas: []
+    metrics: [comprehension_proxy_task_completion, cvr, landing_engagement]
+    observed_effects: []
+
+  - id: MM-15-coherence-pruning
+    mechanism_id: MM-15
+    artifact_types: [landing_hero, paywall, pricing_page, email, onboarding]
+    product_requirements: []
+    generation_directive: "Remove material that is interesting but not essential to the point being made — tangential detail, decorative media, atmospheric copy. The coherence finding is counterintuitive and specific: adding engaging extras measurably reduces understanding of the core message, even when the extras are enjoyed."
+    copy_formulas: []
+    metrics: [cvr, task_completion_rate, comprehension_proxy_task_completion]
+    observed_effects: []
+
+  - id: MM-15-signaling
+    mechanism_id: MM-15
+    artifact_types: [landing_hero, dashboard_widget, pricing_page, onboarding]
+    product_requirements: []
+    generation_directive: "Cue what matters: visual emphasis, hierarchy and structural markers that direct attention to the essential element and the relationship between elements. Signalling improves outcomes without adding content — it tells the reader where capacity should go."
+    copy_formulas: []
+    metrics: [cvr, attention_to_primary_action, task_completion_rate]
+    observed_effects: []
+
+  - id: MM-15-contiguity-and-redundancy
+    mechanism_id: MM-15
+    artifact_types: [onboarding, dashboard_widget, checkout, pricing_page]
+    product_requirements: []
+    generation_directive: Place words next to the image or control they describe, and present them at the same time — not in separate regions or sequential screens. Conversely, do not present identical content simultaneously in two forms (identical caption duplicating narration, text repeating verbatim what the image already states); duplication competes for the same capacity rather than reinforcing.
+    copy_formulas: []
+    metrics: [error_rate, time_to_complete, task_completion_rate]
+    observed_effects: []
+
+  - id: PF-16-legibility-and-plain-language
+    mechanism_id: PF-16
+    artifact_types: [landing_hero, paywall, pricing_page, checkout, email]
+    product_requirements: []
+    generation_directive: "Make genuine content easy to process: legible contrast and type, plain concrete language over jargon and abstraction, short sentences for key claims, familiar structure. Difficulty of processing is read as a property of the offer, so unnecessary complexity in stating a true claim costs credibility."
+    copy_formulas: []
+    metrics: [cvr, comprehension_proxy_task_completion, time_to_complete]
+    observed_effects: []
+
+  - id: PF-16-familiar-structure
+    mechanism_id: PF-16
+    artifact_types: [landing_hero, onboarding, checkout, dashboard_widget]
+    product_requirements: []
+    generation_directive: Use conventional structures where convention exists — expected placement of navigation, price, primary action, form order. Familiarity is a fluency source; novelty in structural elements imposes processing cost that is misread as difficulty with the product itself. Reserve novelty for content, not for load-bearing structure.
+    copy_formulas: []
+    metrics: [task_completion_rate, error_rate, cvr]
+    observed_effects: []
+
+  - id: PS-13-show-the-outcome
+    mechanism_id: PS-13
+    artifact_types: [landing_hero, onboarding, email]
+    product_requirements: ["produces_visible_output"]
+    generation_directive: Where the product produces a visible result, show the actual result rather than describing it. The image should be the concrete thing itself — a real output, a real state, a real before-and-after — not a stock illustration standing in for it, which is decorative and carries no content advantage.
+    copy_formulas: []
+    metrics: [cvr, landing_engagement, recall_proxy_return_rate]
+    observed_effects: []
+
+  - id: PS-13-visual-state-encoding
+    mechanism_id: PS-13
+    artifact_types: [dashboard_widget, onboarding]
+    product_requirements: []
+    generation_directive: Encode recurring, concrete states and categories visually as well as verbally — status, type, progress, ownership — so they are recognised rather than read on each encounter. This applies to concrete states; conditional or quantitative information keeps its textual form.
+    copy_formulas: []
+    metrics: [task_completion_rate, time_to_complete, error_rate]
+    observed_effects: []
+
+  - id: SC-17-single-dominant-element
+    mechanism_id: SC-17
+    artifact_types: [landing_hero, paywall, pricing_page, dashboard_widget]
+    product_requirements: []
+    generation_directive: Give each view one visually dominant element carrying the primary message or action, with clear subordination of the rest. Competing elements of equal weight fragment the fast initial sample and leave no message received. Hierarchy is what a two-second glance resolves.
+    copy_formulas: []
+    metrics: [cvr, attention_to_primary_action, bounce_rate]
+    observed_effects: []
+
+  - id: SC-17-front-loaded-meaning
+    mechanism_id: SC-17
+    artifact_types: [landing_hero, email, pricing_page, dashboard_widget]
+    product_requirements: []
+    generation_directive: Place the informative part of headings, labels and first lines at the start, and make each stand alone. Scanning samples beginnings; meaning deferred to the end of a sentence or paragraph is not collected. Structure content so that reading only the headings still conveys the substance.
+    copy_formulas: []
+    metrics: [landing_engagement, cvr, email_click_through]
+    observed_effects: []
+
+  - id: SC-17-avoid-ad-resemblance
+    mechanism_id: SC-17
+    artifact_types: [landing_hero, dashboard_widget, email]
+    product_requirements: []
+    generation_directive: Do not style genuine, important content in the visual idiom of advertising — banner proportions, promotional badges, isolated boxed callouts in peripheral positions. Such content is skipped unread. Conversely, never disguise promotional content as native content to evade that avoidance (see hard rules).
+    copy_formulas: []
+    metrics: [attention_to_primary_action, cvr]
+    observed_effects: []
+
+# ─────────────────────────────────────────────
+# INTERACTIONS (separate relationship records; not ontology L2)
 # ─────────────────────────────────────────────
 interactions:
 
@@ -109,7 +294,7 @@ interactions:
     grade: B+
 
 # ─────────────────────────────────────────────
-# LAYER 3 — CONTEXT WEIGHTS (what fits what)
+# CONTEXT WEIGHTS (separate contextual dimension; not ontology L3)
 # ─────────────────────────────────────────────
 context_weights:
   - context: product.has_repeatable_reward_moment
@@ -147,7 +332,7 @@ signals:
 # ─────────────────────────────────────────────
 wiring:
   where: planning stage of the Development Plan, when the planned element matches applies_to
-  how: pack is provided to the generator as knowledge to reason from; nothing here instructs how to build
+  how: pack provides L1/L2 knowledge plus owner-authored L3 realization directives to the generator
   selection_now: by element type
   selection_later: planning agent pre-filters mechanisms via active_when against the product spec, narrowing the evidence in context
   provenance: downstream of registry records; regenerate when a record's grade/boundary/guardrail changes; never edit independently
