@@ -52,6 +52,8 @@ In the solo phase the "engine" is not a service but a set of pipelines. All of t
 - **Derivation pipeline** — scheduled and manual (workflow_dispatch): mining grounded corpus records → provenance-gated proposals.
 - **Corpus tagging** — batches on demand.
 
+Before a derivation reaches the review queue, STEP B2 applies four ordered quality gates (D-079): corpus-record/DOI/quote grounding, deterministic near-duplicate resolution, a configurable confidence floor, and a configurable per-mechanism volume cap. Pending duplicates are merged by provenance union. A match against authoritative knowledge becomes an owner-reviewed `operation: enrich` proposal with an explicit before/after diff; extraction never writes the artifact itself. Low-confidence or no-material-change enrichments remain visible under `status: held_low_confidence`, collapsed by default. The extraction manifest and `/ops` report proposed, merged, ungrounded, held, capped, and high-confidence-overflow counts so dropped knowledge is never silent.
+
 Why Actions and not a server: every run is an open log with full output. The "no black box" requirement is satisfied by the platform itself: open the Actions tab and see what ran, when, and with what result. Limits (6h per job) suffice for our batches; if a batch outgrows them, it moves to the harvest worker without changing the scheme.
 
 **Runtime selection** (the mechanism filter at generation time) is a local script during the solo phase for M3 runs. In August it moves **inside Ventora's backend** as a pure function — the registry is baked into the build from git. A separate "engine server" does not exist by design: the engine is a layer of Ventora, not an island.

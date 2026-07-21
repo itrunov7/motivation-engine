@@ -8,6 +8,7 @@ export const PROPOSAL_STATUS_META: Record<
   edited: { label: "edited, awaiting review", actionable: true },
   approved: { label: "approved", actionable: false },
   rejected: { label: "rejected", actionable: false },
+  held_low_confidence: { label: "held — low confidence", actionable: false },
 };
 
 export function isActionableProposal(proposal: Proposal): boolean {

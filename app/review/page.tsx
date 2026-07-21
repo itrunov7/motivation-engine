@@ -50,7 +50,12 @@ async function enrich(
       const text = await snapshot.read(path);
       if (!text) throw new Error(`Proposal disappeared while loading: ${path}`);
       const proposal = JSON.parse(text) as Proposal;
-      if (!isActionableProposal(proposal)) return { path, proposal, preview: [] };
+      if (
+        !isActionableProposal(proposal) &&
+        !(proposal.status === "held_low_confidence" && proposal.operation === "enrich")
+      ) {
+        return { path, proposal, preview: [] };
+      }
       try {
         const preview = await prepareProposalPreview(snapshot, path);
         return {

@@ -18,6 +18,9 @@
   "limits": {
     "per_run_tokens": 120000,
     "monthly_tokens": 1000000,
-    "records_per_batch": 25
+    "records_per_batch": 25,
+    "confidence_floor": 0.5,
+    "duplicate_similarity": 0.78,
+    "max_proposals_per_mechanism": 10
   }
 }

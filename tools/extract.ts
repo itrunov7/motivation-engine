@@ -27,6 +27,13 @@ import {
   extractionPriceState,
   loadExtractionOpsConfigFromDisk,
 } from "../lib/ops";
+import {
+  groundingErrors,
+  hasNovelEnrichment,
+  mergeProposals,
+  normalizeQualityText,
+  proposalSimilarity,
+} from "../lib/proposal-quality";
 import type {
   CorpusManifest,
   CorpusManifestRun,
@@ -114,8 +121,27 @@ interface DraftResponse {
 export interface ExtractionStats {
   candidates: number;
   dropped_ungrounded: number;
-  dropped_duplicate: number;
-  proposals_written: number;
+  proposed: number;
+  merged: number;
+  held_low_confidence: number;
+  dropped_volume_cap: number;
+  dropped_volume_cap_high_confidence: number;
+}
+
+export function extractionSummaryParams(
+  stats: ExtractionStats,
+): Record<string, string> {
+  return {
+    candidates: String(stats.candidates),
+    proposed: String(stats.proposed),
+    merged: String(stats.merged),
+    dropped_ungrounded: String(stats.dropped_ungrounded),
+    held_low_confidence: String(stats.held_low_confidence),
+    dropped_volume_cap: String(stats.dropped_volume_cap),
+    dropped_volume_cap_high_confidence: String(
+      stats.dropped_volume_cap_high_confidence,
+    ),
+  };
 }
 
 interface Usage {
@@ -535,9 +561,7 @@ async function callOpenRouter(
   );
 }
 
-function normalizeText(value: string): string {
-  return value.normalize("NFKC").replace(/\s+/g, " ").trim().toLowerCase();
-}
+const normalizeText = normalizeQualityText;
 
 export function groundedProvenance(
   item: DraftItem,
@@ -573,7 +597,8 @@ export function groundedProvenance(
       item,
     ]),
   );
-  return Array.from(unique.values());
+  const result = Array.from(unique.values());
+  return groundingErrors(result, corpus).length === 0 ? result : null;
 }
 
 function slug(value: string): string {
@@ -609,16 +634,26 @@ function proposalId(type: Proposal["type"], target: string, identity: string): s
 function envelope<T extends Proposal>(
   proposal: Omit<
     T,
-    "proposed_by" | "proposed_at" | "status" | "decided_by" | "decided_at" | "decision_note"
+    | "operation"
+    | "proposed_by"
+    | "proposed_at"
+    | "status"
+    | "hold_reason"
+    | "decided_by"
+    | "decided_at"
+    | "decision_note"
   >,
   runId: string,
   proposedAt: string,
+  operation: T["operation"] = "create",
 ): T {
   return {
     ...proposal,
+    operation,
     proposed_by: runId,
     proposed_at: proposedAt,
     status: "pending",
+    hold_reason: null,
     decided_by: null,
     decided_at: null,
     decision_note: null,
@@ -758,6 +793,7 @@ export function toProposal(
       },
       runId,
       proposedAt,
+      "enrich",
     );
   }
   return null;
@@ -780,42 +816,107 @@ export function proposalIdentity(proposal: Proposal): string {
   }
 }
 
-function existingIdentities(): Set<string> {
-  const identities = new Set<string>();
+interface ExistingMatch {
+  proposal: Proposal;
+  path: string | null;
+  authoritative: boolean;
+}
+
+function artifactEnvelope(
+  proposal: Pick<Proposal, "id" | "type" | "target" | "payload" | "provenance" | "confidence">,
+): Proposal {
+  return {
+    ...proposal,
+    operation: "enrich",
+    proposed_by: "authoritative-artifact",
+    proposed_at: "1970-01-01T00:00:00.000Z",
+    status: "approved",
+    hold_reason: null,
+    decided_by: "owner",
+    decided_at: "1970-01-01T00:00:00.000Z",
+    decision_note: "authoritative comparison record",
+  } as Proposal;
+}
+
+function existingMatches(): ExistingMatch[] {
+  const matches: ExistingMatch[] = [];
   for (const file of listJsonRecursive(PROPOSALS_DIR)) {
     if (basename(file) === "proposal.schema.json") continue;
     const proposal = readJson<Proposal>(file);
-    if (proposal.status === "pending" || proposal.status === "edited") {
-      identities.add(proposalIdentity(proposal));
+    if (
+      proposal.status === "pending" ||
+      proposal.status === "edited" ||
+      proposal.status === "held_low_confidence"
+    ) {
+      matches.push({ proposal, path: file, authoritative: false });
     }
   }
   for (const file of listJsonRecursive(join(ROOT, "effects"))) {
     if (basename(file) === "effect.schema.json") continue;
-    const effect = readJson<{ mechanism_id: string; name: string }>(file);
-    identities.add(`effect:${effect.mechanism_id}:${normalizeText(effect.name)}`);
+    const payload = readJson<Extract<Proposal, { type: "effect" }>["payload"]>(file);
+    matches.push({
+      proposal: artifactEnvelope({
+        id: `artifact-effect-${payload.mechanism_id}-${payload.id}`,
+        type: "effect",
+        target: payload.mechanism_id,
+        payload,
+        provenance: payload.provenance,
+        confidence: 1,
+      }),
+      path: null,
+      authoritative: true,
+    });
   }
   for (const file of listJsonRecursive(join(ROOT, "realizations"))) {
     if (basename(file) === "realization.schema.json") continue;
-    const realization = readJson<Realization>(file);
-    identities.add(
-      `realization:${realization.mechanism_id}:${normalizeText(realization.term)}`,
-    );
+    const payload = readJson<Realization>(file);
+    matches.push({
+      proposal: artifactEnvelope({
+        id: `artifact-realization-${payload.mechanism_id}-${payload.id}`,
+        type: "realization",
+        target: payload.mechanism_id,
+        payload,
+        provenance: payload.provenance,
+        confidence: payload.confidence,
+      }),
+      path: null,
+      authoritative: true,
+    });
   }
   for (const file of listJson(join(ROOT, "interactions"))) {
     if (basename(file) === "interaction.schema.json") continue;
-    const interaction = readJson<{ pair: [string, string] }>(file);
-    identities.add(`interaction:${interaction.pair.join("__")}`);
+    const payload = readJson<Extract<Proposal, { type: "interaction" }>["payload"]>(file);
+    const target = payload.pair.join("__");
+    matches.push({
+      proposal: artifactEnvelope({
+        id: `artifact-interaction-${target}`,
+        type: "interaction",
+        target,
+        payload,
+        provenance: [],
+        confidence: 1,
+      }),
+      path: null,
+      authoritative: true,
+    });
   }
   for (const file of listJson(join(ROOT, "dossiers"))) {
     if (basename(file) === "dossier.schema.json") continue;
     const dossier = readJson<{ mechanism_id: string; dissent: string }>(file);
-    identities.add(
-      `dossier:${dossier.mechanism_id}:dissent:${normalizeText(
-        JSON.stringify(dossier.dissent),
-      )}`,
-    );
+    matches.push({
+      proposal: artifactEnvelope({
+        id: `artifact-dossier-${dossier.mechanism_id}-dissent`,
+        type: "dossier_section",
+        target: dossier.mechanism_id,
+        payload: { field: "dissent", value: dossier.dissent },
+        provenance: [],
+        confidence: 1,
+      }),
+      path: null,
+      authoritative: true,
+    });
   }
-  return identities;
+  return matches;
 }
 
 function proposalValidator(): ValidateFunction {
@@ -856,6 +957,7 @@ function writeManifest(
   usage: Usage,
   stats: ExtractionStats,
   estimatedUsd: number,
+  filesWritten: number,
 ): void {
   mkdirSync(EXTRACTION_DIR, { recursive: true });
   const duration = Math.round(((Date.now() - startedAt.getTime()) / 1000) * 100) / 100;
@@ -865,13 +967,10 @@ function writeManifest(
     params: {
       mode,
       [scope.kind]: scope.id,
-      candidates: String(stats.candidates),
-      dropped_ungrounded: String(stats.dropped_ungrounded),
-      dropped_duplicate: String(stats.dropped_duplicate),
-      proposals_written: String(stats.proposals_written),
+      ...extractionSummaryParams(stats),
     },
     records_fetched: stats.candidates,
-    files_written: stats.proposals_written,
+    files_written: filesWritten,
     duration_s: duration,
     ...(stats.dropped_ungrounded > 0
       ? { warnings: { ungrounded_dropped: true } }
@@ -928,11 +1027,15 @@ export async function runExtraction(args: {
   const stats: ExtractionStats = {
     candidates: 0,
     dropped_ungrounded: 0,
-    dropped_duplicate: 0,
-    proposals_written: 0,
+    proposed: 0,
+    merged: 0,
+    held_low_confidence: 0,
+    dropped_volume_cap: 0,
+    dropped_volume_cap_high_confidence: 0,
   };
   const proposals: Proposal[] = [];
-  const known = existingIdentities();
+  const existing = existingMatches();
+  const pendingWrites = new Map<string, Proposal>();
   const validate = proposalValidator();
   const runId = process.env.GITHUB_RUN_ID
     ? `github-actions-${process.env.GITHUB_RUN_ID}`
@@ -960,9 +1063,11 @@ export async function runExtraction(args: {
       STRONG_OUTPUT_RESERVE,
     );
     stats.candidates += synthesized.length;
+    const admissible: { proposal: Proposal; outcome: "proposed" | "merged" }[] = [];
+    const held: Proposal[] = [];
     for (const item of synthesized) {
       const provenance = groundedProvenance(item, corpus);
-      if (!provenance || !provenance.some((source) => source.doi !== null)) {
+      if (!provenance) {
         stats.dropped_ungrounded += 1;
         continue;
       }
@@ -978,22 +1083,112 @@ export async function runExtraction(args: {
         stats.dropped_ungrounded += 1;
         continue;
       }
-      const identity = proposalIdentity(proposal);
-      if (known.has(identity)) {
-        stats.dropped_duplicate += 1;
+      const duplicate = existing
+        .map((entry) => ({
+          entry,
+          score: proposalSimilarity(entry.proposal, proposal),
+        }))
+        .filter(({ score }) => score >= args.config.limits.duplicate_similarity)
+        .sort(
+          (left, right) =>
+            right.score - left.score ||
+            left.entry.proposal.id.localeCompare(right.entry.proposal.id),
+        )[0]?.entry;
+
+      if (duplicate && !duplicate.authoritative) {
+        const previous = duplicate.proposal;
+        let merged = mergeProposals(duplicate.proposal, proposal);
+        if (
+          previous.status === "held_low_confidence" &&
+          merged.confidence >= args.config.limits.confidence_floor &&
+          hasNovelEnrichment(previous, merged)
+        ) {
+          merged = { ...merged, status: "pending", hold_reason: null } as Proposal;
+        }
+        if (!validate(merged)) {
+          stats.dropped_ungrounded += 1;
+          continue;
+        }
+        duplicate.proposal = merged;
+        if (duplicate.path) {
+          pendingWrites.set(duplicate.path, merged);
+        } else {
+          const staged = admissible.find((entry) => entry.proposal === previous);
+          if (staged) staged.proposal = merged;
+          const heldIndex = held.findIndex((entry) => entry === previous);
+          if (heldIndex >= 0) held[heldIndex] = merged;
+        }
+        stats.merged += 1;
         continue;
       }
-      known.add(identity);
-      proposals.push(proposal);
+
+      let gatedProposal = proposal;
+      let outcome: "proposed" | "merged" = "proposed";
+      let addsValue = true;
+      if (duplicate?.authoritative) {
+        const merged = mergeProposals(duplicate.proposal, proposal);
+        addsValue = hasNovelEnrichment(duplicate.proposal, merged);
+        gatedProposal = {
+          ...proposal,
+          operation: "enrich",
+          payload: merged.payload,
+          provenance: merged.provenance,
+        } as Proposal;
+        outcome = "merged";
+      }
+
+      if (!validate(gatedProposal)) {
+        stats.dropped_ungrounded += 1;
+        continue;
+      }
+
+      if (
+        gatedProposal.confidence < args.config.limits.confidence_floor ||
+        !addsValue
+      ) {
+        const heldProposal = {
+          ...gatedProposal,
+          status: "held_low_confidence",
+          hold_reason:
+            gatedProposal.confidence < args.config.limits.confidence_floor
+              ? "below_confidence_floor"
+              : "no_material_enrichment",
+        } as Proposal;
+        held.push(heldProposal);
+        existing.push({ proposal: heldProposal, path: null, authoritative: false });
+        stats.held_low_confidence += 1;
+        continue;
+      }
+      admissible.push({ proposal: gatedProposal, outcome });
+      existing.push({ proposal: gatedProposal, path: null, authoritative: false });
     }
+
+    admissible.sort(
+      (left, right) =>
+        right.proposal.confidence - left.proposal.confidence ||
+        proposalIdentity(left.proposal).localeCompare(proposalIdentity(right.proposal)),
+    );
+    const admitted = admissible.slice(
+      0,
+      args.config.limits.max_proposals_per_mechanism,
+    );
+    const overflow = admissible.slice(args.config.limits.max_proposals_per_mechanism);
+    stats.dropped_volume_cap += overflow.length;
+    stats.dropped_volume_cap_high_confidence += overflow.filter(
+      ({ proposal: overflowProposal }) => overflowProposal.confidence >= 0.8,
+    ).length;
+    for (const entry of admitted) stats[entry.outcome] += 1;
+    proposals.push(...admitted.map(({ proposal: admittedProposal }) => admittedProposal), ...held);
   }
 
+  for (const [path, proposal] of Array.from(pendingWrites.entries())) {
+    writeFileSync(path, json(proposal));
+  }
   for (const proposal of proposals) {
     const dir = join(PROPOSALS_DIR, proposal.type);
     mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, `${proposal.id}.json`), json(proposal));
   }
-  stats.proposals_written = proposals.length;
   writeManifest(
     args.mode,
     args.scope,
@@ -1001,6 +1196,7 @@ export async function runExtraction(args: {
     context.usage,
     stats,
     computeUsd(args.config, context.usage),
+    proposals.length + pendingWrites.size,
   );
   return { proposals, stats, usage: context.usage };
 }

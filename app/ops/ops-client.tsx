@@ -14,6 +14,7 @@ import type {
   BudgetSnapshot,
   ExtractionOpsConfig,
   ExtractionPriceState,
+  ExtractionRunSummary,
   OpsConnectorConfig,
   QuoteArtifact,
 } from "@/lib/ops";
@@ -58,9 +59,56 @@ export interface OpsClientProps {
   writeEnabled: boolean;
   budget: BudgetSnapshot;
   extraction: ExtractionOpsConfig | null;
+  extractionRun: ExtractionRunSummary | null;
   extractionPriceState: ExtractionPriceState;
   connectors: ConnectorView[];
   mechanismOptions: MechanismOption[];
+}
+
+function ExtractionRunPanel({ run }: { run: ExtractionRunSummary | null }) {
+  const outcomes = run
+    ? [
+        ["proposed", run.proposed],
+        ["merged", run.merged],
+        ["dropped ungrounded", run.droppedUngrounded],
+        ["held low confidence", run.heldLowConfidence],
+        ["dropped at volume cap", run.droppedVolumeCap],
+        ["high-confidence overflow", run.droppedVolumeCapHighConfidence],
+      ]
+    : [];
+  return (
+    <section className="rounded-lg border border-[#243329] bg-[#151F1A] p-5">
+      <h2 className="font-display text-lg font-medium text-[#E6EFE8]">
+        Extraction quality gates
+      </h2>
+      {run ? (
+        <>
+          <p className="mt-1 text-xs text-[#8CA495]">
+            {formatTimestamp(run.timestamp)} · {run.mode} · {run.scope}
+          </p>
+          <dl className="mt-4 grid gap-3 sm:grid-cols-3">
+            {outcomes.map(([label, value]) => (
+              <div key={label} className="rounded-md border border-[#243329] bg-[#1A2620] p-3">
+                <dt className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
+                  {label}
+                </dt>
+                <dd className="mt-1 font-mono text-lg text-[#E6EFE8]">{value}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-3 text-xs text-[#8CA495]">
+            High-confidence overflow counts capped items at or above 80%; raise the
+            per-mechanism cap or rerun if that number is non-zero.
+          </p>
+        </>
+      ) : (
+        <p className="mt-2 text-sm text-[#8CA495]">
+          No extraction run yet. Gate outcomes will appear after the Actions extraction
+          pipeline writes corpora/extraction/manifest.json.
+        </p>
+      )}
+    </section>
+  );
 }
 
 /** Options grouped under their L0 node, node order preserved from the input. */
@@ -325,7 +373,7 @@ function BudgetPanel({
         </div>
         <p className="mt-3 text-xs leading-relaxed text-[#8CA495]">
           {extraction
-            ? `Token cap: ${extraction.limits.monthly_tokens.toLocaleString()} monthly · ${extraction.limits.per_run_tokens.toLocaleString()} per run. Prices verified: ${extraction.prices_verified_on ?? "not yet configured"}. Routing: cheap ${extraction.tiers.cheap.model_id ?? "unset"} · strong ${extraction.tiers.strong.model_id ?? "unset"}.`
+            ? `Token cap: ${extraction.limits.monthly_tokens.toLocaleString()} monthly · ${extraction.limits.per_run_tokens.toLocaleString()} per run. Quality gates: confidence ≥ ${Math.round(extraction.limits.confidence_floor * 100)}% · duplicate similarity ≥ ${Math.round(extraction.limits.duplicate_similarity * 100)}% · max ${extraction.limits.max_proposals_per_mechanism} proposals per mechanism. Prices verified: ${extraction.prices_verified_on ?? "not yet configured"}. Routing: cheap ${extraction.tiers.cheap.model_id ?? "unset"} · strong ${extraction.tiers.strong.model_id ?? "unset"}.`
             : "corpora/_ops/extraction.json is missing; extraction cannot quote or run."}
         </p>
       </div>
@@ -981,6 +1029,7 @@ export default function OpsClient({
   writeEnabled,
   budget,
   extraction,
+  extractionRun,
   extractionPriceState,
   connectors,
   mechanismOptions,
@@ -1045,6 +1094,7 @@ export default function OpsClient({
         extraction={extraction}
         extractionPriceState={extractionPriceState}
       />
+      <ExtractionRunPanel run={extractionRun} />
 
       {status === "loading" && (
         <div className="rounded-lg border border-[#243329] bg-[#151F1A] px-5 py-6">

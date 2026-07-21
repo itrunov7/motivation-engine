@@ -3,13 +3,20 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 import { extractionPriceState } from "../lib/ops";
+import {
+  groundingErrors,
+  mergeProposals,
+  proposalSimilarity,
+} from "../lib/proposal-quality";
 import type {
   EvidenceCorpusFile,
   ExtractionOpsConfig,
   KnowledgeProvenanceItem,
+  Proposal,
 } from "../lib/types";
 import {
   buildQuote,
+  extractionSummaryParams,
   groundedProvenance,
   proposalIdentity,
   resolveScope,
@@ -38,6 +45,9 @@ const configured: ExtractionOpsConfig = {
     per_run_tokens: 10_000_000,
     monthly_tokens: 100_000_000,
     records_per_batch: 25,
+    confidence_floor: 0.5,
+    duplicate_similarity: 0.78,
+    max_proposals_per_mechanism: 10,
   },
 };
 
@@ -132,6 +142,18 @@ test("grounding accepts exact loci and rejects invented or unknown citations", (
     ),
     null,
   );
+  assert.match(
+    groundingErrors(
+      [
+        {
+          ...grounded![0],
+          doi: "10.9999/fabricated",
+        },
+      ],
+      file,
+    ).join(" "),
+    /DOI does not resolve/,
+  );
 });
 
 test("all four modes produce typed proposals with canonical identities", () => {
@@ -204,5 +226,76 @@ test("all four modes produce typed proposals with canonical identities", () => {
   assert.equal(realization?.type, "realization");
   assert.equal(interaction?.type, "interaction");
   assert.equal(dissent?.type, "dossier_section");
+});
+
+test("near-duplicate realization enriches the existing artifact instead of duplicating it", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract && record.doi);
+  const provenance: KnowledgeProvenanceItem[] = [{
+    mechanism_id: "CL-14",
+    corpus_record_id: record.record_id,
+    doi: record.doi,
+    title: record.title,
+    quote_or_locus: record.abstract.slice(0, 80),
+  }];
+  const candidate = toProposal(
+    "realizations",
+    "CL-14",
+    {
+      term: "Progress indicator pattern",
+      description_as_reported: "A progress indicator pattern was shown in the interface.",
+      artifact_context: ["onboarding flow"],
+      confidence: 0.86,
+    },
+    provenance,
+    "test-run",
+    "2026-07-21T10:00:00.000Z",
+  );
+  assert(candidate?.type === "realization");
+  const existing: Proposal = {
+    ...candidate,
+    id: "artifact-realization-cl-14-progress-indicator",
+    operation: "enrich",
+    payload: {
+      ...candidate.payload,
+      id: "progress-indicator",
+      term: "Progress indicator",
+      description_as_reported: "A progress indicator is shown in onboarding.",
+    },
+    proposed_by: "authoritative-artifact",
+    status: "approved",
+    decided_by: "owner",
+    decided_at: "2026-07-20T10:00:00.000Z",
+    decision_note: null,
+  };
+  assert(proposalSimilarity(existing, candidate) >= configured.limits.duplicate_similarity);
+  const merged = mergeProposals(existing, candidate);
+  assert.equal(merged.type, "realization");
+  assert.equal(merged.payload.id, "progress-indicator");
+  assert.equal(merged.provenance.length, 1);
+});
+
+test("run summary exposes every quality-gate and cap outcome", () => {
+  assert.deepEqual(
+    extractionSummaryParams({
+      candidates: 15,
+      proposed: 4,
+      merged: 3,
+      dropped_ungrounded: 2,
+      held_low_confidence: 2,
+      dropped_volume_cap: 4,
+      dropped_volume_cap_high_confidence: 1,
+    }),
+    {
+      candidates: "15",
+      proposed: "4",
+      merged: "3",
+      dropped_ungrounded: "2",
+      held_low_confidence: "2",
+      dropped_volume_cap: "4",
+      dropped_volume_cap_high_confidence: "1",
+    },
+  );
 });
 

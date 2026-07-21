@@ -180,7 +180,7 @@ function ProposalCard({
             </p>
           </div>
           <h2 className="mt-1 font-display text-lg font-medium text-[#E6EFE8]">
-            Target {proposal.target}
+            {proposal.operation === "enrich" ? "Enrich" : "Create"} · Target {proposal.target}
           </h2>
         </div>
         <span className="rounded-full border border-[#243329] px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider text-[#34D399]">
@@ -326,6 +326,14 @@ function ProposalCard({
             </button>
           </div>
         </>
+      ) : proposal.status === "held_low_confidence" ? (
+        <p className="mt-4 text-xs text-[#E4B54E]">
+          {proposal.hold_reason === "no_material_enrichment"
+            ? "Held because the enrichment adds no new source or material field change."
+            : "Held below the configured confidence floor."}{" "}
+          It remains visible for inspection but cannot be approved unless a later
+          grounded run strengthens and merges it.
+        </p>
       ) : (
         <p className="mt-4 text-xs text-[#7C93A8]">
           Decided by {proposal.decided_by ?? "unknown"} at{" "}
@@ -355,8 +363,14 @@ export default function ReviewClient({
   const [batchMessage, setBatchMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const held = proposals.filter(
+    (item) => item.proposal.status === "held_low_confidence",
+  );
+  const primary = proposals.filter(
+    (item) => item.proposal.status !== "held_low_confidence",
+  );
   const groups = new Map<string, ReviewProposal[]>();
-  for (const item of proposals) {
+  for (const item of primary) {
     const key = `${item.proposal.type}::${item.proposal.target}`;
     groups.set(key, [...(groups.get(key) ?? []), item]);
   }
@@ -432,6 +446,29 @@ export default function ReviewClient({
           </div>
         </section>
       ))}
+
+      {held.length > 0 && (
+        <details className="rounded-lg border border-[#E4B54E]/30 bg-[#151F1A] p-4">
+          <summary className="cursor-pointer font-display text-lg text-[#E4B54E]">
+            Low-confidence bucket · {held.length}
+          </summary>
+          <p className="mt-2 text-xs text-[#8CA495]">
+            Collapsed by default. These grounded items did not clear the configured
+            confidence floor or added no material enrichment.
+          </p>
+          <div className="mt-4 space-y-4">
+            {held.map((item) => (
+              <ProposalCard
+                key={item.path}
+                item={item}
+                writeEnabled={writeEnabled}
+                selected={false}
+                onSelected={() => undefined}
+              />
+            ))}
+          </div>
+        </details>
+      )}
 
       {selected.size > 0 && (
         <section className="sticky bottom-4 rounded-lg border border-[#34D399]/40 bg-[#151F1A] p-4 shadow-2xl">

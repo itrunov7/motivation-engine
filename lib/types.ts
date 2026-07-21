@@ -340,7 +340,14 @@ export type ProposalType =
   | "dossier_section"
   | "segment";
 
-export type ProposalStatus = "pending" | "approved" | "rejected" | "edited";
+export type ProposalStatus =
+  | "pending"
+  | "approved"
+  | "rejected"
+  | "edited"
+  | "held_low_confidence";
+
+export type ProposalOperation = "create" | "enrich";
 
 export type DossierSectionPayload =
   | { field: "scores"; value: DossierScores }
@@ -361,6 +368,8 @@ export interface ProposalEnvelope<TType extends ProposalType, TPayload> {
   $schema?: string;
   id: string;
   type: TType;
+  /** Whether approval creates an artifact or enriches an existing one. */
+  operation: ProposalOperation;
   /** Mechanism, pack, or segment id. */
   target: string;
   payload: TPayload;
@@ -373,6 +382,7 @@ export interface ProposalEnvelope<TType extends ProposalType, TPayload> {
   /** ISO timestamp. */
   proposed_at: string;
   status: ProposalStatus;
+  hold_reason: "below_confidence_floor" | "no_material_enrichment" | null;
   decided_by: string | null;
   /** ISO timestamp, or null before a decision. */
   decided_at: string | null;
@@ -850,6 +860,9 @@ export interface ExtractionOpsConfig {
     per_run_tokens: number;
     monthly_tokens: number;
     records_per_batch: number;
+    confidence_floor: number;
+    duplicate_similarity: number;
+    max_proposals_per_mechanism: number;
   };
 }
 

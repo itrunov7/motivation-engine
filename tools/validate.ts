@@ -59,6 +59,7 @@ import type {
 } from "./connectors/types";
 import { CONNECTORS } from "./connectors";
 import { deriveCorpusRecordId, CORPUS_RECORD_ID_PATTERN } from "../lib/corpus-record-id";
+import { groundingErrors } from "../lib/proposal-quality";
 import type {
   BenchmarkFile,
   BenchmarkMetric,
@@ -1827,7 +1828,9 @@ function main(): void {
             ok = false;
           }
           if (
-            (proposal.status === "pending" || proposal.status === "edited") &&
+            (proposal.status === "pending" ||
+              proposal.status === "edited" ||
+              proposal.status === "held_low_confidence") &&
             (proposal.decided_by !== null ||
               proposal.decided_at !== null ||
               proposal.decision_note !== null)
@@ -1852,11 +1855,14 @@ function main(): void {
             ok = false;
           }
           if (
-            proposal.type === "effect" &&
+            (proposal.type === "effect" || proposal.type === "realization") &&
             JSON.stringify(proposal.payload?.provenance) !==
               JSON.stringify(proposal.provenance)
           ) {
-            fail(file, "effect payload provenance must exactly match envelope provenance");
+            fail(
+              file,
+              `${proposal.type} payload provenance must exactly match envelope provenance`,
+            );
             ok = false;
           }
           for (const source of proposal.provenance ?? []) {
@@ -1871,20 +1877,9 @@ function main(): void {
               continue;
             }
             const corpus = readJson(corpusPath) as EvidenceCorpusFile | undefined;
-            const record = corpus?.records.find(
-              (item) => item.record_id === source.corpus_record_id,
-            );
-            if (!record) {
-              fail(
-                file,
-                `provenance record ${source.corpus_record_id} is absent from ${source.mechanism_id}`,
-              );
-              ok = false;
-            } else if (record.title !== source.title || record.doi !== source.doi) {
-              fail(
-                file,
-                `provenance metadata does not match record ${source.corpus_record_id}`,
-              );
+            const errors = corpus ? groundingErrors([source], corpus) : ["corpus is invalid"];
+            if (errors.length > 0) {
+              fail(file, `provenance does not resolve: ${errors.join("; ")}`);
               ok = false;
             }
           }

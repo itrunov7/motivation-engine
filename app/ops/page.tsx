@@ -7,6 +7,7 @@ import {
   defaultConnectorConfig,
   extractionPriceState,
   loadExtractionOpsConfigFromDisk,
+  loadExtractionRunSummary,
   loadConnectorLastRun,
   loadOpsConnectorConfigFromDisk,
 } from "@/lib/ops";
@@ -26,6 +27,7 @@ export default function OpsPage() {
   const writeEnabled = isOpsWriteEnabled();
   const budget = computeBudgetSnapshot();
   const extraction = loadExtractionOpsConfigFromDisk() ?? null;
+  const extractionRun = loadExtractionRunSummary() ?? null;
 
   // Every known mechanism resolved to its L0 parent node, so the target picker
   // can group ids under node headings (motivational S1–S6 vs cross-cutting S7)
@@ -80,6 +82,7 @@ export default function OpsPage() {
         writeEnabled={writeEnabled}
         budget={budget}
         extraction={extraction}
+        extractionRun={extractionRun}
         extractionPriceState={extraction ? extractionPriceState(extraction) : "unconfigured"}
         connectors={connectors}
         mechanismOptions={mechanismOptions}

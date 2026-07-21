@@ -196,14 +196,36 @@ export function validateExtractionOpsConfig(data: unknown): string[] {
     errors.push("limits must be an object");
   } else {
     const limitExtras = Object.keys(data.limits).filter(
-      (key) => !["per_run_tokens", "monthly_tokens", "records_per_batch"].includes(key),
+      (key) =>
+        ![
+          "per_run_tokens",
+          "monthly_tokens",
+          "records_per_batch",
+          "confidence_floor",
+          "duplicate_similarity",
+          "max_proposals_per_mechanism",
+        ].includes(key),
     );
     if (limitExtras.length > 0) {
       errors.push(`unexpected limits field(s): ${limitExtras.join(", ")}`);
     }
-    for (const key of ["per_run_tokens", "monthly_tokens", "records_per_batch"] as const) {
+    for (const key of [
+      "per_run_tokens",
+      "monthly_tokens",
+      "records_per_batch",
+      "max_proposals_per_mechanism",
+    ] as const) {
       if (!isNonNegativeInteger(data.limits[key]) || data.limits[key] < 1) {
         errors.push(`limits.${key} must be an integer ≥ 1`);
+      }
+    }
+    for (const key of ["confidence_floor", "duplicate_similarity"] as const) {
+      if (
+        !isNonNegativeNumber(data.limits[key]) ||
+        data.limits[key] <= 0 ||
+        data.limits[key] > 1
+      ) {
+        errors.push(`limits.${key} must be a number in (0, 1]`);
       }
     }
   }
@@ -332,6 +354,44 @@ export function loadOpsBudgetFromDisk(): OpsBudget | undefined {
 
 export function loadExtractionOpsConfigFromDisk(): ExtractionOpsConfig | undefined {
   return readJsonSafe<ExtractionOpsConfig>(OPS_PATHS.extraction);
+}
+
+export interface ExtractionRunSummary {
+  timestamp: string;
+  mode: string;
+  scope: string;
+  proposed: number;
+  merged: number;
+  droppedUngrounded: number;
+  heldLowConfidence: number;
+  droppedVolumeCap: number;
+  droppedVolumeCapHighConfidence: number;
+}
+
+export function loadExtractionRunSummary(): ExtractionRunSummary | undefined {
+  const manifest = readJsonSafe<CorpusManifest>(
+    join(DATA_PATHS.corporaDir, "extraction", "manifest.json"),
+  );
+  if (!manifest) return undefined;
+  const params = manifest.last_run.params;
+  const number = (key: string): number => {
+    const parsed = Number(params[key] ?? "0");
+    return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+  };
+  const scopeEntry = Object.entries(params).find(([key]) =>
+    ["mechanism", "pack", "segment"].includes(key),
+  );
+  return {
+    timestamp: manifest.last_run.timestamp,
+    mode: params.mode ?? "unknown",
+    scope: scopeEntry ? `${scopeEntry[0]} ${scopeEntry[1]}` : "unknown scope",
+    proposed: number("proposed"),
+    merged: number("merged"),
+    droppedUngrounded: number("dropped_ungrounded"),
+    heldLowConfidence: number("held_low_confidence"),
+    droppedVolumeCap: number("dropped_volume_cap"),
+    droppedVolumeCapHighConfidence: number("dropped_volume_cap_high_confidence"),
+  };
 }
 
 export type ExtractionPriceState = "unconfigured" | "current" | "stale";

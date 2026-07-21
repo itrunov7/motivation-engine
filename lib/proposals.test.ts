@@ -13,11 +13,12 @@ import { commitGitDataTransaction, type GithubOpsEnv } from "./github";
 import { deriveCorpusRecordId } from "./corpus-record-id";
 import {
   BatchProposalValidationError,
+  isActionableProposal,
   prepareBatchProposalDecision,
   prepareProposalDecision,
   type RepositorySnapshot,
 } from "./proposals";
-import type { Mechanism, ProposalType, SegmentsFile } from "./types";
+import type { Mechanism, Proposal, ProposalType, SegmentsFile } from "./types";
 
 const ROOT = join(__dirname, "..");
 const decidedAt = "2026-07-20T18:00:00.000Z";
@@ -31,7 +32,8 @@ const provenance = [
     }),
     doi: "10.2307/1914185",
     title: "Prospect Theory: An Analysis of Decision under Risk",
-    quote_or_locus: "Test locus",
+    quote_or_locus:
+      "This paper presents a critique of expected utility theory as a descriptive model of decision making under risk",
   },
 ];
 
@@ -52,10 +54,17 @@ class FixtureSnapshot implements RepositorySnapshot {
   }
 }
 
-function envelope(type: ProposalType, id: string, target: string, payload: unknown): unknown {
+function envelope(
+  type: ProposalType,
+  id: string,
+  target: string,
+  payload: unknown,
+  operation: "create" | "enrich" = "create",
+): unknown {
   return {
     id,
     type,
+    operation,
     target,
     payload,
     provenance,
@@ -63,6 +72,7 @@ function envelope(type: ProposalType, id: string, target: string, payload: unkno
     proposed_by: "test-run",
     proposed_at: "2026-07-20T17:00:00.000Z",
     status: "pending",
+    hold_reason: null,
     decided_by: null,
     decided_at: null,
     decision_note: null,
@@ -75,10 +85,11 @@ async function prepare(
   target: string,
   payload: unknown,
   action: "approve" | "reject" = "approve",
+  operation: "create" | "enrich" = "create",
 ) {
   const path = `proposals/${type}/${id}.json`;
   return prepareProposalDecision(
-    new FixtureSnapshot(path, envelope(type, id, target, payload)),
+    new FixtureSnapshot(path, envelope(type, id, target, payload, operation)),
     {
       proposalPath: path,
       action,
@@ -125,6 +136,7 @@ test("projects all six proposal types deterministically", async () => {
     target: string;
     payload: unknown;
     artifactPaths: string[];
+    operation?: "create" | "enrich";
   }[] = [
     {
       type: "effect",
@@ -167,6 +179,7 @@ test("projects all six proposal types deterministically", async () => {
       target: "LA-01__ST-09",
       payload: { ...(interaction as object), fact: "Updated fixture interaction fact" },
       artifactPaths: ["interactions/LA-01__ST-09.json"],
+      operation: "enrich",
     },
     {
       type: "mechanism",
@@ -192,9 +205,23 @@ test("projects all six proposal types deterministically", async () => {
   ];
 
   for (const item of cases) {
-    const transaction = await prepare(item.type, item.id, item.target, item.payload);
+    const transaction = await prepare(
+      item.type,
+      item.id,
+      item.target,
+      item.payload,
+      "approve",
+      item.operation,
+    );
     const paths = transaction.mutations.map((mutation) => mutation.path);
     for (const artifactPath of item.artifactPaths) assert(paths.includes(artifactPath));
+    if (item.operation === "enrich") {
+      const artifactMutation = transaction.mutations.find(
+        (mutation) => mutation.path === item.artifactPaths[0],
+      );
+      assert(artifactMutation?.expectedContent);
+      assert.notEqual(artifactMutation.expectedContent, artifactMutation.content);
+    }
     assert(paths.includes(`proposals/${item.type}/${item.id}.json`));
     assert(paths.includes("decisions/decisions.json"));
     assert.deepEqual(paths, [...paths].sort());
@@ -373,6 +400,25 @@ test("rejects empty provenance before preparing any write", async () => {
     }),
     /must NOT have fewer than 1 items|provenance must not be empty/i,
   );
+});
+
+test("held low-confidence proposals are visible state but never actionable", () => {
+  const held = {
+    ...(envelope("effect", "held-effect", "LA-01", {
+      id: "held-effect",
+      mechanism_id: "LA-01",
+      name: "Held effect",
+      fact: "Held fact",
+      grade: "B",
+      source: ["10.2307/1914185"],
+      boundary: "Held boundary",
+      realization_ids: [],
+      provenance,
+    }) as Proposal),
+    status: "held_low_confidence",
+    hold_reason: "below_confidence_floor",
+  } as Proposal;
+  assert.equal(isActionableProposal(held), false);
 });
 
 test("rejection requires a reason and never mutates an artifact", async () => {

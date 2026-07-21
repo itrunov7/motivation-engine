@@ -15,6 +15,7 @@ import type {
   Segment,
   SegmentsFile,
 } from "./types";
+import { groundingErrors } from "./proposal-quality";
 export { isActionableProposal, PROPOSAL_STATUS_META } from "./proposal-meta";
 
 export const PROPOSAL_TYPES = [
@@ -269,17 +270,10 @@ async function assertResolvableProvenance(
     }
     const path = `corpora/evidence/${item.mechanism_id}.json`;
     const corpus = parseJson<EvidenceCorpusFile>(path, await requireText(snapshot, path));
-    const record = corpus.records.find(
-      (candidate) => candidate.record_id === item.corpus_record_id,
-    );
-    if (!record) {
+    const errors = groundingErrors([item], corpus);
+    if (errors.length > 0) {
       throw new ProposalValidationError(
-        `Provenance record ${item.corpus_record_id} was not found in ${path}`,
-      );
-    }
-    if (record.title !== item.title || record.doi !== item.doi) {
-      throw new ProposalValidationError(
-        `Provenance metadata does not match corpus record ${item.corpus_record_id}`,
+        `Provenance does not resolve in ${path}: ${errors.join("; ")}`,
       );
     }
   }
@@ -426,10 +420,18 @@ async function projectEffect(
   }
   assertSafeComponent("effect id", effect.id);
   assertSchema("effect payload", validators.effect, effect);
+  const effectPath = `effects/${effect.mechanism_id}/${effect.id}.json`;
+  const existingEffect = await builder.read(effectPath);
+  if (proposal.operation === "create" && existingEffect !== null) {
+    throw new ProposalValidationError(`Create proposal would overwrite existing ${effectPath}`);
+  }
+  if (proposal.operation === "enrich" && existingEffect === null) {
+    throw new ProposalValidationError(`Enrichment target does not exist: ${effectPath}`);
+  }
   const mechanism = await loadMechanism(builder, proposal.target);
   const refs = Array.from(new Set([...(mechanism.effect_refs ?? []), effect.id])).sort();
   const nextMechanism: Mechanism = { ...mechanism, effect_refs: refs };
-  await builder.write(`effects/${effect.mechanism_id}/${effect.id}.json`, json(effect));
+  await builder.write(effectPath, json(effect));
   await builder.write(`registry/mechanisms/${mechanism.id}.json`, json(nextMechanism));
   assertSchema("projected mechanism", validators.mechanism, nextMechanism);
   await validateMechanismReferences(builder, nextMechanism);
@@ -459,8 +461,20 @@ async function projectRealization(
       );
     }
   }
+  const realizationPath = `realizations/${realization.mechanism_id}/${realization.id}.json`;
+  const existingRealization = await builder.read(realizationPath);
+  if (proposal.operation === "create" && existingRealization !== null) {
+    throw new ProposalValidationError(
+      `Create proposal would overwrite existing ${realizationPath}`,
+    );
+  }
+  if (proposal.operation === "enrich" && existingRealization === null) {
+    throw new ProposalValidationError(
+      `Enrichment target does not exist: ${realizationPath}`,
+    );
+  }
   await builder.write(
-    `realizations/${realization.mechanism_id}/${realization.id}.json`,
+    realizationPath,
     json(realization),
   );
 }
@@ -488,7 +502,19 @@ async function projectInteraction(
       throw new ProposalValidationError(`Interaction mechanism does not exist: ${mechanismId}`);
     }
   }
-  await builder.write(`interactions/${pairId}.json`, json(interaction));
+  const interactionPath = `interactions/${pairId}.json`;
+  const existingInteraction = await builder.read(interactionPath);
+  if (proposal.operation === "create" && existingInteraction !== null) {
+    throw new ProposalValidationError(
+      `Create proposal would overwrite existing ${interactionPath}`,
+    );
+  }
+  if (proposal.operation === "enrich" && existingInteraction === null) {
+    throw new ProposalValidationError(
+      `Enrichment target does not exist: ${interactionPath}`,
+    );
+  }
+  await builder.write(interactionPath, json(interaction));
 }
 
 async function projectMechanism(

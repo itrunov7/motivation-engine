@@ -18,6 +18,11 @@
         "segment"
       ]
     },
+    "operation": {
+      "type": "string",
+      "enum": ["create", "enrich"],
+      "description": "Create a new artifact, or enrich an existing artifact after owner approval."
+    },
     "target": {
       "type": "string",
       "minLength": 1,
@@ -45,7 +50,16 @@
     },
     "status": {
       "type": "string",
-      "enum": ["pending", "approved", "rejected", "edited"]
+      "enum": ["pending", "approved", "rejected", "edited", "held_low_confidence"]
+    },
+    "hold_reason": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": ["below_confidence_floor", "no_material_enrichment"]
+        },
+        { "type": "null" }
+      ]
     },
     "decided_by": {
       "type": ["string", "null"],
@@ -65,6 +79,7 @@
   "required": [
     "id",
     "type",
+    "operation",
     "target",
     "payload",
     "provenance",
@@ -72,12 +87,30 @@
     "proposed_by",
     "proposed_at",
     "status",
+    "hold_reason",
     "decided_by",
     "decided_at",
     "decision_note"
   ],
   "additionalProperties": false,
   "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "held_low_confidence" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "hold_reason": {
+            "type": "string",
+            "enum": ["below_confidence_floor", "no_material_enrichment"]
+          }
+        }
+      },
+      "else": {
+        "properties": { "hold_reason": { "type": "null" } }
+      }
+    },
     {
       "if": {
         "properties": { "type": { "const": "effect" } },
