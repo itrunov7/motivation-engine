@@ -15,12 +15,13 @@ exist ONLY in the tools/ corpus-extraction pipeline (rule 12), never in the app.
 1. SOURCE OF TRUTH — files in the repo. Data lives ONLY in:
  /registry/**.json, /sources/sources.json, /decisions/decisions.json,
  /dossiers/**, /effects/**.json (first-class L2 effects, D-076),
+ /realizations/**.json (source-grounded descriptive L3, D-078),
  /interactions/**.json, /proposals/**.json (provenance-gated proposal queue,
  D-076), /docs/**.md, /segments/segments.yaml (product-segment axis, D-047),
  /packs/pack-map.yaml (pack map — sole hand-authored pack input, D-048),
  /corpora/_ops/**.json (operational config).
    No data inside components, no databases. Knowledge files (registry,
-   dossiers, effects, interactions, proposals, docs, sources, decisions) are
+   dossiers, effects, realizations, interactions, proposals, docs, sources, decisions) are
    edited ONLY in git. The app has a NARROW write surface: operational writes
    under /corpora/_ops/** (D-023), plus owner decisions through /review
    (D-076). A /review approval must atomically commit the validated proposal
@@ -52,7 +53,7 @@ exist ONLY in the tools/ corpus-extraction pipeline (rule 12), never in the app.
    GROUNDED in harvested sources, each carrying provenance (source corpus record
    ids + DOIs) and a confidence score. Every such proposal lands in the proposal
    queue for the owner to approve or reject; unapproved proposals have NO effect
-   on any artifact (registry, dossiers, interactions, packs, cards). If a record
+  on any artifact (registry, dossiers, effects, realizations, interactions, packs, cards). If a record
    example is needed for layout work — use the existing LA-01, do not generate
    new "plausible" mechanisms.
 9. Seed mechanisms (11 items) have lifecycle_status: "candidate" and contain
@@ -83,7 +84,7 @@ exist ONLY in the tools/ corpus-extraction pipeline (rule 12), never in the app.
     (app/, middleware, server actions); (b) every extracted item carries
     provenance (source corpus record ids + DOIs) and a confidence score; (c)
     extracted items land in a proposal queue and NEVER directly in the registry,
-    dossiers, interactions, or packs; (d) all LLM spend is counted by the budget
+    dossiers, effects, realizations, interactions, or packs; (d) all LLM spend is counted by the budget
     system against the monthly cap (/corpora/_ops/budget.json). LLM API calls
     remain forbidden everywhere else — the app makes no LLM calls, ever.
 13. Data types are generated from JSON schemas (or declared in /lib/types.ts
@@ -111,7 +112,7 @@ exist ONLY in the tools/ corpus-extraction pipeline (rule 12), never in the app.
 - Do not build general scrapers; source connectors are allowed ONLY as scripts
   under tools/ calling the whitelisted APIs in rule 12
 - Do not build general data-editing forms in the UI for KNOWLEDGE (registry,
-  dossiers, effects, interactions, docs, sources, decisions) — that is edited
+  dossiers, effects, realizations, interactions, docs, sources, decisions) — that is edited
   in git. UI writes are limited to operational config/run triggering under
   /corpora/_ops/** (D-023) and the owner approval/rejection workflow under
   /review (D-076); /review may apply only validated proposal payloads through

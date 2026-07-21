@@ -12,9 +12,9 @@ Principle: minimum moving parts, maximum transparency. Every component is a mana
  │  GitHub repo    │      │  Postgres (managed,  │      │ Object store │
  │  registry JSON  │      │  e.g. Supabase)      │      │ (R2/S3)      │
  │  dossiers, L2   │      │  high-volume corpora,│      │ screenshots, │
- │  effects,       │      │  tags, telemetry     │      │ flow dumps,  │
- │  proposals,     │      │  (after trigger)     │      │ html         │
- │  decision log   │      │                      │      │              │
+ │  effects, L3    │      │  tags, telemetry     │      │ flow dumps,  │
+ │  realizations,  │      │  (after trigger)     │      │ html         │
+ │  proposals/log  │      │                      │      │              │
  └───────┬─────────┘      └──────────┬───────────┘      └──────┬───────┘
          │                           │                          │
          ▼                           ▼                          │
@@ -62,11 +62,11 @@ Three tiers by data type:
 
 | Tier | What | Where | Why |
 |---|---|---|---|
-| Knowledge | mechanism registry, dossiers, L2 effects, interactions, proposals, schema, decision log | **GitHub repo (private)** | versioning, review, provenance, status history = git history |
+| Knowledge | mechanism registry, dossiers, L2 effects, descriptive realizations, interactions, proposals, schema, decision log | **GitHub repo (private)** | versioning, review, provenance, status history = git history |
 | Structure | high-volume corpora (tagged flows, reviews→labels) and telemetry observations | **managed Postgres** (only when an escalation trigger fires) | SQL joins for the loop and pgvector if volume eventually requires it |
 | Raw | interface screenshots, flow recordings, html dumps | **object store (R2/S3)** | no egress fees, pennies per TB |
 
-Boundary rule: anything a human edits or approves — git. Pipeline-extracted knowledge first lands in `/proposals/{type}/{id}.json`; it does not affect `/registry`, `/effects`, `/interactions`, `/dossiers`, or `/segments` before approval. Anything pipelines produce by the thousands may move to Postgres only after an escalation trigger. Anything binary — object store.
+Boundary rule: anything a human edits or approves — git. Pipeline-extracted knowledge first lands in `/proposals/{type}/{id}.json`; it does not affect `/registry`, `/effects`, `/realizations`, `/interactions`, `/dossiers`, or `/segments` before approval. Anything pipelines produce by the thousands may move to Postgres only after an escalation trigger. Anything binary — object store.
 
 ### File write surfaces
 

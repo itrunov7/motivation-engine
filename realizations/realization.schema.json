@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ventora.dev/motivation-engine/realization.schema.json",
+  "title": "Source-grounded realization (descriptive L3 evidence)",
+  "description": "A neutral interface, copy, or flow embodiment reported by harvested sources. It describes what exists; mechanism.implementations remains the product-authored directive layer.",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "mechanism_id": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}-\\d{2}$"
+    },
+    "effect_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "term": { "type": "string", "minLength": 1 },
+    "description_as_reported": { "type": "string", "minLength": 1 },
+    "artifact_context": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/provenanceItem" }
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    }
+  },
+  "required": [
+    "id",
+    "mechanism_id",
+    "term",
+    "description_as_reported",
+    "artifact_context",
+    "provenance",
+    "confidence"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "doi": {
+      "type": "string",
+      "pattern": "^10\\.\\d{4,9}/\\S+$"
+    },
+    "provenanceItem": {
+      "type": "object",
+      "properties": {
+        "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+        "corpus_record_id": { "type": "string", "pattern": "^cr_[a-f0-9]{24}$" },
+        "doi": {
+          "anyOf": [
+            { "$ref": "#/$defs/doi" },
+            { "type": "null" }
+          ]
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "quote_or_locus": { "type": "string", "minLength": 1 }
+      },
+      "required": ["mechanism_id", "corpus_record_id", "doi", "title", "quote_or_locus"],
+      "additionalProperties": false
+    }
+  }
+}

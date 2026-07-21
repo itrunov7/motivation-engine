@@ -98,7 +98,9 @@
       },
       "then": {
         "properties": {
-          "payload": { "$ref": "#/$defs/implementation" }
+          "payload": {
+            "$ref": "https://ventora.dev/motivation-engine/realization.schema.json"
+          }
         }
       }
     },

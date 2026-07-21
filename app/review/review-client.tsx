@@ -241,8 +241,16 @@ function ProposalCard({
 
       <section className="mt-4 rounded-md border border-[#243329] bg-[#1A2620] p-4">
         <h3 className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8]">
-          Proposed content
+          {proposal.type === "realization"
+            ? "Source-grounded realization"
+            : "Proposed content"}
         </h3>
+        {proposal.type === "realization" ? (
+          <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">
+            Descriptive evidence about an embodiment reported in sources; this is not a
+            product-authored generator directive.
+          </p>
+        ) : null}
         <div className="mt-3"><ReadableValue value={proposal.payload} /></div>
       </section>
 

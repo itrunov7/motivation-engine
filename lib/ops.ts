@@ -19,9 +19,16 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { DATA_PATHS } from "./data";
 import { computeMonthlyRollup, loadCorpusManifests } from "./status";
-import type { CorpusManifest, CorpusRunStatus, OpsBudget, OpsConnectorConfig, RunQuote } from "./types";
+import type {
+  CorpusManifest,
+  CorpusRunStatus,
+  ExtractionOpsConfig,
+  OpsBudget,
+  OpsConnectorConfig,
+  RunQuote,
+} from "./types";
 
-export type { OpsBudget, OpsConnectorConfig, RunQuote } from "./types";
+export type { ExtractionOpsConfig, OpsBudget, OpsConnectorConfig, RunQuote } from "./types";
 
 /**
  * Connector ids the ops surface knows about. Declared here because lib/ never
@@ -42,11 +49,13 @@ export function isKnownConnectorId(id: string): id is KnownConnectorId {
 export const OPS_PATHS = {
   dir: join(DATA_PATHS.corporaDir, "_ops"),
   budget: join(DATA_PATHS.corporaDir, "_ops", "budget.json"),
+  extraction: join(DATA_PATHS.corporaDir, "_ops", "extraction.json"),
   connectorsDir: join(DATA_PATHS.corporaDir, "_ops", "connectors"),
 } as const;
 
 /** Repo-relative path the GitHub Contents API commits to. */
 export const OPS_BUDGET_REPO_PATH = "corpora/_ops/budget.json";
+export const OPS_EXTRACTION_REPO_PATH = "corpora/_ops/extraction.json";
 
 /** Repo-relative path for one connector's config. */
 export function opsConnectorRepoPath(id: string): string {
@@ -129,6 +138,74 @@ export function validateOpsBudget(data: unknown): string[] {
   const extraCaps = Object.keys(caps).filter((k) => k !== "usd" && k !== "calls");
   if (extraCaps.length > 0) {
     errors.push(`unexpected monthly_caps field(s): ${extraCaps.join(", ")}`);
+  }
+  return errors;
+}
+
+export function validateExtractionOpsConfig(data: unknown): string[] {
+  if (!isPlainObject(data)) return ["extraction config must be a JSON object"];
+  const errors: string[] = [];
+  const allowed = new Set(["version", "prices_verified_on", "tiers", "limits"]);
+  const extras = Object.keys(data).filter((key) => !allowed.has(key));
+  if (extras.length > 0) errors.push(`unexpected field(s): ${extras.join(", ")}`);
+  if (typeof data.version !== "string" || !/^\d+\.\d+\.\d+$/.test(data.version)) {
+    errors.push("version must be semver");
+  }
+  if (
+    data.prices_verified_on !== null &&
+    (typeof data.prices_verified_on !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(data.prices_verified_on))
+  ) {
+    errors.push("prices_verified_on must be YYYY-MM-DD or null");
+  }
+  if (!isPlainObject(data.tiers)) {
+    errors.push("tiers must be an object");
+  } else {
+    for (const name of ["cheap", "strong"] as const) {
+      const tier = data.tiers[name];
+      if (!isPlainObject(tier)) {
+        errors.push(`tiers.${name} must be an object`);
+        continue;
+      }
+      const tierExtras = Object.keys(tier).filter(
+        (key) =>
+          ![
+            "model_id",
+            "input_usd_per_token",
+            "output_usd_per_token",
+            "max_tokens_per_call",
+          ].includes(key),
+      );
+      if (tierExtras.length > 0) {
+        errors.push(`unexpected tiers.${name} field(s): ${tierExtras.join(", ")}`);
+      }
+      if (tier.model_id !== null && (typeof tier.model_id !== "string" || !tier.model_id.trim())) {
+        errors.push(`tiers.${name}.model_id must be non-empty or null`);
+      }
+      for (const key of ["input_usd_per_token", "output_usd_per_token"] as const) {
+        if (tier[key] !== null && !isNonNegativeNumber(tier[key])) {
+          errors.push(`tiers.${name}.${key} must be non-negative or null`);
+        }
+      }
+      if (!isNonNegativeInteger(tier.max_tokens_per_call) || tier.max_tokens_per_call < 1) {
+        errors.push(`tiers.${name}.max_tokens_per_call must be an integer ≥ 1`);
+      }
+    }
+  }
+  if (!isPlainObject(data.limits)) {
+    errors.push("limits must be an object");
+  } else {
+    const limitExtras = Object.keys(data.limits).filter(
+      (key) => !["per_run_tokens", "monthly_tokens", "records_per_batch"].includes(key),
+    );
+    if (limitExtras.length > 0) {
+      errors.push(`unexpected limits field(s): ${limitExtras.join(", ")}`);
+    }
+    for (const key of ["per_run_tokens", "monthly_tokens", "records_per_batch"] as const) {
+      if (!isNonNegativeInteger(data.limits[key]) || data.limits[key] < 1) {
+        errors.push(`limits.${key} must be an integer ≥ 1`);
+      }
+    }
   }
   return errors;
 }
@@ -253,6 +330,28 @@ export function loadOpsBudgetFromDisk(): OpsBudget | undefined {
   return readJsonSafe<OpsBudget>(OPS_PATHS.budget);
 }
 
+export function loadExtractionOpsConfigFromDisk(): ExtractionOpsConfig | undefined {
+  return readJsonSafe<ExtractionOpsConfig>(OPS_PATHS.extraction);
+}
+
+export type ExtractionPriceState = "unconfigured" | "current" | "stale";
+
+export function extractionPriceState(
+  config: ExtractionOpsConfig,
+  now: Date = new Date(),
+): ExtractionPriceState {
+  const configured = Object.values(config.tiers).every(
+    (tier) =>
+      tier.model_id !== null &&
+      tier.input_usd_per_token !== null &&
+      tier.output_usd_per_token !== null,
+  );
+  if (!configured || config.prices_verified_on === null) return "unconfigured";
+  const verified = Date.parse(`${config.prices_verified_on}T00:00:00Z`);
+  if (!Number.isFinite(verified)) return "unconfigured";
+  return now.getTime() - verified > 90 * 86_400_000 ? "stale" : "current";
+}
+
 /** One connector's config from disk, or undefined if absent/broken. */
 export function loadOpsConnectorConfigFromDisk(
   id: string,
@@ -319,14 +418,19 @@ export interface BudgetSnapshot {
   /** UTC "YYYY-MM". */
   month: string;
   caps: { usd: number; calls: number };
-  used: { usd: number; calls: number };
+  used: { usd: number; calls: number; tokensIn: number; tokensOut: number };
   remaining: { usd: number; calls: number };
 }
 
 export function computeBudgetSnapshot(now: Date = new Date()): BudgetSnapshot {
   const caps = (loadOpsBudgetFromDisk() ?? DEFAULT_BUDGET).monthly_caps;
   const rollup = computeMonthlyRollup(loadCorpusManifests(), now);
-  const used = { usd: rollup.total.estimatedUsd, calls: rollup.total.apiCalls };
+  const used = {
+    usd: rollup.total.estimatedUsd,
+    calls: rollup.total.apiCalls,
+    tokensIn: rollup.total.tokensIn,
+    tokensOut: rollup.total.tokensOut,
+  };
   return {
     month: rollup.month,
     caps,

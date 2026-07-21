@@ -343,6 +343,8 @@ export interface MonthlyRollupRow {
   apiCalls: number;
   durationS: number;
   estimatedUsd: number;
+  tokensIn: number;
+  tokensOut: number;
 }
 
 export interface MonthlyRollup {
@@ -387,8 +389,18 @@ export function computeMonthlyRollup(
           apiCalls: row.apiCalls + (run.cost?.api_calls ?? 0),
           durationS: row.durationS + run.duration_s,
           estimatedUsd: row.estimatedUsd + (run.cost?.estimated_usd ?? 0),
+          tokensIn: row.tokensIn + (run.cost?.tokens_in ?? 0),
+          tokensOut: row.tokensOut + (run.cost?.tokens_out ?? 0),
         }),
-        { label: dirName, runs: 0, apiCalls: 0, durationS: 0, estimatedUsd: 0 },
+        {
+          label: dirName,
+          runs: 0,
+          apiCalls: 0,
+          durationS: 0,
+          estimatedUsd: 0,
+          tokensIn: 0,
+          tokensOut: 0,
+        },
       ),
     );
   }
@@ -402,8 +414,18 @@ export function computeMonthlyRollup(
       apiCalls: acc.apiCalls + row.apiCalls,
       durationS: acc.durationS + row.durationS,
       estimatedUsd: acc.estimatedUsd + row.estimatedUsd,
+      tokensIn: acc.tokensIn + row.tokensIn,
+      tokensOut: acc.tokensOut + row.tokensOut,
     }),
-    { label: "total", runs: 0, apiCalls: 0, durationS: 0, estimatedUsd: 0 },
+    {
+      label: "total",
+      runs: 0,
+      apiCalls: 0,
+      durationS: 0,
+      estimatedUsd: 0,
+      tokensIn: 0,
+      tokensOut: 0,
+    },
   );
 
   return { month, perConnector, total, empty: perConnector.length === 0 };

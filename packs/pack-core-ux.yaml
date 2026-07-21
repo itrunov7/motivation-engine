@@ -7,7 +7,7 @@ applies_to: [core-product-screens]
 funnel_stage: activation
 version: 0.1.0
 nature: knowledge base. L1/L2 facts with evidence strength; L3 preserves authored realization directives.
-source: projection of registry records and first-class effects for VR-02 HA-04 ZE-07 CL-14 IF-18 MM-15 PF-16 PS-13 SC-17
+source: projection of registry records, first-class effects, and source-grounded realizations for VR-02 HA-04 ZE-07 CL-14 IF-18 MM-15 PF-16 PS-13 SC-17
 
 # ─────────────────────────────────────────────
 # LAYER 1 — MECHANISMS (atoms of evidence)
@@ -108,9 +108,16 @@ effects:
   [] # no approved first-class effects referenced by this pack's mechanisms
 
 # ─────────────────────────────────────────────
-# LAYER 3 — REALIZATIONS (concrete implementations)
+# LAYER 3 — REALIZATIONS (source-grounded evidence palette)
 # ─────────────────────────────────────────────
 realizations:
+
+  [] # no approved source-grounded realizations exist for this pack
+
+# ─────────────────────────────────────────────
+# IMPLEMENTATIONS (product-authored generator directives)
+# ─────────────────────────────────────────────
+implementations:
 
   - id: VR-02-variable-discovery
     mechanism_id: VR-02

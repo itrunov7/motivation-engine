@@ -155,6 +155,15 @@
             "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
             "description": "Optional L2 effect this L3 realization embodies."
           },
+          "realization_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "description": "Optional source-grounded realization records that justify this directive."
+          },
           "artifact_types": {
             "type": "array",
             "items": { "$ref": "#/$defs/artifactType" },

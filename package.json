@@ -21,7 +21,9 @@
     "health": "tsx tools/health-check.ts",
     "ops-gate": "tsx tools/ops-gate.ts",
     "proposal": "tsx tools/proposal.ts",
-    "test:proposals": "tsx --test lib/corpus-record-id.test.ts lib/proposals.test.ts"
+    "extract": "tsx tools/extract.ts",
+    "test:proposals": "tsx --test lib/corpus-record-id.test.ts lib/proposals.test.ts",
+    "test:extract": "tsx --test tools/extract.test.ts"
   },
   "dependencies": {
     "ajv": "^8.20.0",

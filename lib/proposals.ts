@@ -11,6 +11,7 @@ import type {
   Mechanism,
   Proposal,
   ProposalStatus,
+  Realization,
   Segment,
   SegmentsFile,
 } from "./types";
@@ -103,6 +104,7 @@ interface Validators {
   proposal: ValidateFunction;
   mechanism: ValidateFunction;
   effect: ValidateFunction;
+  realization: ValidateFunction;
   interaction: ValidateFunction;
   dossier: ValidateFunction;
 }
@@ -136,11 +138,19 @@ async function getValidators(root: string): Promise<Validators> {
   const cached = validatorsByRoot.get(root);
   if (cached) return cached;
 
-  const [proposalSchema, mechanismSchema, effectSchema, interactionSchema, dossierSchema] =
+  const [
+    proposalSchema,
+    mechanismSchema,
+    effectSchema,
+    realizationSchema,
+    interactionSchema,
+    dossierSchema,
+  ] =
     await Promise.all([
       readSchema(root, "proposals/proposal.schema.json"),
       readSchema(root, "registry/mechanism.schema.json"),
       readSchema(root, "effects/effect.schema.json"),
+      readSchema(root, "realizations/realization.schema.json"),
       readSchema(root, "interactions/interaction.schema.json"),
       readSchema(root, "dossiers/dossier.schema.json"),
     ]);
@@ -148,6 +158,7 @@ async function getValidators(root: string): Promise<Validators> {
   addFormats(ajv);
   ajv.addSchema(mechanismSchema);
   ajv.addSchema(effectSchema);
+  ajv.addSchema(realizationSchema);
   ajv.addSchema(interactionSchema);
   ajv.addSchema(dossierSchema);
   const validators = {
@@ -156,6 +167,9 @@ async function getValidators(root: string): Promise<Validators> {
       "https://ventora.dev/motivation-engine/mechanism.schema.json",
     )!,
     effect: ajv.getSchema("https://ventora.dev/motivation-engine/effect.schema.json")!,
+    realization: ajv.getSchema(
+      "https://ventora.dev/motivation-engine/realization.schema.json",
+    )!,
     interaction: ajv.getSchema(
       "https://ventora.dev/motivation-engine/interaction.schema.json",
     )!,
@@ -222,12 +236,14 @@ function assertPayloadProvenance(proposal: Proposal): void {
   if (proposal.provenance.length === 0) {
     throw new ProposalValidationError("Proposal provenance must not be empty");
   }
-  if (proposal.type === "effect") {
+  if (proposal.type === "effect" || proposal.type === "realization") {
     if (canonical(proposal.payload.provenance) !== canonical(proposal.provenance)) {
       throw new ProposalValidationError(
-        "Effect payload provenance must exactly match the proposal envelope provenance",
+        `${proposal.type} payload provenance must exactly match the proposal envelope provenance`,
       );
     }
+  }
+  if (proposal.type === "effect") {
     const provenanceDois = new Set(
       proposal.provenance.flatMap((item) => (item.doi === null ? [] : [item.doi])),
     );
@@ -365,12 +381,34 @@ async function validateMechanismReferences(
         `Implementation ${implementation.id} references missing effect ${implementation.effect_id}`,
       );
     }
+    for (const realizationId of implementation.realization_ids ?? []) {
+      const path = `realizations/${mechanism.id}/${realizationId}.json`;
+      const realization = parseJson<Realization>(path, await requireText(snapshot, path));
+      if (
+        realization.id !== realizationId ||
+        realization.mechanism_id !== mechanism.id
+      ) {
+        throw new ProposalValidationError(
+          `Realization reference ${path} does not match its mechanism/id`,
+        );
+      }
+    }
   }
   for (const effect of Array.from(effects.values())) {
     for (const realizationId of effect.realization_ids) {
-      if (!implementationIds.has(realizationId)) {
+      const path = `realizations/${mechanism.id}/${realizationId}.json`;
+      const realization = parseJson<Realization>(path, await requireText(snapshot, path));
+      if (
+        realization.id !== realizationId ||
+        realization.mechanism_id !== mechanism.id
+      ) {
         throw new ProposalValidationError(
-          `Effect ${effect.id} references missing realization ${realizationId}`,
+          `Effect ${effect.id} references invalid realization ${realizationId}`,
+        );
+      }
+      if (realization.effect_id !== effect.id) {
+        throw new ProposalValidationError(
+          `Realization ${realizationId} must link back to effect ${effect.id}`,
         );
       }
     }
@@ -402,16 +440,29 @@ async function projectRealization(
   proposal: Extract<Proposal, { type: "realization" }>,
   validators: Validators,
 ): Promise<void> {
-  const mechanism = await loadMechanism(builder, proposal.target);
-  const implementation = proposal.payload;
-  const index = mechanism.implementations.findIndex((item) => item.id === implementation.id);
-  const implementations = [...mechanism.implementations];
-  if (index === -1) implementations.push(implementation);
-  else implementations[index] = implementation;
-  const nextMechanism: Mechanism = { ...mechanism, implementations };
-  assertSchema("projected mechanism", validators.mechanism, nextMechanism);
-  await builder.write(`registry/mechanisms/${mechanism.id}.json`, json(nextMechanism));
-  await validateMechanismReferences(builder, nextMechanism);
+  const realization = proposal.payload;
+  if (proposal.target !== realization.mechanism_id) {
+    throw new ProposalValidationError("Realization target must equal payload.mechanism_id");
+  }
+  assertSafeComponent("realization id", realization.id);
+  assertSchema("realization payload", validators.realization, realization);
+  if (!(await mechanismExists(builder, realization.mechanism_id))) {
+    throw new ProposalValidationError(
+      `Realization mechanism does not exist: ${realization.mechanism_id}`,
+    );
+  }
+  if (realization.effect_id) {
+    const effectPath = `effects/${realization.mechanism_id}/${realization.effect_id}.json`;
+    if ((await builder.read(effectPath)) === null) {
+      throw new ProposalValidationError(
+        `Realization effect does not exist: ${realization.effect_id}`,
+      );
+    }
+  }
+  await builder.write(
+    `realizations/${realization.mechanism_id}/${realization.id}.json`,
+    json(realization),
+  );
 }
 
 async function projectInteraction(

@@ -10,7 +10,13 @@
  */
 
 import { useCallback, useEffect, useState, useTransition } from "react";
-import type { BudgetSnapshot, OpsConnectorConfig, QuoteArtifact } from "@/lib/ops";
+import type {
+  BudgetSnapshot,
+  ExtractionOpsConfig,
+  ExtractionPriceState,
+  OpsConnectorConfig,
+  QuoteArtifact,
+} from "@/lib/ops";
 import {
   confirmRealRunAction,
   loadLiveConnectorConfigsAction,
@@ -51,6 +57,8 @@ export interface MechanismOption {
 export interface OpsClientProps {
   writeEnabled: boolean;
   budget: BudgetSnapshot;
+  extraction: ExtractionOpsConfig | null;
+  extractionPriceState: ExtractionPriceState;
   connectors: ConnectorView[];
   mechanismOptions: MechanismOption[];
 }
@@ -225,9 +233,13 @@ function Notice({ tone, children }: { tone: "ok" | "warn" | "err"; children: Rea
 function BudgetPanel({
   writeEnabled,
   budget,
+  extraction,
+  extractionPriceState,
 }: {
   writeEnabled: boolean;
   budget: BudgetSnapshot;
+  extraction: ExtractionOpsConfig | null;
+  extractionPriceState: ExtractionPriceState;
 }) {
   const [usd, setUsd] = useState(budget.caps.usd);
   const [calls, setCalls] = useState(budget.caps.calls);
@@ -250,9 +262,8 @@ function BudgetPanel({
         <h2 className="font-display text-lg font-medium text-[#E6EFE8]">Monthly budget</h2>
         <p className="mt-1 text-sm text-[#8CA495]">
           The ceiling the fleet respects before starting a run this month ({budget.month} UTC).
-          Usage is counted from real run costs — it is not a guess. Every source is a free public
-          API today, so the dollar figure guards future paid work and the call count is the
-          meaningful limit.
+          Usage is counted from real run costs — it is not a guess. Harvest APIs and paid
+          OpenRouter extraction share these ceilings.
         </p>
       </header>
 
@@ -273,6 +284,50 @@ function BudgetPanel({
             <ProgressBar used={budget.used.usd} cap={budget.caps.usd} unit="usd" />
           </div>
         </div>
+      </div>
+
+      <div className="mt-4 rounded-md border border-[#243329] bg-[#1A2620] p-4">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">
+            extraction tokens this month
+          </p>
+          <span
+            className="font-mono text-[10px] uppercase tracking-wider"
+            style={{
+              color:
+                extractionPriceState === "current"
+                  ? C.accent
+                  : extractionPriceState === "stale"
+                    ? C.amber
+                    : C.alert,
+            }}
+          >
+            {extractionPriceState === "current"
+              ? "prices current"
+              : extractionPriceState === "stale"
+                ? "prices older than 90 days"
+                : "models or prices unconfigured"}
+          </span>
+        </div>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <div>
+            <p className="font-mono text-[10px] uppercase text-[#7C93A8]">input</p>
+            <p className="mt-1 font-mono text-sm text-[#E6EFE8]">
+              {budget.used.tokensIn.toLocaleString()} tokens
+            </p>
+          </div>
+          <div>
+            <p className="font-mono text-[10px] uppercase text-[#7C93A8]">output</p>
+            <p className="mt-1 font-mono text-sm text-[#E6EFE8]">
+              {budget.used.tokensOut.toLocaleString()} tokens
+            </p>
+          </div>
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-[#8CA495]">
+          {extraction
+            ? `Token cap: ${extraction.limits.monthly_tokens.toLocaleString()} monthly · ${extraction.limits.per_run_tokens.toLocaleString()} per run. Prices verified: ${extraction.prices_verified_on ?? "not yet configured"}. Routing: cheap ${extraction.tiers.cheap.model_id ?? "unset"} · strong ${extraction.tiers.strong.model_id ?? "unset"}.`
+            : "corpora/_ops/extraction.json is missing; extraction cannot quote or run."}
+        </p>
       </div>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -925,6 +980,8 @@ type HydrateStatus = "loading" | "ready" | "error";
 export default function OpsClient({
   writeEnabled,
   budget,
+  extraction,
+  extractionPriceState,
   connectors,
   mechanismOptions,
 }: OpsClientProps) {
@@ -982,7 +1039,12 @@ export default function OpsClient({
         </div>
       )}
 
-      <BudgetPanel writeEnabled={writeEnabled} budget={budget} />
+      <BudgetPanel
+        writeEnabled={writeEnabled}
+        budget={budget}
+        extraction={extraction}
+        extractionPriceState={extractionPriceState}
+      />
 
       {status === "loading" && (
         <div className="rounded-lg border border-[#243329] bg-[#151F1A] px-5 py-6">

@@ -76,6 +76,7 @@ import type {
 import {
   KNOWN_CONNECTOR_IDS,
   OPS_PATHS,
+  validateExtractionOpsConfig,
   validateOpsBudget,
   validateOpsConnectorConfig,
 } from "../lib/ops";
@@ -103,6 +104,8 @@ const PATHS = {
   interactionsDir: join(ROOT, "interactions"),
   effectSchema: join(ROOT, "effects", "effect.schema.json"),
   effectsDir: join(ROOT, "effects"),
+  realizationSchema: join(ROOT, "realizations", "realization.schema.json"),
+  realizationsDir: join(ROOT, "realizations"),
   proposalSchema: join(ROOT, "proposals", "proposal.schema.json"),
   proposalsDir: join(ROOT, "proposals"),
 };
@@ -763,7 +766,12 @@ interface MechanismLike {
   dossier_ref?: string | null;
   evidence_terms?: unknown;
   effect_refs?: unknown;
-  implementations?: { id?: string; effect_id?: string; metrics?: unknown }[];
+  implementations?: {
+    id?: string;
+    effect_id?: string;
+    realization_ids?: unknown;
+    metrics?: unknown;
+  }[];
   constraints?: { hard_rules?: unknown };
   relations?: { target?: string }[];
 }
@@ -1247,6 +1255,19 @@ function main(): void {
     console.log("  · no ops budget yet (defaults apply)");
   }
 
+  if (existsSync(OPS_PATHS.extraction)) {
+    const extraction = readJson(OPS_PATHS.extraction);
+    if (extraction !== undefined) {
+      const errors = validateExtractionOpsConfig(extraction);
+      for (const message of errors) fail(OPS_PATHS.extraction, message);
+      if (errors.length === 0) {
+        console.log(`  ✓ ${rel(OPS_PATHS.extraction)} valid (extraction ops config)`);
+      }
+    }
+  } else {
+    fail(OPS_PATHS.extraction, "missing extraction ops config");
+  }
+
   const opsFiles = listJsonFiles(OPS_PATHS.connectorsDir);
   for (const file of opsFiles) {
     const data = readJson(file);
@@ -1621,6 +1642,78 @@ function main(): void {
     console.log("  · no effect schema yet (effects/effect.schema.json)");
   }
 
+  const realizationsByKey = new Map<
+    string,
+    { file: string; effectId?: string }
+  >();
+  if (existsSync(PATHS.realizationSchema)) {
+    const realizationSchemaDoc = readJson(PATHS.realizationSchema);
+    if (realizationSchemaDoc !== undefined) {
+      let validateRealization: ValidateFunction | undefined;
+      try {
+        validateRealization = ajv.compile(realizationSchemaDoc as object);
+        console.log(`  ✓ ${rel(PATHS.realizationSchema)} compiles`);
+      } catch (err) {
+        fail(PATHS.realizationSchema, `schema does not compile — ${(err as Error).message}`);
+      }
+      if (validateRealization) {
+        const realizationFiles = listJsonFilesRecursive(PATHS.realizationsDir).filter(
+          (file) => file !== PATHS.realizationSchema,
+        );
+        for (const file of realizationFiles) {
+          const data = readJson(file);
+          if (data === undefined) continue;
+          let ok = validateAgainst(validateRealization, file, data);
+          const realization = data as {
+            id?: string;
+            mechanism_id?: string;
+            effect_id?: string;
+          };
+          const parts = relative(PATHS.realizationsDir, file).split(sep);
+          const expected =
+            typeof realization.mechanism_id === "string" &&
+            typeof realization.id === "string"
+              ? [realization.mechanism_id, `${realization.id}.json`]
+              : [];
+          if (parts.length !== 2 || parts[0] !== expected[0] || parts[1] !== expected[1]) {
+            fail(file, "path must match realizations/{mechanism_id}/{id}.json");
+            ok = false;
+          }
+          if (
+            typeof realization.mechanism_id === "string" &&
+            !fullRecordById.has(realization.mechanism_id)
+          ) {
+            fail(file, `mechanism_id "${realization.mechanism_id}" is not a full mechanism record`);
+            ok = false;
+          }
+          if (
+            typeof realization.mechanism_id === "string" &&
+            typeof realization.id === "string"
+          ) {
+            const key = `${realization.mechanism_id}\u0000${realization.id}`;
+            if (realizationsByKey.has(key)) {
+              fail(file, `duplicate realization ${realization.mechanism_id}/${realization.id}`);
+              ok = false;
+            } else {
+              realizationsByKey.set(key, {
+                file,
+                ...(typeof realization.effect_id === "string"
+                  ? { effectId: realization.effect_id }
+                  : {}),
+              });
+            }
+          }
+          if (ok) console.log(`  ✓ ${rel(file)} valid (realization record)`);
+        }
+        if (realizationFiles.length === 0) {
+          console.log("  · no realization records yet (honest empty state)");
+        }
+      }
+    }
+  } else {
+    fail(PATHS.realizationSchema, "missing realization schema");
+  }
+
   for (const [key, effect] of Array.from(effectsByKey.entries())) {
     const [mechanismId, effectId] = key.split("\u0000");
     const mechanism = fullRecordById.get(mechanismId);
@@ -1636,13 +1729,6 @@ function main(): void {
   }
 
   for (const { file, record } of fullRecords) {
-    const implementationsById = new Map(
-      (record.implementations ?? []).flatMap((implementation) =>
-        typeof implementation.id === "string"
-          ? [[implementation.id, implementation] as const]
-          : [],
-      ),
-    );
     const effectRefs = Array.isArray(record.effect_refs)
       ? record.effect_refs.filter((id): id is string => typeof id === "string")
       : [];
@@ -1654,10 +1740,13 @@ function main(): void {
         continue;
       }
       for (const realizationId of effect.realizationIds) {
-        const implementation = implementationsById.get(realizationId);
-        if (!implementation) {
-          fail(effect.file, `realization_id "${realizationId}" is not in ${record.id}.implementations`);
-        } else if (implementation.effect_id !== effectId) {
+        const realization = realizationsByKey.get(`${record.id}\u0000${realizationId}`);
+        if (!realization) {
+          fail(
+            effect.file,
+            `realization_id "${realizationId}" has no realizations/${record.id}/${realizationId}.json`,
+          );
+        } else if (realization.effectId !== effectId) {
           fail(
             effect.file,
             `realization_id "${realizationId}" must link back with effect_id "${effectId}"`,
@@ -1666,24 +1755,34 @@ function main(): void {
       }
     }
     for (const implementation of record.implementations ?? []) {
-      if (typeof implementation.effect_id !== "string") continue;
-      if (!effectRefs.includes(implementation.effect_id)) {
+      if (
+        typeof implementation.effect_id === "string" &&
+        !effectRefs.includes(implementation.effect_id)
+      ) {
         fail(
           file,
           `implementation "${implementation.id ?? "?"}" effect_id "${implementation.effect_id}" is not in effect_refs`,
         );
-        continue;
       }
-      const effect = effectsByKey.get(`${record.id}\u0000${implementation.effect_id}`);
-      if (
-        effect &&
-        typeof implementation.id === "string" &&
-        !effect.realizationIds.includes(implementation.id)
-      ) {
-        fail(
-          file,
-          `implementation "${implementation.id}" links effect_id "${implementation.effect_id}" but the effect does not list it in realization_ids`,
-        );
+      if (Array.isArray(implementation.realization_ids)) {
+        for (const realizationId of implementation.realization_ids) {
+          const realization = realizationsByKey.get(`${record.id}\u0000${realizationId}`);
+          if (!realization) {
+            fail(
+              file,
+              `implementation "${implementation.id ?? "?"}" references missing realization "${realizationId}"`,
+            );
+          } else if (
+            typeof implementation.effect_id === "string" &&
+            realization.effectId !== undefined &&
+            realization.effectId !== implementation.effect_id
+          ) {
+            fail(
+              file,
+              `implementation "${implementation.id ?? "?"}" and realization "${realizationId}" reference different effects`,
+            );
+          }
+        }
       }
     }
   }

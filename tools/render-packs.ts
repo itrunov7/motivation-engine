@@ -61,10 +61,12 @@ import type {
   PackEffect,
   PackInteraction,
   PackInteractionType,
+  PackImplementation,
   PackMapElement,
   PackMapFile,
   PackMechanism,
   PackRealization,
+  Realization,
   Relation,
   Taxonomy,
 } from "../lib/types";
@@ -74,6 +76,7 @@ const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
 const TAXONOMY = join(ROOT, "registry", "taxonomy.json");
 const DOSSIERS_DIR = join(ROOT, "dossiers");
 const EFFECTS_DIR = join(ROOT, "effects");
+const REALIZATIONS_DIR = join(ROOT, "realizations");
 const INTERACTIONS_DIR = join(ROOT, "interactions");
 const PACKS_DIR = join(ROOT, "packs");
 const PACK_MAP = join(PACKS_DIR, "pack-map.yaml");
@@ -245,18 +248,21 @@ function effectsFor(
   return effects;
 }
 
-// ---------- LAYER 3 — realizations ----------
+// ---------- LAYER 3 — descriptive realizations + authored implementations ----------
 
-function buildRealization(
+function buildImplementation(
   mechanismId: string,
   implementation: Implementation,
-): PackRealization {
+): PackImplementation {
   return {
     id: implementation.id,
     mechanism_id: mechanismId,
     ...(implementation.effect_id === undefined
       ? {}
       : { effect_id: implementation.effect_id }),
+    ...(implementation.realization_ids === undefined
+      ? {}
+      : { realization_ids: implementation.realization_ids }),
     artifact_types: implementation.artifact_types,
     product_requirements: implementation.product_requirements,
     generation_directive: implementation.generation_directive,
@@ -266,11 +272,29 @@ function buildRealization(
   };
 }
 
-function realizationsFor(mechanisms: Mechanism[]): PackRealization[] {
+function implementationsFor(mechanisms: Mechanism[]): PackImplementation[] {
   return mechanisms.flatMap((mechanism) =>
     mechanism.implementations.map((implementation) =>
-      buildRealization(mechanism.id, implementation),
+      buildImplementation(mechanism.id, implementation),
     ),
+  );
+}
+
+function realizationsFor(
+  mechanisms: Mechanism[],
+  realizationsByMechanism: Map<string, Realization[]>,
+): PackRealization[] {
+  return mechanisms.flatMap((mechanism) =>
+    (realizationsByMechanism.get(mechanism.id) ?? []).map((realization) => ({
+      id: realization.id,
+      mechanism_id: realization.mechanism_id,
+      ...(realization.effect_id === undefined ? {} : { effect_id: realization.effect_id }),
+      term: realization.term,
+      description_as_reported: realization.description_as_reported,
+      artifact_context: realization.artifact_context,
+      confidence: realization.confidence,
+      source_record_ids: realization.provenance.map((item) => item.corpus_record_id),
+    })),
   );
 }
 
@@ -426,6 +450,7 @@ function buildDatasheet(
   crossCutting: Mechanism[],
   authored: Map<string, InteractionRecord>,
   effectsByMechanism: Map<string, Map<string, Effect>>,
+  realizationsByMechanism: Map<string, Realization[]>,
 ): PackDatasheet {
   const gradeOf = new Map(members.map((m) => [m.id, m.evidence.grade] as const));
   const ontologyMechanisms = [...members, ...crossCutting];
@@ -435,11 +460,12 @@ function buildDatasheet(
     funnel_stage: element.funnel_stage,
     version: PACK_MAP_VERSION,
     nature: NATURE,
-    source: `projection of registry records and first-class effects for ${ontologyMechanisms.map((m) => m.id).join(" ")}`,
+    source: `projection of registry records, first-class effects, and source-grounded realizations for ${ontologyMechanisms.map((m) => m.id).join(" ")}`,
     mechanisms: members.map((m) => buildMechanism(m, loadDossier(m.id))),
     cross_cutting_perception: crossCutting.map((m) => buildMechanism(m, loadDossier(m.id))),
     effects: effectsFor(ontologyMechanisms, effectsByMechanism),
-    realizations: realizationsFor(ontologyMechanisms),
+    realizations: realizationsFor(ontologyMechanisms, realizationsByMechanism),
+    implementations: implementationsFor(ontologyMechanisms),
     interactions: buildInteractions(members, crossCutting, gradeOf, authored),
     context_weights: buildContextWeights(members),
     hard_boundaries: buildHardBoundaries(members),
@@ -487,12 +513,34 @@ function renderRealization(realization: PackRealization): string[] {
     lines.push(`    effect_id: ${realization.effect_id}`);
   }
   lines.push(
-    `    artifact_types: ${flow(realization.artifact_types)}`,
-    `    product_requirements: ${scalarFlow(realization.product_requirements)}`,
-    `    generation_directive: ${scalar(realization.generation_directive)}`,
-    `    copy_formulas: ${scalarFlow(realization.copy_formulas)}`,
-    `    metrics: ${flow(realization.metrics)}`,
-    `    observed_effects: ${scalarFlow(realization.observed_effects)}`,
+    `    term: ${scalar(realization.term)}`,
+    `    description_as_reported: ${scalar(realization.description_as_reported)}`,
+    `    artifact_context: ${scalarFlow(realization.artifact_context)}`,
+    `    confidence: ${realization.confidence}`,
+    `    source_record_ids: ${flow(realization.source_record_ids)}`,
+    "",
+  );
+  return lines;
+}
+
+function renderImplementation(implementation: PackImplementation): string[] {
+  const lines = [
+    `  - id: ${implementation.id}`,
+    `    mechanism_id: ${implementation.mechanism_id}`,
+  ];
+  if (implementation.effect_id !== undefined) {
+    lines.push(`    effect_id: ${implementation.effect_id}`);
+  }
+  if (implementation.realization_ids !== undefined) {
+    lines.push(`    realization_ids: ${flow(implementation.realization_ids)}`);
+  }
+  lines.push(
+    `    artifact_types: ${flow(implementation.artifact_types)}`,
+    `    product_requirements: ${scalarFlow(implementation.product_requirements)}`,
+    `    generation_directive: ${scalar(implementation.generation_directive)}`,
+    `    copy_formulas: ${scalarFlow(implementation.copy_formulas)}`,
+    `    metrics: ${flow(implementation.metrics)}`,
+    `    observed_effects: ${scalarFlow(implementation.observed_effects)}`,
     "",
   );
   return lines;
@@ -577,19 +625,34 @@ function renderDatasheet(sheet: PackDatasheet): string {
 
   lines.push(
     BANNER,
-    "# LAYER 3 — REALIZATIONS (concrete implementations)",
+    "# LAYER 3 — REALIZATIONS (source-grounded evidence palette)",
     BANNER,
     "realizations:",
     "",
   );
   if (sheet.realizations.length === 0) {
     lines.push(
-      "  [] # no realizations exist in this pack's mechanism records",
+      "  [] # no approved source-grounded realizations exist for this pack",
       "",
     );
   } else {
     for (const realization of sheet.realizations) {
       lines.push(...renderRealization(realization));
+    }
+  }
+
+  lines.push(
+    BANNER,
+    "# IMPLEMENTATIONS (product-authored generator directives)",
+    BANNER,
+    "implementations:",
+    "",
+  );
+  if (sheet.implementations.length === 0) {
+    lines.push("  [] # no product-authored implementation directives", "");
+  } else {
+    for (const implementation of sheet.implementations) {
+      lines.push(...renderImplementation(implementation));
     }
   }
 
@@ -658,12 +721,12 @@ function renderDatasheet(sheet: PackDatasheet): string {
 
 function voiceViolations(text: string): string[] {
   const violations: string[] = [];
-  let inRealizations = false;
+  let inImplementations = false;
   for (const line of text.split("\n")) {
-    if (line === "realizations:") inRealizations = true;
-    if (line === "interactions:") inRealizations = false;
+    if (line === "implementations:") inImplementations = true;
+    if (line === "interactions:") inImplementations = false;
     if (
-      !inRealizations &&
+      !inImplementations &&
       !line.trimStart().startsWith("#") &&
       VOICE_TOKENS.test(line)
     ) {
@@ -795,6 +858,16 @@ function main(): void {
     effectsByMechanism.set(effect.mechanism_id, indexed);
   }
 
+  const realizationsByMechanism = new Map<string, Realization[]>();
+  for (const file of listJsonFilesRecursive(REALIZATIONS_DIR)) {
+    if (file.endsWith("realization.schema.json")) continue;
+    const realization = JSON.parse(readFileSync(file, "utf-8")) as Realization;
+    const indexed = realizationsByMechanism.get(realization.mechanism_id) ?? [];
+    indexed.push(realization);
+    indexed.sort((a, b) => a.id.localeCompare(b.id));
+    realizationsByMechanism.set(realization.mechanism_id, indexed);
+  }
+
   // Cross-cutting perception (Step 5, D-066): every full record whose L0 parent
   // is flagged cross_cutting (today only S7) is emitted into EVERY pack as a
   // distinct top-level section — no pack-map entry, no per-element listing.
@@ -843,6 +916,7 @@ function main(): void {
       crossCuttingMechanisms,
       authoredInteractions,
       effectsByMechanism,
+      realizationsByMechanism,
     );
     const text = renderDatasheet(sheet);
 

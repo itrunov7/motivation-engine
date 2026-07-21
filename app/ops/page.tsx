@@ -5,6 +5,8 @@ import {
   KNOWN_CONNECTOR_IDS,
   computeBudgetSnapshot,
   defaultConnectorConfig,
+  extractionPriceState,
+  loadExtractionOpsConfigFromDisk,
   loadConnectorLastRun,
   loadOpsConnectorConfigFromDisk,
 } from "@/lib/ops";
@@ -23,6 +25,7 @@ export const dynamic = "force-dynamic";
 export default function OpsPage() {
   const writeEnabled = isOpsWriteEnabled();
   const budget = computeBudgetSnapshot();
+  const extraction = loadExtractionOpsConfigFromDisk() ?? null;
 
   // Every known mechanism resolved to its L0 parent node, so the target picker
   // can group ids under node headings (motivational S1–S6 vs cross-cutting S7)
@@ -76,6 +79,8 @@ export default function OpsPage() {
       <OpsClient
         writeEnabled={writeEnabled}
         budget={budget}
+        extraction={extraction}
+        extractionPriceState={extraction ? extractionPriceState(extraction) : "unconfigured"}
         connectors={connectors}
         mechanismOptions={mechanismOptions}
       />

@@ -1,0 +1,107 @@
+# Grounded corpus extraction — dispatch only (D-075/D-078).
+# Dry runs make no LLM calls and upload quote.json. Real runs are budget-gated,
+# write only proposals plus the extraction cost manifest, validate, and commit.
+name: extract
+
+run-name: >-
+  extract ${{ inputs.mode }} — ${{ inputs.scope_kind }}=${{ inputs.scope_id }}${{ inputs.dry_run == 'true' && ' (dry-run)' || '' }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "One task type: effects, realizations, interactions, dissent"
+        required: true
+        type: choice
+        options:
+          - effects
+          - realizations
+          - interactions
+          - dissent
+      scope_kind:
+        description: "Scope resolver"
+        required: true
+        type: choice
+        options:
+          - mechanism
+          - pack
+          - segment
+      scope_id:
+        description: "Mechanism, pack, or segment id"
+        required: true
+        type: string
+      dry_run:
+        description: "Estimate tokens and USD without calling OpenRouter"
+        required: true
+        type: boolean
+        default: true
+
+concurrency:
+  group: extraction
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  quote:
+    if: inputs.dry_run == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Compute deterministic extraction quote
+        run: >-
+          npm run extract --
+          quote
+          mode=${{ inputs.mode }}
+          ${{ inputs.scope_kind }}=${{ inputs.scope_id }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: extraction-quote
+          path: quote.json
+          retention-days: 1
+
+  run:
+    if: inputs.dry_run != true
+    runs-on: ubuntu-latest
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Enforce quote and budget gates
+        run: >-
+          npm run extract --
+          quote
+          mode=${{ inputs.mode }}
+          ${{ inputs.scope_kind }}=${{ inputs.scope_id }}
+      - name: Extract grounded proposals
+        run: >-
+          npm run extract --
+          run
+          mode=${{ inputs.mode }}
+          ${{ inputs.scope_kind }}=${{ inputs.scope_id }}
+      - name: Validate generated proposals and manifest
+        run: npm run validate
+      - name: Commit proposals and extraction accounting
+        run: |
+          if [ -n "$(git status --porcelain proposals corpora/extraction)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add proposals corpora/extraction
+            git commit -m "data: extract ${{ inputs.mode }} for ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
+            git push
+          else
+            echo "No novel grounded proposals — nothing to commit."
+          fi

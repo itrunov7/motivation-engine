@@ -109,6 +109,8 @@ export interface Implementation {
   id: string;
   /** Optional first-class L2 effect this L3 realization embodies. */
   effect_id?: string;
+  /** Optional descriptive realizations that ground this product-authored directive. */
+  realization_ids?: string[];
   artifact_types: ArtifactType[];
   product_requirements: string[];
   generation_directive: string;
@@ -250,6 +252,23 @@ export interface Effect {
   provenance: KnowledgeProvenanceItem[];
 }
 
+/**
+ * /realizations/{mechanism_id}/{id}.json — descriptive evidence about an
+ * interface, copy, or flow embodiment reported by a source. This is distinct
+ * from Implementation, which is a product-authored generator directive.
+ */
+export interface Realization {
+  $schema?: string;
+  id: string;
+  mechanism_id: string;
+  effect_id?: string;
+  term: string;
+  description_as_reported: string;
+  artifact_context: string[];
+  provenance: KnowledgeProvenanceItem[];
+  confidence: number;
+}
+
 // ---------- Dossier, admission gate (§3.3) ----------
 
 /** Axis score, integer 0–3. */
@@ -361,7 +380,7 @@ export interface ProposalEnvelope<TType extends ProposalType, TPayload> {
 }
 
 export type EffectProposal = ProposalEnvelope<"effect", Effect>;
-export type RealizationProposal = ProposalEnvelope<"realization", Implementation>;
+export type RealizationProposal = ProposalEnvelope<"realization", Realization>;
 export type InteractionProposal = ProposalEnvelope<
   "interaction",
   InteractionRecord
@@ -812,6 +831,28 @@ export interface OpsBudget {
   };
 }
 
+export interface ExtractionModelTierConfig {
+  model_id: string | null;
+  input_usd_per_token: number | null;
+  output_usd_per_token: number | null;
+  max_tokens_per_call: number;
+}
+
+/** /corpora/_ops/extraction.json — versioned OpenRouter routing and caps. */
+export interface ExtractionOpsConfig {
+  version: string;
+  prices_verified_on: string | null;
+  tiers: {
+    cheap: ExtractionModelTierConfig;
+    strong: ExtractionModelTierConfig;
+  };
+  limits: {
+    per_run_tokens: number;
+    monthly_tokens: number;
+    records_per_batch: number;
+  };
+}
+
 /**
  * /corpora/_ops/connectors/{id}.json — one connector's operating config
  * (D-024). Reader mirror of tools/connectors/types.ts OpsConnectorConfig.
@@ -1028,11 +1069,25 @@ export interface PackEffect {
 }
 
 /** LAYER 3 — one concrete realization projected from mechanism.implementations. */
+/** Source-grounded, descriptive evidence palette entry. */
 export interface PackRealization {
+  id: string;
+  mechanism_id: string;
+  effect_id?: string;
+  term: string;
+  description_as_reported: string;
+  artifact_context: string[];
+  confidence: number;
+  source_record_ids: string[];
+}
+
+/** Product-authored directive projected from mechanism.implementations. */
+export interface PackImplementation {
   id: string;
   mechanism_id: string;
   /** Optional first-class L2 effect this realization embodies. */
   effect_id?: string;
+  realization_ids?: string[];
   artifact_types: ArtifactType[];
   product_requirements: string[];
   generation_directive: string;
@@ -1111,6 +1166,7 @@ export interface PackDatasheet {
   cross_cutting_perception: PackMechanism[];
   effects: PackEffect[];
   realizations: PackRealization[];
+  implementations: PackImplementation[];
   interactions: PackInteraction[];
   context_weights: PackContextWeight[];
   /** Each entry is a single-key map, e.g. { "fake-scarcity": "forbidden — ..." }. */
