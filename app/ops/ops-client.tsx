@@ -12,6 +12,7 @@
 import { useCallback, useEffect, useState, useTransition } from "react";
 import type {
   BudgetSnapshot,
+  ExtractionBudgetState,
   ExtractionOpsConfig,
   ExtractionPriceState,
   ExtractionRunSummary,
@@ -64,6 +65,7 @@ export interface OpsClientProps {
   writeEnabled: boolean;
   budget: BudgetSnapshot;
   extraction: ExtractionOpsConfig | null;
+  extractionBudgetState: ExtractionBudgetState | null;
   extractionRun: ExtractionRunSummary | null;
   extractionPriceState: ExtractionPriceState;
   connectors: ConnectorView[];
@@ -289,11 +291,13 @@ function BudgetPanel({
   writeEnabled,
   budget,
   extraction,
+  extractionBudgetState,
   extractionPriceState,
 }: {
   writeEnabled: boolean;
   budget: BudgetSnapshot;
   extraction: ExtractionOpsConfig | null;
+  extractionBudgetState: ExtractionBudgetState | null;
   extractionPriceState: ExtractionPriceState;
 }) {
   const [usd, setUsd] = useState(budget.caps.usd);
@@ -321,6 +325,43 @@ function BudgetPanel({
           OpenRouter extraction share these ceilings.
         </p>
       </header>
+
+      {extractionBudgetState && (
+        <div
+          className="mt-4 rounded-md border px-4 py-3"
+          style={{
+            borderColor:
+              extractionBudgetState.tone === "ok"
+                ? `${C.accent}55`
+                : extractionBudgetState.tone === "warn"
+                  ? `${C.amber}55`
+                  : `${C.alert}55`,
+            backgroundColor:
+              extractionBudgetState.tone === "ok"
+                ? `${C.accent}0D`
+                : extractionBudgetState.tone === "warn"
+                  ? `${C.amber}0D`
+                  : `${C.alert}0D`,
+          }}
+        >
+          <p
+            className="font-mono text-[10px] uppercase tracking-widest"
+            style={{
+              color:
+                extractionBudgetState.tone === "ok"
+                  ? C.accent
+                  : extractionBudgetState.tone === "warn"
+                    ? C.amber
+                    : C.alert,
+            }}
+          >
+            {extractionBudgetState.label}
+          </p>
+          <p className="mt-1 text-xs leading-relaxed text-[#C7D7CC]">
+            {extractionBudgetState.message}
+          </p>
+        </div>
+      )}
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div className="rounded-md border border-[#243329] bg-[#1A2620] p-4">
@@ -378,6 +419,15 @@ function BudgetPanel({
             </p>
           </div>
         </div>
+        {extraction && extractionBudgetState && (
+          <div className="mt-3">
+            <ProgressBar
+              used={extractionBudgetState.tokensUsed}
+              cap={extraction.limits.monthly_tokens}
+              unit="tokens"
+            />
+          </div>
+        )}
         <p className="mt-3 text-xs leading-relaxed text-[#8CA495]">
           {extraction
             ? `Token cap: ${extraction.limits.monthly_tokens.toLocaleString()} monthly · ${extraction.limits.per_run_tokens.toLocaleString()} per run. Quality gates: confidence ≥ ${Math.round(extraction.limits.confidence_floor * 100)}% · duplicate similarity ≥ ${Math.round(extraction.limits.duplicate_similarity * 100)}% · max ${extraction.limits.max_proposals_per_mechanism} proposals per mechanism. Prices verified: ${extraction.prices_verified_on ?? "not yet configured"}. Routing: cheap ${extraction.tiers.cheap.model_id ?? "unset"} · strong ${extraction.tiers.strong.model_id ?? "unset"}.`
@@ -1499,6 +1549,7 @@ export default function OpsClient({
   writeEnabled,
   budget,
   extraction,
+  extractionBudgetState,
   extractionRun,
   extractionPriceState,
   connectors,
@@ -1564,6 +1615,7 @@ export default function OpsClient({
         writeEnabled={writeEnabled}
         budget={budget}
         extraction={extraction}
+        extractionBudgetState={extractionBudgetState}
         extractionPriceState={extractionPriceState}
       />
       <ExtractionRunPanel run={extractionRun} />

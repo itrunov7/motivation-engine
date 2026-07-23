@@ -140,6 +140,15 @@ export type RunStatus = "success" | "partial" | "failed";
  * pure-fetch run computes to 0; it becomes non-zero the moment a priced job
  * (an LLM call) reports token usage.
  */
+export interface ManifestModelCost {
+  tier: "cheap" | "strong";
+  model_id: string;
+  api_calls: number;
+  tokens_in: number;
+  tokens_out: number;
+  estimated_usd: number;
+}
+
 export interface ManifestCost {
   /** Outbound HTTP requests made this run, counting retries (the honest
    *  request cost). Filled by the polite-fetch layer (lib/http.ts). */
@@ -152,6 +161,8 @@ export interface ManifestCost {
   tokens_out: number | null;
   /** Computed dollar estimate; 0 for the free public APIs (D-011). */
   estimated_usd: number;
+  /** Present for paid extraction runs; omitted by public-API connectors. */
+  models?: ManifestModelCost[];
 }
 
 export interface ManifestRun {

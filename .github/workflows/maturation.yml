@@ -201,7 +201,8 @@ jobs:
       # ---------- Run Actions-only extraction tasks (D-083) ----------
       # Each task is quoted immediately before it runs. The quote reads the
       # manifest left by prior tasks, so token/USD/call accounting is cumulative
-      # across the batch. A blocked quote is deferred, never forced.
+      # across the batch. A blocked quote is deferred, never forced; exhausted
+      # monthly extraction caps are recorded explicitly as a scheduled pause.
       - name: Run budget-approved extraction tasks
         id: extraction
         if: steps.harvest.outputs.failed != 'true'
@@ -217,8 +218,16 @@ jobs:
               reason="quote allowed; extraction completed"
             else
               action=defer
-              reason=$(< extraction-quote.log)
-              reason="${reason: -1000}"
+              quote_reasons=$(jq -r '.reasons | join("; ")' quote.json 2>/dev/null || true)
+              if jq -e '.reasons | any(test("monthly (USD|token) cap"))' quote.json >/dev/null 2>&1; then
+                reason="paused — monthly extraction cap exhausted: ${quote_reasons}"
+                echo "::warning::${reason}"
+              elif [ -n "$quote_reasons" ]; then
+                reason="quote blocked: ${quote_reasons}"
+              else
+                reason=$(< extraction-quote.log)
+                reason="${reason: -1000}"
+              fi
             fi
             jq \
               --arg action "$action" \

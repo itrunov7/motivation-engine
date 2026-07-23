@@ -586,12 +586,23 @@ export type CorpusRunStatus = "success" | "partial" | "failed";
  * future LLM jobs (null until an engine exists); estimated_usd is computed,
  * 0 for the free D-011 public APIs.
  */
+export interface CorpusManifestModelCost {
+  tier: "cheap" | "strong";
+  model_id: string;
+  api_calls: number;
+  tokens_in: number;
+  tokens_out: number;
+  estimated_usd: number;
+}
+
 export interface CorpusManifestCost {
   api_calls: number;
   duration_s: number;
   tokens_in: number | null;
   tokens_out: number | null;
   estimated_usd: number;
+  /** Exact model-level accounting for paid extraction runs (D-087). */
+  models?: CorpusManifestModelCost[];
 }
 
 /** One manifest run entry (last_run / run_history). */

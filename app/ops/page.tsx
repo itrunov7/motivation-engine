@@ -5,6 +5,7 @@ import { isOpsWriteEnabled } from "@/lib/github";
 import {
   KNOWN_CONNECTOR_IDS,
   computeBudgetSnapshot,
+  computeExtractionBudgetState,
   defaultConnectorConfig,
   extractionPriceState,
   loadExtractionOpsConfigFromDisk,
@@ -31,6 +32,9 @@ export default function OpsPage() {
   const writeEnabled = isOpsWriteEnabled();
   const budget = computeBudgetSnapshot();
   const extraction = loadExtractionOpsConfigFromDisk() ?? null;
+  const extractionBudgetState = extraction
+    ? computeExtractionBudgetState(budget, extraction)
+    : null;
   const extractionRun = loadExtractionRunSummary() ?? null;
 
   // Every known mechanism resolved to its L0 parent node, so the target picker
@@ -106,6 +110,7 @@ export default function OpsPage() {
         writeEnabled={writeEnabled}
         budget={budget}
         extraction={extraction}
+        extractionBudgetState={extractionBudgetState}
         extractionRun={extractionRun}
         extractionPriceState={extraction ? extractionPriceState(extraction) : "unconfigured"}
         connectors={connectors}

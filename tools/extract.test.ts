@@ -16,6 +16,7 @@ import type {
   RealizationCorpusFile,
 } from "../lib/types";
 import {
+  buildExtractionManifestCost,
   buildQuote,
   extractionSummaryParams,
   groundedProvenance,
@@ -91,6 +92,49 @@ test("quotes are deterministic and enforce the per-run token cap", () => {
   );
   assert.equal(blocked.allowed, false);
   assert(blocked.reasons.some((reason) => reason.includes("per-run cap")));
+});
+
+test("manifest cost accounts for each configured model and reconciles totals", () => {
+  const cost = buildExtractionManifestCost(
+    configured,
+    {
+      input: 1_500,
+      output: 500,
+      calls: 3,
+      byTier: {
+        cheap: { input: 1_000, output: 400, calls: 2 },
+        strong: { input: 500, output: 100, calls: 1 },
+      },
+    },
+    12.5,
+  );
+  assert.deepEqual(
+    cost.models?.map((model) => [model.tier, model.model_id, model.api_calls]),
+    [
+      ["cheap", "owner/cheap", 2],
+      ["strong", "owner/strong", 1],
+    ],
+  );
+  assert.equal(cost.tokens_in, 1_500);
+  assert.equal(cost.tokens_out, 500);
+  assert.equal(
+    cost.estimated_usd,
+    cost.models?.reduce((sum, model) => sum + model.estimated_usd, 0),
+  );
+});
+
+test("monthly token exhaustion blocks the estimate before extraction", () => {
+  const quote = buildQuote(
+    "effects",
+    resolveScope({ mechanism: "CL-14" }),
+    {
+      ...configured,
+      limits: { ...configured.limits, monthly_tokens: 0 },
+    },
+    new Date("2026-07-21T10:00:00.000Z"),
+  );
+  assert.equal(quote.allowed, false);
+  assert(quote.reasons.some((reason) => reason.includes("monthly token cap")));
 });
 
 test("pricing freshness is computed from the verification date", () => {

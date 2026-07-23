@@ -89,7 +89,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Enforce quote and budget gates
+      # This estimate is deliberately a separate step before any process with
+      # OPENROUTER_API_KEY can call a model (D-087).
+      - name: Estimate cost and enforce budget gates before extraction
         run: >-
           npm run extract --
           quote

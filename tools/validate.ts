@@ -44,6 +44,7 @@ import {
   RUN_HISTORY_LIMIT,
   type Manifest,
   type ManifestCost,
+  type ManifestModelCost,
   type ManifestDataFile,
   type StoredManifestRun,
 } from "./connectors/types";
@@ -494,15 +495,39 @@ type _ManifestContractInSync = AssertAssignable<Manifest, CorpusManifest>;
 // a field renamed, removed, or added in tools/connectors/types.ts without a
 // schema update no longer compiles.
 // Cost accounting block (D-022): api_calls and duration filled by connectors
-// now; tokens reserved for future LLM jobs (number OR null); estimated_usd
-// computed. Optional on the run — runs recorded before D-022 carry no block —
-// but when present every key is required and no extras are allowed.
+// now; extraction fills token and optional model-level accounting (D-087).
+// Optional on the run — runs recorded before D-022 carry no block — but when
+// present every aggregate key is required and no extras are allowed.
+const manifestModelCostProperties = {
+  tier: { type: "string", enum: ["cheap", "strong"] },
+  model_id: { type: "string", minLength: 1 },
+  api_calls: { type: "integer", minimum: 0 },
+  tokens_in: { type: "integer", minimum: 0 },
+  tokens_out: { type: "integer", minimum: 0 },
+  estimated_usd: { type: "number", minimum: 0 },
+} as const satisfies Record<keyof ManifestModelCost, unknown>;
+
+const manifestModelCostSchema = {
+  type: "object",
+  properties: manifestModelCostProperties,
+  required: [
+    "tier",
+    "model_id",
+    "api_calls",
+    "tokens_in",
+    "tokens_out",
+    "estimated_usd",
+  ] satisfies readonly (keyof ManifestModelCost)[],
+  additionalProperties: false,
+} as const;
+
 const manifestCostProperties = {
   api_calls: { type: "integer", minimum: 0 },
   duration_s: { type: "number", minimum: 0 },
   tokens_in: { type: ["integer", "null"], minimum: 0 },
   tokens_out: { type: ["integer", "null"], minimum: 0 },
   estimated_usd: { type: "number", minimum: 0 },
+  models: { type: "array", items: manifestModelCostSchema },
 } as const satisfies Record<keyof ManifestCost, unknown>;
 
 const manifestCostSchema = {

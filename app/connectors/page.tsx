@@ -473,6 +473,12 @@ function RollupCells({ row }: { row: MonthlyRollupRow }) {
         {row.apiCalls}
       </td>
       <td className="whitespace-nowrap px-3 py-2.5 text-right font-mono text-xs text-[#8CA495]">
+        {row.tokensIn.toLocaleString()}
+      </td>
+      <td className="whitespace-nowrap px-3 py-2.5 text-right font-mono text-xs text-[#8CA495]">
+        {row.tokensOut.toLocaleString()}
+      </td>
+      <td className="whitespace-nowrap px-3 py-2.5 text-right font-mono text-xs text-[#8CA495]">
         {formatDuration(row.durationS)}
       </td>
       <td className="whitespace-nowrap px-3 py-2.5 text-right font-mono text-xs text-[#8CA495]">
@@ -491,11 +497,9 @@ function MonthlyRollupPanel({ rollup }: { rollup: MonthlyRollup }) {
         </h2>
         <p className="mt-1 text-sm text-[#8CA495]">
           Runs this calendar month ({rollup.month} UTC), aggregated per
-          connector from each manifest&apos;s run_history (D-022). api_calls
-          counts outbound requests including retries; estimated_usd is computed
-          and reads $0.00 while every source is a free D-011 public API — it
-          becomes non-zero the moment a priced job (a future LLM call) reports
-          token usage.
+          corpus from each manifest&apos;s run_history (D-022/D-087). api_calls
+          counts outbound requests including retries; extraction rows report
+          actual input/output token usage and model-priced estimated_usd.
         </p>
       </header>
       {rollup.empty ? (
@@ -511,13 +515,13 @@ function MonthlyRollupPanel({ rollup }: { rollup: MonthlyRollup }) {
         </div>
       ) : (
         <div className="mt-4 overflow-x-auto rounded-md border border-[#243329]">
-          <table className="w-full min-w-[560px] border-collapse text-left">
+          <table className="w-full min-w-[760px] border-collapse text-left">
             <thead>
               <tr className="border-b border-[#243329] bg-[#1A2620]">
                 <th className="px-3 py-2 font-mono text-[10px] font-normal uppercase tracking-wider text-[#7C93A8]">
-                  connector
+                  corpus
                 </th>
-                {["runs", "api_calls", "duration", "est. usd"].map((header) => (
+                {["runs", "api_calls", "tokens in", "tokens out", "duration", "est. usd"].map((header) => (
                   <th
                     key={header}
                     className="px-3 py-2 text-right font-mono text-[10px] font-normal uppercase tracking-wider text-[#7C93A8]"

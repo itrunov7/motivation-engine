@@ -41,6 +41,7 @@ import type {
   ArtifactType,
   AxisScore,
   CorpusManifest,
+  CorpusManifestCost,
   CorpusManifestRun,
   DossierDraftAxis,
   DossierDraftPayload,
@@ -270,7 +271,7 @@ export function extractionSummaryParams(
   };
 }
 
-interface Usage {
+export interface Usage {
   input: number;
   output: number;
   calls: number;
@@ -1545,29 +1546,53 @@ function proposalValidator(): ValidateFunction {
   return ajv.compile(readJson<object>(join(ROOT, "proposals/proposal.schema.json")));
 }
 
-function computeUsd(
+export function buildExtractionManifestCost(
   config: ExtractionOpsConfig,
   usage: Usage,
-): number {
-  const usd = (["cheap", "strong"] as const).reduce((sum, name) => {
-    const tier = configuredTier(config, name);
-    const tierUsage = usage.byTier[name];
-    return (
-      sum +
-      tierUsage.input * tier.input_usd_per_token +
-      tierUsage.output * tier.output_usd_per_token
-    );
-  }, 0);
-  return Math.round(usd * 1e8) / 1e8;
+  durationS: number,
+): CorpusManifestCost {
+  const models = (["cheap", "strong"] as const)
+    .map((name) => {
+      const tier = configuredTier(config, name);
+      const tierUsage = usage.byTier[name];
+      return {
+        tier: name,
+        model_id: tier.model_id,
+        api_calls: tierUsage.calls,
+        tokens_in: tierUsage.input,
+        tokens_out: tierUsage.output,
+        estimated_usd:
+          Math.round(
+            (
+              tierUsage.input * tier.input_usd_per_token +
+              tierUsage.output * tier.output_usd_per_token
+            ) * 1e8,
+          ) / 1e8,
+      };
+    })
+    .filter((model) => model.api_calls > 0);
+  return {
+    api_calls: usage.calls,
+    duration_s: durationS,
+    tokens_in: usage.input,
+    tokens_out: usage.output,
+    estimated_usd:
+      Math.round(models.reduce((sum, model) => sum + model.estimated_usd, 0) * 1e8) / 1e8,
+    models,
+  };
+}
+
+function computeUsd(config: ExtractionOpsConfig, usage: Usage): number {
+  return buildExtractionManifestCost(config, usage, 0).estimated_usd;
 }
 
 function writeManifest(
   mode: ExtractionMode,
   scope: ExtractionScope,
   startedAt: Date,
+  config: ExtractionOpsConfig,
   usage: Usage,
   stats: ExtractionStats,
-  estimatedUsd: number,
   filesWritten: number,
 ): void {
   mkdirSync(EXTRACTION_DIR, { recursive: true });
@@ -1586,13 +1611,7 @@ function writeManifest(
     ...(stats.dropped_ungrounded > 0
       ? { warnings: { ungrounded_dropped: true } }
       : {}),
-    cost: {
-      api_calls: usage.calls,
-      duration_s: duration,
-      tokens_in: usage.input,
-      tokens_out: usage.output,
-      estimated_usd: estimatedUsd,
-    },
+    cost: buildExtractionManifestCost(config, usage, duration),
   };
   const previous = existsSync(MANIFEST_FILE)
     ? readJson<CorpusManifest>(MANIFEST_FILE)
@@ -1894,9 +1913,9 @@ export async function runExtraction(args: {
     args.mode,
     args.scope,
     startedAt,
+    args.config,
     context.usage,
     stats,
-    computeUsd(args.config, context.usage),
     proposals.length + pendingWrites.size,
   );
   reportExtractProgress(

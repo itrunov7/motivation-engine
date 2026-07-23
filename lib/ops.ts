@@ -91,7 +91,7 @@ export function isAllowedOpsWritePath(path: string): boolean {
  * priced (LLM) jobs; `calls` is the meaningful ceiling today.
  */
 export const DEFAULT_BUDGET: OpsBudget = {
-  monthly_caps: { usd: 5, calls: 20000 },
+  monthly_caps: { usd: 100, calls: 20000 },
 };
 
 export const DEFAULT_EVIDENCE_SATURATION = {
@@ -580,6 +580,81 @@ export interface BudgetSnapshot {
   caps: { usd: number; calls: number };
   used: { usd: number; calls: number; tokensIn: number; tokensOut: number };
   remaining: { usd: number; calls: number };
+}
+
+export interface ExtractionBudgetState {
+  level: "normal" | "warning" | "paused";
+  tone: "ok" | "warn" | "err";
+  label: string;
+  message: string;
+  usdPercent: number;
+  tokenPercent: number;
+  tokensUsed: number;
+  tokensRemaining: number;
+}
+
+function usagePercent(used: number, cap: number): number {
+  if (cap <= 0) return used > 0 ? 100 : 0;
+  return (used / cap) * 100;
+}
+
+/** Computed paid-extraction state used by both the cockpit and tests (D-087). */
+export function computeExtractionBudgetState(
+  budget: BudgetSnapshot,
+  extraction: ExtractionOpsConfig,
+): ExtractionBudgetState {
+  const tokensUsed = budget.used.tokensIn + budget.used.tokensOut;
+  const tokenCap = extraction.limits.monthly_tokens;
+  const usdPercent = usagePercent(budget.used.usd, budget.caps.usd);
+  const tokenPercent = usagePercent(tokensUsed, tokenCap);
+  const usdExhausted = budget.caps.usd <= 0 || budget.used.usd >= budget.caps.usd;
+  const tokensExhausted = tokenCap <= 0 || tokensUsed >= tokenCap;
+  const tokensRemaining = Math.max(0, tokenCap - tokensUsed);
+
+  if (usdExhausted || tokensExhausted) {
+    const exhausted = [
+      ...(usdExhausted ? ["monthly USD cap"] : []),
+      ...(tokensExhausted ? ["monthly token cap"] : []),
+    ].join(" and ");
+    return {
+      level: "paused",
+      tone: "err",
+      label: "scheduled extraction paused",
+      message: `Scheduled extraction is paused — ${exhausted} exhausted. It resumes next UTC month or after an owner-reviewed cap increase.`,
+      usdPercent,
+      tokenPercent,
+      tokensUsed,
+      tokensRemaining,
+    };
+  }
+
+  if (usdPercent >= 80 || tokenPercent >= 80) {
+    const nearCap = [
+      ...(usdPercent >= 80 ? ["monthly USD cap"] : []),
+      ...(tokenPercent >= 80 ? ["monthly token cap"] : []),
+    ].join(" and ");
+    return {
+      level: "warning",
+      tone: "warn",
+      label: "budget alert",
+      message: `Extraction has reached at least 80% of the ${nearCap}; scheduled runs still quote fail-closed before execution.`,
+      usdPercent,
+      tokenPercent,
+      tokensUsed,
+      tokensRemaining,
+    };
+  }
+
+  return {
+    level: "normal",
+    tone: "ok",
+    label: "within budget",
+    message: "Extraction is below the 80% monthly alert threshold.",
+    usdPercent,
+    tokenPercent,
+    tokensUsed,
+    tokensRemaining,
+  };
 }
 
 export function computeBudgetSnapshot(now: Date = new Date()): BudgetSnapshot {
