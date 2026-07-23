@@ -521,17 +521,67 @@ export async function getRunCurrentPhase(
 }
 
 interface WorkflowJob {
+  id: number;
   name: string;
   conclusion: string | null;
   steps?: { name: string; conclusion: string | null }[];
 }
 
 /**
+ * The real error line from a job's raw log, so /ops shows an operator WHAT
+ * broke, not just which step (D-088). GitHub prefixes every log line with an
+ * ISO timestamp; the thrown Error.message our tools print via console.error
+ * lands as its own line just before the runner's own
+ * "##[error]Process completed with exit code N". We strip timestamps and
+ * workflow-command/noise lines, prefer a meaningful "##[error]" line, and
+ * otherwise take the last content line — capped so a giant dump (e.g. a
+ * printed quote JSON) can never flood the UI. Returns null when nothing
+ * useful survives.
+ */
+export function extractLogErrorTail(log: string): string | null {
+  const content = log
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^\S+Z\s/, "").trim())
+    // A leading ##[error] just marks the runner's red channel; the message is
+    // what matters, so strip the prefix rather than treat it specially.
+    .map((line) => line.replace(/^##\[error\]/, "").trim())
+    .filter(
+      (line) =>
+        line.length > 0 &&
+        // Group markers, npm/shell echoes, and the runner's own exit-code line
+        // are noise — the thrown Error.message is the useful tail.
+        !/^##\[(group|endgroup)\]/.test(line) &&
+        !/^> /.test(line) &&
+        !/^shell: /.test(line) &&
+        !/^Process completed with exit code/.test(line),
+    );
+  const tail = content.at(-1);
+  if (!tail) return null;
+  return tail.length > 300 ? `${tail.slice(0, 297)}…` : tail;
+}
+
+async function getJobLogErrorTail(env: GithubOpsEnv, jobId: number): Promise<string | null> {
+  try {
+    const res = await ghFetch(
+      env,
+      `/repos/${env.owner}/${env.repo}/actions/jobs/${jobId}/logs`,
+    );
+    if (!res.ok) return null;
+    return extractLogErrorTail(await res.text());
+  } catch {
+    return null;
+  }
+}
+
+/**
  * A short, human-readable reason a completed run did not succeed, read from
  * the run's jobs: the first non-successful job and its first failed step
- * (D-025). Used by the /ops poll to show WHY a dry run produced no estimate,
- * instead of the generic "no quote" message. Best-effort — falls back to the
- * run's own conclusion when the jobs list is empty or unreadable.
+ * (D-025). The failed step's raw log is fetched best-effort and the real
+ * error line appended, so /ops shows WHY — e.g.
+ * `the "quote" job failed at step "…": corpora/_ops/extraction.json is
+ * invalid: limits.per_run_tokens must be an integer ≥ 1` (D-088) — instead of
+ * a generic step name. Falls back to the run's own conclusion when the jobs
+ * list is empty or unreadable.
  */
 export async function getRunFailureSummary(
   env: GithubOpsEnv,
@@ -553,9 +603,11 @@ export async function getRunFailureSummary(
     const failedStep = (failedJob.steps ?? []).find(
       (step) => step.conclusion !== null && step.conclusion !== "success" && step.conclusion !== "skipped",
     );
+    const errorTail = await getJobLogErrorTail(env, failedJob.id);
+    const detail = errorTail ? `: ${errorTail}` : "";
     return failedStep
-      ? `the "${failedJob.name}" job failed at step "${failedStep.name}" (${failedStep.conclusion})`
-      : `the "${failedJob.name}" job did not succeed (${failedJob.conclusion})`;
+      ? `the "${failedJob.name}" job failed at step "${failedStep.name}" (${failedStep.conclusion})${detail}`
+      : `the "${failedJob.name}" job did not succeed (${failedJob.conclusion})${detail}`;
   } catch {
     return fallback;
   }

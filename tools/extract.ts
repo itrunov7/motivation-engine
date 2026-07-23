@@ -27,6 +27,7 @@ import {
   computeBudgetSnapshot,
   extractionPriceState,
   loadExtractionOpsConfigFromDisk,
+  validateExtractionOpsConfig,
 } from "../lib/ops";
 import {
   groundingErrors,
@@ -1937,12 +1938,27 @@ async function main(): Promise<void> {
   }
   const config = loadExtractionOpsConfigFromDisk();
   if (!config) throw new Error("Missing corpora/_ops/extraction.json");
+  // A missing/stale/malformed field must fail with an explicit named message,
+  // never silently drive the estimator to NaN (D-088). The shared validator is
+  // the SAME one CI and the /ops write path use, so the quote can never accept
+  // a config the rest of the fleet would reject.
+  const configErrors = validateExtractionOpsConfig(config);
+  if (configErrors.length > 0) {
+    throw new Error(
+      `corpora/_ops/extraction.json is invalid: ${configErrors.join("; ")}`,
+    );
+  }
   const scope = resolveScope(params, { includeSeeds: isDraftMode(params.mode) });
   if (command === "quote") {
     const quote = buildQuote(params.mode, scope, config);
     writeFileSync(QUOTE_FILE, json(quote));
     console.log(json(quote).trim());
-    if (!quote.allowed) process.exitCode = 1;
+    // A computed quote is a SUCCESS, even when its verdict is "blocked": the
+    // dry-run job must upload quote.json so /ops can show the operator WHY
+    // (e.g. over the per-run cap). Only the pre-flight gate in the real run
+    // (enforce=true) exits non-zero on a blocked verdict, to fail closed
+    // before any OPENROUTER_API_KEY process starts (D-087/D-088).
+    if (!quote.allowed && params.enforce === "true") process.exitCode = 1;
     return;
   }
   if (process.env.GITHUB_ACTIONS !== "true") {

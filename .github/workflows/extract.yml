@@ -61,6 +61,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # A blocked verdict (e.g. over the per-run cap) is a SUCCESSFUL estimate,
+      # not a job failure: this step exits 0 so quote.json uploads and /ops can
+      # show the operator the reason. Only the real run's pre-flight gate below
+      # runs with enforce=true and fails closed on a blocked verdict (D-088).
       - name: Compute deterministic extraction quote
         run: >-
           npm run extract --
@@ -68,6 +72,7 @@ jobs:
           mode=${{ inputs.mode }}
           ${{ inputs.scope_kind }}=${{ inputs.scope_id }}
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: extraction-quote
           path: quote.json
@@ -97,6 +102,7 @@ jobs:
           quote
           mode=${{ inputs.mode }}
           ${{ inputs.scope_kind }}=${{ inputs.scope_id }}
+          enforce=true
       # Wrap the run in the progress publisher (D-086): the live heartbeat is
       # force-pushed to the ops-progress ref every ~2 min so /ops shows batches
       # drafted and running token spend while extraction is in flight.

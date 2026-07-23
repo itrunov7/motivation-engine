@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
-import { extractionPriceState } from "../lib/ops";
+import { extractionPriceState, validateExtractionOpsConfig } from "../lib/ops";
 import {
   groundingErrors,
   mergeProposals,
@@ -92,6 +92,30 @@ test("quotes are deterministic and enforce the per-run token cap", () => {
   );
   assert.equal(blocked.allowed, false);
   assert(blocked.reasons.some((reason) => reason.includes("per-run cap")));
+  // A blocked verdict is still a fully-formed, computed quote (the dry-run job
+  // uploads it and /ops shows the reason); it is not a broken estimate (D-088).
+  assert.equal(blocked.mode, "effects");
+  assert.deepEqual(blocked.scope.mechanism_ids, ["CL-14"]);
+  assert(Number.isFinite(blocked.tokens.total_upper_bound));
+});
+
+test("the quote config guard fails with an explicit named message (D-088)", () => {
+  // The extract quote/run path runs this SAME shared validator before building
+  // a quote, so a missing/stale/malformed field fails named instead of driving
+  // the estimator to NaN.
+  const missingCap = {
+    ...configured,
+    limits: { ...configured.limits, per_run_tokens: undefined },
+  };
+  const capErrors = validateExtractionOpsConfig(missingCap);
+  assert(capErrors.some((error) => error.includes("limits.per_run_tokens")));
+
+  const badPrice = { ...configured, prices_verified_on: "yesterday" };
+  const priceErrors = validateExtractionOpsConfig(badPrice);
+  assert(priceErrors.some((error) => error.includes("prices_verified_on")));
+
+  // The guard composes exactly what main() throws.
+  assert.equal(validateExtractionOpsConfig(configured).length, 0);
 });
 
 test("manifest cost accounts for each configured model and reconciles totals", () => {
