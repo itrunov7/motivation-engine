@@ -45,7 +45,9 @@ import {
 } from "@/lib/github";
 import { readLiveOpsFiles } from "@/lib/live-ops";
 import type {
+  CorpusRunStatus,
   LiveOpsSnapshot,
+  LiveRecentRun,
   LiveRun,
   LiveRunKind,
   RunProgress,
@@ -546,8 +548,63 @@ export async function getLiveOpsSnapshotAction(): Promise<LiveOpsSnapshot> {
     );
     running.sort((a, b) => b.elapsedS - a.elapsedS);
 
-    return { ...base, liveEnabled: true, running };
+    return {
+      ...base,
+      liveEnabled: true,
+      running,
+      recent: withJustFinishedExtraction(base.recent, progress),
+    };
   } catch (err) {
     return { ...base, liveEnabled: true, error: errorMessage(err) };
   }
+}
+
+/**
+ * Prepend a just-finished extraction run reconstructed from the terminal
+ * heartbeat (D-090) so the operator sees the five counters + funnel the moment
+ * the job ends — without opening GitHub Actions and before the run's own commit
+ * lands. Deduped against committed rows: an extraction run within 10 minutes of
+ * this heartbeat's start is the SAME run, so we defer to the committed row.
+ */
+function withJustFinishedExtraction(
+  recent: LiveRecentRun[],
+  progress: RunProgress | null,
+): LiveRecentRun[] {
+  if (!progress || !progress.finished || progress.kind !== "extraction") {
+    return recent;
+  }
+  const startedMs = Date.parse(progress.started_at);
+  const alreadyCommitted = recent.some(
+    (run) =>
+      run.corpus === "extraction" &&
+      Math.abs(Date.parse(run.timestamp) - startedMs) < 10 * 60_000,
+  );
+  if (alreadyCommitted) return recent;
+  const params: Record<string, string> = {};
+  if (progress.target) {
+    const [kind, ...rest] = progress.target.split(" ");
+    if (kind && rest.length > 0) params[kind] = rest.join(" ");
+  }
+  const status: CorpusRunStatus =
+    progress.status === "running" ? "partial" : progress.status;
+  const entry: LiveRecentRun = {
+    corpus: "extraction",
+    timestamp: progress.updated_at,
+    status,
+    records:
+      progress.records ?? progress.summary?.records_processed ?? 0,
+    apiCalls: progress.spend.api_calls,
+    estimatedUsd: progress.spend.estimated_usd,
+    durationS: Math.max(
+      0,
+      Math.round((Date.parse(progress.updated_at) - startedMs) / 1000),
+    ),
+    params,
+    error: null,
+    warnings: [],
+    saturation: null,
+    justFinished: true,
+    summary: progress.summary ?? null,
+  };
+  return [entry, ...recent];
 }

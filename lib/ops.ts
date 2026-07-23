@@ -466,6 +466,12 @@ export interface ExtractionRunSummary {
   heldLowConfidence: number;
   droppedVolumeCap: number;
   droppedVolumeCapHighConfidence: number;
+  /** Relevance funnel (D-090); 0 for runs predating the funnel counters. */
+  recordsEligible: number;
+  recordsRelevant: number;
+  recordsProcessed: number;
+  candidates: number;
+  recordsRemaining: number;
 }
 
 export function loadExtractionRunSummary(): ExtractionRunSummary | undefined {
@@ -491,6 +497,11 @@ export function loadExtractionRunSummary(): ExtractionRunSummary | undefined {
     heldLowConfidence: number("held_low_confidence"),
     droppedVolumeCap: number("dropped_volume_cap"),
     droppedVolumeCapHighConfidence: number("dropped_volume_cap_high_confidence"),
+    recordsEligible: number("records_eligible"),
+    recordsRelevant: number("records_relevant"),
+    recordsProcessed: number("records_processed"),
+    candidates: number("candidates"),
+    recordsRemaining: number("records_remaining"),
   };
 }
 

@@ -1174,6 +1174,30 @@ export interface RunProgress {
     monthly_usd: number | null;
   };
   note: string | null;
+  /**
+   * Final funnel + gate counters for a finished extraction run (D-090). Set
+   * only on the terminal heartbeat so /ops can show what a run produced the
+   * moment it ends — before the run's own commit lands and the deploy catches
+   * up. Absent/null for in-flight heartbeats and for harvest runs.
+   */
+  summary?: RunProgressSummary | null;
+}
+
+/** The five gate counters plus the relevance funnel for a finished run (D-090). */
+export interface RunProgressSummary {
+  proposed: number;
+  merged: number;
+  dropped_ungrounded: number;
+  held_low_confidence: number;
+  dropped_volume_cap: number;
+  dropped_volume_cap_high_confidence: number;
+  candidates: number;
+  /** Funnel: total eligible → passed pre-filter → sent to model → still remaining. */
+  records_eligible: number;
+  records_relevant: number;
+  records_processed: number;
+  records_skipped_irrelevant: number;
+  records_remaining: number;
 }
 
 /** The classification of a live/recent run for the /ops live view. */
@@ -1212,6 +1236,18 @@ export interface LiveRecentRun {
   warnings: string[];
   /** One-line saturation summary for evidence targets; null otherwise. */
   saturation: string | null;
+  /**
+   * True when this row was reconstructed from the just-finished extraction
+   * heartbeat (D-090) — surfaced the moment a run ends, before its own commit
+   * lands and the deploy catches up. Committed rows leave this undefined.
+   */
+  justFinished?: boolean;
+  /**
+   * Extraction funnel + gate counters (D-090). Present on just-finished rows
+   * (from the heartbeat summary); committed rows carry the same numbers in
+   * `params` as strings.
+   */
+  summary?: RunProgressSummary | null;
 }
 
 /** One scheduled workflow and its next computed occurrence. */

@@ -814,6 +814,9 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       held_low_confidence: 2,
       dropped_volume_cap: 4,
       dropped_volume_cap_high_confidence: 1,
+      records_eligible: 200,
+      records_relevant: 120,
+      records_remaining: 95,
     }),
     {
       candidates: "15",
@@ -825,6 +828,9 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       held_low_confidence: "2",
       dropped_volume_cap: "4",
       dropped_volume_cap_high_confidence: "1",
+      records_eligible: "200",
+      records_relevant: "120",
+      records_remaining: "95",
     },
   );
 });

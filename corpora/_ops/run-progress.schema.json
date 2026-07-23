@@ -68,6 +68,38 @@
         "monthly_usd": { "type": ["number", "null"], "minimum": 0 }
       }
     },
-    "note": { "type": ["string", "null"] }
+    "note": { "type": ["string", "null"] },
+    "summary": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": [
+        "proposed",
+        "merged",
+        "dropped_ungrounded",
+        "held_low_confidence",
+        "dropped_volume_cap",
+        "dropped_volume_cap_high_confidence",
+        "candidates",
+        "records_eligible",
+        "records_relevant",
+        "records_processed",
+        "records_skipped_irrelevant",
+        "records_remaining"
+      ],
+      "properties": {
+        "proposed": { "type": "integer", "minimum": 0 },
+        "merged": { "type": "integer", "minimum": 0 },
+        "dropped_ungrounded": { "type": "integer", "minimum": 0 },
+        "held_low_confidence": { "type": "integer", "minimum": 0 },
+        "dropped_volume_cap": { "type": "integer", "minimum": 0 },
+        "dropped_volume_cap_high_confidence": { "type": "integer", "minimum": 0 },
+        "candidates": { "type": "integer", "minimum": 0 },
+        "records_eligible": { "type": "integer", "minimum": 0 },
+        "records_relevant": { "type": "integer", "minimum": 0 },
+        "records_processed": { "type": "integer", "minimum": 0 },
+        "records_skipped_irrelevant": { "type": "integer", "minimum": 0 },
+        "records_remaining": { "type": "integer", "minimum": 0 }
+      }
+    }
   }
 }

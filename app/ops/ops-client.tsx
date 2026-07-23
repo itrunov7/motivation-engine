@@ -95,6 +95,11 @@ function ExtractionRunPanel({ run }: { run: ExtractionRunSummary | null }) {
           <p className="mt-1 text-xs text-[#8CA495]">
             {formatTimestamp(run.timestamp)} · {run.mode} · {run.scope}
           </p>
+          <p className="mt-2 font-mono text-[11px] text-[#7C93A8]">
+            funnel: {run.recordsEligible} eligible → {run.recordsRelevant} passed
+            pre-filter → {run.recordsProcessed} sent to model · {run.candidates}{" "}
+            candidates · {run.recordsRemaining} remaining
+          </p>
           <dl className="mt-4 grid gap-3 sm:grid-cols-3">
             {outcomes.map(([label, value]) => (
               <div key={label} className="rounded-md border border-[#243329] bg-[#1A2620] p-3">

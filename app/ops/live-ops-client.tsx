@@ -210,12 +210,67 @@ function RunningCard({ run, now }: { run: LiveRun; now: number }) {
   );
 }
 
+/**
+ * The extraction funnel + five gate counters for a recent run (D-090), read
+ * from the just-finished heartbeat summary (numbers) or the committed manifest
+ * params (strings). Returns null for non-extraction rows or rows without the
+ * counters (e.g. pre-D-090 runs missing the funnel keys).
+ */
+function extractionCounters(run: LiveRecentRun): {
+  proposed: number;
+  merged: number;
+  droppedUngrounded: number;
+  heldLowConfidence: number;
+  droppedVolumeCap: number;
+  candidates: number;
+  eligible: number;
+  relevant: number;
+  processed: number;
+  remaining: number;
+} | null {
+  if (run.corpus !== "extraction") return null;
+  const fromSummary = run.summary;
+  const numeric = (key: string): number => {
+    const raw = run.params[key];
+    const parsed = raw === undefined ? NaN : Number(raw);
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+  if (fromSummary) {
+    return {
+      proposed: fromSummary.proposed,
+      merged: fromSummary.merged,
+      droppedUngrounded: fromSummary.dropped_ungrounded,
+      heldLowConfidence: fromSummary.held_low_confidence,
+      droppedVolumeCap: fromSummary.dropped_volume_cap,
+      candidates: fromSummary.candidates,
+      eligible: fromSummary.records_eligible,
+      relevant: fromSummary.records_relevant,
+      processed: fromSummary.records_processed,
+      remaining: fromSummary.records_remaining,
+    };
+  }
+  if (run.params.proposed === undefined) return null;
+  return {
+    proposed: numeric("proposed"),
+    merged: numeric("merged"),
+    droppedUngrounded: numeric("dropped_ungrounded"),
+    heldLowConfidence: numeric("held_low_confidence"),
+    droppedVolumeCap: numeric("dropped_volume_cap"),
+    candidates: numeric("candidates"),
+    eligible: numeric("records_eligible"),
+    relevant: numeric("records_relevant"),
+    processed: numeric("records_processed"),
+    remaining: numeric("records_remaining"),
+  };
+}
+
 function RecentRow({ run, now }: { run: LiveRecentRun; now: number }) {
   const scope =
     run.params.mechanism ??
     run.params.mode ??
     Object.values(run.params)[0] ??
     "—";
+  const counters = extractionCounters(run);
   return (
     <li className="border-t border-[#243329] py-2 first:border-t-0 first:pt-0">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -228,6 +283,11 @@ function RecentRow({ run, now }: { run: LiveRecentRun; now: number }) {
           </span>
           <span className="font-mono text-[12px] text-[#E6EFE8]">{run.corpus}</span>
           <span className="font-mono text-[11px] text-[#8CA495]">{scope}</span>
+          {run.justFinished ? (
+            <span className="rounded-sm bg-[#34D399]/15 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-[#34D399]">
+              just finished
+            </span>
+          ) : null}
         </div>
         <span className="font-mono text-[10px] text-[#7C93A8]">
           {formatWhen(run.timestamp, now)}
@@ -241,6 +301,22 @@ function RecentRow({ run, now }: { run: LiveRecentRun; now: number }) {
         <span>cost: <span className="text-[#E6EFE8]">{money(run.estimatedUsd)}</span></span>
         <span>{Math.round(run.durationS)}s</span>
       </div>
+      {counters ? (
+        <>
+          <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[10px] text-[#8CA495]">
+            <span>proposed: <span className="text-[#E6EFE8]">{counters.proposed}</span></span>
+            <span>merged: <span className="text-[#E6EFE8]">{counters.merged}</span></span>
+            <span>ungrounded: <span className="text-[#E6EFE8]">{counters.droppedUngrounded}</span></span>
+            <span>held: <span className="text-[#E6EFE8]">{counters.heldLowConfidence}</span></span>
+            <span>volume cap: <span className="text-[#E6EFE8]">{counters.droppedVolumeCap}</span></span>
+          </div>
+          <p className="mt-0.5 font-mono text-[10px] text-[#7C93A8]">
+            funnel: {counters.eligible} eligible → {counters.relevant} passed pre-filter →{" "}
+            {counters.processed} sent to model · {counters.candidates} candidates ·{" "}
+            {counters.remaining} remaining
+          </p>
+        </>
+      ) : null}
       {run.saturation ? (
         <p className="mt-1 font-mono text-[10px] text-[#7C93A8]">{run.saturation}</p>
       ) : null}

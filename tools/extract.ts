@@ -65,6 +65,7 @@ import type {
   RealizationCorpusRecord,
   RealizationCorpusProvenanceItem,
   Relation,
+  RunProgressSummary,
   Segment,
   SeedStub,
   SegmentsFile,
@@ -223,6 +224,12 @@ export interface ExtractionStats {
   held_low_confidence: number;
   dropped_volume_cap: number;
   dropped_volume_cap_high_confidence: number;
+  /** Funnel (D-090): total eligible records in the corpus at run start. */
+  records_eligible: number;
+  /** Funnel (D-090): eligible records that passed the cheap relevance pre-filter. */
+  records_relevant: number;
+  /** Funnel (D-090): relevant records still unread after this run (0 = corpus exhausted). */
+  records_remaining: number;
 }
 
 export interface ReaderCoverageDelta {
@@ -312,6 +319,9 @@ export function extractionSummaryParams(
     dropped_volume_cap_high_confidence: String(
       stats.dropped_volume_cap_high_confidence,
     ),
+    records_eligible: String(stats.records_eligible),
+    records_relevant: String(stats.records_relevant),
+    records_remaining: String(stats.records_remaining),
   };
 }
 
@@ -746,6 +756,18 @@ function bytes(value: string): number {
   return Buffer.byteLength(value, "utf8");
 }
 
+/**
+ * Rough token estimate from a prompt string. English JSON prose runs ~4 UTF-8
+ * bytes per token, so counting raw bytes as tokens (the pre-D-090 estimator)
+ * overshot ~4.5x and, together with an inflated strong-input reserve, ate the
+ * per-run cap before any records were counted — starving every slice to a
+ * handful of records. Both the planner (estimateSelected) and the runtime
+ * guard (callOpenRouter) use this so the plan and the live cap agree.
+ */
+function estimateTokens(value: string): number {
+  return Math.ceil(bytes(value) / 4);
+}
+
 function configuredTier(
   config: ExtractionOpsConfig,
   tierName: "cheap" | "strong",
@@ -826,13 +848,16 @@ function estimateSelected(
     );
     for (const batch of mechanismBatches) {
       cheapCalls += 1;
-      inputUpper += bytes(cheapPrompt(mode, mechanismId, batch));
+      inputUpper += estimateTokens(cheapPrompt(mode, mechanismId, batch));
       outputReserved += Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call);
     }
     strongCalls += 1;
+    // The strong call's input is the synthesized cheap output; reserve at most
+    // the sum of the cheap output reserves (token units), capped by the strong
+    // tier's own per-call ceiling.
     inputUpper += Math.min(
-      mechanismBatches.length * CHEAP_OUTPUT_RESERVE * 4,
-      strong.max_tokens_per_call * 4,
+      mechanismBatches.length * Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call),
+      strong.max_tokens_per_call,
     );
     outputReserved += Math.min(STRONG_OUTPUT_RESERVE, strong.max_tokens_per_call);
   }
@@ -1027,7 +1052,7 @@ async function callOpenRouter(
   outputReserve: number,
 ): Promise<DraftItem[]> {
   const tier = configuredTier(context.config, tierName);
-  const inputUpper = bytes(prompt);
+  const inputUpper = estimateTokens(prompt);
   const maxTokens = Math.min(outputReserve, tier.max_tokens_per_call);
   const projected = context.usage.input + context.usage.output + inputUpper + maxTokens;
   if (projected > context.config.limits.per_run_tokens) {
@@ -2003,13 +2028,21 @@ export async function runExtraction(args: {
   const stats: ExtractionStats = {
     candidates: 0,
     records_processed: 0,
-    records_skipped_irrelevant: plan.records.skipped_irrelevant,
+    // Accumulated per slice below; later slices skip nothing new because the
+    // first slice's pre-filter already marks every irrelevant record terminal.
+    records_skipped_irrelevant: 0,
     dropped_ungrounded: 0,
     proposed: 0,
     merged: 0,
     held_low_confidence: 0,
     dropped_volume_cap: 0,
     dropped_volume_cap_high_confidence: 0,
+    // Funnel is fixed at run start (D-090): total eligible and the relevant
+    // subset that cleared the pre-filter. records_remaining is updated after
+    // the last slice.
+    records_eligible: plan.records.eligible_total,
+    records_relevant: plan.records.selected + plan.records.remaining,
+    records_remaining: plan.records.remaining,
   };
   const proposals: Proposal[] = [];
   const existing = existingMatches();
@@ -2025,16 +2058,15 @@ export async function runExtraction(args: {
 
   // Live progress heartbeat (D-086): report batches drafted and running spend
   // against the per-run token cap so /ops shows extraction moving in flight.
-  const batchSize = args.config.limits.records_per_batch;
+  // D-090: a run may process several slices in one job, so totalBatches grows
+  // as each slice is planned rather than being fixed to the first slice.
   let totalBatches = 0;
-  for (const mechanism of plan.mechanisms) {
-    totalBatches += Math.ceil(mechanism.selected.length / batchSize);
-  }
   let batchesDone = 0;
   const reportExtractProgress = (
     phase: string,
     status: "running" | "success" | "partial" | "failed",
     finished: boolean,
+    summary: RunProgressSummary | null = null,
   ): void => {
     writeRunProgress({
       kind: "extraction",
@@ -2043,7 +2075,7 @@ export async function runExtraction(args: {
       finished,
       status,
       progress: { unit: "batches", done: batchesDone, total: totalBatches },
-      records: null,
+      records: stats.records_processed,
       spend: {
         api_calls: context.usage.calls,
         tokens_in: context.usage.input,
@@ -2057,6 +2089,7 @@ export async function runExtraction(args: {
         monthly_usd: null,
       },
       note: null,
+      summary,
     });
   };
   reportExtractProgress("reading corpora", "running", false);
@@ -2071,13 +2104,27 @@ export async function runExtraction(args: {
       }
     : null;
 
-  for (const mechanismPlan of plan.mechanisms) {
+  const processSlice = async (slicePlan: ExtractionPlan): Promise<void> => {
+    const batchSize = args.config.limits.records_per_batch;
+    for (const mechanism of slicePlan.mechanisms) {
+      totalBatches += Math.ceil(mechanism.selected.length / batchSize);
+    }
+    for (const mechanismPlan of slicePlan.mechanisms) {
     const { mechanismId, corpus } = mechanismPlan;
     const records = mechanismPlan.selected;
-    const coverageDelta = {
-      processed_record_ids: [] as string[],
-      skipped_irrelevant_record_ids: mechanismPlan.skippedIrrelevantIds,
-    };
+    // Accumulate across slices (D-090): a mechanism can be visited by several
+    // slices, each adding more processed ids. Skipped ids arrive only in the
+    // first slice, since the pre-filter marks every irrelevant record terminal
+    // at once, so appending them is idempotent for later slices.
+    const coverageDelta =
+      processedByMechanism.get(mechanismId) ?? {
+        processed_record_ids: [] as string[],
+        skipped_irrelevant_record_ids: [] as string[],
+      };
+    coverageDelta.skipped_irrelevant_record_ids.push(
+      ...mechanismPlan.skippedIrrelevantIds,
+    );
+    stats.records_skipped_irrelevant += mechanismPlan.skippedIrrelevantIds.length;
     if (
       records.length > 0 ||
       coverageDelta.skipped_irrelevant_record_ids.length > 0
@@ -2238,6 +2285,42 @@ export async function runExtraction(args: {
     ).length;
     for (const entry of admitted) stats[entry.outcome] += 1;
     proposals.push(...admitted.map(({ proposal: admittedProposal }) => admittedProposal), ...held);
+    }
+  };
+
+  // Slice-continuation driver (D-090): keep reading the next-ranked slice in
+  // the SAME job while relevant records remain and the ACTUAL spend leaves
+  // headroom under the per-run cap. A run that reads only pre-filtered noise
+  // now advances instead of concluding with a misleading zero yield. Each
+  // continuation slice is planned against the remaining headroom (not the full
+  // cap) so callOpenRouter's per-call guard can never trip mid-run.
+  let currentPlan = plan;
+  while (true) {
+    await processSlice(currentPlan);
+    stats.records_remaining = currentPlan.records.remaining;
+    if (!currentPlan.capped) break; // corpus exhausted for this scope + mode
+    const usedTokens = context.usage.input + context.usage.output;
+    const headroom = args.config.limits.per_run_tokens - usedTokens;
+    if (headroom <= 0) break; // per-run token cap consumed
+    const coverageNow = mergeReaderCoverage(
+      coverageAtStart,
+      args.mode,
+      processedByMechanism,
+      startedAt.toISOString(),
+    );
+    const sliceConfig: ExtractionOpsConfig = {
+      ...args.config,
+      limits: { ...args.config.limits, per_run_tokens: headroom },
+    };
+    const nextPlan = buildExtractionPlan(
+      args.mode,
+      args.scope,
+      sliceConfig,
+      coverageNow,
+    );
+    if (nextPlan.records.selected === 0) break; // next record cannot fit headroom
+    reportExtractProgress("advancing to next slice", "running", false);
+    currentPlan = nextPlan;
   }
 
   for (const [path, proposal] of Array.from(pendingWrites.entries())) {
@@ -2261,12 +2344,27 @@ export async function runExtraction(args: {
     context.usage,
     stats,
     proposals.length + pendingWrites.size,
-    plan.capped,
+    currentPlan.capped,
   );
+  const summary: RunProgressSummary = {
+    proposed: stats.proposed,
+    merged: stats.merged,
+    dropped_ungrounded: stats.dropped_ungrounded,
+    held_low_confidence: stats.held_low_confidence,
+    dropped_volume_cap: stats.dropped_volume_cap,
+    dropped_volume_cap_high_confidence: stats.dropped_volume_cap_high_confidence,
+    candidates: stats.candidates,
+    records_eligible: stats.records_eligible,
+    records_relevant: stats.records_relevant,
+    records_processed: stats.records_processed,
+    records_skipped_irrelevant: stats.records_skipped_irrelevant,
+    records_remaining: stats.records_remaining,
+  };
   reportExtractProgress(
-    `${plan.capped ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals`,
-    plan.capped ? "partial" : "success",
+    `${currentPlan.capped ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates · ${stats.dropped_ungrounded} dropped ungrounded · ${stats.records_remaining} remaining`,
+    currentPlan.capped ? "partial" : "success",
     true,
+    summary,
   );
   return { proposals, stats, usage: context.usage };
 }
