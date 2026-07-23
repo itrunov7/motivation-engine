@@ -34,11 +34,22 @@ import {
   EXTRACTION_WORKFLOW_FILE,
   findRunByDispatchId,
   getRepoFile,
+  getRepoFileFromRef,
+  getRunCurrentPhase,
   getRunFailureSummary,
+  listActiveWorkflowRuns,
   putRepoFile,
   readGithubOpsEnv,
+  type ActiveWorkflowRun,
   type GithubOpsEnv,
 } from "@/lib/github";
+import { readLiveOpsFiles } from "@/lib/live-ops";
+import type {
+  LiveOpsSnapshot,
+  LiveRun,
+  LiveRunKind,
+  RunProgress,
+} from "@/lib/types";
 import type { ExtractionMode, ExtractionQuote, ScopeKind } from "@/tools/extract";
 
 // ---------- Shared result types ----------
@@ -440,5 +451,103 @@ export async function confirmExtractionRunAction(args: {
     return { ok: true, dispatchId };
   } catch (err) {
     return { ok: false, error: errorMessage(err) };
+  }
+}
+
+// ---------- Live operations view (D-086) ----------
+
+/** Workflow files the live view surfaces, mapped to their run kind. */
+const LIVE_WORKFLOWS: Record<string, LiveRunKind> = {
+  "harvest.yml": "harvest",
+  "connectors.yml": "harvest",
+  "extract.yml": "extraction",
+  "maturation.yml": "analysis",
+};
+
+/** The heartbeat lives at run-progress.json on the ops-progress ref (D-086). */
+const OPS_PROGRESS_REF = "ops-progress";
+const OPS_PROGRESS_ENTRY = "run-progress.json";
+
+function workflowBasename(path: string): string {
+  return path.split("/").pop() ?? path;
+}
+
+function classifyRun(basename: string, runName: string): LiveRunKind {
+  // A connectors run is a health heartbeat or a harvest depending on the
+  // schedule that fired; the run-name distinguishes them honestly.
+  if (basename === "connectors.yml" && /heartbeat/i.test(runName)) {
+    return "health";
+  }
+  return LIVE_WORKFLOWS[basename] ?? "analysis";
+}
+
+function elapsedSeconds(run: ActiveWorkflowRun, now: number): number {
+  const start = Date.parse(run.run_started_at ?? run.created_at);
+  if (!Number.isFinite(start)) return 0;
+  return Math.max(0, Math.round((now - start) / 1000));
+}
+
+/**
+ * The live operations snapshot (D-086): in-flight Actions runs merged with the
+ * progress heartbeat, plus the file-based recent runs, queues, and schedule.
+ * Read-only across the Actions API + the ops-progress ref; when the GitHub
+ * read surface is unconfigured the live section degrades to empty while every
+ * file-based section still renders.
+ */
+export async function getLiveOpsSnapshotAction(): Promise<LiveOpsSnapshot> {
+  const now = new Date();
+  const files = readLiveOpsFiles(now);
+  const base: LiveOpsSnapshot = {
+    generatedAt: now.toISOString(),
+    liveEnabled: false,
+    error: null,
+    running: [],
+    ...files,
+  };
+
+  const env = readGithubOpsEnv();
+  if (!env) return base;
+
+  try {
+    const active = (await listActiveWorkflowRuns(env)).filter(
+      (run) => workflowBasename(run.path) in LIVE_WORKFLOWS,
+    );
+
+    let progress: RunProgress | null = null;
+    try {
+      const heartbeat = await getRepoFileFromRef(env, OPS_PROGRESS_ENTRY, OPS_PROGRESS_REF);
+      if (heartbeat?.text) progress = JSON.parse(heartbeat.text) as RunProgress;
+    } catch {
+      // A missing/unreadable heartbeat is fine — phase/elapsed still come from
+      // the Actions API; only the rich counters are absent.
+      progress = null;
+    }
+
+    const nowMs = now.getTime();
+    const running: LiveRun[] = await Promise.all(
+      active.map(async (run): Promise<LiveRun> => {
+        const basename = workflowBasename(run.path);
+        const phase = await getRunCurrentPhase(env, run.id);
+        const matched =
+          progress && progress.github_run_id === run.id ? progress : null;
+        return {
+          runId: run.id,
+          name: run.name,
+          workflow: basename,
+          kind: classifyRun(basename, run.name),
+          status: run.status,
+          htmlUrl: run.html_url,
+          createdAt: run.created_at,
+          elapsedS: elapsedSeconds(run, nowMs),
+          phase,
+          progress: matched,
+        };
+      }),
+    );
+    running.sort((a, b) => b.elapsedS - a.elapsedS);
+
+    return { ...base, liveEnabled: true, running };
+  } catch (err) {
+    return { ...base, liveEnabled: true, error: errorMessage(err) };
   }
 }

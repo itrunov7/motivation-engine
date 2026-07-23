@@ -78,6 +78,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      # Correlation id echoed into the live progress heartbeat (D-086).
+      OPS_DISPATCH_ID: ${{ inputs.dispatch_id || github.run_id }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -93,8 +95,12 @@ jobs:
           quote
           mode=${{ inputs.mode }}
           ${{ inputs.scope_kind }}=${{ inputs.scope_id }}
+      # Wrap the run in the progress publisher (D-086): the live heartbeat is
+      # force-pushed to the ops-progress ref every ~2 min so /ops shows batches
+      # drafted and running token spend while extraction is in flight.
       - name: Extract grounded proposals
         run: >-
+          npx tsx tools/progress-publisher.ts
           npm run extract --
           run
           mode=${{ inputs.mode }}

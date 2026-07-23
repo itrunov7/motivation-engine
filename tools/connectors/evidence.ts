@@ -95,10 +95,12 @@ import { join } from "node:path";
 import { assignCorpusRecordIds, normalizeCorpusDoi } from "../../lib/corpus-record-id";
 import {
   DEFAULT_EVIDENCE_SATURATION,
+  loadOpsBudgetFromDisk,
   loadOpsConnectorConfigFromDisk,
   type OpsConnectorConfig,
 } from "../../lib/ops";
-import type { EvidenceSaturationConfig } from "../../lib/types";
+import type { EvidenceSaturationConfig, RunProgressStatus } from "../../lib/types";
+import { writeRunProgress } from "../progress";
 import { UpstreamCooldownError } from "./lib/http";
 import {
   EVIDENCE_CATEGORIES,
@@ -1704,6 +1706,44 @@ export const evidenceConnector: Connector = {
     }
     const baseApiCalls = existingCheckpoint?.api_calls_spent ?? 0;
 
+    // Live progress heartbeat (D-086): reported after each checkpoint so /ops
+    // shows phase, query progress, records, and spend-against-caps while a long
+    // harvest is in flight. Monthly caps are read once (a single small file).
+    const monthlyCaps = loadOpsBudgetFromDisk()?.monthly_caps ?? null;
+    const reportProgress = (
+      phase: string,
+      status: RunProgressStatus,
+      finished: boolean,
+      note: string | null = null,
+    ): void => {
+      writeRunProgress({
+        kind: "harvest",
+        target: mechanismId as string,
+        phase,
+        finished,
+        status,
+        progress: {
+          unit: "queries",
+          done: checkpoint.cursor,
+          total: checkpoint.tasks.length,
+        },
+        records: accumulated.length,
+        spend: {
+          api_calls: baseApiCalls + ctx.apiCalls(),
+          tokens_in: null,
+          tokens_out: null,
+          estimated_usd: 0,
+        },
+        caps: {
+          per_run_calls: maxCalls,
+          per_run_tokens: null,
+          monthly_calls: monthlyCaps?.calls ?? null,
+          monthly_usd: monthlyCaps?.usd ?? null,
+        },
+        note,
+      });
+    };
+
     let s2Throttled = checkpoint.s2_throttled === true;
     const s2Limit = (): number =>
       s2Throttled && !s2ApiKey()
@@ -1726,6 +1766,7 @@ export const evidenceConnector: Connector = {
         .flatMap((task) => task.records),
     ]).records.slice(0, maxRecords);
     ctx.log(`checkpoint state rebuilt: ${accumulated.length} cumulative records`);
+    reportProgress("harvesting", "running", false);
 
     const graphTask = (
       kind: "backward-reference" | "forward-citation",
@@ -1956,6 +1997,11 @@ export const evidenceConnector: Connector = {
         checkpoint.cursor % saturation.checkpoint_every_queries === 0
       ) {
         writeCheckpoint(checkpoint);
+        reportProgress(
+          `harvesting (query ${checkpoint.cursor}/${checkpoint.tasks.length})`,
+          "running",
+          false,
+        );
       }
 
       if (
@@ -1989,6 +2035,13 @@ export const evidenceConnector: Connector = {
         ? "upstream_quota"
         : "time_slice";
       writeCheckpoint(checkpoint);
+      reportProgress(
+        checkpoint.slice_stop_reason === "upstream_quota"
+          ? "paused — upstream quota, will resume"
+          : "paused — time slice, will resume",
+        "partial",
+        true,
+      );
       return {
         status: "partial",
         recordsFetched: accumulated.length,
@@ -2168,6 +2221,7 @@ export const evidenceConnector: Connector = {
         `regression suspected: re-harvest produced ${recordsWithIds.length} records vs ${existingCount} ` +
         `already in the corpus — corpus NOT overwritten; wrote ${sideFile} for review (D-038)`;
       ctx.log(`WARNING ${message}`);
+      reportProgress("regression suspected — corpus kept", "partial", true, message);
       return {
         status: "partial",
         recordsFetched: recordsWithIds.length,
@@ -2179,6 +2233,11 @@ export const evidenceConnector: Connector = {
 
     ctx.writeJson(fileName, file);
     ctx.log(`wrote ${recordsWithIds.length} deduplicated records to ${fileName}`);
+    reportProgress(
+      failures.length > 0 ? "completed with query failures" : "completed",
+      failures.length > 0 ? "partial" : "success",
+      true,
+    );
 
     return {
       status: failures.length > 0 ? "partial" : "success",

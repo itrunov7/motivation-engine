@@ -36,6 +36,7 @@ import {
   proposalSimilarity,
   realizationGroundingErrors,
 } from "../lib/proposal-quality";
+import { writeRunProgress } from "./progress";
 import type {
   ArtifactType,
   AxisScore,
@@ -1666,6 +1667,46 @@ export async function runExtraction(args: {
     ? `github-actions-${process.env.GITHUB_RUN_ID}`
     : `extract-${startedAt.toISOString()}`;
 
+  // Live progress heartbeat (D-086): report batches drafted and running spend
+  // against the per-run token cap so /ops shows extraction moving in flight.
+  const batchSize = args.config.limits.records_per_batch;
+  let totalBatches = 0;
+  for (const mechanismId of args.scope.mechanismIds) {
+    if (!modeEligible(args.mode, mechanismId)) continue;
+    const records = eligibleRecords(corpusFor(args.mode, mechanismId));
+    totalBatches += Math.ceil(records.length / batchSize);
+  }
+  let batchesDone = 0;
+  const reportExtractProgress = (
+    phase: string,
+    status: "running" | "success" | "partial" | "failed",
+    finished: boolean,
+  ): void => {
+    writeRunProgress({
+      kind: "extraction",
+      target: `${args.scope.kind} ${args.scope.id}`,
+      phase,
+      finished,
+      status,
+      progress: { unit: "batches", done: batchesDone, total: totalBatches },
+      records: null,
+      spend: {
+        api_calls: context.usage.calls,
+        tokens_in: context.usage.input,
+        tokens_out: context.usage.output,
+        estimated_usd: computeUsd(args.config, context.usage),
+      },
+      caps: {
+        per_run_calls: null,
+        per_run_tokens: args.config.limits.per_run_tokens,
+        monthly_calls: null,
+        monthly_usd: null,
+      },
+      note: null,
+    });
+  };
+  reportExtractProgress("reading corpora", "running", false);
+
   const draftContextBase = isDraftMode(args.mode)
     ? {
         seeds: seedStubs(),
@@ -1702,7 +1743,10 @@ export async function runExtraction(args: {
           CHEAP_OUTPUT_RESERVE,
         )),
       );
+      batchesDone += 1;
+      reportExtractProgress(`drafting ${mechanismId}`, "running", false);
     }
+    reportExtractProgress(`composing ${mechanismId}`, "running", false);
     const synthesizedRaw = await callOpenRouter(
       context,
       "strong",
@@ -1854,6 +1898,11 @@ export async function runExtraction(args: {
     stats,
     computeUsd(args.config, context.usage),
     proposals.length + pendingWrites.size,
+  );
+  reportExtractProgress(
+    `completed — ${stats.proposed + stats.merged} proposals`,
+    "success",
+    true,
   );
   return { proposals, stats, usage: context.usage };
 }

@@ -1096,6 +1096,133 @@ export interface RunQuote {
   estimated_usd: number;
 }
 
+// ---------- Live operations view (D-086) ----------
+
+/** What a long job is: an evidence/wayback harvest or an LLM extraction. */
+export type RunProgressKind = "harvest" | "extraction";
+
+/** Live status a heartbeat reports for its own job. */
+export type RunProgressStatus = "running" | "success" | "partial" | "failed";
+
+/**
+ * A single progress heartbeat written by a long-running Actions job (D-086).
+ * The tool writes it to a gitignored working file after each checkpoint; a
+ * publisher force-pushes it to the dedicated `ops-progress` ref every ~2 min,
+ * so /ops can show live progress without polluting main. NEVER committed to
+ * main — the schema doc lives at corpora/_ops/run-progress.schema.json.
+ */
+export interface RunProgress {
+  schema_version: 1;
+  kind: RunProgressKind;
+  /** Mechanism id (harvest) or "kind id" scope label (extraction); null when unknown. */
+  target: string | null;
+  /** Human-readable current phase, e.g. "harvesting", "drafting CL-14". */
+  phase: string;
+  /** GitHub Actions run id for correlation with the live run list; null locally. */
+  github_run_id: number | null;
+  github_run_attempt: number | null;
+  /** Correlation id echoed into the run name (D-025); null when unset. */
+  dispatch_id: string | null;
+  started_at: string;
+  updated_at: string;
+  /** True once the wrapped job finished — the last snapshot before the ref is reused. */
+  finished: boolean;
+  status: RunProgressStatus;
+  /** Progress against the run's own frontier. */
+  progress: {
+    unit: "queries" | "batches";
+    done: number;
+    /** Total planned units; null when not yet known. */
+    total: number | null;
+  };
+  /** Records accumulated so far; null for jobs that do not count records. */
+  records: number | null;
+  spend: {
+    api_calls: number | null;
+    tokens_in: number | null;
+    tokens_out: number | null;
+    estimated_usd: number | null;
+  };
+  caps: {
+    per_run_calls: number | null;
+    per_run_tokens: number | null;
+    monthly_calls: number | null;
+    monthly_usd: number | null;
+  };
+  note: string | null;
+}
+
+/** The classification of a live/recent run for the /ops live view. */
+export type LiveRunKind = "harvest" | "extraction" | "analysis" | "health";
+
+/** One in-flight Actions run, merged with its progress heartbeat when present. */
+export interface LiveRun {
+  runId: number;
+  name: string;
+  /** Workflow file basename, e.g. "harvest.yml". */
+  workflow: string;
+  kind: LiveRunKind;
+  /** "queued" | "in_progress" | ... from the Actions API. */
+  status: string;
+  htmlUrl: string;
+  createdAt: string;
+  /** Seconds since the run started, computed at snapshot time. */
+  elapsedS: number;
+  /** Current step name (phase) from the run's jobs, or null. */
+  phase: string | null;
+  /** Matching heartbeat (github_run_id === runId), or null. */
+  progress: RunProgress | null;
+}
+
+/** One completed run projected from a corpus manifest run_history entry. */
+export interface LiveRecentRun {
+  corpus: string;
+  timestamp: string;
+  status: CorpusRunStatus;
+  records: number;
+  apiCalls: number | null;
+  estimatedUsd: number | null;
+  durationS: number;
+  params: Record<string, string>;
+  error: string | null;
+  warnings: string[];
+  /** One-line saturation summary for evidence targets; null otherwise. */
+  saturation: string | null;
+}
+
+/** One scheduled workflow and its next computed occurrence. */
+export interface LiveScheduledRun {
+  workflow: string;
+  label: string;
+  cron: string;
+  /** ISO timestamp of the next occurrence, or null when uncomputable. */
+  nextRunAt: string | null;
+}
+
+/** The four operational queues, counted from committed files. */
+export interface LiveQueueCounts {
+  harvest: number;
+  extraction: number;
+  review: number;
+  reviewHeld: number;
+  authoring: number;
+  /** Evidence checkpoints awaiting a continuation dispatch. */
+  checkpointResumes: number;
+}
+
+/** The full payload the /ops live view renders (D-086). */
+export interface LiveOpsSnapshot {
+  generatedAt: string;
+  /** True when the GitHub read surface is configured (GH_OPS_TOKEN). */
+  liveEnabled: boolean;
+  /** Non-null when the live layer failed; file-based sections still render. */
+  error: string | null;
+  running: LiveRun[];
+  recent: LiveRecentRun[];
+  scheduled: LiveScheduledRun[];
+  queues: LiveQueueCounts;
+}
+
 // ---------- Decision log (§3.5) ----------
 
 export type DecisionArea =

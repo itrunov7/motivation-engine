@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ventora.dev/motivation-engine/run-progress.schema.json",
+  "title": "Run progress heartbeat (D-086)",
+  "description": "The live progress heartbeat a long-running Actions job (evidence harvest, extraction) writes after each checkpoint. A publisher force-pushes it to the dedicated `ops-progress` git ref every ~2 minutes so /ops can show live progress. This file NEVER lives on main — it exists at runtime only on the ops-progress ref (single-file orphan tree) and in the job's gitignored .ops-progress/ working dir. Mirrors lib/types.ts RunProgress.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "target",
+    "phase",
+    "github_run_id",
+    "github_run_attempt",
+    "dispatch_id",
+    "started_at",
+    "updated_at",
+    "finished",
+    "status",
+    "progress",
+    "records",
+    "spend",
+    "caps",
+    "note"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "kind": { "enum": ["harvest", "extraction"] },
+    "target": { "type": ["string", "null"] },
+    "phase": { "type": "string" },
+    "github_run_id": { "type": ["integer", "null"] },
+    "github_run_attempt": { "type": ["integer", "null"] },
+    "dispatch_id": { "type": ["string", "null"] },
+    "started_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "finished": { "type": "boolean" },
+    "status": { "enum": ["running", "success", "partial", "failed"] },
+    "progress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit", "done", "total"],
+      "properties": {
+        "unit": { "enum": ["queries", "batches"] },
+        "done": { "type": "integer", "minimum": 0 },
+        "total": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "records": { "type": ["integer", "null"], "minimum": 0 },
+    "spend": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api_calls", "tokens_in", "tokens_out", "estimated_usd"],
+      "properties": {
+        "api_calls": { "type": ["integer", "null"], "minimum": 0 },
+        "tokens_in": { "type": ["integer", "null"], "minimum": 0 },
+        "tokens_out": { "type": ["integer", "null"], "minimum": 0 },
+        "estimated_usd": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "caps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["per_run_calls", "per_run_tokens", "monthly_calls", "monthly_usd"],
+      "properties": {
+        "per_run_calls": { "type": ["integer", "null"], "minimum": 0 },
+        "per_run_tokens": { "type": ["integer", "null"], "minimum": 0 },
+        "monthly_calls": { "type": ["integer", "null"], "minimum": 0 },
+        "monthly_usd": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "note": { "type": ["string", "null"] }
+  }
+}

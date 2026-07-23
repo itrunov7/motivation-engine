@@ -113,6 +113,8 @@ jobs:
       CONNECTOR_ID: ${{ inputs.connector }}
       S2_API_KEY: ${{ secrets.S2_API_KEY }}
       CONNECTOR_MAILTO: ${{ vars.CONNECTOR_MAILTO }}
+      # Correlation id echoed into the live progress heartbeat (D-086).
+      OPS_DISPATCH_ID: ${{ inputs.dispatch_id || github.run_id }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -140,11 +142,14 @@ jobs:
         id: harvest
         run: |
           set +e
+          # Wrap the harvest in the progress publisher (D-086): it force-pushes
+          # the live heartbeat to the ops-progress ref every ~2 min so /ops can
+          # show query progress and spend while this long run is in flight.
           harvest() {
             if [ -n "${{ inputs.target }}" ]; then
-              npm run connector -- "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" "terms=${{ inputs.terms }}" 2>&1 | tee harvest.log
+              npx tsx tools/progress-publisher.ts npm run connector -- "${{ inputs.connector }}" "mechanism=${{ inputs.target }}" "terms=${{ inputs.terms }}" 2>&1 | tee harvest.log
             else
-              npm run connector -- "${{ inputs.connector }}" 2>&1 | tee harvest.log
+              npx tsx tools/progress-publisher.ts npm run connector -- "${{ inputs.connector }}" 2>&1 | tee harvest.log
             fi
             return ${PIPESTATUS[0]}
           }

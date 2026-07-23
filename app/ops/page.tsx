@@ -12,10 +12,13 @@ import {
   loadConnectorLastRun,
   loadOpsConnectorConfigFromDisk,
 } from "@/lib/ops";
+import { readLiveOpsFiles } from "@/lib/live-ops";
+import type { LiveOpsSnapshot } from "@/lib/types";
 import OpsClient, {
   type ConnectorView,
   type MechanismOption,
 } from "./ops-client";
+import LiveOpsPanel from "./live-ops-client";
 
 export const metadata = {
   title: "Operations — Motivation Engine",
@@ -59,6 +62,17 @@ export default function OpsPage() {
     .filter((segment) => segment.status === "active")
     .map((segment) => segment.id);
 
+  // Live ops (D-086): the initial snapshot is computed from committed files
+  // (fast, no network); the client polls the server action to fill in in-flight
+  // Actions runs and the progress heartbeat, and to refresh.
+  const initialLiveSnapshot: LiveOpsSnapshot = {
+    generatedAt: new Date().toISOString(),
+    liveEnabled: writeEnabled,
+    error: null,
+    running: [],
+    ...readLiveOpsFiles(),
+  };
+
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
       <header>
@@ -85,6 +99,8 @@ export default function OpsPage() {
           for the harvested corpora, health, and cost rollup.
         </p>
       </header>
+
+      <LiveOpsPanel initialSnapshot={initialLiveSnapshot} />
 
       <OpsClient
         writeEnabled={writeEnabled}

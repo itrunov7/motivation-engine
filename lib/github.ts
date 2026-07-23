@@ -190,6 +190,19 @@ async function getRepoFileAtRef(
   };
 }
 
+/**
+ * GET a file's contents at an arbitrary ref (branch/tag/sha), or null on 404.
+ * Used by the live ops view to read the run-progress heartbeat off the
+ * dedicated `ops-progress` ref (D-086) — a ref the app never writes.
+ */
+export async function getRepoFileFromRef(
+  env: GithubOpsEnv,
+  path: string,
+  ref: string,
+): Promise<RepoFile | null> {
+  return getRepoFileAtRef(env, path, ref);
+}
+
 async function getBranchHead(env: GithubOpsEnv): Promise<string> {
   const branchPath = encodeURIComponent(env.branch).replace(/%2F/g, "/");
   const res = await ghFetch(
@@ -417,6 +430,94 @@ export async function getRun(env: GithubOpsEnv, runId: number): Promise<Workflow
     throw new GithubApiError(res.status, `get run ${runId} failed: ${await res.text()}`);
   }
   return (await res.json()) as WorkflowRun;
+}
+
+/** One in-flight workflow run, enough for the live ops view (D-086). */
+export interface ActiveWorkflowRun {
+  id: number;
+  name: string;
+  /** Full workflow path, e.g. ".github/workflows/harvest.yml". */
+  path: string;
+  status: string;
+  html_url: string;
+  created_at: string;
+  /** When the run actually started; may lag created_at while queued. */
+  run_started_at: string | null;
+}
+
+/**
+ * List every queued or in-progress workflow run (D-086). Read-only Actions
+ * API, within the /ops poll surface. The caller filters to the workflows it
+ * cares about (harvest/connectors/extract/maturation) — this returns all so a
+ * new long workflow shows up without a code change here.
+ */
+export async function listActiveWorkflowRuns(
+  env: GithubOpsEnv,
+): Promise<ActiveWorkflowRun[]> {
+  const byId = new Map<number, ActiveWorkflowRun>();
+  for (const status of ["in_progress", "queued"] as const) {
+    const res = await ghFetch(
+      env,
+      `/repos/${env.owner}/${env.repo}/actions/runs?status=${status}&per_page=50`,
+    );
+    if (!res.ok) {
+      throw new GithubApiError(res.status, `list ${status} runs failed: ${await res.text()}`);
+    }
+    const body = (await res.json()) as {
+      workflow_runs: {
+        id: number;
+        name?: string;
+        path?: string;
+        status?: string;
+        html_url: string;
+        created_at: string;
+        run_started_at?: string;
+      }[];
+    };
+    for (const run of body.workflow_runs) {
+      byId.set(run.id, {
+        id: run.id,
+        name: run.name ?? String(run.id),
+        path: run.path ?? "",
+        status: run.status ?? status,
+        html_url: run.html_url,
+        created_at: run.created_at,
+        run_started_at: run.run_started_at ?? null,
+      });
+    }
+  }
+  return Array.from(byId.values());
+}
+
+/**
+ * The current phase of an in-flight run: the in-progress step's name (or the
+ * running job's name as a fallback), read from the run's jobs (D-086). Returns
+ * null when the jobs list is empty or unreadable — best-effort, never throws.
+ */
+export async function getRunCurrentPhase(
+  env: GithubOpsEnv,
+  runId: number,
+): Promise<string | null> {
+  try {
+    const res = await ghFetch(
+      env,
+      `/repos/${env.owner}/${env.repo}/actions/runs/${runId}/jobs`,
+    );
+    if (!res.ok) return null;
+    const jobs = ((await res.json()) as {
+      jobs?: {
+        name: string;
+        status?: string;
+        steps?: { name: string; status?: string }[];
+      }[];
+    }).jobs ?? [];
+    const running = jobs.find((job) => job.status === "in_progress") ?? jobs.at(-1);
+    if (!running) return null;
+    const step = (running.steps ?? []).find((item) => item.status === "in_progress");
+    return step?.name ?? running.name ?? null;
+  } catch {
+    return null;
+  }
 }
 
 interface WorkflowJob {

@@ -197,12 +197,15 @@ jobs:
             echo "failed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          # Wrap each harvest in the progress publisher (D-086): live heartbeat
+          # force-pushed to the ops-progress ref so /ops shows scheduled runs
+          # progressing.
           harvest_one() {
             local connector="$1" target="$2"
             if [ -n "$target" ] && [ "$target" != "null" ]; then
-              npm run connector -- "$connector" "mechanism=$target" 2>&1 | tee -a harvest.log
+              npx tsx tools/progress-publisher.ts npm run connector -- "$connector" "mechanism=$target" 2>&1 | tee -a harvest.log
             else
-              npm run connector -- "$connector" 2>&1 | tee -a harvest.log
+              npx tsx tools/progress-publisher.ts npm run connector -- "$connector" 2>&1 | tee -a harvest.log
             fi
             return ${PIPESTATUS[0]}
           }

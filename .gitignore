@@ -25,6 +25,10 @@
 # ephemeral dry-run quote (D-025): a run artifact, never committed
 /quote.json
 
+# live run-progress heartbeat (D-086): a working file the publisher force-pushes
+# to the ops-progress ref, never committed to main
+/.ops-progress/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
