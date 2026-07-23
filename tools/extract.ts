@@ -219,6 +219,7 @@ export interface ExtractionStats {
   records_processed: number;
   records_skipped_irrelevant: number;
   dropped_ungrounded: number;
+  failed_validation: number;
   proposed: number;
   merged: number;
   held_low_confidence: number;
@@ -314,6 +315,7 @@ export function extractionSummaryParams(
     proposed: String(stats.proposed),
     merged: String(stats.merged),
     dropped_ungrounded: String(stats.dropped_ungrounded),
+    failed_validation: String(stats.failed_validation),
     held_low_confidence: String(stats.held_low_confidence),
     dropped_volume_cap: String(stats.dropped_volume_cap),
     dropped_volume_cap_high_confidence: String(
@@ -1851,6 +1853,23 @@ function proposalValidator(): ValidateFunction {
   return ajv.compile(readJson<object>(join(ROOT, "proposals/proposal.schema.json")));
 }
 
+function reportValidationFailure(
+  validate: ValidateFunction,
+  stage: string,
+  mechanismId: string,
+): void {
+  const errors = (validate.errors ?? [])
+    .map(
+      (error) =>
+        `${error.instancePath || "(root)"} ${error.message ?? "is invalid"}`,
+    )
+    .join("; ");
+  console.warn(
+    `[extract] proposal failed schema validation at ${stage} for ${mechanismId}: ` +
+      (errors || "unknown validation error"),
+  );
+}
+
 export function buildExtractionManifestCost(
   config: ExtractionOpsConfig,
   usage: Usage,
@@ -1914,11 +1933,16 @@ export function buildExtractionManifestRun(args: {
       args.stats.records_processed + args.stats.records_skipped_irrelevant,
     files_written: args.filesWritten,
     duration_s: args.durationS,
-    ...(args.stats.dropped_ungrounded > 0 || args.capped
+    ...(args.stats.dropped_ungrounded > 0 ||
+      args.stats.failed_validation > 0 ||
+      args.capped
       ? {
           warnings: {
             ...(args.stats.dropped_ungrounded > 0
               ? { ungrounded_dropped: true }
+              : {}),
+            ...(args.stats.failed_validation > 0
+              ? { validation_failed: true }
               : {}),
             ...(args.capped ? { capped: true } : {}),
           },
@@ -2032,6 +2056,7 @@ export async function runExtraction(args: {
     // first slice's pre-filter already marks every irrelevant record terminal.
     records_skipped_irrelevant: 0,
     dropped_ungrounded: 0,
+    failed_validation: 0,
     proposed: 0,
     merged: 0,
     held_low_confidence: 0,
@@ -2185,8 +2210,13 @@ export async function runExtraction(args: {
         startedAt.toISOString(),
         draftContext,
       );
-      if (!proposal || !validate(proposal)) {
+      if (!proposal) {
         stats.dropped_ungrounded += 1;
+        continue;
+      }
+      if (!validate(proposal)) {
+        stats.failed_validation += 1;
+        reportValidationFailure(validate, "candidate", mechanismId);
         continue;
       }
       const duplicate = existing
@@ -2212,7 +2242,8 @@ export async function runExtraction(args: {
           merged = { ...merged, status: "pending", hold_reason: null } as Proposal;
         }
         if (!validate(merged)) {
-          stats.dropped_ungrounded += 1;
+          stats.failed_validation += 1;
+          reportValidationFailure(validate, "pending merge", mechanismId);
           continue;
         }
         duplicate.proposal = merged;
@@ -2244,7 +2275,8 @@ export async function runExtraction(args: {
       }
 
       if (!validate(gatedProposal)) {
-        stats.dropped_ungrounded += 1;
+        stats.failed_validation += 1;
+        reportValidationFailure(validate, "authoritative enrichment", mechanismId);
         continue;
       }
 
@@ -2350,6 +2382,7 @@ export async function runExtraction(args: {
     proposed: stats.proposed,
     merged: stats.merged,
     dropped_ungrounded: stats.dropped_ungrounded,
+    failed_validation: stats.failed_validation,
     held_low_confidence: stats.held_low_confidence,
     dropped_volume_cap: stats.dropped_volume_cap,
     dropped_volume_cap_high_confidence: stats.dropped_volume_cap_high_confidence,
@@ -2361,7 +2394,7 @@ export async function runExtraction(args: {
     records_remaining: stats.records_remaining,
   };
   reportExtractProgress(
-    `${currentPlan.capped ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates · ${stats.dropped_ungrounded} dropped ungrounded · ${stats.records_remaining} remaining`,
+    `${currentPlan.capped ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates · ${stats.dropped_ungrounded} dropped ungrounded · ${stats.failed_validation} failed validation · ${stats.records_remaining} remaining`,
     currentPlan.capped ? "partial" : "success",
     true,
     summary,

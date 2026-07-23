@@ -1183,11 +1183,12 @@ export interface RunProgress {
   summary?: RunProgressSummary | null;
 }
 
-/** The five gate counters plus the relevance funnel for a finished run (D-090). */
+/** Quality-gate counters plus the relevance funnel for a finished run. */
 export interface RunProgressSummary {
   proposed: number;
   merged: number;
   dropped_ungrounded: number;
+  failed_validation: number;
   held_low_confidence: number;
   dropped_volume_cap: number;
   dropped_volume_cap_high_confidence: number;

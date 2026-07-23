@@ -211,7 +211,7 @@ function RunningCard({ run, now }: { run: LiveRun; now: number }) {
 }
 
 /**
- * The extraction funnel + five gate counters for a recent run (D-090), read
+ * The extraction funnel + quality-gate counters for a recent run, read
  * from the just-finished heartbeat summary (numbers) or the committed manifest
  * params (strings). Returns null for non-extraction rows or rows without the
  * counters (e.g. pre-D-090 runs missing the funnel keys).
@@ -220,6 +220,7 @@ function extractionCounters(run: LiveRecentRun): {
   proposed: number;
   merged: number;
   droppedUngrounded: number;
+  failedValidation: number | null;
   heldLowConfidence: number;
   droppedVolumeCap: number;
   candidates: number;
@@ -240,6 +241,7 @@ function extractionCounters(run: LiveRecentRun): {
       proposed: fromSummary.proposed,
       merged: fromSummary.merged,
       droppedUngrounded: fromSummary.dropped_ungrounded,
+      failedValidation: fromSummary.failed_validation,
       heldLowConfidence: fromSummary.held_low_confidence,
       droppedVolumeCap: fromSummary.dropped_volume_cap,
       candidates: fromSummary.candidates,
@@ -254,6 +256,10 @@ function extractionCounters(run: LiveRecentRun): {
     proposed: numeric("proposed"),
     merged: numeric("merged"),
     droppedUngrounded: numeric("dropped_ungrounded"),
+    failedValidation:
+      run.params.failed_validation === undefined
+        ? null
+        : numeric("failed_validation"),
     heldLowConfidence: numeric("held_low_confidence"),
     droppedVolumeCap: numeric("dropped_volume_cap"),
     candidates: numeric("candidates"),
@@ -307,6 +313,7 @@ function RecentRow({ run, now }: { run: LiveRecentRun; now: number }) {
             <span>proposed: <span className="text-[#E6EFE8]">{counters.proposed}</span></span>
             <span>merged: <span className="text-[#E6EFE8]">{counters.merged}</span></span>
             <span>ungrounded: <span className="text-[#E6EFE8]">{counters.droppedUngrounded}</span></span>
+            <span>invalid: <span className="text-[#E6EFE8]">{counters.failedValidation ?? "—"}</span></span>
             <span>held: <span className="text-[#E6EFE8]">{counters.heldLowConfidence}</span></span>
             <span>volume cap: <span className="text-[#E6EFE8]">{counters.droppedVolumeCap}</span></span>
           </div>

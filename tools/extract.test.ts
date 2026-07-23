@@ -380,6 +380,7 @@ test("capped extraction manifest is partial and records funnel outcomes", () => 
       records_processed: 3,
       records_skipped_irrelevant: 7,
       dropped_ungrounded: 0,
+      failed_validation: 1,
       proposed: 1,
       merged: 0,
       held_low_confidence: 0,
@@ -392,7 +393,9 @@ test("capped extraction manifest is partial and records funnel outcomes", () => 
   });
   assert.equal(run.status, "partial");
   assert.equal(run.warnings?.capped, true);
+  assert.equal(run.warnings?.validation_failed, true);
   assert.equal(run.records_fetched, 10);
+  assert.equal(run.params.failed_validation, "1");
   assert.equal(run.params.records_processed, "3");
   assert.equal(run.params.records_skipped_irrelevant, "7");
 });
@@ -811,6 +814,7 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       proposed: 4,
       merged: 3,
       dropped_ungrounded: 2,
+      failed_validation: 1,
       held_low_confidence: 2,
       dropped_volume_cap: 4,
       dropped_volume_cap_high_confidence: 1,
@@ -825,6 +829,7 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       proposed: "4",
       merged: "3",
       dropped_ungrounded: "2",
+      failed_validation: "1",
       held_low_confidence: "2",
       dropped_volume_cap: "4",
       dropped_volume_cap_high_confidence: "1",

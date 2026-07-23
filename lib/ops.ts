@@ -463,6 +463,8 @@ export interface ExtractionRunSummary {
   proposed: number;
   merged: number;
   droppedUngrounded: number;
+  /** Null for runs committed before D-091 introduced this counter. */
+  failedValidation: number | null;
   heldLowConfidence: number;
   droppedVolumeCap: number;
   droppedVolumeCapHighConfidence: number;
@@ -484,6 +486,11 @@ export function loadExtractionRunSummary(): ExtractionRunSummary | undefined {
     const parsed = Number(params[key] ?? "0");
     return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
   };
+  const optionalNumber = (key: string): number | null => {
+    if (params[key] === undefined) return null;
+    const parsed = Number(params[key]);
+    return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
+  };
   const scopeEntry = Object.entries(params).find(([key]) =>
     ["mechanism", "pack", "segment"].includes(key),
   );
@@ -494,6 +501,7 @@ export function loadExtractionRunSummary(): ExtractionRunSummary | undefined {
     proposed: number("proposed"),
     merged: number("merged"),
     droppedUngrounded: number("dropped_ungrounded"),
+    failedValidation: optionalNumber("failed_validation"),
     heldLowConfidence: number("held_low_confidence"),
     droppedVolumeCap: number("dropped_volume_cap"),
     droppedVolumeCapHighConfidence: number("dropped_volume_cap_high_confidence"),

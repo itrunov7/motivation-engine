@@ -561,7 +561,7 @@ export async function getLiveOpsSnapshotAction(): Promise<LiveOpsSnapshot> {
 
 /**
  * Prepend a just-finished extraction run reconstructed from the terminal
- * heartbeat (D-090) so the operator sees the five counters + funnel the moment
+ * heartbeat so the operator sees the quality counters + funnel the moment
  * the job ends — without opening GitHub Actions and before the run's own commit
  * lands. Deduped against committed rows: an extraction run within 10 minutes of
  * this heartbeat's start is the SAME run, so we defer to the committed row.

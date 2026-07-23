@@ -80,6 +80,7 @@ function ExtractionRunPanel({ run }: { run: ExtractionRunSummary | null }) {
         ["proposed", run.proposed],
         ["merged", run.merged],
         ["dropped ungrounded", run.droppedUngrounded],
+        ["failed validation", run.failedValidation],
         ["held low confidence", run.heldLowConfidence],
         ["dropped at volume cap", run.droppedVolumeCap],
         ["high-confidence overflow", run.droppedVolumeCapHighConfidence],
@@ -106,7 +107,9 @@ function ExtractionRunPanel({ run }: { run: ExtractionRunSummary | null }) {
                 <dt className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
                   {label}
                 </dt>
-                <dd className="mt-1 font-mono text-lg text-[#E6EFE8]">{value}</dd>
+                <dd className="mt-1 font-mono text-lg text-[#E6EFE8]">
+                  {value ?? "—"}
+                </dd>
               </div>
             ))}
           </dl>
