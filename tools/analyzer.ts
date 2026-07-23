@@ -77,6 +77,7 @@ import type {
   ReaderCoverageFile,
   Realization,
   RealizationCorpusFile,
+  SeedStub,
   PackMapFile,
   SegmentsFile,
   StageThresholds,
@@ -93,6 +94,7 @@ import type {
 
 const ROOT = join(__dirname, "..");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
+const SEED_DIR = join(MECHANISMS_DIR, "_seed");
 const TAXONOMY = join(ROOT, "registry", "taxonomy.json");
 const DOSSIERS_DIR = join(ROOT, "dossiers");
 const INTERACTIONS_DIR = join(ROOT, "interactions");
@@ -109,7 +111,7 @@ const CONFIG = join(ANALYSIS_DIR, "analyzer.config.yaml");
 const MATRIX = join(ANALYSIS_DIR, "sufficiency-matrix.json");
 const HARVEST_HISTORY = join(ANALYSIS_DIR, "harvest-history.json");
 
-const MATRIX_VERSION = "0.4.0";
+const MATRIX_VERSION = "0.5.0";
 
 /**
  * The reserved row id of the cross-cutting perception row group (Step 6, D-067):
@@ -480,6 +482,34 @@ function bootstrapCell(
     gaps,
     typed_gaps: buildTypedGaps(gaps, scores, config, "general_only", "red"),
     segment_evidence: "general_only",
+  };
+}
+
+/**
+ * Candidate members are declared dependencies but not authoritative knowledge.
+ * Keep full-record scores visible, force every group/cell red, and trace exactly
+ * which promotion gate is pending. This is distinct from evidence exhaustion.
+ */
+export function applyCandidatePendency(
+  cell: SufficiencyCell,
+  candidates: SeedStub[],
+): SufficiencyCell {
+  if (candidates.length === 0) return cell;
+  return {
+    ...cell,
+    group_statuses: {
+      breadth: "red",
+      depth: "red",
+      quality: "red",
+    },
+    status: "red",
+    candidate_members: [...candidates]
+      .sort((a, b) => a.id.localeCompare(b.id))
+      .map((candidate) => ({
+        id: candidate.id,
+        source: rel(join(SEED_DIR, `${candidate.id}.json`)),
+        reason: `member mechanism ${candidate.id} is a candidate — no evidence yet`,
+      })),
   };
 }
 
@@ -1170,6 +1200,13 @@ export function main(): void {
     const m = JSON.parse(readFileSync(file, "utf-8")) as Mechanism;
     mechanisms.set(m.id, m);
   }
+  const seedStubs = new Map<string, SeedStub>();
+  if (existsSync(SEED_DIR)) {
+    for (const file of listJsonFiles(SEED_DIR)) {
+      const stub = JSON.parse(readFileSync(file, "utf-8")) as SeedStub;
+      seedStubs.set(stub.id, stub);
+    }
+  }
 
   // Cross-cutting perception roster (Step 6, D-067): every full record whose L0
   // parent is flagged cross_cutting in the taxonomy (today only S7) — the SAME
@@ -1291,6 +1328,7 @@ export function main(): void {
   let generalOnly = 0;
   let exhausted = 0;
   let rescored = 0;
+  let candidatePending = 0;
 
   for (const element of packMap.elements) {
     // Scoped run: an unfiltered pack keeps its existing cells verbatim; only
@@ -1308,16 +1346,27 @@ export function main(): void {
         statusCounts[existing.status] += 1;
         if (existing.segment_evidence === "general_only") generalOnly += 1;
         if (existing.evidence_exhausted) exhausted += 1;
+        if ((existing.candidate_members?.length ?? 0) > 0) candidatePending += 1;
       }
       continue;
     }
-    const members = element.mechanisms.map((id) => {
-      const m = mechanisms.get(id);
-      if (!m) throw new Error(`pack "${element.id}" references unknown mechanism "${id}"`);
-      return m;
-    });
+    const members: Mechanism[] = [];
+    const candidateMembers: SeedStub[] = [];
+    for (const id of element.mechanisms) {
+      const mechanism = mechanisms.get(id);
+      if (mechanism) {
+        members.push(mechanism);
+        continue;
+      }
+      const candidate = seedStubs.get(id);
+      if (candidate) {
+        candidateMembers.push(candidate);
+        continue;
+      }
+      throw new Error(`pack "${element.id}" references unknown mechanism "${id}"`);
+    }
     for (const segment of activeSegments) {
-      const scored = bootstrapSegmentIds.has(segment.id)
+      const base = bootstrapSegmentIds.has(segment.id)
         ? bootstrapCell(element.id, segment.id, config, "pack")
         : scoreCell(
             element.id,
@@ -1329,11 +1378,16 @@ export function main(): void {
             "pack",
             knowledge,
           );
-      const cell = applyExhaustion(scored, element.mechanisms, harvestHistory, exhaustionK);
+      const scored = applyCandidatePendency(base, candidateMembers);
+      const cell =
+        candidateMembers.length > 0
+          ? scored
+          : applyExhaustion(scored, element.mechanisms, harvestHistory, exhaustionK);
       cells.push(cell);
       statusCounts[cell.status] += 1;
       if (cell.segment_evidence === "general_only") generalOnly += 1;
       if (cell.evidence_exhausted) exhausted += 1;
+      if ((cell.candidate_members?.length ?? 0) > 0) candidatePending += 1;
     }
     rescored += 1;
     console.log(`  ✓ ${element.id} scored across ${activeSegments.length} segments`);
@@ -1412,7 +1466,8 @@ export function main(): void {
   console.log(
     `     stage: ${config.maturity_stage} (D-060); ` +
       `pack status: ${statusCounts.green} green / ${statusCounts.amber} amber / ${statusCounts.red} red; ` +
-      `${generalOnly} cell${generalOnly === 1 ? "" : "s"} on general evidence only.`,
+      `${generalOnly} cell${generalOnly === 1 ? "" : "s"} on general evidence only; ` +
+      `${candidatePending} candidate-pending cell${candidatePending === 1 ? "" : "s"}.`,
   );
   // Perception is reported apart from pack coverage (D-067): the cross-cutting
   // row is scored once per segment, never counted 11 times, so it never

@@ -203,18 +203,19 @@ const taxonomySchema = {
     version: { type: "string", pattern: "^\\d+\\.\\d+\\.\\d+$" },
     nodes: {
       type: "array",
-      minItems: 7,
-      maxItems: 7,
+      minItems: 8,
+      maxItems: 8,
       items: {
         type: "object",
         properties: {
-          id: { type: "string", pattern: "^S[1-7]$" },
+          id: { type: "string", pattern: "^S[1-8]$" },
           name: { type: "string", minLength: 1 },
           anchors: {
             type: "object",
             properties: {
               rdoc: { type: "string", minLength: 1 },
               panksepp: { type: "string", minLength: 1 },
+              sdt: { type: "string", minLength: 1 },
             },
             required: ["rdoc"],
             additionalProperties: false,
@@ -1000,8 +1001,8 @@ function main(): void {
       taxonomyIds.add(node.id);
       if (node.cross_cutting) crossCuttingL0.add(node.id);
     }
-    if (taxonomyIds.size !== 7) {
-      fail(PATHS.taxonomy, `expected 7 unique node ids S1–S7, found ${taxonomyIds.size}`);
+    if (taxonomyIds.size !== 8) {
+      fail(PATHS.taxonomy, `expected 8 unique node ids S1–S8, found ${taxonomyIds.size}`);
     } else {
       console.log(`  ✓ ${rel(PATHS.taxonomy)} valid (${taxonomyIds.size} L0 nodes)`);
     }

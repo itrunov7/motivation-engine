@@ -25,4 +25,5 @@ jobs:
       - run: npm run test:extract
       - run: npm run test:analyzer
       - run: npm run test:gaps
+      - run: npm run test:packs
       - run: npm run build

@@ -55,6 +55,7 @@ import type {
   ResearchGapCell,
   ResearchQueue,
   ResearchTask,
+  SeedStub,
   SegmentsFile,
   StageThresholds,
   SufficiencyCell,
@@ -67,6 +68,7 @@ import type {
 
 const ROOT = join(__dirname, "..");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
+const SEED_DIR = join(MECHANISMS_DIR, "_seed");
 const TAXONOMY = join(ROOT, "registry", "taxonomy.json");
 const EVIDENCE_DIR = join(ROOT, "corpora", "evidence");
 const REALIZATION_CORPUS_DIR = join(ROOT, "corpora", "realizations");
@@ -310,7 +312,7 @@ export function harvestCriteria(cell: SufficiencyCell): SufficiencyCriterion[] {
 
 /** A cell is harvestable iff it has ≥1 scored harvest gap (see harvestCriteria). */
 function isHarvestable(cell: SufficiencyCell): boolean {
-  return harvestCriteria(cell).length > 0;
+  return harvestCriteria(cell).length > 0 || (cell.candidate_members?.length ?? 0) > 0;
 }
 
 /** The cell's scored Actions-only pipeline gaps. */
@@ -438,7 +440,7 @@ function comparePipelineCandidates(a: PipelineCandidate, b: PipelineCandidate): 
 
 // ---------- task construction ----------
 
-function suggestedTerms(mechanism: Mechanism, qualifier: string): string[] {
+function suggestedTerms(mechanism: Mechanism | SeedStub, qualifier: string): string[] {
   const base =
     mechanism.evidence_terms && mechanism.evidence_terms.length > 0
       ? mechanism.evidence_terms
@@ -483,15 +485,18 @@ function reasonFor(
   file: AnalyzerConfigFile,
   criteria: SufficiencyCriterion[],
 ): string {
-  const failed = criteria
-    .map((criterion) => {
-      const score = cell.scores[criterion];
-      const green = greenThreshold(file, criterion);
-      return score === null
-        ? `${criterion} unmeasured (needs ≥${green.toFixed(2)})`
-        : `${criterion} ${score.toFixed(2)}<${green.toFixed(2)}`;
-    })
-    .join(", ");
+  const failed =
+    criteria.length === 0
+      ? "candidate member pending promotion"
+      : criteria
+          .map((criterion) => {
+            const score = cell.scores[criterion];
+            const green = greenThreshold(file, criterion);
+            return score === null
+              ? `${criterion} unmeasured (needs ≥${green.toFixed(2)})`
+              : `${criterion} ${score.toFixed(2)}<${green.toFixed(2)}`;
+          })
+          .join(", ");
   const evidenceNote =
     cell.segment_evidence === "general_only"
       ? "; segment evidence general_only (segment-specific harvest needed)"
@@ -532,10 +537,18 @@ function main(): void {
   const packMechanisms = new Map<string, string[]>();
   for (const element of packMap.elements) packMechanisms.set(element.id, element.mechanisms);
 
-  const mechanisms = new Map<string, Mechanism>();
+  const fullMechanisms = new Map<string, Mechanism>();
+  const mechanisms = new Map<string, Mechanism | SeedStub>();
   for (const path of listJsonFiles(MECHANISMS_DIR)) {
     const m = JSON.parse(readFileSync(path, "utf-8")) as Mechanism;
+    fullMechanisms.set(m.id, m);
     mechanisms.set(m.id, m);
+  }
+  if (existsSync(SEED_DIR)) {
+    for (const path of listJsonFiles(SEED_DIR)) {
+      const stub = JSON.parse(readFileSync(path, "utf-8")) as SeedStub;
+      mechanisms.set(stub.id, stub);
+    }
   }
 
   // Perception row (Step 6, D-067): register the cross-cutting roster (full
@@ -548,7 +561,7 @@ function main(): void {
   const crossCuttingL0 = new Set(
     taxonomy.nodes.filter((n) => n.cross_cutting).map((n) => n.id),
   );
-  const crossCuttingIds = Array.from(mechanisms.values())
+  const crossCuttingIds = Array.from(fullMechanisms.values())
     .filter((m) => crossCuttingL0.has(m.parent))
     .map((m) => m.id)
     .sort((a, b) => a.localeCompare(b));
@@ -603,16 +616,20 @@ function main(): void {
     const weight = gp.segment_weights?.[cell.segment] ?? 1;
     const importance = round(weight * gapSize(cell, file, harvestCriteria(cell)));
     const members = packMechanisms.get(cell.pack) ?? [];
+    const pendingIds = new Set(cell.candidate_members?.map((candidate) => candidate.id) ?? []);
     for (const mechanismId of members) {
       const mechanism = mechanisms.get(mechanismId);
       if (!mechanism) continue; // validate.ts guarantees resolution; skip defensively.
+      const isCandidate = pendingIds.has(mechanismId) || !("evidence" in mechanism);
       const weakness =
-        GRADE_ORDER.indexOf(mechanism.evidence.grade) +
+        (isCandidate
+          ? REPLICATION_FLAG_BUMP * 2
+          : GRADE_ORDER.indexOf(mechanism.evidence.grade)) +
         (flagged.has(mechanismId) ? REPLICATION_FLAG_BUMP : 0);
       const candidate: Candidate = {
         mechanism: mechanismId,
         segment: cell.segment,
-        importance,
+        importance: round(importance + (isCandidate ? weight : 0)),
         weakness,
         status,
         generalOnly: cell.segment_evidence === "general_only",
@@ -644,7 +661,7 @@ function main(): void {
   let lowNoveltySkipped = 0;
   for (const candidate of ranked) {
     if (tasks.length >= effectiveMaxTasks) break;
-    const mechanism = mechanisms.get(candidate.mechanism) as Mechanism;
+    const mechanism = mechanisms.get(candidate.mechanism) as Mechanism | SeedStub;
     const qualifier = qualifiers[candidate.segment];
     const terms = suggestedTerms(mechanism, qualifier);
 
@@ -667,7 +684,14 @@ function main(): void {
       segment: candidate.segment,
       importance: candidate.importance,
       suggested_evidence_terms: terms,
-      reason: reasonFor(candidate.cell, file, harvestCriteria(candidate.cell)),
+      reason: [
+        reasonFor(candidate.cell, file, harvestCriteria(candidate.cell)),
+        candidate.cell.candidate_members?.find(
+          (pending) => pending.id === candidate.mechanism,
+        )?.reason,
+      ]
+        .filter((part): part is string => Boolean(part))
+        .join("; "),
     });
   }
 

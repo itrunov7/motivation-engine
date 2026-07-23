@@ -15,7 +15,7 @@ Key idea the UI must communicate: this is a transparent machine under constructi
 Four levels, tree-shaped:
 
 ```
-L0  BRAIN SYSTEMS      — fundamental motivational/affective systems (fixed set of 6)
+L0  SYSTEMS            — motivation, perception, interaction, and agency (fixed set of 8)
  └─ L1  MECHANISMS     — reproducible psychological mechanisms (the main records)
      └─ L2  EFFECTS    — observable phenomena produced by a mechanism (inside L1 records)
          └─ L3  IMPLEMENTATIONS — concrete UI/copy/flow embodiments (inside L1 records)
@@ -31,9 +31,10 @@ L0  BRAIN SYSTEMS      — fundamental motivational/affective systems (fixed set
 | S5 | Self & ownership | RDoC social: self-perception | EN-03, ID-12 |
 | S6 | Evaluation & choice | RDoC cognitive: decision | FR-11 |
 | S7 | Perception & comprehension (cross-cutting) | RDoC cognitive: attention, perception, working memory | — (cross-cutting; applies to every element, D-062) |
+| S8 | Interaction & agency | RDoC cognitive control / reward responsiveness; SDT autonomy, competence | CO-19, AU-20, FB-21, ER-22, DE-23, FL-24, RR-25, AE-26 |
 
 ### L1 mechanism lifecycle
-`candidate → incubating → core → deprecated` (also: candidate/incubating → rejected; core → demoted back to incubating). Baseline state: **LA-01 = core-pending (displayed as "incubating"), 11 seed stubs = candidate.** Transitions happen only via dossiers (see §4); the baseline UI only displays statuses, it never changes them.
+`candidate → incubating → core → deprecated` (also: candidate/incubating → rejected; core → demoted back to incubating). S8 enters as eight owner-authored candidate stubs. Transitions happen only via dossiers (see §4); the UI only displays statuses, it never changes them.
 
 ### Seed mechanism roster (11 stubs + 1 full record)
 LA-01 Loss aversion (full record) · VR-02 Variable reward · EN-03 Endowment effect · HA-04 Habit loop · CG-05 Curiosity gap · SC-06 Scarcity · ZE-07 Progress & incompleteness · SP-08 Social proof · ST-09 Status & comparison · RE-10 Reciprocity · FR-11 Framing & anchoring · ID-12 Identity & consistency.

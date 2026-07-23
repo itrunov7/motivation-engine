@@ -433,6 +433,20 @@ function CellTooltip({
               </span>
             ))}
           </div>
+          {(cell.candidate_members?.length ?? 0) > 0 && (
+            <div className="mt-2">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-[#E4B54E]">
+                candidate pendency
+              </p>
+              <ul className="mt-1 flex flex-col gap-1">
+                {cell.candidate_members?.map((candidate) => (
+                  <li key={candidate.id} className="font-mono text-[11px] text-[#8CA495]">
+                    {candidate.reason} · {candidate.source}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {CRITERION_GROUPS.map((group) => (
             <GapGroup
               key={group.key}

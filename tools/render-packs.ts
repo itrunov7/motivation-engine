@@ -18,6 +18,8 @@
  * into EVERY pack as the distinct top-level section cross_cutting_perception,
  * separate from the pack's own motivational LAYER 1. The pack map never lists
  * these — inclusion is automatic. Empty until the S7 seeds become full records.
+ * Non-cross-cutting candidate members may be declared in pack-map, but are
+ * omitted from generated guidance until promotion (D-084).
  *
  * Interactions draw from TWO sources (D-057): owner-authored records
  * (/interactions/{A}__{B}.json) and registry relations. An authored record is
@@ -68,11 +70,13 @@ import type {
   PackRealization,
   Realization,
   Relation,
+  SeedStub,
   Taxonomy,
 } from "../lib/types";
 
 const ROOT = join(__dirname, "..");
 const MECHANISMS_DIR = join(ROOT, "registry", "mechanisms");
+const SEED_DIR = join(MECHANISMS_DIR, "_seed");
 const TAXONOMY = join(ROOT, "registry", "taxonomy.json");
 const DOSSIERS_DIR = join(ROOT, "dossiers");
 const EFFECTS_DIR = join(ROOT, "effects");
@@ -844,6 +848,13 @@ function main(): void {
     const m = JSON.parse(readFileSync(file, "utf-8")) as Mechanism;
     mechanisms.set(m.id, m);
   }
+  const candidateIds = new Set<string>();
+  if (existsSync(SEED_DIR)) {
+    for (const file of listJsonFiles(SEED_DIR)) {
+      const stub = JSON.parse(readFileSync(file, "utf-8")) as SeedStub;
+      candidateIds.add(stub.id);
+    }
+  }
 
   // First-class L2 effects (D-076), indexed under their owning L1 mechanism.
   // The renderer follows mechanism.effect_refs; tools/validate.ts enforces the
@@ -904,10 +915,11 @@ function main(): void {
     // even if that guard is bypassed).
     const members = element.mechanisms
       .filter((id) => !crossCuttingIds.has(id))
-      .map((id) => {
+      .flatMap((id) => {
         const m = mechanisms.get(id);
-        if (!m) throw new Error(`pack "${element.id}" references unknown mechanism "${id}"`);
-        return m;
+        if (m) return [m];
+        if (candidateIds.has(id)) return [];
+        throw new Error(`pack "${element.id}" references unknown mechanism "${id}"`);
       });
 
     const sheet = buildDatasheet(

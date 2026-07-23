@@ -60,4 +60,30 @@ test("grouped sufficiency is fail-closed, traced, and exposes core-ux depth", ()
       ),
     );
   }
+
+  const candidatePending = packCells.filter(
+    (cell) => (cell.candidate_members?.length ?? 0) > 0,
+  );
+  assert.equal(candidatePending.length, 75);
+  assert(candidatePending.every((cell) => cell.status === "red"));
+  assert(
+    candidatePending.every((cell) =>
+      Object.values(cell.group_statuses).every((status) => status === "red"),
+    ),
+  );
+  assert.deepEqual(
+    coreUx[0].candidate_members?.map((candidate) => candidate.id),
+    ["AE-26", "AU-20", "CO-19", "DE-23", "ER-22", "FB-21", "FL-24", "RR-25"],
+  );
+  assert(
+    candidatePending.every((cell) =>
+      cell.candidate_members?.every(
+        (candidate) =>
+          candidate.reason ===
+            `member mechanism ${candidate.id} is a candidate — no evidence yet` &&
+          candidate.source ===
+            `registry/mechanisms/_seed/${candidate.id}.json`,
+      ),
+    ),
+  );
 });

@@ -22,7 +22,7 @@
     "level": { "const": "L1" },
     "parent": {
       "type": "string",
-      "pattern": "^S[1-7]$",
+      "pattern": "^S[1-8]$",
       "description": "L0 taxonomy node id"
     },
     "cross_cutting": {
@@ -310,7 +310,7 @@
         "oneliner": { "type": "string", "minLength": 1 },
         "parent": {
           "type": "string",
-          "pattern": "^S[1-7]$"
+          "pattern": "^S[1-8]$"
         },
         "lifecycle_status": { "const": "candidate" },
         "cross_cutting": {

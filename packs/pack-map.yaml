@@ -31,17 +31,20 @@ elements:
   - id: onboarding
     applies_to: [onboarding-flow]
     funnel_stage: onboarding
-    mechanisms: [ID-12, EN-03, ZE-07, VR-02]
+    mechanisms: [ID-12, EN-03, ZE-07, VR-02, CO-19, AU-20, DE-23, FB-21, ER-22]
+    note: "owner-added S8 — early competence, consent, sensible defaults, responsive feedback, cheap recovery from first mistakes"
 
   - id: first-value
     applies_to: [first-run-experience]
     funnel_stage: activation
-    mechanisms: [ZE-07, VR-02, EN-03]
+    mechanisms: [ZE-07, VR-02, EN-03, CO-19, FB-21, DE-23, RR-25]
+    note: "owner-added S8 — the first success must feel earned, be immediately confirmed, and require minimum effort or memory"
 
   - id: core-ux
     applies_to: [core-product-screens]
     funnel_stage: activation
-    mechanisms: [VR-02, HA-04, ZE-07]
+    mechanisms: [VR-02, HA-04, ZE-07, CO-19, AU-20, FB-21, ER-22, DE-23, FL-24, RR-25, AE-26]
+    note: "owner-added S8 — interaction and agency are first-class core-product dependencies"
 
   - id: retention-return
     applies_to: [return-triggers, notifications]
@@ -61,12 +64,14 @@ elements:
   - id: paywall-conversion
     applies_to: [paywall, pricing]
     funnel_stage: conversion
-    mechanisms: [LA-01, EN-03, FR-11, SC-06]
+    mechanisms: [LA-01, EN-03, FR-11, SC-06, DE-23]
+    note: "owner-added S8 — defaults belong where plan selection, billing period, or auto-renew presents a real preselected choice"
 
   - id: retention-billing
     applies_to: [billing, renewal]
     funnel_stage: retention
-    mechanisms: [LA-01, EN-03, ST-09]
+    mechanisms: [LA-01, EN-03, ST-09, ER-22]
+    note: "owner-added S8 — cancellation and billing errors make recovery quality consequential"
 
   - id: trust-friction
     applies_to: [checkout, forms]

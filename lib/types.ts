@@ -41,8 +41,16 @@ export type RuleSeverity = "block" | "warn";
 
 export type ProposedBy = "owner" | "derivation-pipeline";
 
-/** L0 taxonomy node id (S1–S7). */
-export type TaxonomyNodeId = "S1" | "S2" | "S3" | "S4" | "S5" | "S6" | "S7";
+/** L0 taxonomy node id (S1–S8). */
+export type TaxonomyNodeId =
+  | "S1"
+  | "S2"
+  | "S3"
+  | "S4"
+  | "S5"
+  | "S6"
+  | "S7"
+  | "S8";
 
 export type ArtifactType =
   | "paywall"
@@ -60,6 +68,7 @@ export type ArtifactType =
 export interface TaxonomyAnchors {
   rdoc: string;
   panksepp?: string;
+  sdt?: string;
 }
 
 export interface TaxonomyNode {
@@ -1568,6 +1577,13 @@ export interface CellExhaustion {
  */
 export type MatrixRowGroup = "pack" | "perception";
 
+/** An unpromoted pack member that makes the cell fail closed (D-084). */
+export interface CandidateMemberTrace {
+  id: string;
+  source: string;
+  reason: string;
+}
+
 /** One scored [row × segment] cell of the sufficiency matrix. */
 export interface SufficiencyCell {
   /** The row id: a pack id (D-048) or the reserved "perception" row (D-067). */
@@ -1602,6 +1618,11 @@ export interface SufficiencyCell {
    */
   typed_gaps: TypedGap[];
   segment_evidence: SegmentEvidence;
+  /**
+   * Candidate pack members excluded from authoritative scoring/guidance.
+   * Their declared dependency forces the cell red until promotion.
+   */
+  candidate_members?: CandidateMemberTrace[];
   /**
    * True when every one of the pack's mechanisms has been harvested to
    * exhaustion for this segment (D-059) and the cell still has a scored harvest

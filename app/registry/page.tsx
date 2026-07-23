@@ -503,6 +503,7 @@ function NodeAnchors({ node }: { node: TaxonomyNode }) {
     <div className="flex flex-wrap gap-1.5">
       <Tag>RDoC · {node.anchors.rdoc}</Tag>
       {node.anchors.panksepp && <Tag>Panksepp · {node.anchors.panksepp}</Tag>}
+      {node.anchors.sdt && <Tag>SDT · {node.anchors.sdt}</Tag>}
     </div>
   );
 }
