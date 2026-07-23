@@ -1394,6 +1394,42 @@ function main(): void {
                   ok = false;
                 }
               }
+              const aggregate = new Set(
+                corpusCoverage?.processed_record_ids ?? [],
+              );
+              for (const [mode, modeState] of Object.entries(
+                corpusCoverage?.by_mode ?? {},
+              )) {
+                const processed = new Set(modeState.processed_record_ids);
+                for (const id of modeState.skipped_irrelevant_record_ids) {
+                  if (processed.has(id)) {
+                    fail(
+                      PATHS.readerCoverage,
+                      `${mechanismId}.${kind}.${mode} marks ${id} both processed and skipped_irrelevant`,
+                    );
+                    ok = false;
+                  }
+                }
+                for (const id of [
+                  ...modeState.processed_record_ids,
+                  ...modeState.skipped_irrelevant_record_ids,
+                ]) {
+                  if (!currentIds.has(id)) {
+                    fail(
+                      PATHS.readerCoverage,
+                      `${mechanismId}.${kind}.${mode} references unknown record ${id}`,
+                    );
+                    ok = false;
+                  }
+                  if (!aggregate.has(id)) {
+                    fail(
+                      PATHS.readerCoverage,
+                      `${mechanismId}.${kind}.${mode} terminal record ${id} is missing from aggregate processed_record_ids`,
+                    );
+                    ok = false;
+                  }
+                }
+              }
             }
           }
           if (ok) console.log(`  ✓ ${rel(PATHS.readerCoverage)} valid (reader coverage)`);

@@ -13,15 +13,20 @@ import type {
   ExtractionOpsConfig,
   KnowledgeProvenanceItem,
   Proposal,
+  ReaderCoverageFile,
   RealizationCorpusFile,
 } from "../lib/types";
 import {
+  buildExtractionManifestRun,
+  buildExtractionPlan,
   buildExtractionManifestCost,
   buildQuote,
   extractionSummaryParams,
   groundedProvenance,
   mergeReaderCoverage,
   proposalIdentity,
+  rankRelevantRecords,
+  recordRelevanceTier,
   resolveScope,
   toProposal,
 } from "./extract";
@@ -97,6 +102,87 @@ test("quotes are deterministic and enforce the per-run token cap", () => {
   assert.equal(blocked.mode, "effects");
   assert.deepEqual(blocked.scope.mechanism_ids, ["CL-14"]);
   assert(Number.isFinite(blocked.tokens.total_upper_bound));
+});
+
+test("relevance funnel keeps pins, ranks confirmed evidence, and skips noise", () => {
+  const file = corpus();
+  const base = file.records.find((record) => record.abstract);
+  assert(base?.abstract);
+  const fixture: EvidenceCorpusFile = {
+    ...file,
+    terms: ["scarcity persuasion"],
+    records: [
+      {
+        ...base,
+        record_id: "cr_111111111111111111111111",
+        title: "Unrelated owner pin",
+        abstract: "No matching vocabulary.",
+        citations: 1,
+        source_api: "pinned",
+        pin_reason: "owner canon",
+      },
+      {
+        ...base,
+        record_id: "cr_222222222222222222222222",
+        title: "Scarcity cues in choice",
+        abstract: "Scarcity can operate as persuasion.",
+        citations: 10,
+        source_api: "openalex",
+        pin_reason: undefined,
+      },
+      {
+        ...base,
+        record_id: "cr_333333333333333333333333",
+        title: "Scarcity in markets",
+        abstract: "A bounded field observation.",
+        citations: 100,
+        source_api: "openalex",
+        pin_reason: undefined,
+      },
+      {
+        ...base,
+        record_id: "cr_444444444444444444444444",
+        title: "Liver disease guidance",
+        abstract: "Clinical biomarkers and fibrosis staging.",
+        citations: 1000,
+        source_api: "openalex",
+        pin_reason: undefined,
+      },
+    ],
+  };
+  const ranked = rankRelevantRecords(fixture, fixture.records);
+  assert.deepEqual(
+    ranked.records.map((record) => record.record_id),
+    [
+      "cr_111111111111111111111111",
+      "cr_222222222222222222222222",
+      "cr_333333333333333333333333",
+    ],
+  );
+  assert.deepEqual(ranked.skippedIrrelevantIds, [
+    "cr_444444444444444444444444",
+  ]);
+  assert.equal(recordRelevanceTier(fixture, fixture.records[0]), 0);
+});
+
+test("SC-06 first effects slice fits the unchanged 50k cap and is resumable", () => {
+  const config = {
+    ...configured,
+    limits: { ...configured.limits, per_run_tokens: 50_000 },
+  };
+  const quote = buildQuote(
+    "effects",
+    resolveScope({ mechanism: "SC-06" }),
+    config,
+    new Date("2026-07-23T12:00:00.000Z"),
+    null,
+  );
+  assert.equal(quote.allowed, true);
+  assert.equal(quote.capped, true);
+  assert.equal(quote.resumable, true);
+  assert(quote.records.selected > 0);
+  assert(quote.records.remaining > 0);
+  assert(quote.tokens.total_upper_bound <= 50_000);
 });
 
 test("the quote config guard fails with an explicit named message (D-088)", () => {
@@ -183,7 +269,15 @@ test("reader coverage unions exact record ids and modes", () => {
   const first = mergeReaderCoverage(
     null,
     "effects",
-    new Map([["CL-14", ["cr_111111111111111111111111"]]]),
+    new Map([
+      [
+        "CL-14",
+        {
+          processed_record_ids: ["cr_111111111111111111111111"],
+          skipped_irrelevant_record_ids: [],
+        },
+      ],
+    ]),
     "2026-07-21T10:00:00.000Z",
   );
   const second = mergeReaderCoverage(
@@ -192,10 +286,12 @@ test("reader coverage unions exact record ids and modes", () => {
     new Map([
       [
         "CL-14",
-        [
-          "cr_111111111111111111111111",
-          "cr_222222222222222222222222",
-        ],
+        {
+          processed_record_ids: ["cr_222222222222222222222222"],
+          skipped_irrelevant_record_ids: [
+            "cr_333333333333333333333333",
+          ],
+        },
       ],
     ]),
     "2026-07-21T11:00:00.000Z",
@@ -204,10 +300,101 @@ test("reader coverage unions exact record ids and modes", () => {
     processed_record_ids: [
       "cr_111111111111111111111111",
       "cr_222222222222222222222222",
+      "cr_333333333333333333333333",
     ],
     processed_at: "2026-07-21T11:00:00.000Z",
     modes: ["dissent", "effects"],
+    by_mode: {
+      effects: {
+        processed_record_ids: ["cr_111111111111111111111111"],
+        skipped_irrelevant_record_ids: [],
+        processed_at: "2026-07-21T10:00:00.000Z",
+      },
+      dissent: {
+        processed_record_ids: ["cr_222222222222222222222222"],
+        skipped_irrelevant_record_ids: [
+          "cr_333333333333333333333333",
+        ],
+        processed_at: "2026-07-21T11:00:00.000Z",
+      },
+    },
   });
+});
+
+test("resume state is isolated by extraction mode", () => {
+  const file = JSON.parse(
+    readFileSync(join(ROOT, "corpora/evidence/SC-06.json"), "utf8"),
+  ) as EvidenceCorpusFile;
+  const terminalId = file.records.find((record) => record.abstract)?.record_id;
+  assert(terminalId);
+  const coverage: ReaderCoverageFile = {
+    version: "1.1.0",
+    updated_at: "2026-07-23T10:00:00.000Z",
+    mechanisms: {
+      "SC-06": {
+        evidence: {
+          processed_record_ids: [terminalId],
+          processed_at: "2026-07-23T10:00:00.000Z",
+          modes: ["effects"],
+          by_mode: {
+            effects: {
+              processed_record_ids: [terminalId],
+              skipped_irrelevant_record_ids: [],
+              processed_at: "2026-07-23T10:00:00.000Z",
+            },
+          },
+        },
+      },
+    },
+  };
+  const scope = resolveScope({ mechanism: "SC-06" });
+  assert.equal(
+    buildExtractionPlan("effects", scope, configured, coverage).records
+      .already_completed,
+    1,
+  );
+  assert.equal(
+    buildExtractionPlan("dissent", scope, configured, coverage).records
+      .already_completed,
+    0,
+  );
+});
+
+test("capped extraction manifest is partial and records funnel outcomes", () => {
+  const run = buildExtractionManifestRun({
+    mode: "effects",
+    scope: resolveScope({ mechanism: "SC-06" }),
+    startedAt: new Date("2026-07-23T12:00:00.000Z"),
+    config: configured,
+    usage: {
+      input: 100,
+      output: 20,
+      calls: 2,
+      byTier: {
+        cheap: { input: 60, output: 10, calls: 1 },
+        strong: { input: 40, output: 10, calls: 1 },
+      },
+    },
+    stats: {
+      candidates: 1,
+      records_processed: 3,
+      records_skipped_irrelevant: 7,
+      dropped_ungrounded: 0,
+      proposed: 1,
+      merged: 0,
+      held_low_confidence: 0,
+      dropped_volume_cap: 0,
+      dropped_volume_cap_high_confidence: 0,
+    },
+    filesWritten: 1,
+    capped: true,
+    durationS: 2,
+  });
+  assert.equal(run.status, "partial");
+  assert.equal(run.warnings?.capped, true);
+  assert.equal(run.records_fetched, 10);
+  assert.equal(run.params.records_processed, "3");
+  assert.equal(run.params.records_skipped_irrelevant, "7");
 });
 
 test("grounding accepts exact loci and rejects invented or unknown citations", () => {
@@ -619,6 +806,8 @@ test("run summary exposes every quality-gate and cap outcome", () => {
   assert.deepEqual(
     extractionSummaryParams({
       candidates: 15,
+      records_processed: 20,
+      records_skipped_irrelevant: 5,
       proposed: 4,
       merged: 3,
       dropped_ungrounded: 2,
@@ -628,6 +817,8 @@ test("run summary exposes every quality-gate and cap outcome", () => {
     }),
     {
       candidates: "15",
+      records_processed: "20",
+      records_skipped_irrelevant: "5",
       proposed: "4",
       merged: "3",
       dropped_ungrounded: "2",

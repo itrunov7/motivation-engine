@@ -1037,15 +1037,28 @@ export type ReaderCoverageMode =
   | "mechanism"
   | "dossier";
 
+export interface ReaderCoverageModeState {
+  /** Records that reached the mode's cheap extraction model. */
+  processed_record_ids: string[];
+  /** Records rejected by the deterministic title + abstract relevance gate. */
+  skipped_irrelevant_record_ids: string[];
+  processed_at: string;
+}
+
 export interface ReaderCoverageCorpus {
+  /**
+   * Aggregate terminal ids retained for analyzer extraction_completeness.
+   * This is the union of processed and skipped-irrelevant ids across modes.
+   */
   processed_record_ids: string[];
   processed_at: string;
   modes: ReaderCoverageMode[];
+  by_mode: Partial<Record<ReaderCoverageMode, ReaderCoverageModeState>>;
 }
 
 /** Exact cumulative reader ledger written by successful Actions extraction runs. */
 export interface ReaderCoverageFile {
-  version: "1.0.0";
+  version: "1.1.0";
   updated_at: string;
   mechanisms: Record<
     string,

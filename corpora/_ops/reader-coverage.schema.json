@@ -4,7 +4,7 @@
   "title": "Extraction reader coverage ledger",
   "type": "object",
   "properties": {
-    "version": { "const": "1.0.0" },
+    "version": { "const": "1.1.0" },
     "updated_at": { "type": "string", "format": "date-time" },
     "mechanisms": {
       "type": "object",
@@ -49,9 +49,51 @@
               "dossier"
             ]
           }
+        },
+        "by_mode": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "effects",
+              "realizations",
+              "interactions",
+              "dissent",
+              "mechanism",
+              "dossier"
+            ]
+          },
+          "additionalProperties": { "$ref": "#/$defs/modeState" }
         }
       },
-      "required": ["processed_record_ids", "processed_at", "modes"],
+      "required": ["processed_record_ids", "processed_at", "modes", "by_mode"],
+      "additionalProperties": false
+    },
+    "modeState": {
+      "type": "object",
+      "properties": {
+        "processed_record_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(?:cr|rr)_[a-f0-9]{24}$"
+          }
+        },
+        "skipped_irrelevant_record_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(?:cr|rr)_[a-f0-9]{24}$"
+          }
+        },
+        "processed_at": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "processed_record_ids",
+        "skipped_irrelevant_record_ids",
+        "processed_at"
+      ],
       "additionalProperties": false
     }
   }

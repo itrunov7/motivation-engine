@@ -1088,6 +1088,14 @@ function ExtractionDispatchPanel({
                 label: "tokens (upper bound)",
                 value: phase.quote.tokens.total_upper_bound.toLocaleString(),
               },
+              {
+                label: "records this slice",
+                value: `${phase.quote.records.selected.toLocaleString()} selected · ${phase.quote.records.skipped_irrelevant.toLocaleString()} skipped`,
+              },
+              {
+                label: "records remaining",
+                value: phase.quote.records.remaining.toLocaleString(),
+              },
               { label: "est. cost", value: `$${phase.quote.estimated_usd.toFixed(4)}` },
               {
                 label: "prices",
@@ -1114,6 +1122,13 @@ function ExtractionDispatchPanel({
             <Notice tone="err">
               This run is blocked and the workflow will refuse it:{" "}
               {phase.quote.reasons.join("; ")}.
+            </Notice>
+          )}
+          {phase.quote.allowed && phase.quote.capped && (
+            <Notice tone="warn">
+              This ranked slice respects the per-run cap. The run will commit partial
+              coverage and resume with the remaining {phase.quote.records.remaining.toLocaleString()}{" "}
+              relevant records next time.
             </Notice>
           )}
           <div className="mt-4 flex items-center gap-3">

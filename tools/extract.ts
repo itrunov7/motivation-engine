@@ -110,6 +110,15 @@ export interface ExtractionQuote {
   scope: { kind: ScopeKind; id: string; mechanism_ids: string[] };
   calls: { cheap: number; strong: number; total: number };
   tokens: { input_upper_bound: number; output_reserved: number; total_upper_bound: number };
+  records: {
+    eligible_total: number;
+    already_completed: number;
+    skipped_irrelevant: number;
+    selected: number;
+    remaining: number;
+  };
+  capped: boolean;
+  resumable: boolean;
   estimated_usd: number;
   caps: { per_run_tokens: number; monthly_tokens: number };
   allowed: boolean;
@@ -206,6 +215,8 @@ interface DraftResponse {
 
 export interface ExtractionStats {
   candidates: number;
+  records_processed: number;
+  records_skipped_irrelevant: number;
   dropped_ungrounded: number;
   proposed: number;
   merged: number;
@@ -214,28 +225,58 @@ export interface ExtractionStats {
   dropped_volume_cap_high_confidence: number;
 }
 
+export interface ReaderCoverageDelta {
+  processed_record_ids: readonly string[];
+  skipped_irrelevant_record_ids: readonly string[];
+}
+
 export function mergeReaderCoverage(
   previous: ReaderCoverageFile | null,
   mode: ExtractionMode,
-  processed: ReadonlyMap<string, readonly string[]>,
+  processed: ReadonlyMap<string, ReaderCoverageDelta>,
   processedAt: string,
 ): ReaderCoverageFile {
   const kind = mode === "realizations" ? "realization" : "evidence";
   const mechanisms = structuredClone(previous?.mechanisms ?? {});
-  for (const [mechanismId, recordIds] of Array.from(processed.entries())) {
+  for (const [mechanismId, delta] of Array.from(processed.entries())) {
     const mechanism = mechanisms[mechanismId] ?? {};
     const prior = mechanism[kind];
+    const priorMode = prior?.by_mode[mode];
+    const modeProcessed = Array.from(
+      new Set([
+        ...(priorMode?.processed_record_ids ?? []),
+        ...delta.processed_record_ids,
+      ]),
+    ).sort();
+    const modeSkipped = Array.from(
+      new Set([
+        ...(priorMode?.skipped_irrelevant_record_ids ?? []),
+        ...delta.skipped_irrelevant_record_ids,
+      ]),
+    ).sort();
     mechanism[kind] = {
       processed_record_ids: Array.from(
-        new Set([...(prior?.processed_record_ids ?? []), ...recordIds]),
+        new Set([
+          ...(prior?.processed_record_ids ?? []),
+          ...modeProcessed,
+          ...modeSkipped,
+        ]),
       ).sort(),
       processed_at: processedAt,
       modes: Array.from(new Set([...(prior?.modes ?? []), mode])).sort(),
+      by_mode: {
+        ...(prior?.by_mode ?? {}),
+        [mode]: {
+          processed_record_ids: modeProcessed,
+          skipped_irrelevant_record_ids: modeSkipped,
+          processed_at: processedAt,
+        },
+      },
     };
     mechanisms[mechanismId] = mechanism;
   }
   return {
-    version: "1.0.0",
+    version: "1.1.0",
     updated_at: processedAt,
     mechanisms,
   };
@@ -243,7 +284,7 @@ export function mergeReaderCoverage(
 
 function writeReaderCoverage(
   mode: ExtractionMode,
-  processed: ReadonlyMap<string, readonly string[]>,
+  processed: ReadonlyMap<string, ReaderCoverageDelta>,
   processedAt: string,
 ): void {
   mkdirSync(EXTRACTION_DIR, { recursive: true });
@@ -261,6 +302,8 @@ export function extractionSummaryParams(
 ): Record<string, string> {
   return {
     candidates: String(stats.candidates),
+    records_processed: String(stats.records_processed),
+    records_skipped_irrelevant: String(stats.records_skipped_irrelevant),
     proposed: String(stats.proposed),
     merged: String(stats.merged),
     dropped_ungrounded: String(stats.dropped_ungrounded),
@@ -471,6 +514,101 @@ function eligibleRecords(corpus: ExtractionCorpus): ExtractionRecord[] {
     .sort((a, b) => a.record_id.localeCompare(b.record_id));
 }
 
+const GENERIC_RELEVANCE_TOKENS = new Set([
+  "effect",
+  "effects",
+  "meta",
+  "analysis",
+  "analyses",
+  "replication",
+  "motivation",
+  "theory",
+  "model",
+  "review",
+  "systematic",
+  "consumer",
+  "consumers",
+]);
+
+function relevanceTokens(value: string): Set<string> {
+  return new Set(
+    value
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter((token) => token.length >= 4),
+  );
+}
+
+function corpusCoreKeywords(corpus: ExtractionCorpus): string[] {
+  if (isRealizationCorpus(corpus)) return [];
+  const keywords = new Set<string>();
+  for (const term of corpus.terms) {
+    for (const token of Array.from(relevanceTokens(term))) {
+      if (!GENERIC_RELEVANCE_TOKENS.has(token)) keywords.add(token);
+    }
+  }
+  return Array.from(keywords).sort();
+}
+
+function keywordHits(value: string, keywords: readonly string[]): number {
+  const tokens = relevanceTokens(value);
+  return keywords.filter((keyword) => tokens.has(keyword)).length;
+}
+
+/**
+ * Deterministic, zero-network funnel gate. Pinned evidence is never discarded;
+ * tier 1 requires title + abstract confirmation, and tier 2 is the weaker
+ * relevant tail. null is terminal skipped_irrelevant for this mode.
+ */
+export function recordRelevanceTier(
+  corpus: ExtractionCorpus,
+  record: ExtractionRecord,
+): 0 | 1 | 2 | null {
+  if (isRealizationRecord(record)) return 1;
+  if (record.source_api === "pinned" || record.pin_reason) return 0;
+  const keywords = corpusCoreKeywords(corpus);
+  // A corpus without usable distinctive terms cannot be rejected safely.
+  if (keywords.length === 0) return 2;
+  const titleHits = keywordHits(record.title, keywords);
+  const abstractHits = keywordHits(record.abstract ?? "", keywords);
+  if (titleHits >= 1 && abstractHits >= 1) return 1;
+  if (titleHits >= 1 || abstractHits >= 2) return 2;
+  return null;
+}
+
+export function rankRelevantRecords(
+  corpus: ExtractionCorpus,
+  records: readonly ExtractionRecord[],
+): { records: ExtractionRecord[]; skippedIrrelevantIds: string[] } {
+  const ranked: { record: ExtractionRecord; tier: 0 | 1 | 2 }[] = [];
+  const skippedIrrelevantIds: string[] = [];
+  for (const record of records) {
+    const tier = recordRelevanceTier(corpus, record);
+    if (tier === null) {
+      skippedIrrelevantIds.push(record.record_id);
+    } else {
+      ranked.push({ record, tier });
+    }
+  }
+  ranked.sort((left, right) => {
+    const leftCitations = isRealizationRecord(left.record)
+      ? -1
+      : (left.record.citations ?? -1);
+    const rightCitations = isRealizationRecord(right.record)
+      ? -1
+      : (right.record.citations ?? -1);
+    return (
+      left.tier - right.tier ||
+      rightCitations - leftCitations ||
+      left.record.record_id.localeCompare(right.record.record_id)
+    );
+  });
+  return {
+    records: ranked.map(({ record }) => record),
+    skippedIrrelevantIds: skippedIrrelevantIds.sort(),
+  };
+}
+
 function batches<T>(items: T[], size: number): T[][] {
   const result: T[][] = [];
   for (let index = 0; index < items.length; index += size) {
@@ -647,40 +785,178 @@ function monthTokenUsage(now: Date = new Date()): number {
     );
 }
 
+interface PlannedMechanism {
+  mechanismId: string;
+  corpus: ExtractionCorpus;
+  selected: ExtractionRecord[];
+  skippedIrrelevantIds: string[];
+  relevantRemaining: number;
+}
+
+interface ExtractionPlan {
+  mechanisms: PlannedMechanism[];
+  calls: { cheap: number; strong: number; total: number };
+  tokens: { input_upper_bound: number; output_reserved: number; total_upper_bound: number };
+  records: ExtractionQuote["records"];
+  capped: boolean;
+}
+
+function loadReaderCoverage(): ReaderCoverageFile | null {
+  return existsSync(READER_COVERAGE_FILE)
+    ? readJson<ReaderCoverageFile>(READER_COVERAGE_FILE)
+    : null;
+}
+
+function estimateSelected(
+  mode: ExtractionMode,
+  selectedByMechanism: ReadonlyMap<string, readonly ExtractionRecord[]>,
+  config: ExtractionOpsConfig,
+): Pick<ExtractionPlan, "calls" | "tokens"> {
+  const cheap = configuredTier(config, "cheap");
+  const strong = configuredTier(config, "strong");
+  let cheapCalls = 0;
+  let strongCalls = 0;
+  let inputUpper = 0;
+  let outputReserved = 0;
+  for (const [mechanismId, selected] of Array.from(selectedByMechanism.entries())) {
+    if (selected.length === 0) continue;
+    const mechanismBatches = batches(
+      [...selected],
+      config.limits.records_per_batch,
+    );
+    for (const batch of mechanismBatches) {
+      cheapCalls += 1;
+      inputUpper += bytes(cheapPrompt(mode, mechanismId, batch));
+      outputReserved += Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call);
+    }
+    strongCalls += 1;
+    inputUpper += Math.min(
+      mechanismBatches.length * CHEAP_OUTPUT_RESERVE * 4,
+      strong.max_tokens_per_call * 4,
+    );
+    outputReserved += Math.min(STRONG_OUTPUT_RESERVE, strong.max_tokens_per_call);
+  }
+  return {
+    calls: {
+      cheap: cheapCalls,
+      strong: strongCalls,
+      total: cheapCalls + strongCalls,
+    },
+    tokens: {
+      input_upper_bound: inputUpper,
+      output_reserved: outputReserved,
+      total_upper_bound: inputUpper + outputReserved,
+    },
+  };
+}
+
+export function buildExtractionPlan(
+  mode: ExtractionMode,
+  scope: ExtractionScope,
+  config: ExtractionOpsConfig,
+  coverage: ReaderCoverageFile | null = loadReaderCoverage(),
+): ExtractionPlan {
+  const candidates: {
+    mechanismId: string;
+    corpus: ExtractionCorpus;
+    relevant: ExtractionRecord[];
+    skippedIrrelevantIds: string[];
+  }[] = [];
+  let eligibleTotal = 0;
+  let alreadyCompleted = 0;
+  for (const mechanismId of scope.mechanismIds) {
+    if (!modeEligible(mode, mechanismId)) continue;
+    const corpus = corpusFor(mode, mechanismId);
+    const eligible = eligibleRecords(corpus);
+    eligibleTotal += eligible.length;
+    const kind = mode === "realizations" ? "realization" : "evidence";
+    const priorMode = coverage?.mechanisms[mechanismId]?.[kind]?.by_mode[mode];
+    const terminal = new Set([
+      ...(priorMode?.processed_record_ids ?? []),
+      ...(priorMode?.skipped_irrelevant_record_ids ?? []),
+    ]);
+    const pending = eligible.filter((record) => !terminal.has(record.record_id));
+    alreadyCompleted += eligible.length - pending.length;
+    const ranked = rankRelevantRecords(corpus, pending);
+    candidates.push({
+      mechanismId,
+      corpus,
+      relevant: ranked.records,
+      skippedIrrelevantIds: ranked.skippedIrrelevantIds,
+    });
+  }
+
+  const selectedByMechanism = new Map<string, ExtractionRecord[]>();
+  let capReached = false;
+  for (const candidate of candidates) {
+    const selected: ExtractionRecord[] = [];
+    selectedByMechanism.set(candidate.mechanismId, selected);
+    for (const record of candidate.relevant) {
+      selected.push(record);
+      const estimate = estimateSelected(mode, selectedByMechanism, config);
+      if (estimate.tokens.total_upper_bound > config.limits.per_run_tokens) {
+        selected.pop();
+        capReached = true;
+        break;
+      }
+    }
+    if (capReached) break;
+  }
+
+  const estimate = estimateSelected(mode, selectedByMechanism, config);
+  const mechanisms = candidates.map((candidate) => {
+    const selected = selectedByMechanism.get(candidate.mechanismId) ?? [];
+    return {
+      mechanismId: candidate.mechanismId,
+      corpus: candidate.corpus,
+      selected,
+      skippedIrrelevantIds: candidate.skippedIrrelevantIds,
+      relevantRemaining: candidate.relevant.length - selected.length,
+    };
+  });
+  const skippedIrrelevant = mechanisms.reduce(
+    (sum, mechanism) => sum + mechanism.skippedIrrelevantIds.length,
+    0,
+  );
+  const selected = mechanisms.reduce(
+    (sum, mechanism) => sum + mechanism.selected.length,
+    0,
+  );
+  const remaining = mechanisms.reduce(
+    (sum, mechanism) => sum + mechanism.relevantRemaining,
+    0,
+  );
+  return {
+    mechanisms,
+    ...estimate,
+    records: {
+      eligible_total: eligibleTotal,
+      already_completed: alreadyCompleted,
+      skipped_irrelevant: skippedIrrelevant,
+      selected,
+      remaining,
+    },
+    capped: remaining > 0,
+  };
+}
+
 export function buildQuote(
   mode: ExtractionMode,
   scope: ExtractionScope,
   config: ExtractionOpsConfig,
   now: Date = new Date(),
+  coverage: ReaderCoverageFile | null = loadReaderCoverage(),
 ): ExtractionQuote {
   const cheap = configuredTier(config, "cheap");
   const strong = configuredTier(config, "strong");
   const reasons: string[] = [];
   const priceState = extractionPriceState(config, now);
   if (priceState === "unconfigured") reasons.push("model pricing verification date is missing");
-  let cheapCalls = 0;
-  let inputUpper = 0;
-  let mechanismsWithRecords = 0;
-  for (const mechanismId of scope.mechanismIds) {
-    if (!modeEligible(mode, mechanismId)) continue;
-    const records = eligibleRecords(corpusFor(mode, mechanismId));
-    if (records.length === 0) continue;
-    mechanismsWithRecords += 1;
-    for (const batch of batches(records, config.limits.records_per_batch)) {
-      cheapCalls += 1;
-      inputUpper += bytes(cheapPrompt(mode, mechanismId, batch));
-    }
-    // Strong synthesis receives at most the cheap calls' reserved output.
-    inputUpper += Math.min(
-      cheapCalls * CHEAP_OUTPUT_RESERVE * 4,
-      strong.max_tokens_per_call * 4,
-    );
-  }
-  const strongCalls = mechanismsWithRecords;
-  const outputReserved =
-    cheapCalls * Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call) +
-    strongCalls * Math.min(STRONG_OUTPUT_RESERVE, strong.max_tokens_per_call);
-  const totalUpper = inputUpper + outputReserved;
+  const plan = buildExtractionPlan(mode, scope, config, coverage);
+  const { cheap: cheapCalls, strong: strongCalls } = plan.calls;
+  const inputUpper = plan.tokens.input_upper_bound;
+  const outputReserved = plan.tokens.output_reserved;
+  const totalUpper = plan.tokens.total_upper_bound;
   const estimatedUsd =
     inputUpper * Math.max(cheap.input_usd_per_token, strong.input_usd_per_token) +
     cheapCalls *
@@ -690,9 +966,9 @@ export function buildQuote(
       Math.min(STRONG_OUTPUT_RESERVE, strong.max_tokens_per_call) *
       strong.output_usd_per_token;
   const budget = computeBudgetSnapshot(now);
-  if (totalUpper > config.limits.per_run_tokens) {
+  if (plan.records.remaining > 0 && plan.records.selected === 0) {
     reasons.push(
-      `upper-bound ${totalUpper} tokens exceeds per-run cap ${config.limits.per_run_tokens}`,
+      `the highest-ranked pending record cannot fit inside the per-run cap ${config.limits.per_run_tokens}`,
     );
   }
   const monthlyUsed = monthTokenUsage(now);
@@ -728,6 +1004,9 @@ export function buildQuote(
       output_reserved: outputReserved,
       total_upper_bound: totalUpper,
     },
+    records: plan.records,
+    capped: plan.capped,
+    resumable: plan.capped,
     estimated_usd: Math.round(estimatedUsd * 1e8) / 1e8,
     caps: {
       per_run_tokens: config.limits.per_run_tokens,
@@ -1587,6 +1866,47 @@ function computeUsd(config: ExtractionOpsConfig, usage: Usage): number {
   return buildExtractionManifestCost(config, usage, 0).estimated_usd;
 }
 
+export function buildExtractionManifestRun(args: {
+  mode: ExtractionMode;
+  scope: ExtractionScope;
+  startedAt: Date;
+  config: ExtractionOpsConfig;
+  usage: Usage;
+  stats: ExtractionStats;
+  filesWritten: number;
+  capped: boolean;
+  durationS: number;
+}): CorpusManifestRun {
+  return {
+    timestamp: args.startedAt.toISOString(),
+    status: args.capped ? "partial" : "success",
+    params: {
+      mode: args.mode,
+      [args.scope.kind]: args.scope.id,
+      ...extractionSummaryParams(args.stats),
+    },
+    records_fetched:
+      args.stats.records_processed + args.stats.records_skipped_irrelevant,
+    files_written: args.filesWritten,
+    duration_s: args.durationS,
+    ...(args.stats.dropped_ungrounded > 0 || args.capped
+      ? {
+          warnings: {
+            ...(args.stats.dropped_ungrounded > 0
+              ? { ungrounded_dropped: true }
+              : {}),
+            ...(args.capped ? { capped: true } : {}),
+          },
+        }
+      : {}),
+    cost: buildExtractionManifestCost(
+      args.config,
+      args.usage,
+      args.durationS,
+    ),
+  };
+}
+
 function writeManifest(
   mode: ExtractionMode,
   scope: ExtractionScope,
@@ -1595,25 +1915,21 @@ function writeManifest(
   usage: Usage,
   stats: ExtractionStats,
   filesWritten: number,
+  capped: boolean,
 ): void {
   mkdirSync(EXTRACTION_DIR, { recursive: true });
   const duration = Math.round(((Date.now() - startedAt.getTime()) / 1000) * 100) / 100;
-  const run: CorpusManifestRun = {
-    timestamp: startedAt.toISOString(),
-    status: "success",
-    params: {
-      mode,
-      [scope.kind]: scope.id,
-      ...extractionSummaryParams(stats),
-    },
-    records_fetched: stats.candidates,
-    files_written: filesWritten,
-    duration_s: duration,
-    ...(stats.dropped_ungrounded > 0
-      ? { warnings: { ungrounded_dropped: true } }
-      : {}),
-    cost: buildExtractionManifestCost(config, usage, duration),
-  };
+  const run = buildExtractionManifestRun({
+    mode,
+    scope,
+    startedAt,
+    config,
+    usage,
+    stats,
+    filesWritten,
+    capped,
+    durationS: duration,
+  });
   const previous = existsSync(MANIFEST_FILE)
     ? readJson<CorpusManifest>(MANIFEST_FILE)
     : null;
@@ -1653,9 +1969,24 @@ export async function runExtraction(args: {
   now?: Date;
 }): Promise<{ proposals: Proposal[]; stats: ExtractionStats; usage: Usage }> {
   const startedAt = args.now ?? new Date();
-  const quote = buildQuote(args.mode, args.scope, args.config, startedAt);
+  const coverageAtStart = loadReaderCoverage();
+  const plan = buildExtractionPlan(
+    args.mode,
+    args.scope,
+    args.config,
+    coverageAtStart,
+  );
+  const quote = buildQuote(
+    args.mode,
+    args.scope,
+    args.config,
+    startedAt,
+    coverageAtStart,
+  );
   if (!quote.allowed) throw new Error(`Extraction blocked: ${quote.reasons.join("; ")}`);
-  if (!process.env.OPENROUTER_API_KEY) throw new Error("OPENROUTER_API_KEY is required");
+  if (quote.calls.total > 0 && !process.env.OPENROUTER_API_KEY) {
+    throw new Error("OPENROUTER_API_KEY is required");
+  }
   const context: RunContext = {
     config: args.config,
     usage: {
@@ -1671,6 +2002,8 @@ export async function runExtraction(args: {
   };
   const stats: ExtractionStats = {
     candidates: 0,
+    records_processed: 0,
+    records_skipped_irrelevant: plan.records.skipped_irrelevant,
     dropped_ungrounded: 0,
     proposed: 0,
     merged: 0,
@@ -1681,7 +2014,10 @@ export async function runExtraction(args: {
   const proposals: Proposal[] = [];
   const existing = existingMatches();
   const pendingWrites = new Map<string, Proposal>();
-  const processedByMechanism = new Map<string, string[]>();
+  const processedByMechanism = new Map<string, {
+    processed_record_ids: string[];
+    skipped_irrelevant_record_ids: string[];
+  }>();
   const validate = proposalValidator();
   const runId = process.env.GITHUB_RUN_ID
     ? `github-actions-${process.env.GITHUB_RUN_ID}`
@@ -1691,10 +2027,8 @@ export async function runExtraction(args: {
   // against the per-run token cap so /ops shows extraction moving in flight.
   const batchSize = args.config.limits.records_per_batch;
   let totalBatches = 0;
-  for (const mechanismId of args.scope.mechanismIds) {
-    if (!modeEligible(args.mode, mechanismId)) continue;
-    const records = eligibleRecords(corpusFor(args.mode, mechanismId));
-    totalBatches += Math.ceil(records.length / batchSize);
+  for (const mechanism of plan.mechanisms) {
+    totalBatches += Math.ceil(mechanism.selected.length / batchSize);
   }
   let batchesDone = 0;
   const reportExtractProgress = (
@@ -1737,15 +2071,20 @@ export async function runExtraction(args: {
       }
     : null;
 
-  for (const mechanismId of args.scope.mechanismIds) {
-    if (!modeEligible(args.mode, mechanismId)) continue;
-    const corpus = corpusFor(args.mode, mechanismId);
-    const records = eligibleRecords(corpus);
+  for (const mechanismPlan of plan.mechanisms) {
+    const { mechanismId, corpus } = mechanismPlan;
+    const records = mechanismPlan.selected;
+    const coverageDelta = {
+      processed_record_ids: [] as string[],
+      skipped_irrelevant_record_ids: mechanismPlan.skippedIrrelevantIds,
+    };
+    if (
+      records.length > 0 ||
+      coverageDelta.skipped_irrelevant_record_ids.length > 0
+    ) {
+      processedByMechanism.set(mechanismId, coverageDelta);
+    }
     if (records.length === 0) continue;
-    processedByMechanism.set(
-      mechanismId,
-      records.map((record) => record.record_id),
-    );
     const draftContext: DraftContext | undefined = draftContextBase
       ? {
           corpus,
@@ -1763,6 +2102,10 @@ export async function runExtraction(args: {
           CHEAP_OUTPUT_RESERVE,
         )),
       );
+      coverageDelta.processed_record_ids.push(
+        ...batch.map((record) => record.record_id),
+      );
+      stats.records_processed += batch.length;
       batchesDone += 1;
       reportExtractProgress(`drafting ${mechanismId}`, "running", false);
     }
@@ -1918,10 +2261,11 @@ export async function runExtraction(args: {
     context.usage,
     stats,
     proposals.length + pendingWrites.size,
+    plan.capped,
   );
   reportExtractProgress(
-    `completed — ${stats.proposed + stats.merged} proposals`,
-    "success",
+    `${plan.capped ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals`,
+    plan.capped ? "partial" : "success",
     true,
   );
   return { proposals, stats, usage: context.usage };
