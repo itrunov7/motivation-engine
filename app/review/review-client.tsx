@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { isActionableProposal, PROPOSAL_STATUS_META } from "@/lib/proposal-meta";
-import type { Proposal } from "@/lib/types";
+import type { DossierDraftAxis, Proposal } from "@/lib/types";
 import {
   approveProposalAction,
   batchProposalAction,
@@ -136,6 +136,115 @@ function Diff({ item }: { item: ReviewProposal["preview"][number] }) {
   );
 }
 
+function DossierAxis({ name, axis }: { name: string; axis: DossierDraftAxis }) {
+  const scored = axis.score !== null && axis.rationale !== null;
+  return (
+    <div
+      className={`rounded-md border p-3 ${
+        scored ? "border-[#243329] bg-[#0E1512]" : "border-[#E4B54E]/40 bg-[#0E1512]"
+      }`}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="font-mono text-[11px] uppercase tracking-widest text-[#E6EFE8]">
+          {label(name)}
+        </p>
+        {scored ? (
+          <span className="rounded-full border border-[#E4B54E]/50 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-[#E4B54E]">
+            proposed · {axis.score} / 3
+          </span>
+        ) : (
+          <span className="rounded-full border border-[#E4B54E] bg-[#E4B54E]/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-[#E4B54E]">
+            unscored · needs owner judgement
+          </span>
+        )}
+      </div>
+      {scored ? (
+        <p className="mt-2 text-sm leading-relaxed text-[#E6EFE8]">{axis.rationale}</p>
+      ) : (
+        <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">
+          The pipeline could not ground a rationale for this axis, so no score was
+          guessed. Enter a score and rationale via “Edit the full proposal”, then use
+          “Approve edited version”.
+        </p>
+      )}
+      {axis.provenance.length > 0 && (
+        <ul className="mt-2 space-y-1">
+          {axis.provenance.map((source) => (
+            <li
+              key={`${source.corpus_record_id}:${source.quote_or_locus}`}
+              className="border-l border-[#243329] pl-3 text-xs leading-relaxed text-[#8CA495]"
+            >
+              <span className="font-mono text-[10px] text-[#7C93A8]">
+                {source.corpus_record_id}
+                {source.doi ? ` · ${source.doi}` : ""}
+              </span>
+              <p className="mt-0.5">“{source.quote_or_locus}”</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function DossierDraftView({
+  proposal,
+}: {
+  proposal: Extract<Proposal, { type: "dossier" }>;
+}) {
+  const payload = proposal.payload;
+  return (
+    <div className="mt-3 space-y-3">
+      <p className="text-xs leading-relaxed text-[#8CA495]">
+        Machine-drafted dossier for {payload.mechanism_id}. Every score below is a
+        proposal until you confirm or edit it; total and verdict are computed at
+        approval, never proposed. Unscored axes block approval.
+      </p>
+      {Object.entries(payload.scores).map(([name, axis]) => (
+        <DossierAxis key={name} name={name} axis={axis} />
+      ))}
+      <div>
+        <p className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
+          core condition
+        </p>
+        <p className="mt-0.5 text-sm leading-relaxed text-[#E6EFE8]">
+          {payload.core_condition}
+        </p>
+      </div>
+      <div>
+        <p className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
+          dissent
+        </p>
+        <p className="mt-0.5 whitespace-pre-wrap text-sm leading-relaxed text-[#E6EFE8]">
+          {payload.dissent}
+        </p>
+      </div>
+      <div>
+        <p className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
+          evidence sources
+        </p>
+        <ul className="mt-1 space-y-1">
+          {payload.evidence_sources.map((source) => (
+            <li key={source.ref} className="text-xs text-[#8CA495]">
+              {source.ref}
+              {source.doi ? (
+                <a
+                  href={`https://doi.org/${source.doi}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="ml-2 text-[#34D399] hover:underline"
+                >
+                  DOI ↗
+                </a>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 function ProposalCard({
   item,
   writeEnabled,
@@ -156,8 +265,17 @@ function ProposalCard({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const actionable = isActionableProposal(proposal);
+  const unscoredAxes =
+    proposal.type === "dossier"
+      ? Object.entries(proposal.payload.scores)
+          .filter(([, axis]) => axis.score === null || axis.rationale === null)
+          .map(([name]) => name)
+      : [];
   const readyToApprove =
-    actionable && proposal.provenance.length > 0 && !item.previewError;
+    actionable &&
+    proposal.provenance.length > 0 &&
+    !item.previewError &&
+    unscoredAxes.length === 0;
 
   function run(action: () => Promise<ReviewActionResult>): void {
     setMessage(null);
@@ -258,7 +376,11 @@ function ProposalCard({
         <h3 className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8]">
           {proposal.type === "realization"
             ? "Source-grounded realization"
-            : "Proposed content"}
+            : proposal.type === "dossier"
+              ? "Drafted dossier — every score is proposed"
+              : proposal.type === "mechanism"
+                ? "Drafted mechanism record"
+                : "Proposed content"}
         </h3>
         {proposal.type === "realization" ? (
           <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">
@@ -266,8 +388,28 @@ function ProposalCard({
             product-authored generator directive.
           </p>
         ) : null}
-        <div className="mt-3"><ReadableValue value={proposal.payload} /></div>
+        {proposal.type === "mechanism" ? (
+          <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">
+            Full L1 record drafted from the evidence corpus. Seed content (name,
+            oneliner terms, pinned evidence) is preserved verbatim; ids, versioning
+            and telemetry are code-filled; summary, evidence, implementations and
+            hard rules are grounded claims — check them against the sources above.
+          </p>
+        ) : null}
+        {proposal.type === "dossier" ? (
+          <DossierDraftView proposal={proposal} />
+        ) : (
+          <div className="mt-3"><ReadableValue value={proposal.payload} /></div>
+        )}
       </section>
+
+      {unscoredAxes.length > 0 && (
+        <p role="alert" className="mt-4 rounded-md border border-[#E4B54E]/40 bg-[#1A2620] p-3 text-xs text-[#E4B54E]">
+          Approval is blocked: {unscoredAxes.map(label).join(", ")}{" "}
+          {unscoredAxes.length === 1 ? "axis needs" : "axes need"} owner judgement.
+          Edit a score and rationale, then use “Approve edited version”.
+        </p>
+      )}
 
       {item.preview.length > 0 && (
         <section className="mt-4">

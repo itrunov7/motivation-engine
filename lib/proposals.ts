@@ -3,8 +3,10 @@ import { Ajv2020, type ErrorObject, type ValidateFunction } from "ajv/dist/2020"
 import addFormats from "ajv-formats";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import type {
+  AxisScore,
   DecisionsLog,
   Dossier,
+  DossierScores,
   Effect,
   EvidenceCorpusFile,
   CorpusManifest,
@@ -30,6 +32,7 @@ export const PROPOSAL_TYPES = [
   "realization",
   "interaction",
   "mechanism",
+  "dossier",
   "dossier_section",
   "segment",
 ] as const;
@@ -273,6 +276,20 @@ function assertPayloadProvenance(proposal: Proposal): void {
       throw new ProposalValidationError(
         `${proposal.type} payload provenance must exactly match the proposal envelope provenance`,
       );
+    }
+  }
+  if (proposal.type === "dossier") {
+    // Every per-axis provenance item must also be carried by the envelope, so
+    // assertResolvableProvenance transitively re-grounds each axis quote.
+    const envelope = new Set(proposal.provenance.map((item) => canonical(item)));
+    for (const [axisName, axis] of Object.entries(proposal.payload.scores)) {
+      for (const item of axis.provenance) {
+        if (!envelope.has(canonical(item))) {
+          throw new ProposalValidationError(
+            `Dossier axis ${axisName} carries provenance absent from the proposal envelope`,
+          );
+        }
+      }
     }
   }
   if (proposal.type === "effect") {
@@ -559,14 +576,37 @@ async function projectInteraction(
   await builder.write(interactionPath, json(interaction));
 }
 
+/** The dossier verdict IS the lifecycle decision (dossier.schema.json). */
+const LIFECYCLE_BY_VERDICT: Record<Dossier["verdict"], Mechanism["lifecycle_status"]> = {
+  incubating: "incubating",
+  core: "core",
+  rejected: "rejected",
+  hold: "candidate",
+};
+
 async function projectMechanism(
   builder: MutationBuilder,
   proposal: Extract<Proposal, { type: "mechanism" }>,
   validators: Validators,
 ): Promise<void> {
-  const mechanism = proposal.payload;
+  let mechanism = proposal.payload;
   if (proposal.target !== mechanism.id) {
     throw new ProposalValidationError("Mechanism target must equal payload.id");
+  }
+  // D-085: lifecycle_status is derived data. A machine-drafted record is
+  // proposed as "candidate" (honest before any dossier is decided); when its
+  // dossier exists at approval time — including one applied earlier in the
+  // same atomic batch — the record enters the registry with the
+  // verdict-derived status, never a stale drafted one.
+  if (mechanism.dossier_ref !== null) {
+    const dossierText = await builder.read(mechanism.dossier_ref.replace(/^\/+/, ""));
+    if (dossierText !== null) {
+      const dossier = parseJson<Dossier>(mechanism.dossier_ref, dossierText);
+      mechanism = {
+        ...mechanism,
+        lifecycle_status: LIFECYCLE_BY_VERDICT[dossier.verdict],
+      };
+    }
   }
   assertSchema("mechanism payload", validators.mechanism, mechanism);
   await builder.write(`registry/mechanisms/${mechanism.id}.json`, json(mechanism));
@@ -581,6 +621,97 @@ function assertDossierTotal(dossier: Dossier): void {
       `Projected dossier total ${dossier.total} does not equal score sum ${sum}`,
     );
   }
+}
+
+/** Who decides and when — stamped into a projected dossier at approval time. */
+export interface ProposalProjectionDecision {
+  decidedBy: string;
+  decidedAt: string;
+}
+
+/** Admission gate thresholds (dossier.schema.json / SPEC.md §3.3). */
+const INCUBATING_MIN_TOTAL = 11;
+const INCUBATING_MIN_EVIDENCE = 2;
+const INCUBATING_MIN_SAFETY = 2;
+
+/**
+ * Project an approved `dossier` proposal (D-085) into dossiers/{mechanism}.json.
+ * Requires EVERY axis scored (an unscored axis is an owner-judgement flag and
+ * blocks approval until edited), computes `total`, derives the verdict from
+ * the admission gate (incubating iff total >= 11 AND evidence >= 2 AND
+ * safety >= 2, else hold — "core" always requires a later measured effect),
+ * and stamps decided_by/date from the owner decision, never from the payload.
+ */
+async function projectDossier(
+  builder: MutationBuilder,
+  proposal: Extract<Proposal, { type: "dossier" }>,
+  validators: Validators,
+  decision: ProposalProjectionDecision,
+): Promise<void> {
+  const draft = proposal.payload;
+  assertSafeComponent("dossier target", proposal.target);
+  if (proposal.target !== draft.mechanism_id) {
+    throw new ProposalValidationError("Dossier target must equal payload.mechanism_id");
+  }
+  if (draft.id !== `DOS-${draft.mechanism_id}`) {
+    throw new ProposalValidationError(
+      `Dossier id must be DOS-${draft.mechanism_id}, got ${draft.id}`,
+    );
+  }
+  if (proposal.operation !== "create") {
+    throw new ProposalValidationError(
+      "A dossier proposal creates a first-time dossier; enrichment uses dossier_section",
+    );
+  }
+  const path = `dossiers/${draft.mechanism_id}.json`;
+  if ((await builder.read(path)) !== null) {
+    throw new ProposalValidationError(`Create proposal would overwrite existing ${path}`);
+  }
+  if (!(await mechanismExists(builder, draft.mechanism_id))) {
+    throw new ProposalValidationError(
+      `Dossier mechanism does not exist: ${draft.mechanism_id}`,
+    );
+  }
+  const unscored = Object.entries(draft.scores)
+    .filter(([, axis]) => axis.score === null || axis.rationale === null)
+    .map(([name]) => name);
+  if (unscored.length > 0) {
+    throw new ProposalValidationError(
+      `Unscored axis (owner judgement required): ${unscored.join(", ")} — ` +
+        "edit the proposal with a score and rationale before approving",
+    );
+  }
+  const scores = Object.fromEntries(
+    Object.entries(draft.scores).map(([name, axis]) => [
+      name,
+      { score: axis.score as AxisScore, rationale: axis.rationale as string },
+    ]),
+  ) as unknown as DossierScores;
+  const total = Object.values(scores).reduce((sum, axis) => sum + axis.score, 0);
+  const verdict =
+    total >= INCUBATING_MIN_TOTAL &&
+    scores.evidence.score >= INCUBATING_MIN_EVIDENCE &&
+    scores.safety.score >= INCUBATING_MIN_SAFETY
+      ? "incubating"
+      : "hold";
+  const dossier: Dossier = {
+    id: draft.id,
+    mechanism_id: draft.mechanism_id,
+    scores,
+    total,
+    core_condition: draft.core_condition,
+    dissent: draft.dissent,
+    evidence_sources: draft.evidence_sources,
+    verdict,
+    decided_by: decision.decidedBy,
+    date: decision.decidedAt.slice(0, 10),
+    notes:
+      draft.notes ??
+      `Approved from dossier proposal ${proposal.id}; scores confirmed or edited by the owner in /review.`,
+  };
+  assertSchema("projected dossier", validators.dossier, dossier);
+  assertDossierTotal(dossier);
+  await builder.write(path, json(dossier));
 }
 
 async function projectDossierSection(
@@ -654,6 +785,7 @@ async function projectApprovedProposal(
   builder: MutationBuilder,
   proposal: Proposal,
   validators: Validators,
+  decision: ProposalProjectionDecision,
 ): Promise<void> {
   switch (proposal.type) {
     case "effect":
@@ -664,6 +796,8 @@ async function projectApprovedProposal(
       return projectInteraction(builder, proposal, validators);
     case "mechanism":
       return projectMechanism(builder, proposal, validators);
+    case "dossier":
+      return projectDossier(builder, proposal, validators, decision);
     case "dossier_section":
       return projectDossierSection(builder, proposal, validators);
     case "segment":
@@ -757,7 +891,10 @@ async function applyProposalDecision(
 
   if (request.action === "approve" || request.action === "edit_approve") {
     await assertResolvableProvenance(builder, workingProposal);
-    await projectApprovedProposal(builder, workingProposal, validators);
+    await projectApprovedProposal(builder, workingProposal, validators, {
+      decidedBy: request.decidedBy.trim(),
+      decidedAt: request.decidedAt,
+    });
   }
 
   const decidedProposal: Proposal =
@@ -1004,7 +1141,12 @@ export async function prepareProposalPreview(
   assertPayloadProvenance(working);
   await assertResolvableProvenance(snapshot, working);
   const builder = new MutationBuilder(snapshot);
-  await projectApprovedProposal(builder, working, validators);
+  // Preview stamps a placeholder decision; the real decidedBy/decidedAt are
+  // stamped by prepareProposalDecision at commit time.
+  await projectApprovedProposal(builder, working, validators, {
+    decidedBy: "owner",
+    decidedAt: new Date().toISOString(),
+  });
   return builder.mutations();
 }
 

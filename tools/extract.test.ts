@@ -372,6 +372,181 @@ test("near-duplicate realization enriches the existing artifact instead of dupli
   assert.equal(merged.provenance.length, 1);
 });
 
+test("draft modes resolve seed candidates only when seeds are included", () => {
+  assert.throws(() => resolveScope({ mechanism: "CO-19" }), /Unknown full mechanism/);
+  const scope = resolveScope({ mechanism: "CO-19" }, { includeSeeds: true });
+  assert.deepEqual(scope.mechanismIds, ["CO-19"]);
+});
+
+test("mode=dossier grounds axes per-citation and leaves ungrounded axes unscored", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract && record.doi);
+  const exact = record.abstract.slice(0, 80);
+  const provenance = groundedProvenance(
+    { citations: [{ record_id: record.record_id, quote_or_locus: exact }] },
+    file,
+  );
+  assert(provenance);
+  const context = {
+    corpus: file,
+    knownMechanismIds: new Set(["CL-14", "MM-15"]),
+  };
+  const axis = (grounded: boolean) => ({
+    score: 2,
+    rationale: "Grounded rationale from the cited abstract.",
+    citations: [
+      {
+        record_id: record.record_id,
+        quote_or_locus: grounded ? exact : "This span was invented.",
+      },
+    ],
+  });
+  const proposal = toProposal(
+    "dossier",
+    "CL-14",
+    {
+      scores: {
+        evidence: axis(true),
+        product_applicability: axis(false),
+        measurability: axis(true),
+        orthogonality: axis(true),
+        safety: axis(true),
+      },
+      core_condition: "A measured lift in the studied outcome.",
+      dissent: "Counter-evidence exists in the corpus.",
+      confidence: 0.8,
+    },
+    provenance,
+    "test-run",
+    "2026-07-21T10:00:00.000Z",
+    context,
+  );
+  assert(proposal?.type === "dossier");
+  assert.equal(proposal.payload.id, "DOS-CL-14");
+  assert.equal(proposal.payload.scores.evidence.score, 2);
+  assert(proposal.payload.scores.evidence.provenance.length > 0);
+  // The invented citation must NOT become a guessed score.
+  assert.equal(proposal.payload.scores.product_applicability.score, null);
+  assert.equal(proposal.payload.scores.product_applicability.rationale, null);
+  assert.deepEqual(proposal.payload.scores.product_applicability.provenance, []);
+  assert(proposal.payload.evidence_sources.length > 0);
+  // Every axis provenance item is carried by the envelope (re-grounding gate).
+  const envelope = new Set(proposal.provenance.map((item) => JSON.stringify(item)));
+  for (const axisValue of Object.values(proposal.payload.scores)) {
+    for (const item of axisValue.provenance) {
+      assert(envelope.has(JSON.stringify(item)));
+    }
+  }
+  // Without draft context the draft modes fail closed.
+  assert.equal(
+    toProposal(
+      "dossier",
+      "CL-14",
+      { core_condition: "x", dissent: "y", confidence: 0.8 },
+      provenance,
+      "test-run",
+      "2026-07-21T10:00:00.000Z",
+    ),
+    null,
+  );
+});
+
+test("mode=mechanism composes a schema-valid record from seed + grounded claims", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract && record.doi);
+  const provenance: KnowledgeProvenanceItem[] = [
+    {
+      mechanism_id: "CL-14",
+      corpus_record_id: record.record_id,
+      doi: record.doi,
+      title: record.title,
+      quote_or_locus: record.abstract.slice(0, 80),
+    },
+  ];
+  const seed = {
+    id: "CO-19",
+    name: "Competence & mastery",
+    grade_draft: "B+",
+    oneliner: "Fixture oneliner.",
+    parent: "S8",
+    lifecycle_status: "candidate" as const,
+    evidence_terms: ["competence need satisfaction"],
+    pinned_evidence: [
+      { doi: "10.1037/0003-066X.55.1.68", title: "SDT", reason: "foundational" },
+    ],
+  };
+  const proposal = toProposal(
+    "mechanism",
+    "CO-19",
+    {
+      grade: "B+",
+      summary: "People persist when interfaces make growing capability visible.",
+      evidence_basis: "Meta-analyses and field experiments on competence need satisfaction.",
+      effect_size_note: "Moderate effects in the studied contexts.",
+      caveats: ["Validated mainly in education contexts"],
+      funnel_stages: ["onboarding", "retention", "not_a_stage"],
+      excluded_stages: ["cold_acquisition"],
+      applicability_artifact_types: ["onboarding", "dashboard_widget", "bogus"],
+      preconditions: [
+        { predicate: "artifact.has_skill_progression == true", reason: "no mastery signal otherwise" },
+      ],
+      culture_note: "General logic; surface vocabulary varies.",
+      implementations: [
+        {
+          id_suffix: "visible-skill-progress",
+          artifact_types: ["dashboard_widget"],
+          product_requirements: [],
+          generation_directive: "Show the user their growing capability explicitly.",
+          copy_formulas: [],
+          metrics: ["task completion rate"],
+        },
+      ],
+      hard_rules: [
+        { id: "No Fake Mastery", rule: "Never fabricate skill progress.", severity: "block" },
+      ],
+      compliance_refs: [],
+      boundary_test: "Does the interface reflect real capability growth?",
+      relations: [
+        { type: "adjacent", target: "CL-14", note: "Load ceiling limits mastery signals." },
+        { type: "adjacent", target: "XX-99", note: "Unknown target must be dropped." },
+      ],
+      confidence: 0.8,
+    },
+    provenance,
+    "test-run",
+    "2026-07-21T10:00:00.000Z",
+    {
+      corpus: file,
+      seed,
+      knownMechanismIds: new Set(["CL-14", "CO-19"]),
+    },
+  );
+  assert(proposal?.type === "mechanism");
+  const payload = proposal.payload;
+  assert.equal(payload.id, "CO-19");
+  assert.equal(payload.slug, "competence_mastery");
+  assert.equal(payload.name, seed.name);
+  assert.equal(payload.lifecycle_status, "candidate");
+  assert.equal(payload.dossier_ref, "dossiers/CO-19.json");
+  assert.equal(payload.provenance.proposed_by, "derivation-pipeline");
+  assert.deepEqual(payload.evidence_terms, seed.evidence_terms);
+  assert.deepEqual(payload.applicability.funnel_stages, ["onboarding", "retention"]);
+  assert.deepEqual(payload.applicability.artifact_types, [
+    "onboarding",
+    "dashboard_widget",
+  ]);
+  assert.equal(payload.implementations[0].id, "CO-19-visible-skill-progress");
+  assert.deepEqual(payload.implementations[0].metrics, ["task_completion_rate"]);
+  assert.equal(payload.constraints.hard_rules[0].id, "no_fake_mastery");
+  assert.deepEqual(
+    payload.relations.map((relation) => relation.target),
+    ["CL-14"],
+  );
+  assert.equal(payload.prior_weight, 0.7);
+});
+
 test("run summary exposes every quality-gate and cap outcome", () => {
   assert.deepEqual(
     extractionSummaryParams({

@@ -14,6 +14,7 @@
         "realization",
         "interaction",
         "mechanism",
+        "dossier",
         "dossier_section",
         "segment"
       ]
@@ -160,6 +161,17 @@
           "payload": {
             "$ref": "https://ventora.dev/motivation-engine/mechanism.schema.json"
           }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "dossier" } },
+        "required": ["type"]
+      },
+      "then": {
+        "properties": {
+          "payload": { "$ref": "#/$defs/dossierDraft" }
         }
       }
     },
@@ -329,6 +341,78 @@
         "doi": { "type": "string", "minLength": 1 }
       },
       "required": ["ref"],
+      "additionalProperties": false
+    },
+    "dossierDraftAxis": {
+      "description": "One drafted axis (D-085): either fully grounded (score + rationale + at least one literature provenance item) or explicitly unscored (nulls, empty provenance) — flagged for owner judgement, never guessed. Unscored axes block approval until the owner edits them.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "score": { "type": "integer", "minimum": 0, "maximum": 3 },
+            "rationale": { "type": "string", "minLength": 1 },
+            "provenance": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/evidenceProvenanceItem" }
+            }
+          },
+          "required": ["score", "rationale", "provenance"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "score": { "type": "null" },
+            "rationale": { "type": "null" },
+            "provenance": { "type": "array", "maxItems": 0 }
+          },
+          "required": ["score", "rationale", "provenance"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "dossierDraft": {
+      "description": "Full machine-drafted dossier (D-085). total/verdict/decided_by/date are absent by design — computed and stamped at owner approval. Never auto-approves.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "pattern": "^DOS-[A-Z]{2}-\\d{2}$" },
+        "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+        "scores": {
+          "type": "object",
+          "properties": {
+            "evidence": { "$ref": "#/$defs/dossierDraftAxis" },
+            "product_applicability": { "$ref": "#/$defs/dossierDraftAxis" },
+            "measurability": { "$ref": "#/$defs/dossierDraftAxis" },
+            "orthogonality": { "$ref": "#/$defs/dossierDraftAxis" },
+            "safety": { "$ref": "#/$defs/dossierDraftAxis" }
+          },
+          "required": [
+            "evidence",
+            "product_applicability",
+            "measurability",
+            "orthogonality",
+            "safety"
+          ],
+          "additionalProperties": false
+        },
+        "core_condition": { "type": "string", "minLength": 1 },
+        "dissent": { "type": "string", "minLength": 1 },
+        "evidence_sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/evidenceSource" }
+        },
+        "notes": { "type": "string" }
+      },
+      "required": [
+        "id",
+        "mechanism_id",
+        "scores",
+        "core_condition",
+        "dissent",
+        "evidence_sources"
+      ],
       "additionalProperties": false
     },
     "dossierSection": {

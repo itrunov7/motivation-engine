@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { loadMechanismNodeIndex } from "@/lib/status";
+import { loadPackMap, loadSegmentsFile } from "@/lib/maturation";
 import { isOpsWriteEnabled } from "@/lib/github";
 import {
   KNOWN_CONNECTOR_IDS,
@@ -51,6 +52,13 @@ export default function OpsPage() {
     lastRun: loadConnectorLastRun(id) ?? null,
   }));
 
+  // Scope pickers for the extraction dispatch flow (D-085): packs from the
+  // pack map, active segments from segments.yaml — never free-typed ids.
+  const packOptions = (loadPackMap()?.elements ?? []).map((pack) => pack.id);
+  const segmentOptions = (loadSegmentsFile()?.segments ?? [])
+    .filter((segment) => segment.status === "active")
+    .map((segment) => segment.id);
+
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
       <header>
@@ -86,6 +94,8 @@ export default function OpsPage() {
         extractionPriceState={extraction ? extractionPriceState(extraction) : "unconfigured"}
         connectors={connectors}
         mechanismOptions={mechanismOptions}
+        packOptions={packOptions}
+        segmentOptions={segmentOptions}
       />
     </main>
   );

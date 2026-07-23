@@ -2202,6 +2202,29 @@ function main(): void {
             );
             ok = false;
           }
+          if (proposal.type === "dossier") {
+            // D-085: every per-axis provenance item must also be carried by
+            // the envelope, so the grounding loop below re-grounds each axis
+            // quote transitively.
+            const envelopeItems = new Set(
+              (proposal.provenance ?? []).map((item) => JSON.stringify(item)),
+            );
+            const scores =
+              (proposal.payload as {
+                scores?: Record<string, { provenance?: unknown[] }>;
+              } | undefined)?.scores ?? {};
+            for (const [axisName, axis] of Object.entries(scores)) {
+              for (const item of axis?.provenance ?? []) {
+                if (!envelopeItems.has(JSON.stringify(item))) {
+                  fail(
+                    file,
+                    `dossier axis ${axisName} carries provenance absent from the envelope`,
+                  );
+                  ok = false;
+                }
+              }
+            }
+          }
           for (const source of proposal.provenance ?? []) {
             const corpusPath = isRealizationProvenance(source)
               ? join(

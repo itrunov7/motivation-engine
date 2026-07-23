@@ -28,8 +28,10 @@ import {
   type QuoteArtifact,
 } from "@/lib/ops";
 import {
+  dispatchExtraction,
   dispatchHarvest,
   downloadArtifactJson,
+  EXTRACTION_WORKFLOW_FILE,
   findRunByDispatchId,
   getRepoFile,
   getRunFailureSummary,
@@ -37,6 +39,7 @@ import {
   readGithubOpsEnv,
   type GithubOpsEnv,
 } from "@/lib/github";
+import type { ExtractionMode, ExtractionQuote, ScopeKind } from "@/tools/extract";
 
 // ---------- Shared result types ----------
 
@@ -312,6 +315,127 @@ export async function confirmRealRunAction(args: {
       dry_run: "false",
       dispatch_id: dispatchId,
       raise_cap: raiseCap ? "true" : "false",
+    });
+    return { ok: true, dispatchId };
+  } catch (err) {
+    return { ok: false, error: errorMessage(err) };
+  }
+}
+
+// ---------- Run path: extraction quote → confirm → dispatch (D-085) ----------
+
+const EXTRACTION_MODES: readonly ExtractionMode[] = [
+  "effects",
+  "realizations",
+  "interactions",
+  "dissent",
+  "mechanism",
+  "dossier",
+];
+const SCOPE_KINDS: readonly ScopeKind[] = ["mechanism", "pack", "segment"];
+
+export type ExtractionPollResult =
+  | {
+      ok: true;
+      state: PollState;
+      runUrl?: string;
+      quote?: ExtractionQuote;
+      error?: string;
+    }
+  | { ok: false; error: string };
+
+function validateExtractionScope(args: {
+  mode: string;
+  scopeKind: string;
+  scopeId: string;
+}): string | null {
+  if (!EXTRACTION_MODES.includes(args.mode as ExtractionMode)) {
+    return `"${args.mode}" is not an extraction mode.`;
+  }
+  if (!SCOPE_KINDS.includes(args.scopeKind as ScopeKind)) {
+    return `"${args.scopeKind}" is not a scope kind.`;
+  }
+  if (!args.scopeId.trim()) return "A scope id is required.";
+  if (
+    args.scopeKind === "mechanism" &&
+    !knownMechanismIds().includes(args.scopeId)
+  ) {
+    return `"${args.scopeId}" is not a known mechanism or seed candidate.`;
+  }
+  return null;
+}
+
+export async function startExtractionQuoteAction(args: {
+  mode: string;
+  scopeKind: string;
+  scopeId: string;
+}): Promise<DispatchResult> {
+  const invalid = validateExtractionScope(args);
+  if (invalid) return { ok: false, error: invalid };
+  try {
+    const env = requireEnv();
+    const dispatchId = newDispatchId("ops-extract-dry");
+    await dispatchExtraction(env, {
+      mode: args.mode,
+      scope_kind: args.scopeKind,
+      scope_id: args.scopeId,
+      dry_run: "true",
+      dispatch_id: dispatchId,
+    });
+    return { ok: true, dispatchId };
+  } catch (err) {
+    return { ok: false, error: errorMessage(err) };
+  }
+}
+
+export async function pollExtractionQuoteAction(
+  dispatchId: string,
+): Promise<ExtractionPollResult> {
+  try {
+    const env = requireEnv();
+    const run = await findRunByDispatchId(env, dispatchId, EXTRACTION_WORKFLOW_FILE);
+    if (!run) return { ok: true, state: "pending" };
+    if (run.status !== "completed") {
+      return { ok: true, state: "running", runUrl: run.html_url };
+    }
+    if (run.conclusion !== "success") {
+      const error = await getRunFailureSummary(env, run.id, run.conclusion);
+      return { ok: true, state: "failed", runUrl: run.html_url, error };
+    }
+    const quote = await downloadArtifactJson<ExtractionQuote>(
+      env,
+      run.id,
+      "extraction-quote",
+      "quote.json",
+    );
+    if (!quote) return { ok: true, state: "no_quote", runUrl: run.html_url };
+    return { ok: true, state: "ready", runUrl: run.html_url, quote };
+  } catch (err) {
+    return { ok: false, error: errorMessage(err) };
+  }
+}
+
+/**
+ * Dispatch the REAL extraction run for a quote the operator confirmed. There
+ * is no raise-cap path here: the workflow re-runs the deterministic quote gate
+ * itself and fails closed if budget or per-run caps are exceeded.
+ */
+export async function confirmExtractionRunAction(args: {
+  mode: string;
+  scopeKind: string;
+  scopeId: string;
+}): Promise<DispatchResult> {
+  const invalid = validateExtractionScope(args);
+  if (invalid) return { ok: false, error: invalid };
+  try {
+    const env = requireEnv();
+    const dispatchId = newDispatchId("ops-extract-real");
+    await dispatchExtraction(env, {
+      mode: args.mode,
+      scope_kind: args.scopeKind,
+      scope_id: args.scopeId,
+      dry_run: "false",
+      dispatch_id: dispatchId,
     });
     return { ok: true, dispatchId };
   } catch (err) {

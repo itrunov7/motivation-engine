@@ -1,17 +1,17 @@
 {
   "version": "1.0.0",
-  "prices_verified_on": null,
+  "prices_verified_on": "2026-07-23",
   "tiers": {
     "cheap": {
-      "model_id": null,
-      "input_usd_per_token": null,
-      "output_usd_per_token": null,
+      "model_id": "google/gemini-3.1-flash-lite",
+      "input_usd_per_token": 0.00000025,
+      "output_usd_per_token": 0.0000015,
       "max_tokens_per_call": 24000
     },
     "strong": {
-      "model_id": null,
-      "input_usd_per_token": null,
-      "output_usd_per_token": null,
+      "model_id": "anthropic/claude-sonnet-5",
+      "input_usd_per_token": 0.000002,
+      "output_usd_per_token": 0.00001,
       "max_tokens_per_call": 32000
     }
   },

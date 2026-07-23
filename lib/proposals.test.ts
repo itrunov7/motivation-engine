@@ -337,6 +337,201 @@ test("prepares one atomic batch with one enumerated decision entry", async () =>
   }
 });
 
+test("dossier + mechanism batch populates a seed candidate atomically (D-085)", async () => {
+  const root = await temporaryRepository();
+  const doi = "10.1037/0003-066X.55.1.68";
+  const title =
+    "Self-determination theory and the facilitation of intrinsic motivation, social development, and well-being";
+  const abstract =
+    "Perceived competence and autonomy support sustain intrinsic motivation across settings, while controlling contexts undermine it.";
+  const record = {
+    record_id: deriveCorpusRecordId({ doi, title, year: 2000 }),
+    title,
+    abstract,
+    doi,
+    authors: ["Deci", "Ryan"],
+    year: 2000,
+    venue: "American Psychologist",
+    citations: 30000,
+    categories: [],
+  };
+  const co19Provenance = [
+    {
+      mechanism_id: "CO-19",
+      corpus_record_id: record.record_id,
+      doi,
+      title,
+      quote_or_locus: "Perceived competence and autonomy support sustain intrinsic motivation",
+    },
+  ];
+  const scoredAxis = (score: number) => ({
+    score,
+    rationale: "Grounded fixture rationale arguing from the cited abstract.",
+    provenance: co19Provenance,
+  });
+  const dossierPayload = {
+    id: "DOS-CO-19",
+    mechanism_id: "CO-19",
+    scores: {
+      evidence: scoredAxis(3),
+      product_applicability: scoredAxis(2),
+      measurability: scoredAxis(2),
+      orthogonality: scoredAxis(2),
+      safety: scoredAxis(2),
+    },
+    core_condition: "A measured lift in task completion after competence-signalling changes.",
+    dissent: "Controlling contexts undermine intrinsic motivation; overuse backfires.",
+    evidence_sources: [{ ref: title, doi }],
+  };
+  const mechanismPayload = {
+    id: "CO-19",
+    slug: "competence_mastery",
+    name: "Competence & mastery",
+    version: "1.0.0",
+    level: "L1",
+    parent: "S8",
+    lifecycle_status: "candidate",
+    dossier_ref: "dossiers/CO-19.json",
+    provenance: { proposed_by: "derivation-pipeline", date: "2026-07-23" },
+    evidence: {
+      grade: "B+",
+      basis: "Fixture basis grounded in SDT literature.",
+      effect_size_note: "Moderate effects in studied contexts.",
+      caveats: ["fixture_caveat"],
+    },
+    prior_weight: 0.7,
+    mechanism_summary_for_context:
+      "Users persist when interfaces make growing capability visible and abandon flows that make them feel incompetent.",
+    applicability: {
+      funnel_stages: ["onboarding", "retention"],
+      excluded_stages: [],
+      artifact_types: ["onboarding", "dashboard_widget"],
+      preconditions: [],
+      culture_note: "",
+    },
+    implementations: [
+      {
+        id: "CO-19-visible-skill-progress",
+        artifact_types: ["dashboard_widget"],
+        product_requirements: [],
+        generation_directive: "Show the user their growing capability explicitly.",
+        copy_formulas: [],
+        metrics: ["task_completion_rate"],
+        observed_effects: [],
+      },
+    ],
+    constraints: {
+      hard_rules: [
+        {
+          id: "no_fake_mastery",
+          rule: "Never fabricate skill progress.",
+          severity: "block",
+        },
+      ],
+      compliance_refs: [],
+      boundary_test: "Does the interface reflect real capability growth?",
+    },
+    relations: [],
+    telemetry: {
+      tag_format: "me:CO-19:{implementation_id}",
+      amplitude_event_property: "mechanism_tags",
+    },
+  };
+  const dossierPath = "proposals/dossier/co-19-dossier-draft.json";
+  const mechanismPath = "proposals/mechanism/co-19-record-draft.json";
+  try {
+    await writeFile(
+      join(root, "corpora/evidence/CO-19.json"),
+      `${JSON.stringify({ mechanism_id: "CO-19", records: [record] }, null, 2)}\n`,
+    );
+    await mkdir(join(root, "proposals/dossier"), { recursive: true });
+    await mkdir(join(root, "proposals/mechanism"), { recursive: true });
+    const dossierProposal = {
+      ...(envelope("dossier", "co-19-dossier-draft", "CO-19", dossierPayload) as Record<
+        string,
+        unknown
+      >),
+      provenance: co19Provenance,
+    };
+    const mechanismProposal = {
+      ...(envelope("mechanism", "co-19-record-draft", "CO-19", mechanismPayload) as Record<
+        string,
+        unknown
+      >),
+      provenance: co19Provenance,
+    };
+    await writeFile(
+      join(root, dossierPath),
+      `${JSON.stringify(dossierProposal, null, 2)}\n`,
+    );
+    await writeFile(
+      join(root, mechanismPath),
+      `${JSON.stringify(mechanismProposal, null, 2)}\n`,
+    );
+    const transaction = await prepareBatchProposalDecision(
+      new LocalRepositorySnapshot(root),
+      {
+        proposalPaths: [mechanismPath, dossierPath],
+        action: "approve",
+        decidedBy: "test-owner",
+        decidedAt,
+        schemaRoot: root,
+      },
+    );
+    const byPath = new Map(
+      transaction.mutations.map((mutation) => [mutation.path, mutation]),
+    );
+    const dossier = JSON.parse(byPath.get("dossiers/CO-19.json")!.content!) as {
+      total: number;
+      verdict: string;
+      decided_by: string;
+      date: string;
+      scores: Record<string, { score: number }>;
+    };
+    // total 11, evidence 3, safety 2 → incubating; stamped from the decision.
+    assert.equal(dossier.total, 11);
+    assert.equal(dossier.verdict, "incubating");
+    assert.equal(dossier.decided_by, "test-owner");
+    assert.equal(dossier.date, decidedAt.slice(0, 10));
+    const mechanism = JSON.parse(
+      byPath.get("registry/mechanisms/CO-19.json")!.content!,
+    ) as Mechanism;
+    // lifecycle derives from the dossier verdict applied earlier in the batch,
+    // not from the drafted "candidate".
+    assert.equal(mechanism.lifecycle_status, "incubating");
+    // The seed stub is deleted in the same atomic transaction.
+    assert.equal(byPath.get("registry/mechanisms/_seed/CO-19.json")?.content, null);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("a dossier draft with an unscored axis blocks approval until the owner edits it", async () => {
+  const doi = "10.2307/1914185";
+  const payload = {
+    id: "DOS-AU-20",
+    mechanism_id: "AU-20",
+    scores: {
+      evidence: {
+        score: 3,
+        rationale: "Grounded fixture rationale.",
+        provenance,
+      },
+      product_applicability: { score: null, rationale: null, provenance: [] },
+      measurability: { score: 2, rationale: "Grounded fixture rationale.", provenance },
+      orthogonality: { score: 2, rationale: "Grounded fixture rationale.", provenance },
+      safety: { score: 2, rationale: "Grounded fixture rationale.", provenance },
+    },
+    core_condition: "Fixture measured condition.",
+    dissent: "Fixture counter-evidence.",
+    evidence_sources: [{ ref: "Prospect Theory", doi }],
+  };
+  await assert.rejects(
+    prepare("dossier", "au-20-dossier-unscored", "AU-20", payload),
+    /Unscored axis \(owner judgement required\): product_applicability/,
+  );
+});
+
 test("invalid batch returns per-item reports and no transaction", async () => {
   const root = await temporaryRepository();
   const validPath = "proposals/dossier_section/batch-valid.json";

@@ -363,6 +363,7 @@ export type ProposalType =
   | "realization"
   | "interaction"
   | "mechanism"
+  | "dossier"
   | "dossier_section"
   | "segment";
 
@@ -389,6 +390,46 @@ export type DossierSectionPayload =
       field: "flag_lowest_admitted" | "flag_completes_core";
       value: boolean;
     };
+
+/**
+ * One drafted dossier axis (D-085). Either fully grounded — an integer score
+ * with its rationale and at least one literature provenance item — or
+ * explicitly UNSCORED (score/rationale null, provenance empty): the pipeline
+ * could not ground a rationale, so the axis is flagged for owner judgement
+ * rather than guessed. An unscored axis blocks approval until the owner edits
+ * a score + rationale in.
+ */
+export interface DossierDraftAxis {
+  score: AxisScore | null;
+  rationale: string | null;
+  provenance: EvidenceProvenanceItem[];
+}
+
+export interface DossierDraftScores {
+  evidence: DossierDraftAxis;
+  product_applicability: DossierDraftAxis;
+  measurability: DossierDraftAxis;
+  orthogonality: DossierDraftAxis;
+  safety: DossierDraftAxis;
+}
+
+/**
+ * Payload of a `dossier` proposal (D-085): a full machine-drafted dossier.
+ * `total`, `verdict`, `decided_by` and `date` are intentionally ABSENT — they
+ * are computed/stamped at owner approval, never proposed. A dossier proposal
+ * can never auto-approve; every score stays visibly "proposed" until the
+ * owner confirms or edits it in /review.
+ */
+export interface DossierDraftPayload {
+  /** DOS-{mechanism_id}, e.g. DOS-CO-19. */
+  id: string;
+  mechanism_id: string;
+  scores: DossierDraftScores;
+  core_condition: string;
+  dissent: string;
+  evidence_sources: DossierEvidenceSource[];
+  notes?: string;
+}
 
 export interface ProposalEnvelope<TType extends ProposalType, TPayload> {
   $schema?: string;
@@ -422,6 +463,7 @@ export type InteractionProposal = ProposalEnvelope<
   InteractionRecord
 >;
 export type MechanismProposal = ProposalEnvelope<"mechanism", Mechanism>;
+export type DossierProposal = ProposalEnvelope<"dossier", DossierDraftPayload>;
 export type DossierSectionProposal = ProposalEnvelope<
   "dossier_section",
   DossierSectionPayload
@@ -433,6 +475,7 @@ export type Proposal =
   | RealizationProposal
   | InteractionProposal
   | MechanismProposal
+  | DossierProposal
   | DossierSectionProposal
   | SegmentProposal;
 
@@ -979,7 +1022,9 @@ export type ReaderCoverageMode =
   | "effects"
   | "realizations"
   | "interactions"
-  | "dissent";
+  | "dissent"
+  | "mechanism"
+  | "dossier";
 
 export interface ReaderCoverageCorpus {
   processed_record_ids: string[];

@@ -18,13 +18,18 @@ import type {
   OpsConnectorConfig,
   QuoteArtifact,
 } from "@/lib/ops";
+import type { ExtractionQuote } from "@/tools/extract";
 import {
+  confirmExtractionRunAction,
   confirmRealRunAction,
   loadLiveConnectorConfigsAction,
   pollDryRunAction,
+  pollExtractionQuoteAction,
   saveBudgetAction,
   saveConnectorConfigAction,
   startDryRunAction,
+  startExtractionQuoteAction,
+  type ExtractionPollResult,
   type PollResult,
 } from "./actions";
 
@@ -63,6 +68,8 @@ export interface OpsClientProps {
   extractionPriceState: ExtractionPriceState;
   connectors: ConnectorView[];
   mechanismOptions: MechanismOption[];
+  packOptions: string[];
+  segmentOptions: string[];
 }
 
 function ExtractionRunPanel({ run }: { run: ExtractionRunSummary | null }) {
@@ -742,6 +749,356 @@ function QuoteConfirm({
   );
 }
 
+// ---------- Extraction dispatch (quote → confirm → run, D-085) ----------
+
+const EXTRACTION_MODE_OPTIONS: { id: string; label: string; help: string }[] = [
+  { id: "effects", label: "effects", help: "distinct named phenomena (L2)" },
+  { id: "realizations", label: "realizations", help: "interface embodiments (L3)" },
+  { id: "interactions", label: "interactions", help: "mechanism pairs treated together" },
+  { id: "dissent", label: "dissent", help: "critiques and failed replications" },
+  { id: "mechanism", label: "mechanism record", help: "draft a full L1 record for a seed candidate" },
+  { id: "dossier", label: "dossier draft", help: "draft a full scored dossier for owner review" },
+];
+
+type ExtractionPhase =
+  | { kind: "idle" }
+  | { kind: "dispatching" }
+  | { kind: "polling"; dispatchId: string; attempt: number; runUrl?: string }
+  | { kind: "quote"; quote: ExtractionQuote; runUrl?: string }
+  | { kind: "timeout"; runUrl?: string }
+  | { kind: "no_quote"; runUrl?: string }
+  | { kind: "failed"; message: string; runUrl?: string }
+  | { kind: "confirming" }
+  | { kind: "dispatched" }
+  | { kind: "error"; message: string };
+
+const EXTRACT_MAX_POLLS = 36; // ~3min — quote runs npm ci first
+
+function ExtractionDispatchPanel({
+  writeEnabled,
+  mechanismOptions,
+  optionById,
+  packOptions,
+  segmentOptions,
+}: {
+  writeEnabled: boolean;
+  mechanismOptions: MechanismOption[];
+  optionById: Map<string, MechanismOption>;
+  packOptions: string[];
+  segmentOptions: string[];
+}) {
+  const [mode, setMode] = useState("effects");
+  const [scopeKind, setScopeKind] = useState<"mechanism" | "pack" | "segment">("mechanism");
+  const [scopeId, setScopeId] = useState(mechanismOptions[0]?.id ?? "");
+  const [phase, setPhase] = useState<ExtractionPhase>({ kind: "idle" });
+
+  const mechanismGroups = groupIdsByNode(
+    mechanismOptions.map((option) => option.id),
+    optionById,
+    mechanismOptions,
+  );
+  const scopeIds =
+    scopeKind === "mechanism"
+      ? mechanismOptions.map((option) => option.id)
+      : scopeKind === "pack"
+        ? packOptions
+        : segmentOptions;
+  const selectedScopeId = scopeIds.includes(scopeId) ? scopeId : scopeIds[0] ?? "";
+
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  const poll = useCallback(async (dispatchId: string) => {
+    let runUrl: string | undefined;
+    for (let attempt = 1; attempt <= EXTRACT_MAX_POLLS; attempt++) {
+      setPhase({ kind: "polling", dispatchId, attempt, runUrl });
+      await sleep(POLL_INTERVAL_MS);
+      const res: ExtractionPollResult = await pollExtractionQuoteAction(dispatchId);
+      if (!res.ok) {
+        setPhase({ kind: "error", message: res.error });
+        return;
+      }
+      runUrl = res.runUrl ?? runUrl;
+      if (res.state === "ready" && res.quote) {
+        setPhase({ kind: "quote", quote: res.quote, runUrl });
+        return;
+      }
+      if (res.state === "failed") {
+        setPhase({
+          kind: "failed",
+          message: res.error ?? "the dry run did not succeed",
+          runUrl,
+        });
+        return;
+      }
+      if (res.state === "no_quote") {
+        setPhase({ kind: "no_quote", runUrl });
+        return;
+      }
+    }
+    setPhase({ kind: "timeout", runUrl });
+  }, []);
+
+  const startQuote = useCallback(async () => {
+    setPhase({ kind: "dispatching" });
+    const res = await startExtractionQuoteAction({
+      mode,
+      scopeKind,
+      scopeId: selectedScopeId,
+    });
+    if (!res.ok) {
+      setPhase({ kind: "error", message: res.error });
+      return;
+    }
+    void poll(res.dispatchId);
+  }, [mode, scopeKind, selectedScopeId, poll]);
+
+  const confirm = useCallback(
+    async (quote: ExtractionQuote) => {
+      setPhase({ kind: "confirming" });
+      // The real dispatch uses the scope the QUOTE priced, echoed back in the
+      // artifact — never a fresh dropdown read (D-039).
+      const res = await confirmExtractionRunAction({
+        mode: quote.mode,
+        scopeKind: quote.scope.kind,
+        scopeId: quote.scope.id,
+      });
+      setPhase(res.ok ? { kind: "dispatched" } : { kind: "error", message: res.error });
+    },
+    [],
+  );
+
+  // Changing any picker while a quote is on screen discards the quote — a
+  // quote is only ever confirmable against exactly what it priced (D-039).
+  const discardQuote = () =>
+    setPhase((p) => (p.kind === "quote" ? { kind: "idle" } : p));
+
+  const busy =
+    phase.kind === "dispatching" ||
+    phase.kind === "polling" ||
+    phase.kind === "confirming";
+
+  const modeHelp = EXTRACTION_MODE_OPTIONS.find((option) => option.id === mode)?.help;
+
+  return (
+    <section className="rounded-lg border border-[#243329] bg-[#151F1A] p-5">
+      <header>
+        <h2 className="font-display text-lg font-medium text-[#E6EFE8]">
+          Run extraction
+        </h2>
+        <p className="mt-1 text-sm leading-relaxed text-[#8CA495]">
+          Reads harvested corpora and asks the configured OpenRouter models for ONE
+          grounded task type; every item lands in the proposal queue for review —
+          never directly in the knowledge layer. You always see a token/cost
+          estimate and confirm before any paid call happens.
+        </p>
+      </header>
+
+      <div className="mt-4 flex flex-wrap items-end gap-3">
+        <label className="flex flex-col gap-1">
+          <span className="text-[11px] text-[#8CA495]">what to extract</span>
+          <select
+            value={mode}
+            disabled={!writeEnabled || busy}
+            onChange={(e) => {
+              setMode(e.target.value);
+              discardQuote();
+            }}
+            className="rounded-md border border-[#243329] bg-[#0E1512] px-2.5 py-1.5 font-mono text-sm text-[#E6EFE8] outline-none focus:border-[#34D399] disabled:opacity-50"
+          >
+            {EXTRACTION_MODE_OPTIONS.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="text-[11px] text-[#8CA495]">scope</span>
+          <select
+            value={scopeKind}
+            disabled={!writeEnabled || busy}
+            onChange={(e) => {
+              setScopeKind(e.target.value as "mechanism" | "pack" | "segment");
+              discardQuote();
+            }}
+            className="rounded-md border border-[#243329] bg-[#0E1512] px-2.5 py-1.5 font-mono text-sm text-[#E6EFE8] outline-none focus:border-[#34D399] disabled:opacity-50"
+          >
+            <option value="mechanism">one mechanism</option>
+            <option value="pack">a pack</option>
+            <option value="segment">a segment</option>
+          </select>
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="text-[11px] text-[#8CA495]">which {scopeKind}</span>
+          <select
+            value={selectedScopeId}
+            disabled={!writeEnabled || busy}
+            onChange={(e) => {
+              setScopeId(e.target.value);
+              discardQuote();
+            }}
+            className="rounded-md border border-[#243329] bg-[#0E1512] px-2.5 py-1.5 font-mono text-sm text-[#E6EFE8] outline-none focus:border-[#34D399] disabled:opacity-50"
+          >
+            {scopeKind === "mechanism"
+              ? mechanismGroups.map((group) => (
+                  <optgroup key={group.parent} label={nodeHeading(group)}>
+                    {group.options.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.id}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))
+              : scopeIds.map((id) => (
+                  <option key={id} value={id}>
+                    {id}
+                  </option>
+                ))}
+          </select>
+        </label>
+        <button
+          type="button"
+          onClick={startQuote}
+          disabled={!writeEnabled || busy || !selectedScopeId}
+          className="rounded-md border border-[#34D399] px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-[#34D399] transition hover:bg-[#34D39915] disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {busy ? "working…" : "estimate"}
+        </button>
+      </div>
+      {modeHelp && (
+        <p className="mt-2 text-[11px] leading-snug text-[#8CA495]">{modeHelp}</p>
+      )}
+
+      {phase.kind === "dispatching" && <Notice tone="warn">Starting the estimate…</Notice>}
+      {phase.kind === "polling" && (
+        <Notice tone="warn">
+          Waiting for the estimate… (check {phase.attempt}/{EXTRACT_MAX_POLLS})
+          {phase.runUrl && (
+            <>
+              {" · "}
+              <a className="underline" href={phase.runUrl} target="_blank" rel="noreferrer">
+                view the run
+              </a>
+            </>
+          )}
+        </Notice>
+      )}
+      {phase.kind === "failed" && (
+        <Notice tone="err">
+          The estimate run failed: {phase.message}.{" "}
+          {phase.runUrl && (
+            <a className="underline" href={phase.runUrl} target="_blank" rel="noreferrer">
+              open the run
+            </a>
+          )}
+        </Notice>
+      )}
+      {phase.kind === "no_quote" && (
+        <Notice tone="err">
+          The dry run succeeded but no estimate file was produced.{" "}
+          {phase.runUrl && (
+            <a className="underline" href={phase.runUrl} target="_blank" rel="noreferrer">
+              open the run
+            </a>
+          )}
+        </Notice>
+      )}
+      {phase.kind === "timeout" && (
+        <Notice tone="warn">
+          Quote pending — this is taking longer than expected.{" "}
+          {phase.runUrl ? (
+            <a className="underline" href={phase.runUrl} target="_blank" rel="noreferrer">
+              check the run
+            </a>
+          ) : (
+            "check the Actions tab."
+          )}
+        </Notice>
+      )}
+      {phase.kind === "dispatched" && (
+        <Notice tone="ok">
+          Extraction started. Proposals land in /review when the run commits; gate
+          outcomes appear in the panel above after the manifest updates.
+        </Notice>
+      )}
+      {phase.kind === "error" && <Notice tone="err">{phase.message}</Notice>}
+
+      {phase.kind === "quote" && (
+        <div className="mt-3 rounded-md border border-[#243329] bg-[#0E1512] p-4">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">
+            estimate — {phase.quote.mode} · {phase.quote.scope.kind}={phase.quote.scope.id}
+          </p>
+          <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-1.5 sm:grid-cols-4">
+            {[
+              {
+                label: "llm calls",
+                value: `${phase.quote.calls.total} (${phase.quote.calls.cheap} cheap + ${phase.quote.calls.strong} strong)`,
+              },
+              {
+                label: "tokens (upper bound)",
+                value: phase.quote.tokens.total_upper_bound.toLocaleString(),
+              },
+              { label: "est. cost", value: `$${phase.quote.estimated_usd.toFixed(4)}` },
+              {
+                label: "prices",
+                value:
+                  phase.quote.price_state === "current"
+                    ? `verified ${phase.quote.prices_verified_on}`
+                    : phase.quote.price_state,
+              },
+            ].map((row) => (
+              <div key={row.label}>
+                <dt className="font-mono text-[10px] uppercase tracking-widest text-[#7C93A8]">
+                  {row.label}
+                </dt>
+                <dd className="mt-0.5 font-mono text-sm text-[#E6EFE8]">{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-3 text-[11px] text-[#8CA495]">
+            Mechanisms in scope: {phase.quote.scope.mechanism_ids.join(", ") || "none"} ·
+            caps: {phase.quote.caps.per_run_tokens.toLocaleString()} tokens/run,{" "}
+            {phase.quote.caps.monthly_tokens.toLocaleString()}/month.
+          </p>
+          {!phase.quote.allowed && (
+            <Notice tone="err">
+              This run is blocked and the workflow will refuse it:{" "}
+              {phase.quote.reasons.join("; ")}.
+            </Notice>
+          )}
+          <div className="mt-4 flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => confirm(phase.quote)}
+              disabled={!phase.quote.allowed}
+              className="rounded-md border border-[#34D399] px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-[#34D399] transition hover:bg-[#34D39915] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              confirm & run
+            </button>
+            <button
+              type="button"
+              onClick={() => setPhase({ kind: "idle" })}
+              className="rounded-md border border-[#243329] px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-[#8CA495] transition hover:border-[#7C93A8]"
+            >
+              cancel
+            </button>
+            {phase.runUrl && (
+              <a
+                className="font-mono text-[11px] text-[#7C93A8] underline"
+                href={phase.runUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                view dry run
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
 // ---------- Connector card ----------
 
 function ConnectorCard({
@@ -1146,6 +1503,8 @@ export default function OpsClient({
   extractionPriceState,
   connectors,
   mechanismOptions,
+  packOptions,
+  segmentOptions,
 }: OpsClientProps) {
   const optionById = new Map(mechanismOptions.map((o) => [o.id, o]));
   // The page renders from the deploy-time filesystem snapshot; config saved
@@ -1208,6 +1567,13 @@ export default function OpsClient({
         extractionPriceState={extractionPriceState}
       />
       <ExtractionRunPanel run={extractionRun} />
+      <ExtractionDispatchPanel
+        writeEnabled={writeEnabled}
+        mechanismOptions={mechanismOptions}
+        optionById={optionById}
+        packOptions={packOptions}
+        segmentOptions={segmentOptions}
+      />
 
       {status === "loading" && (
         <div className="rounded-lg border border-[#243329] bg-[#151F1A] px-5 py-6">

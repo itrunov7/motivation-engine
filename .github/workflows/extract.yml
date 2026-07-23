@@ -4,13 +4,13 @@
 name: extract
 
 run-name: >-
-  extract ${{ inputs.mode }} — ${{ inputs.scope_kind }}=${{ inputs.scope_id }}${{ inputs.dry_run == 'true' && ' (dry-run)' || '' }}
+  extract ${{ inputs.mode }} — ${{ inputs.scope_kind }}=${{ inputs.scope_id }}${{ inputs.dry_run == 'true' && ' (dry-run)' || '' }}${{ inputs.dispatch_id != '' && format(' [{0}]', inputs.dispatch_id) || '' }}
 
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "One task type: effects, realizations, interactions, dissent"
+        description: "One task type: effects, realizations, interactions, dissent, mechanism, dossier"
         required: true
         type: choice
         options:
@@ -18,6 +18,8 @@ on:
           - realizations
           - interactions
           - dissent
+          - mechanism
+          - dossier
       scope_kind:
         description: "Scope resolver"
         required: true
@@ -35,6 +37,11 @@ on:
         required: true
         type: boolean
         default: true
+      dispatch_id:
+        description: "Correlation id echoed into run-name so /ops can poll this run (D-025)"
+        required: false
+        type: string
+        default: ""
 
 concurrency:
   group: extraction

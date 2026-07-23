@@ -392,15 +392,17 @@ export interface WorkflowRun {
 /**
  * Find the most recent workflow_dispatch run whose name contains the given
  * dispatch id (the workflow echoes dispatch_id into run-name for correlation,
- * D-025). Returns null until GitHub has registered the run.
+ * D-025). Returns null until GitHub has registered the run. Defaults to the
+ * harvest workflow; pass EXTRACTION_WORKFLOW_FILE to poll extraction (D-085).
  */
 export async function findRunByDispatchId(
   env: GithubOpsEnv,
   dispatchId: string,
+  workflowFile: string = HARVEST_WORKFLOW_FILE,
 ): Promise<WorkflowRun | null> {
   const res = await ghFetch(
     env,
-    `/repos/${env.owner}/${env.repo}/actions/workflows/${HARVEST_WORKFLOW_FILE}/runs?event=workflow_dispatch&per_page=30`,
+    `/repos/${env.owner}/${env.repo}/actions/workflows/${workflowFile}/runs?event=workflow_dispatch&per_page=30`,
   );
   if (!res.ok) {
     throw new GithubApiError(res.status, `list runs failed: ${await res.text()}`);

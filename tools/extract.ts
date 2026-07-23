@@ -37,13 +37,21 @@ import {
   realizationGroundingErrors,
 } from "../lib/proposal-quality";
 import type {
+  ArtifactType,
+  AxisScore,
   CorpusManifest,
   CorpusManifestRun,
+  DossierDraftAxis,
+  DossierDraftPayload,
+  DossierEvidenceSource,
   EvidenceCorpusFile,
   EvidenceCorpusRecord,
   EvidenceGrade,
+  EvidenceProvenanceItem,
   ExtractionModelTierConfig,
   ExtractionOpsConfig,
+  HardRule,
+  Implementation,
   KnowledgeProvenanceItem,
   Mechanism,
   PackMapFile,
@@ -53,7 +61,9 @@ import type {
   RealizationCorpusFile,
   RealizationCorpusRecord,
   RealizationCorpusProvenanceItem,
+  Relation,
   Segment,
+  SeedStub,
   SegmentsFile,
 } from "../lib/types";
 
@@ -75,9 +85,16 @@ export const EXTRACTION_MODES = [
   "realizations",
   "interactions",
   "dissent",
+  "mechanism",
+  "dossier",
 ] as const;
 export type ExtractionMode = (typeof EXTRACTION_MODES)[number];
 export type ScopeKind = "mechanism" | "pack" | "segment";
+
+/** Modes that draft a whole first-time artifact for a seed candidate (D-085). */
+export function isDraftMode(mode: ExtractionMode): mode is "mechanism" | "dossier" {
+  return mode === "mechanism" || mode === "dossier";
+}
 
 export interface ExtractionScope {
   kind: ScopeKind;
@@ -104,6 +121,43 @@ interface CitationDraft {
   quote_or_locus: string;
 }
 
+interface ImplementationDraft {
+  id_suffix?: string;
+  artifact_types?: string[];
+  product_requirements?: string[];
+  generation_directive?: string;
+  copy_formulas?: string[];
+  metrics?: string[];
+}
+
+interface HardRuleDraft {
+  id?: string;
+  rule?: string;
+  severity?: string;
+}
+
+interface PreconditionDraft {
+  predicate?: string;
+  reason?: string;
+}
+
+interface RelationDraft {
+  type?: string;
+  target?: string;
+  note?: string;
+}
+
+interface ReferenceExampleDraft {
+  product?: string;
+  what?: string;
+}
+
+interface DossierAxisDraft {
+  score?: number | null;
+  rationale?: string | null;
+  citations?: CitationDraft[];
+}
+
 interface DraftItem {
   id?: string;
   name?: string;
@@ -120,6 +174,27 @@ interface DraftItem {
   value?: string;
   confidence?: number;
   citations?: CitationDraft[];
+  /** mode=mechanism (D-085): full-record draft fields. */
+  section?: string;
+  summary?: string;
+  evidence_basis?: string;
+  effect_size_note?: string;
+  caveats?: string[];
+  funnel_stages?: string[];
+  excluded_stages?: string[];
+  applicability_artifact_types?: string[];
+  preconditions?: PreconditionDraft[];
+  culture_note?: string;
+  implementations?: ImplementationDraft[];
+  hard_rules?: HardRuleDraft[];
+  compliance_refs?: string[];
+  boundary_test?: string;
+  relations?: RelationDraft[];
+  reference_examples?: ReferenceExampleDraft[];
+  /** mode=dossier (D-085): full dossier draft fields. */
+  scores?: Record<string, DossierAxisDraft>;
+  core_condition?: string;
+  dissent?: string;
 }
 
 interface DraftResponse {
@@ -265,7 +340,35 @@ function fullMechanisms(): Map<string, Mechanism> {
   return result;
 }
 
-export function resolveScope(params: Record<string, string>): ExtractionScope {
+function seedStubs(): Map<string, SeedStub> {
+  const result = new Map<string, SeedStub>();
+  for (const file of listJson(join(ROOT, "registry", "mechanisms", "_seed"))) {
+    const stub = readJson<SeedStub>(file);
+    result.set(stub.id, stub);
+  }
+  return result;
+}
+
+/**
+ * Whether this mode can produce work for the mechanism (D-085): draft modes
+ * target first-time artifacts only — a mechanism that already has a full
+ * record (mode=mechanism) or a dossier (mode=dossier) is skipped, never
+ * overwritten. Non-draft modes are always eligible.
+ */
+function modeEligible(mode: ExtractionMode, mechanismId: string): boolean {
+  if (mode === "mechanism") {
+    return !existsSync(join(ROOT, "registry", "mechanisms", `${mechanismId}.json`));
+  }
+  if (mode === "dossier") {
+    return !existsSync(join(ROOT, "dossiers", `${mechanismId}.json`));
+  }
+  return true;
+}
+
+export function resolveScope(
+  params: Record<string, string>,
+  options: { includeSeeds?: boolean } = {},
+): ExtractionScope {
   const supplied = (["mechanism", "pack", "segment"] as const).filter(
     (key) => params[key],
   );
@@ -278,10 +381,22 @@ export function resolveScope(params: Record<string, string>): ExtractionScope {
   const crossCutting = Array.from(mechanisms.values())
     .filter((mechanism) => mechanism.cross_cutting === true)
     .map((mechanism) => mechanism.id);
+  // Draft modes (mechanism/dossier) target seed candidates too: a first-time
+  // record or dossier is exactly what a stub is missing (D-085).
+  const known = new Set(mechanisms.keys());
+  if (options.includeSeeds) {
+    for (const seedId of Array.from(seedStubs().keys())) known.add(seedId);
+  }
 
   let mechanismIds: string[];
   if (kind === "mechanism") {
-    if (!mechanisms.has(id)) throw new Error(`Unknown full mechanism "${id}"`);
+    if (!known.has(id)) {
+      throw new Error(
+        options.includeSeeds
+          ? `Unknown mechanism or seed candidate "${id}"`
+          : `Unknown full mechanism "${id}"`,
+      );
+    }
     mechanismIds = [id];
   } else {
     const packMap = parseYaml(
@@ -306,7 +421,7 @@ export function resolveScope(params: Record<string, string>): ExtractionScope {
     }
   }
   mechanismIds = Array.from(new Set(mechanismIds))
-    .filter((mechanismId) => mechanisms.has(mechanismId))
+    .filter((mechanismId) => known.has(mechanismId))
     .sort();
   return { kind, id, mechanismIds };
 }
@@ -390,6 +505,35 @@ function compactRecord(record: ExtractionRecord): object {
   };
 }
 
+const FUNNEL_STAGES = [
+  "cold_acquisition",
+  "onboarding",
+  "activation",
+  "conversion",
+  "retention",
+  "reactivation",
+] as const;
+
+const ARTIFACT_TYPES: readonly ArtifactType[] = [
+  "paywall",
+  "cancellation_flow",
+  "retention_push",
+  "checkout",
+  "email",
+  "pricing_page",
+  "dashboard_widget",
+  "onboarding",
+  "landing_hero",
+];
+
+const DOSSIER_AXES = [
+  "evidence",
+  "product_applicability",
+  "measurability",
+  "orthogonality",
+  "safety",
+] as const;
+
 function taskInstruction(mode: ExtractionMode, mechanismId: string): string {
   const locus =
     mode === "realizations"
@@ -405,6 +549,34 @@ function taskInstruction(mode: ExtractionMode, mechanismId: string): string {
       return `${shared} Extract only pairs of known mechanism ids explicitly treated together. Fields: pair (two sorted mechanism ids), type (sequence-amplifying|reinforcing|suppressing|neutral), fact, grade, boundary, source, confidence, citations.`;
     case "dissent":
       return `${shared} Extract critiques, failed replications, null findings, and boundary findings for ${mechanismId}. Fields: value (concise markdown), confidence, citations.`;
+    case "mechanism":
+      return `${shared} Extract record-drafting claims about the motivation mechanism ${mechanismId}: what it is and predicts (section=summary), the strength and basis of the evidence including effect sizes (section=evidence), caveats, boundary conditions and failed replications (section=caveat), where and how interfaces embody it (section=implementation), what outcomes are measured (section=measurement), and misuse, harm or dark-pattern boundaries (section=risk). Fields: section, fact, confidence, citations.`;
+    case "dossier":
+      return `${shared} Extract evaluative observations for scoring the mechanism ${mechanismId}: strength and breadth of evidence (section=evidence), applicability to product interfaces (section=product_applicability), how measurable its predicted outcomes are (section=measurability), how distinct it is from neighbouring constructs (section=orthogonality), harms, ethics and misuse boundaries (section=safety), counter-evidence, critiques and null findings (section=dissent), and measured-outcome conditions (section=core_condition). Fields: section, fact, confidence, citations.`;
+  }
+}
+
+function synthesisInstruction(mode: ExtractionMode, mechanismId: string): string {
+  const noInvention =
+    "Do not add a claim or citation that is not supported by the candidates.";
+  switch (mode) {
+    case "mechanism":
+      return [
+        `Return JSON {"items":[]} with EXACTLY ONE item composing a full mechanism record draft for ${mechanismId} from the candidate claims. ${noInvention} Every citation must be copied verbatim from a candidate.`,
+        "Item fields:",
+        `summary (2-4 sentences of generation-facing prose stating what the mechanism does to behaviour and what that implies for interfaces); grade (A+..C-, conservative); evidence_basis (what kinds of studies establish it); effect_size_note; caveats (snake_case strings); funnel_stages (subset of ${FUNNEL_STAGES.join("|")}); excluded_stages (same vocabulary); applicability_artifact_types (subset of ${ARTIFACT_TYPES.join("|")}); preconditions [{predicate,reason}] (predicate as a machine-readable condition, e.g. "artifact.has_choice == true"); culture_note; implementations (1-3 of {id_suffix (kebab-case), artifact_types (subset of the same vocabulary), product_requirements (strings), generation_directive (imperative prose for a generator), copy_formulas (strings), metrics (non-empty measurable product metrics)}); hard_rules (1+ of {id (snake_case), rule, severity block|warn}) covering misuse and dark-pattern boundaries reported in the sources; compliance_refs (strings); boundary_test (one question separating legitimate use from manipulation); relations (only mechanism ids explicitly treated together in the records: {type enabled_by|enables|adjacent|hybrid_with, target, note}); reference_examples [{product, what}] only if reported in sources; confidence; citations (the grounded union backing summary, evidence and caveats).`,
+      ].join("\n");
+    case "dossier":
+      return [
+        `Return JSON {"items":[]} with EXACTLY ONE item composing a full dossier draft for ${mechanismId} from the candidate observations. ${noInvention} Every citation must be copied verbatim from a candidate.`,
+        `Item fields: scores — an object with keys ${DOSSIER_AXES.join(", ")}, each {score (integer 0-3), rationale (markdown justification arguing from the cited evidence), citations}; core_condition (the measured condition under which the mechanism could be promoted, grounded in what the sources measure); dissent (markdown documenting counter-evidence, critiques, failed replications and boundary findings — a dossier that can only confirm is broken); confidence; citations (the grounded union backing dissent and core_condition).`,
+        "HARD RULE: if the candidates do not ground a rationale for an axis, emit that axis as {score:null, rationale:null, citations:[]} — never guess a score. Score conservatively from the cited evidence only.",
+      ].join("\n");
+    default:
+      return [
+        taskInstruction(mode, mechanismId),
+        "Synthesize the candidate list: merge true duplicates, preserve all valid citations, remove contradictions that the cited text does not establish, and grade conservatively. Do not add a claim or citation.",
+      ].join("\n\n");
   }
 }
 
@@ -424,8 +596,7 @@ function strongPrompt(
   candidates: DraftItem[],
 ): string {
   return [
-    taskInstruction(mode, mechanismId),
-    "Synthesize the candidate list: merge true duplicates, preserve all valid citations, remove contradictions that the cited text does not establish, and grade conservatively. Do not add a claim or citation.",
+    synthesisInstruction(mode, mechanismId),
     `CANDIDATES:\n${JSON.stringify(candidates)}`,
   ].join("\n\n");
 }
@@ -488,6 +659,7 @@ export function buildQuote(
   let inputUpper = 0;
   let mechanismsWithRecords = 0;
   for (const mechanismId of scope.mechanismIds) {
+    if (!modeEligible(mode, mechanismId)) continue;
     const records = eligibleRecords(corpusFor(mode, mechanismId));
     if (records.length === 0) continue;
     mechanismsWithRecords += 1;
@@ -725,6 +897,14 @@ function slug(value: string): string {
     .slice(0, 72);
 }
 
+function snake(value: string): string {
+  return value
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
 function evidenceGrade(value: unknown): value is EvidenceGrade {
   return (
     typeof value === "string" &&
@@ -775,6 +955,284 @@ function envelope<T extends Proposal>(
   } as T;
 }
 
+/** Corpus and registry context needed by the draft modes (D-085). */
+export interface DraftContext {
+  corpus: ExtractionCorpus;
+  /** The seed stub whose content is preserved verbatim (mode=mechanism). */
+  seed?: SeedStub;
+  /** Full + seed ids; relations to anything else are dropped as ungrounded. */
+  knownMechanismIds: ReadonlySet<string>;
+}
+
+/**
+ * Conservative prior from the drafted evidence grade, matching the range the
+ * owner used across the hand-authored registry (A 0.85–0.9 … B 0.65).
+ */
+const PRIOR_WEIGHT_BY_GRADE: Record<EvidenceGrade, number> = {
+  "A+": 0.9,
+  A: 0.85,
+  "A-": 0.8,
+  "B+": 0.7,
+  B: 0.65,
+  "B-": 0.55,
+  "C+": 0.45,
+  C: 0.35,
+  "C-": 0.25,
+};
+
+function nonEmpty(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function stringList(value: unknown): string[] {
+  return Array.isArray(value)
+    ? Array.from(
+        new Set(value.filter(nonEmpty).map((entry) => entry.trim())),
+      )
+    : [];
+}
+
+function vocabularySubset(value: unknown, allowed: readonly string[]): string[] {
+  return stringList(value).filter((entry) => allowed.includes(entry));
+}
+
+function draftMechanismPayload(
+  mechanismId: string,
+  item: DraftItem,
+  context: DraftContext,
+  proposedAt: string,
+): Mechanism | null {
+  const seed = context.seed;
+  if (!seed) return null;
+  if (
+    !evidenceGrade(item.grade) ||
+    !nonEmpty(item.summary) ||
+    !nonEmpty(item.evidence_basis) ||
+    !nonEmpty(item.effect_size_note) ||
+    !nonEmpty(item.boundary_test)
+  ) {
+    return null;
+  }
+  const funnelStages = vocabularySubset(item.funnel_stages, FUNNEL_STAGES);
+  const artifactTypes = vocabularySubset(
+    item.applicability_artifact_types,
+    ARTIFACT_TYPES,
+  ) as ArtifactType[];
+  if (funnelStages.length === 0 || artifactTypes.length === 0) return null;
+  const excludedStages = vocabularySubset(item.excluded_stages, FUNNEL_STAGES).filter(
+    (stage) => !funnelStages.includes(stage),
+  );
+
+  const preconditions = (Array.isArray(item.preconditions) ? item.preconditions : [])
+    .filter(
+      (entry): entry is { predicate: string; reason: string } =>
+        typeof entry === "object" &&
+        entry !== null &&
+        nonEmpty(entry.predicate) &&
+        nonEmpty(entry.reason),
+    )
+    .map((entry) => ({
+      predicate: entry.predicate.trim(),
+      reason: entry.reason.trim(),
+    }));
+
+  const implementations: Implementation[] = [];
+  for (const draft of Array.isArray(item.implementations) ? item.implementations : []) {
+    if (typeof draft !== "object" || draft === null) continue;
+    const suffix = nonEmpty(draft.id_suffix) ? slug(draft.id_suffix) : "";
+    const implementationTypes = vocabularySubset(
+      draft.artifact_types,
+      ARTIFACT_TYPES,
+    ) as ArtifactType[];
+    const metrics = stringList(draft.metrics).map(snake).filter(Boolean);
+    if (!suffix || implementationTypes.length === 0 || metrics.length === 0) continue;
+    if (!nonEmpty(draft.generation_directive)) continue;
+    const id = `${mechanismId}-${suffix}`;
+    if (implementations.some((existing) => existing.id === id)) continue;
+    implementations.push({
+      id,
+      artifact_types: implementationTypes,
+      product_requirements: stringList(draft.product_requirements),
+      generation_directive: draft.generation_directive.trim(),
+      copy_formulas: stringList(draft.copy_formulas),
+      metrics,
+      observed_effects: [],
+    });
+  }
+  if (implementations.length === 0) return null;
+
+  const hardRules: HardRule[] = [];
+  for (const draft of Array.isArray(item.hard_rules) ? item.hard_rules : []) {
+    if (typeof draft !== "object" || draft === null) continue;
+    if (!nonEmpty(draft.id) || !nonEmpty(draft.rule)) continue;
+    if (draft.severity !== "block" && draft.severity !== "warn") continue;
+    const id = snake(draft.id);
+    if (!id || hardRules.some((existing) => existing.id === id)) continue;
+    hardRules.push({ id, rule: draft.rule.trim(), severity: draft.severity });
+  }
+  if (hardRules.length === 0) return null;
+
+  const relations: Relation[] = (Array.isArray(item.relations) ? item.relations : [])
+    .filter(
+      (entry): entry is { type: string; target: string; note: string } =>
+        typeof entry === "object" &&
+        entry !== null &&
+        typeof entry.type === "string" &&
+        ["enabled_by", "enables", "adjacent", "hybrid_with"].includes(entry.type) &&
+        nonEmpty(entry.target) &&
+        entry.target !== mechanismId &&
+        context.knownMechanismIds.has(entry.target) &&
+        nonEmpty(entry.note),
+    )
+    .map((entry) => ({
+      type: entry.type as Relation["type"],
+      target: entry.target,
+      note: entry.note.trim(),
+    }));
+
+  const referenceExamples = (Array.isArray(item.reference_examples)
+    ? item.reference_examples
+    : []
+  )
+    .filter(
+      (entry): entry is { product: string; what: string } =>
+        typeof entry === "object" &&
+        entry !== null &&
+        nonEmpty(entry.product) &&
+        nonEmpty(entry.what),
+    )
+    .map((entry) => ({ product: entry.product.trim(), what: entry.what.trim() }));
+
+  return {
+    id: mechanismId,
+    slug: snake(seed.name),
+    name: seed.name,
+    version: "1.0.0",
+    level: "L1",
+    parent: seed.parent,
+    ...(seed.cross_cutting === true ? { cross_cutting: true } : {}),
+    // Honest at proposal time; projectMechanism derives the final lifecycle
+    // from the approved dossier verdict when the dossier exists (D-085).
+    lifecycle_status: "candidate",
+    dossier_ref: `dossiers/${mechanismId}.json`,
+    provenance: {
+      proposed_by: "derivation-pipeline",
+      date: proposedAt.slice(0, 10),
+    },
+    ...(seed.evidence_terms ? { evidence_terms: seed.evidence_terms } : {}),
+    ...(seed.pinned_evidence ? { pinned_evidence: seed.pinned_evidence } : {}),
+    evidence: {
+      grade: item.grade,
+      basis: item.evidence_basis.trim(),
+      effect_size_note: item.effect_size_note.trim(),
+      caveats: stringList(item.caveats).map(snake).filter(Boolean),
+    },
+    prior_weight: PRIOR_WEIGHT_BY_GRADE[item.grade],
+    mechanism_summary_for_context: item.summary.trim(),
+    applicability: {
+      funnel_stages: funnelStages,
+      excluded_stages: excludedStages,
+      artifact_types: artifactTypes,
+      preconditions,
+      culture_note: nonEmpty(item.culture_note) ? item.culture_note.trim() : "",
+    },
+    implementations,
+    constraints: {
+      hard_rules: hardRules,
+      compliance_refs: stringList(item.compliance_refs).map(snake).filter(Boolean),
+      boundary_test: item.boundary_test.trim(),
+    },
+    relations,
+    telemetry: {
+      tag_format: `me:${mechanismId}:{implementation_id}`,
+      amplitude_event_property: "mechanism_tags",
+    },
+    ...(referenceExamples.length > 0 ? { reference_examples: referenceExamples } : {}),
+  };
+}
+
+function isEvidenceProvenance(
+  item: KnowledgeProvenanceItem,
+): item is EvidenceProvenanceItem {
+  return !("corpus_kind" in item && item.corpus_kind === "realization");
+}
+
+function draftDossierAxis(
+  raw: DossierAxisDraft | undefined,
+  corpus: ExtractionCorpus,
+): DossierDraftAxis {
+  const unscored: DossierDraftAxis = { score: null, rationale: null, provenance: [] };
+  if (
+    !raw ||
+    typeof raw !== "object" ||
+    !Number.isInteger(raw.score) ||
+    (raw.score as number) < 0 ||
+    (raw.score as number) > 3 ||
+    !nonEmpty(raw.rationale)
+  ) {
+    return unscored;
+  }
+  const grounded = groundedProvenance({ citations: raw.citations }, corpus);
+  if (!grounded || !grounded.every(isEvidenceProvenance)) return unscored;
+  return {
+    score: raw.score as AxisScore,
+    rationale: raw.rationale.trim(),
+    provenance: grounded as EvidenceProvenanceItem[],
+  };
+}
+
+function draftDossierPayload(
+  mechanismId: string,
+  item: DraftItem,
+  context: DraftContext,
+  envelopeProvenance: KnowledgeProvenanceItem[],
+): { payload: DossierDraftPayload; provenance: KnowledgeProvenanceItem[] } | null {
+  if (!nonEmpty(item.core_condition) || !nonEmpty(item.dissent)) return null;
+  const scores = {
+    evidence: draftDossierAxis(item.scores?.evidence, context.corpus),
+    product_applicability: draftDossierAxis(
+      item.scores?.product_applicability,
+      context.corpus,
+    ),
+    measurability: draftDossierAxis(item.scores?.measurability, context.corpus),
+    orthogonality: draftDossierAxis(item.scores?.orthogonality, context.corpus),
+    safety: draftDossierAxis(item.scores?.safety, context.corpus),
+  };
+  // The envelope carries the exact union of the top-level citations and every
+  // per-axis provenance item, so /review re-grounds each axis transitively.
+  const union = new Map<string, KnowledgeProvenanceItem>();
+  for (const entry of [
+    ...envelopeProvenance,
+    ...Object.values(scores).flatMap((axis) => axis.provenance),
+  ]) {
+    union.set(JSON.stringify(entry), entry);
+  }
+  const provenance = Array.from(union.values()).sort(
+    (left, right) =>
+      left.corpus_record_id.localeCompare(right.corpus_record_id) ||
+      left.quote_or_locus.localeCompare(right.quote_or_locus),
+  );
+  const evidenceSources: DossierEvidenceSource[] = [];
+  const seenDois = new Set<string>();
+  for (const entry of provenance) {
+    if (!("doi" in entry) || entry.doi === null || seenDois.has(entry.doi)) continue;
+    seenDois.add(entry.doi);
+    evidenceSources.push({ ref: entry.title, doi: entry.doi });
+  }
+  if (evidenceSources.length === 0) return null;
+  return {
+    payload: {
+      id: `DOS-${mechanismId}`,
+      mechanism_id: mechanismId,
+      scores,
+      core_condition: item.core_condition.trim(),
+      dissent: item.dissent.trim(),
+      evidence_sources: evidenceSources,
+    },
+    provenance,
+  };
+}
+
 export function toProposal(
   mode: ExtractionMode,
   mechanismId: string,
@@ -782,9 +1240,44 @@ export function toProposal(
   provenance: KnowledgeProvenanceItem[],
   runId: string,
   proposedAt: string,
+  context?: DraftContext,
 ): Proposal | null {
   const itemConfidence = confidence(item.confidence);
   if (itemConfidence === null) return null;
+  if (mode === "mechanism") {
+    if (!context) return null;
+    const payload = draftMechanismPayload(mechanismId, item, context, proposedAt);
+    if (!payload) return null;
+    return envelope(
+      {
+        id: proposalId("mechanism", mechanismId, "record"),
+        type: "mechanism",
+        target: mechanismId,
+        payload,
+        provenance,
+        confidence: itemConfidence,
+      },
+      runId,
+      proposedAt,
+    );
+  }
+  if (mode === "dossier") {
+    if (!context) return null;
+    const draft = draftDossierPayload(mechanismId, item, context, provenance);
+    if (!draft) return null;
+    return envelope(
+      {
+        id: proposalId("dossier", mechanismId, "draft"),
+        type: "dossier",
+        target: mechanismId,
+        payload: draft.payload,
+        provenance: draft.provenance,
+        confidence: itemConfidence,
+      },
+      runId,
+      proposedAt,
+    );
+  }
   if (
     mode === "effects" &&
     typeof item.name === "string" &&
@@ -1173,7 +1666,18 @@ export async function runExtraction(args: {
     ? `github-actions-${process.env.GITHUB_RUN_ID}`
     : `extract-${startedAt.toISOString()}`;
 
+  const draftContextBase = isDraftMode(args.mode)
+    ? {
+        seeds: seedStubs(),
+        knownMechanismIds: new Set([
+          ...Array.from(fullMechanisms().keys()),
+          ...Array.from(seedStubs().keys()),
+        ]) as ReadonlySet<string>,
+      }
+    : null;
+
   for (const mechanismId of args.scope.mechanismIds) {
+    if (!modeEligible(args.mode, mechanismId)) continue;
     const corpus = corpusFor(args.mode, mechanismId);
     const records = eligibleRecords(corpus);
     if (records.length === 0) continue;
@@ -1181,6 +1685,13 @@ export async function runExtraction(args: {
       mechanismId,
       records.map((record) => record.record_id),
     );
+    const draftContext: DraftContext | undefined = draftContextBase
+      ? {
+          corpus,
+          seed: draftContextBase.seeds.get(mechanismId),
+          knownMechanismIds: draftContextBase.knownMechanismIds,
+        }
+      : undefined;
     const candidates: DraftItem[] = [];
     for (const batch of batches(records, args.config.limits.records_per_batch)) {
       candidates.push(
@@ -1192,12 +1703,16 @@ export async function runExtraction(args: {
         )),
       );
     }
-    const synthesized = await callOpenRouter(
+    const synthesizedRaw = await callOpenRouter(
       context,
       "strong",
       strongPrompt(args.mode, mechanismId, candidates),
       STRONG_OUTPUT_RESERVE,
     );
+    // A draft mode composes exactly one first-time artifact per mechanism.
+    const synthesized = isDraftMode(args.mode)
+      ? synthesizedRaw.slice(0, 1)
+      : synthesizedRaw;
     stats.candidates += synthesized.length;
     const admissible: { proposal: Proposal; outcome: "proposed" | "merged" }[] = [];
     const held: Proposal[] = [];
@@ -1214,6 +1729,7 @@ export async function runExtraction(args: {
         provenance,
         runId,
         startedAt.toISOString(),
+        draftContext,
       );
       if (!proposal || !validate(proposal)) {
         stats.dropped_ungrounded += 1;
@@ -1353,7 +1869,7 @@ async function main(): Promise<void> {
   }
   const config = loadExtractionOpsConfigFromDisk();
   if (!config) throw new Error("Missing corpora/_ops/extraction.json");
-  const scope = resolveScope(params);
+  const scope = resolveScope(params, { includeSeeds: isDraftMode(params.mode) });
   if (command === "quote") {
     const quote = buildQuote(params.mode, scope, config);
     writeFileSync(QUOTE_FILE, json(quote));

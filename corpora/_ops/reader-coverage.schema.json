@@ -40,7 +40,14 @@
           "type": "array",
           "uniqueItems": true,
           "items": {
-            "enum": ["effects", "realizations", "interactions", "dissent"]
+            "enum": [
+              "effects",
+              "realizations",
+              "interactions",
+              "dissent",
+              "mechanism",
+              "dossier"
+            ]
           }
         }
       },
