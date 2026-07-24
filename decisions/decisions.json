@@ -636,6 +636,13 @@
       "title": "Review schema assets are explicit server-function dependencies",
       "body": "The first-class effect and realization schemas required by D-076/D-078 already existed at effects/effect.schema.json and realizations/realization.schema.json and matched their decided artifact shapes. /review approval nevertheless failed on Vercel with ENOENT for effects/effect.schema.json because lib/proposals.ts loads validator schemas through a runtime-computed fs path; Next.js output file tracing could not infer those dynamic file dependencies, so the deployed review server function omitted schemas that were present in git. next.config.mjs now explicitly includes every schema consumed by the approval validator in the /review trace, preserving schemaRoot-based filesystem validation and the atomic proposal/artifact/decision transaction. The SC-06 extraction run was not affected by that deployment-only omission: Actions ran from the repository checkout and reported two candidates under dropped_ungrounded. However, extraction also placed every Ajv failure in that same bucket and discarded it without diagnostics, making the run unable to distinguish grounding failures from schema failures. Extraction summaries and terminal heartbeats therefore add failed_validation as a separate quality counter, manifests raise validation_failed, /ops renders the counter, and each failed schema validation prints its Ajv errors. No validation gate is weakened and no app write surface is widened.",
       "area": "architecture"
+    },
+    {
+      "id": "D-092",
+      "date": "2026-07-24",
+      "title": "Proposal realization-ze-07-language-learning-landing-hero-b8d0d1b852e0 approved",
+      "body": "Owner owner approved realization proposal realization-ze-07-language-learning-landing-hero-b8d0d1b852e0 for ZE-07. The validated proposal status and authoritative projection were committed atomically.",
+      "area": "data"
     }
   ]
 }
