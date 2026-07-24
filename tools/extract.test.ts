@@ -17,17 +17,23 @@ import type {
   RealizationCorpusFile,
 } from "../lib/types";
 import {
+  OPENROUTER_SYSTEM_PROMPT,
+  OpenRouterOutputValidationError,
   buildExtractionManifestRun,
   buildExtractionPlan,
   buildExtractionManifestCost,
   buildQuote,
+  everyResponseBatchFailed,
   extractionSummaryParams,
   groundedProvenance,
   mergeReaderCoverage,
+  openRouterStructuredOutputOptions,
+  parseDraftResponse,
   proposalIdentity,
   rankRelevantRecords,
   recordRelevanceTier,
   resolveScope,
+  settleResponseBatch,
   toProposal,
 } from "./extract";
 import { visibleReplayText } from "./connectors/realization-wayback";
@@ -59,6 +65,86 @@ const configured: ExtractionOpsConfig = {
     max_proposals_per_mechanism: 10,
   },
 };
+
+test("OpenRouter requests require a strict items envelope", () => {
+  const options = openRouterStructuredOutputOptions("effects", "extract");
+  assert.deepEqual(options.provider, { require_parameters: true });
+  assert.equal(
+    (options.response_format as { type?: string }).type,
+    "json_schema",
+  );
+  const format = options.response_format as {
+    json_schema?: {
+      strict?: boolean;
+      schema?: {
+        additionalProperties?: boolean;
+        required?: string[];
+        properties?: { items?: { type?: string } };
+      };
+    };
+  };
+  assert.equal(format.json_schema?.strict, true);
+  assert.equal(format.json_schema?.schema?.additionalProperties, false);
+  assert.deepEqual(format.json_schema?.schema?.required, ["items"]);
+  assert.equal(
+    format.json_schema?.schema?.properties?.items?.type,
+    "array",
+  );
+  assert.match(OPENROUTER_SYSTEM_PROMPT, /\{"items":\[\.\.\.\]\}/);
+  assert.match(OPENROUTER_SYSTEM_PROMPT, /bare top-level array/);
+});
+
+test("response parser tolerates form deviations but keeps the envelope strict", () => {
+  const item = { fact: 'A value with an escaped quote: "yes".' };
+  assert.deepEqual(
+    parseDraftResponse(JSON.stringify({ items: [item] })),
+    { items: [item], tolerance: "strict" },
+  );
+  assert.deepEqual(
+    parseDraftResponse(JSON.stringify([item])),
+    { items: [item], tolerance: "bare_array" },
+  );
+  assert.deepEqual(
+    parseDraftResponse(`\`\`\`json\n${JSON.stringify({ items: [item] })}\n\`\`\``),
+    { items: [item], tolerance: "markdown_code_fence" },
+  );
+  assert.deepEqual(
+    parseDraftResponse(
+      `Model preface with {not JSON}. Result: ${JSON.stringify({
+        items: [{ ...item, nested: { braces: "{still text}" } }],
+      })} trailing prose.`,
+    ),
+    {
+      items: [{ ...item, nested: { braces: "{still text}" } }],
+      tolerance: "embedded_json",
+    },
+  );
+  assert.throws(
+    () => parseDraftResponse('{"items":[],"explanation":"extra"}'),
+    OpenRouterOutputValidationError,
+  );
+  assert.throws(
+    () => parseDraftResponse("There is no usable JSON here."),
+    OpenRouterOutputValidationError,
+  );
+});
+
+test("response validation failures settle per batch and only all-failed runs fail", async () => {
+  const failed = await settleResponseBatch(async () => {
+    throw new OpenRouterOutputValidationError("malformed");
+  });
+  const succeeded = await settleResponseBatch(async () => [{ fact: "valid" }]);
+  assert.equal(failed.ok, false);
+  assert.equal(succeeded.ok, true);
+  assert.equal(everyResponseBatchFailed(2, 1), false);
+  assert.equal(everyResponseBatchFailed(2, 0), true);
+  await assert.rejects(
+    settleResponseBatch(async () => {
+      throw new Error("transport failed");
+    }),
+    /transport failed/,
+  );
+});
 
 function corpus(): EvidenceCorpusFile {
   return JSON.parse(
@@ -386,6 +472,9 @@ test("capped extraction manifest is partial and records funnel outcomes", () => 
       held_low_confidence: 0,
       dropped_volume_cap: 0,
       dropped_volume_cap_high_confidence: 0,
+      records_eligible: 10,
+      records_relevant: 3,
+      records_remaining: 0,
     },
     filesWritten: 1,
     capped: true,
@@ -398,6 +487,46 @@ test("capped extraction manifest is partial and records funnel outcomes", () => 
   assert.equal(run.params.failed_validation, "1");
   assert.equal(run.params.records_processed, "3");
   assert.equal(run.params.records_skipped_irrelevant, "7");
+});
+
+test("retryable response failures are partial without claiming a token cap", () => {
+  const run = buildExtractionManifestRun({
+    mode: "effects",
+    scope: resolveScope({ mechanism: "CG-05" }),
+    startedAt: new Date("2026-07-24T12:00:00.000Z"),
+    config: configured,
+    usage: {
+      input: 100,
+      output: 10,
+      calls: 1,
+      byTier: {
+        cheap: { input: 100, output: 10, calls: 1 },
+        strong: { input: 0, output: 0, calls: 0 },
+      },
+    },
+    stats: {
+      candidates: 0,
+      records_processed: 25,
+      records_skipped_irrelevant: 0,
+      dropped_ungrounded: 0,
+      failed_validation: 1,
+      proposed: 0,
+      merged: 0,
+      held_low_confidence: 0,
+      dropped_volume_cap: 0,
+      dropped_volume_cap_high_confidence: 0,
+      records_eligible: 25,
+      records_relevant: 25,
+      records_remaining: 25,
+    },
+    filesWritten: 0,
+    capped: false,
+    incomplete: true,
+    durationS: 1,
+  });
+  assert.equal(run.status, "partial");
+  assert.equal(run.warnings?.validation_failed, true);
+  assert.equal(run.warnings?.capped, undefined);
 });
 
 test("grounding accepts exact loci and rejects invented or unknown citations", () => {
@@ -728,7 +857,7 @@ test("mode=mechanism composes a schema-valid record from seed + grounded claims"
     name: "Competence & mastery",
     grade_draft: "B+",
     oneliner: "Fixture oneliner.",
-    parent: "S8",
+    parent: "S8" as const,
     lifecycle_status: "candidate" as const,
     evidence_terms: ["competence need satisfaction"],
     pinned_evidence: [

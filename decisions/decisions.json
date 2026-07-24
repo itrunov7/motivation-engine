@@ -643,6 +643,13 @@
       "title": "Proposal realization-ze-07-language-learning-landing-hero-b8d0d1b852e0 approved",
       "body": "Owner owner approved realization proposal realization-ze-07-language-learning-landing-hero-b8d0d1b852e0 for ZE-07. The validated proposal status and authoritative projection were committed atomically.",
       "area": "data"
+    },
+    {
+      "id": "D-093",
+      "date": "2026-07-24",
+      "title": "Extractor tolerates response form but remains strict on content",
+      "body": "Extractor is tolerant to response form, strict on content; single malformed responses cost a batch, never a run. OpenRouter calls use strict mode-specific JSON Schema with the exact {items: [...]} envelope and require a provider endpoint that supports the requested parameters. The system prompt repeats the envelope explicitly. Responses are parsed strictly first, then may recover from a markdown code fence, a bare top-level array, or the first balanced valid JSON block in surrounding prose; every recovery logs the exact model, tier, and strategy. Recovery changes form only: item grounding, confidence, proposal schemas, deduplication, and owner approval remain fail-closed. An unrecoverable response increments the existing failed_validation sixth counter and processing continues with the next cheap batch or mechanism synthesis. Failed records are excluded from committed reader coverage and from same-run replanning, so extraction completeness stays honest without retry loops. Transport, API, usage-accounting, and budget failures still abort immediately. A run fails for response validation only when every attempted response batch fails; any successfully parsed batch allows a partial or successful run to persist its honest counters.",
+      "area": "operations"
     }
   ]
 }

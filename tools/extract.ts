@@ -171,8 +171,8 @@ interface DossierAxisDraft {
   citations?: CitationDraft[];
 }
 
-interface DraftItem {
-  id?: string;
+export interface DraftItem {
+  id?: string | null;
   name?: string;
   fact?: string;
   boundary?: string;
@@ -180,7 +180,7 @@ interface DraftItem {
   term?: string;
   description_as_reported?: string;
   artifact_context?: string[];
-  effect_id?: string;
+  effect_id?: string | null;
   pair?: string[];
   type?: string;
   source?: string;
@@ -212,6 +212,355 @@ interface DraftItem {
 
 interface DraftResponse {
   items: DraftItem[];
+}
+
+type ExtractionStage = "extract" | "synthesize";
+export type ResponseTolerance =
+  | "strict"
+  | "markdown_code_fence"
+  | "bare_array"
+  | "embedded_json";
+
+export interface ParsedDraftResponse {
+  items: DraftItem[];
+  tolerance: ResponseTolerance;
+}
+
+export class OpenRouterOutputValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "OpenRouterOutputValidationError";
+  }
+}
+
+interface JsonSchema {
+  [key: string]: unknown;
+}
+
+const citationSchema: JsonSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    record_id: { type: "string" },
+    quote_or_locus: { type: "string" },
+  },
+  required: ["record_id", "quote_or_locus"],
+};
+
+const citationsSchema: JsonSchema = {
+  type: "array",
+  items: citationSchema,
+};
+
+const stringArraySchema: JsonSchema = {
+  type: "array",
+  items: { type: "string" },
+};
+
+function strictObject(
+  properties: Record<string, JsonSchema>,
+  required: readonly string[] = Object.keys(properties),
+): JsonSchema {
+  return {
+    type: "object",
+    additionalProperties: false,
+    properties,
+    required,
+  };
+}
+
+function commonItem(properties: Record<string, JsonSchema>): JsonSchema {
+  return strictObject({
+    ...properties,
+    confidence: { type: "number" },
+    citations: citationsSchema,
+  });
+}
+
+function extractionItemSchema(mode: ExtractionMode): JsonSchema {
+  switch (mode) {
+    case "effects":
+      return commonItem({
+        id: { type: ["string", "null"] },
+        name: { type: "string" },
+        fact: { type: "string" },
+        boundary: { type: "string" },
+        grade: { type: "string" },
+      });
+    case "realizations":
+      return commonItem({
+        id: { type: ["string", "null"] },
+        term: { type: "string" },
+        description_as_reported: { type: "string" },
+        artifact_context: stringArraySchema,
+        effect_id: { type: ["string", "null"] },
+      });
+    case "interactions":
+      return commonItem({
+        pair: stringArraySchema,
+        type: { type: "string" },
+        fact: { type: "string" },
+        grade: { type: "string" },
+        boundary: { type: "string" },
+        source: { type: "string" },
+      });
+    case "dissent":
+      return commonItem({ value: { type: "string" } });
+    case "mechanism":
+    case "dossier":
+      return commonItem({
+        section: { type: "string" },
+        fact: { type: "string" },
+      });
+  }
+}
+
+function mechanismSynthesisSchema(): JsonSchema {
+  return commonItem({
+    summary: { type: "string" },
+    grade: { type: "string" },
+    evidence_basis: { type: "string" },
+    effect_size_note: { type: "string" },
+    caveats: stringArraySchema,
+    funnel_stages: stringArraySchema,
+    excluded_stages: stringArraySchema,
+    applicability_artifact_types: stringArraySchema,
+    preconditions: {
+      type: "array",
+      items: strictObject({
+        predicate: { type: "string" },
+        reason: { type: "string" },
+      }),
+    },
+    culture_note: { type: "string" },
+    implementations: {
+      type: "array",
+      items: strictObject({
+        id_suffix: { type: "string" },
+        artifact_types: stringArraySchema,
+        product_requirements: stringArraySchema,
+        generation_directive: { type: "string" },
+        copy_formulas: stringArraySchema,
+        metrics: stringArraySchema,
+      }),
+    },
+    hard_rules: {
+      type: "array",
+      items: strictObject({
+        id: { type: "string" },
+        rule: { type: "string" },
+        severity: { type: "string" },
+      }),
+    },
+    compliance_refs: stringArraySchema,
+    boundary_test: { type: "string" },
+    relations: {
+      type: "array",
+      items: strictObject({
+        type: { type: "string" },
+        target: { type: "string" },
+        note: { type: "string" },
+      }),
+    },
+    reference_examples: {
+      type: "array",
+      items: strictObject({
+        product: { type: "string" },
+        what: { type: "string" },
+      }),
+    },
+  });
+}
+
+function dossierSynthesisSchema(): JsonSchema {
+  const axis = strictObject({
+    score: { type: ["integer", "null"] },
+    rationale: { type: ["string", "null"] },
+    citations: citationsSchema,
+  });
+  return commonItem({
+    scores: strictObject({
+      evidence: axis,
+      product_applicability: axis,
+      measurability: axis,
+      orthogonality: axis,
+      safety: axis,
+    }),
+    core_condition: { type: "string" },
+    dissent: { type: "string" },
+  });
+}
+
+function responseItemSchema(
+  mode: ExtractionMode,
+  stage: ExtractionStage,
+): JsonSchema {
+  if (stage === "synthesize" && mode === "mechanism") {
+    return mechanismSynthesisSchema();
+  }
+  if (stage === "synthesize" && mode === "dossier") {
+    return dossierSynthesisSchema();
+  }
+  return extractionItemSchema(mode);
+}
+
+export function openRouterResponseFormat(
+  mode: ExtractionMode,
+  stage: ExtractionStage,
+): JsonSchema {
+  return {
+    type: "json_schema",
+    json_schema: {
+      name: `motivation_engine_${mode}_${stage}`,
+      strict: true,
+      schema: strictObject({
+        items: {
+          type: "array",
+          items: responseItemSchema(mode, stage),
+        },
+      }),
+    },
+  };
+}
+
+export const OPENROUTER_SYSTEM_PROMPT =
+  'You are a fail-closed scientific extraction function. Return exactly one JSON object with the envelope {"items":[...]}. Do not return markdown, code fences, explanatory prose, or a bare top-level array. Never use knowledge outside supplied records.';
+
+export function openRouterStructuredOutputOptions(
+  mode: ExtractionMode,
+  stage: ExtractionStage,
+): JsonSchema {
+  return {
+    response_format: openRouterResponseFormat(mode, stage),
+    provider: { require_parameters: true },
+  };
+}
+
+function normalizeDraftResponse(value: unknown): DraftItem[] | null {
+  const rawItems = Array.isArray(value)
+    ? value
+    : typeof value === "object" &&
+        value !== null &&
+        Object.keys(value).length === 1 &&
+        Array.isArray((value as DraftResponse).items)
+      ? (value as DraftResponse).items
+      : null;
+  if (
+    rawItems === null ||
+    !rawItems.every((item) => typeof item === "object" && item !== null)
+  ) {
+    return null;
+  }
+  return rawItems as DraftItem[];
+}
+
+function balancedJsonBlocks(value: string): string[] {
+  const blocks: string[] = [];
+  for (let start = 0; start < value.length; start += 1) {
+    if (value[start] !== "{" && value[start] !== "[") continue;
+    const stack: string[] = [];
+    let inString = false;
+    let escaped = false;
+    for (let index = start; index < value.length; index += 1) {
+      const char = value[index];
+      if (inString) {
+        if (escaped) {
+          escaped = false;
+        } else if (char === "\\") {
+          escaped = true;
+        } else if (char === '"') {
+          inString = false;
+        }
+        continue;
+      }
+      if (char === '"') {
+        inString = true;
+      } else if (char === "{" || char === "[") {
+        stack.push(char);
+      } else if (char === "}" || char === "]") {
+        const opener = stack.pop();
+        if (
+          opener === undefined ||
+          (char === "}" && opener !== "{") ||
+          (char === "]" && opener !== "[")
+        ) {
+          break;
+        }
+        if (stack.length === 0) {
+          blocks.push(value.slice(start, index + 1));
+          start = index;
+          break;
+        }
+      }
+    }
+  }
+  return blocks;
+}
+
+function parseJson(value: string): unknown | undefined {
+  try {
+    return JSON.parse(value) as unknown;
+  } catch {
+    return undefined;
+  }
+}
+
+export function parseDraftResponse(content: string): ParsedDraftResponse {
+  const trimmed = content.trim();
+  const direct = parseJson(trimmed);
+  if (direct !== undefined) {
+    const items = normalizeDraftResponse(direct);
+    if (items) {
+      return {
+        items,
+        tolerance: Array.isArray(direct) ? "bare_array" : "strict",
+      };
+    }
+    throw new OpenRouterOutputValidationError(
+      'OpenRouter output must be exactly {"items":[]}',
+    );
+  }
+
+  const fence = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+  if (fence) {
+    const fenced = parseJson(fence[1]);
+    const items = fenced === undefined ? null : normalizeDraftResponse(fenced);
+    if (items) return { items, tolerance: "markdown_code_fence" };
+  }
+
+  for (const block of balancedJsonBlocks(trimmed)) {
+    const parsed = parseJson(block);
+    const items = parsed === undefined ? null : normalizeDraftResponse(parsed);
+    if (items) return { items, tolerance: "embedded_json" };
+  }
+
+  throw new OpenRouterOutputValidationError(
+    'OpenRouter output must contain valid JSON matching {"items":[]}',
+  );
+}
+
+export type SettledResponseBatch<T> =
+  | { ok: true; value: T }
+  | { ok: false; error: OpenRouterOutputValidationError };
+
+export async function settleResponseBatch<T>(
+  operation: () => Promise<T>,
+): Promise<SettledResponseBatch<T>> {
+  try {
+    return { ok: true, value: await operation() };
+  } catch (error) {
+    if (error instanceof OpenRouterOutputValidationError) {
+      return { ok: false, error };
+    }
+    throw error;
+  }
+}
+
+export function everyResponseBatchFailed(
+  attempted: number,
+  succeeded: number,
+): boolean {
+  return attempted > 0 && succeeded === 0;
 }
 
 export interface ExtractionStats {
@@ -692,7 +1041,7 @@ function taskInstruction(mode: ExtractionMode, mechanismId: string): string {
     mode === "realizations"
       ? "a supplied title or observation"
       : "a supplied title or abstract";
-  const shared = `Return JSON {"items":[]}. Every item must include citations [{record_id,quote_or_locus}] using only supplied records. quote_or_locus must be an exact span from ${locus}. If an item cannot be grounded, omit it.`;
+  const shared = `Return exactly one JSON object with this envelope: {"items":[]}. Do not return markdown, code fences, prose, or a bare top-level array. Every item must include citations [{record_id,quote_or_locus}] using only supplied records. quote_or_locus must be an exact span from ${locus}. If an item cannot be grounded, omit it.`;
   switch (mode) {
     case "effects":
       return `${shared} Extract distinct named phenomena produced by ${mechanismId}. Fields: id, name, fact, boundary, grade (A+..C-), confidence, citations.`;
@@ -1050,6 +1399,8 @@ export function buildQuote(
 async function callOpenRouter(
   context: RunContext,
   tierName: "cheap" | "strong",
+  mode: ExtractionMode,
+  stage: ExtractionStage,
   prompt: string,
   outputReserve: number,
 ): Promise<DraftItem[]> {
@@ -1082,12 +1433,11 @@ async function callOpenRouter(
         messages: [
           {
             role: "system",
-            content:
-              "You are a fail-closed scientific extraction function. Output JSON only. Never use knowledge outside supplied records.",
+            content: OPENROUTER_SYSTEM_PROMPT,
           },
           { role: "user", content: prompt },
         ],
-        response_format: { type: "json_object" },
+        ...openRouterStructuredOutputOptions(mode, stage),
         temperature: 0,
         max_tokens: maxTokens,
       }),
@@ -1103,7 +1453,11 @@ async function callOpenRouter(
   if (!response?.ok) throw new Error("OpenRouter request failed");
   const body = (await response.json()) as OpenRouterResponse;
   const content = body.choices?.[0]?.message?.content;
-  if (typeof content !== "string") throw new Error("OpenRouter returned no content");
+  if (typeof content !== "string") {
+    throw new OpenRouterOutputValidationError(
+      "OpenRouter returned no response content",
+    );
+  }
   const usageInput = body.usage?.prompt_tokens;
   const usageOutput = body.usage?.completion_tokens;
   if (
@@ -1120,17 +1474,13 @@ async function callOpenRouter(
   context.usage.byTier[tierName].input += usageInput!;
   context.usage.byTier[tierName].output += usageOutput!;
   context.usage.byTier[tierName].calls += 1;
-  const parsed = JSON.parse(content) as unknown;
-  if (
-    typeof parsed !== "object" ||
-    parsed === null ||
-    !Array.isArray((parsed as DraftResponse).items)
-  ) {
-    throw new Error("OpenRouter output must be {items: []}");
+  const parsed = parseDraftResponse(content);
+  if (parsed.tolerance !== "strict") {
+    console.warn(
+      `[extract] tolerated OpenRouter response form model=${tier.model_id} tier=${tierName} strategy=${parsed.tolerance}`,
+    );
   }
-  return (parsed as DraftResponse).items.filter(
-    (item): item is DraftItem => typeof item === "object" && item !== null,
-  );
+  return parsed.items;
 }
 
 const normalizeText = normalizeQualityText;
@@ -1919,11 +2269,12 @@ export function buildExtractionManifestRun(args: {
   stats: ExtractionStats;
   filesWritten: number;
   capped: boolean;
+  incomplete?: boolean;
   durationS: number;
 }): CorpusManifestRun {
   return {
     timestamp: args.startedAt.toISOString(),
-    status: args.capped ? "partial" : "success",
+    status: args.capped || args.incomplete ? "partial" : "success",
     params: {
       mode: args.mode,
       [args.scope.kind]: args.scope.id,
@@ -1965,6 +2316,7 @@ function writeManifest(
   stats: ExtractionStats,
   filesWritten: number,
   capped: boolean,
+  incomplete: boolean,
 ): void {
   mkdirSync(EXTRACTION_DIR, { recursive: true });
   const duration = Math.round(((Date.now() - startedAt.getTime()) / 1000) * 100) / 100;
@@ -1977,6 +2329,7 @@ function writeManifest(
     stats,
     filesWritten,
     capped,
+    incomplete,
     durationS: duration,
   });
   const previous = existsSync(MANIFEST_FILE)
@@ -2128,6 +2481,26 @@ export async function runExtraction(args: {
         ]) as ReadonlySet<string>,
       }
     : null;
+  let responseBatchesAttempted = 0;
+  let responseBatchesSucceeded = 0;
+  const failedRecordIdsByMechanism = new Map<string, Set<string>>();
+
+  const recordFailedBatch = (
+    mechanismId: string,
+    tierName: "cheap" | "strong",
+    error: OpenRouterOutputValidationError,
+    recordIds: readonly string[],
+  ): void => {
+    stats.failed_validation += 1;
+    const failed =
+      failedRecordIdsByMechanism.get(mechanismId) ?? new Set<string>();
+    for (const recordId of recordIds) failed.add(recordId);
+    failedRecordIdsByMechanism.set(mechanismId, failed);
+    const modelId = configuredTier(args.config, tierName).model_id;
+    console.warn(
+      `[extract] response validation failed model=${modelId} tier=${tierName} mechanism=${mechanismId}: ${error.message}`,
+    );
+  };
 
   const processSlice = async (slicePlan: ExtractionPlan): Promise<void> => {
     const batchSize = args.config.limits.records_per_batch;
@@ -2135,188 +2508,249 @@ export async function runExtraction(args: {
       totalBatches += Math.ceil(mechanism.selected.length / batchSize);
     }
     for (const mechanismPlan of slicePlan.mechanisms) {
-    const { mechanismId, corpus } = mechanismPlan;
-    const records = mechanismPlan.selected;
-    // Accumulate across slices (D-090): a mechanism can be visited by several
-    // slices, each adding more processed ids. Skipped ids arrive only in the
-    // first slice, since the pre-filter marks every irrelevant record terminal
-    // at once, so appending them is idempotent for later slices.
-    const coverageDelta =
-      processedByMechanism.get(mechanismId) ?? {
-        processed_record_ids: [] as string[],
-        skipped_irrelevant_record_ids: [] as string[],
-      };
-    coverageDelta.skipped_irrelevant_record_ids.push(
-      ...mechanismPlan.skippedIrrelevantIds,
-    );
-    stats.records_skipped_irrelevant += mechanismPlan.skippedIrrelevantIds.length;
-    if (
-      records.length > 0 ||
-      coverageDelta.skipped_irrelevant_record_ids.length > 0
-    ) {
-      processedByMechanism.set(mechanismId, coverageDelta);
-    }
-    if (records.length === 0) continue;
-    const draftContext: DraftContext | undefined = draftContextBase
-      ? {
-          corpus,
-          seed: draftContextBase.seeds.get(mechanismId),
-          knownMechanismIds: draftContextBase.knownMechanismIds,
+      const { mechanismId, corpus } = mechanismPlan;
+      const records = mechanismPlan.selected;
+      // Accumulate across slices (D-090): a mechanism can be visited by several
+      // slices, each adding more processed ids. Skipped ids arrive only in the
+      // first slice, since the pre-filter marks every irrelevant record terminal
+      // at once, so appending them is idempotent for later slices.
+      const coverageDelta =
+        processedByMechanism.get(mechanismId) ?? {
+          processed_record_ids: [] as string[],
+          skipped_irrelevant_record_ids: [] as string[],
+        };
+      coverageDelta.skipped_irrelevant_record_ids.push(
+        ...mechanismPlan.skippedIrrelevantIds,
+      );
+      stats.records_skipped_irrelevant +=
+        mechanismPlan.skippedIrrelevantIds.length;
+      if (coverageDelta.skipped_irrelevant_record_ids.length > 0) {
+        processedByMechanism.set(mechanismId, coverageDelta);
+      }
+      if (records.length === 0) continue;
+      const draftContext: DraftContext | undefined = draftContextBase
+        ? {
+            corpus,
+            seed: draftContextBase.seeds.get(mechanismId),
+            knownMechanismIds: draftContextBase.knownMechanismIds,
+          }
+        : undefined;
+      const candidates: DraftItem[] = [];
+      const parsedRecordIds: string[] = [];
+      let parsedCheapBatches = 0;
+      for (const batch of batches(
+        records,
+        args.config.limits.records_per_batch,
+      )) {
+        responseBatchesAttempted += 1;
+        const result = await settleResponseBatch(() =>
+          callOpenRouter(
+            context,
+            "cheap",
+            args.mode,
+            "extract",
+            cheapPrompt(args.mode, mechanismId, batch),
+            CHEAP_OUTPUT_RESERVE,
+          ),
+        );
+        const recordIds = batch.map((record) => record.record_id);
+        stats.records_processed += batch.length;
+        batchesDone += 1;
+        if (result.ok) {
+          responseBatchesSucceeded += 1;
+          parsedCheapBatches += 1;
+          candidates.push(...result.value);
+          parsedRecordIds.push(...recordIds);
+        } else {
+          recordFailedBatch(mechanismId, "cheap", result.error, recordIds);
         }
-      : undefined;
-    const candidates: DraftItem[] = [];
-    for (const batch of batches(records, args.config.limits.records_per_batch)) {
-      candidates.push(
-        ...(await callOpenRouter(
-          context,
-          "cheap",
-          cheapPrompt(args.mode, mechanismId, batch),
-          CHEAP_OUTPUT_RESERVE,
-        )),
-      );
-      coverageDelta.processed_record_ids.push(
-        ...batch.map((record) => record.record_id),
-      );
-      stats.records_processed += batch.length;
-      batchesDone += 1;
-      reportExtractProgress(`drafting ${mechanismId}`, "running", false);
-    }
-    reportExtractProgress(`composing ${mechanismId}`, "running", false);
-    const synthesizedRaw = await callOpenRouter(
-      context,
-      "strong",
-      strongPrompt(args.mode, mechanismId, candidates),
-      STRONG_OUTPUT_RESERVE,
-    );
-    // A draft mode composes exactly one first-time artifact per mechanism.
-    const synthesized = isDraftMode(args.mode)
-      ? synthesizedRaw.slice(0, 1)
-      : synthesizedRaw;
-    stats.candidates += synthesized.length;
-    const admissible: { proposal: Proposal; outcome: "proposed" | "merged" }[] = [];
-    const held: Proposal[] = [];
-    for (const item of synthesized) {
-      const provenance = groundedProvenance(item, corpus);
-      if (!provenance) {
-        stats.dropped_ungrounded += 1;
-        continue;
+        reportExtractProgress(`drafting ${mechanismId}`, "running", false);
       }
-      const proposal = toProposal(
-        args.mode,
-        mechanismId,
-        item,
-        provenance,
-        runId,
-        startedAt.toISOString(),
-        draftContext,
-      );
-      if (!proposal) {
-        stats.dropped_ungrounded += 1;
-        continue;
-      }
-      if (!validate(proposal)) {
-        stats.failed_validation += 1;
-        reportValidationFailure(validate, "candidate", mechanismId);
-        continue;
-      }
-      const duplicate = existing
-        .map((entry) => ({
-          entry,
-          score: proposalSimilarity(entry.proposal, proposal),
-        }))
-        .filter(({ score }) => score >= args.config.limits.duplicate_similarity)
-        .sort(
-          (left, right) =>
-            right.score - left.score ||
-            left.entry.proposal.id.localeCompare(right.entry.proposal.id),
-        )[0]?.entry;
+      if (parsedCheapBatches === 0) continue;
 
-      if (duplicate && !duplicate.authoritative) {
-        const previous = duplicate.proposal;
-        let merged = mergeProposals(duplicate.proposal, proposal);
-        if (
-          previous.status === "held_low_confidence" &&
-          merged.confidence >= args.config.limits.confidence_floor &&
-          hasNovelEnrichment(previous, merged)
-        ) {
-          merged = { ...merged, status: "pending", hold_reason: null } as Proposal;
-        }
-        if (!validate(merged)) {
-          stats.failed_validation += 1;
-          reportValidationFailure(validate, "pending merge", mechanismId);
+      reportExtractProgress(`composing ${mechanismId}`, "running", false);
+      responseBatchesAttempted += 1;
+      const synthesisResult = await settleResponseBatch(() =>
+        callOpenRouter(
+          context,
+          "strong",
+          args.mode,
+          "synthesize",
+          strongPrompt(args.mode, mechanismId, candidates),
+          STRONG_OUTPUT_RESERVE,
+        ),
+      );
+      if (!synthesisResult.ok) {
+        recordFailedBatch(
+          mechanismId,
+          "strong",
+          synthesisResult.error,
+          parsedRecordIds,
+        );
+        continue;
+      }
+      responseBatchesSucceeded += 1;
+      coverageDelta.processed_record_ids.push(...parsedRecordIds);
+      processedByMechanism.set(mechanismId, coverageDelta);
+
+      // A draft mode composes exactly one first-time artifact per mechanism.
+      const synthesized = isDraftMode(args.mode)
+        ? synthesisResult.value.slice(0, 1)
+        : synthesisResult.value;
+      stats.candidates += synthesized.length;
+      const admissible: {
+        proposal: Proposal;
+        outcome: "proposed" | "merged";
+      }[] = [];
+      const held: Proposal[] = [];
+      for (const item of synthesized) {
+        const provenance = groundedProvenance(item, corpus);
+        if (!provenance) {
+          stats.dropped_ungrounded += 1;
           continue;
         }
-        duplicate.proposal = merged;
-        if (duplicate.path) {
-          pendingWrites.set(duplicate.path, merged);
-        } else {
-          const staged = admissible.find((entry) => entry.proposal === previous);
-          if (staged) staged.proposal = merged;
-          const heldIndex = held.findIndex((entry) => entry === previous);
-          if (heldIndex >= 0) held[heldIndex] = merged;
+        const proposal = toProposal(
+          args.mode,
+          mechanismId,
+          item,
+          provenance,
+          runId,
+          startedAt.toISOString(),
+          draftContext,
+        );
+        if (!proposal) {
+          stats.dropped_ungrounded += 1;
+          continue;
         }
-        stats.merged += 1;
-        continue;
+        if (!validate(proposal)) {
+          stats.failed_validation += 1;
+          reportValidationFailure(validate, "candidate", mechanismId);
+          continue;
+        }
+        const duplicate = existing
+          .map((entry) => ({
+            entry,
+            score: proposalSimilarity(entry.proposal, proposal),
+          }))
+          .filter(({ score }) => score >= args.config.limits.duplicate_similarity)
+          .sort(
+            (left, right) =>
+              right.score - left.score ||
+              left.entry.proposal.id.localeCompare(right.entry.proposal.id),
+          )[0]?.entry;
+
+        if (duplicate && !duplicate.authoritative) {
+          const previous = duplicate.proposal;
+          let merged = mergeProposals(duplicate.proposal, proposal);
+          if (
+            previous.status === "held_low_confidence" &&
+            merged.confidence >= args.config.limits.confidence_floor &&
+            hasNovelEnrichment(previous, merged)
+          ) {
+            merged = {
+              ...merged,
+              status: "pending",
+              hold_reason: null,
+            } as Proposal;
+          }
+          if (!validate(merged)) {
+            stats.failed_validation += 1;
+            reportValidationFailure(validate, "pending merge", mechanismId);
+            continue;
+          }
+          duplicate.proposal = merged;
+          if (duplicate.path) {
+            pendingWrites.set(duplicate.path, merged);
+          } else {
+            const staged = admissible.find(
+              (entry) => entry.proposal === previous,
+            );
+            if (staged) staged.proposal = merged;
+            const heldIndex = held.findIndex((entry) => entry === previous);
+            if (heldIndex >= 0) held[heldIndex] = merged;
+          }
+          stats.merged += 1;
+          continue;
+        }
+
+        let gatedProposal = proposal;
+        let outcome: "proposed" | "merged" = "proposed";
+        let addsValue = true;
+        if (duplicate?.authoritative) {
+          const merged = mergeProposals(duplicate.proposal, proposal);
+          addsValue = hasNovelEnrichment(duplicate.proposal, merged);
+          gatedProposal = {
+            ...proposal,
+            operation: "enrich",
+            payload: merged.payload,
+            provenance: merged.provenance,
+          } as Proposal;
+          outcome = "merged";
+        }
+
+        if (!validate(gatedProposal)) {
+          stats.failed_validation += 1;
+          reportValidationFailure(
+            validate,
+            "authoritative enrichment",
+            mechanismId,
+          );
+          continue;
+        }
+
+        if (
+          gatedProposal.confidence < args.config.limits.confidence_floor ||
+          !addsValue
+        ) {
+          const heldProposal = {
+            ...gatedProposal,
+            status: "held_low_confidence",
+            hold_reason:
+              gatedProposal.confidence < args.config.limits.confidence_floor
+                ? "below_confidence_floor"
+                : "no_material_enrichment",
+          } as Proposal;
+          held.push(heldProposal);
+          existing.push({
+            proposal: heldProposal,
+            path: null,
+            authoritative: false,
+          });
+          stats.held_low_confidence += 1;
+          continue;
+        }
+        admissible.push({ proposal: gatedProposal, outcome });
+        existing.push({
+          proposal: gatedProposal,
+          path: null,
+          authoritative: false,
+        });
       }
 
-      let gatedProposal = proposal;
-      let outcome: "proposed" | "merged" = "proposed";
-      let addsValue = true;
-      if (duplicate?.authoritative) {
-        const merged = mergeProposals(duplicate.proposal, proposal);
-        addsValue = hasNovelEnrichment(duplicate.proposal, merged);
-        gatedProposal = {
-          ...proposal,
-          operation: "enrich",
-          payload: merged.payload,
-          provenance: merged.provenance,
-        } as Proposal;
-        outcome = "merged";
-      }
-
-      if (!validate(gatedProposal)) {
-        stats.failed_validation += 1;
-        reportValidationFailure(validate, "authoritative enrichment", mechanismId);
-        continue;
-      }
-
-      if (
-        gatedProposal.confidence < args.config.limits.confidence_floor ||
-        !addsValue
-      ) {
-        const heldProposal = {
-          ...gatedProposal,
-          status: "held_low_confidence",
-          hold_reason:
-            gatedProposal.confidence < args.config.limits.confidence_floor
-              ? "below_confidence_floor"
-              : "no_material_enrichment",
-        } as Proposal;
-        held.push(heldProposal);
-        existing.push({ proposal: heldProposal, path: null, authoritative: false });
-        stats.held_low_confidence += 1;
-        continue;
-      }
-      admissible.push({ proposal: gatedProposal, outcome });
-      existing.push({ proposal: gatedProposal, path: null, authoritative: false });
-    }
-
-    admissible.sort(
-      (left, right) =>
-        right.proposal.confidence - left.proposal.confidence ||
-        proposalIdentity(left.proposal).localeCompare(proposalIdentity(right.proposal)),
-    );
-    const admitted = admissible.slice(
-      0,
-      args.config.limits.max_proposals_per_mechanism,
-    );
-    const overflow = admissible.slice(args.config.limits.max_proposals_per_mechanism);
-    stats.dropped_volume_cap += overflow.length;
-    stats.dropped_volume_cap_high_confidence += overflow.filter(
-      ({ proposal: overflowProposal }) => overflowProposal.confidence >= 0.8,
-    ).length;
-    for (const entry of admitted) stats[entry.outcome] += 1;
-    proposals.push(...admitted.map(({ proposal: admittedProposal }) => admittedProposal), ...held);
+      admissible.sort(
+        (left, right) =>
+          right.proposal.confidence - left.proposal.confidence ||
+          proposalIdentity(left.proposal).localeCompare(
+            proposalIdentity(right.proposal),
+          ),
+      );
+      const admitted = admissible.slice(
+        0,
+        args.config.limits.max_proposals_per_mechanism,
+      );
+      const overflow = admissible.slice(
+        args.config.limits.max_proposals_per_mechanism,
+      );
+      stats.dropped_volume_cap += overflow.length;
+      stats.dropped_volume_cap_high_confidence += overflow.filter(
+        ({ proposal: overflowProposal }) =>
+          overflowProposal.confidence >= 0.8,
+      ).length;
+      for (const entry of admitted) stats[entry.outcome] += 1;
+      proposals.push(
+        ...admitted.map(({ proposal: admittedProposal }) => admittedProposal),
+        ...held,
+      );
     }
   };
 
@@ -2334,10 +2768,32 @@ export async function runExtraction(args: {
     const usedTokens = context.usage.input + context.usage.output;
     const headroom = args.config.limits.per_run_tokens - usedTokens;
     if (headroom <= 0) break; // per-run token cap consumed
+    // Failed response-form batches are retryable in a later run, but must be
+    // treated as attempted while this run advances through additional slices.
+    const planningDeltas = new Map<string, ReaderCoverageDelta>();
+    const planningMechanismIds = new Set([
+      ...Array.from(processedByMechanism.keys()),
+      ...Array.from(failedRecordIdsByMechanism.keys()),
+    ]);
+    for (const mechanismId of Array.from(planningMechanismIds)) {
+      const completed = processedByMechanism.get(mechanismId);
+      planningDeltas.set(mechanismId, {
+        processed_record_ids: Array.from(
+          new Set([
+            ...(completed?.processed_record_ids ?? []),
+            ...Array.from(
+              failedRecordIdsByMechanism.get(mechanismId) ?? new Set<string>(),
+            ),
+          ]),
+        ),
+        skipped_irrelevant_record_ids:
+          completed?.skipped_irrelevant_record_ids ?? [],
+      });
+    }
     const coverageNow = mergeReaderCoverage(
       coverageAtStart,
       args.mode,
-      processedByMechanism,
+      planningDeltas,
       startedAt.toISOString(),
     );
     const sliceConfig: ExtractionOpsConfig = {
@@ -2353,6 +2809,44 @@ export async function runExtraction(args: {
     if (nextPlan.records.selected === 0) break; // next record cannot fit headroom
     reportExtractProgress("advancing to next slice", "running", false);
     currentPlan = nextPlan;
+  }
+
+  const failedRecordCount = Array.from(
+    failedRecordIdsByMechanism.values(),
+  ).reduce((sum, recordIds) => sum + recordIds.size, 0);
+  stats.records_remaining = currentPlan.records.remaining + failedRecordCount;
+  const runIncomplete = stats.records_remaining > 0;
+  const summary: RunProgressSummary = {
+    proposed: stats.proposed,
+    merged: stats.merged,
+    dropped_ungrounded: stats.dropped_ungrounded,
+    failed_validation: stats.failed_validation,
+    held_low_confidence: stats.held_low_confidence,
+    dropped_volume_cap: stats.dropped_volume_cap,
+    dropped_volume_cap_high_confidence:
+      stats.dropped_volume_cap_high_confidence,
+    candidates: stats.candidates,
+    records_eligible: stats.records_eligible,
+    records_relevant: stats.records_relevant,
+    records_processed: stats.records_processed,
+    records_skipped_irrelevant: stats.records_skipped_irrelevant,
+    records_remaining: stats.records_remaining,
+  };
+  if (
+    everyResponseBatchFailed(
+      responseBatchesAttempted,
+      responseBatchesSucceeded,
+    )
+  ) {
+    reportExtractProgress(
+      `failed — all ${responseBatchesAttempted} response batches failed validation`,
+      "failed",
+      true,
+      summary,
+    );
+    throw new Error(
+      `Every OpenRouter response batch failed validation (${responseBatchesAttempted}/${responseBatchesAttempted})`,
+    );
   }
 
   for (const [path, proposal] of Array.from(pendingWrites.entries())) {
@@ -2377,25 +2871,11 @@ export async function runExtraction(args: {
     stats,
     proposals.length + pendingWrites.size,
     currentPlan.capped,
+    runIncomplete,
   );
-  const summary: RunProgressSummary = {
-    proposed: stats.proposed,
-    merged: stats.merged,
-    dropped_ungrounded: stats.dropped_ungrounded,
-    failed_validation: stats.failed_validation,
-    held_low_confidence: stats.held_low_confidence,
-    dropped_volume_cap: stats.dropped_volume_cap,
-    dropped_volume_cap_high_confidence: stats.dropped_volume_cap_high_confidence,
-    candidates: stats.candidates,
-    records_eligible: stats.records_eligible,
-    records_relevant: stats.records_relevant,
-    records_processed: stats.records_processed,
-    records_skipped_irrelevant: stats.records_skipped_irrelevant,
-    records_remaining: stats.records_remaining,
-  };
   reportExtractProgress(
-    `${currentPlan.capped ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates · ${stats.dropped_ungrounded} dropped ungrounded · ${stats.failed_validation} failed validation · ${stats.records_remaining} remaining`,
-    currentPlan.capped ? "partial" : "success",
+    `${runIncomplete ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates · ${stats.dropped_ungrounded} dropped ungrounded · ${stats.failed_validation} failed validation · ${stats.records_remaining} remaining`,
+    runIncomplete ? "partial" : "success",
     true,
     summary,
   );
