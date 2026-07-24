@@ -1452,7 +1452,7 @@ async function callOpenRouter(
     if (response.ok) break;
     if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 2) {
       throw new Error(
-        `OpenRouter ${response.status}: ${(await response.text()).slice(0, 500)}`,
+        `OpenRouter ${response.status} model=${tier.model_id} tier=${tierName}: ${(await response.text()).slice(0, 500)}`,
       );
     }
     await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** attempt));

@@ -657,6 +657,13 @@
       "title": "OpenRouter response strictness follows verified endpoint capability",
       "body": "D-094 narrows D-093's request-routing statement after the first CG-05 verification run returned OpenRouter 404 before inference: google/gemini-3.1-flash-lite advertised response_format but no routed endpoint accepted strict json_schema with require_parameters=true. Response capability is therefore explicit per extraction tier in corpora/_ops/extraction.json. The cheap Gemini tier uses response_format=json_object plus the exact-envelope system prompt and the same tolerant parser; the strong Claude Sonnet 5 tier uses strict mode-specific json_schema and provider.require_parameters=true. validateExtractionOpsConfig rejects missing or unknown response_format values, so changing a model requires an owner-reviewed capability choice rather than a hardcoded model-name guess. Content remains equally fail-closed in both modes through grounding and proposal validation.",
       "area": "operations"
+    },
+    {
+      "id": "D-095",
+      "date": "2026-07-24",
+      "title": "Claude extraction routing currently uses OpenRouter JSON mode",
+      "body": "D-095 further narrows D-094 from live endpoint evidence. The capability-aware CG-05 rerun completed both Gemini cheap batches (31 records, 2 calls, 13,220 input and 697 output tokens) and reached phase composing CG-05, then OpenRouter returned the same no-compatible-endpoint 404 for Claude Sonnet 5 with strict json_schema plus require_parameters=true. The configured strong tier therefore also uses response_format=json_object for the current route. The extractor retains tested json_schema support and will require a compatible endpoint when a future verified tier is configured for it; current strictness comes from JSON mode, the exact-envelope system prompt, tolerant form normalization, and unchanged fail-closed content gates. OpenRouter HTTP errors now name model and tier so future capability failures are attributable without heartbeat forensics.",
+      "area": "operations"
     }
   ]
 }
