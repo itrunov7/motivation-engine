@@ -1006,6 +1006,7 @@ export interface OpsBudget {
 
 export interface ExtractionModelTierConfig {
   model_id: string | null;
+  response_format: "json_schema" | "json_object";
   input_usd_per_token: number | null;
   output_usd_per_token: number | null;
   max_tokens_per_call: number;

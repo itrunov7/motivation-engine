@@ -194,6 +194,7 @@ export function validateExtractionOpsConfig(data: unknown): string[] {
         (key) =>
           ![
             "model_id",
+            "response_format",
             "input_usd_per_token",
             "output_usd_per_token",
             "max_tokens_per_call",
@@ -204,6 +205,14 @@ export function validateExtractionOpsConfig(data: unknown): string[] {
       }
       if (tier.model_id !== null && (typeof tier.model_id !== "string" || !tier.model_id.trim())) {
         errors.push(`tiers.${name}.model_id must be non-empty or null`);
+      }
+      if (
+        tier.response_format !== "json_schema" &&
+        tier.response_format !== "json_object"
+      ) {
+        errors.push(
+          `tiers.${name}.response_format must be json_schema or json_object`,
+        );
       }
       for (const key of ["input_usd_per_token", "output_usd_per_token"] as const) {
         if (tier[key] !== null && !isNonNegativeNumber(tier[key])) {

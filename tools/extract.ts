@@ -429,11 +429,14 @@ export const OPENROUTER_SYSTEM_PROMPT =
 export function openRouterStructuredOutputOptions(
   mode: ExtractionMode,
   stage: ExtractionStage,
+  responseFormat: ExtractionModelTierConfig["response_format"],
 ): JsonSchema {
-  return {
-    response_format: openRouterResponseFormat(mode, stage),
-    provider: { require_parameters: true },
-  };
+  return responseFormat === "json_schema"
+    ? {
+        response_format: openRouterResponseFormat(mode, stage),
+        provider: { require_parameters: true },
+      }
+    : { response_format: { type: "json_object" } };
 }
 
 function normalizeDraftResponse(value: unknown): DraftItem[] | null {
@@ -1437,7 +1440,11 @@ async function callOpenRouter(
           },
           { role: "user", content: prompt },
         ],
-        ...openRouterStructuredOutputOptions(mode, stage),
+        ...openRouterStructuredOutputOptions(
+          mode,
+          stage,
+          tier.response_format,
+        ),
         temperature: 0,
         max_tokens: maxTokens,
       }),

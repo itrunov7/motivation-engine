@@ -16,12 +16,14 @@ const extractionConfig: ExtractionOpsConfig = {
   tiers: {
     cheap: {
       model_id: "owner/cheap",
+      response_format: "json_object",
       input_usd_per_token: 0.000001,
       output_usd_per_token: 0.000002,
       max_tokens_per_call: 24_000,
     },
     strong: {
       model_id: "owner/strong",
+      response_format: "json_schema",
       input_usd_per_token: 0.000003,
       output_usd_per_token: 0.000004,
       max_tokens_per_call: 32_000,

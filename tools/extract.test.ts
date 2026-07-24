@@ -45,12 +45,14 @@ const configured: ExtractionOpsConfig = {
   tiers: {
     cheap: {
       model_id: "owner/cheap",
+      response_format: "json_object",
       input_usd_per_token: 0.0000001,
       output_usd_per_token: 0.0000002,
       max_tokens_per_call: 24000,
     },
     strong: {
       model_id: "owner/strong",
+      response_format: "json_schema",
       input_usd_per_token: 0.0000003,
       output_usd_per_token: 0.0000004,
       max_tokens_per_call: 32000,
@@ -67,7 +69,11 @@ const configured: ExtractionOpsConfig = {
 };
 
 test("OpenRouter requests require a strict items envelope", () => {
-  const options = openRouterStructuredOutputOptions("effects", "extract");
+  const options = openRouterStructuredOutputOptions(
+    "effects",
+    "extract",
+    "json_schema",
+  );
   assert.deepEqual(options.provider, { require_parameters: true });
   assert.equal(
     (options.response_format as { type?: string }).type,
@@ -92,6 +98,10 @@ test("OpenRouter requests require a strict items envelope", () => {
   );
   assert.match(OPENROUTER_SYSTEM_PROMPT, /\{"items":\[\.\.\.\]\}/);
   assert.match(OPENROUTER_SYSTEM_PROMPT, /bare top-level array/);
+  assert.deepEqual(
+    openRouterStructuredOutputOptions("effects", "extract", "json_object"),
+    { response_format: { type: "json_object" } },
+  );
 });
 
 test("response parser tolerates form deviations but keeps the envelope strict", () => {
@@ -285,6 +295,16 @@ test("the quote config guard fails with an explicit named message (D-088)", () =
   const badPrice = { ...configured, prices_verified_on: "yesterday" };
   const priceErrors = validateExtractionOpsConfig(badPrice);
   assert(priceErrors.some((error) => error.includes("prices_verified_on")));
+
+  const badFormat = {
+    ...configured,
+    tiers: {
+      ...configured.tiers,
+      cheap: { ...configured.tiers.cheap, response_format: "guess" },
+    },
+  };
+  const formatErrors = validateExtractionOpsConfig(badFormat);
+  assert(formatErrors.some((error) => error.includes("tiers.cheap.response_format")));
 
   // The guard composes exactly what main() throws.
   assert.equal(validateExtractionOpsConfig(configured).length, 0);
