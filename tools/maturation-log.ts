@@ -26,7 +26,7 @@
  *     [--budget-before budget-before.json] [--budget-after budget-after.json] \
  *     [--queue-plan queue-plan.json] [--authoring-queue analysis/authoring-queue.json] \
  *     [--extraction-plan extraction-plan.json] \
- *     [--low-novelty N] [--week YYYY-MM-DD]
+ *     [--low-novelty N] [--harvest-failed true|false] [--week YYYY-MM-DD]
  *
  * Re-running for the same week REPLACES that week's entry (idempotent for
  * repeated manual dispatches on the same day).
@@ -158,6 +158,12 @@ function main(): void {
   const exhaustedRaw = Number.parseInt(args["evidence-exhausted"] ?? "0", 10);
   const evidenceExhausted = Number.isFinite(exhaustedRaw) ? Math.max(0, exhaustedRaw) : 0;
 
+  // Whether this week's harvest step failed after its retry (D-097). The week
+  // is still analyzed, logged, and committed, but it is a DEGRADED week:
+  // extraction was skipped, so a flat matrix here means "not attempted", not
+  // "attempted and found nothing".
+  const harvestFailed = (args["harvest-failed"] ?? "false") === "true";
+
   const entry: MaturationLogEntry = {
     week,
     generated_at: new Date().toISOString(),
@@ -170,6 +176,7 @@ function main(): void {
     structural_queued: structuralQueued,
     low_novelty_harvests: lowNoveltyHarvests,
     evidence_exhausted: evidenceExhausted,
+    harvest_failed: harvestFailed,
   };
 
   const existing = readJsonOrNull<MaturationLog>(LOG_FILE);
@@ -195,7 +202,8 @@ function main(): void {
       `${extractionDispatched} extraction dispatched / ${extractionDeferred} deferred, ` +
       `${structuralQueued} structural queued, ` +
       `${lowNoveltyHarvests} low-novelty harvest(s), ` +
-      `${evidenceExhausted} evidence-exhausted cell(s) ` +
+      `${evidenceExhausted} evidence-exhausted cell(s)` +
+      `${harvestFailed ? ", HARVEST FAILED (partial week)" : ""} ` +
       `(${entries.length} week(s) in the log).`,
   );
 }

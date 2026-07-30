@@ -6,9 +6,11 @@ import { extractionPriceState, validateExtractionOpsConfig } from "../lib/ops";
 import {
   groundingErrors,
   mergeProposals,
+  normalizeQualityText,
   proposalSimilarity,
 } from "../lib/proposal-quality";
 import type {
+  CorpusManifestRun,
   EvidenceCorpusFile,
   ExtractionOpsConfig,
   KnowledgeProvenanceItem,
@@ -25,18 +27,31 @@ import {
   buildQuote,
   everyResponseBatchFailed,
   extractionSummaryParams,
+  forSynthesis,
+  formatUngroundedReasons,
   groundedProvenance,
+  groundingOutcome,
+  openRouterRequestBody,
+  openRouterResponseFormat,
+  mergeExtractionRunHistory,
   mergeReaderCoverage,
   openRouterStructuredOutputOptions,
   parseDraftResponse,
   proposalIdentity,
   rankRelevantRecords,
   recordRelevanceTier,
+  recordUngroundedDrop,
   resolveScope,
   settleResponseBatch,
   toProposal,
+  type DraftItem,
+  type ExtractionMode,
+  type ExtractionStats,
+  type UngroundedReason,
+  type Usage,
 } from "./extract";
 import { visibleReplayText } from "./connectors/realization-wayback";
+import { rejectionRecord } from "./rejected-candidates";
 
 const ROOT = join(__dirname, "..");
 const configured: ExtractionOpsConfig = {
@@ -49,6 +64,7 @@ const configured: ExtractionOpsConfig = {
       input_usd_per_token: 0.0000001,
       output_usd_per_token: 0.0000002,
       max_tokens_per_call: 24000,
+      supports: { temperature: true, structured_outputs: true },
     },
     strong: {
       model_id: "owner/strong",
@@ -56,6 +72,7 @@ const configured: ExtractionOpsConfig = {
       input_usd_per_token: 0.0000003,
       output_usd_per_token: 0.0000004,
       max_tokens_per_call: 32000,
+      supports: { temperature: false, structured_outputs: true },
     },
   },
   limits: {
@@ -160,6 +177,33 @@ function corpus(): EvidenceCorpusFile {
   return JSON.parse(
     readFileSync(join(ROOT, "corpora/evidence/CL-14.json"), "utf8"),
   ) as EvidenceCorpusFile;
+}
+
+/** A zeroed stats block; tests override only the counters they assert on. */
+function statsFixture(overrides: Partial<ExtractionStats> = {}): ExtractionStats {
+  return {
+    candidates: 0,
+    candidates_cheap: 0,
+    candidates_strong: 0,
+    records_processed: 0,
+    records_skipped_irrelevant: 0,
+    dropped_ungrounded: 0,
+    dropped_ungrounded_cheap: 0,
+    dropped_ungrounded_strong: 0,
+    dropped_ungrounded_reasons: {},
+    dropped_ungrounded_reasons_cheap: {},
+    dropped_ungrounded_reasons_strong: {},
+    failed_validation: 0,
+    proposed: 0,
+    merged: 0,
+    held_low_confidence: 0,
+    dropped_volume_cap: 0,
+    dropped_volume_cap_high_confidence: 0,
+    records_eligible: 0,
+    records_relevant: 0,
+    records_remaining: 0,
+    ...overrides,
+  };
 }
 
 test("resolves mechanism, pack, and segment scopes deterministically", () => {
@@ -481,21 +525,16 @@ test("capped extraction manifest is partial and records funnel outcomes", () => 
         strong: { input: 40, output: 10, calls: 1 },
       },
     },
-    stats: {
+    stats: statsFixture({
       candidates: 1,
+      candidates_strong: 1,
       records_processed: 3,
       records_skipped_irrelevant: 7,
-      dropped_ungrounded: 0,
       failed_validation: 1,
       proposed: 1,
-      merged: 0,
-      held_low_confidence: 0,
-      dropped_volume_cap: 0,
-      dropped_volume_cap_high_confidence: 0,
       records_eligible: 10,
       records_relevant: 3,
-      records_remaining: 0,
-    },
+    }),
     filesWritten: 1,
     capped: true,
     durationS: 2,
@@ -524,21 +563,13 @@ test("retryable response failures are partial without claiming a token cap", () 
         strong: { input: 0, output: 0, calls: 0 },
       },
     },
-    stats: {
-      candidates: 0,
+    stats: statsFixture({
       records_processed: 25,
-      records_skipped_irrelevant: 0,
-      dropped_ungrounded: 0,
       failed_validation: 1,
-      proposed: 0,
-      merged: 0,
-      held_low_confidence: 0,
-      dropped_volume_cap: 0,
-      dropped_volume_cap_high_confidence: 0,
       records_eligible: 25,
       records_relevant: 25,
       records_remaining: 25,
-    },
+    }),
     filesWritten: 0,
     capped: false,
     incomplete: true,
@@ -597,6 +628,376 @@ test("grounding accepts exact loci and rejects invented or unknown citations", (
     ).join(" "),
     /DOI does not resolve/,
   );
+});
+
+test("every grounding refusal names its own reason", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract);
+  const exact = record.abstract.slice(0, 80);
+
+  const accepted = groundingOutcome(
+    { citations: [{ record_id: record.record_id, quote_or_locus: exact }] },
+    file,
+  );
+  assert.equal(accepted.ok, true);
+
+  const cases: [DraftItem, UngroundedReason][] = [
+    [{ citations: [] }, "no_citations"],
+    [{}, "no_citations"],
+    [
+      { citations: [{ record_id: record.record_id, quote_or_locus: "   " }] },
+      "malformed_citation",
+    ],
+    [
+      {
+        citations: [
+          { record_id: "cr_000000000000000000000000", quote_or_locus: exact },
+        ],
+      },
+      "unknown_record_id",
+    ],
+    [
+      {
+        citations: [
+          { record_id: record.record_id, quote_or_locus: "This span was invented." },
+        ],
+      },
+      "quote_not_in_source",
+    ],
+  ];
+  for (const [item, expected] of cases) {
+    const outcome = groundingOutcome(item, file);
+    assert.equal(outcome.ok, false);
+    assert.equal(outcome.ok === false && outcome.reason, expected);
+    assert(outcome.ok === false && outcome.detail.length > 0);
+  }
+
+  // A DOI-less record is refused by the evidence gate, and the refusal is
+  // attributed to the DOI check rather than to the generic bucket. Injected
+  // rather than searched for, so the case is always exercised.
+  const doiless = {
+    ...record,
+    record_id: "cr_111111111111111111111111",
+    doi: null,
+  };
+  const withDoiless: EvidenceCorpusFile = {
+    ...file,
+    records: [...file.records, doiless],
+  };
+  const doiOutcome = groundingOutcome(
+    {
+      citations: [{ record_id: doiless.record_id, quote_or_locus: exact }],
+    },
+    withDoiless,
+  );
+  assert.equal(doiOutcome.ok, false);
+  assert.equal(doiOutcome.ok === false && doiOutcome.reason, "doi_unresolved");
+  // A doi_unresolved refusal must carry the record's own DOI, since that is the
+  // value the check actually compared (D-104).
+  assert.equal(doiOutcome.ok === false && doiOutcome.corpus_record_id, doiless.record_id);
+  assert.equal(doiOutcome.ok === false && doiOutcome.corpus_side?.doi, null);
+});
+
+test("a refusal carries both compared strings untruncated", () => {
+  const file = corpus();
+  const record = file.records.find(
+    (candidate) => candidate.abstract && candidate.doi && candidate.abstract.length > 400,
+  );
+  assert(record?.abstract);
+
+  const invented = "this exact span was never harvested from any source";
+  const refusal = groundingOutcome(
+    { citations: [{ record_id: record.record_id, quote_or_locus: invented }] },
+    file,
+  );
+  assert.equal(refusal.ok, false);
+  if (refusal.ok) return;
+  assert.equal(refusal.reason, "quote_not_in_source");
+  assert.equal(refusal.corpus_record_id, record.record_id);
+  assert(refusal.compared);
+  // Untruncated is the whole point: a 120-char detail line was what made the
+  // four 100%-drop runs undiagnosable.
+  assert.equal(refusal.compared.quote_raw, invented);
+  assert.equal(
+    refusal.compared.source_raw,
+    `${record.title}\n${record.abstract}`,
+  );
+  assert(refusal.compared.source_raw.length > 400);
+  assert.equal(
+    refusal.compared.quote_normalized,
+    normalizeQualityText(invented),
+  );
+  assert.equal(
+    refusal.compared.source_normalized,
+    normalizeQualityText(refusal.compared.source_raw),
+  );
+  assert.equal(refusal.corpus_side?.title, record.title);
+});
+
+test("refusals before any comparison carry no compared strings", () => {
+  const file = corpus();
+  // Nothing was compared, so claiming a comparison would be a fabrication.
+  const noCitations = groundingOutcome({ citations: [] }, file);
+  assert.equal(noCitations.ok === false && noCitations.compared, undefined);
+  assert.equal(noCitations.ok === false && noCitations.corpus_record_id, null);
+
+  const unknown = groundingOutcome(
+    {
+      citations: [
+        { record_id: "cr_000000000000000000000000", quote_or_locus: "anything" },
+      ],
+    },
+    file,
+  );
+  assert.equal(unknown.ok === false && unknown.compared, undefined);
+  // The cited id survives even though it resolved to nothing.
+  assert.equal(
+    unknown.ok === false && unknown.corpus_record_id,
+    "cr_000000000000000000000000",
+  );
+});
+
+test("drop reasons are counted per cause and always sum to the total", () => {
+  const stats = statsFixture();
+  for (const reason of [
+    "doi_unresolved",
+    "doi_unresolved",
+    "quote_not_in_source",
+    "no_citations",
+    "doi_unresolved",
+  ] as const) {
+    recordUngroundedDrop(stats, "strong", reason);
+  }
+  assert.equal(stats.dropped_ungrounded, 5);
+  assert.deepEqual(stats.dropped_ungrounded_reasons, {
+    doi_unresolved: 3,
+    quote_not_in_source: 1,
+    no_citations: 1,
+  });
+  const summed = Object.values(stats.dropped_ungrounded_reasons).reduce(
+    (total, count) => total + (count ?? 0),
+    0,
+  );
+  assert.equal(summed, stats.dropped_ungrounded);
+  // Densest reason first, so the run log leads with the dominant cause.
+  assert.equal(
+    formatUngroundedReasons(stats.dropped_ungrounded_reasons),
+    "doi_unresolved=3 no_citations=1 quote_not_in_source=1",
+  );
+  assert.equal(formatUngroundedReasons({}), "");
+});
+
+/** An object node of a JSON schema, for navigating one in a test. */
+interface SchemaNode {
+  additionalProperties?: boolean;
+  properties: Record<string, SchemaNode>;
+  items?: SchemaNode;
+  type?: unknown;
+}
+
+/** The per-item schema the model is held to for one mode and stage. */
+function itemSchema(mode: ExtractionMode, stage: "extract" | "synthesize"): SchemaNode {
+  const format = openRouterResponseFormat(mode, stage) as unknown as {
+    json_schema: { schema: SchemaNode };
+  };
+  const items = format.json_schema.schema.properties.items.items;
+  assert(items);
+  return items;
+}
+
+test("a parameter the model does not advertise is never sent", () => {
+  // D-107. require_parameters:true routes only to a provider honouring every
+  // parameter in the request, so sending temperature to a model that does not
+  // advertise it leaves no eligible provider and 404s before any model runs.
+  const claude = openRouterRequestBody({
+    tier: configured.tiers.strong,
+    mode: "effects",
+    stage: "synthesize",
+    prompt: "p",
+    maxTokens: 1,
+  });
+  assert.equal("temperature" in claude, false);
+  // The guard itself stays on — omitting the parameter is the fix, not
+  // loosening routing.
+  assert.deepEqual(claude.provider, { require_parameters: true });
+
+  const gemini = openRouterRequestBody({
+    tier: { ...configured.tiers.cheap, response_format: "json_schema" },
+    mode: "effects",
+    stage: "extract",
+    prompt: "p",
+    maxTokens: 1,
+  });
+  assert.equal(gemini.temperature, 0);
+  assert.deepEqual(gemini.provider, { require_parameters: true });
+
+  // json_object needs no provider constraint, so none is sent.
+  const loose = openRouterRequestBody({
+    tier: configured.tiers.cheap,
+    mode: "effects",
+    stage: "extract",
+    prompt: "p",
+    maxTokens: 1,
+  });
+  assert.equal("provider" in loose, false);
+});
+
+test("the committed extraction config declares capabilities that match its format", () => {
+  const config = JSON.parse(
+    readFileSync(join(ROOT, "corpora/_ops/extraction.json"), "utf8"),
+  ) as ExtractionOpsConfig;
+  assert.deepEqual(validateExtractionOpsConfig(config), []);
+  // Structural provenance needs a strict schema on both tiers to be
+  // enforceable, and json_schema is only routable where the model advertises
+  // structured outputs (D-104/D-107).
+  for (const tier of [config.tiers.cheap, config.tiers.strong]) {
+    assert.equal(tier.response_format, "json_schema");
+    assert.equal(tier.supports.structured_outputs, true);
+  }
+});
+
+test("the synthesis schema has no field a model could put a quote in", () => {
+  // D-104 in schema form. The extraction stage may emit citations; the synthesis
+  // stage may emit refs and nothing else, so there is no field for a quote or a
+  // record id to arrive in.
+  for (const mode of ["effects", "realizations", "interactions", "dissent"] as const) {
+    const extract = itemSchema(mode, "extract");
+    assert("citations" in extract.properties);
+    assert.equal("provenance_refs" in extract.properties, false);
+
+    const synthesize = itemSchema(mode, "synthesize");
+    assert.equal("citations" in synthesize.properties, false);
+    assert("provenance_refs" in synthesize.properties);
+    // additionalProperties:false is what makes the absence binding rather than
+    // advisory: a citations key would be a schema violation, not extra data.
+    assert.equal(synthesize.additionalProperties, false);
+    assert.deepEqual(synthesize.properties.provenance_refs, {
+      type: "array",
+      items: { type: "string" },
+    });
+  }
+
+  // The two draft modes have their own synthesis schemas; both must agree.
+  for (const mode of ["mechanism", "dossier"] as const) {
+    const item = itemSchema(mode, "synthesize");
+    assert.equal("citations" in item.properties, false);
+    assert("provenance_refs" in item.properties);
+  }
+  // Dossier axes carry provenance too, and are held to the same rule.
+  const axes = itemSchema("dossier", "synthesize").properties.scores.properties;
+  for (const axis of Object.values(axes)) {
+    assert.equal("citations" in axis.properties, false);
+    assert("provenance_refs" in axis.properties);
+    assert.equal(axis.additionalProperties, false);
+  }
+});
+
+test("the synthesis projection strips every quote and record id", () => {
+  const projected = forSynthesis({
+    item: {
+      name: "chunking raises effective capacity",
+      fact: "grouping items raises recall",
+      confidence: 0.8,
+      citations: [
+        { record_id: "cr_aaaaaaaaaaaaaaaaaaaaaaaa", quote_or_locus: "about four chunks" },
+      ],
+      scores: {
+        evidence: {
+          score: 2,
+          rationale: "several replications",
+          citations: [
+            {
+              record_id: "cr_aaaaaaaaaaaaaaaaaaaaaaaa",
+              quote_or_locus: "about four chunks",
+            },
+          ],
+        },
+      },
+    },
+    refs: ["p1", "p2"],
+  });
+
+  // The claim survives; every provenance-shaped field is replaced by handles.
+  assert.equal(projected.fact, "grouping items raises recall");
+  assert.equal(projected.confidence, 0.8);
+  assert.deepEqual(projected.provenance_refs, ["p1", "p2"]);
+  assert.equal(projected.citations, undefined);
+  assert.equal(projected.scores?.evidence.citations, undefined);
+  assert.equal(projected.scores?.evidence.score, 2);
+
+  // The serialized prompt payload is the real guarantee: neither the quote nor
+  // the record id can appear anywhere in what the model receives.
+  const wire = JSON.stringify(projected);
+  assert.equal(wire.includes("cr_aaaaaaaaaaaaaaaaaaaaaaaa"), false);
+  assert.equal(wire.includes("about four chunks"), false);
+});
+
+test("a persisted rejection omits fields it has no value for", () => {
+  const bare = rejectionRecord({
+    mechanismId: "CL-14",
+    mode: "effects",
+    pass: "cheap",
+    reason: "no_citations",
+    detail: "item carried no citations",
+    corpusRecordId: null,
+    item: { name: "something" },
+  });
+  // Absent, not null: a null "compared" would claim a comparison happened.
+  assert.equal("compared" in bare, false);
+  assert.equal("corpus_side" in bare, false);
+  assert.equal("cheap_origin" in bare, false);
+  assert.equal(bare.corpus_record_id, null);
+
+  const full = rejectionRecord({
+    mechanismId: "CL-14",
+    mode: "effects",
+    pass: "strong",
+    reason: "quote_not_in_source",
+    detail: "quote not a substring",
+    corpusRecordId: "cr_111111111111111111111111",
+    item: { name: "synthesized" },
+    provenance: [{ record_id: "cr_111111111111111111111111", quote_or_locus: "x" }],
+    compared: {
+      quote_raw: "x",
+      quote_normalized: "x",
+      source_raw: "y",
+      source_normalized: "y",
+    },
+    corpusSide: { doi: "10.1/abc", title: "A title" },
+    cheapOrigin: { name: "extracted" },
+  });
+  // A strong-pass drop must carry the candidate it was synthesized from, since
+  // the strong pass never saw the source records.
+  assert.deepEqual(full.cheap_origin, { name: "extracted" });
+  assert.equal(full.compared?.source_raw, "y");
+  assert.equal(full.corpus_side?.doi, "10.1/abc");
+});
+
+test("drop reasons are attributed to the pass that produced the candidate", () => {
+  const stats = statsFixture();
+  recordUngroundedDrop(stats, "cheap", "quote_not_in_source");
+  recordUngroundedDrop(stats, "cheap", "quote_not_in_source");
+  recordUngroundedDrop(stats, "strong", "doi_unresolved");
+
+  // The total keeps its pre-D-105 meaning; the split explains it.
+  assert.equal(stats.dropped_ungrounded, 3);
+  assert.equal(stats.dropped_ungrounded_cheap, 2);
+  assert.equal(stats.dropped_ungrounded_strong, 1);
+  assert.equal(
+    stats.dropped_ungrounded_cheap + stats.dropped_ungrounded_strong,
+    stats.dropped_ungrounded,
+  );
+  assert.deepEqual(stats.dropped_ungrounded_reasons_cheap, {
+    quote_not_in_source: 2,
+  });
+  assert.deepEqual(stats.dropped_ungrounded_reasons_strong, {
+    doi_unresolved: 1,
+  });
+  assert.deepEqual(stats.dropped_ungrounded_reasons, {
+    quote_not_in_source: 2,
+    doi_unresolved: 1,
+  });
 });
 
 test("realization mode grounds interface observations without a DOI", () => {
@@ -956,21 +1357,30 @@ test("mode=mechanism composes a schema-valid record from seed + grounded claims"
 
 test("run summary exposes every quality-gate and cap outcome", () => {
   assert.deepEqual(
-    extractionSummaryParams({
-      candidates: 15,
-      records_processed: 20,
-      records_skipped_irrelevant: 5,
-      proposed: 4,
-      merged: 3,
-      dropped_ungrounded: 2,
-      failed_validation: 1,
-      held_low_confidence: 2,
-      dropped_volume_cap: 4,
-      dropped_volume_cap_high_confidence: 1,
-      records_eligible: 200,
-      records_relevant: 120,
-      records_remaining: 95,
-    }),
+    extractionSummaryParams(
+      statsFixture({
+        candidates: 15,
+        candidates_cheap: 12,
+        candidates_strong: 3,
+        records_processed: 20,
+        records_skipped_irrelevant: 5,
+        proposed: 4,
+        merged: 3,
+        dropped_ungrounded: 2,
+        dropped_ungrounded_cheap: 1,
+        dropped_ungrounded_strong: 1,
+        dropped_ungrounded_reasons: { doi_unresolved: 2 },
+        dropped_ungrounded_reasons_cheap: { doi_unresolved: 1 },
+        dropped_ungrounded_reasons_strong: { doi_unresolved: 1 },
+        failed_validation: 1,
+        held_low_confidence: 2,
+        dropped_volume_cap: 4,
+        dropped_volume_cap_high_confidence: 1,
+        records_eligible: 200,
+        records_relevant: 120,
+        records_remaining: 95,
+      }),
+    ),
     {
       candidates: "15",
       records_processed: "20",
@@ -978,6 +1388,7 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       proposed: "4",
       merged: "3",
       dropped_ungrounded: "2",
+      dropped_ungrounded_reasons: "doi_unresolved=2",
       failed_validation: "1",
       held_low_confidence: "2",
       dropped_volume_cap: "4",
@@ -985,7 +1396,105 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       records_eligible: "200",
       records_relevant: "120",
       records_remaining: "95",
+      candidates_cheap: "12",
+      candidates_strong: "3",
+      dropped_ungrounded_cheap: "1",
+      dropped_ungrounded_strong: "1",
+      dropped_ungrounded_reasons_cheap: "doi_unresolved=1",
+      dropped_ungrounded_reasons_strong: "doi_unresolved=1",
     },
   );
+});
+
+test("the per-pass funnel is written even at zero so absence means pre-gate", () => {
+  const params = extractionSummaryParams(statsFixture({ candidates: 0 }));
+  // Present-at-zero is the contract: /ops distinguishes "gated, nothing lost"
+  // from "this run never gated the cheap pass" by presence, not by value.
+  assert.equal(params.candidates_cheap, "0");
+  assert.equal(params.candidates_strong, "0");
+  assert.equal(params.dropped_ungrounded_cheap, "0");
+  assert.equal(params.dropped_ungrounded_strong, "0");
+  // The per-reason maps stay absent when nothing was dropped.
+  assert.equal("dropped_ungrounded_reasons_cheap" in params, false);
+  assert.equal("dropped_ungrounded_reasons_strong" in params, false);
+});
+
+test("a run that dies mid-way still leaves its spend on the monthly cap", () => {
+  const startedAt = new Date("2026-07-30T09:00:00.000Z");
+  const spentBeforeCrash: Usage = {
+    input: 40000,
+    output: 4000,
+    calls: 3,
+    byTier: {
+      cheap: { input: 36000, output: 3000, calls: 2 },
+      strong: { input: 4000, output: 1000, calls: 1 },
+    },
+  };
+  const crashStats = statsFixture({
+    candidates: 4,
+    candidates_strong: 4,
+    records_processed: 50,
+    records_eligible: 200,
+    records_relevant: 150,
+    records_remaining: 100,
+  });
+  const built = buildExtractionManifestRun({
+    mode: "effects",
+    scope: resolveScope({ mechanism: "CG-05" }),
+    startedAt,
+    config: configured,
+    usage: spentBeforeCrash,
+    stats: crashStats,
+    filesWritten: 0,
+    capped: false,
+    incomplete: true,
+    durationS: 42,
+  });
+  const failed: CorpusManifestRun = { ...built, status: "failed" };
+
+  // The whole point: a failed run's cost block is non-zero, so the monthly
+  // rollup the budget gate reads can see the spend.
+  assert.equal(failed.status, "failed");
+  assert(failed.cost);
+  assert(failed.cost.estimated_usd > 0);
+  assert.equal(failed.cost.api_calls, 3);
+  assert.equal(failed.cost.tokens_in, 40000);
+  assert.equal(failed.cost.tokens_out, 4000);
+
+  const older: CorpusManifestRun = {
+    ...built,
+    timestamp: "2026-07-29T09:00:00.000Z",
+  };
+  // Each in-flight write supersedes the previous snapshot of the SAME run…
+  const firstWrite = mergeExtractionRunHistory([older], built);
+  const secondWrite = mergeExtractionRunHistory(firstWrite, failed);
+  assert.equal(
+    secondWrite.filter((entry) => entry.timestamp === built.timestamp).length,
+    1,
+  );
+  assert.equal(secondWrite[0].status, "failed");
+  // …while a genuinely different run is preserved, not overwritten.
+  assert.equal(secondWrite.length, 2);
+  assert.equal(secondWrite[1].timestamp, older.timestamp);
+
+  const monthly = secondWrite.reduce(
+    (total, entry) => total + (entry.cost?.estimated_usd ?? 0),
+    0,
+  );
+  assert.equal(monthly, failed.cost.estimated_usd * 2);
+});
+
+test("a clean run carries no drop-reason field at all", () => {
+  const params = extractionSummaryParams(
+    statsFixture({
+      candidates: 3,
+      candidates_strong: 3,
+      records_processed: 3,
+      proposed: 3,
+      records_eligible: 3,
+      records_relevant: 3,
+    }),
+  );
+  assert.equal("dropped_ungrounded_reasons" in params, false);
 });
 

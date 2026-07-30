@@ -184,6 +184,15 @@ export interface ManifestRun {
    *  data gap. Persisted history that predates D-022 is typed separately as
    *  StoredManifestRun, where cost is optional. */
   cost: ManifestCost;
+  /**
+   * The dispatch correlation id this run was triggered with (D-108), recorded
+   * so retrospective attribution does not have to infer it from a workflow run
+   * NAME — a display string that can be edited or collide. Null when the run
+   * carried no correlation id; omitted only by writers predating D-108.
+   */
+  dispatch_id?: string | null;
+  /** The Actions run that wrote this entry (D-108); null outside CI. */
+  github_run_id?: number | null;
 }
 
 /**

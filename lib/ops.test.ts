@@ -20,6 +20,7 @@ const extractionConfig: ExtractionOpsConfig = {
       input_usd_per_token: 0.000001,
       output_usd_per_token: 0.000002,
       max_tokens_per_call: 24_000,
+      supports: { temperature: true, structured_outputs: true },
     },
     strong: {
       model_id: "owner/strong",
@@ -27,6 +28,7 @@ const extractionConfig: ExtractionOpsConfig = {
       input_usd_per_token: 0.000003,
       output_usd_per_token: 0.000004,
       max_tokens_per_call: 32_000,
+      supports: { temperature: false, structured_outputs: true },
     },
   },
   limits: {

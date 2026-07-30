@@ -617,6 +617,23 @@ export interface CorpusManifestRun {
   warnings?: Record<string, boolean>;
   /** Cost accounting (D-022); absent for runs recorded before D-022. */
   cost?: CorpusManifestCost;
+  /**
+   * The dispatch correlation id this run was triggered with (D-108).
+   *
+   * Written by the run itself, so asking "which dispatch produced this spend"
+   * after the fact no longer requires inference. It previously did: the only
+   * link was `findRunByDispatchId` substring-matching a workflow run NAME, and a
+   * run name is a display string — editing `run-name` or dispatching two ids
+   * that share a prefix breaks the link silently. Live polling still matches on
+   * the name, because it runs before any manifest exists; everything after the
+   * run reads this field.
+   *
+   * Absent for runs predating D-108, and null when a run carried no correlation
+   * id at all. Those are different facts and stay distinguishable.
+   */
+  dispatch_id?: string | null;
+  /** The Actions run that wrote this entry (D-108); null outside CI. */
+  github_run_id?: number | null;
 }
 
 /**
@@ -1004,12 +1021,35 @@ export interface OpsBudget {
   };
 }
 
+/**
+ * Which optional OpenRouter parameters a tier's model actually advertises
+ * (D-107).
+ *
+ * `provider.require_parameters: true` is a fail-closed guard: it tells OpenRouter
+ * to route only to a provider that honours every parameter sent. Sending a
+ * parameter the model does not advertise therefore leaves NO eligible provider
+ * and the request 404s with "no endpoints found" before any model is invoked —
+ * which is exactly what killed runs 30102079781 and 30102271340. The guard is
+ * correct; sending `temperature` unconditionally was not.
+ *
+ * Declared per tier rather than probed at runtime, because the app and the tools
+ * are file-based (rule 12) and a capability lookup would be a new endpoint.
+ * tools/openrouter-preflight.ts verifies the declaration for ~$0.0001.
+ */
+export interface ExtractionModelTierSupports {
+  /** Sampling temperature. Claude models do not advertise it. */
+  temperature: boolean;
+  /** response_format with a json_schema, required for strict provenance schemas. */
+  structured_outputs: boolean;
+}
+
 export interface ExtractionModelTierConfig {
   model_id: string | null;
   response_format: "json_schema" | "json_object";
   input_usd_per_token: number | null;
   output_usd_per_token: number | null;
   max_tokens_per_call: number;
+  supports: ExtractionModelTierSupports;
 }
 
 /** /corpora/_ops/extraction.json — versioned OpenRouter routing and caps. */
@@ -1200,6 +1240,128 @@ export interface RunProgressSummary {
   records_processed: number;
   records_skipped_irrelevant: number;
   records_remaining: number;
+  /**
+   * Per-reason attribution of dropped_ungrounded (D-098); values sum to that
+   * total. Optional: absent on a clean run and on runs recorded before D-098,
+   * so /ops must render an honest "not attributed" state rather than zeros.
+   */
+  dropped_ungrounded_reasons?: Partial<Record<UngroundedDropReason, number>>;
+  /**
+   * The same figures split by model pass (D-105). Optional for the same reason
+   * as above: runs recorded before D-105 gated only the strong pass, so /ops
+   * must say "not split" rather than imply the cheap pass dropped nothing.
+   */
+  candidates_cheap?: number;
+  candidates_strong?: number;
+  dropped_ungrounded_cheap?: number;
+  dropped_ungrounded_strong?: number;
+  dropped_ungrounded_reasons_cheap?: Partial<Record<UngroundedDropReason, number>>;
+  dropped_ungrounded_reasons_strong?: Partial<Record<UngroundedDropReason, number>>;
+}
+
+/**
+ * Every grounding check that can refuse an extraction candidate (D-098), in
+ * schema order. Declared once here because the extraction pipeline (tools/),
+ * the ops reader (lib/ops.ts), and the /ops client all need it and lib/ never
+ * imports tools/ (D-020). tools/validate.ts asserts this equals the
+ * dropped_ungrounded_reasons properties in run-progress.schema.json.
+ */
+export const UNGROUNDED_DROP_REASONS = [
+  /** The model returned an item with no citations array, or an empty one. */
+  "no_citations",
+  /** A citation lacked a string record_id or a non-empty quote_or_locus. */
+  "malformed_citation",
+  /** A cited record_id is not in the corpus slice the model was shown. */
+  "unknown_record_id",
+  /** The quote is not a normalized substring of title + abstract/observation. */
+  "quote_not_in_source",
+  /** Evidence provenance in a realization corpus, or the reverse. */
+  "wrong_corpus_kind",
+  /** The cited record carries no DOI, or the provenance DOI disagrees with it. */
+  "doi_unresolved",
+  /** The provenance title disagrees with the corpus record's title. */
+  "title_mismatch",
+  /** Provenance mechanism/source/contributor disagrees with the corpus. */
+  "provenance_mismatch",
+  /** The proposal builder rejected the item after provenance was assembled. */
+  "proposal_not_built",
+] as const;
+
+/** The grounding check that refused a candidate (D-098). */
+export type UngroundedDropReason = (typeof UNGROUNDED_DROP_REASONS)[number];
+
+/** Which model pass produced the candidate that was refused (D-104/D-105). */
+export type ExtractionPass = "cheap" | "strong";
+
+/**
+ * The two strings the grounding gate actually compared, stored UNTRUNCATED
+ * (D-104). A refusal is only diagnosable if both sides survive, in raw and
+ * normalized form: the raw pair shows the bytes, the normalized pair shows what
+ * the comparison saw after NFKC folding.
+ */
+export interface RejectedCandidateComparison {
+  quote_raw: string;
+  quote_normalized: string;
+  source_raw: string;
+  source_normalized: string;
+}
+
+/**
+ * The corpus record's own values the provenance was checked against (D-104).
+ * A doi_unresolved or title_mismatch refusal compares these, not the quote, so
+ * they have to survive alongside the quote comparison to be diagnosable.
+ */
+export interface RejectedCandidateCorpusSide {
+  doi: string | null;
+  title: string;
+}
+
+/**
+ * One candidate the extraction pipeline dropped at the grounding gate (D-104).
+ *
+ * Persisted for EVERY drop, not a sampled few, so any rejection stays
+ * re-checkable offline forever through tools/replay-grounding.ts. This is
+ * diagnostic output, never an input to any artifact: a rejected candidate has
+ * no effect on the registry, dossiers, effects, realizations, interactions or
+ * proposals (rule 8).
+ */
+export interface RejectedCandidateRecord {
+  mechanism_id: string;
+  mode: string;
+  /** The pass whose output was refused. */
+  pass: ExtractionPass;
+  /** The failing check, one of UNGROUNDED_DROP_REASONS. */
+  reason: UngroundedDropReason;
+  /** The gate's own message for that refusal. */
+  detail: string;
+  /** The cited record the candidate was matched against; null when none resolved. */
+  corpus_record_id: string | null;
+  /** The raw model output for this item, exactly as returned. */
+  item: unknown;
+  /** Provenance fields as returned, when the gate got far enough to build any. */
+  provenance?: unknown;
+  /** Both compared strings in full; absent when the refusal never compared any. */
+  compared?: RejectedCandidateComparison;
+  /** The cited record's own doi/title; absent when no record resolved. */
+  corpus_side?: RejectedCandidateCorpusSide;
+  /**
+   * For a strong-pass drop, the cheap-pass candidate it was synthesized from.
+   * Present because the strong pass never sees the source records, so a strong
+   * refusal is only interpretable next to the grounded candidate it started as.
+   */
+  cheap_origin?: unknown;
+}
+
+/** Run-scoped file of every candidate one extraction run dropped (D-104). */
+export interface RejectedCandidateFile {
+  schema_version: 1;
+  /** The run's start timestamp, the same key mergeExtractionRunHistory uses. */
+  run_id: string;
+  dispatch_id: string | null;
+  github_run_id: number | null;
+  mode: string;
+  written_at: string;
+  rejected: RejectedCandidateRecord[];
 }
 
 /** The classification of a live/recent run for the /ops live view. */
@@ -2138,6 +2300,13 @@ export interface MaturationLogEntry {
    * so entries written before D-059 stay valid.
    */
   evidence_exhausted?: number;
+  /**
+   * True when this week's harvest step failed after its retry (D-097). The week
+   * was still analyzed, logged, and committed, but extraction was skipped — so
+   * a flat matrix means "not attempted", not "attempted and found nothing".
+   * Optional so entries written before D-097 stay valid.
+   */
+  harvest_failed?: boolean;
 }
 
 /** /analysis/maturation-log.json — the append-only weekly maturation history. */

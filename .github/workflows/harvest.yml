@@ -162,8 +162,15 @@ jobs:
             code=$?
           fi
           if [ "$code" -ne 0 ]; then echo "failed=true" >> "$GITHUB_OUTPUT"; else echo "failed=false" >> "$GITHUB_OUTPUT"; fi
-          checkpoint="corpora/_ops/checkpoints/evidence/${{ inputs.target }}.json"
-          if [ "${{ inputs.connector }}" = "evidence" ] && [ -f "$checkpoint" ]; then
+          # Checkpoints are addressed <mechanism>.<fingerprint-prefix>.json
+          # (D-096), so match any slice belonging to this target.
+          resume=false
+          for checkpoint in "corpora/_ops/checkpoints/evidence/${{ inputs.target }}."*.json; do
+            [ -f "$checkpoint" ] || continue
+            resume=true
+            break
+          done
+          if [ "${{ inputs.connector }}" = "evidence" ] && [ "$resume" = "true" ]; then
             echo "resume_required=true" >> "$GITHUB_OUTPUT"
           else
             echo "resume_required=false" >> "$GITHUB_OUTPUT"

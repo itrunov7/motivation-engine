@@ -44,6 +44,7 @@ import type {
   CorpusManifest,
   CorpusManifestCost,
   CorpusManifestRun,
+  CorpusRunStatus,
   DossierDraftAxis,
   DossierDraftPayload,
   DossierEvidenceSource,
@@ -64,12 +65,26 @@ import type {
   RealizationCorpusFile,
   RealizationCorpusRecord,
   RealizationCorpusProvenanceItem,
+  ExtractionPass,
+  RejectedCandidateComparison,
+  RejectedCandidateCorpusSide,
   Relation,
   RunProgressSummary,
   Segment,
   SeedStub,
   SegmentsFile,
+  UngroundedDropReason,
 } from "../lib/types";
+import {
+  anchorCitations,
+  resolveRefs,
+  SpanLedger,
+} from "./provenance-refs";
+import {
+  createRejectionLog,
+  rejectionRecord,
+  type RejectionLog,
+} from "./rejected-candidates";
 
 const ROOT = join(__dirname, "..");
 const CORPUS_DIR = join(ROOT, "corpora", "evidence");
@@ -169,6 +184,8 @@ interface DossierAxisDraft {
   score?: number | null;
   rationale?: string | null;
   citations?: CitationDraft[];
+  /** Synthesis-side provenance: refs only, resolved back to citations (D-104). */
+  provenance_refs?: unknown;
 }
 
 export interface DraftItem {
@@ -187,6 +204,14 @@ export interface DraftItem {
   value?: string;
   confidence?: number;
   citations?: CitationDraft[];
+  /**
+   * Opaque handles to spans the extraction pass already resolved (D-104). This
+   * is the ONLY provenance field the synthesis pass may emit; the resolver turns
+   * refs back into `citations` with quotes derived from the stored offsets, so a
+   * synthesis model cannot author or alter provenance. Typed `unknown` because
+   * it arrives from a model and is validated, not trusted.
+   */
+  provenance_refs?: unknown;
   /** mode=mechanism (D-085): full-record draft fields. */
   section?: string;
   summary?: string;
@@ -252,6 +277,18 @@ const citationsSchema: JsonSchema = {
   items: citationSchema,
 };
 
+/**
+ * What the synthesis pass is allowed to say about provenance (D-104): an opaque
+ * handle to a span the extraction pass already resolved against the source, and
+ * nothing else. No record ids, no quote text, no offsets. The synthesis model
+ * never sees a source record, so it cannot be trusted to author provenance —
+ * enforced here in the schema, not by asking it nicely in the prompt.
+ */
+const provenanceRefsSchema: JsonSchema = {
+  type: "array",
+  items: { type: "string" },
+};
+
 const stringArraySchema: JsonSchema = {
   type: "array",
   items: { type: "string" },
@@ -269,49 +306,78 @@ function strictObject(
   };
 }
 
-function commonItem(properties: Record<string, JsonSchema>): JsonSchema {
+/**
+ * Provenance is shaped by the pass, not by the mode (D-104). The extraction pass
+ * reads the records and quotes them; the synthesis pass may only point at what
+ * extraction already verified.
+ */
+function provenanceProperty(stage: ExtractionStage): Record<string, JsonSchema> {
+  return stage === "extract"
+    ? { citations: citationsSchema }
+    : { provenance_refs: provenanceRefsSchema };
+}
+
+function commonItem(
+  properties: Record<string, JsonSchema>,
+  stage: ExtractionStage,
+): JsonSchema {
   return strictObject({
     ...properties,
     confidence: { type: "number" },
-    citations: citationsSchema,
+    ...provenanceProperty(stage),
   });
 }
 
-function extractionItemSchema(mode: ExtractionMode): JsonSchema {
+function extractionItemSchema(
+  mode: ExtractionMode,
+  stage: ExtractionStage,
+): JsonSchema {
   switch (mode) {
     case "effects":
-      return commonItem({
-        id: { type: ["string", "null"] },
-        name: { type: "string" },
-        fact: { type: "string" },
-        boundary: { type: "string" },
-        grade: { type: "string" },
-      });
+      return commonItem(
+        {
+          id: { type: ["string", "null"] },
+          name: { type: "string" },
+          fact: { type: "string" },
+          boundary: { type: "string" },
+          grade: { type: "string" },
+        },
+        stage,
+      );
     case "realizations":
-      return commonItem({
-        id: { type: ["string", "null"] },
-        term: { type: "string" },
-        description_as_reported: { type: "string" },
-        artifact_context: stringArraySchema,
-        effect_id: { type: ["string", "null"] },
-      });
+      return commonItem(
+        {
+          id: { type: ["string", "null"] },
+          term: { type: "string" },
+          description_as_reported: { type: "string" },
+          artifact_context: stringArraySchema,
+          effect_id: { type: ["string", "null"] },
+        },
+        stage,
+      );
     case "interactions":
-      return commonItem({
-        pair: stringArraySchema,
-        type: { type: "string" },
-        fact: { type: "string" },
-        grade: { type: "string" },
-        boundary: { type: "string" },
-        source: { type: "string" },
-      });
+      return commonItem(
+        {
+          pair: stringArraySchema,
+          type: { type: "string" },
+          fact: { type: "string" },
+          grade: { type: "string" },
+          boundary: { type: "string" },
+          source: { type: "string" },
+        },
+        stage,
+      );
     case "dissent":
-      return commonItem({ value: { type: "string" } });
+      return commonItem({ value: { type: "string" } }, stage);
     case "mechanism":
     case "dossier":
-      return commonItem({
-        section: { type: "string" },
-        fact: { type: "string" },
-      });
+      return commonItem(
+        {
+          section: { type: "string" },
+          fact: { type: "string" },
+        },
+        stage,
+      );
   }
 }
 
@@ -369,26 +435,31 @@ function mechanismSynthesisSchema(): JsonSchema {
         what: { type: "string" },
       }),
     },
-  });
+  }, "synthesize");
 }
 
 function dossierSynthesisSchema(): JsonSchema {
+  // Per-axis provenance is also refs-only: a dossier axis is scored by the
+  // synthesis pass, which has never seen a source record.
   const axis = strictObject({
     score: { type: ["integer", "null"] },
     rationale: { type: ["string", "null"] },
-    citations: citationsSchema,
+    provenance_refs: provenanceRefsSchema,
   });
-  return commonItem({
-    scores: strictObject({
-      evidence: axis,
-      product_applicability: axis,
-      measurability: axis,
-      orthogonality: axis,
-      safety: axis,
-    }),
-    core_condition: { type: "string" },
-    dissent: { type: "string" },
-  });
+  return commonItem(
+    {
+      scores: strictObject({
+        evidence: axis,
+        product_applicability: axis,
+        measurability: axis,
+        orthogonality: axis,
+        safety: axis,
+      }),
+      core_condition: { type: "string" },
+      dissent: { type: "string" },
+    },
+    "synthesize",
+  );
 }
 
 function responseItemSchema(
@@ -401,7 +472,7 @@ function responseItemSchema(
   if (stage === "synthesize" && mode === "dossier") {
     return dossierSynthesisSchema();
   }
-  return extractionItemSchema(mode);
+  return extractionItemSchema(mode, stage);
 }
 
 export function openRouterResponseFormat(
@@ -437,6 +508,56 @@ export function openRouterStructuredOutputOptions(
         provider: { require_parameters: true },
       }
     : { response_format: { type: "json_object" } };
+}
+
+/**
+ * The optional sampling parameters for a tier, filtered by what its model
+ * advertises (D-107).
+ *
+ * `require_parameters: true` routes only to a provider that honours EVERY
+ * parameter in the request. Sending `temperature` to a model that does not
+ * advertise it therefore leaves no eligible provider and the request 404s with
+ * "no endpoints found" — no model invoked, no usage block, no cost attribution.
+ * That is how runs 30102079781 and 30102271340 died. Omitting the parameter
+ * rather than dropping the guard keeps the request fail-closed: a provider that
+ * would silently ignore a parameter still cannot serve us.
+ *
+ * Determinism is unaffected in practice — the omitted case is Claude, whose
+ * default sampling we accept — and the alternative (dropping require_parameters)
+ * would let a provider silently ignore the response format instead.
+ */
+export function openRouterSamplingOptions(
+  supports: ExtractionModelTierConfig["supports"],
+): { temperature?: number } {
+  return supports.temperature ? { temperature: 0 } : {};
+}
+
+/**
+ * The exact request body sent to OpenRouter. Extracted so the preflight can
+ * prove the production parameter set routes, rather than probing an
+ * approximation of it (D-107).
+ */
+export function openRouterRequestBody(args: {
+  tier: ExtractionModelTierConfig;
+  mode: ExtractionMode;
+  stage: ExtractionStage;
+  prompt: string;
+  maxTokens: number;
+}): Record<string, unknown> {
+  return {
+    model: args.tier.model_id,
+    messages: [
+      { role: "system", content: OPENROUTER_SYSTEM_PROMPT },
+      { role: "user", content: args.prompt },
+    ],
+    ...openRouterStructuredOutputOptions(
+      args.mode,
+      args.stage,
+      args.tier.response_format,
+    ),
+    ...openRouterSamplingOptions(args.tier.supports),
+    max_tokens: args.maxTokens,
+  };
 }
 
 function normalizeDraftResponse(value: unknown): DraftItem[] | null {
@@ -568,9 +689,20 @@ export function everyResponseBatchFailed(
 
 export interface ExtractionStats {
   candidates: number;
+  /**
+   * Candidates split by the pass that produced them (D-105). The cheap pass
+   * reads the source records; the strong pass only ever sees cheap output. They
+   * were previously merged into `candidates` with the cheap pass uncounted, so a
+   * cheap-pass loss was invisible. `candidates` remains the total.
+   */
+  candidates_cheap: number;
+  candidates_strong: number;
   records_processed: number;
   records_skipped_irrelevant: number;
   dropped_ungrounded: number;
+  /** Ungrounded drops split by pass (D-105); the two sum to dropped_ungrounded. */
+  dropped_ungrounded_cheap: number;
+  dropped_ungrounded_strong: number;
   failed_validation: number;
   proposed: number;
   merged: number;
@@ -583,6 +715,57 @@ export interface ExtractionStats {
   records_relevant: number;
   /** Funnel (D-090): relevant records still unread after this run (0 = corpus exhausted). */
   records_remaining: number;
+  /**
+   * Per-reason breakdown of dropped_ungrounded (D-098). Keys are
+   * UngroundedReason; only non-zero reasons are present. The values always sum
+   * to dropped_ungrounded — this attributes the existing total, it does not
+   * change which candidates are admitted.
+   */
+  dropped_ungrounded_reasons: Partial<Record<UngroundedReason, number>>;
+  /**
+   * The same attribution, per pass (D-105). Reading the two apart is the only
+   * way to tell "the extractor could not ground it" from "synthesis broke the
+   * provenance the extractor had already grounded".
+   */
+  dropped_ungrounded_reasons_cheap: Partial<Record<UngroundedReason, number>>;
+  dropped_ungrounded_reasons_strong: Partial<Record<UngroundedReason, number>>;
+}
+
+/**
+ * Count one ungrounded drop against the total, its reason, and the pass that
+ * produced it (D-098 for the reason, D-105 for the pass).
+ */
+export function recordUngroundedDrop(
+  stats: ExtractionStats,
+  pass: ExtractionPass,
+  reason: UngroundedReason,
+): void {
+  stats.dropped_ungrounded += 1;
+  stats.dropped_ungrounded_reasons[reason] =
+    (stats.dropped_ungrounded_reasons[reason] ?? 0) + 1;
+  if (pass === "cheap") {
+    stats.dropped_ungrounded_cheap += 1;
+    stats.dropped_ungrounded_reasons_cheap[reason] =
+      (stats.dropped_ungrounded_reasons_cheap[reason] ?? 0) + 1;
+  } else {
+    stats.dropped_ungrounded_strong += 1;
+    stats.dropped_ungrounded_reasons_strong[reason] =
+      (stats.dropped_ungrounded_reasons_strong[reason] ?? 0) + 1;
+  }
+}
+
+/** Stable "reason=count" rendering, densest first, for logs and run params. */
+export function formatUngroundedReasons(
+  reasons: Partial<Record<UngroundedReason, number>>,
+): string {
+  return Object.entries(reasons)
+    .filter(([, count]) => (count ?? 0) > 0)
+    .sort(
+      ([leftKey, leftCount], [rightKey, rightCount]) =>
+        (rightCount ?? 0) - (leftCount ?? 0) || leftKey.localeCompare(rightKey),
+    )
+    .map(([reason, count]) => `${reason}=${count}`)
+    .join(" ");
 }
 
 export interface ReaderCoverageDelta {
@@ -676,6 +859,36 @@ export function extractionSummaryParams(
     records_eligible: String(stats.records_eligible),
     records_relevant: String(stats.records_relevant),
     records_remaining: String(stats.records_remaining),
+    // The per-pass funnel is always present from D-105 on, even at zero: its
+    // absence is what tells /ops a run predates the cheap-pass gate, so writing
+    // it unconditionally is what makes "not split" a truthful reading.
+    candidates_cheap: String(stats.candidates_cheap),
+    candidates_strong: String(stats.candidates_strong),
+    dropped_ungrounded_cheap: String(stats.dropped_ungrounded_cheap),
+    dropped_ungrounded_strong: String(stats.dropped_ungrounded_strong),
+    // Only present when something was actually dropped, so a clean run does
+    // not carry an empty field and pre-D-098 runs stay readable as absent.
+    ...(stats.dropped_ungrounded > 0
+      ? {
+          dropped_ungrounded_reasons: formatUngroundedReasons(
+            stats.dropped_ungrounded_reasons,
+          ),
+        }
+      : {}),
+    ...(stats.dropped_ungrounded_cheap > 0
+      ? {
+          dropped_ungrounded_reasons_cheap: formatUngroundedReasons(
+            stats.dropped_ungrounded_reasons_cheap,
+          ),
+        }
+      : {}),
+    ...(stats.dropped_ungrounded_strong > 0
+      ? {
+          dropped_ungrounded_reasons_strong: formatUngroundedReasons(
+            stats.dropped_ungrounded_reasons_strong,
+          ),
+        }
+      : {}),
   };
 }
 
@@ -1039,48 +1252,70 @@ const DOSSIER_AXES = [
   "safety",
 ] as const;
 
-function taskInstruction(mode: ExtractionMode, mechanismId: string): string {
+/**
+ * How each pass is told to express provenance (D-104).
+ *
+ * The extraction pass sees records and quotes them. The synthesis pass sees no
+ * records, so it is told to carry refs forward — which is also all its schema
+ * permits, and all the resolver will accept. The prompt only explains the shape
+ * the code already enforces; it is not what makes provenance immutable.
+ */
+function provenanceInstruction(mode: ExtractionMode, stage: ExtractionStage): string {
+  if (stage === "synthesize") {
+    return "Every item must include provenance_refs: the opaque provenance handles of the candidates it draws on, copied unchanged. Never emit record ids, quotes, or offsets — provenance was established upstream and cannot be authored here. If an item has no supporting ref, omit it.";
+  }
   const locus =
     mode === "realizations"
       ? "a supplied title or observation"
       : "a supplied title or abstract";
-  const shared = `Return exactly one JSON object with this envelope: {"items":[]}. Do not return markdown, code fences, prose, or a bare top-level array. Every item must include citations [{record_id,quote_or_locus}] using only supplied records. quote_or_locus must be an exact span from ${locus}. If an item cannot be grounded, omit it.`;
+  return `Every item must include citations [{record_id,quote_or_locus}] using only supplied records. quote_or_locus must be an exact span from ${locus}. If an item cannot be grounded, omit it.`;
+}
+
+function taskInstruction(
+  mode: ExtractionMode,
+  mechanismId: string,
+  stage: ExtractionStage = "extract",
+): string {
+  const provenanceField = stage === "synthesize" ? "provenance_refs" : "citations";
+  const shared = `Return exactly one JSON object with this envelope: {"items":[]}. Do not return markdown, code fences, prose, or a bare top-level array. ${provenanceInstruction(mode, stage)}`;
   switch (mode) {
     case "effects":
-      return `${shared} Extract distinct named phenomena produced by ${mechanismId}. Fields: id, name, fact, boundary, grade (A+..C-), confidence, citations.`;
+      return `${shared} Extract distinct named phenomena produced by ${mechanismId}. Fields: id, name, fact, boundary, grade (A+..C-), confidence, ${provenanceField}.`;
     case "realizations":
-      return `${shared} Extract concrete interface, copy, or flow embodiments reported in sources for ${mechanismId}. Use neutral descriptive language. Fields: id, term, description_as_reported, artifact_context (strings), optional effect_id, confidence, citations.`;
+      return `${shared} Extract concrete interface, copy, or flow embodiments reported in sources for ${mechanismId}. Use neutral descriptive language. Fields: id, term, description_as_reported, artifact_context (strings), optional effect_id, confidence, ${provenanceField}.`;
     case "interactions":
-      return `${shared} Extract only pairs of known mechanism ids explicitly treated together. Fields: pair (two sorted mechanism ids), type (sequence-amplifying|reinforcing|suppressing|neutral), fact, grade, boundary, source, confidence, citations.`;
+      return `${shared} Extract only pairs of known mechanism ids explicitly treated together. Fields: pair (two sorted mechanism ids), type (sequence-amplifying|reinforcing|suppressing|neutral), fact, grade, boundary, source, confidence, ${provenanceField}.`;
     case "dissent":
-      return `${shared} Extract critiques, failed replications, null findings, and boundary findings for ${mechanismId}. Fields: value (concise markdown), confidence, citations.`;
+      return `${shared} Extract critiques, failed replications, null findings, and boundary findings for ${mechanismId}. Fields: value (concise markdown), confidence, ${provenanceField}.`;
     case "mechanism":
-      return `${shared} Extract record-drafting claims about the motivation mechanism ${mechanismId}: what it is and predicts (section=summary), the strength and basis of the evidence including effect sizes (section=evidence), caveats, boundary conditions and failed replications (section=caveat), where and how interfaces embody it (section=implementation), what outcomes are measured (section=measurement), and misuse, harm or dark-pattern boundaries (section=risk). Fields: section, fact, confidence, citations.`;
+      return `${shared} Extract record-drafting claims about the motivation mechanism ${mechanismId}: what it is and predicts (section=summary), the strength and basis of the evidence including effect sizes (section=evidence), caveats, boundary conditions and failed replications (section=caveat), where and how interfaces embody it (section=implementation), what outcomes are measured (section=measurement), and misuse, harm or dark-pattern boundaries (section=risk). Fields: section, fact, confidence, ${provenanceField}.`;
     case "dossier":
-      return `${shared} Extract evaluative observations for scoring the mechanism ${mechanismId}: strength and breadth of evidence (section=evidence), applicability to product interfaces (section=product_applicability), how measurable its predicted outcomes are (section=measurability), how distinct it is from neighbouring constructs (section=orthogonality), harms, ethics and misuse boundaries (section=safety), counter-evidence, critiques and null findings (section=dissent), and measured-outcome conditions (section=core_condition). Fields: section, fact, confidence, citations.`;
+      return `${shared} Extract evaluative observations for scoring the mechanism ${mechanismId}: strength and breadth of evidence (section=evidence), applicability to product interfaces (section=product_applicability), how measurable its predicted outcomes are (section=measurability), how distinct it is from neighbouring constructs (section=orthogonality), harms, ethics and misuse boundaries (section=safety), counter-evidence, critiques and null findings (section=dissent), and measured-outcome conditions (section=core_condition). Fields: section, fact, confidence, ${provenanceField}.`;
   }
 }
 
 function synthesisInstruction(mode: ExtractionMode, mechanismId: string): string {
   const noInvention =
-    "Do not add a claim or citation that is not supported by the candidates.";
+    "Do not add a claim that is not supported by the candidates.";
+  // Refs, not quotes: the synthesis pass has no records to quote from (D-104).
+  const refsOnly = provenanceInstruction(mode, "synthesize");
   switch (mode) {
     case "mechanism":
       return [
-        `Return JSON {"items":[]} with EXACTLY ONE item composing a full mechanism record draft for ${mechanismId} from the candidate claims. ${noInvention} Every citation must be copied verbatim from a candidate.`,
+        `Return JSON {"items":[]} with EXACTLY ONE item composing a full mechanism record draft for ${mechanismId} from the candidate claims. ${noInvention} ${refsOnly}`,
         "Item fields:",
-        `summary (2-4 sentences of generation-facing prose stating what the mechanism does to behaviour and what that implies for interfaces); grade (A+..C-, conservative); evidence_basis (what kinds of studies establish it); effect_size_note; caveats (snake_case strings); funnel_stages (subset of ${FUNNEL_STAGES.join("|")}); excluded_stages (same vocabulary); applicability_artifact_types (subset of ${ARTIFACT_TYPES.join("|")}); preconditions [{predicate,reason}] (predicate as a machine-readable condition, e.g. "artifact.has_choice == true"); culture_note; implementations (1-3 of {id_suffix (kebab-case), artifact_types (subset of the same vocabulary), product_requirements (strings), generation_directive (imperative prose for a generator), copy_formulas (strings), metrics (non-empty measurable product metrics)}); hard_rules (1+ of {id (snake_case), rule, severity block|warn}) covering misuse and dark-pattern boundaries reported in the sources; compliance_refs (strings); boundary_test (one question separating legitimate use from manipulation); relations (only mechanism ids explicitly treated together in the records: {type enabled_by|enables|adjacent|hybrid_with, target, note}); reference_examples [{product, what}] only if reported in sources; confidence; citations (the grounded union backing summary, evidence and caveats).`,
+        `summary (2-4 sentences of generation-facing prose stating what the mechanism does to behaviour and what that implies for interfaces); grade (A+..C-, conservative); evidence_basis (what kinds of studies establish it); effect_size_note; caveats (snake_case strings); funnel_stages (subset of ${FUNNEL_STAGES.join("|")}); excluded_stages (same vocabulary); applicability_artifact_types (subset of ${ARTIFACT_TYPES.join("|")}); preconditions [{predicate,reason}] (predicate as a machine-readable condition, e.g. "artifact.has_choice == true"); culture_note; implementations (1-3 of {id_suffix (kebab-case), artifact_types (subset of the same vocabulary), product_requirements (strings), generation_directive (imperative prose for a generator), copy_formulas (strings), metrics (non-empty measurable product metrics)}); hard_rules (1+ of {id (snake_case), rule, severity block|warn}) covering misuse and dark-pattern boundaries reported in the sources; compliance_refs (strings); boundary_test (one question separating legitimate use from manipulation); relations (only mechanism ids explicitly treated together in the records: {type enabled_by|enables|adjacent|hybrid_with, target, note}); reference_examples [{product, what}] only if reported in sources; confidence; provenance_refs (the union of refs backing summary, evidence and caveats).`,
       ].join("\n");
     case "dossier":
       return [
-        `Return JSON {"items":[]} with EXACTLY ONE item composing a full dossier draft for ${mechanismId} from the candidate observations. ${noInvention} Every citation must be copied verbatim from a candidate.`,
-        `Item fields: scores — an object with keys ${DOSSIER_AXES.join(", ")}, each {score (integer 0-3), rationale (markdown justification arguing from the cited evidence), citations}; core_condition (the measured condition under which the mechanism could be promoted, grounded in what the sources measure); dissent (markdown documenting counter-evidence, critiques, failed replications and boundary findings — a dossier that can only confirm is broken); confidence; citations (the grounded union backing dissent and core_condition).`,
-        "HARD RULE: if the candidates do not ground a rationale for an axis, emit that axis as {score:null, rationale:null, citations:[]} — never guess a score. Score conservatively from the cited evidence only.",
+        `Return JSON {"items":[]} with EXACTLY ONE item composing a full dossier draft for ${mechanismId} from the candidate observations. ${noInvention} ${refsOnly}`,
+        `Item fields: scores — an object with keys ${DOSSIER_AXES.join(", ")}, each {score (integer 0-3), rationale (markdown justification arguing from the cited evidence), provenance_refs}; core_condition (the measured condition under which the mechanism could be promoted, grounded in what the sources measure); dissent (markdown documenting counter-evidence, critiques, failed replications and boundary findings — a dossier that can only confirm is broken); confidence; provenance_refs (the union of refs backing dissent and core_condition).`,
+        "HARD RULE: if the candidates do not ground a rationale for an axis, emit that axis as {score:null, rationale:null, provenance_refs:[]} — never guess a score. Score conservatively from the cited evidence only.",
       ].join("\n");
     default:
       return [
-        taskInstruction(mode, mechanismId),
-        "Synthesize the candidate list: merge true duplicates, preserve all valid citations, remove contradictions that the cited text does not establish, and grade conservatively. Do not add a claim or citation.",
+        taskInstruction(mode, mechanismId, "synthesize"),
+        "Synthesize the candidate list: merge true duplicates, carry forward every ref that still applies, remove contradictions that the cited text does not establish, and grade conservatively. Do not add a claim.",
       ].join("\n\n");
   }
 }
@@ -1095,14 +1330,46 @@ function cheapPrompt(
   )}`;
 }
 
+/**
+ * An extraction candidate whose provenance has been anchored to offsets, paired
+ * with the opaque refs that stand in for it downstream (D-104).
+ */
+export interface AnchoredCandidate {
+  item: DraftItem;
+  refs: string[];
+}
+
+/**
+ * Strip every provenance-shaped field out of a candidate before the synthesis
+ * pass sees it, leaving opaque refs (D-104).
+ *
+ * The synthesis pass gets the CLAIM and a handle. Withholding record ids and
+ * quote text is what makes provenance model-immutable: there is no quote to
+ * paraphrase and no record id to reattach, so `provenance_refs` is the only
+ * provenance the model can possibly return.
+ */
+export function forSynthesis(candidate: AnchoredCandidate): DraftItem {
+  const { citations: _citations, scores, ...claim } = candidate.item;
+  const projected: DraftItem = { ...claim, provenance_refs: candidate.refs };
+  if (scores) {
+    projected.scores = Object.fromEntries(
+      Object.entries(scores).map(([axis, value]) => {
+        const { citations: _axisCitations, ...rest } = value;
+        return [axis, rest];
+      }),
+    );
+  }
+  return projected;
+}
+
 function strongPrompt(
   mode: ExtractionMode,
   mechanismId: string,
-  candidates: DraftItem[],
+  candidates: AnchoredCandidate[],
 ): string {
   return [
     synthesisInstruction(mode, mechanismId),
-    `CANDIDATES:\n${JSON.stringify(candidates)}`,
+    `CANDIDATES:\n${JSON.stringify(candidates.map(forSynthesis))}`,
   ].join("\n\n");
 }
 
@@ -1431,23 +1698,9 @@ async function callOpenRouter(
         "HTTP-Referer": "https://github.com/ventora/motivation-engine",
         "X-Title": "Motivation Engine extraction",
       },
-      body: JSON.stringify({
-        model: tier.model_id,
-        messages: [
-          {
-            role: "system",
-            content: OPENROUTER_SYSTEM_PROMPT,
-          },
-          { role: "user", content: prompt },
-        ],
-        ...openRouterStructuredOutputOptions(
-          mode,
-          stage,
-          tier.response_format,
-        ),
-        temperature: 0,
-        max_tokens: maxTokens,
-      }),
+      body: JSON.stringify(
+        openRouterRequestBody({ tier, mode, stage, prompt, maxTokens }),
+      ),
     });
     if (response.ok) break;
     if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 2) {
@@ -1492,11 +1745,101 @@ async function callOpenRouter(
 
 const normalizeText = normalizeQualityText;
 
-export function groundedProvenance(
+/**
+ * Why one candidate failed the grounding gate (D-098).
+ *
+ * D-093 split Ajv failures out of the single dropped_ungrounded bucket; the
+ * bucket was still coarse enough to hide WHICH of the grounding checks a
+ * candidate failed, which is why four runs dropping 100% of their candidates
+ * told us nothing actionable. These are labels for an existing decision, not
+ * new gates: every reason already rejected the candidate before.
+ */
+export type UngroundedReason = UngroundedDropReason;
+
+/**
+ * A refusal, with everything needed to re-check it offline (D-104).
+ *
+ * The diagnostic fields are additive instrumentation: they describe a decision
+ * the gate already made and never influence it. `compared` and `corpus_side`
+ * are absent exactly when the refusal happened before any comparison could be
+ * made (no citations, a malformed citation, an unknown record id).
+ */
+export interface GroundingRefusal {
+  ok: false;
+  reason: UngroundedReason;
+  detail: string;
+  /** The cited record the refusal concerns; null when none resolved. */
+  corpus_record_id: string | null;
+  compared?: RejectedCandidateComparison;
+  corpus_side?: RejectedCandidateCorpusSide;
+}
+
+export type GroundingOutcome =
+  | { ok: true; provenance: KnowledgeProvenanceItem[] }
+  | GroundingRefusal;
+
+/** Both compared strings, raw and normalized, untruncated (D-104). */
+function comparisonFor(quote: string, sourceText: string): RejectedCandidateComparison {
+  return {
+    quote_raw: quote,
+    quote_normalized: normalizeText(quote),
+    source_raw: sourceText,
+    source_normalized: normalizeText(sourceText),
+  };
+}
+
+/** The text the gate compares a quote against, for either corpus kind. */
+function comparableSourceText(record: ExtractionRecord): string {
+  return `${record.title}\n${
+    isRealizationRecord(record) ? record.observation : record.abstract ?? ""
+  }`;
+}
+
+function corpusSideFor(record: ExtractionRecord): RejectedCandidateCorpusSide {
+  return {
+    doi: isRealizationRecord(record) ? null : record.doi,
+    title: record.title,
+  };
+}
+
+/** Trailing record id in a `groundingErrors` message, e.g. "... for cr_abc". */
+function recordIdFromError(error: string): string | null {
+  const match = /(?:for|record) (\S+)$/.exec(error.trim());
+  return match ? match[1] : null;
+}
+
+/**
+ * Map one `groundingErrors` / `realizationGroundingErrors` string to its
+ * reason. The error strings are the existing contract in lib/proposal-quality;
+ * this only classifies them so the funnel can report a cause.
+ */
+function reasonForGroundingError(error: string): UngroundedReason {
+  if (error.startsWith("wrong corpus kind")) return "wrong_corpus_kind";
+  if (error.startsWith("missing corpus record")) return "unknown_record_id";
+  if (error.startsWith("missing realization corpus record")) return "unknown_record_id";
+  if (error.startsWith("DOI does not resolve")) return "doi_unresolved";
+  if (error.startsWith("title mismatch")) return "title_mismatch";
+  if (error.startsWith("quote does not resolve")) return "quote_not_in_source";
+  return "provenance_mismatch";
+}
+
+/**
+ * The grounding gate, unchanged in what it admits — it now reports WHY it
+ * refused (D-098). `groundedProvenance` stays the boolean-shaped view of the
+ * same decision for callers that only need the provenance.
+ */
+export function groundingOutcome(
   item: DraftItem,
   corpus: ExtractionCorpus,
-): KnowledgeProvenanceItem[] | null {
-  if (!Array.isArray(item.citations) || item.citations.length === 0) return null;
+): GroundingOutcome {
+  if (!Array.isArray(item.citations) || item.citations.length === 0) {
+    return {
+      ok: false,
+      reason: "no_citations",
+      detail: "item carried no citations",
+      corpus_record_id: null,
+    };
+  }
   const records = new Map(corpus.records.map((record) => [record.record_id, record]));
   const provenance: KnowledgeProvenanceItem[] = [];
   for (const citation of item.citations) {
@@ -1505,15 +1848,36 @@ export function groundedProvenance(
       typeof citation.quote_or_locus !== "string" ||
       !citation.quote_or_locus.trim()
     ) {
-      return null;
+      return {
+        ok: false,
+        reason: "malformed_citation",
+        detail: "citation missing a record_id or a non-empty quote_or_locus",
+        corpus_record_id:
+          typeof citation?.record_id === "string" ? citation.record_id : null,
+      };
     }
     const record = records.get(citation.record_id);
-    if (!record) return null;
+    if (!record) {
+      return {
+        ok: false,
+        reason: "unknown_record_id",
+        detail: `cited ${citation.record_id}, absent from the corpus slice`,
+        corpus_record_id: citation.record_id,
+      };
+    }
     const locus = normalizeText(citation.quote_or_locus);
-    const sourceText = normalizeText(
-      `${record.title}\n${isRealizationRecord(record) ? record.observation : record.abstract ?? ""}`,
-    );
-    if (!sourceText.includes(locus)) return null;
+    const rawSourceText = comparableSourceText(record);
+    const sourceText = normalizeText(rawSourceText);
+    if (!sourceText.includes(locus)) {
+      return {
+        ok: false,
+        reason: "quote_not_in_source",
+        detail: `quote not a substring of ${record.record_id}: "${citation.quote_or_locus.slice(0, 120)}"`,
+        corpus_record_id: record.record_id,
+        compared: comparisonFor(citation.quote_or_locus, rawSourceText),
+        corpus_side: corpusSideFor(record),
+      };
+    }
     provenance.push(
       isRealizationRecord(record)
         ? {
@@ -1546,12 +1910,60 @@ export function groundedProvenance(
       (entry): entry is RealizationCorpusProvenanceItem =>
         entry.corpus_kind === "realization",
     );
-    return realizationProvenance.length === result.length &&
-      realizationGroundingErrors(realizationProvenance, corpus).length === 0
-      ? result
-      : null;
+    if (realizationProvenance.length !== result.length) {
+      return {
+        ok: false,
+        reason: "wrong_corpus_kind",
+        detail: "evidence provenance produced against a realization corpus",
+        corpus_record_id: result[0]?.corpus_record_id ?? null,
+      };
+    }
+    const errors = realizationGroundingErrors(realizationProvenance, corpus);
+    if (errors.length > 0) {
+      return refusalForGroundingError(errors[0], result, records);
+    }
+    return { ok: true, provenance: result };
   }
-  return groundingErrors(result, corpus).length === 0 ? result : null;
+  const errors = groundingErrors(result, corpus);
+  if (errors.length > 0) {
+    return refusalForGroundingError(errors[0], result, records);
+  }
+  return { ok: true, provenance: result };
+}
+
+/**
+ * Turn a secondary-check error string into a refusal carrying the same
+ * diagnostics as a first-pass refusal (D-104). The error strings are the
+ * existing lib/proposal-quality contract; this only classifies and enriches.
+ */
+function refusalForGroundingError(
+  error: string,
+  provenance: readonly KnowledgeProvenanceItem[],
+  records: ReadonlyMap<string, ExtractionRecord>,
+): GroundingRefusal {
+  const recordId = recordIdFromError(error);
+  const record = recordId ? records.get(recordId) : undefined;
+  const source = provenance.find((entry) => entry.corpus_record_id === recordId);
+  return {
+    ok: false,
+    reason: reasonForGroundingError(error),
+    detail: error,
+    corpus_record_id: recordId ?? provenance[0]?.corpus_record_id ?? null,
+    ...(record && source
+      ? {
+          compared: comparisonFor(source.quote_or_locus, comparableSourceText(record)),
+          corpus_side: corpusSideFor(record),
+        }
+      : {}),
+  };
+}
+
+export function groundedProvenance(
+  item: DraftItem,
+  corpus: ExtractionCorpus,
+): KnowledgeProvenanceItem[] | null {
+  const outcome = groundingOutcome(item, corpus);
+  return outcome.ok ? outcome.provenance : null;
 }
 
 function slug(value: string): string {
@@ -2227,6 +2639,24 @@ function reportValidationFailure(
   );
 }
 
+/**
+ * Log every concrete ungrounded drop (D-104). This was capped at five per
+ * mechanism, which was the wrong trade: the cap hid exactly the runs that
+ * needed reading — the ones dropping everything — and the surviving lines were
+ * console output, which is not committed. The cap is gone and the full record
+ * is persisted by the rejection log, so the console line can stay a summary.
+ */
+function reportUngroundedDrop(
+  mechanismId: string,
+  pass: ExtractionPass,
+  reason: UngroundedReason,
+  detail: string,
+): void {
+  console.warn(
+    `[extract] ${mechanismId} dropped ungrounded (pass=${pass} reason=${reason}): ${detail}`,
+  );
+}
+
 export function buildExtractionManifestCost(
   config: ExtractionOpsConfig,
   usage: Usage,
@@ -2291,6 +2721,13 @@ export function buildExtractionManifestRun(args: {
       args.stats.records_processed + args.stats.records_skipped_irrelevant,
     files_written: args.filesWritten,
     duration_s: args.durationS,
+    // Recorded, not inferred (D-108). Attribution used to rest on substring
+    // matching a workflow run NAME, a display string that can be edited or
+    // collide; writing the id the run was dispatched with settles it.
+    dispatch_id: process.env.OPS_DISPATCH_ID ?? null,
+    github_run_id: process.env.GITHUB_RUN_ID
+      ? Number(process.env.GITHUB_RUN_ID)
+      : null,
     ...(args.stats.dropped_ungrounded > 0 ||
       args.stats.failed_validation > 0 ||
       args.capped
@@ -2314,6 +2751,35 @@ export function buildExtractionManifestRun(args: {
   };
 }
 
+/** Newest-first run entries kept in the extraction manifest. */
+const RUN_HISTORY_LIMIT = 20;
+
+/**
+ * Put `run` at the head of the history, replacing any earlier entry for the
+ * SAME run (D-099). Accounting is persisted repeatedly while a run is in
+ * flight, and each write must supersede the previous snapshot of that run
+ * rather than adding a duplicate that would double-count its spend.
+ */
+export function mergeExtractionRunHistory(
+  previous: readonly CorpusManifestRun[],
+  run: CorpusManifestRun,
+): CorpusManifestRun[] {
+  return [
+    run,
+    ...previous.filter((entry) => entry.timestamp !== run.timestamp),
+  ].slice(0, RUN_HISTORY_LIMIT);
+}
+
+/**
+ * Write the extraction manifest for THIS run.
+ *
+ * Idempotent per run (D-099): a run is identified by its startedAt timestamp,
+ * and re-writing replaces that run's history entry instead of appending a
+ * second one. This is what makes it safe to call after every batch so that a
+ * run which dies mid-way still leaves its spend recorded — the monthly cap is
+ * derived from committed manifests, so spend that is never written is spend the
+ * cap can never see.
+ */
 function writeManifest(
   mode: ExtractionMode,
   scope: ExtractionScope,
@@ -2324,10 +2790,11 @@ function writeManifest(
   filesWritten: number,
   capped: boolean,
   incomplete: boolean,
+  status?: CorpusRunStatus,
 ): void {
   mkdirSync(EXTRACTION_DIR, { recursive: true });
   const duration = Math.round(((Date.now() - startedAt.getTime()) / 1000) * 100) / 100;
-  const run = buildExtractionManifestRun({
+  const built = buildExtractionManifestRun({
     mode,
     scope,
     startedAt,
@@ -2339,12 +2806,18 @@ function writeManifest(
     incomplete,
     durationS: duration,
   });
+  const run: CorpusManifestRun = status ? { ...built, status } : built;
   const previous = existsSync(MANIFEST_FILE)
     ? readJson<CorpusManifest>(MANIFEST_FILE)
     : null;
-  const history = [run, ...(previous?.run_history ?? [])].slice(0, 20);
-  const coverage = readJson<ReaderCoverageFile>(READER_COVERAGE_FILE);
-  const coveredRecords = Object.values(coverage.mechanisms).reduce(
+  const history = mergeExtractionRunHistory(previous?.run_history ?? [], run);
+  // Coverage is written at the end of a run, so an in-flight or crashed write
+  // may find it absent or stale. Report what exists rather than throwing —
+  // recording the spend matters more than the record count.
+  const coverage = existsSync(READER_COVERAGE_FILE)
+    ? readJson<ReaderCoverageFile>(READER_COVERAGE_FILE)
+    : null;
+  const coveredRecords = Object.values(coverage?.mechanisms ?? {}).reduce(
     (sum, mechanism) =>
       sum +
       (mechanism.evidence?.processed_record_ids.length ?? 0) +
@@ -2359,13 +2832,15 @@ function writeManifest(
       connector_version: "1.1.0",
       last_run: run,
       run_history: history,
-      data_files: [
-        {
-          path: "coverage.json",
-          records: coveredRecords,
-          bytes: statSync(READER_COVERAGE_FILE).size,
-        },
-      ],
+      data_files: coverage
+        ? [
+            {
+              path: "coverage.json",
+              records: coveredRecords,
+              bytes: statSync(READER_COVERAGE_FILE).size,
+            },
+          ]
+        : [],
     }),
   );
 }
@@ -2411,11 +2886,18 @@ export async function runExtraction(args: {
   };
   const stats: ExtractionStats = {
     candidates: 0,
+    candidates_cheap: 0,
+    candidates_strong: 0,
     records_processed: 0,
     // Accumulated per slice below; later slices skip nothing new because the
     // first slice's pre-filter already marks every irrelevant record terminal.
     records_skipped_irrelevant: 0,
     dropped_ungrounded: 0,
+    dropped_ungrounded_cheap: 0,
+    dropped_ungrounded_strong: 0,
+    dropped_ungrounded_reasons: {},
+    dropped_ungrounded_reasons_cheap: {},
+    dropped_ungrounded_reasons_strong: {},
     failed_validation: 0,
     proposed: 0,
     merged: 0,
@@ -2440,6 +2922,49 @@ export async function runExtraction(args: {
   const runId = process.env.GITHUB_RUN_ID
     ? `github-actions-${process.env.GITHUB_RUN_ID}`
     : `extract-${startedAt.toISOString()}`;
+
+  // Every refused candidate is persisted, not sampled (D-104), keyed by the
+  // same run-start timestamp the manifest uses so the two line up.
+  const rejections: RejectionLog = createRejectionLog({
+    runId: startedAt.toISOString(),
+    mode: args.mode,
+    dispatchId: process.env.OPS_DISPATCH_ID ?? null,
+    githubRunId: process.env.GITHUB_RUN_ID
+      ? Number(process.env.GITHUB_RUN_ID)
+      : null,
+  });
+
+  /**
+   * Record one refusal against both the counters and the committed log.
+   * `cheapOrigin` is present for strong-pass drops: the strong pass never sees
+   * the source records, so its refusal is only interpretable next to the
+   * candidate it was synthesized from.
+   */
+  const dropUngrounded = (
+    mechanismId: string,
+    pass: ExtractionPass,
+    refusal: GroundingRefusal,
+    item: DraftItem,
+    cheapOrigin?: unknown,
+  ): void => {
+    recordUngroundedDrop(stats, pass, refusal.reason);
+    reportUngroundedDrop(mechanismId, pass, refusal.reason, refusal.detail);
+    rejections.add(
+      rejectionRecord({
+        mechanismId,
+        mode: args.mode,
+        pass,
+        reason: refusal.reason,
+        detail: refusal.detail,
+        corpusRecordId: refusal.corpus_record_id,
+        item,
+        provenance: item.citations ?? null,
+        compared: refusal.compared,
+        corpusSide: refusal.corpus_side,
+        cheapOrigin,
+      }),
+    );
+  };
 
   // Live progress heartbeat (D-086): report batches drafted and running spend
   // against the per-run token cap so /ops shows extraction moving in flight.
@@ -2478,6 +3003,47 @@ export async function runExtraction(args: {
     });
   };
   reportExtractProgress("reading corpora", "running", false);
+
+  /**
+   * Persist this run's spend to the manifest mid-flight (D-099).
+   *
+   * The monthly cap is computed from committed corpus manifests, so a run that
+   * calls models and then dies used real budget that the cap could never see.
+   * Writing after every batch — and once more on the way out of a throw —
+   * bounds the invisible spend to at most one batch. The entry is keyed by the
+   * run's start timestamp, so these writes replace each other instead of
+   * accumulating. Best-effort by construction: a failure to record accounting
+   * must never mask the error that is already ending the run.
+   */
+  const persistAccounting = (status?: CorpusRunStatus): void => {
+    try {
+      // Rejections ride along with accounting for the same reason (D-104): a run
+      // that dies must still leave behind why it dropped what it dropped.
+      rejections.flush();
+    } catch (error) {
+      console.warn(
+        `[extract] could not persist rejected candidates: ${(error as Error).message}`,
+      );
+    }
+    try {
+      writeManifest(
+        args.mode,
+        args.scope,
+        startedAt,
+        args.config,
+        context.usage,
+        stats,
+        proposals.length + pendingWrites.size,
+        currentPlan.capped,
+        true,
+        status,
+      );
+    } catch (error) {
+      console.warn(
+        `[extract] could not persist interim accounting: ${(error as Error).message}`,
+      );
+    }
+  };
 
   const draftContextBase = isDraftMode(args.mode)
     ? {
@@ -2572,8 +3138,54 @@ export async function runExtraction(args: {
           recordFailedBatch(mechanismId, "cheap", result.error, recordIds);
         }
         reportExtractProgress(`drafting ${mechanismId}`, "running", false);
+        persistAccounting();
       }
       if (parsedCheapBatches === 0) continue;
+
+      // Gate the cheap pass too (D-105). These candidates were extracted by the
+      // only pass that reads the source records, so an ungrounded one here is a
+      // genuine extraction failure worth counting — it used to be discarded
+      // silently on the way into synthesis, with no counter and no record.
+      stats.candidates += candidates.length;
+      stats.candidates_cheap += candidates.length;
+      const ledger = new SpanLedger();
+      const sourceTextFor = (recordId: string): string | null => {
+        const record = corpus.records.find(
+          (candidate) => candidate.record_id === recordId,
+        );
+        return record ? comparableSourceText(record) : null;
+      };
+      const groundedCheap: AnchoredCandidate[] = [];
+      for (const item of candidates) {
+        const grounding = groundingOutcome(item, corpus);
+        if (!grounding.ok) {
+          dropUngrounded(mechanismId, "cheap", grounding, item);
+          continue;
+        }
+        // Anchor provenance to offsets while the record is still in view
+        // (D-104). From here on the quote is a slice of the record, so no later
+        // pass can author or alter it.
+        const anchored = anchorCitations(item.citations, sourceTextFor, ledger);
+        if (!anchored.ok) {
+          dropUngrounded(mechanismId, "cheap", anchored, item);
+          continue;
+        }
+        groundedCheap.push({
+          item: { ...item, citations: anchored.citations },
+          refs: anchored.refs,
+        });
+      }
+      if (groundedCheap.length === 0) {
+        // The records were read and paid for. Mark them processed even though
+        // nothing survived, so the next run advances instead of re-reading and
+        // re-spending on the same slice.
+        coverageDelta.processed_record_ids.push(...parsedRecordIds);
+        processedByMechanism.set(mechanismId, coverageDelta);
+        console.warn(
+          `[extract] ${mechanismId}: no cheap-pass candidate grounded; skipping synthesis`,
+        );
+        continue;
+      }
 
       reportExtractProgress(`composing ${mechanismId}`, "running", false);
       responseBatchesAttempted += 1;
@@ -2583,10 +3195,11 @@ export async function runExtraction(args: {
           "strong",
           args.mode,
           "synthesize",
-          strongPrompt(args.mode, mechanismId, candidates),
+          strongPrompt(args.mode, mechanismId, groundedCheap),
           STRONG_OUTPUT_RESERVE,
         ),
       );
+      persistAccounting();
       if (!synthesisResult.ok) {
         recordFailedBatch(
           mechanismId,
@@ -2605,28 +3218,84 @@ export async function runExtraction(args: {
         ? synthesisResult.value.slice(0, 1)
         : synthesisResult.value;
       stats.candidates += synthesized.length;
+      stats.candidates_strong += synthesized.length;
       const admissible: {
         proposal: Proposal;
         outcome: "proposed" | "merged";
       }[] = [];
       const held: Proposal[] = [];
-      for (const item of synthesized) {
-        const provenance = groundedProvenance(item, corpus);
-        if (!provenance) {
-          stats.dropped_ungrounded += 1;
+      // Every ref the synthesis pass was shown, across all candidates. A ref
+      // outside this set is provenance the model invented (D-104).
+      const suppliedRefs = new Set(
+        groundedCheap.flatMap((candidate) => candidate.refs),
+      );
+      for (const rawItem of synthesized) {
+        // Rebuild citations from refs before gating: the quote is sliced out of
+        // the record at the stored offsets, so the string the gate inspects was
+        // written by the corpus, not by a model that never read it.
+        const resolved = resolveRefs(
+          rawItem.provenance_refs,
+          suppliedRefs,
+          sourceTextFor,
+          ledger,
+        );
+        if (!resolved.ok) {
+          dropUngrounded(mechanismId, "strong", resolved, rawItem, groundedCheap);
+          continue;
+        }
+        const item: DraftItem = { ...rawItem, citations: resolved.citations };
+        delete item.provenance_refs;
+        if (rawItem.scores) {
+          // Per-axis provenance resolves the same way. An axis whose refs do
+          // not resolve becomes citation-less, which draftDossierAxis already
+          // renders as unscored — the pre-D-104 outcome for an ungrounded axis,
+          // and not a reason to drop the whole dossier.
+          item.scores = Object.fromEntries(
+            Object.entries(rawItem.scores).map(([axis, value]) => {
+              const axisRefs = resolveRefs(
+                value.provenance_refs,
+                suppliedRefs,
+                sourceTextFor,
+                ledger,
+              );
+              return [
+                axis,
+                {
+                  score: value.score,
+                  rationale: value.rationale,
+                  citations: axisRefs.ok ? axisRefs.citations : [],
+                },
+              ];
+            }),
+          );
+        }
+        const grounding = groundingOutcome(item, corpus);
+        if (!grounding.ok) {
+          dropUngrounded(mechanismId, "strong", grounding, rawItem, groundedCheap);
           continue;
         }
         const proposal = toProposal(
           args.mode,
           mechanismId,
           item,
-          provenance,
+          grounding.provenance,
           runId,
           startedAt.toISOString(),
           draftContext,
         );
         if (!proposal) {
-          stats.dropped_ungrounded += 1;
+          dropUngrounded(
+            mechanismId,
+            "strong",
+            {
+              ok: false,
+              reason: "proposal_not_built",
+              detail: "provenance grounded but the proposal builder refused the item",
+              corpus_record_id: grounding.provenance[0]?.corpus_record_id ?? null,
+            },
+            rawItem,
+            groundedCheap,
+          );
           continue;
         }
         if (!validate(proposal)) {
@@ -2769,7 +3438,14 @@ export async function runExtraction(args: {
   // cap) so callOpenRouter's per-call guard can never trip mid-run.
   let currentPlan = plan;
   while (true) {
-    await processSlice(currentPlan);
+    try {
+      await processSlice(currentPlan);
+    } catch (error) {
+      // Whatever ended the run, the tokens it already burned are real. Record
+      // them before the error propagates (D-099) so the monthly cap sees them.
+      persistAccounting("failed");
+      throw error;
+    }
     stats.records_remaining = currentPlan.records.remaining;
     if (!currentPlan.capped) break; // corpus exhausted for this scope + mode
     const usedTokens = context.usage.input + context.usage.output;
@@ -2838,6 +3514,21 @@ export async function runExtraction(args: {
     records_processed: stats.records_processed,
     records_skipped_irrelevant: stats.records_skipped_irrelevant,
     records_remaining: stats.records_remaining,
+    ...(stats.dropped_ungrounded > 0
+      ? { dropped_ungrounded_reasons: stats.dropped_ungrounded_reasons }
+      : {}),
+    // Always present from D-105 on; absence is the signal that a run predates
+    // the cheap-pass gate, which /ops renders as "not split".
+    candidates_cheap: stats.candidates_cheap,
+    candidates_strong: stats.candidates_strong,
+    dropped_ungrounded_cheap: stats.dropped_ungrounded_cheap,
+    dropped_ungrounded_strong: stats.dropped_ungrounded_strong,
+    ...(stats.dropped_ungrounded_cheap > 0
+      ? { dropped_ungrounded_reasons_cheap: stats.dropped_ungrounded_reasons_cheap }
+      : {}),
+    ...(stats.dropped_ungrounded_strong > 0
+      ? { dropped_ungrounded_reasons_strong: stats.dropped_ungrounded_reasons_strong }
+      : {}),
   };
   if (
     everyResponseBatchFailed(
@@ -2851,6 +3542,7 @@ export async function runExtraction(args: {
       true,
       summary,
     );
+    persistAccounting("failed");
     throw new Error(
       `Every OpenRouter response batch failed validation (${responseBatchesAttempted}/${responseBatchesAttempted})`,
     );
@@ -2880,8 +3572,15 @@ export async function runExtraction(args: {
     currentPlan.capped,
     runIncomplete,
   );
+  const ungroundedBreakdown = formatUngroundedReasons(stats.dropped_ungrounded_reasons);
+  if (rejections.count() > 0) {
+    console.warn(
+      `[extract] ${rejections.count()} refused candidates persisted to ${rejections.path()} — ` +
+        `re-check offline with: npm run replay-grounding -- replay ${rejections.path()}`,
+    );
+  }
   reportExtractProgress(
-    `${runIncomplete ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates · ${stats.dropped_ungrounded} dropped ungrounded · ${stats.failed_validation} failed validation · ${stats.records_remaining} remaining`,
+    `${runIncomplete ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates (cheap ${stats.candidates_cheap} / strong ${stats.candidates_strong}) · ${stats.dropped_ungrounded} dropped ungrounded (cheap ${stats.dropped_ungrounded_cheap} / strong ${stats.dropped_ungrounded_strong})${ungroundedBreakdown ? ` (${ungroundedBreakdown})` : ""} · ${stats.failed_validation} failed validation · ${stats.records_remaining} remaining · ${currentPlan.records.remaining} dropped by cap truncation`,
     runIncomplete ? "partial" : "success",
     true,
     summary,

@@ -100,7 +100,40 @@
         "records_relevant": { "type": "integer", "minimum": 0 },
         "records_processed": { "type": "integer", "minimum": 0 },
         "records_skipped_irrelevant": { "type": "integer", "minimum": 0 },
-        "records_remaining": { "type": "integer", "minimum": 0 }
+        "records_remaining": { "type": "integer", "minimum": 0 },
+        "candidates_cheap": { "type": "integer", "minimum": 0 },
+        "candidates_strong": { "type": "integer", "minimum": 0 },
+        "dropped_ungrounded_cheap": { "type": "integer", "minimum": 0 },
+        "dropped_ungrounded_strong": { "type": "integer", "minimum": 0 },
+        "dropped_ungrounded_reasons": {
+          "description": "Per-reason attribution of dropped_ungrounded (D-098). Keys are the grounding checks that refused a candidate; values sum to dropped_ungrounded. Optional: absent on a clean run and on runs written before D-098.",
+          "$ref": "#/$defs/ungroundedReasons"
+        },
+        "dropped_ungrounded_reasons_cheap": {
+          "description": "The same attribution for the cheap extraction pass alone (D-105) — the only pass that reads the source records. Optional; absent on runs written before D-105.",
+          "$ref": "#/$defs/ungroundedReasons"
+        },
+        "dropped_ungrounded_reasons_strong": {
+          "description": "The same attribution for the strong synthesis pass alone (D-105). Optional; absent on runs written before D-105.",
+          "$ref": "#/$defs/ungroundedReasons"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ungroundedReasons": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "no_citations": { "type": "integer", "minimum": 0 },
+        "malformed_citation": { "type": "integer", "minimum": 0 },
+        "unknown_record_id": { "type": "integer", "minimum": 0 },
+        "quote_not_in_source": { "type": "integer", "minimum": 0 },
+        "wrong_corpus_kind": { "type": "integer", "minimum": 0 },
+        "doi_unresolved": { "type": "integer", "minimum": 0 },
+        "title_mismatch": { "type": "integer", "minimum": 0 },
+        "provenance_mismatch": { "type": "integer", "minimum": 0 },
+        "proposal_not_built": { "type": "integer", "minimum": 0 }
       }
     }
   }

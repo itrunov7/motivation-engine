@@ -265,18 +265,23 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          # Each file is one resumable slice: <mechanism>.<fingerprint>.json
+          # (D-096). The fingerprint keeps the dispatch id unique when one
+          # mechanism has slices for several segments.
           for checkpoint in corpora/_ops/checkpoints/evidence/*.json; do
             [ -f "$checkpoint" ] || continue
-            target="${checkpoint##*/}"
-            target="${target%.json}"
+            slice="${checkpoint##*/}"
+            slice="${slice%.json}"
+            target="${slice%%.*}"
+            print="${slice#*.}"
             gh workflow run harvest.yml \
               --ref "${GITHUB_REF_NAME}" \
               -f connector=evidence \
               -f target="$target" \
               -f dry_run=false \
-              -f dispatch_id="scheduled-${GITHUB_RUN_ID}-${target}" \
+              -f dispatch_id="scheduled-${GITHUB_RUN_ID}-${target}-${print}" \
               -f raise_cap=false
-            echo "Queued continuation for $target."
+            echo "Queued continuation for $target (slice $print)."
           done
 
       - name: Open ops issue on persistent failure

@@ -62,6 +62,7 @@ import { CONNECTORS } from "./connectors";
 import { deriveCorpusRecordId, CORPUS_RECORD_ID_PATTERN } from "../lib/corpus-record-id";
 import {
   groundingErrors,
+  normalizeQualityText,
   realizationGroundingErrors,
 } from "../lib/proposal-quality";
 import { isRealizationProvenance } from "../lib/realization-corpus";
@@ -79,9 +80,11 @@ import type {
   RealizationCorpusFile,
   ReaderCoverageFile,
   RealizationCorpusProvenanceItem,
+  RejectedCandidateFile,
   Segment,
   SegmentCandidate,
 } from "../lib/types";
+import { UNGROUNDED_DROP_REASONS } from "../lib/types";
 import {
   KNOWN_CONNECTOR_IDS,
   OPS_PATHS,
@@ -117,6 +120,13 @@ const PATHS = {
     "reader-coverage.schema.json",
   ),
   readerCoverage: join(ROOT, "corpora", "extraction", "coverage.json"),
+  rejectedCandidatesSchema: join(
+    ROOT,
+    "corpora",
+    "_ops",
+    "rejected-candidates.schema.json",
+  ),
+  rejectedCandidatesDir: join(ROOT, "corpora", "extraction", "rejected"),
   heartbeat: join(ROOT, "corpora", "_health", "heartbeat.json"),
   segments: join(ROOT, "segments", "segments.yaml"),
   segmentCandidates: join(ROOT, "segments", "candidates.json"),
@@ -553,6 +563,10 @@ const manifestRunProperties = {
   error: { type: "string", minLength: 1 },
   warnings: { type: "object", additionalProperties: { type: "boolean" } },
   cost: manifestCostSchema,
+  // D-108: recorded by the run, nullable because a run may carry no id, and
+  // optional because history written before D-108 has neither.
+  dispatch_id: { type: ["string", "null"], minLength: 1 },
+  github_run_id: { type: ["integer", "null"], minimum: 1 },
 } as const satisfies Record<keyof StoredManifestRun, unknown>;
 
 const manifestRunRequired = [
@@ -1442,6 +1456,68 @@ function main(): void {
     fail(PATHS.readerCoverageSchema, "missing reader coverage schema");
   }
 
+  // 9b-ii. Rejected extraction candidates (D-104): every candidate the
+  // grounding gate refused, persisted run-scoped so a refusal stays
+  // re-checkable offline. Diagnostic output, never an input to an artifact —
+  // but a malformed file must not land, or the replay path silently breaks.
+  if (existsSync(PATHS.rejectedCandidatesSchema)) {
+    const schema = readJson(PATHS.rejectedCandidatesSchema);
+    if (schema !== undefined) {
+      const validateRejected = ajv.compile(schema as object);
+      const files = existsSync(PATHS.rejectedCandidatesDir)
+        ? listJsonFiles(PATHS.rejectedCandidatesDir)
+        : [];
+      if (files.length === 0) {
+        console.log(
+          "  · no rejected-candidate logs yet (written only by runs that drop something)",
+        );
+      }
+      for (const file of files) {
+        const data = readJson(file);
+        if (data === undefined) continue;
+        let ok = validateAgainst(validateRejected, file, data);
+        const rejectedFile = data as RejectedCandidateFile;
+        // The gate's own message must agree with the recorded reason, and a
+        // comparison that claims a normalized form must actually carry it.
+        for (const entry of rejectedFile.rejected ?? []) {
+          if (
+            entry.compared &&
+            normalizeQualityText(entry.compared.quote_raw) !==
+              entry.compared.quote_normalized
+          ) {
+            fail(
+              file,
+              `${entry.corpus_record_id ?? "(no record)"} quote_normalized does not match quote_raw under the gate's normalization`,
+            );
+            ok = false;
+          }
+          if (
+            entry.compared &&
+            normalizeQualityText(entry.compared.source_raw) !==
+              entry.compared.source_normalized
+          ) {
+            fail(
+              file,
+              `${entry.corpus_record_id ?? "(no record)"} source_normalized does not match source_raw under the gate's normalization`,
+            );
+            ok = false;
+          }
+          if (entry.pass === "cheap" && entry.cheap_origin !== undefined) {
+            fail(file, "a cheap-pass rejection cannot carry a cheap_origin");
+            ok = false;
+          }
+        }
+        if (ok) {
+          console.log(
+            `  ✓ ${rel(file)} valid (${rejectedFile.rejected.length} rejected candidates, D-104)`,
+          );
+        }
+      }
+    }
+  } else {
+    fail(PATHS.rejectedCandidatesSchema, "missing rejected-candidates schema");
+  }
+
   // 9c. Benchmark files (D-029): every /corpora/benchmarks/{source_id}.json
   // is owner-prepared data normalized by tools/ingest-report.ts. Beyond the
   // manifest contract above, the RECORD shape is validated here, and the
@@ -1592,6 +1668,68 @@ function main(): void {
     );
   }
 
+  // Drift guard: the grounding-refusal reasons lib/types.ts declares (D-098)
+  // must equal the dropped_ungrounded_reasons properties the run-progress
+  // schema accepts, or /ops would silently ignore a reason the pipeline emits.
+  const declaredReasons = [...UNGROUNDED_DROP_REASONS].sort();
+  const runProgressSchemaFile = join(OPS_PATHS.dir, "run-progress.schema.json");
+  if (existsSync(runProgressSchemaFile)) {
+    interface ReasonMapSchema {
+      $ref?: string;
+      properties?: object;
+    }
+    const schema = readJson(runProgressSchemaFile) as
+      | {
+          properties?: { summary?: { properties?: Record<string, ReasonMapSchema> } };
+          $defs?: Record<string, ReasonMapSchema>;
+        }
+      | undefined;
+    const summaryProperties = schema?.properties?.summary?.properties ?? {};
+    /** Follow a local "#/$defs/name" reference; the reason maps share one def. */
+    const reasonProperties = (node: ReasonMapSchema | undefined): object => {
+      if (!node) return {};
+      const defName = node.$ref?.startsWith("#/$defs/")
+        ? node.$ref.slice("#/$defs/".length)
+        : null;
+      if (defName) return schema?.$defs?.[defName]?.properties ?? {};
+      return node.properties ?? {};
+    };
+    // D-105 split the breakdown per pass; every reason map must accept the same
+    // reasons, or a pass-specific view would silently drop one.
+    for (const key of [
+      "dropped_ungrounded_reasons",
+      "dropped_ungrounded_reasons_cheap",
+      "dropped_ungrounded_reasons_strong",
+    ]) {
+      const schemaReasons = Object.keys(reasonProperties(summaryProperties[key])).sort();
+      if (schemaReasons.join(",") !== declaredReasons.join(",")) {
+        fail(
+          runProgressSchemaFile,
+          `${key} [${schemaReasons.join(", ")}] does not equal ` +
+            `UNGROUNDED_DROP_REASONS [${declaredReasons.join(", ")}] — update both when adding a reason`,
+        );
+      }
+    }
+  }
+
+  // Same guard for the rejection log (D-104): a reason the pipeline can emit but
+  // the schema rejects would make the run fail to persist its own evidence.
+  if (existsSync(PATHS.rejectedCandidatesSchema)) {
+    const schema = readJson(PATHS.rejectedCandidatesSchema) as
+      | { $defs?: { rejection?: { properties?: { reason?: { enum?: string[] } } } } }
+      | undefined;
+    const schemaReasons = [
+      ...(schema?.$defs?.rejection?.properties?.reason?.enum ?? []),
+    ].sort();
+    if (schemaReasons.join(",") !== declaredReasons.join(",")) {
+      fail(
+        PATHS.rejectedCandidatesSchema,
+        `rejection reason enum [${schemaReasons.join(", ")}] does not equal ` +
+          `UNGROUNDED_DROP_REASONS [${declaredReasons.join(", ")}] — update both when adding a reason`,
+      );
+    }
+  }
+
   if (existsSync(OPS_PATHS.budget)) {
     const budget = readJson(OPS_PATHS.budget);
     if (budget !== undefined) {
@@ -1657,17 +1795,24 @@ function main(): void {
         | undefined;
       if (!value) continue;
       if (value.version !== 1) fail(file, "checkpoint version must be 1");
-      if (
-        typeof value.mechanism_id !== "string" ||
-        basename(file, ".json") !== value.mechanism_id
-      ) {
-        fail(file, "checkpoint mechanism_id must equal its filename");
+      // A checkpoint is addressed <mechanism>.<fingerprint-prefix>.json
+      // (D-096), so the filename must agree with BOTH fields — that agreement
+      // is what makes a missing file an honest "fresh slice" instead of a
+      // silently ignored resume.
+      const [fileMechanism, filePrint, ...extra] = basename(file, ".json").split(".");
+      if (typeof value.mechanism_id !== "string" || fileMechanism !== value.mechanism_id) {
+        fail(file, "checkpoint mechanism_id must equal the first segment of its filename");
       }
       if (!Array.isArray(value.terms) || !value.terms.every((term) => typeof term === "string")) {
         fail(file, "checkpoint terms must be an array of strings");
       }
       if (typeof value.fingerprint !== "string" || !/^[a-f0-9]{64}$/.test(value.fingerprint)) {
         fail(file, "checkpoint fingerprint must be a SHA-256 hex string");
+      } else if (extra.length > 0 || filePrint !== value.fingerprint.slice(0, 12)) {
+        fail(
+          file,
+          "checkpoint filename must be <mechanism>.<first 12 chars of fingerprint>.json",
+        );
       }
       if (!Number.isInteger(value.cursor) || (value.cursor as number) < 0) {
         fail(file, "checkpoint cursor must be a non-negative integer");

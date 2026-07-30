@@ -20,7 +20,9 @@ import type {
   LiveRecentRun,
   LiveRun,
   LiveScheduledRun,
+  UngroundedDropReason,
 } from "@/lib/types";
+import { UNGROUNDED_DROP_REASONS } from "@/lib/types";
 import { getLiveOpsSnapshotAction } from "./actions";
 
 const STATUS_COLOR: Record<string, string> = {
@@ -228,6 +230,8 @@ function extractionCounters(run: LiveRecentRun): {
   relevant: number;
   processed: number;
   remaining: number;
+  ungroundedReasons: { reason: UngroundedDropReason; count: number }[] | null;
+  perPass: PassCounters | null;
 } | null {
   if (run.corpus !== "extraction") return null;
   const fromSummary = run.summary;
@@ -249,6 +253,29 @@ function extractionCounters(run: LiveRecentRun): {
       relevant: fromSummary.records_relevant,
       processed: fromSummary.records_processed,
       remaining: fromSummary.records_remaining,
+      ungroundedReasons: sortedUngroundedReasons(
+        fromSummary.dropped_ungrounded_reasons,
+      ),
+      perPass:
+        fromSummary.candidates_cheap === undefined ||
+        fromSummary.candidates_strong === undefined
+          ? null
+          : {
+              cheap: {
+                candidates: fromSummary.candidates_cheap,
+                droppedUngrounded: fromSummary.dropped_ungrounded_cheap ?? 0,
+                reasons: sortedUngroundedReasons(
+                  fromSummary.dropped_ungrounded_reasons_cheap,
+                ),
+              },
+              strong: {
+                candidates: fromSummary.candidates_strong,
+                droppedUngrounded: fromSummary.dropped_ungrounded_strong ?? 0,
+                reasons: sortedUngroundedReasons(
+                  fromSummary.dropped_ungrounded_reasons_strong,
+                ),
+              },
+            },
     };
   }
   if (run.params.proposed === undefined) return null;
@@ -267,7 +294,100 @@ function extractionCounters(run: LiveRecentRun): {
     relevant: numeric("records_relevant"),
     processed: numeric("records_processed"),
     remaining: numeric("records_remaining"),
+    ungroundedReasons: parseUngroundedReasons(run.params.dropped_ungrounded_reasons),
+    // Absent, not zero, is what marks a run from before the cheap-pass gate.
+    perPass:
+      run.params.candidates_cheap === undefined ||
+      run.params.candidates_strong === undefined
+        ? null
+        : {
+            cheap: {
+              candidates: numeric("candidates_cheap"),
+              droppedUngrounded: numeric("dropped_ungrounded_cheap"),
+              reasons: parseUngroundedReasons(
+                run.params.dropped_ungrounded_reasons_cheap,
+              ),
+            },
+            strong: {
+              candidates: numeric("candidates_strong"),
+              droppedUngrounded: numeric("dropped_ungrounded_strong"),
+              reasons: parseUngroundedReasons(
+                run.params.dropped_ungrounded_reasons_strong,
+              ),
+            },
+          },
   };
+}
+
+/** Cheap-extraction vs strong-synthesis counters for one run (D-105). */
+interface PassCounters {
+  cheap: OnePassCounters;
+  strong: OnePassCounters;
+}
+
+interface OnePassCounters {
+  candidates: number;
+  droppedUngrounded: number;
+  reasons: { reason: UngroundedDropReason; count: number }[] | null;
+}
+
+/** "quote not in source ×7 · doi unresolved ×3", densest first. */
+function formatReasons(
+  reasons: { reason: UngroundedDropReason; count: number }[],
+): string {
+  return reasons
+    .map((entry) => `${entry.reason.replaceAll("_", " ")} ×${entry.count}`)
+    .join(" · ");
+}
+
+function byDensestReason(
+  left: { reason: UngroundedDropReason; count: number },
+  right: { reason: UngroundedDropReason; count: number },
+): number {
+  return right.count - left.count || left.reason.localeCompare(right.reason);
+}
+
+/**
+ * The live heartbeat carries the reason breakdown as an object (D-098);
+ * flatten it to the same densest-first list the committed manifest yields, so
+ * both sources render identically. Null when nothing was attributed.
+ */
+function sortedUngroundedReasons(
+  reasons: Partial<Record<UngroundedDropReason, number>> | undefined,
+): { reason: UngroundedDropReason; count: number }[] | null {
+  if (!reasons) return null;
+  const entries = Object.entries(reasons)
+    .filter(([, count]) => (count ?? 0) > 0)
+    .map(([reason, count]) => ({
+      reason: reason as UngroundedDropReason,
+      count: count as number,
+    }))
+    .sort(byDensestReason);
+  return entries.length > 0 ? entries : null;
+}
+
+/**
+ * The committed manifest stores the breakdown as "reason=count reason=count".
+ * Unknown keys are ignored rather than guessed, so a run written by a
+ * different version cannot invent a cause. Null when absent or unusable.
+ */
+function parseUngroundedReasons(
+  raw: string | undefined,
+): { reason: UngroundedDropReason; count: number }[] | null {
+  if (raw === undefined) return null;
+  const known = new Set<string>(UNGROUNDED_DROP_REASONS);
+  const entries = raw
+    .split(/\s+/)
+    .filter(Boolean)
+    .flatMap((pair) => {
+      const [reason, value] = pair.split("=");
+      if (!known.has(reason)) return [];
+      const count = Number(value);
+      if (!Number.isFinite(count) || count <= 0) return [];
+      return [{ reason: reason as UngroundedDropReason, count }];
+    })
+    .sort(byDensestReason);
+  return entries.length > 0 ? entries : null;
 }
 
 function RecentRow({ run, now }: { run: LiveRecentRun; now: number }) {
@@ -322,6 +442,34 @@ function RecentRow({ run, now }: { run: LiveRecentRun; now: number }) {
             {counters.processed} sent to model · {counters.candidates} candidates ·{" "}
             {counters.remaining} remaining
           </p>
+          {counters.droppedUngrounded > 0 ? (
+            <p className="mt-0.5 font-mono text-[10px] text-[#E4B54E]">
+              {counters.ungroundedReasons
+                ? `ungrounded because: ${counters.ungroundedReasons
+                    .map((entry) => `${entry.reason.replaceAll("_", " ")} ×${entry.count}`)
+                    .join(" · ")}`
+                : "ungrounded cause not attributed — this run predates the per-reason breakdown; the next run will name the failing check"}
+            </p>
+          ) : null}
+          {counters.perPass ? (
+            <p className="mt-0.5 font-mono text-[10px] text-[#7C93A8]">
+              by pass: cheap {counters.perPass.cheap.candidates} candidates,{" "}
+              {counters.perPass.cheap.droppedUngrounded} ungrounded
+              {counters.perPass.cheap.reasons
+                ? ` (${formatReasons(counters.perPass.cheap.reasons)})`
+                : ""}{" "}
+              · strong {counters.perPass.strong.candidates} candidates,{" "}
+              {counters.perPass.strong.droppedUngrounded} ungrounded
+              {counters.perPass.strong.reasons
+                ? ` (${formatReasons(counters.perPass.strong.reasons)})`
+                : ""}
+            </p>
+          ) : (
+            <p className="mt-0.5 font-mono text-[10px] text-[#7C93A8]">
+              by pass: not split — this run gated only the synthesis pass, so
+              cheap-pass losses were never counted
+            </p>
+          )}
         </>
       ) : null}
       {run.saturation ? (
@@ -513,8 +661,9 @@ export default function LiveOpsPanel({
         </div>
         {queues.checkpointResumes > 0 ? (
           <p className="mt-3 font-mono text-[10px] text-[#E4B54E]">
-            {queues.checkpointResumes} evidence checkpoint
-            {queues.checkpointResumes === 1 ? "" : "s"} awaiting a continuation dispatch.
+            {queues.checkpointResumes} mechanism
+            {queues.checkpointResumes === 1 ? "" : "s"} with an evidence slice awaiting a
+            continuation dispatch.
           </p>
         ) : null}
       </Panel>

@@ -1561,11 +1561,30 @@ interface EvidenceCheckpoint {
   api_calls_spent: number;
 }
 
-function checkpointPath(mechanismId: string): string {
-  return join(EVIDENCE_CHECKPOINT_DIR, `${mechanismId}.json`);
+/**
+ * Checkpoint identity is (mechanism × run fingerprint), not mechanism alone
+ * (D-096). The maturation queue harvests one mechanism once per segment with
+ * segment-qualified terms, and those terms are part of the fingerprint — so a
+ * mechanism-keyed filename made the second segment read the first segment's
+ * checkpoint and fail it as stale. The digest prefix keeps the name readable
+ * while separating slices that must never be resumed into one another.
+ */
+export function checkpointPath(mechanismId: string, fingerprint: string): string {
+  return join(
+    EVIDENCE_CHECKPOINT_DIR,
+    `${mechanismId}.${fingerprint.slice(0, CHECKPOINT_FINGERPRINT_PREFIX)}.json`,
+  );
 }
 
-function runFingerprint(
+/** Chars of the fingerprint digest used in the checkpoint filename. */
+const CHECKPOINT_FINGERPRINT_PREFIX = 12;
+
+/** The mechanism id encoded in a checkpoint filename (D-096 naming). */
+export function checkpointMechanismId(fileName: string): string {
+  return fileName.replace(/\.json$/, "").split(".")[0];
+}
+
+export function runFingerprint(
   mechanismId: string,
   terms: string[],
   saturation: EvidenceSaturationConfig,
@@ -1579,17 +1598,20 @@ function runFingerprint(
     .digest("hex");
 }
 
-function readCheckpoint(
+export function readCheckpoint(
   mechanismId: string,
   fingerprint: string,
 ): EvidenceCheckpoint | null {
-  const path = checkpointPath(mechanismId);
+  const path = checkpointPath(mechanismId, fingerprint);
+  // No file for this fingerprint means "no resumable slice for these terms" —
+  // a fresh start, never an error. Only a file that IS addressed to this
+  // fingerprint yet disagrees with it is corrupt enough to stop the run.
   if (!existsSync(path)) return null;
   const checkpoint = JSON.parse(readFileSync(path, "utf-8")) as EvidenceCheckpoint;
   if (!checkpointIsCompatible(checkpoint, mechanismId, fingerprint)) {
     throw new Error(
-      `stale saturation checkpoint for ${mechanismId} — terms, config, or base corpus changed; ` +
-        `remove ${path} only after reviewing it`,
+      `corrupt saturation checkpoint for ${mechanismId} — file contents disagree with their own ` +
+        `fingerprint address; remove ${path} only after reviewing it`,
     );
   }
   return checkpoint;
@@ -1609,14 +1631,14 @@ export function checkpointIsCompatible(
 
 function writeCheckpoint(checkpoint: EvidenceCheckpoint): void {
   mkdirSync(EVIDENCE_CHECKPOINT_DIR, { recursive: true });
-  const path = checkpointPath(checkpoint.mechanism_id);
+  const path = checkpointPath(checkpoint.mechanism_id, checkpoint.fingerprint);
   const temp = `${path}.tmp`;
   writeFileSync(temp, `${JSON.stringify(checkpoint, null, 2)}\n`, "utf-8");
   renameSync(temp, path);
 }
 
-function removeCheckpoint(mechanismId: string): void {
-  const path = checkpointPath(mechanismId);
+function removeCheckpoint(mechanismId: string, fingerprint: string): void {
+  const path = checkpointPath(mechanismId, fingerprint);
   if (existsSync(path)) unlinkSync(path);
 }
 
@@ -2054,7 +2076,7 @@ export const evidenceConnector: Connector = {
         warnings: { resume_required: true },
       };
     }
-    removeCheckpoint(mechanismId as string);
+    removeCheckpoint(mechanismId as string, fingerprint);
 
     const completedTasks = checkpoint.tasks.slice(0, checkpoint.cursor);
     const searchTasks = completedTasks.filter((task) => task.kind === "search");

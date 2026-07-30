@@ -31,6 +31,15 @@
 # retried once after a backoff; a persistent failure opens a deduplicated ops
 # issue and fails the run red.
 #
+# A red job still leaves the surface CURRENT (D-097). Steps (1) and (2) already
+# computed a fresh matrix and queues before any evidence was fetched, so a
+# harvest failure must never discard them: re-analysis, the summary, the log
+# entry, the commit, and the checkpoint continuations run regardless of harvest
+# outcome, while the steps that genuinely need harvested evidence (defer,
+# low-novelty count, harvest ledger, extraction) stay gated on it. The commit
+# message and the log entry are marked partial so a degraded week is never
+# presented as a clean one, and the job still goes red.
+#
 # S2 rate compliance (D-027): this workflow MUST reuse the exact concurrency
 # group "connectors-s2" from connectors.yml/harvest.yml so two runner
 # processes never call Semantic Scholar at the same time.
@@ -99,6 +108,10 @@ jobs:
           npx tsx tools/ops-gate.ts plan-queue "$MAX_TASKS" > queue-plan.json 2> plan-summary.md
           cat plan-summary.md >> "$GITHUB_STEP_SUMMARY"
           npx tsx tools/ops-gate.ts budget > budget-before.json
+          # An empty extraction plan exists from here on, so the re-analysis,
+          # summary, and log steps read a real file even when the extraction
+          # step is skipped by a failed harvest (D-097).
+          jq -n '{ entries: [] }' > extraction-plan.json
 
       # Harvest each due task with its segment-qualified terms. Retry once
       # after a 60s backoff per target (D-022); a persistent failure is
@@ -140,10 +153,12 @@ jobs:
         if: steps.harvest.outputs.ran == 'true' && steps.harvest.outputs.failed != 'true'
         run: |
           set -euo pipefail
+          # Checkpoints are named <mechanism>.<fingerprint-prefix>.json (D-096),
+          # so the mechanism id is the segment before the first dot.
           for checkpoint in corpora/_ops/checkpoints/evidence/*.json; do
             [ -f "$checkpoint" ] || continue
             mechanism="${checkpoint##*/}"
-            mechanism="${mechanism%.json}"
+            mechanism="${mechanism%%.*}"
             jq --arg mechanism "$mechanism" '
               .entries |= map(
                 if .mechanism == $mechanism and .action == "run"
@@ -208,7 +223,6 @@ jobs:
         if: steps.harvest.outputs.failed != 'true'
         run: |
           set -euo pipefail
-          jq -n '{ entries: [] }' > extraction-plan.json
           jq -c '.tasks[]' analysis/extraction-queue.json | while IFS= read -r task; do
             mode=$(jq -r '.mode' <<<"$task")
             mechanism=$(jq -r '.mechanism' <<<"$task")
@@ -243,9 +257,14 @@ jobs:
       # ---------- (4) re-analyze ONLY the affected cells ----------
       # Affected = the packs whose gap cells the harvested/extraction tasks addressed;
       # every other pack's cells are preserved from the baseline matrix.
+      # Runs even when the harvest failed (D-097). A failed evidence fetch may
+      # not discard the matrix and queues step 1 already computed, and any
+      # corpus a SUCCEEDING target did write is real evidence that must be
+      # scored and committed. The harvest step itself always exits 0 and
+      # reports through its outputs, so the absence of an `if:` here means
+      # "run unless something genuinely broke earlier in the job".
       - name: Re-analyze affected cells
         id: reanalyze
-        if: steps.harvest.outputs.failed != 'true'
         run: |
           set -euo pipefail
           affected=$(jq -nr \
@@ -279,8 +298,11 @@ jobs:
           echo "exhausted=$(jq '[.cells[] | select(.evidence_exhausted == true)] | length' analysis/sufficiency-matrix.json)" >> "$GITHUB_OUTPUT"
 
       # ---------- (5) regenerate ONLY the packs whose cells went green ----------
+      # Gated on the flip, not on the harvest: if a cell really went green the
+      # pack export must match the matrix we are about to commit, otherwise the
+      # committed week would claim green from a stale pack (invariants 2/3).
       - name: Regenerate packs for filled cells
-        if: steps.harvest.outputs.failed != 'true' && steps.reanalyze.outputs.flipped_packs != ''
+        if: steps.reanalyze.outputs.flipped_packs != ''
         run: |
           set -euo pipefail
           flipped="${{ steps.reanalyze.outputs.flipped_packs }}"
@@ -296,7 +318,6 @@ jobs:
 
       # ---------- Job summary: red→green diff, packs regenerated, spend ----------
       - name: Maturation summary
-        if: steps.harvest.outputs.failed != 'true'
         run: |
           set -euo pipefail
           npx tsx tools/ops-gate.ts budget > budget-after.json
@@ -304,6 +325,11 @@ jobs:
             echo ""
             echo "### Maturation week $(date -u +%Y-%m-%d)"
             echo ""
+            if [ "${{ steps.harvest.outputs.failed }}" = "true" ]; then
+              echo "PARTIAL WEEK — the harvest step failed after its retry, so extraction was skipped."
+              echo "The matrix, queues, and any corpus a succeeding target wrote are still scored and committed."
+              echo ""
+            fi
             if [ "$(jq 'length' cell-diff.json)" -gt 0 ]; then
               echo "Cell status changes:"
               jq -r '.[] | "- \(.pack) × \(.segment): \(.from) → \(.to)"' cell-diff.json
@@ -347,7 +373,6 @@ jobs:
       # It only records what steps 1-5 already computed; a zero-flip week is
       # recorded truthfully.
       - name: Record the maturation log entry
-        if: steps.harvest.outputs.failed != 'true'
         run: |
           set -euo pipefail
           npx tsx tools/maturation-log.ts \
@@ -359,32 +384,44 @@ jobs:
             --extraction-plan extraction-plan.json \
             --low-novelty "${{ steps.novelty.outputs.low_novelty || '0' }}" \
             --evidence-exhausted "${{ steps.reanalyze.outputs.exhausted || '0' }}" \
+            --harvest-failed "${{ steps.harvest.outputs.failed || 'false' }}" \
             --week "$(date -u +%Y-%m-%d)"
 
       # ---------- (6) commit the week's turn ----------
+      # Commits whatever the week actually produced, harvest failure included
+      # (D-097). A red job must still leave the surface current; the message
+      # says "partial" so a degraded week is never presented as a clean one.
       - name: Commit maturation results if changed
-        if: steps.harvest.outputs.failed != 'true'
         run: |
           if [ -n "$(git status --porcelain analysis corpora packs proposals)" ]; then
+            if [ "${{ steps.harvest.outputs.failed }}" = "true" ]; then
+              suffix=" (partial — harvest failed)"
+            else
+              suffix=""
+            fi
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add analysis corpora packs proposals
-            git commit -m "maturation: week $(date -u +%Y-%m-%d) — filled ${{ steps.reanalyze.outputs.filled || '0' }} gaps"
+            git commit -m "maturation: week $(date -u +%Y-%m-%d) — filled ${{ steps.reanalyze.outputs.filled || '0' }} gaps${suffix}"
             git push
           else
             echo "Nothing changed — no commit."
           fi
 
       - name: Queue checkpoint continuations
-        if: steps.harvest.outputs.failed != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          # One mechanism can hold several checkpoints, one per segment-qualified
+          # term set (D-096), so each FILE is its own continuation and the
+          # dispatch id must carry the fingerprint to stay unique.
           for checkpoint in corpora/_ops/checkpoints/evidence/*.json; do
             [ -f "$checkpoint" ] || continue
-            target="${checkpoint##*/}"
-            target="${target%.json}"
+            slice="${checkpoint##*/}"
+            slice="${slice%.json}"
+            target="${slice%%.*}"
+            print="${slice#*.}"
             terms=$(jq -r '.terms | join(";")' "$checkpoint")
             gh workflow run harvest.yml \
               --ref "${GITHUB_REF_NAME}" \
@@ -392,9 +429,9 @@ jobs:
               -f target="$target" \
               -f terms="$terms" \
               -f dry_run=false \
-              -f dispatch_id="maturation-${GITHUB_RUN_ID}-${target}" \
+              -f dispatch_id="maturation-${GITHUB_RUN_ID}-${target}-${print}" \
               -f raise_cap=false
-            echo "Queued continuation for $target."
+            echo "Queued continuation for $target (slice $print)."
           done
 
       - name: Open ops issue on persistent failure

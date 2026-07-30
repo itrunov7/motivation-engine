@@ -48,7 +48,15 @@ test("grouped sufficiency is fail-closed, traced, and exposes core-ux depth", ()
   const coreUx = packCells.filter((cell) => cell.pack === "core-ux");
   assert.equal(coreUx.length, 15);
   for (const cell of coreUx) {
-    assert.equal(cell.scores.realization_density, 0);
+    // Asserted as a threshold, not as zero: an approved realization moves this
+    // score off 0 without closing the gap, and the test must track the
+    // behaviour (depth stays an open pipeline gap) rather than today's count.
+    const density = cell.scores.realization_density;
+    assert(density !== null, `${cell.segment} realization_density unmeasured`);
+    assert(
+      density < 0.17,
+      `${cell.segment} realization_density ${density} should still be below the seed amber bar`,
+    );
     assert(cell.gaps.includes("realization_density"));
     const gap = cell.typed_gaps.find(
       (candidate) => candidate.criterion === "realization_density",

@@ -1589,6 +1589,7 @@ function LogEntry({ entry }: { entry: MaturationLogEntry }) {
           {entry.evidence_exhausted && entry.evidence_exhausted > 0
             ? ` · ${entry.evidence_exhausted} exhausted`
             : ""}
+          {entry.harvest_failed ? " · partial" : ""}
         </span>
       </div>
       {entry.cells_changed.length > 0 ? (
@@ -1603,7 +1604,9 @@ function LogEntry({ entry }: { entry: MaturationLogEntry }) {
         </ul>
       ) : (
         <p className="mt-2 font-mono text-[11px] text-[#7C93A8]">
-          no cell changed status this week
+          {entry.harvest_failed
+            ? "no cell changed status this week — harvest failed, so no gap was attempted"
+            : "no cell changed status this week"}
         </p>
       )}
       <p className="mt-2 font-mono text-[11px] text-[#8CA495]">
@@ -1614,6 +1617,12 @@ function LogEntry({ entry }: { entry: MaturationLogEntry }) {
             : "none"}
         </span>
       </p>
+      {entry.harvest_failed && (
+        <p className="mt-2 font-mono text-[11px] text-[#E4B54E]">
+          partial week — the harvest step failed after its retry and extraction was skipped; the
+          matrix and queues were still re-scored and committed
+        </p>
+      )}
     </li>
   );
 }

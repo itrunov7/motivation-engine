@@ -85,6 +85,13 @@ One file per registered connector; the filename stem must equal
   `_ops/checkpoints/evidence/`. A soft five-hour slice exits green/partial;
   Actions commits the checkpoint and queues a continuation. Calls already
   spent remain part of the same logical-run cap.
+- A checkpoint file is named `<mechanism>.<fingerprint-prefix>.json` (D-096).
+  The fingerprint covers the mechanism, its terms, the saturation config, and
+  the base corpus, so one mechanism harvested for several segments holds one
+  independent slice per segment. An address with no file simply means "no
+  resumable slice for these terms" and starts fresh; only a file whose
+  contents disagree with their own address is treated as corrupt and stops the
+  run for review.
 
 ## Validation (D-024)
 

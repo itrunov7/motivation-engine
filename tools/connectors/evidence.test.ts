@@ -1,14 +1,19 @@
 import assert from "node:assert/strict";
+import { basename, dirname } from "node:path";
 import test from "node:test";
 import { DEFAULT_EVIDENCE_SATURATION } from "../../lib/ops";
 import type { EvidenceSaturationConfig } from "../../lib/types";
 import {
   buildQueryTasks,
   checkpointIsCompatible,
+  checkpointMechanismId,
+  checkpointPath,
   enabledGraphDirections,
   estimateFieldUnion,
   isTopicalGraphAnchor,
+  readCheckpoint,
   rollingNoveltyRate,
+  runFingerprint,
   saturationReached,
   type SaturationPoint,
 } from "./evidence";
@@ -124,6 +129,58 @@ test("stale checkpoints are rejected", () => {
   assert.equal(checkpointIsCompatible(checkpoint, "CL-14", "abc"), true);
   assert.equal(checkpointIsCompatible(checkpoint, "CL-14", "changed"), false);
   assert.equal(checkpointIsCompatible(checkpoint, "LA-01", "abc"), false);
+});
+
+test("two segments of one mechanism get independent checkpoints", () => {
+  // The maturation queue harvests one mechanism once per segment, so the same
+  // mechanism arrives twice in a run with segment-qualified terms (D-096).
+  const b2b = ["default effect decision making b2b enterprise"];
+  const retention = ["default effect decision making subscription retention"];
+  const b2bPrint = runFingerprint("DE-23", b2b, config(), null);
+  const retentionPrint = runFingerprint("DE-23", retention, config(), null);
+  assert.notEqual(b2bPrint, retentionPrint);
+
+  const b2bPath = checkpointPath("DE-23", b2bPrint);
+  const retentionPath = checkpointPath("DE-23", retentionPrint);
+  assert.notEqual(b2bPath, retentionPath);
+  assert.equal(dirname(b2bPath), dirname(retentionPath));
+
+  // Each filename still resolves back to the mechanism the defer step needs.
+  assert.equal(checkpointMechanismId(basename(b2bPath)), "DE-23");
+  assert.equal(checkpointMechanismId(basename(retentionPath)), "DE-23");
+
+  // A checkpoint is only ever compared against its own address, so one
+  // segment's slice can never be judged stale by the other's.
+  const slice = { version: 1 as const, mechanism_id: "DE-23", fingerprint: b2bPrint };
+  assert.equal(checkpointIsCompatible(slice, "DE-23", b2bPrint), true);
+  assert.equal(checkpointIsCompatible(slice, "DE-23", retentionPrint), false);
+
+  // An address with no file is a fresh slice, never a thrown error.
+  assert.equal(readCheckpoint("DE-23", retentionPrint), null);
+});
+
+test("a changed base corpus reprints the fingerprint without colliding", () => {
+  const terms = ["default effect decision making b2b enterprise"];
+  const record = {
+    record_id: "openalex:W1",
+    title: "Defaults and choice",
+    authors: [],
+    year: 2025,
+    venue: null,
+    doi: "10.1/defaults",
+    citations: 3,
+    abstract: "Defaults shape choice.",
+    openalex_id: "W1",
+    openalex_type: "article",
+    referenced_works_count: 12,
+    categories: [],
+    source_api: "openalex" as const,
+  };
+  const empty = runFingerprint("DE-23", terms, config(), null);
+  const grown = runFingerprint("DE-23", terms, config(), [record]);
+  assert.notEqual(empty, grown);
+  assert.notEqual(checkpointPath("DE-23", empty), checkpointPath("DE-23", grown));
+  assert.equal(readCheckpoint("DE-23", grown), null);
 });
 
 test("field union estimate uses upstream totals adjusted by sampled overlap", () => {

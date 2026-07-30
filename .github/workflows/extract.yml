@@ -37,6 +37,11 @@ on:
         required: true
         type: boolean
         default: true
+      preflight:
+        description: "Route-check both tiers with max_tokens=1 before the run (~$0.0001, D-107)"
+        required: false
+        type: boolean
+        default: false
       dispatch_id:
         description: "Correlation id echoed into run-name so /ops can poll this run (D-025)"
         required: false
@@ -52,7 +57,7 @@ permissions:
 
 jobs:
   quote:
-    if: inputs.dry_run == true
+    if: inputs.dry_run == true && inputs.preflight != true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -78,8 +83,28 @@ jobs:
           path: quote.json
           retention-days: 1
 
+  # Route-check only (D-107). A run that 404s on its first call produces no
+  # completion and no usage block, so it is diagnosable only from the routing
+  # error itself — cheaper to establish here, for ~$0.0001, than by dispatching
+  # a run and reading the wreckage. Runs standalone: pick dry_run=false and
+  # preflight=true to check routing without extracting anything.
+  preflight:
+    if: inputs.preflight == true
+    runs-on: ubuntu-latest
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Route-check both tiers with the production parameter set
+        run: npm run openrouter-preflight
+
   run:
-    if: inputs.dry_run != true
+    if: inputs.dry_run != true && inputs.preflight != true
     runs-on: ubuntu-latest
     env:
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -116,6 +141,7 @@ jobs:
       - name: Validate generated proposals and manifest
         run: npm run validate
       - name: Commit proposals and extraction accounting
+        id: commit
         run: |
           if [ -n "$(git status --porcelain proposals corpora/extraction)" ]; then
             git config user.name "github-actions[bot]"
@@ -126,3 +152,35 @@ jobs:
           else
             echo "No novel grounded proposals — nothing to commit."
           fi
+
+      # ---------- Spend is recorded even when the run fails (D-099) ----------
+      # The monthly cap is derived from committed corpus manifests, so a run
+      # that called models and then died would spend budget the cap can never
+      # see. tools/extract.ts persists accounting after each batch; this step
+      # commits it when the steps above did not run.
+      #
+      # Scoped to corpora/extraction ONLY. `proposals` stays fail-closed: a
+      # failed run's partial proposals must never reach the queue (rule 8).
+      - name: Commit extraction accounting even on failure
+        if: always() && steps.commit.outcome != 'success'
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain corpora/extraction)" ]; then
+            echo "No extraction accounting to record — the run spent nothing."
+            exit 0
+          fi
+          # Discard the failed run's partial proposals before validating, so
+          # this step can never commit an unreviewable proposal and validation
+          # judges only the accounting we are about to land.
+          git checkout -- proposals 2>/dev/null || true
+          git clean -fd proposals
+          if ! npm run validate; then
+            echo "::error::extraction accounting failed validation — not committed; \
+            the run's spend is visible in the Actions log only."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add corpora/extraction
+          git commit -m "data: record extraction spend for a failed ${{ inputs.mode }} run on ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
+          git push

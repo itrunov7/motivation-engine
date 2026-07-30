@@ -123,11 +123,21 @@ function readAllProposals(): Proposal[] {
     });
 }
 
+/**
+ * Mechanisms with a resumable evidence slice. Checkpoints are addressed by
+ * mechanism AND run fingerprint (D-096), so one mechanism can hold several
+ * files — one per segment-qualified term set. The tile reports mechanisms
+ * waiting to resume, not files on disk, so a multi-segment mechanism is not
+ * counted several times.
+ */
 function countCheckpointResumes(): number {
   if (!existsSync(EVIDENCE_CHECKPOINT_DIR)) return 0;
-  return readdirSync(EVIDENCE_CHECKPOINT_DIR).filter((name) =>
-    name.endsWith(".json"),
-  ).length;
+  const mechanisms = new Set(
+    readdirSync(EVIDENCE_CHECKPOINT_DIR)
+      .filter((name) => name.endsWith(".json"))
+      .map((name) => name.replace(/\.json$/, "").split(".")[0]),
+  );
+  return mechanisms.size;
 }
 
 /** The four operational queues, counted from committed files (D-086). */

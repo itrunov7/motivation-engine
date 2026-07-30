@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ventora.dev/motivation-engine/rejected-candidates.schema.json",
+  "title": "Rejected extraction candidates, run-scoped (D-104)",
+  "description": "Every candidate one extraction run dropped at the grounding gate, with both compared strings untruncated so the refusal stays re-checkable offline via tools/replay-grounding.ts. Diagnostic output only: a rejected candidate has no effect on any artifact (rule 8).",
+  "type": "object",
+  "properties": {
+    "schema_version": { "const": 1 },
+    "run_id": {
+      "description": "The run's start timestamp, the same key the manifest's run_history uses.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "dispatch_id": { "type": ["string", "null"] },
+    "github_run_id": { "type": ["integer", "null"], "minimum": 1 },
+    "mode": {
+      "enum": [
+        "effects",
+        "realizations",
+        "interactions",
+        "dissent",
+        "mechanism",
+        "dossier"
+      ]
+    },
+    "written_at": { "type": "string", "format": "date-time" },
+    "rejected": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/rejection" }
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "dispatch_id",
+    "github_run_id",
+    "mode",
+    "written_at",
+    "rejected"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "rejection": {
+      "type": "object",
+      "properties": {
+        "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+        "mode": {
+          "enum": [
+            "effects",
+            "realizations",
+            "interactions",
+            "dissent",
+            "mechanism",
+            "dossier"
+          ]
+        },
+        "pass": {
+          "description": "Which model pass produced the refused candidate (D-105).",
+          "enum": ["cheap", "strong"]
+        },
+        "reason": {
+          "description": "The failing grounding check. Must stay equal to UNGROUNDED_DROP_REASONS in lib/types.ts; tools/validate.ts asserts it.",
+          "enum": [
+            "no_citations",
+            "malformed_citation",
+            "unknown_record_id",
+            "quote_not_in_source",
+            "wrong_corpus_kind",
+            "doi_unresolved",
+            "title_mismatch",
+            "provenance_mismatch",
+            "proposal_not_built"
+          ]
+        },
+        "detail": { "type": "string", "minLength": 1 },
+        "corpus_record_id": { "type": ["string", "null"] },
+        "item": {
+          "description": "The raw model output for this item, exactly as returned."
+        },
+        "provenance": {
+          "description": "Provenance fields as returned by the model."
+        },
+        "compared": { "$ref": "#/$defs/comparison" },
+        "corpus_side": { "$ref": "#/$defs/corpusSide" },
+        "cheap_origin": {
+          "description": "For a strong-pass drop, the cheap-pass candidate it was synthesized from."
+        }
+      },
+      "required": [
+        "mechanism_id",
+        "mode",
+        "pass",
+        "reason",
+        "detail",
+        "corpus_record_id",
+        "item"
+      ],
+      "additionalProperties": false
+    },
+    "comparison": {
+      "description": "Both strings the gate compared, raw and normalized, UNTRUNCATED.",
+      "type": "object",
+      "properties": {
+        "quote_raw": { "type": "string" },
+        "quote_normalized": { "type": "string" },
+        "source_raw": { "type": "string" },
+        "source_normalized": { "type": "string" }
+      },
+      "required": [
+        "quote_raw",
+        "quote_normalized",
+        "source_raw",
+        "source_normalized"
+      ],
+      "additionalProperties": false
+    },
+    "corpusSide": {
+      "description": "The cited record's own values, for doi_unresolved and title_mismatch.",
+      "type": "object",
+      "properties": {
+        "doi": { "type": ["string", "null"] },
+        "title": { "type": "string" }
+      },
+      "required": ["doi", "title"],
+      "additionalProperties": false
+    }
+  }
+}

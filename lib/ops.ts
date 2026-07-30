@@ -26,9 +26,17 @@ import type {
   OpsBudget,
   OpsConnectorConfig,
   RunQuote,
+  UngroundedDropReason,
 } from "./types";
+import { UNGROUNDED_DROP_REASONS } from "./types";
 
-export type { ExtractionOpsConfig, OpsBudget, OpsConnectorConfig, RunQuote } from "./types";
+export type {
+  ExtractionOpsConfig,
+  OpsBudget,
+  OpsConnectorConfig,
+  RunQuote,
+  UngroundedDropReason,
+} from "./types";
 
 /**
  * Connector ids the ops surface knows about. Declared here because lib/ never
@@ -198,6 +206,7 @@ export function validateExtractionOpsConfig(data: unknown): string[] {
             "input_usd_per_token",
             "output_usd_per_token",
             "max_tokens_per_call",
+            "supports",
           ].includes(key),
       );
       if (tierExtras.length > 0) {
@@ -213,6 +222,34 @@ export function validateExtractionOpsConfig(data: unknown): string[] {
         errors.push(
           `tiers.${name}.response_format must be json_schema or json_object`,
         );
+      }
+      if (!isPlainObject(tier.supports)) {
+        errors.push(`tiers.${name}.supports must be an object`);
+      } else {
+        const supportExtras = Object.keys(tier.supports).filter(
+          (key) => !["temperature", "structured_outputs"].includes(key),
+        );
+        if (supportExtras.length > 0) {
+          errors.push(
+            `unexpected tiers.${name}.supports field(s): ${supportExtras.join(", ")}`,
+          );
+        }
+        for (const key of ["temperature", "structured_outputs"] as const) {
+          if (typeof tier.supports[key] !== "boolean") {
+            errors.push(`tiers.${name}.supports.${key} must be a boolean`);
+          }
+        }
+        // require_parameters routes only to a provider honouring every parameter
+        // sent, so asking for json_schema from a model that does not advertise
+        // structured outputs leaves no eligible provider and 404s (D-107).
+        if (
+          tier.response_format === "json_schema" &&
+          tier.supports.structured_outputs !== true
+        ) {
+          errors.push(
+            `tiers.${name}.response_format is json_schema but supports.structured_outputs is not true`,
+          );
+        }
       }
       for (const key of ["input_usd_per_token", "output_usd_per_token"] as const) {
         if (tier[key] !== null && !isNonNegativeNumber(tier[key])) {
@@ -483,6 +520,33 @@ export interface ExtractionRunSummary {
   recordsProcessed: number;
   candidates: number;
   recordsRemaining: number;
+  /**
+   * Which grounding check refused each dropped candidate (D-098), densest
+   * first. Null when the run recorded no attribution — either it dropped
+   * nothing, or it predates D-098. Never synthesized from the total.
+   */
+  droppedUngroundedReasons: { reason: UngroundedDropReason; count: number }[] | null;
+  /**
+   * The same funnel split by model pass (D-105). Null when the run predates the
+   * cheap-pass gate: before it, only the strong pass was gated and cheap-pass
+   * losses were never counted, so a zero here would be a fabrication rather
+   * than a measurement.
+   */
+  perPass: ExtractionPassFunnel | null;
+}
+
+/** Cheap-extraction vs strong-synthesis funnel for one run (D-105). */
+export interface ExtractionPassFunnel {
+  cheap: {
+    candidates: number;
+    droppedUngrounded: number;
+    reasons: { reason: UngroundedDropReason; count: number }[] | null;
+  };
+  strong: {
+    candidates: number;
+    droppedUngrounded: number;
+    reasons: { reason: UngroundedDropReason; count: number }[] | null;
+  };
 }
 
 export function loadExtractionRunSummary(): ExtractionRunSummary | undefined {
@@ -519,7 +583,56 @@ export function loadExtractionRunSummary(): ExtractionRunSummary | undefined {
     recordsProcessed: number("records_processed"),
     candidates: number("candidates"),
     recordsRemaining: number("records_remaining"),
+    droppedUngroundedReasons: parseUngroundedReasons(
+      params.dropped_ungrounded_reasons,
+    ),
+    // D-105 writes both per-pass candidate counts unconditionally, so their
+    // absence — not a zero — is what identifies a pre-gate run.
+    perPass:
+      params.candidates_cheap === undefined ||
+      params.candidates_strong === undefined
+        ? null
+        : {
+            cheap: {
+              candidates: number("candidates_cheap"),
+              droppedUngrounded: number("dropped_ungrounded_cheap"),
+              reasons: parseUngroundedReasons(
+                params.dropped_ungrounded_reasons_cheap,
+              ),
+            },
+            strong: {
+              candidates: number("candidates_strong"),
+              droppedUngrounded: number("dropped_ungrounded_strong"),
+              reasons: parseUngroundedReasons(
+                params.dropped_ungrounded_reasons_strong,
+              ),
+            },
+          },
   };
+}
+
+/**
+ * Parse the manifest's "reason=count reason=count" attribution of
+ * dropped_ungrounded (D-098). Null when the field is absent — a run recorded
+ * before D-098, or one that dropped nothing. Unknown reason keys are ignored
+ * rather than guessed, so an older/newer writer cannot fabricate a cause.
+ */
+export function parseUngroundedReasons(
+  raw: string | undefined,
+): { reason: UngroundedDropReason; count: number }[] | null {
+  if (raw === undefined) return null;
+  const known = new Set<string>(UNGROUNDED_DROP_REASONS);
+  const parsed = raw
+    .split(/\s+/)
+    .filter(Boolean)
+    .flatMap((pair) => {
+      const [reason, value] = pair.split("=");
+      if (!known.has(reason)) return [];
+      const count = Number(value);
+      if (!Number.isFinite(count) || count <= 0) return [];
+      return [{ reason: reason as UngroundedDropReason, count }];
+    });
+  return parsed.length > 0 ? parsed : null;
 }
 
 export type ExtractionPriceState = "unconfigured" | "current" | "stale";
