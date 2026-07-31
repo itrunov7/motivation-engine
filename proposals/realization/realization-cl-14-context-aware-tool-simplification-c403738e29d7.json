@@ -72,9 +72,9 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30622558771",
   "proposed_at": "2026-07-31T10:09:59.574Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "owner",
+  "decided_at": "2026-07-31T11:05:06.572Z",
+  "decision_note": "Duplicate. Same trigger and same action as expertise-based-guidance-toggle: both replace a guided walkthrough with the unguided interface once the user has repeated the core workflow, differing only in which surface they name. A generator would read them as one rule with two surfaces. No independent evidence either — its only quote is the effect's own sentence, so its reported half adds nothing the effect does not already say."
 }
