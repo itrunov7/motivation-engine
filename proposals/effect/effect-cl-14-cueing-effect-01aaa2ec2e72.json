@@ -6,12 +6,13 @@
     "id": "cl14-cueing",
     "mechanism_id": "CL-14",
     "name": "Cueing effect",
-    "fact": "Adding visual cues relating elements of a picture to the text increases the effectiveness of multimedia instructions.",
-    "grade": "B",
+    "fact": "Adding visual cues that relate elements of a picture to the text raised retention scores in a learner-paced classroom study, but the same study reports only a weak cueing effect that does not easily generalise to non-laboratory settings.",
+    "grade": "C",
+    "grade_basis": "Corpus evidence = one primary study (Tabbers, Martens & van Merrienboer 2004; 111 participants; one classroom experiment). The model asserted B+ from a BACKGROUND span restating cognitive load theory's prediction; that span was discarded and the record re-anchored to the paper's own RESULTS and CONCLUSIONS. C rather than C+ because the single source calls its own cueing effect weak and reports the companion modality effect REVERSING in the same experiment, so the direction survives contact with the data but the magnitude and the generality do not. Grade reflects OUR corpus provenance, not the literature at large; to be re-graded when the computed rubric (D-114) lands.",
     "source": [
       "10.1348/000709904322848824"
     ],
-    "boundary": "Multimedia instructions",
+    "boundary": "Learner-paced, non-laboratory multimedia instruction",
     "realization_ids": [],
     "provenance": [
       {
@@ -19,10 +20,22 @@
         "corpus_record_id": "cr_09815b8bafeb7050b14d4cd8",
         "doi": "10.1348/000709904322848824",
         "title": "Multimedia instructions and cognitive load theory: Effects of modality and cueing",
-        "quote_or_locus": "adding visual cues relating elements of a picture to the text (the cueing effect) both increase the effectiveness of multimedia instructions in terms of better learning results or less mental effort spent",
+        "quote_or_locus": "Adding visual cues to the pictures resulted in higher retention scores",
         "source_span": {
-          "start": 434,
-          "end": 638,
+          "start": 1190,
+          "end": 1260,
+          "source_text_sha256": "06b934c36311bde17b8dcf0133b276fb1f8e3786263c9870cdf3a962559bdab4"
+        }
+      },
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_09815b8bafeb7050b14d4cd8",
+        "doi": "10.1348/000709904322848824",
+        "title": "Multimedia instructions and cognitive load theory: Effects of modality and cueing",
+        "quote_or_locus": "Only a weak cueing effect and even a reverse modality effect have been found, indicating that both effects do not easily generalise to non-laboratory settings",
+        "source_span": {
+          "start": 1369,
+          "end": 1527,
           "source_text_sha256": "06b934c36311bde17b8dcf0133b276fb1f8e3786263c9870cdf3a962559bdab4"
         }
       }
@@ -34,21 +47,33 @@
       "corpus_record_id": "cr_09815b8bafeb7050b14d4cd8",
       "doi": "10.1348/000709904322848824",
       "title": "Multimedia instructions and cognitive load theory: Effects of modality and cueing",
-      "quote_or_locus": "adding visual cues relating elements of a picture to the text (the cueing effect) both increase the effectiveness of multimedia instructions in terms of better learning results or less mental effort spent",
+      "quote_or_locus": "Adding visual cues to the pictures resulted in higher retention scores",
       "source_span": {
-        "start": 434,
-        "end": 638,
+        "start": 1190,
+        "end": 1260,
+        "source_text_sha256": "06b934c36311bde17b8dcf0133b276fb1f8e3786263c9870cdf3a962559bdab4"
+      }
+    },
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_09815b8bafeb7050b14d4cd8",
+      "doi": "10.1348/000709904322848824",
+      "title": "Multimedia instructions and cognitive load theory: Effects of modality and cueing",
+      "quote_or_locus": "Only a weak cueing effect and even a reverse modality effect have been found, indicating that both effects do not easily generalise to non-laboratory settings",
+      "source_span": {
+        "start": 1369,
+        "end": 1527,
         "source_text_sha256": "06b934c36311bde17b8dcf0133b276fb1f8e3786263c9870cdf3a962559bdab4"
       }
     }
   ],
-  "confidence": 0.85,
+  "confidence": 0.55,
   "operation": "create",
   "proposed_by": "extraction:github-actions-30618907548",
   "proposed_at": "2026-07-31T09:10:13.532Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "owner",
+  "decided_at": "2026-07-31T12:08:53.071Z",
+  "decision_note": "Accepted at C after the re-anchoring in D-125. What is being filed is a weak positive with a named boundary, not a robust effect: one classroom study, cues raised retention but not transfer, and the authors themselves call the cueing effect weak and say it does not easily generalise beyond the laboratory. A generator should read this as a reason NOT to treat cueing as a primary lever, and as the boundary that a future proposal claiming a strong cueing effect has to argue past. Both citations are findings spans on the same DOI, so the record is consistent with the span_role gate rather than grandfathered against it."
 }

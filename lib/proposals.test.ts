@@ -1119,6 +1119,94 @@ test("an owner corrects envelope confidence through the edit transaction (D-122)
   }
 });
 
+test("an edit can drop a mis-anchored citation, and the envelope follows (D-124)", async () => {
+  const root = await temporaryRepository();
+  const proposalPath = "proposals/effect/narrowed-effect.json";
+  const second = {
+    mechanism_id: "LA-01",
+    corpus_record_id: deriveCorpusRecordId({
+      doi: "10.1037/0022-0663.87.2.319",
+      title: "A second fixture source, cited but never evidence",
+      year: 1995,
+    }),
+    doi: "10.1037/0022-0663.87.2.319",
+    title: "A second fixture source, cited but never evidence",
+    quote_or_locus: "a prescription rather than a finding",
+  };
+  const payload = {
+    id: "narrowed-effect",
+    mechanism_id: "LA-01",
+    name: "Narrowed test effect",
+    fact: "A grounded fixture phenomenon.",
+    grade: "A",
+    source: ["10.2307/1914185", "10.1037/0022-0663.87.2.319"],
+    boundary: "Only a transaction fixture.",
+    realization_ids: [],
+    provenance: [...provenance, second],
+  };
+  const proposal = {
+    ...(envelope("effect", "narrowed-effect", "LA-01", payload) as Proposal),
+    provenance: [...provenance, second],
+  };
+  try {
+    await mkdir(join(root, "proposals/effect"), { recursive: true });
+    await writeFile(
+      join(root, proposalPath),
+      `${JSON.stringify(proposal, null, 2)}\n`,
+      "utf8",
+    );
+
+    // Drop the second citation from BOTH source and payload provenance. The
+    // envelope still carries it at this point; the transaction must bring it
+    // down rather than fail the equality check.
+    const edit = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "edit",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason: "The second citation is a design prescription, not evidence.",
+      editedPayload: {
+        ...payload,
+        grade: "C+",
+        source: ["10.2307/1914185"],
+        provenance,
+      },
+      editedConfidence: 0.7,
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, edit);
+
+    const edited = JSON.parse(await readFile(join(root, proposalPath), "utf8")) as {
+      confidence: number;
+      provenance: { corpus_record_id: string }[];
+      payload: { grade: string; source: string[]; provenance: { corpus_record_id: string }[] };
+    };
+    assert.equal(edited.provenance.length, 1);
+    assert.equal(edited.payload.provenance.length, 1);
+    assert.deepEqual(edited.payload.source, ["10.2307/1914185"]);
+    assert.equal(edited.confidence, 0.7);
+    assert.equal(edited.payload.grade, "C+");
+
+    // And the narrowed record projects with the single citation.
+    const approval = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "approve",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason: "Narrowed to the evidence that survives.",
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, approval);
+    const effect = JSON.parse(
+      await readFile(join(root, "effects/LA-01/narrowed-effect.json"), "utf8"),
+    ) as { source: string[]; provenance: unknown[] };
+    assert.deepEqual(effect.source, ["10.2307/1914185"]);
+    assert.equal(effect.provenance.length, 1);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("an out-of-range or misplaced confidence correction is refused by name", async () => {
   const root = await temporaryRepository();
   const proposalPath = "proposals/effect/refused-confidence.json";

@@ -323,6 +323,23 @@ function assertPayloadProvenance(proposal: Proposal): void {
   }
 }
 
+/**
+ * The envelope provenance an edited proposal should carry (D-124).
+ *
+ * Only for effect and realization, the two types whose schema requires payload
+ * and envelope provenance to be exactly equal. For every other type the
+ * envelope is authored independently and is left alone.
+ */
+function envelopeProvenanceForEdit(
+  proposal: Proposal,
+  editedPayload: unknown,
+): { provenance?: unknown } {
+  if (proposal.type !== "effect" && proposal.type !== "realization") return {};
+  if (typeof editedPayload !== "object" || editedPayload === null) return {};
+  const provenance = (editedPayload as { provenance?: unknown }).provenance;
+  return Array.isArray(provenance) ? { provenance } : {};
+}
+
 async function assertResolvableProvenance(
   snapshot: RepositorySnapshot,
   proposal: Proposal,
@@ -967,6 +984,15 @@ async function applyProposalDecision(
     ? ({
         ...proposal,
         payload: request.editedPayload,
+        // For the types whose schema declares payload and envelope provenance
+        // IDENTICAL, the envelope is a projection of the payload, so an edited
+        // payload carries its provenance up (D-124). Without this an owner can
+        // never drop a mis-anchored citation or re-anchor a span: the edit
+        // would always fail the equality check it cannot reach. Mirroring
+        // cannot mask a divergence, because the proposal as read was already
+        // checked for one above, and the mirrored provenance is re-grounded
+        // against the corpus before anything is projected.
+        ...envelopeProvenanceForEdit(proposal, request.editedPayload),
         ...(request.editedConfidence === undefined
           ? {}
           : { confidence: request.editedConfidence }),

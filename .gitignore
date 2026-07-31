@@ -29,6 +29,13 @@
 # to the ops-progress ref, never committed to main
 /.ops-progress/
 
+# drafting scratch for registry records and dossiers. Declared scratch because
+# the validator reads registry/mechanisms and registry/mechanisms/_seed ONLY, so
+# anything here is schema-shaped data that no gate checks — the drafts left from
+# the S7 batch-2 promotion were byte-identical to the committed records, which is
+# exactly the kind of near-duplicate that gets edited by mistake.
+/registry/temp/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
