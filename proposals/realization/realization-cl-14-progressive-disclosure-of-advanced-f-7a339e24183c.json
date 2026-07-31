@@ -1,0 +1,80 @@
+{
+  "id": "realization-cl-14-progressive-disclosure-of-advanced-f-7a339e24183c",
+  "type": "realization",
+  "target": "CL-14",
+  "payload": {
+    "id": "cl-14-002-p1",
+    "mechanism_id": "CL-14",
+    "term": "Progressive Disclosure of Advanced Features",
+    "description_as_reported": "Instructional techniques that facilitate learning among early learners may not help and may even interfere with learning among more advanced learners.",
+    "artifact_context": [
+      "onboarding",
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "cl-14-002"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "medical education",
+      "application_domain": "product UI"
+    },
+    "pattern": "Hide advanced configuration options or complex toolbars by default for new users, and reveal them only after the user has completed a specific number of core tasks or reached a defined proficiency milestone.",
+    "provenance": [
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_f251c717810311c480c7234f",
+        "doi": "10.3109/0142159x.2014.889290",
+        "title": "Cognitive Load Theory: Implications for medical education: AMEE Guide No. 86",
+        "quote_or_locus": "Instructional techniques that facilitate learning among early learners may not help and may even interfere with learning among more advanced learners",
+        "source_span": {
+          "start": 1298,
+          "end": 1447,
+          "source_text_sha256": "a33defaf35785254bc07b8967a7f77cd8407f2af3122488cf0d222b4d9bd6013"
+        }
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_f251c717810311c480c7234f",
+        "effect_id": "cl-14-002",
+        "title": "Cognitive Load Theory: Implications for medical education: AMEE Guide No. 86",
+        "quote_or_locus": "Instructional techniques that facilitate learning among early learners may not help and may even interfere with learning among more advanced learners.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.6
+  },
+  "provenance": [
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_f251c717810311c480c7234f",
+      "doi": "10.3109/0142159x.2014.889290",
+      "title": "Cognitive Load Theory: Implications for medical education: AMEE Guide No. 86",
+      "quote_or_locus": "Instructional techniques that facilitate learning among early learners may not help and may even interfere with learning among more advanced learners",
+      "source_span": {
+        "start": 1298,
+        "end": 1447,
+        "source_text_sha256": "a33defaf35785254bc07b8967a7f77cd8407f2af3122488cf0d222b4d9bd6013"
+      }
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_f251c717810311c480c7234f",
+      "effect_id": "cl-14-002",
+      "title": "Cognitive Load Theory: Implications for medical education: AMEE Guide No. 86",
+      "quote_or_locus": "Instructional techniques that facilitate learning among early learners may not help and may even interfere with learning among more advanced learners.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.6,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-30622558771",
+  "proposed_at": "2026-07-31T10:09:59.574Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}
