@@ -166,28 +166,133 @@ const SECTION_ROLES: readonly (readonly [readonly string[], readonly SpanRole[]]
 ];
 
 /**
- * Sentences that overturn what came before them.
+ * Verbs a reversal negates when it says the claim did not hold.
  *
- * Scoped to REVERSAL, not to negation in general: "did not" on its own appears
- * throughout ordinary academic prose, so the verbs it may negate are enumerated.
- * "as opposed to" is deliberately absent — it introduces a contrast between two
- * conditions, which is how findings are normally stated, not a retraction of one.
+ * Enumerated rather than negated in general, because "did not" on its own
+ * appears throughout ordinary academic prose — D-130 measured a bare "does not"
+ * firing on 382 records where it meant nothing of the kind. Split into the verbs
+ * a CLAIM is made in and the verbs an OUTCOME is reported in, the same division
+ * DISSENT_MARKERS uses, so a later narrowing can drop one half with a count.
  */
-const REVERSAL_MARKERS: readonly RegExp[] = [
+const REVERSAL_CLAIM_VERBS =
+  "replicate|reproduce|generalise|generalize|hold|extend|transfer|apply|" +
+  "support|confirm|corroborate|predict|obtain|persist|materialise|materialize|" +
+  "survive|appear|emerge|find|show|arise|occur";
+
+const REVERSAL_OUTCOME_VERBS =
+  "differ|improve|benefit|help|increase|reduce|decrease|affect|influence|" +
+  "outperform|exceed|facilitate|enhance|moderate|mediate|eliminate";
+
+/** The same verbs as past participles, for "was not replicated". */
+const REVERSAL_PARTICIPLES =
+  "replicated|reproduced|generalised|generalized|supported|confirmed|" +
+  "corroborated|observed|found|detected|significant|reliable|evident|" +
+  "present|borne out|obtained|sustained|maintained";
+
+/**
+ * Sentences that overturn what came before them (D-129, extended D-133).
+ *
+ * Scoped to REVERSAL, not to negation in general. Two exclusions are load
+ * bearing and stay out on purpose:
+ *
+ * - "as opposed to" introduces a contrast between two conditions, which is how
+ *   findings are normally stated, not a retraction of one.
+ * - "however" and a bare "did not" are discourse, not claims. They are most of
+ *   the distance between what this list catches and the crude upper bound a
+ *   probe reports, and they are exactly the catch-alls D-130 found firing on
+ *   539 and 382 records for no reason. Buying coverage with them would be
+ *   buying back the defect.
+ *
+ * The list errs toward recall, and the reason is the same trade-off recorded at
+ * OVERLAP_THRESHOLD below: a wrongly refused candidate is recoverable and
+ * visible in the funnel, a wrongly filed fact is neither. What keeps the recall
+ * from becoming noise is the overlap requirement, not the vocabulary — a marker
+ * only refuses when its sentence shares three distinctive words with the quote.
+ *
+ * Named, so a refusal can say which rule fired and tools/marker-coverage.ts can
+ * report how often each one is the reason.
+ */
+export interface ReversalMarker {
+  name: string;
+  pattern: RegExp;
+}
+
+export const REVERSAL_MARKERS: readonly ReversalMarker[] = [
   // "reverse-engineering" is a method, not a retraction. Measured: it was the
   // one spurious match across 391 CL-14 abstracts probed at their opening
   // sentence, so the exclusion is a fix for an observed false positive rather
-  // than an imagined one.
-  /\breverse[ds]?\b(?![-\s]?engineer)/i,
-  /\breversal\b/i,
-  /\bopposite\b/i,
-  /\bcontrary to\b/i,
-  /\bonly a weak\b/i,
-  /\bfail(?:ed|s|ure)? to (?:replicate|find|generalise|generalize|show|emerge|hold)\b/i,
-  /\b(?:did|does|do) not (?:replicate|generalise|generalize|hold|extend|transfer|appear|emerge|support|survive)\b/i,
-  /\b(?:was|were) not (?:replicated|supported|confirmed|observed|found|significant)\b/i,
-  /\bno (?:statistically )?(?:significant|reliable|detectable|measurable) (?:effect|difference|benefit|advantage|improvement|gain|change)\b/i,
-  /\bno evidence (?:of|for|that)\b/i,
+  // than an imagined one. "reverse transcription" is added on the same basis
+  // and no other: it is laboratory jargon appearing in 13 of the 4444 stored
+  // records against reverse-engineering's 2. Shapes that do not occur in the
+  // corpus — "reverse-scored", "reversed-item" — are deliberately NOT excluded,
+  // because an exclusion for a false positive nobody has seen is a guess.
+  { name: "reverse", pattern: /\breverse[ds]?\b(?![-\s]?(?:engineer|transcri))/i },
+  { name: "reversal", pattern: /\breversal\b/i },
+  { name: "opposite", pattern: /\bopposite\b/i },
+  { name: "contrary-to", pattern: /\bcontrary to\b/i },
+  {
+    name: "in-contrast-to-prediction",
+    pattern:
+      /\bin contrast (?:to|with) (?:our |the |these |previous |prior |earlier )*(?:prediction|expectation|hypothes[ie]s|assumption|claim)\w*\b/i,
+  },
+  {
+    name: "only-a-weak",
+    pattern: /\bonly (?:a |an )?(?:very )?(?:weak|small|modest|marginal|negligible)\b/i,
+  },
+  {
+    name: "fail-to+verb",
+    pattern: new RegExp(
+      `\\bfail(?:ed|s|ure|ures|ing)?\\s+to\\s+(?:${REVERSAL_CLAIM_VERBS}|${REVERSAL_OUTCOME_VERBS})\\b`,
+      "i",
+    ),
+  },
+  {
+    name: "neg+claim-verb",
+    pattern: new RegExp(
+      `\\b(?:did|does|do)\\s+not\\s+(?:${REVERSAL_CLAIM_VERBS})\\b`,
+      "i",
+    ),
+  },
+  {
+    name: "neg+outcome-verb",
+    pattern: new RegExp(
+      `\\b(?:did|does|do)\\s+not\\s+(?:${REVERSAL_OUTCOME_VERBS})\\b`,
+      "i",
+    ),
+  },
+  {
+    name: "was-not+participle",
+    pattern: new RegExp(
+      `\\b(?:was|were|is|are|has|have|had)\\s+not\\s+(?:${REVERSAL_PARTICIPLES})\\b`,
+      "i",
+    ),
+  },
+  {
+    name: "no-significant",
+    pattern:
+      /\bno (?:statistically )?(?:significant|reliable|detectable|measurable|discernible|appreciable) (?:effect|difference|differences|benefit|advantage|improvement|gain|change|association|correlation|relationship|interaction)\b/i,
+  },
+  { name: "no-effect-of", pattern: /\bno effect (?:of|on|was|were|for)\b/i },
+  { name: "no-evidence", pattern: /\bno evidence (?:of|for|that|was|has)\b/i },
+  { name: "no-support-for", pattern: /\b(?:no|little) support for\b/i },
+  {
+    name: "null-result",
+    pattern: /\bnull (?:result|results|finding|findings|effect|effects)\b/i,
+  },
+  {
+    name: "absence-of",
+    pattern:
+      /\babsence of (?:an? )?(?:\w+ ){0,2}(?:effect|effects|difference|differences|benefit|association|correlation|evidence|support)\b/i,
+  },
+  {
+    name: "contradicts",
+    pattern: /\b(?:contradict(?:s|ed|ing)?|refut(?:e|es|ed|ing)|disconfirm\w*)\b/i,
+  },
+  {
+    name: "effect-disappeared",
+    pattern:
+      /\b(?:effect|effects|advantage|advantages|benefit|benefits|difference|differences)\b(?:\s+\w+){0,3}\s+(?:disappear(?:ed|s)?|vanish(?:ed|es)?|was eliminated|were eliminated)\b/i,
+  },
 ];
 
 /**
@@ -345,16 +450,29 @@ function sentencesOf(text: string): string[] {
     .filter((sentence) => sentence.length > 0);
 }
 
-function reversalMarkerIn(text: string): string | null {
-  for (const marker of REVERSAL_MARKERS) {
-    const match = marker.exec(text);
-    if (match) return match[0];
+/**
+ * The first marker to fire, with the text that matched it.
+ *
+ * `markers` is a parameter only so a coverage measurement can run an older
+ * vocabulary through this exact code path (D-133). A before/after produced by a
+ * second copy of the matching logic measures the copy, not the change.
+ */
+export function reversalMarkerIn(
+  text: string,
+  markers: readonly ReversalMarker[] = REVERSAL_MARKERS,
+): { name: string; matched: string } | null {
+  for (const marker of markers) {
+    const match = marker.pattern.exec(text);
+    if (match) return { name: marker.name, matched: match[0] };
   }
   return null;
 }
 
 export interface DownstreamContradiction {
+  /** The text that matched, which is what a reader needs to judge the refusal. */
   marker: string;
+  /** Which rule fired, so a wrong refusal points at the rule to change. */
+  marker_name: string;
   sentence: string;
   shared: string[];
 }
@@ -372,17 +490,23 @@ export function downstreamContradiction(
   source: string,
   spanEnd: number,
   quote: string,
+  markers: readonly ReversalMarker[] = REVERSAL_MARKERS,
 ): DownstreamContradiction | null {
-  if (reversalMarkerIn(quote)) return null;
+  if (reversalMarkerIn(quote, markers)) return null;
   const quoteWords = contentWords(quote);
   for (const sentence of sentencesOf(source.slice(spanEnd))) {
-    const marker = reversalMarkerIn(sentence);
+    const marker = reversalMarkerIn(sentence, markers);
     if (!marker) continue;
     const shared = Array.from(contentWords(sentence)).filter((word) =>
       quoteWords.has(word),
     );
     if (shared.length >= OVERLAP_THRESHOLD) {
-      return { marker, sentence, shared: shared.sort() };
+      return {
+        marker: marker.matched,
+        marker_name: marker.name,
+        sentence,
+        shared: shared.sort(),
+      };
     }
   }
   return null;
@@ -452,8 +576,9 @@ export function checkSpanRole(input: SpanRoleInput): SpanRoleVerdict {
         reason: "premise_contradicted_downstream",
         detail:
           `span_role=finding asserted for a span the same source later reverses: ` +
-          `matched "${contradiction.marker}" in "${contradiction.sentence}", ` +
-          `sharing ${contradiction.shared.join(", ")} with the quote (D-129)`,
+          `marker ${contradiction.marker_name} matched "${contradiction.marker}" in ` +
+          `"${contradiction.sentence}", sharing ${contradiction.shared.join(", ")} ` +
+          `with the quote (D-129)`,
       };
     }
   }
