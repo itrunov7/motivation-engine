@@ -58,7 +58,7 @@
  */
 
 import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
-import { basename, join, relative } from "node:path";
+import { basename, dirname, join, relative } from "node:path";
 import { parse as parseYaml } from "yaml";
 import type {
   AnalyzerConfig,
@@ -1105,14 +1105,14 @@ function parsePacksFilter(args: string[]): Set<string> | undefined {
  * preserve untouched packs from. Fails loudly when the matrix is absent —
  * a scoped run cannot invent the cells it does not re-score.
  */
-function loadExistingCells(): Map<string, SufficiencyCell> {
-  if (!existsSync(MATRIX)) {
+function loadExistingCells(matrixPath: string): Map<string, SufficiencyCell> {
+  if (!existsSync(matrixPath)) {
     console.error(
-      `  ✗ scoped re-score needs an existing matrix at ${rel(MATRIX)} — run a full \`npm run analyze\` first.`,
+      `  ✗ scoped re-score needs an existing matrix at ${rel(matrixPath)} — run a full \`npm run analyze\` first.`,
     );
     process.exit(1);
   }
-  const matrix = JSON.parse(readFileSync(MATRIX, "utf-8")) as SufficiencyMatrix;
+  const matrix = JSON.parse(readFileSync(matrixPath, "utf-8")) as SufficiencyMatrix;
   if (matrix.version !== MATRIX_VERSION) {
     console.error(
       `  ✗ existing matrix ${matrix.version} cannot be mixed with analyzer ${MATRIX_VERSION} — run a full \`npm run analyze\`.`,
@@ -1125,7 +1125,7 @@ function loadExistingCells(): Map<string, SufficiencyCell> {
   const untyped = matrix.cells.find((cell) => !Array.isArray(cell.typed_gaps));
   if (untyped) {
     console.error(
-      `  ✗ existing matrix at ${rel(MATRIX)} predates gap typing (cell ${untyped.pack}×${untyped.segment} has no typed_gaps) — run a full \`npm run analyze\`.`,
+      `  ✗ existing matrix at ${rel(matrixPath)} predates gap typing (cell ${untyped.pack}×${untyped.segment} has no typed_gaps) — run a full \`npm run analyze\`.`,
     );
     process.exit(1);
   }
@@ -1136,7 +1136,7 @@ function loadExistingCells(): Map<string, SufficiencyCell> {
   const untagged = matrix.cells.find((cell) => cell.row_group === undefined);
   if (untagged) {
     console.error(
-      `  ✗ existing matrix at ${rel(MATRIX)} predates the perception row group (cell ${untagged.pack}×${untagged.segment} has no row_group) — run a full \`npm run analyze\`.`,
+      `  ✗ existing matrix at ${rel(matrixPath)} predates the perception row group (cell ${untagged.pack}×${untagged.segment} has no row_group) — run a full \`npm run analyze\`.`,
     );
     process.exit(1);
   }
@@ -1152,7 +1152,21 @@ function loadExistingCells(): Map<string, SufficiencyCell> {
   return new Map(matrix.cells.map((cell) => [`${cell.pack}|${cell.segment}`, cell]));
 }
 
-export function main(): void {
+export interface AnalyzerOptions {
+  /**
+   * Where the matrix is written and, for a scoped re-score, read back from.
+   *
+   * Defaults to the committed analysis/sufficiency-matrix.json. It is a
+   * parameter so a TEST can point the analyzer at a temp directory (D-134): a
+   * test that writes to a committed path leaves the working tree dirty, makes
+   * `git status` an unreliable signal, and can silently commit a regenerated
+   * artifact nobody chose to regenerate.
+   */
+  matrixPath?: string;
+}
+
+export function main(options: AnalyzerOptions = {}): void {
+  const matrixPath = options.matrixPath ?? MATRIX;
   console.log("Motivation Engine sufficiency analyzer\n");
 
   if (!existsSync(PACK_MAP)) {
@@ -1193,7 +1207,7 @@ export function main(): void {
       }
     }
   }
-  const existingCells = packsFilter ? loadExistingCells() : undefined;
+  const existingCells = packsFilter ? loadExistingCells(matrixPath) : undefined;
 
   const mechanisms = new Map<string, Mechanism>();
   for (const file of listJsonFiles(MECHANISMS_DIR)) {
@@ -1454,8 +1468,8 @@ export function main(): void {
     cells,
   };
 
-  mkdirSync(ANALYSIS_DIR, { recursive: true });
-  writeFileSync(MATRIX, `${JSON.stringify(matrix, null, 2)}\n`, "utf-8");
+  mkdirSync(dirname(matrixPath), { recursive: true });
+  writeFileSync(matrixPath, `${JSON.stringify(matrix, null, 2)}\n`, "utf-8");
 
   const scope = packsFilter
     ? `${rescored} of ${packMap.elements.length} packs re-scored (packs= filter), rest preserved`
@@ -1469,7 +1483,7 @@ export function main(): void {
   const perceptionCellCount = cells.length - packCellCount;
   console.log(
     `\nOK — ${cells.length} cells = ${packCellCount} pack (${scope}) + ${perceptionCellCount} perception ` +
-      `(cross-cutting row × ${activeSegments.length} segments, D-067) → ${rel(MATRIX)}.`,
+      `(cross-cutting row × ${activeSegments.length} segments, D-067) → ${rel(matrixPath)}.`,
   );
   console.log(
     `     stage: ${config.maturity_stage} (D-060); ` +

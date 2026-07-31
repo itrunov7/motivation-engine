@@ -23,11 +23,19 @@ jobs:
       - run: npm run validate
       - run: npm run test:proposals
       - run: npm run test:ops
+      - run: npm run test:github
       - run: npm run test:spans
+      - run: npm run test:span-role
       - run: npm run test:provenance
       - run: npm run test:extract
       - run: npm run test:evidence
       - run: npm run test:analyzer
       - run: npm run test:gaps
       - run: npm run test:packs
+      # D-134: a test may not write to a committed path. Enforced rather than
+      # promised — analyzer.test.ts rewrote analysis/sufficiency-matrix.json on
+      # every run, which made `git status` useless as a signal and let a
+      # regenerated artifact ride along in an unrelated commit.
+      - name: tests left the working tree unchanged (D-134)
+        run: git diff --exit-code
       - run: npm run build
