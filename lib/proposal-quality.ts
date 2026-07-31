@@ -82,15 +82,18 @@ export function patternParameterErrors(
   const errors: string[] = [];
   const declared = new Set(parameters.map((parameter) => parameter.name));
   const referenced = new Set<string>();
-  for (const [, name] of pattern.matchAll(PLACEHOLDER)) {
+  for (const [, name] of Array.from(pattern.matchAll(PLACEHOLDER))) {
     referenced.add(name);
     if (!declared.has(name)) {
       errors.push(`pattern references {${name}}, which is not a declared parameter`);
     }
   }
-  for (const name of declared) {
-    if (!referenced.has(name)) {
-      errors.push(`parameter "${name}" is declared but never referenced as {${name}} in the pattern`);
+  for (const parameter of parameters) {
+    if (!referenced.has(parameter.name)) {
+      errors.push(
+        `parameter "${parameter.name}" is declared but never referenced as ` +
+          `{${parameter.name}} in the pattern`,
+      );
     }
   }
   const prose = pattern.replace(PLACEHOLDER, " ");
