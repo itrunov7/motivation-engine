@@ -1305,6 +1305,41 @@ test("a half-marked inference is dropped rather than proposed as evidence", () =
   assert.equal(withoutSourceDomain, null);
 });
 
+test("a realization id comes from its term, not from the model's own id", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract && record.doi);
+  const provenance: KnowledgeProvenanceItem[] = [
+    {
+      mechanism_id: "CL-14",
+      corpus_record_id: record.record_id,
+      doi: record.doi,
+      title: record.title,
+      quote_or_locus: record.abstract.slice(0, 80),
+    },
+  ];
+  const ids = ["Collapsing guided tour", "Deferred advanced toolbar"].map((term) => {
+    const proposal = toProposal(
+      "realizations",
+      "CL-14",
+      {
+        // The first effect-anchored run labelled two different patterns "p1".
+        id: "cl-14-002-p1",
+        term,
+        description_as_reported: "The source reports a fixture pattern.",
+        artifact_context: ["onboarding"],
+        confidence: 0.6,
+      },
+      provenance,
+      "fixture-run",
+      "2026-07-31T10:00:00.000Z",
+    );
+    assert(proposal?.type === "realization");
+    return proposal.payload.id;
+  });
+  assert.deepEqual(ids, ["collapsing-guided-tour", "deferred-advanced-toolbar"]);
+});
+
 test("an effect scope ranks the records the effect cites first", () => {
   const file = corpus();
   const cited = file.records[file.records.length - 1];

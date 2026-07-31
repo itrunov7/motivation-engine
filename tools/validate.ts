@@ -2489,6 +2489,11 @@ function main(): void {
         const proposalFiles = listJsonFilesRecursive(PATHS.proposalsDir).filter(
           (file) => file !== PATHS.proposalSchema,
         );
+        // Where each undecided proposal WOULD land if approved. Two of them
+        // aimed at one path are two proposals that cannot both be accepted, and
+        // the second approval would fail on a write that already exists — a
+        // collision the queue should show while it is still cheap to resolve.
+        const pendingRecordPaths = new Map<string, string[]>();
         for (const file of proposalFiles) {
           const data = readJson(file);
           if (data === undefined) continue;
@@ -2496,6 +2501,7 @@ function main(): void {
           const proposal = data as {
             id?: string;
             type?: string;
+            target?: string;
             status?: string;
             proposed_by?: string;
             decided_by?: string | null;
@@ -2715,7 +2721,34 @@ function main(): void {
               }
             }
           }
+          const payloadId = (proposal.payload as { id?: unknown } | undefined)?.id;
+          if (
+            (proposal.type === "effect" || proposal.type === "realization") &&
+            typeof proposal.target === "string" &&
+            typeof payloadId === "string" &&
+            (proposal.status === "pending" ||
+              proposal.status === "edited" ||
+              proposal.status === "held_low_confidence")
+          ) {
+            const key = `${proposal.type}s/${proposal.target}/${payloadId}.json`;
+            pendingRecordPaths.set(key, [
+              ...(pendingRecordPaths.get(key) ?? []),
+              rel(file),
+            ]);
+          }
           if (ok) console.log(`  ✓ ${rel(file)} valid (${proposal.status} proposal)`);
+        }
+        for (const [target, files] of Array.from(pendingRecordPaths.entries())) {
+          if (files.length > 1) {
+            // A warning, not a failure: both proposals are individually valid,
+            // nothing authoritative is wrong yet, and failing here would mean a
+            // whole extraction run is discarded over a naming clash. The owner
+            // resolves it by approving one and rejecting or renaming the other.
+            console.log(
+              `  ! ${files.length} undecided proposals would all be written to ${target}: ` +
+                `${files.join(", ")} — only one can be approved as-is`,
+            );
+          }
         }
         if (proposalFiles.length === 0) {
           console.log("  · no proposals yet (honest empty state)");

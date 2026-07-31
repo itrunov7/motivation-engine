@@ -2824,7 +2824,13 @@ export function toProposal(
     item.artifact_context.length > 0 &&
     item.artifact_context.every((entry) => typeof entry === "string" && entry.trim())
   ) {
-    const id = slug(item.id ?? item.term);
+    // The record id comes from the TERM, never from the model's own id field.
+    // A realization id becomes a filename and the handle an implementation
+    // points at, and the first effect-anchored run returned "cl-14-002-p1" for
+    // two different patterns — a label that is neither unique nor readable. The
+    // term is both, and it is the same string the proposal id is already hashed
+    // from, so one term can only ever occupy one file.
+    const id = slug(item.term);
     if (!id) return null;
     const basis = context?.effectBasis;
     const common = {
