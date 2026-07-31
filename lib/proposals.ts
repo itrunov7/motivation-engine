@@ -67,6 +67,13 @@ export interface ProposalDecisionRequest {
   reason?: string;
   /** Complete replacement payload for an edit. */
   editedPayload?: unknown;
+  /**
+   * Envelope confidence, corrected by the owner as part of the edit (D-122).
+   * Omitted leaves the pipeline's number untouched; a corrected one travels
+   * through the same transaction as the payload, so the reason that explains
+   * the payload explains the number too.
+   */
+  editedConfidence?: number;
   /** Repository root containing the actual JSON schemas. Defaults to cwd. */
   schemaRoot?: string;
 }
@@ -919,11 +926,28 @@ async function applyProposalDecision(
   if (request.action === "reject" && !reason) {
     throw new ProposalValidationError("A non-empty reason is required to reject a proposal");
   }
-  if (
-    (request.action === "edit" || request.action === "edit_approve") &&
-    request.editedPayload === undefined
-  ) {
+  const editing = request.action === "edit" || request.action === "edit_approve";
+  if (editing && request.editedPayload === undefined) {
     throw new ProposalValidationError("A complete payload is required to edit a proposal");
+  }
+  if (request.editedConfidence !== undefined) {
+    if (!editing) {
+      throw new ProposalValidationError(
+        "editedConfidence is only accepted on an edit; approving or rejecting cannot change the number",
+      );
+    }
+    // The schema bound is checked below with the rest of the envelope, but a
+    // NaN or an out-of-range number should name the flag that carried it
+    // rather than surface as a JSON Schema path.
+    if (
+      !Number.isFinite(request.editedConfidence) ||
+      request.editedConfidence < 0 ||
+      request.editedConfidence > 1
+    ) {
+      throw new ProposalValidationError(
+        `editedConfidence must be a number between 0 and 1, received ${String(request.editedConfidence)}`,
+      );
+    }
   }
 
   const proposalText = await requireText(builder, request.proposalPath);
@@ -939,10 +963,15 @@ async function applyProposalDecision(
   assertPendingTransition(proposal.status, request.action);
   assertPayloadProvenance(proposal);
 
-  const workingProposal =
-    request.action === "edit" || request.action === "edit_approve"
-      ? ({ ...proposal, payload: request.editedPayload } as Proposal)
-      : proposal;
+  const workingProposal = editing
+    ? ({
+        ...proposal,
+        payload: request.editedPayload,
+        ...(request.editedConfidence === undefined
+          ? {}
+          : { confidence: request.editedConfidence }),
+      } as Proposal)
+    : proposal;
   assertSchema("edited proposal envelope/payload", validators.proposal, workingProposal);
   assertPayloadProvenance(workingProposal);
 

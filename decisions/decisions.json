@@ -846,6 +846,13 @@
       "title": "Proposal realization-cl-14-progressive-disclosure-of-advanced-f-7a339e24183c rejected",
       "body": "Owner owner rejected realization proposal realization-cl-14-progressive-disclosure-of-advanced-f-7a339e24183c for CL-14. No authoritative artifact was changed. Reason: Mis-anchored. Expertise reversal states that SUPPORT harms EXPERTS; this pattern withholds advanced FEATURES from NOVICES, which runs the effect backwards. Hiding complexity from a beginner is justified by general cognitive load, not by cl-14-002, and its only quote is the effect's own sentence, so nothing in its evidence half supports the direction it takes. If it returns it must anchor to a CL-14 load effect, not to expertise reversal.",
       "area": "data"
+    },
+    {
+      "id": "D-122",
+      "date": "2026-07-31",
+      "area": "process",
+      "title": "Envelope confidence is corrected inside the decision transaction, never by hand in git",
+      "body": "SYMPTOM: the edit action replaced payload and nothing else, so an owner who judged the pipeline's confidence unearned had two options: leave a number they disbelieved, or open the proposal file and change it in a separate commit. The second is what happened, and it breaks the one property the transaction exists to hold. D-113 requires a reason on every decision, and a hand-edited file carries no reason, no actor and no decision id — the corrected number becomes exactly as unexplained as the asserted one it replaced, and cl-14-002's regrade only reads as justified because the grade travelled with the payload while its confidence did not. DECISION: ProposalDecisionRequest gains an optional editedConfidence, applied to the envelope in the same atomic transaction as editedPayload, exposed as --confidence on the proposal CLI. Refused on approve and reject: the payload an approval commits is the one that was reviewed, and a number changed at approval time was reviewed by nobody. Refused outside [0,1] with the flag named in the message rather than a JSON Schema path, because a nonsense value should blame the input that carried it. Omitting the flag leaves the existing number untouched, so absent and corrected stay distinguishable. The confidence FLOOR is unchanged and still an extraction-time gate — an owner may set a value below it, since a held proposal and an owner-corrected low confidence are different facts. /review keeps its payload-only edit form; adding a confidence field to the UI would be a knowledge-editing surface the constitution does not allow, and the CLI is the recovery path the library already documents."
     }
   ]
 }

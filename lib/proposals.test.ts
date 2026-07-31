@@ -1053,6 +1053,127 @@ test("an owner reason survives an edit and the approval that follows it", async 
   }
 });
 
+test("an owner corrects envelope confidence through the edit transaction (D-122)", async () => {
+  const root = await temporaryRepository();
+  const proposalPath = "proposals/effect/reconfidenced-effect.json";
+  const reason = "One source reporting a weak result; the pipeline's 0.9 was unearned.";
+  const payload = {
+    id: "reconfidenced-effect",
+    mechanism_id: "LA-01",
+    name: "Reconfidenced test effect",
+    fact: "A grounded fixture phenomenon.",
+    grade: "B",
+    source: ["10.2307/1914185"],
+    boundary: "Only a transaction fixture.",
+    realization_ids: [],
+    provenance,
+  };
+  try {
+    await mkdir(join(root, "proposals/effect"), { recursive: true });
+    await writeFile(
+      join(root, proposalPath),
+      `${JSON.stringify(
+        envelope("effect", "reconfidenced-effect", "LA-01", payload),
+        null,
+        2,
+      )}\n`,
+      "utf8",
+    );
+
+    const edit = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "edit",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason,
+      editedPayload: { ...payload, grade: "C" },
+      editedConfidence: 0.55,
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, edit);
+
+    const edited = JSON.parse(await readFile(join(root, proposalPath), "utf8")) as {
+      confidence: number;
+      payload: { grade: string };
+    };
+    assert.equal(edited.confidence, 0.55);
+    assert.equal(edited.payload.grade, "C");
+
+    // Omitting the flag on a later edit leaves the corrected number alone.
+    const second = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "edit",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason,
+      editedPayload: { ...payload, grade: "C-" },
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, second);
+    const again = JSON.parse(await readFile(join(root, proposalPath), "utf8")) as {
+      confidence: number;
+    };
+    assert.equal(again.confidence, 0.55);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("an out-of-range or misplaced confidence correction is refused by name", async () => {
+  const root = await temporaryRepository();
+  const proposalPath = "proposals/effect/refused-confidence.json";
+  const payload = {
+    id: "refused-confidence",
+    mechanism_id: "LA-01",
+    name: "Refused confidence fixture",
+    fact: "A grounded fixture phenomenon.",
+    grade: "B",
+    source: ["10.2307/1914185"],
+    boundary: "Only a transaction fixture.",
+    realization_ids: [],
+    provenance,
+  };
+  try {
+    await mkdir(join(root, "proposals/effect"), { recursive: true });
+    await writeFile(
+      join(root, proposalPath),
+      `${JSON.stringify(envelope("effect", "refused-confidence", "LA-01", payload), null, 2)}\n`,
+      "utf8",
+    );
+
+    await assert.rejects(
+      prepareProposalDecision(new LocalRepositorySnapshot(root), {
+        proposalPath,
+        action: "edit",
+        decidedBy: "test-owner",
+        decidedAt,
+        reason: "out of range",
+        editedPayload: payload,
+        editedConfidence: 1.4,
+        schemaRoot: root,
+      }),
+      /editedConfidence must be a number between 0 and 1/,
+    );
+
+    // Approval is not a place to change the number: the payload it approves is
+    // the one that was reviewed.
+    await assert.rejects(
+      prepareProposalDecision(new LocalRepositorySnapshot(root), {
+        proposalPath,
+        action: "approve",
+        decidedBy: "test-owner",
+        decidedAt,
+        reason: "approving",
+        editedConfidence: 0.5,
+        schemaRoot: root,
+      }),
+      /only accepted on an edit/,
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("local adapter applies writes/deletes and rejects stale preconditions", async () => {
   const root = await mkdtemp(join(tmpdir(), "proposal-transaction-"));
   try {
