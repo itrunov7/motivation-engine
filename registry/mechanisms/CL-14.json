@@ -9,74 +9,179 @@
   "cross_cutting": true,
   "lifecycle_status": "incubating",
   "dossier_ref": "dossiers/CL-14.json",
-  "provenance": { "proposed_by": "owner", "date": "2026-07-20" },
-  "evidence_terms": ["cognitive load theory", "extraneous cognitive load instructional", "working memory limits information processing", "cognitive load measurement replication", "split attention effect"],
+  "provenance": {
+    "proposed_by": "owner",
+    "date": "2026-07-20"
+  },
+  "evidence_terms": [
+    "cognitive load theory",
+    "extraneous cognitive load instructional",
+    "working memory limits information processing",
+    "cognitive load measurement replication",
+    "split attention effect"
+  ],
   "pinned_evidence": [
-    { "doi": "10.1207/s15516709cog1202_4", "title": "Cognitive Load During Problem Solving: Effects on Learning", "reason": "foundational — Sweller 1988" },
-    { "doi": "10.1023/A:1022193728205", "title": "Cognitive Architecture and Instructional Design", "reason": "review — Sweller, van Merriënboer & Paas 1998" }
+    {
+      "doi": "10.1207/s15516709cog1202_4",
+      "title": "Cognitive Load During Problem Solving: Effects on Learning",
+      "reason": "foundational — Sweller 1988"
+    },
+    {
+      "doi": "10.1023/A:1022193728205",
+      "title": "Cognitive Architecture and Instructional Design",
+      "reason": "review — Sweller, van Merriënboer & Paas 1998"
+    }
   ],
   "evidence": {
     "grade": "A",
     "basis": "Working memory processes only a few elements at once (Baddeley 1974); when presentation consumes that capacity with load unrelated to the task (extraneous load), comprehension and performance degrade. Sweller 1988 and the 1998 architecture paper established the framework; split-attention (Chandler & Sweller 1991) and the 20-years-later review (Sweller et al. 2019) sustain it across four decades.",
     "effect_size_note": "The core claim — extraneous load harms comprehension — is robust and repeatedly demonstrated. Magnitude depends heavily on task complexity and on the learner's prior knowledge; measurement of load itself relies largely on subjective scales, which limits precision.",
-    "caveats": ["expertise_reversal_what_helps_novices_can_hurt_experts", "load_measurement_relies_on_subjective_scales", "germane_load_construct_contested", "evidence_base_is_instructional_not_commercial_interfaces"]
+    "caveats": [
+      "expertise_reversal_what_helps_novices_can_hurt_experts",
+      "load_measurement_relies_on_subjective_scales",
+      "germane_load_construct_contested",
+      "evidence_base_is_instructional_not_commercial_interfaces"
+    ]
   },
   "prior_weight": 0.85,
   "mechanism_summary_for_context": "Working memory is narrow: only a few elements can be held and related at once. Load imposed by the material itself is unavoidable (intrinsic), but load imposed by how it is presented is not (extraneous) — every unnecessary element, every split between related pieces of information, every simultaneous demand consumes capacity that would otherwise go to understanding. When extraneous load exceeds what is left, comprehension fails regardless of how motivating the content is. This constrains every interface: dense text, scattered related elements, and simultaneous competing demands are not merely unattractive, they measurably prevent understanding.",
   "applicability": {
-    "funnel_stages": ["cold_acquisition", "activation", "onboarding", "conversion", "retention"],
+    "funnel_stages": [
+      "cold_acquisition",
+      "activation",
+      "onboarding",
+      "conversion",
+      "retention"
+    ],
     "excluded_stages": [],
-    "artifact_types": ["landing_hero", "onboarding", "paywall", "checkout", "pricing_page", "dashboard_widget", "email", "retention_push"],
+    "artifact_types": [
+      "landing_hero",
+      "onboarding",
+      "paywall",
+      "checkout",
+      "pricing_page",
+      "dashboard_widget",
+      "email",
+      "retention_push"
+    ],
     "preconditions": [],
     "culture_note": "Working-memory limits are a species-level constraint; what varies culturally is reading direction, density conventions and prior familiarity with interface patterns — L3 surface parameters"
   },
   "implementations": [
     {
       "id": "CL-14-extraneous-reduction",
-      "artifact_types": ["landing_hero", "paywall", "checkout", "pricing_page", "dashboard_widget"],
+      "artifact_types": [
+        "landing_hero",
+        "paywall",
+        "checkout",
+        "pricing_page",
+        "dashboard_widget"
+      ],
       "product_requirements": [],
       "generation_directive": "Remove elements that do not serve the current decision or action: decorative content competing for attention, secondary explanations, redundant restatements, unnecessary choices. Every element retained should be justifiable as intrinsic to the task. Reducing extraneous load is not minimalism as taste — it is preserving capacity for the part that matters.",
       "copy_formulas": [],
-      "metrics": ["task_completion_rate", "time_to_complete", "cvr", "error_rate"],
+      "metrics": [
+        "task_completion_rate",
+        "time_to_complete",
+        "cvr",
+        "error_rate"
+      ],
       "observed_effects": []
     },
     {
       "id": "CL-14-chunking-progressive-disclosure",
-      "artifact_types": ["onboarding", "checkout", "landing_hero", "email"],
+      "artifact_types": [
+        "onboarding",
+        "checkout",
+        "landing_hero",
+        "email"
+      ],
       "product_requirements": [],
       "generation_directive": "Split information and input demands into sequenced chunks rather than presenting the full set at once. Reveal detail progressively as it becomes relevant to the step at hand, keeping simultaneous elements few. Long unbroken text and multi-field forms presented in one block impose load that sequencing removes at no cost to completeness.",
       "copy_formulas": [],
-      "metrics": ["onboarding_completion", "form_completion_rate", "drop_off_by_step"],
+      "metrics": [
+        "onboarding_completion",
+        "form_completion_rate",
+        "drop_off_by_step"
+      ],
       "observed_effects": []
     },
     {
       "id": "CL-14-split-attention-avoidance",
-      "artifact_types": ["onboarding", "dashboard_widget", "checkout", "pricing_page"],
+      "artifact_types": [
+        "onboarding",
+        "dashboard_widget",
+        "checkout",
+        "pricing_page"
+      ],
       "product_requirements": [],
       "generation_directive": "Place related pieces of information together in space and time rather than requiring the user to hold one while searching for the other. Labels adjacent to what they label rather than in a legend; explanation beside the control rather than in a separate section; error message at the field, not summarized elsewhere. Splitting related information forces integration in working memory and measurably degrades performance.",
       "copy_formulas": [],
-      "metrics": ["error_rate", "task_completion_rate", "time_to_complete"],
+      "metrics": [
+        "error_rate",
+        "task_completion_rate",
+        "time_to_complete"
+      ],
       "observed_effects": []
     }
   ],
   "constraints": {
     "hard_rules": [
-      { "id": "no_load_as_obstruction", "rule": "Cognitive load must not be deliberately increased to obstruct a user action — confusing cancellation flows, deliberately dense terms, or complexity introduced to discourage a choice are dark patterns", "severity": "block" },
-      { "id": "no_essential_omission", "rule": "Load reduction may not remove information the user needs to decide (price, terms, consequences); simplification never means concealment", "severity": "block" }
+      {
+        "id": "no_load_as_obstruction",
+        "rule": "Cognitive load must not be deliberately increased to obstruct a user action — confusing cancellation flows, deliberately dense terms, or complexity introduced to discourage a choice are dark patterns",
+        "severity": "block"
+      },
+      {
+        "id": "no_essential_omission",
+        "rule": "Load reduction may not remove information the user needs to decide (price, terms, consequences); simplification never means concealment",
+        "severity": "block"
+      }
     ],
-    "compliance_refs": ["EU_DSA_dark_patterns", "eu_ucpd_material_information", "ftc_deceptive_omission"],
+    "compliance_refs": [
+      "EU_DSA_dark_patterns",
+      "eu_ucpd_material_information",
+      "ftc_deceptive_omission"
+    ],
     "boundary_test": "Is the reduction removing load that served nothing — or removing information the user needed to decide?"
   },
   "relations": [
-    { "type": "enables", "target": "MM-15", "note": "Multimedia design principles are largely applied cognitive-load management; MM-15 specifies how word–picture combination is handled, CL-14 states the underlying capacity constraint" },
-    { "type": "adjacent", "target": "PF-16", "note": "Lower load usually produces higher processing fluency; distinct constructs — capacity consumption versus subjective ease of processing" },
-    { "type": "adjacent", "target": "SC-17", "note": "Scanning behaviour is partly an adaptation to limited capacity; SC-17 describes the resulting attention pattern, CL-14 the constraint producing it" }
+    {
+      "type": "enables",
+      "target": "MM-15",
+      "note": "Multimedia design principles are largely applied cognitive-load management; MM-15 specifies how word–picture combination is handled, CL-14 states the underlying capacity constraint"
+    },
+    {
+      "type": "adjacent",
+      "target": "PF-16",
+      "note": "Lower load usually produces higher processing fluency; distinct constructs — capacity consumption versus subjective ease of processing"
+    },
+    {
+      "type": "adjacent",
+      "target": "SC-17",
+      "note": "Scanning behaviour is partly an adaptation to limited capacity; SC-17 describes the resulting attention pattern, CL-14 the constraint producing it"
+    }
   ],
   "orthogonality_note": "CL-14 is the capacity constraint underlying most of S7; MM-15, PF-16 and SC-17 describe specific consequences and applications of it. Kept as a distinct L1 because the constraint itself carries implementations (chunking, split-attention avoidance) that the others do not.",
-  "telemetry": { "tag_format": "me:CL-14:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "telemetry": {
+    "tag_format": "me:CL-14:{implementation_id}",
+    "amplitude_event_property": "mechanism_tags"
+  },
   "reference_examples": [
-    { "product": "Stripe Checkout", "what": "Sequenced, chunked payment steps with fields grouped and labelled in place rather than one dense form — extraneous load reduction at a high-stakes step" },
-    { "product": "Google search results page", "what": "Sparse presentation of one decision (which result) with detail withheld until needed — capacity preserved for the actual choice" },
-    { "product": "Apple product pages", "what": "Progressive disclosure: headline claim, then supporting detail on demand, rather than full specification presented simultaneously" }
+    {
+      "product": "Stripe Checkout",
+      "what": "Sequenced, chunked payment steps with fields grouped and labelled in place rather than one dense form — extraneous load reduction at a high-stakes step"
+    },
+    {
+      "product": "Google search results page",
+      "what": "Sparse presentation of one decision (which result) with detail withheld until needed — capacity preserved for the actual choice"
+    },
+    {
+      "product": "Apple product pages",
+      "what": "Progressive disclosure: headline claim, then supporting detail on demand, rather than full specification presented simultaneously"
+    }
+  ],
+  "effect_refs": [
+    "cl-14-002"
   ]
 }

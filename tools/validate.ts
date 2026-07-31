@@ -2549,15 +2549,24 @@ function main(): void {
             fail(file, "path must match proposals/{type}/{id}.json");
             ok = false;
           }
+          // decided_by/decided_at mean somebody DECIDED, which no undecided
+          // proposal has. decision_note is different on an edited one (D-113):
+          // it records why the payload was changed, and an edit with no stated
+          // reason is the ungrounded override the note exists to prevent.
           if (
             (proposal.status === "pending" ||
               proposal.status === "edited" ||
               proposal.status === "held_low_confidence") &&
-            (proposal.decided_by !== null ||
-              proposal.decided_at !== null ||
-              proposal.decision_note !== null)
+            (proposal.decided_by !== null || proposal.decided_at !== null)
           ) {
-            fail(file, `${proposal.status} proposal must not carry decision metadata`);
+            fail(file, `${proposal.status} proposal must not carry a decider`);
+            ok = false;
+          }
+          if (
+            (proposal.status === "pending" || proposal.status === "held_low_confidence") &&
+            proposal.decision_note !== null
+          ) {
+            fail(file, `${proposal.status} proposal must not carry a decision_note`);
             ok = false;
           }
           if (

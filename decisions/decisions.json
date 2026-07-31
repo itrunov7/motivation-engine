@@ -804,6 +804,20 @@
       "area": "data",
       "title": "A numeric threshold in an inferred pattern is a named tunable parameter, never prose",
       "body": "All three realizations from the first effect-anchored run told a generator to switch behaviour after 'three times' or 'three completions'. No source measured three, or any number: the cited studies compared worked examples against exploration and reported no significant difference for experienced learners, with nothing said about how many repetitions build a schema. The number was invented by the model and then written in the register of a finding — the same defect as D-114, an unmeasured value carrying the authority of measurement, differing only in that a grade at least LOOKS like a judgement while '3' looks like data. Realizations therefore gain a `parameters` array of {name, value, unit, evidence_basis}. The pattern text carries {snake_case_name} and the default lives in the parameter, so a reader sees the number is tunable and a generator can override it without editing prose. evidence_basis is an enum whose only member today is 'none — default heuristic', following the span_absent_reason precedent in the same schema: a literal a reader can filter on, not a sentence a writer can reword into sounding measured, and a second member is added the day a source actually measures a threshold. It is code-filled at extraction, never read from the model, because letting a model write it would let a model claim its own guess was measured. Enforcement sits at three depths, deliberately unequal: the extractor DROPS a candidate whose pattern states a bare digit or number-word rather than repairing it, since guessing which number the prose meant reinvents the same precision one layer down; approval REFUSES such a payload in projectRealization, which is the boundary the number would cross to become knowledge; and the validator FAILS a record but only WARNS on an undecided proposal, because a decided proposal keeps the payload it was decided on — rewriting a rejected pattern would erase the evidence of what the pipeline produced — and failing an undecided one would discard a whole run over a number the owner is about to fix. parameters is forbidden when derivation='reported', which describes what a source observed and has no pattern to parameterise. Applied immediately to expertise-based-guidance-toggle, whose 'three times' became {core_task_completions_before_exploration}."
+    },
+    {
+      "id": "D-116",
+      "date": "2026-07-31",
+      "title": "Proposal effect-cl-14-expertise-reversal-effect-72a394e20f30 edited",
+      "body": "Owner owner edited effect proposal effect-cl-14-expertise-reversal-effect-72a394e20f30 for CL-14. The validated proposal payload was updated for further review. No authoritative artifact was changed. Reason: Provisional grade. Corpus evidence = one secondary source (narrative review, AMEE Guide 86). Model-asserted A- rejected as ungrounded. To be re-graded when the computed rubric (grade-provenance defect) lands. Grade reflects OUR corpus provenance, not the literature at large.",
+      "area": "data"
+    },
+    {
+      "id": "D-117",
+      "date": "2026-07-31",
+      "title": "Proposal effect-cl-14-expertise-reversal-effect-72a394e20f30 approved",
+      "body": "Owner owner approved effect proposal effect-cl-14-expertise-reversal-effect-72a394e20f30 for CL-14. The validated proposal status and authoritative projection were committed atomically. Reason: Provisional grade. Corpus evidence = one secondary source (narrative review, AMEE Guide 86). Model-asserted A- rejected as ungrounded. To be re-graded when the computed rubric (grade-provenance defect) lands. Grade reflects OUR corpus provenance, not the literature at large.",
+      "area": "data"
     }
   ]
 }
