@@ -329,6 +329,12 @@ export interface Effect {
   name: string;
   fact: string;
   grade: EvidenceGrade;
+  /**
+   * What corpus evidence the grade rests on, in the owner's words. Optional
+   * while grades are still corrected by hand; required once grading is
+   * computed from the corpus rather than asserted.
+   */
+  grade_basis?: string;
   /** Supporting DOIs. */
   source: string[];
   boundary: string;

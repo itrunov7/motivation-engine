@@ -947,9 +947,13 @@ async function applyProposalDecision(
       ? {
           ...workingProposal,
           status: "edited",
+          // Nobody has decided yet, so decided_by/at stay null — but the reason
+          // the payload was changed is the only record of WHY it differs from
+          // what the pipeline proposed, and dropping it leaves an edited value
+          // as unexplained as the asserted one it replaced.
           decided_by: null,
           decided_at: null,
-          decision_note: null,
+          decision_note: reason ?? null,
         }
       : {
           ...workingProposal,
@@ -1203,17 +1207,25 @@ export async function prepareProposalDecision(
   const builder = new MutationBuilder(snapshot);
   const applied = await applyProposalDecision(builder, request, validators);
   const reason = request.reason?.trim();
+  // A rejection always states its reason; an approval or an edit states one
+  // when the owner supplied it. The reason is the only provenance an
+  // owner-corrected value has — a grade changed from A- to C+ with no recorded
+  // basis is exactly the ungrounded assertion the correction was meant to
+  // remove, so it is appended to every action rather than to one.
+  const outcome =
+    applied.actionPast === "approved"
+      ? "The validated proposal status and authoritative projection were committed atomically."
+      : applied.actionPast === "rejected"
+        ? "No authoritative artifact was changed."
+        : "The validated proposal payload was updated for further review. No authoritative artifact was changed.";
   const decisionId = await appendDecision(
     builder,
     request.decidedAt,
     `Proposal ${applied.proposalId} ${applied.actionPast}`,
     `Owner ${request.decidedBy.trim()} ${applied.actionPast} ${applied.proposalType} proposal ` +
       `${applied.proposalId} for ${applied.target}. ` +
-      (applied.actionPast === "approved"
-        ? "The validated proposal status and authoritative projection were committed atomically."
-        : applied.actionPast === "rejected"
-          ? `No authoritative artifact was changed. Reason: ${reason}`
-          : "The validated proposal payload was updated for further review. No authoritative artifact was changed."),
+      outcome +
+      (reason ? ` Reason: ${reason}` : ""),
   );
 
   const mutations = builder.mutations();
@@ -1291,6 +1303,7 @@ export async function prepareBatchProposalDecision(
   const enumeration = appliedItems
     .map((item) => `${item.proposalId}: ${item.actionPast}`)
     .join("; ");
+  const batchReason = request.reason?.trim();
   const decisionId = await appendDecision(
     builder,
     request.decidedAt,
@@ -1298,7 +1311,8 @@ export async function prepareBatchProposalDecision(
     `Owner ${request.decidedBy.trim()} completed one atomic batch. Outcomes: ${enumeration}. ` +
       (request.action === "approve"
         ? "Every proposal and projected artifact was validated before the single commit."
-        : `No authoritative artifact was changed. Shared reason: ${request.reason?.trim()}`),
+        : "No authoritative artifact was changed.") +
+      (batchReason ? ` Shared reason: ${batchReason}` : ""),
   );
   return {
     action: request.action,

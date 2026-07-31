@@ -945,6 +945,85 @@ test("applied rejection records the reason and leaves artifacts untouched", asyn
   }
 });
 
+test("an owner reason survives an edit and the approval that follows it", async () => {
+  const root = await temporaryRepository();
+  const proposalPath = "proposals/effect/regraded-effect.json";
+  const basis =
+    "Provisional grade. Corpus evidence = one secondary source. " +
+    "Model-asserted A rejected as ungrounded.";
+  const payload = {
+    id: "regraded-effect",
+    mechanism_id: "LA-01",
+    name: "Regraded test effect",
+    fact: "A grounded fixture phenomenon.",
+    grade: "A",
+    source: ["10.2307/1914185"],
+    boundary: "Only a transaction fixture.",
+    realization_ids: [],
+    provenance,
+  };
+  try {
+    await mkdir(join(root, "proposals/effect"), { recursive: true });
+    await writeFile(
+      join(root, proposalPath),
+      `${JSON.stringify(envelope("effect", "regraded-effect", "LA-01", payload), null, 2)}\n`,
+      "utf8",
+    );
+
+    const edit = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "edit",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason: basis,
+      editedPayload: { ...payload, grade: "C+", grade_basis: basis },
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, edit);
+
+    const edited = JSON.parse(await readFile(join(root, proposalPath), "utf8")) as {
+      status: string;
+      decided_by: string | null;
+      decision_note: string | null;
+      payload: { grade: string; grade_basis: string };
+    };
+    assert.equal(edited.status, "edited");
+    // Nobody has decided yet, but the reason for the change is recorded.
+    assert.equal(edited.decided_by, null);
+    assert.equal(edited.decision_note, basis);
+    assert.equal(edited.payload.grade, "C+");
+    assert.equal(edited.payload.grade_basis, basis);
+
+    const approval = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "approve",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason: basis,
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, approval);
+
+    const decisions = JSON.parse(
+      await readFile(join(root, "decisions/decisions.json"), "utf8"),
+    ) as { decisions: { id: string; body: string }[] };
+    const [editDecision, approvalDecision] = decisions.decisions.slice(-2);
+    assert.equal(editDecision.id, edit.decisionId);
+    assert.equal(approvalDecision.id, approval.decisionId);
+    for (const decision of [editDecision, approvalDecision]) {
+      assert(decision.body.includes(`Reason: ${basis}`));
+    }
+
+    const effect = JSON.parse(
+      await readFile(join(root, "effects/LA-01/regraded-effect.json"), "utf8"),
+    ) as { grade: string; grade_basis: string };
+    assert.equal(effect.grade, "C+");
+    assert.equal(effect.grade_basis, basis);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("local adapter applies writes/deletes and rejects stale preconditions", async () => {
   const root = await mkdtemp(join(tmpdir(), "proposal-transaction-"));
   try {

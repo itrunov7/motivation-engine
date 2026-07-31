@@ -17,6 +17,11 @@
     "name": { "type": "string", "minLength": 1 },
     "fact": { "type": "string", "minLength": 1 },
     "grade": { "$ref": "#/$defs/evidenceGrade" },
+    "grade_basis": {
+      "description": "What corpus evidence the grade rests on, in the owner's words. A letter with no stated basis is an assertion; the reader of the record must be able to see whether it came from one secondary source or from replicated primary work. Optional while grades are still owner-corrected by hand; required once the computed rubric lands.",
+      "type": "string",
+      "minLength": 1
+    },
     "source": {
       "type": "array",
       "minItems": 1,
