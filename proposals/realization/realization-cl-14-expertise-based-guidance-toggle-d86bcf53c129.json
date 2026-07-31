@@ -3,10 +3,10 @@
   "type": "realization",
   "target": "CL-14",
   "payload": {
-    "id": "cl-14-002-p1",
+    "id": "expertise-based-guidance-toggle",
     "mechanism_id": "CL-14",
     "term": "Expertise-based guidance toggle",
-    "description_as_reported": "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration.",
+    "description_as_reported": "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning.",
     "artifact_context": [
       "onboarding",
       "dashboard_widget"
@@ -19,7 +19,7 @@
       "source_domain": "educational psychology",
       "application_domain": "product UI"
     },
-    "pattern": "Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task three times.",
+    "pattern": "Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.",
     "provenance": [
       {
         "mechanism_id": "CL-14",
@@ -43,7 +43,15 @@
         "span_absent_reason": "no direct span — inferred from effect"
       }
     ],
-    "confidence": 0.75
+    "confidence": 0.6,
+    "parameters": [
+      {
+        "name": "core_task_completions_before_exploration",
+        "value": 3,
+        "unit": "completions of the core task",
+        "evidence_basis": "none — default heuristic"
+      }
+    ]
   },
   "provenance": [
     {
@@ -68,13 +76,13 @@
       "span_absent_reason": "no direct span — inferred from effect"
     }
   ],
-  "confidence": 0.75,
+  "confidence": 0.6,
   "operation": "create",
   "proposed_by": "extraction:github-actions-30622558771",
   "proposed_at": "2026-07-31T10:09:59.574Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "owner",
+  "decided_at": "2026-07-31T11:04:19.230Z",
+  "decision_note": "Accepted after the wording, id and threshold corrections in D-118. The transfer is a hypothesis for a generator, not evidence that it works — it rests on a neutral result for experienced learners, and its threshold is a declared default nobody measured."
 }

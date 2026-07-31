@@ -1,0 +1,51 @@
+{
+  "id": "expertise-based-guidance-toggle",
+  "mechanism_id": "CL-14",
+  "term": "Expertise-based guidance toggle",
+  "description_as_reported": "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning.",
+  "artifact_context": [
+    "onboarding",
+    "dashboard_widget"
+  ],
+  "effect_refs": [
+    "cl-14-002"
+  ],
+  "derivation": "inferred",
+  "domain_transfer": {
+    "source_domain": "educational psychology",
+    "application_domain": "product UI"
+  },
+  "pattern": "Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.",
+  "provenance": [
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_7e6bcb42220d86126199d6e2",
+      "doi": "10.1037/0022-0663.91.2.334",
+      "title": "A comparison of cognitive load associated with discovery learning and worked examples.",
+      "quote_or_locus": "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning",
+      "source_span": {
+        "start": 577,
+        "end": 865,
+        "source_text_sha256": "117f79f808c2a101fcd00a14d12a68446760b83b78402553b77c7687a81cce6c"
+      }
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_f251c717810311c480c7234f",
+      "effect_id": "cl-14-002",
+      "title": "Cognitive Load Theory: Implications for medical education: AMEE Guide No. 86",
+      "quote_or_locus": "Instructional techniques that facilitate learning among early learners may not help and may even interfere with learning among more advanced learners.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.6,
+  "parameters": [
+    {
+      "name": "core_task_completions_before_exploration",
+      "value": 3,
+      "unit": "completions of the core task",
+      "evidence_basis": "none — default heuristic"
+    }
+  ]
+}
