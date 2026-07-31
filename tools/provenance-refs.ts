@@ -31,8 +31,10 @@
 
 import { normalizeQualityText } from "../lib/proposal-quality";
 import { deriveQuote, locateSpan } from "../lib/span-locate";
+import { isSpanRole } from "../lib/types";
 import type {
   RejectedCandidateComparison,
+  SpanRole,
   UngroundedDropReason,
 } from "../lib/types";
 
@@ -44,6 +46,17 @@ export interface ProvenanceSpan {
   /** Raw character offsets into the record's source text, end-exclusive. */
   start: number;
   end: number;
+  /**
+   * The rhetorical role the reading pass established for this span (D-129).
+   * Stored in the ledger for the same reason the offsets are: the synthesis pass
+   * never sees a record, so if the role did not survive the round trip it would
+   * have to be re-judged by a model that cannot read the source — or dropped,
+   * which would make every synthesized item fail the role gate.
+   *
+   * Optional so a ledger entry registered without one stays representable; the
+   * gate treats its absence as a missing role, not as a pass.
+   */
+  span_role?: SpanRole;
 }
 
 /**
@@ -72,6 +85,8 @@ export interface AnchoredCitation {
   quote_or_locus: string;
   start: number;
   end: number;
+  /** Carried through from the reading pass so the gate can re-check it (D-129). */
+  span_role?: SpanRole;
 }
 
 export interface AnchoredCitations {
@@ -98,15 +113,34 @@ export class SpanLedger {
   private readonly byKey = new Map<string, string>();
   private next = 1;
 
-  /** Register a span, returning its ref. Idempotent for an identical span. */
-  register(corpusRecordId: string, start: number, end: number): string {
+  /**
+   * Register a span, returning its ref. Idempotent for an identical span.
+   *
+   * The role is NOT part of the key. Two citations of the same offsets are the
+   * same text and so have the same role; if a model disagrees with itself about
+   * one span, keying on the role would issue two refs for one span and hand the
+   * synthesis pass a distinction that does not exist in the source. The first
+   * role registered wins, deterministically.
+   */
+  register(
+    corpusRecordId: string,
+    start: number,
+    end: number,
+    spanRole?: SpanRole,
+  ): string {
     const key = `${corpusRecordId}:${start}:${end}`;
     const seen = this.byKey.get(key);
     if (seen) return seen;
     const ref = `p${this.next}`;
     this.next += 1;
     this.byKey.set(key, ref);
-    this.byRef.set(ref, { ref, corpus_record_id: corpusRecordId, start, end });
+    this.byRef.set(ref, {
+      ref,
+      corpus_record_id: corpusRecordId,
+      start,
+      end,
+      ...(spanRole ? { span_role: spanRole } : {}),
+    });
     return ref;
   }
 
@@ -135,7 +169,9 @@ export class SpanLedger {
  * `source.slice(start, end)`.
  */
 export function anchorCitations(
-  citations: { record_id?: unknown; quote_or_locus?: unknown }[] | undefined,
+  citations:
+    | { record_id?: unknown; quote_or_locus?: unknown; span_role?: unknown }[]
+    | undefined,
   sourceTextFor: (recordId: string) => string | null,
   ledger: SpanLedger,
 ): AnchoredCitations | ProvenanceRefusal {
@@ -188,12 +224,14 @@ export function anchorCitations(
         },
       };
     }
-    refs.push(ledger.register(recordId, span.start, span.end));
+    const spanRole = isSpanRole(citation?.span_role) ? citation.span_role : undefined;
+    refs.push(ledger.register(recordId, span.start, span.end, spanRole));
     anchored.push({
       record_id: recordId,
       quote_or_locus: span.quote,
       start: span.start,
       end: span.end,
+      ...(spanRole ? { span_role: spanRole } : {}),
     });
   }
   return { ok: true, citations: anchored, refs };
@@ -277,6 +315,7 @@ export function resolveRefs(
       quote_or_locus: quote,
       start: span.start,
       end: span.end,
+      ...(span.span_role ? { span_role: span.span_role } : {}),
     });
   }
   return { ok: true, citations };

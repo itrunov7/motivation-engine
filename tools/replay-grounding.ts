@@ -185,14 +185,29 @@ interface GroundedCandidate {
   item: DraftItem;
 }
 
-function candidateFor(record: EvidenceCorpusRecord, quote: string): DraftItem {
+function candidateFor(
+  record: EvidenceCorpusRecord,
+  quote: string,
+  // A probe is grounded BY CONSTRUCTION, so it asserts the role that lets it
+  // through (D-129). Any other default would make the 0.1 control fail for a
+  // reason the control is not measuring, and the mutation axes below vary this
+  // deliberately instead. `null` omits the field — not `undefined`, which a
+  // default parameter cannot distinguish from an absent argument.
+  spanRole: unknown = "finding",
+): DraftItem {
   return {
     name: `replay probe for ${record.record_id}`,
     fact: "Constructed offline by tools/replay-grounding.ts; never proposed.",
     boundary: "Not a scientific claim.",
     grade: "C-",
     confidence: 0.5,
-    citations: [{ record_id: record.record_id, quote_or_locus: quote }],
+    citations: [
+      {
+        record_id: record.record_id,
+        quote_or_locus: quote,
+        ...(spanRole === null ? {} : { span_role: spanRole }),
+      },
+    ],
   };
 }
 
@@ -251,6 +266,7 @@ function synth(mechanismId: string, count: number): number {
   console.log("-".repeat(header.length));
 
   let refused = 0;
+  let roleRefused = 0;
   for (let index = 0; index < candidates.length; index += 1) {
     const candidate = candidates[index];
     const outcome = groundingOutcome(candidate.item, corpus);
@@ -261,25 +277,53 @@ function synth(mechanismId: string, count: number): number {
         `${String(candidate.quote.length).padEnd(13)}${label}`,
     );
     if (!outcome.ok) {
-      refused += 1;
+      // A probe is grounded by construction but NOT role-honest by
+      // construction (D-129): it quotes the opening of an abstract, which is
+      // usually background, and asserts "finding" because that is the only role
+      // that reaches the rest of the gate. When the role checks refuse it they
+      // are working, so counting that as the grounding bug this part exists to
+      // rule out would make the control cry wolf.
+      if (isSpanRoleRefusal(outcome.reason)) roleRefused += 1;
+      else refused += 1;
       console.log(`      detail: ${outcome.detail}`);
-      reportComparison(candidate.quote, sourceTextFor(candidate.record));
+      if (!isSpanRoleRefusal(outcome.reason)) {
+        reportComparison(candidate.quote, sourceTextFor(candidate.record));
+      }
     }
   }
 
   console.log("");
   if (refused > 0) {
     console.log(
-      `FAIL — ${refused} of ${candidates.length} definitionally grounded candidates were refused. ` +
-        "That is the bug: the gate rejects provenance it constructed itself.",
+      `FAIL — ${refused} of ${candidates.length} definitionally grounded candidates were refused ` +
+        "on GROUNDING. That is the bug: the gate rejects provenance it constructed itself.",
     );
     return 1;
   }
   console.log(
-    `OK — all ${candidates.length} admitted. The gate admits provenance that is ` +
-      "grounded by construction, so a 100% drop rate is not the gate refusing valid input.",
+    `OK — ${candidates.length - roleRefused} of ${candidates.length} admitted, and the ` +
+      `${roleRefused} refusal${roleRefused === 1 ? "" : "s"} ${roleRefused === 1 ? "is" : "are"} ` +
+      "on span_role, not on grounding. The gate admits provenance that is grounded by " +
+      "construction, so a 100% drop rate is not the gate refusing valid input.",
   );
+  if (roleRefused > 0) {
+    console.log(
+      "   A probe quotes the OPENING of an abstract and asserts span_role=finding, which is " +
+        "usually a lie — the role checks catching that is the D-129 gate working, not the " +
+        "grounding gate failing.",
+    );
+  }
   return 0;
+}
+
+/** Whether a refusal came from the D-129 role checks rather than from grounding. */
+function isSpanRoleRefusal(reason: UngroundedReason): boolean {
+  return (
+    reason === "span_role_missing" ||
+    reason === "span_role_not_finding" ||
+    reason === "span_role_contradicted_by_structure" ||
+    reason === "premise_contradicted_downstream"
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -296,6 +340,13 @@ interface Mutation {
   quote?: (quote: string) => string;
   /** Rewrite the corpus record the candidate is checked against. */
   record?: (record: EvidenceCorpusRecord) => EvidenceCorpusRecord;
+  /**
+   * Replace the asserted span_role, `undefined` meaning omit the field (D-129).
+   * A separate axis from `quote` because it varies what the candidate CLAIMS
+   * about a span rather than the span itself, and the two must be measurable
+   * apart: the point of the matrix is one axis per row.
+   */
+  spanRole?: { value: unknown };
 }
 
 const MUTATIONS: Mutation[] = [
@@ -392,6 +443,30 @@ const MUTATIONS: Mutation[] = [
     note: "negative control, must refuse",
     quote: () => "--- ... ---",
   },
+  {
+    name: "span_role_omitted",
+    target: "candidate",
+    note: "D-129, must refuse",
+    spanRole: { value: null },
+  },
+  {
+    name: "span_role_unknown_value",
+    target: "candidate",
+    note: "D-129, must refuse",
+    spanRole: { value: "conclusion" },
+  },
+  {
+    name: "span_role_background",
+    target: "candidate",
+    note: "D-129, must refuse: no finding in the item",
+    spanRole: { value: "background" },
+  },
+  {
+    name: "span_role_method",
+    target: "candidate",
+    note: "D-129, must refuse: no finding in the item",
+    spanRole: { value: "method" },
+  },
 ];
 
 /** Swap one record inside a corpus, leaving every other field identical. */
@@ -433,7 +508,10 @@ function mutate(mechanismId: string, count: number): number {
       const quote = mutation.quote ? mutation.quote(candidate.quote) : candidate.quote;
       const record = mutation.record ? mutation.record(candidate.record) : candidate.record;
       const activeCorpus = mutation.record ? corpusWithRecord(corpus, record) : corpus;
-      const outcome = groundingOutcome(candidateFor(record, quote), activeCorpus);
+      const probe = mutation.spanRole
+        ? candidateFor(record, quote, mutation.spanRole.value)
+        : candidateFor(record, quote);
+      const outcome = groundingOutcome(probe, activeCorpus);
       if (outcome.ok) admitted += 1;
       else reasons.set(outcome.reason, (reasons.get(outcome.reason) ?? 0) + 1);
     }
@@ -463,10 +541,27 @@ function mutate(mechanismId: string, count: number): number {
 // replay — re-check a candidate the pipeline dropped (D-104)
 // ---------------------------------------------------------------------------
 
+/**
+ * Whether a persisted candidate carries any span_role at all (D-129).
+ *
+ * A candidate recorded before the field existed has none, and replaying it under
+ * the role gate would report span_role_missing for every one of them — burying
+ * the reason each was ACTUALLY refused for, which is the only thing the replay
+ * exists to re-examine. So the gate is applied to candidates that could have
+ * carried a role and withheld from those that could not.
+ */
+function carriesSpanRole(item: DraftItem): boolean {
+  return (item.citations ?? []).some(
+    (citation) => (citation as { span_role?: unknown }).span_role !== undefined,
+  );
+}
+
 function replayRecord(entry: RejectedCandidateRecord, index: number): boolean {
   const corpus = loadCorpus(entry.mechanism_id);
-  const outcome = groundingOutcome(entry.item as DraftItem, corpus);
-  const label = outcomeLabel(outcome);
+  const item = entry.item as DraftItem;
+  const preRole = !carriesSpanRole(item);
+  const outcome = groundingOutcome(item, corpus, { requireSpanRole: !preRole });
+  const label = `${outcomeLabel(outcome)}${preRole ? "*" : ""}`;
   const agrees = !outcome.ok && outcome.reason === entry.reason;
 
   console.log(
@@ -499,11 +594,22 @@ function replay(path: string): number {
   console.log("-".repeat(header.length));
 
   let differs = 0;
+  let preRole = 0;
   for (let index = 0; index < file.rejected.length; index += 1) {
-    if (!replayRecord(file.rejected[index], index)) differs += 1;
+    const entry = file.rejected[index];
+    if (!carriesSpanRole(entry.item as DraftItem)) preRole += 1;
+    if (!replayRecord(entry, index)) differs += 1;
   }
 
   console.log("");
+  if (preRole > 0) {
+    console.log(
+      `* ${preRole} of ${file.rejected.length} candidates carry no span_role and were ` +
+        "replayed WITHOUT the D-129 role gate — they were recorded before the field " +
+        "existed, and reporting span_role_missing for them would hide what they were " +
+        "actually refused for.",
+    );
+  }
   if (differs > 0) {
     console.log(
       `${differs} of ${file.rejected.length} replayed to a different verdict — the corpus or the gate ` +

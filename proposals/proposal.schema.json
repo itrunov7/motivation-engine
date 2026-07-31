@@ -224,10 +224,16 @@
         },
         "title": { "type": "string", "minLength": 1 },
         "quote_or_locus": { "type": "string", "minLength": 1 },
-        "source_span": { "$ref": "#/$defs/provenanceSourceSpan" }
+        "source_span": { "$ref": "#/$defs/provenanceSourceSpan" },
+        "span_role": { "$ref": "#/$defs/spanRole" }
       },
       "required": ["mechanism_id", "corpus_record_id", "doi", "title", "quote_or_locus"],
       "additionalProperties": false
+    },
+    "spanRole": {
+      "description": "What the quoted span is DOING in the source it was cut from (D-129). Asserted by the extraction pass — the only pass that reads a record — then checked against the source text: a span inside a labelled BACKGROUND or METHOD section cannot be a finding, and a span the same source later reverses is not one either. Only span_role=finding reports what the cited source observed, and an item whose citations carry no finding is refused. Optional so items written before D-129 stay valid; required in code of anything the extraction pipeline produces.",
+      "type": "string",
+      "enum": ["background", "hypothesis", "method", "finding", "limitation"]
     },
     "provenanceSourceSpan": {
       "description": "Where the quote sits in its source record, and which version of that record the offsets were resolved against (D-110). start/end are end-exclusive character offsets into lib/proposal-quality evidenceSourceText(record), so slicing that string at them re-derives the quote. source_text_sha256 pins the exact text: without it a re-harvested or re-normalised record silently relocates the offsets onto different words, so a mismatch marks the span STALE as a named condition instead. Optional so pre-D-110 hand-authored records stay valid; required in code of anything the extraction pipeline produces.",

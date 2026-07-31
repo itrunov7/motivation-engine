@@ -44,9 +44,12 @@ import {
   sha256Hex,
 } from "../lib/proposal-quality";
 import { writeRunProgress } from "./progress";
+import { checkSpanRole } from "../lib/span-role";
 import {
   INFERENCE_SPAN_ABSENT_REASON,
+  isSpanRole,
   PARAMETER_EVIDENCE_BASIS_NONE,
+  SPAN_ROLES,
 } from "../lib/types";
 import type {
   ArtifactType,
@@ -88,6 +91,7 @@ import type {
   Segment,
   SeedStub,
   SegmentsFile,
+  SpanRole,
   UngroundedDropReason,
 } from "../lib/types";
 import {
@@ -211,6 +215,13 @@ interface CitationDraft {
    */
   start?: number;
   end?: number;
+  /**
+   * What the span is doing in its source (D-129). Asserted by the extraction
+   * model, which is the pass that actually read the record, then checked against
+   * the text. Typed loosely because it arrives from a model: `spanRoleOutcome`
+   * validates it against SPAN_ROLES rather than trusting the string.
+   */
+  span_role?: unknown;
 }
 
 interface ImplementationDraft {
@@ -341,8 +352,13 @@ const citationSchema: JsonSchema = {
   properties: {
     record_id: { type: "string" },
     quote_or_locus: { type: "string" },
+    // Required of the extraction model, and an enum rather than a free string:
+    // the gate that reads it is only as good as the vocabulary being closed
+    // (D-129). A model that cannot decide has "background" available, which
+    // costs it the candidate — that is the intended price.
+    span_role: { type: "string", enum: [...SPAN_ROLES] },
   },
-  required: ["record_id", "quote_or_locus"],
+  required: ["record_id", "quote_or_locus", "span_role"],
 };
 
 const citationsSchema: JsonSchema = {
@@ -1514,7 +1530,19 @@ function provenanceInstruction(
     mode === "realizations" && !anchor
       ? "a supplied title or observation"
       : "a supplied title or abstract";
-  return `Every item must include citations [{record_id,quote_or_locus}] using only supplied records. quote_or_locus must be an exact span from ${locus}. If an item cannot be grounded, omit it.`;
+  return [
+    `Every item must include citations [{record_id,quote_or_locus,span_role}] using only supplied records.`,
+    `quote_or_locus must be an exact span from ${locus}.`,
+    "span_role states what the span is DOING in the source it was cut from, and is checked against the text:",
+    "- background: what the literature, a theory, or prior work says. Includes anything the source is restating rather than testing, and anything it introduces in order to motivate its own question.",
+    "- hypothesis: what this source predicted or set out to test.",
+    "- method: what was done — design, materials, participants, procedure.",
+    "- finding: what THIS source observed in ITS OWN data. Results and conclusions about those results.",
+    "- limitation: what this source says it cannot show, or where its result did not hold.",
+    "A verbatim quote can still misrepresent a paper. A sentence that states what cognitive load theory PREDICTS is background even if the paper agrees with it, and even if the same paper later confirms it — and some papers report the OPPOSITE of the prediction they open with. Read the sentences after your quote before choosing: if the source goes on to qualify or contradict it, the span is background, not a finding.",
+    "Only span_role=finding can ground a fact, so a candidate whose only citations are background, hypothesis, method, or limitation will be dropped. Do not relabel a background span as a finding to save an item — a dropped candidate costs nothing, a false one is filed as knowledge.",
+    "If an item cannot be grounded, omit it.",
+  ].join(" ");
 }
 
 /**
@@ -2206,8 +2234,23 @@ export function groundingOutcome(
      * writes can reach a proposal without a verifiable span.
      */
     requireSpans?: boolean;
+    /**
+     * Check the rhetorical role of every evidence citation, and require the item
+     * to carry at least one finding (D-129). Defaults to TRUE: the pipeline must
+     * not be able to skip it by forgetting a flag, which is the opposite default
+     * from `requireSpans` because that check needs anchoring to have happened
+     * first and this one does not.
+     *
+     * The only caller that turns it off is tools/replay-grounding.ts, replaying
+     * a candidate recorded before this field existed. Such a candidate has no
+     * roles to check, and reporting `span_role_missing` for it would overwrite
+     * the reason it was actually refused for — destroying the record of the
+     * defect the replay exists to re-examine.
+     */
+    requireSpanRole?: boolean;
   } = {},
 ): GroundingOutcome {
+  const checkRoles = options.requireSpanRole !== false;
   if (!Array.isArray(item.citations) || item.citations.length === 0) {
     return {
       ok: false,
@@ -2218,6 +2261,11 @@ export function groundingOutcome(
   }
   const records = new Map(corpus.records.map((record) => [record.record_id, record]));
   const provenance: KnowledgeProvenanceItem[] = [];
+  // Whether any citation reports what its own source OBSERVED (D-129). Tracked
+  // across the whole item rather than per citation, because an item may
+  // legitimately cite the premise its finding confirms — cl-14-001 does exactly
+  // that — but an item with no finding at all rests on nothing observed.
+  let sawFinding = false;
   for (const citation of item.citations) {
     if (
       typeof citation?.record_id !== "string" ||
@@ -2268,6 +2316,26 @@ export function groundingOutcome(
       });
       continue;
     }
+    if (checkRoles) {
+      const verdict = checkSpanRole({
+        asserted: citation.span_role,
+        source: rawSourceText,
+        quote: citation.quote_or_locus,
+        start: citation.start,
+        end: citation.end,
+      });
+      if (!verdict.ok) {
+        return {
+          ok: false,
+          reason: verdict.reason,
+          detail: `${verdict.detail} — record ${record.record_id}`,
+          corpus_record_id: record.record_id,
+          compared: comparisonFor(citation.quote_or_locus, rawSourceText),
+          corpus_side: corpusSideFor(record),
+        };
+      }
+      if (verdict.role === "finding") sawFinding = true;
+    }
     const span = anchoredSpan(citation, rawSourceText);
     if (!span && options.requireSpans) {
       return {
@@ -2289,6 +2357,11 @@ export function groundingOutcome(
       // make the stored text disagree with the offsets that produced it.
       quote_or_locus: span ? span.quote : citation.quote_or_locus.trim(),
       ...(span ? { source_span: span.source_span } : {}),
+      // Persisted, not merely checked (D-129). A reader asking why an effect is
+      // graded as it is needs to know that a citation is the paper's own result
+      // rather than its opening premise, and re-deriving that would mean
+      // re-reading the source with the same judgement that was already made.
+      ...(isSpanRole(citation.span_role) ? { span_role: citation.span_role } : {}),
     });
   }
   const unique = new Map(
@@ -2316,6 +2389,21 @@ export function groundingOutcome(
       return refusalForGroundingError(errors[0], result, records);
     }
     return { ok: true, provenance: result };
+  }
+  // An evidence-grounded item must rest on something a source OBSERVED (D-129).
+  // Applied to evidence corpora only: a realization-corpus record is an owner's
+  // observation of an interface, which has no results section to sit in and no
+  // background section to be mistaken for — the observation IS the finding.
+  if (checkRoles && !sawFinding) {
+    return {
+      ok: false,
+      reason: "span_role_not_finding",
+      detail:
+        "no citation carried span_role=finding, so the item rests on background, " +
+        "hypothesis, method or limitation spans alone — none of which report what " +
+        "a source observed (D-129)",
+      corpus_record_id: result[0]?.corpus_record_id ?? null,
+    };
   }
   const errors = groundingErrors(result, corpus);
   if (errors.length > 0) {

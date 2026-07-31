@@ -250,6 +250,31 @@ export interface ProvenanceSourceSpan {
   source_text_sha256: string;
 }
 
+/**
+ * What a span is DOING in the text it was cut from (D-129).
+ *
+ * A quote can be verbatim and still misrepresent the paper, because a paper is
+ * not one voice: it restates what the literature predicts, states what it set
+ * out to test, describes what it did, reports what it found, and admits what it
+ * cannot show. Only the fourth of those is a finding. Two of the four proposals
+ * from the first extraction run quoted a background premise as though the study
+ * had found it, and one of those papers went on to report the opposite — a
+ * failure no grounding check can catch, because the quote was genuinely there.
+ */
+export const SPAN_ROLES = [
+  "background",
+  "hypothesis",
+  "method",
+  "finding",
+  "limitation",
+] as const;
+
+export type SpanRole = (typeof SPAN_ROLES)[number];
+
+export function isSpanRole(value: unknown): value is SpanRole {
+  return typeof value === "string" && (SPAN_ROLES as readonly string[]).includes(value);
+}
+
 /** One literature locus grounding an effect or proposal. */
 export interface EvidenceProvenanceItem {
   /** Omitted for backwards compatibility with pre-C2 evidence records. */
@@ -267,6 +292,14 @@ export interface EvidenceProvenanceItem {
    * convention. An extraction-authored item without it fails validation.
    */
   source_span?: ProvenanceSourceSpan;
+  /**
+   * The rhetorical role of this span in its source (D-129). Enforced exactly as
+   * `source_span` above: optional in the schema so items written before D-129
+   * stay valid, required in code of anything the extraction pipeline produces.
+   * Absent means the item predates the decision, which is a different fact from
+   * a role nobody could determine.
+   */
+  span_role?: SpanRole;
 }
 
 /** One interface-evidence locus from the realization corpus (D-081). */
@@ -1419,6 +1452,14 @@ export const UNGROUNDED_DROP_REASONS = [
   "title_mismatch",
   /** Provenance mechanism/source/contributor disagrees with the corpus. */
   "provenance_mismatch",
+  /** A citation carried no span_role, or one outside the vocabulary (D-129). */
+  "span_role_missing",
+  /** The span is background/hypothesis/method/limitation, so it grounds no fact (D-129). */
+  "span_role_not_finding",
+  /** The model called it a finding; the source's own section labels say otherwise (D-129). */
+  "span_role_contradicted_by_structure",
+  /** A later sentence in the same stored text contradicts the quoted span (D-129). */
+  "premise_contradicted_downstream",
   /** The proposal builder rejected the item after provenance was assembled. */
   "proposal_not_built",
 ] as const;

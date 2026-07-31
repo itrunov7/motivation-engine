@@ -75,10 +75,16 @@
         },
         "title": { "type": "string", "minLength": 1 },
         "quote_or_locus": { "type": "string", "minLength": 1 },
-        "source_span": { "$ref": "#/$defs/provenanceSourceSpan" }
+        "source_span": { "$ref": "#/$defs/provenanceSourceSpan" },
+        "span_role": { "$ref": "#/$defs/spanRole" }
       },
       "required": ["mechanism_id", "corpus_record_id", "doi", "title", "quote_or_locus"],
       "additionalProperties": false
+    },
+    "spanRole": {
+      "description": "What the quoted span is DOING in the source it was cut from (D-129). A verbatim quote can still misrepresent a paper: a sentence stating what a theory PREDICTS is background even when the same paper later confirms it, and some papers report the opposite of the prediction they open with. Only span_role=finding reports what the cited source itself observed, and only a finding can ground a fact. Optional so items written before D-129 stay valid — absent means the item predates the decision, which is a different fact from a role nobody could determine — but REQUIRED in code of anything the extraction pipeline produces, enforced in lib/span-role.ts and tools/validate.ts exactly as source_span is under D-110.",
+      "type": "string",
+      "enum": ["background", "hypothesis", "method", "finding", "limitation"]
     },
     "provenanceSourceSpan": {
       "description": "Where the quote sits in its source record, and which version of that record the offsets were resolved against (D-110). Approval copies provenance verbatim out of the proposal, so the authoritative effect record stays independently verifiable: re-slicing lib/proposal-quality evidenceSourceText(record) at start/end must reproduce quote_or_locus byte for byte, and source_text_sha256 must still match that text. A hash mismatch marks the span STALE rather than letting the offsets quote different words.",

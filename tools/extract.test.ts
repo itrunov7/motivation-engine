@@ -15,6 +15,7 @@ import {
 import type {
   CorpusManifestRun,
   EvidenceCorpusFile,
+  EvidenceCorpusRecord,
   ExtractionOpsConfig,
   KnowledgeProvenanceItem,
   Proposal,
@@ -182,6 +183,26 @@ function corpus(): EvidenceCorpusFile {
   return JSON.parse(
     readFileSync(join(ROOT, "corpora/evidence/CL-14.json"), "utf8"),
   ) as EvidenceCorpusFile;
+}
+
+/**
+ * A citation carrying the role that lets it through the D-129 gate.
+ *
+ * Every test that is measuring something OTHER than the role gate uses this, so
+ * a span-role refusal cannot masquerade as the failure the test names. Tests of
+ * the gate itself pass their own role.
+ *
+ * `null` OMITS the field. Not `undefined`: an omitted argument and an explicit
+ * `undefined` are the same thing to a default parameter, so `undefined` would
+ * silently produce the default "finding" and a test asserting span_role_missing
+ * would pass a perfectly labelled citation.
+ */
+function cite(recordId: string, quote: string, spanRole: unknown = "finding") {
+  return {
+    record_id: recordId,
+    quote_or_locus: quote,
+    ...(spanRole === null ? {} : { span_role: spanRole }),
+  };
 }
 
 /** A zeroed stats block; tests override only the counters they assert on. */
@@ -593,30 +614,20 @@ test("grounding accepts exact loci and rejects invented or unknown citations", (
   assert(record?.abstract);
   const exact = record.abstract.slice(0, 80);
   const grounded = groundedProvenance(
-    {
-      citations: [{ record_id: record.record_id, quote_or_locus: exact }],
-    },
+    { citations: [cite(record.record_id, exact)] },
     file,
   );
   assert.equal(grounded?.[0].corpus_record_id, record.record_id);
   assert.equal(
     groundedProvenance(
-      {
-        citations: [
-          { record_id: record.record_id, quote_or_locus: "This span was invented." },
-        ],
-      },
+      { citations: [cite(record.record_id, "This span was invented.")] },
       file,
     ),
     null,
   );
   assert.equal(
     groundedProvenance(
-      {
-        citations: [
-          { record_id: "cr_000000000000000000000000", quote_or_locus: exact },
-        ],
-      },
+      { citations: [cite("cr_000000000000000000000000", exact)] },
       file,
     ),
     null,
@@ -644,7 +655,7 @@ test("every grounding refusal names its own reason", () => {
   const exact = record.abstract.slice(0, 80);
 
   const accepted = groundingOutcome(
-    { citations: [{ record_id: record.record_id, quote_or_locus: exact }] },
+    { citations: [cite(record.record_id, exact)] },
     file,
   );
   assert.equal(accepted.ok, true);
@@ -652,25 +663,26 @@ test("every grounding refusal names its own reason", () => {
   const cases: [DraftItem, UngroundedReason][] = [
     [{ citations: [] }, "no_citations"],
     [{}, "no_citations"],
+    [{ citations: [cite(record.record_id, "   ")] }, "malformed_citation"],
     [
-      { citations: [{ record_id: record.record_id, quote_or_locus: "   " }] },
-      "malformed_citation",
-    ],
-    [
-      {
-        citations: [
-          { record_id: "cr_000000000000000000000000", quote_or_locus: exact },
-        ],
-      },
+      { citations: [cite("cr_000000000000000000000000", exact)] },
       "unknown_record_id",
     ],
     [
-      {
-        citations: [
-          { record_id: record.record_id, quote_or_locus: "This span was invented." },
-        ],
-      },
+      { citations: [cite(record.record_id, "This span was invented.")] },
       "quote_not_in_source",
+    ],
+    // D-129. The role is checked per citation; the finding requirement is a
+    // property of the item, so an item citing only a method span is refused even
+    // though that citation is impeccably grounded.
+    [{ citations: [cite(record.record_id, exact, null)] }, "span_role_missing"],
+    [
+      { citations: [cite(record.record_id, exact, "conclusion")] },
+      "span_role_missing",
+    ],
+    [
+      { citations: [cite(record.record_id, exact, "method")] },
+      "span_role_not_finding",
     ],
   ];
   for (const [item, expected] of cases) {
@@ -693,9 +705,7 @@ test("every grounding refusal names its own reason", () => {
     records: [...file.records, doiless],
   };
   const doiOutcome = groundingOutcome(
-    {
-      citations: [{ record_id: doiless.record_id, quote_or_locus: exact }],
-    },
+    { citations: [cite(doiless.record_id, exact)] },
     withDoiless,
   );
   assert.equal(doiOutcome.ok, false);
@@ -719,7 +729,7 @@ test("an anchored citation stores a span that re-slices to its own quote", () =>
   // the model's string.
   const modelQuote = record.abstract.slice(10, 90).replace(/-/g, "\u2010");
   const anchored = anchorCitations(
-    [{ record_id: record.record_id, quote_or_locus: modelQuote }],
+    [cite(record.record_id, modelQuote)],
     () => sourceText,
     ledger,
   );
@@ -735,6 +745,10 @@ test("an anchored citation stores a span that re-slices to its own quote", () =>
   assert(item && !("corpus_kind" in item && item.corpus_kind !== "evidence"));
   const span = item.source_span;
   assert(span, "an extraction-authored evidence item must carry a span");
+  // The role survives anchoring and is PERSISTED on the provenance item (D-129),
+  // so a reader of the record can see the citation is the paper's own result.
+  assert.equal(anchored.citations[0].span_role, "finding");
+  assert.equal(item.span_role, "finding");
 
   // Criterion (d): verified by RE-SLICING, not by trusting the emitted quote.
   assert.equal(sourceText.slice(span.start, span.end), item.quote_or_locus);
@@ -801,9 +815,7 @@ test("provenance reaching a proposal is refused when it carries no span", () => 
   );
   assert(record?.abstract);
   const unanchored = {
-    citations: [
-      { record_id: record.record_id, quote_or_locus: record.abstract.slice(0, 80) },
-    ],
+    citations: [cite(record.record_id, record.abstract.slice(0, 80))],
   };
   // The cheap pre-gate runs before anchoring, so it must still admit this.
   assert.equal(groundingOutcome(unanchored, file).ok, true);
@@ -812,6 +824,139 @@ test("provenance reaching a proposal is refused when it carries no span", () => 
   assert.equal(refused.ok, false);
   assert.equal(refused.ok === false && refused.reason, "malformed_citation");
   assert(refused.ok === false && refused.detail.includes("no anchored span"));
+});
+
+test("the run that exposed D-129 replays: a verbatim premise is refused, its findings are not", () => {
+  const file = corpus();
+  // Tabbers, Martens & van Merriënboer 2004 — the record that grounded BOTH the
+  // rejected modality proposal (D-123) and the narrowed cueing effect (D-126).
+  // Not a synthetic fixture: the gate has to separate these spans of THIS text,
+  // because separating them is the entire reason it exists.
+  const record = file.records.find(
+    (candidate) => candidate.record_id === "cr_09815b8bafeb7050b14d4cd8",
+  );
+  assert(record, "the Tabbers record must stay in the CL-14 corpus for this test");
+  const source = evidenceSourceText(record);
+
+  // 369-638 is the span the rejected modality proposal actually stored;
+  // 1190-1260 and 1369-1527 are the two the approved cueing effect carries.
+  const premise = source.slice(369, 638);
+  const results = source.slice(1190, 1260);
+  const conclusions = source.slice(1369, 1527);
+  // Guard the offsets: if a re-harvest moves them, the test must say so rather
+  // than quietly assert about different sentences.
+  assert.match(premise, /^replacing visual text with spoken text/);
+  assert.match(results, /^Adding visual cues to the pictures/);
+  assert.match(conclusions, /^Only a weak cueing effect/);
+
+  // What the pipeline actually did: quote the BACKGROUND sentence and call it a
+  // finding. The paper labels that section itself, so the structure refuses it.
+  const asFinding = groundingOutcome(
+    { citations: [cite(record.record_id, premise, "finding")] },
+    file,
+  );
+  assert.equal(asFinding.ok, false);
+  assert.equal(
+    asFinding.ok === false && asFinding.reason,
+    "span_role_contradicted_by_structure",
+  );
+  assert(asFinding.ok === false && asFinding.detail.includes("BACKGROUND"));
+
+  // Labelled honestly, the same span is a valid citation and a useless one: the
+  // item rests on nothing the study observed.
+  const asBackground = groundingOutcome(
+    { citations: [cite(record.record_id, premise, "background")] },
+    file,
+  );
+  assert.equal(asBackground.ok, false);
+  assert.equal(
+    asBackground.ok === false && asBackground.reason,
+    "span_role_not_finding",
+  );
+
+  // Both spans the owner approved must survive. The CONCLUSIONS one is the
+  // sharper case: it CONTAINS "reverse", and the sentence after it explains the
+  // reversal, so a naive downstream check would refuse the paper's own verdict.
+  for (const quote of [results, conclusions]) {
+    const outcome = groundingOutcome(
+      { citations: [cite(record.record_id, quote, "finding")] },
+      file,
+    );
+    assert.equal(outcome.ok, true, `findings span refused: ${quote.slice(0, 48)}`);
+  }
+
+  // An item may cite the premise ALONGSIDE the finding — which is the shape
+  // cl-14-001 was narrowed to. One finding is enough; zero is not.
+  const both = groundingOutcome(
+    {
+      citations: [
+        cite(record.record_id, premise, "background"),
+        cite(record.record_id, results, "finding"),
+      ],
+    },
+    file,
+  );
+  assert.equal(both.ok, true);
+  assert(both.ok);
+  assert.deepEqual(
+    both.provenance.map((item) => ("span_role" in item ? item.span_role : null)),
+    ["background", "finding"],
+  );
+});
+
+test("an unlabelled abstract falls back to the sentence that reverses the premise", () => {
+  const file = corpus();
+  const record = file.records.find(
+    (candidate) => candidate.record_id === "cr_09815b8bafeb7050b14d4cd8",
+  );
+  assert(record);
+  // The same paper with its section headings stripped — which is what most of
+  // this corpus looks like. The structural check goes silent, so the downstream
+  // check is all that stands between a background premise and a filed fact.
+  const flattened: EvidenceCorpusRecord = {
+    ...record,
+    abstract: (record.abstract ?? "").replace(
+      /\b(BACKGROUND|AIMS|SAMPLE|METHOD|RESULTS|CONCLUSIONS): /g,
+      "",
+    ),
+  };
+  const flatFile: EvidenceCorpusFile = {
+    ...file,
+    records: [flattened, ...file.records.filter((r) => r.record_id !== record.record_id)],
+  };
+  const source = evidenceSourceText(flattened);
+  const premise = source.slice(
+    source.indexOf("replacing visual text with spoken text"),
+    source.indexOf("less mental effort spent") + "less mental effort spent".length,
+  );
+
+  const refused = groundingOutcome(
+    { citations: [cite(record.record_id, premise, "finding")] },
+    flatFile,
+  );
+  assert.equal(refused.ok, false);
+  assert.equal(
+    refused.ok === false && refused.reason,
+    "premise_contradicted_downstream",
+  );
+  // The refusal names the marked word, the contradicting sentence and the shared
+  // vocabulary, so a false positive is arguable rather than merely mysterious.
+  assert(refused.ok === false && refused.detail.includes("reverse"));
+  assert(refused.ok === false && refused.detail.includes("modality"));
+
+  // And the finding sentences still pass with the headings gone.
+  for (const marker of [
+    "Adding visual cues to the pictures resulted in higher retention scores",
+    "Only a weak cueing effect and even a reverse modality effect have been found",
+  ]) {
+    const at = source.indexOf(marker);
+    assert(at >= 0);
+    const outcome = groundingOutcome(
+      { citations: [cite(record.record_id, source.slice(at, at + marker.length), "finding")] },
+      flatFile,
+    );
+    assert.equal(outcome.ok, true, `refused: ${marker.slice(0, 40)}`);
+  }
 });
 
 test("a refusal carries both compared strings untruncated", () => {
@@ -1570,7 +1715,7 @@ test("mode=dossier grounds axes per-citation and leaves ungrounded axes unscored
   assert(record?.abstract && record.doi);
   const exact = record.abstract.slice(0, 80);
   const provenance = groundedProvenance(
-    { citations: [{ record_id: record.record_id, quote_or_locus: exact }] },
+    { citations: [cite(record.record_id, exact)] },
     file,
   );
   assert(provenance);
@@ -1582,10 +1727,7 @@ test("mode=dossier grounds axes per-citation and leaves ungrounded axes unscored
     score: 2,
     rationale: "Grounded rationale from the cited abstract.",
     citations: [
-      {
-        record_id: record.record_id,
-        quote_or_locus: grounded ? exact : "This span was invented.",
-      },
+      cite(record.record_id, grounded ? exact : "This span was invented."),
     ],
   });
   const proposal = toProposal(

@@ -143,6 +143,10 @@
         "doi_unresolved": { "type": "integer", "minimum": 0 },
         "title_mismatch": { "type": "integer", "minimum": 0 },
         "provenance_mismatch": { "type": "integer", "minimum": 0 },
+        "span_role_missing": { "type": "integer", "minimum": 0 },
+        "span_role_not_finding": { "type": "integer", "minimum": 0 },
+        "span_role_contradicted_by_structure": { "type": "integer", "minimum": 0 },
+        "premise_contradicted_downstream": { "type": "integer", "minimum": 0 },
         "proposal_not_built": { "type": "integer", "minimum": 0 }
       }
     }

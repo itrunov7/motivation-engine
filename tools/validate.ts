@@ -61,7 +61,7 @@ import type {
 import { CONNECTORS } from "./connectors";
 import { deriveCorpusRecordId, CORPUS_RECORD_ID_PATTERN } from "../lib/corpus-record-id";
 import { resolveEffectBasis } from "../lib/effect-basis";
-import { isExtractionAuthored } from "../lib/proposal-meta";
+import { isExtractionAuthored, requiresSpanRole } from "../lib/proposal-meta";
 import {
   evidenceSourceText,
   groundingErrors,
@@ -94,7 +94,7 @@ import type {
   Segment,
   SegmentCandidate,
 } from "../lib/types";
-import { UNGROUNDED_DROP_REASONS } from "../lib/types";
+import { isSpanRole, UNGROUNDED_DROP_REASONS } from "../lib/types";
 import {
   KNOWN_CONNECTOR_IDS,
   OPS_PATHS,
@@ -1037,6 +1037,18 @@ interface SpanTally {
   declaredInference: number;
   /** Files carrying at least one spanless legacy item, for the summary line. */
   legacyFiles: Set<string>;
+  /**
+   * The same shape of count for span_role (D-129). Kept in the same tally
+   * because the two answer one question — how much of the corpus-grounded
+   * knowledge is machine-checkable — and reporting them apart would let one
+   * number look healthy while the other rots.
+   */
+  withRole: number;
+  withoutRole: number;
+  /** How the roles that ARE recorded break down, for the summary line. */
+  roleCounts: Map<string, number>;
+  /** Files carrying at least one roleless legacy item. */
+  rolelessFiles: Set<string>;
 }
 
 function emptySpanTally(): SpanTally {
@@ -1046,6 +1058,10 @@ function emptySpanTally(): SpanTally {
     stale: 0,
     declaredInference: 0,
     legacyFiles: new Set(),
+    withRole: 0,
+    withoutRole: 0,
+    roleCounts: new Map(),
+    rolelessFiles: new Set(),
   };
 }
 
@@ -2649,6 +2665,10 @@ function main(): void {
           const extractionAuthored = isExtractionAuthored(
             proposal.proposed_by ?? "",
           );
+          // D-129 needs the same structural test PLUS a cutoff, because unlike
+          // D-110 it arrives after the pipeline has already written items and
+          // the decision forbids backfilling them. See SPAN_ROLE_REQUIRED_FROM.
+          const roleRequired = requiresSpanRole(proposal);
           // D-112, the same shape of rule for the honesty fields: optional in
           // the schema so the hand-authored records predating them stay valid,
           // required of anything the pipeline writes. An unmarked realization
@@ -2783,6 +2803,30 @@ function main(): void {
                 spanTally.legacyFiles.add(rel(file));
               }
             }
+            // D-129, enforced in the same shape as D-110 above. A verbatim quote
+            // proves the words are the source's; only the role says whether the
+            // source was reporting them or restating someone else's prediction.
+            if (isSpanRole(source.span_role)) {
+              spanTally.withRole += 1;
+              spanTally.roleCounts.set(
+                source.span_role,
+                (spanTally.roleCounts.get(source.span_role) ?? 0) + 1,
+              );
+            } else {
+              spanTally.withoutRole += 1;
+              if (roleRequired) {
+                fail(
+                  file,
+                  `extraction-authored provenance for ${source.corpus_record_id} carries no ` +
+                    "span_role — the rhetorical role is required of anything the pipeline " +
+                    "produces, because a verbatim quote of a background premise grounds " +
+                    "nothing (D-129)",
+                );
+                ok = false;
+              } else {
+                spanTally.rolelessFiles.add(rel(file));
+              }
+            }
           }
           const payloadId = (proposal.payload as { id?: unknown } | undefined)?.id;
           if (
@@ -2855,6 +2899,30 @@ function main(): void {
           "record an inference from an effect and declare they carry no span (D-112); " +
           "each was checked against its effect instead.",
   );
+
+  // The same accounting for span_role (D-129), and for the same reason: the
+  // decision says optional-for-legacy and required-for-new, which is only a
+  // policy rather than a loophole while the remainder is counted every run.
+  console.log("\nSpan roles (D-129):");
+  const roleTotal = spanTally.withRole + spanTally.withoutRole;
+  if (roleTotal === 0) {
+    console.log("  · no evidence provenance items to role-check yet");
+  } else {
+    const breakdown = Array.from(spanTally.roleCounts.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([role, count]) => `${count} ${role}`)
+      .join(", ");
+    console.log(
+      `  ${spanTally.withRole} of ${roleTotal} evidence provenance item${roleTotal === 1 ? "" : "s"} ` +
+        `carry a span_role; ${spanTally.withoutRole} predate D-129 and carry none.`,
+    );
+    if (breakdown) console.log(`  roles recorded: ${breakdown}.`);
+    if (spanTally.rolelessFiles.size > 0) {
+      console.log(
+        `  roleless (legacy, valid): ${Array.from(spanTally.rolelessFiles).sort().join(", ")}`,
+      );
+    }
+  }
 
   finish();
 }

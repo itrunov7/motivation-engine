@@ -154,10 +154,16 @@
         },
         "title": { "type": "string", "minLength": 1 },
         "quote_or_locus": { "type": "string", "minLength": 1 },
-        "source_span": { "$ref": "#/$defs/provenanceSourceSpan" }
+        "source_span": { "$ref": "#/$defs/provenanceSourceSpan" },
+        "span_role": { "$ref": "#/$defs/spanRole" }
       },
       "required": ["mechanism_id", "corpus_record_id", "doi", "title", "quote_or_locus"],
       "additionalProperties": false
+    },
+    "spanRole": {
+      "description": "What the quoted span is DOING in the source it was cut from (D-129). Carried on EVIDENCE provenance only: a realization-corpus record is an owner's observation of an interface, which has no results section to sit in and no background section to be mistaken for, and an inference item quotes an effect rather than a document. Only span_role=finding reports what the cited source observed, and an extraction-authored item whose citations carry no finding is refused. Optional so items written before D-129 stay valid; required in code of anything the extraction pipeline produces.",
+      "type": "string",
+      "enum": ["background", "hypothesis", "method", "finding", "limitation"]
     },
     "provenanceSourceSpan": {
       "description": "Where the quote sits in its source record, and which version of that record the offsets were resolved against (D-110). Carried on EVIDENCE provenance only: realizationProvenanceItem and inferenceProvenanceItem deliberately have no span, and each states why, so the gap is declared rather than assumed. Re-slicing lib/proposal-quality evidenceSourceText(record) at start/end must reproduce quote_or_locus byte for byte; a source_text_sha256 mismatch marks the span STALE.",
