@@ -37,7 +37,7 @@ import {
 // ---------- Shared props ----------
 
 export interface LastRunView {
-  status: "success" | "partial" | "failed";
+  status: "success" | "partial" | "failed" | "broken";
   timestamp: string;
   apiCalls: number | null;
   estimatedUsd: number | null;
@@ -221,6 +221,9 @@ const RUN_COLOR: Record<LastRunView["status"], string> = {
   success: C.accent,
   partial: C.amber,
   failed: C.alert,
+  // D-132: the candidate ledger did not balance, so this run's counters are
+  // unsound rather than merely incomplete.
+  broken: C.alert,
 };
 
 /** Cadence in words — a client copy of lib/ops.describeCadence (lib/ops pulls

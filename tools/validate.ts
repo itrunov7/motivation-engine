@@ -76,9 +76,14 @@ import {
   isInferenceProvenance,
   isRealizationProvenance,
 } from "../lib/realization-corpus";
+import {
+  checkLedgerBalance,
+  checkLedgerDetail,
+} from "../lib/candidate-ledger";
 import type {
   BenchmarkFile,
   BenchmarkMetric,
+  CandidateLedgerFile,
   CorpusManifest,
   EvidenceCorpusFile,
   HeartbeatFile,
@@ -94,7 +99,11 @@ import type {
   Segment,
   SegmentCandidate,
 } from "../lib/types";
-import { isSpanRole, UNGROUNDED_DROP_REASONS } from "../lib/types";
+import {
+  CANDIDATE_FATES,
+  isSpanRole,
+  UNGROUNDED_DROP_REASONS,
+} from "../lib/types";
 import {
   KNOWN_CONNECTOR_IDS,
   OPS_PATHS,
@@ -137,6 +146,14 @@ const PATHS = {
     "rejected-candidates.schema.json",
   ),
   rejectedCandidatesDir: join(ROOT, "corpora", "extraction", "rejected"),
+  candidateLedgerSchema: join(
+    ROOT,
+    "corpora",
+    "_ops",
+    "candidate-ledger.schema.json",
+  ),
+  candidateLedger: join(ROOT, "corpora", "extraction", "ledger.json"),
+  extractionManifest: join(ROOT, "corpora", "extraction", "manifest.json"),
   heartbeat: join(ROOT, "corpora", "_health", "heartbeat.json"),
   segments: join(ROOT, "segments", "segments.yaml"),
   segmentCandidates: join(ROOT, "segments", "candidates.json"),
@@ -565,7 +582,12 @@ const manifestCostSchema = {
 
 const manifestRunProperties = {
   timestamp: { type: "string", format: "date-time" },
-  status: { type: "string", enum: ["success", "partial", "failed"] },
+  status: {
+    // "broken" (D-132) is a run whose candidate ledger does not balance: its
+    // counters are unsound, which is a different claim from "partial".
+    type: "string",
+    enum: ["success", "partial", "failed", "broken"],
+  },
   params: { type: "object", additionalProperties: { type: "string" } },
   records_fetched: { type: "integer", minimum: 0 },
   files_written: { type: "integer", minimum: 0 },
@@ -1659,6 +1681,106 @@ function main(): void {
     fail(PATHS.rejectedCandidatesSchema, "missing rejected-candidates schema");
   }
 
+  // 9b-iii. HARD RULE — candidate conservation (D-132).
+  //
+  // Every candidate an extraction run produced must end somewhere the ledger
+  // can name: candidates_in == proposals_out + merged + dropped_by_named_reason,
+  // staged across the cheap pass, synthesis, and the strong pass.
+  //
+  // Two failures, both fatal, and the second is the one that matters. A ledger
+  // that does not close means the run cannot say what it did. A run with NO
+  // ledger entry means the same thing while looking clean — which is exactly how
+  // this defect class survived three appearances (D-104, D-105, and the
+  // cheap-to-strong shrink that motivated this entry). So absence is not a pass:
+  // every run in the manifest must be accounted for, and a run whose accounting
+  // is genuinely unrecoverable says so, in writing, with a reason.
+  if (existsSync(PATHS.candidateLedgerSchema)) {
+    const schema = readJson(PATHS.candidateLedgerSchema);
+    if (schema !== undefined && existsSync(PATHS.candidateLedger)) {
+      const validateLedger = ajv.compile(schema as object);
+      const data = readJson(PATHS.candidateLedger);
+      if (data !== undefined) {
+        let ok = validateAgainst(validateLedger, PATHS.candidateLedger, data);
+        const ledger = data as CandidateLedgerFile;
+        const byRunId = new Map(
+          (ledger.runs ?? []).map((run) => [run.run_id, run]),
+        );
+        for (const run of ledger.runs ?? []) {
+          const violations = [
+            ...checkLedgerBalance(run),
+            ...checkLedgerDetail(run),
+          ];
+          for (const violation of violations) {
+            fail(PATHS.candidateLedger, `${run.run_id}: ${violation}`);
+            ok = false;
+          }
+          // `balanced` is stored so the manifest status is traceable to the
+          // arithmetic that set it, but it is recomputed here rather than
+          // trusted: a hand-edited true would otherwise buy a pass.
+          const balanced = checkLedgerBalance(run).length === 0;
+          if (run.balanced !== balanced) {
+            fail(
+              PATHS.candidateLedger,
+              `${run.run_id}: balanced is recorded as ${run.balanced} but the stage totals say ${balanced}`,
+            );
+            ok = false;
+          }
+        }
+
+        // Every run the manifest reports must appear in the ledger, and a
+        // ledger entry that does not balance must be reflected in that run's
+        // status. Reading both directions is the point: neither file may quietly
+        // disagree with the other about what happened.
+        const manifest = existsSync(PATHS.extractionManifest)
+          ? (readJson(PATHS.extractionManifest) as CorpusManifest | undefined)
+          : undefined;
+        const manifestRuns = [
+          ...(manifest?.last_run ? [manifest.last_run] : []),
+          ...(manifest?.run_history ?? []),
+        ];
+        const seen = new Set<string>();
+        for (const run of manifestRuns) {
+          if (seen.has(run.timestamp)) continue;
+          seen.add(run.timestamp);
+          const entry = byRunId.get(run.timestamp);
+          if (!entry) {
+            fail(
+              PATHS.candidateLedger,
+              `extraction run ${run.timestamp} has no candidate-ledger entry — a run with no accounting is not a run that balanced (D-132)`,
+            );
+            ok = false;
+            continue;
+          }
+          const balanced = checkLedgerBalance(entry).length === 0;
+          if (!balanced && run.status !== "broken") {
+            fail(
+              PATHS.extractionManifest,
+              `run ${run.timestamp} has an unbalanced candidate ledger but is recorded as "${run.status}" — an unbalanced run is broken, not partial (D-132)`,
+            );
+            ok = false;
+          }
+        }
+        if (ok) {
+          const count = (status: string): number =>
+            (ledger.runs ?? []).filter(
+              (run) => run.reconstruction.status === status,
+            ).length;
+          console.log(
+            `  ✓ ${rel(PATHS.candidateLedger)} valid (${ledger.runs.length} runs balance; ` +
+              `${count("recorded")} recorded, ${count("reconstructed")} reconstructed, ` +
+              `${count("partial")} partly reconstructed, ${count("unreconstructable")} declared unreconstructable, D-132)`,
+          );
+        }
+      }
+    } else if (!existsSync(PATHS.candidateLedger)) {
+      console.log(
+        "  · no candidate ledger yet (written by every extraction run from D-132 on)",
+      );
+    }
+  } else {
+    fail(PATHS.candidateLedgerSchema, "missing candidate-ledger schema");
+  }
+
   // 9c. Benchmark files (D-029): every /corpora/benchmarks/{source_id}.json
   // is owner-prepared data normalized by tools/ingest-report.ts. Beyond the
   // manifest contract above, the RECORD shape is validated here, and the
@@ -1866,6 +1988,47 @@ function main(): void {
       fail(
         PATHS.rejectedCandidatesSchema,
         `rejection reason enum [${schemaReasons.join(", ")}] does not equal ` +
+          `UNGROUNDED_DROP_REASONS [${declaredReasons.join(", ")}] — update both when adding a reason`,
+      );
+    }
+  }
+
+  // Same guard for the conservation ledger (D-132), on both of its closed
+  // vocabularies. The fate list is the invariant: if the schema accepted a fate
+  // the balance equations do not count, a candidate could be written into a
+  // named bucket that no equation reads — which is the silent loss again,
+  // wearing a label.
+  if (existsSync(PATHS.candidateLedgerSchema)) {
+    const schema = readJson(PATHS.candidateLedgerSchema) as
+      | {
+          $defs?: {
+            candidate?: {
+              properties?: {
+                fate?: { enum?: string[] };
+                reason?: { enum?: string[] };
+              };
+            };
+          };
+        }
+      | undefined;
+    const schemaFates = [
+      ...(schema?.$defs?.candidate?.properties?.fate?.enum ?? []),
+    ].sort();
+    const declaredFates = [...CANDIDATE_FATES].sort();
+    if (schemaFates.join(",") !== declaredFates.join(",")) {
+      fail(
+        PATHS.candidateLedgerSchema,
+        `candidate fate enum [${schemaFates.join(", ")}] does not equal ` +
+          `CANDIDATE_FATES [${declaredFates.join(", ")}] — update both, and the balance equations, when adding a fate`,
+      );
+    }
+    const schemaLedgerReasons = [
+      ...(schema?.$defs?.candidate?.properties?.reason?.enum ?? []),
+    ].sort();
+    if (schemaLedgerReasons.join(",") !== declaredReasons.join(",")) {
+      fail(
+        PATHS.candidateLedgerSchema,
+        `candidate reason enum [${schemaLedgerReasons.join(", ")}] does not equal ` +
           `UNGROUNDED_DROP_REASONS [${declaredReasons.join(", ")}] — update both when adding a reason`,
       );
     }

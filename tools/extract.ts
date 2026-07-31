@@ -104,6 +104,8 @@ import {
   rejectionRecord,
   type RejectionLog,
 } from "./rejected-candidates";
+import { CandidateLedger, writeCandidateLedger } from "./candidate-ledger";
+import { checkLedgerBalance } from "../lib/candidate-ledger";
 
 const ROOT = join(__dirname, "..");
 const CORPUS_DIR = join(ROOT, "corpora", "evidence");
@@ -817,10 +819,38 @@ export interface ExtractionStats {
   dropped_ungrounded_strong: number;
   failed_validation: number;
   proposed: number;
+  /**
+   * Kept as the sum of the two fates below, because /ops and every committed
+   * run entry already read it. On its own it is not an outcome: it conflated a
+   * candidate ABSORBED into a pending proposal (no file) with one WRITTEN as an
+   * enrichment of an approved artifact (a file), so proposals_out was not
+   * derivable from it (D-132).
+   */
   merged: number;
+  /** Absorbed into an earlier pending proposal; produces no file of its own. */
+  merged_into_pending: number;
+  /** Written to the queue as an enrichment of an approved artifact. */
+  proposed_enrich: number;
   held_low_confidence: number;
   dropped_volume_cap: number;
   dropped_volume_cap_high_confidence: number;
+  /**
+   * Synthesis output past the first item, discarded by a draft mode (D-085).
+   * Previously never counted as a candidate at all, so a draft run that
+   * composed four artifacts and kept one reported having composed one.
+   */
+  dropped_draft_cap: number;
+  /**
+   * The cheap-to-strong stage (D-132), where the loss hid. Grounded cheap
+   * candidates handed to a synthesis call that RETURNED, those lost with a
+   * synthesis call that failed, and the fold between the two totals — a
+   * consolidation of several candidates into one is legitimate, but it is a
+   * fate, and until now it had no name and no counter.
+   */
+  into_synthesis: number;
+  cheap_synthesis_failed: number;
+  consolidated_by_synthesis: number;
+  expanded_by_synthesis: number;
   /** Funnel (D-090): total eligible records in the corpus at run start. */
   records_eligible: number;
   /** Funnel (D-090): eligible records that passed the cheap relevance pre-filter. */
@@ -1005,6 +1035,16 @@ export function extractionSummaryParams(
     candidates_strong: String(stats.candidates_strong),
     dropped_ungrounded_cheap: String(stats.dropped_ungrounded_cheap),
     dropped_ungrounded_strong: String(stats.dropped_ungrounded_strong),
+    // The conservation counters (D-132), also unconditional: a run whose params
+    // lack them predates the invariant, and that is exactly what the ledger's
+    // reconstruction status has to say out loud rather than leave to inference.
+    merged_into_pending: String(stats.merged_into_pending),
+    proposed_enrich: String(stats.proposed_enrich),
+    dropped_draft_cap: String(stats.dropped_draft_cap),
+    into_synthesis: String(stats.into_synthesis),
+    cheap_synthesis_failed: String(stats.cheap_synthesis_failed),
+    consolidated_by_synthesis: String(stats.consolidated_by_synthesis),
+    expanded_by_synthesis: String(stats.expanded_by_synthesis),
     // Only present when something was actually dropped, so a clean run does
     // not carry an empty field and pre-D-098 runs stay readable as absent.
     ...(stats.dropped_ungrounded > 0
@@ -3300,10 +3340,21 @@ export function buildExtractionManifestRun(args: {
   capped: boolean;
   incomplete?: boolean;
   durationS: number;
+  /**
+   * Whether this run's candidate ledger closes (D-132). False outranks capped
+   * and incomplete: a run that cannot account for its candidates is not a run
+   * that did less than its scope, it is a run whose numbers cannot be read.
+   */
+  balanced?: boolean;
 }): CorpusManifestRun {
+  const unbalanced = args.balanced === false;
   return {
     timestamp: args.startedAt.toISOString(),
-    status: args.capped || args.incomplete ? "partial" : "success",
+    status: unbalanced
+      ? "broken"
+      : args.capped || args.incomplete
+        ? "partial"
+        : "success",
     params: {
       mode: args.mode,
       [args.scope.kind]: args.scope.id,
@@ -3322,7 +3373,8 @@ export function buildExtractionManifestRun(args: {
       : null,
     ...(args.stats.dropped_ungrounded > 0 ||
       args.stats.failed_validation > 0 ||
-      args.capped
+      args.capped ||
+      unbalanced
       ? {
           warnings: {
             ...(args.stats.dropped_ungrounded > 0
@@ -3332,6 +3384,7 @@ export function buildExtractionManifestRun(args: {
               ? { validation_failed: true }
               : {}),
             ...(args.capped ? { capped: true } : {}),
+            ...(unbalanced ? { ledger_unbalanced: true } : {}),
           },
         }
       : {}),
@@ -3383,6 +3436,7 @@ function writeManifest(
   capped: boolean,
   incomplete: boolean,
   status?: CorpusRunStatus,
+  balanced = true,
 ): void {
   mkdirSync(EXTRACTION_DIR, { recursive: true });
   const duration = Math.round(((Date.now() - startedAt.getTime()) / 1000) * 100) / 100;
@@ -3397,8 +3451,13 @@ function writeManifest(
     capped,
     incomplete,
     durationS: duration,
+    balanced,
   });
-  const run: CorpusManifestRun = status ? { ...built, status } : built;
+  // An explicit status still cannot overwrite "broken": a failed run whose
+  // ledger also does not balance is broken, because "failed" would invite the
+  // reading that its counters are merely incomplete rather than unsound.
+  const run: CorpusManifestRun =
+    status && built.status !== "broken" ? { ...built, status } : built;
   const previous = existsSync(MANIFEST_FILE)
     ? readJson<CorpusManifest>(MANIFEST_FILE)
     : null;
@@ -3493,9 +3552,16 @@ export async function runExtraction(args: {
     failed_validation: 0,
     proposed: 0,
     merged: 0,
+    merged_into_pending: 0,
+    proposed_enrich: 0,
     held_low_confidence: 0,
     dropped_volume_cap: 0,
     dropped_volume_cap_high_confidence: 0,
+    dropped_draft_cap: 0,
+    into_synthesis: 0,
+    cheap_synthesis_failed: 0,
+    consolidated_by_synthesis: 0,
+    expanded_by_synthesis: 0,
     // Funnel is fixed at run start (D-090): total eligible and the relevant
     // subset that cleared the pre-filter. records_remaining is updated after
     // the last slice.
@@ -3532,6 +3598,9 @@ export async function runExtraction(args: {
       : null,
   });
 
+  // Every candidate's fate, whether or not anything went wrong with it (D-132).
+  const candidateLedger = new CandidateLedger();
+
   /**
    * Record one refusal against both the counters and the committed log.
    * `cheapOrigin` is present for strong-pass drops: the strong pass never sees
@@ -3543,9 +3612,17 @@ export async function runExtraction(args: {
     pass: ExtractionPass,
     refusal: GroundingRefusal,
     item: DraftItem,
+    candidateId: string,
     cheapOrigin?: unknown,
   ): void => {
     recordUngroundedDrop(stats, pass, refusal.reason);
+    candidateLedger.record({
+      candidate_id: candidateId,
+      mechanism_id: mechanismId,
+      pass,
+      fate: "dropped_ungrounded",
+      reason: refusal.reason,
+    });
     reportUngroundedDrop(mechanismId, pass, refusal.reason, refusal.detail);
     rejections.add(
       rejectionRecord({
@@ -3603,6 +3680,40 @@ export async function runExtraction(args: {
   reportExtractProgress("reading corpora", "running", false);
 
   /**
+   * Write the candidate ledger for this run and report whether it closes
+   * (D-132). Written on the same cadence as the manifest, and on the way out of
+   * a throw, for the same reason: a run that dies still has to say what became
+   * of the candidates it had already produced.
+   */
+  const persistLedger = (): boolean => {
+    try {
+      const ledgerRun = candidateLedger.build({
+        runId: startedAt.toISOString(),
+        dispatchId: process.env.OPS_DISPATCH_ID ?? null,
+        githubRunId: process.env.GITHUB_RUN_ID
+          ? Number(process.env.GITHUB_RUN_ID)
+          : null,
+        mode: args.mode,
+        scope: args.scope.id,
+      });
+      if (!ledgerRun.balanced) {
+        for (const violation of checkLedgerBalance(ledgerRun)) {
+          console.error(
+            `[extract] candidate ledger does not balance — ${violation}`,
+          );
+        }
+      }
+      writeCandidateLedger(ledgerRun);
+      return ledgerRun.balanced;
+    } catch (error) {
+      console.warn(
+        `[extract] could not persist the candidate ledger: ${(error as Error).message}`,
+      );
+      return true;
+    }
+  };
+
+  /**
    * Persist this run's spend to the manifest mid-flight (D-099).
    *
    * The monthly cap is computed from committed corpus manifests, so a run that
@@ -3623,6 +3734,9 @@ export async function runExtraction(args: {
         `[extract] could not persist rejected candidates: ${(error as Error).message}`,
       );
     }
+    // The ledger is written before the manifest because the manifest's status
+    // depends on whether it balances (D-132).
+    const balanced = persistLedger();
     try {
       writeManifest(
         args.mode,
@@ -3635,6 +3749,7 @@ export async function runExtraction(args: {
         currentPlan.capped,
         true,
         status,
+        balanced,
       );
     } catch (error) {
       console.warn(
@@ -3777,10 +3892,15 @@ export async function runExtraction(args: {
         return record ? comparableSourceText(record) : null;
       };
       const groundedCheap: AnchoredCandidate[] = [];
+      // Parallel to groundedCheap, so a synthesis call that dies can name the
+      // candidates it took down with it instead of leaving them counted as
+      // having entered a stage they never came out of (D-132).
+      const groundedCheapIds: string[] = [];
       for (const item of candidates) {
+        const candidateId = candidateLedger.id(mechanismId, "cheap");
         const grounding = groundingOutcome(item, corpus);
         if (!grounding.ok) {
-          dropUngrounded(mechanismId, "cheap", grounding, item);
+          dropUngrounded(mechanismId, "cheap", grounding, item, candidateId);
           continue;
         }
         // Anchor provenance to offsets while the record is still in view
@@ -3788,12 +3908,19 @@ export async function runExtraction(args: {
         // pass can author or alter it.
         const anchored = anchorCitations(item.citations, sourceTextFor, ledger);
         if (!anchored.ok) {
-          dropUngrounded(mechanismId, "cheap", anchored, item);
+          dropUngrounded(mechanismId, "cheap", anchored, item, candidateId);
           continue;
         }
         groundedCheap.push({
           item: { ...item, citations: anchored.citations },
           refs: anchored.refs,
+        });
+        groundedCheapIds.push(candidateId);
+        candidateLedger.record({
+          candidate_id: candidateId,
+          mechanism_id: mechanismId,
+          pass: "cheap",
+          fate: "into_synthesis",
         });
       }
       if (groundedCheap.length === 0) {
@@ -3823,6 +3950,13 @@ export async function runExtraction(args: {
       );
       persistAccounting();
       if (!synthesisResult.ok) {
+        // These candidates were grounded and paid for, and the call that was
+        // meant to compose them died. That is a fate with a name, not a gap
+        // between two totals (D-132).
+        for (const candidateId of groundedCheapIds) {
+          candidateLedger.refate(candidateId, "synthesis_batch_failed");
+        }
+        stats.cheap_synthesis_failed += groundedCheapIds.length;
         recordFailedBatch(
           mechanismId,
           "strong",
@@ -3835,15 +3969,43 @@ export async function runExtraction(args: {
       coverageDelta.processed_record_ids.push(...parsedRecordIds);
       processedByMechanism.set(mechanismId, coverageDelta);
 
+      stats.into_synthesis += groundedCheapIds.length;
+      // Count what the model composed, not what survives the draft cap below:
+      // candidates_strong used to be assigned AFTER the slice, so a draft run
+      // that composed four artifacts and kept one reported one candidate and
+      // discarded three without a counter (D-132).
+      const composed = synthesisResult.value;
+      stats.candidates += composed.length;
+      stats.candidates_strong += composed.length;
+      candidateLedger.recordSynthesisFold(
+        groundedCheapIds.length,
+        composed.length,
+      );
+      if (composed.length < groundedCheapIds.length) {
+        stats.consolidated_by_synthesis +=
+          groundedCheapIds.length - composed.length;
+      } else {
+        stats.expanded_by_synthesis +=
+          composed.length - groundedCheapIds.length;
+      }
+      const strongIds = composed.map(() =>
+        candidateLedger.id(mechanismId, "strong"),
+      );
       // A draft mode composes exactly one first-time artifact per mechanism.
-      const synthesized = isDraftMode(args.mode)
-        ? synthesisResult.value.slice(0, 1)
-        : synthesisResult.value;
-      stats.candidates += synthesized.length;
-      stats.candidates_strong += synthesized.length;
+      const synthesized = isDraftMode(args.mode) ? composed.slice(0, 1) : composed;
+      for (let at = synthesized.length; at < composed.length; at += 1) {
+        stats.dropped_draft_cap += 1;
+        candidateLedger.record({
+          candidate_id: strongIds[at],
+          mechanism_id: mechanismId,
+          pass: "strong",
+          fate: "dropped_draft_cap",
+        });
+      }
       const admissible: {
         proposal: Proposal;
-        outcome: "proposed" | "merged";
+        outcome: "proposed" | "proposed_enrich";
+        candidateId: string;
       }[] = [];
       const held: Proposal[] = [];
       // Every ref the synthesis pass was shown, across all candidates. A ref
@@ -3851,7 +4013,18 @@ export async function runExtraction(args: {
       const suppliedRefs = new Set(
         groundedCheap.flatMap((candidate) => candidate.refs),
       );
-      for (const rawItem of synthesized) {
+      for (let index = 0; index < synthesized.length; index += 1) {
+        const rawItem = synthesized[index];
+        const candidateId = strongIds[index];
+        const failedValidation = (): void => {
+          stats.failed_validation += 1;
+          candidateLedger.record({
+            candidate_id: candidateId,
+            mechanism_id: mechanismId,
+            pass: "strong",
+            fate: "failed_validation",
+          });
+        };
         // Rebuild citations from refs before gating: the quote is sliced out of
         // the record at the stored offsets, so the string the gate inspects was
         // written by the corpus, not by a model that never read it.
@@ -3862,7 +4035,14 @@ export async function runExtraction(args: {
           ledger,
         );
         if (!resolved.ok) {
-          dropUngrounded(mechanismId, "strong", resolved, rawItem, groundedCheap);
+          dropUngrounded(
+            mechanismId,
+            "strong",
+            resolved,
+            rawItem,
+            candidateId,
+            groundedCheap,
+          );
           continue;
         }
         const item: DraftItem = { ...rawItem, citations: resolved.citations };
@@ -3896,7 +4076,14 @@ export async function runExtraction(args: {
         // rather than written (D-110).
         const grounding = groundingOutcome(item, corpus, { requireSpans: true });
         if (!grounding.ok) {
-          dropUngrounded(mechanismId, "strong", grounding, rawItem, groundedCheap);
+          dropUngrounded(
+            mechanismId,
+            "strong",
+            grounding,
+            rawItem,
+            candidateId,
+            groundedCheap,
+          );
           continue;
         }
         const proposal = toProposal(
@@ -3919,12 +4106,13 @@ export async function runExtraction(args: {
               corpus_record_id: grounding.provenance[0]?.corpus_record_id ?? null,
             },
             rawItem,
+            candidateId,
             groundedCheap,
           );
           continue;
         }
         if (!validate(proposal)) {
-          stats.failed_validation += 1;
+          failedValidation();
           reportValidationFailure(validate, "candidate", mechanismId);
           continue;
         }
@@ -3955,7 +4143,7 @@ export async function runExtraction(args: {
             } as Proposal;
           }
           if (!validate(merged)) {
-            stats.failed_validation += 1;
+            failedValidation();
             reportValidationFailure(validate, "pending merge", mechanismId);
             continue;
           }
@@ -3971,11 +4159,20 @@ export async function runExtraction(args: {
             if (heldIndex >= 0) held[heldIndex] = merged;
           }
           stats.merged += 1;
+          stats.merged_into_pending += 1;
+          candidateLedger.record({
+            candidate_id: candidateId,
+            mechanism_id: mechanismId,
+            pass: "strong",
+            fate: "merged_into_pending",
+            proposal_id: merged.id,
+            attribution: "recorded",
+          });
           continue;
         }
 
         let gatedProposal = proposal;
-        let outcome: "proposed" | "merged" = "proposed";
+        let outcome: "proposed" | "proposed_enrich" = "proposed";
         let addsValue = true;
         if (duplicate?.authoritative) {
           const merged = mergeProposals(duplicate.proposal, proposal);
@@ -3986,11 +4183,11 @@ export async function runExtraction(args: {
             payload: merged.payload,
             provenance: merged.provenance,
           } as Proposal;
-          outcome = "merged";
+          outcome = "proposed_enrich";
         }
 
         if (!validate(gatedProposal)) {
-          stats.failed_validation += 1;
+          failedValidation();
           reportValidationFailure(
             validate,
             "authoritative enrichment",
@@ -4018,9 +4215,16 @@ export async function runExtraction(args: {
             authoritative: false,
           });
           stats.held_low_confidence += 1;
+          candidateLedger.record({
+            candidate_id: candidateId,
+            mechanism_id: mechanismId,
+            pass: "strong",
+            fate: "held_low_confidence",
+            proposal_id: heldProposal.id,
+          });
           continue;
         }
-        admissible.push({ proposal: gatedProposal, outcome });
+        admissible.push({ proposal: gatedProposal, outcome, candidateId });
         existing.push({
           proposal: gatedProposal,
           path: null,
@@ -4047,7 +4251,30 @@ export async function runExtraction(args: {
         ({ proposal: overflowProposal }) =>
           overflowProposal.confidence >= 0.8,
       ).length;
-      for (const entry of admitted) stats[entry.outcome] += 1;
+      for (const entry of overflow) {
+        candidateLedger.record({
+          candidate_id: entry.candidateId,
+          mechanism_id: mechanismId,
+          pass: "strong",
+          fate: "dropped_volume_cap",
+        });
+      }
+      for (const entry of admitted) {
+        stats[entry.outcome] += 1;
+        // `merged` stays the sum of the two merge-shaped fates, because every
+        // committed run entry and the /ops reader already read it (D-132).
+        if (entry.outcome === "proposed_enrich") stats.merged += 1;
+        candidateLedger.record({
+          candidate_id: entry.candidateId,
+          mechanism_id: mechanismId,
+          pass: "strong",
+          fate: entry.outcome,
+          proposal_id: entry.proposal.id,
+          ...(entry.outcome === "proposed_enrich"
+            ? { attribution: "recorded" as const }
+            : {}),
+        });
+      }
       proposals.push(
         ...admitted.map(({ proposal: admittedProposal }) => admittedProposal),
         ...held,
@@ -4194,6 +4421,7 @@ export async function runExtraction(args: {
     startedAt.toISOString(),
     coverageCorpusKind,
   );
+  const ledgerBalanced = persistLedger();
   writeManifest(
     args.mode,
     args.scope,
@@ -4204,6 +4432,8 @@ export async function runExtraction(args: {
     proposals.length + pendingWrites.size,
     currentPlan.capped,
     runIncomplete,
+    undefined,
+    ledgerBalanced,
   );
   const ungroundedBreakdown = formatUngroundedReasons(stats.dropped_ungrounded_reasons);
   if (rejections.count() > 0) {

@@ -2,6 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
+import {
+  checkLedgerBalance,
+  checkLedgerDetail,
+} from "../lib/candidate-ledger";
 import { extractionPriceState, validateExtractionOpsConfig } from "../lib/ops";
 import {
   evidenceSourceText,
@@ -13,6 +17,7 @@ import {
   spanErrors,
 } from "../lib/proposal-quality";
 import type {
+  CandidateLedgerRun,
   CorpusManifestRun,
   EvidenceCorpusFile,
   EvidenceCorpusRecord,
@@ -54,6 +59,7 @@ import {
   type UngroundedReason,
   type Usage,
 } from "./extract";
+import { CandidateLedger, mergeLedgerRuns } from "./candidate-ledger";
 import { visibleReplayText } from "./connectors/realization-wayback";
 import { productionStage, rejectedParameters } from "./openrouter-preflight";
 import { anchorCitations, SpanLedger } from "./provenance-refs";
@@ -222,9 +228,16 @@ function statsFixture(overrides: Partial<ExtractionStats> = {}): ExtractionStats
     failed_validation: 0,
     proposed: 0,
     merged: 0,
+    merged_into_pending: 0,
+    proposed_enrich: 0,
     held_low_confidence: 0,
     dropped_volume_cap: 0,
     dropped_volume_cap_high_confidence: 0,
+    dropped_draft_cap: 0,
+    into_synthesis: 0,
+    cheap_synthesis_failed: 0,
+    consolidated_by_synthesis: 0,
+    expanded_by_synthesis: 0,
     records_eligible: 0,
     records_relevant: 0,
     records_remaining: 0,
@@ -1926,6 +1939,16 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       dropped_ungrounded_strong: "1",
       dropped_ungrounded_reasons_cheap: "doi_unresolved=1",
       dropped_ungrounded_reasons_strong: "doi_unresolved=1",
+      // Unconditional from D-132 on, at zero as much as at anything else: an
+      // absent conservation counter means the run predates the invariant, which
+      // is a different claim from "nothing happened at that stage".
+      merged_into_pending: "0",
+      proposed_enrich: "0",
+      dropped_draft_cap: "0",
+      into_synthesis: "0",
+      cheap_synthesis_failed: "0",
+      consolidated_by_synthesis: "0",
+      expanded_by_synthesis: "0",
     },
   );
 });
@@ -2121,5 +2144,312 @@ test("a clean run carries no drop-reason field at all", () => {
     }),
   );
   assert.equal("dropped_ungrounded_reasons" in params, false);
+});
+
+// ---------- Candidate conservation (D-132) ----------
+
+/** A ledger run whose stages close; tests break one stage at a time. */
+function ledgerFixture(
+  overrides: Partial<CandidateLedgerRun> = {},
+): CandidateLedgerRun {
+  return {
+    run_id: "2026-07-31T09:00:00.000Z",
+    dispatch_id: null,
+    github_run_id: null,
+    mode: "effects",
+    scope: "CL-14",
+    candidates: 5,
+    cheap: {
+      candidates: 3,
+      dropped_ungrounded: 1,
+      synthesis_batch_failed: 0,
+      into_synthesis: 2,
+    },
+    synthesis: {
+      into_synthesis: 2,
+      consolidated: 0,
+      expanded: 0,
+      candidates_strong: 2,
+    },
+    strong: {
+      candidates: 2,
+      proposed: 1,
+      proposed_enrich: 0,
+      merged_into_pending: 1,
+      held_low_confidence: 0,
+      failed_validation: 0,
+      dropped_ungrounded: 0,
+      dropped_volume_cap: 0,
+      dropped_draft_cap: 0,
+    },
+    balanced: true,
+    reconstruction: { status: "recorded" },
+    candidates_detail: [
+      {
+        candidate_id: "CL-14:cheap:01",
+        mechanism_id: "CL-14",
+        pass: "cheap",
+        fate: "dropped_ungrounded",
+        reason: "unknown_record_id",
+      },
+      {
+        candidate_id: "CL-14:cheap:02",
+        mechanism_id: "CL-14",
+        pass: "cheap",
+        fate: "into_synthesis",
+      },
+      {
+        candidate_id: "CL-14:cheap:03",
+        mechanism_id: "CL-14",
+        pass: "cheap",
+        fate: "into_synthesis",
+      },
+      {
+        candidate_id: "CL-14:strong:01",
+        mechanism_id: "CL-14",
+        pass: "strong",
+        fate: "proposed",
+        proposal_id: "effect-cl-14-one",
+        attribution: "recorded",
+      },
+      {
+        candidate_id: "CL-14:strong:02",
+        mechanism_id: "CL-14",
+        pass: "strong",
+        fate: "merged_into_pending",
+        proposal_id: "effect-cl-14-one",
+        attribution: "recorded",
+      },
+    ],
+    ...overrides,
+  };
+}
+
+test("a balanced ledger passes every stage equation", () => {
+  assert.deepEqual(checkLedgerBalance(ledgerFixture()), []);
+  assert.deepEqual(checkLedgerDetail(ledgerFixture()), []);
+});
+
+test("a cheap candidate that stops being mentioned fails the invariant", () => {
+  // The 8-to-7 shape: candidates enter synthesis and fewer come out, with no
+  // fold recorded. Before D-132 this was arithmetic nobody performed.
+  const violations = checkLedgerBalance(
+    ledgerFixture({
+      candidates: 4,
+      synthesis: {
+        into_synthesis: 2,
+        consolidated: 0,
+        expanded: 0,
+        candidates_strong: 1,
+      },
+      strong: {
+        candidates: 1,
+        proposed: 1,
+        proposed_enrich: 0,
+        merged_into_pending: 0,
+        held_low_confidence: 0,
+        failed_validation: 0,
+        dropped_ungrounded: 0,
+        dropped_volume_cap: 0,
+        dropped_draft_cap: 0,
+      },
+    }),
+  );
+  assert(violations.some((line) => line.startsWith("synthesis stage")));
+});
+
+test("naming the fold is what makes the same shrink balance", () => {
+  assert.deepEqual(
+    checkLedgerBalance(
+      ledgerFixture({
+        candidates: 4,
+        synthesis: {
+          into_synthesis: 2,
+          consolidated: 1,
+          expanded: 0,
+          candidates_strong: 1,
+        },
+        strong: {
+          candidates: 1,
+          proposed: 1,
+          proposed_enrich: 0,
+          merged_into_pending: 0,
+          held_low_confidence: 0,
+          failed_validation: 0,
+          dropped_ungrounded: 0,
+          dropped_volume_cap: 0,
+          dropped_draft_cap: 0,
+        },
+        candidates_detail: [],
+        reconstruction: { status: "partial", reason: "lineage not persisted" },
+      }),
+    ),
+    [],
+  );
+});
+
+test("a strong candidate with no outcome fails the invariant", () => {
+  const violations = checkLedgerBalance(
+    ledgerFixture({
+      strong: {
+        candidates: 2,
+        proposed: 1,
+        proposed_enrich: 0,
+        merged_into_pending: 0,
+        held_low_confidence: 0,
+        failed_validation: 0,
+        dropped_ungrounded: 0,
+        dropped_volume_cap: 0,
+        dropped_draft_cap: 0,
+      },
+    }),
+  );
+  assert(violations.some((line) => line.startsWith("strong stage")));
+});
+
+test("an unbalanced run is broken, not partial", () => {
+  const args = {
+    mode: "effects" as const,
+    scope: resolveScope({ mechanism: "CG-05" }),
+    startedAt: new Date("2026-07-31T12:00:00.000Z"),
+    config: configured,
+    usage: {
+      input: 100,
+      output: 20,
+      calls: 2,
+      byTier: {
+        cheap: { input: 60, output: 10, calls: 1 },
+        strong: { input: 40, output: 10, calls: 1 },
+      },
+    },
+    stats: statsFixture({ candidates: 4, candidates_cheap: 2, candidates_strong: 2 }),
+    filesWritten: 0,
+    capped: true,
+    durationS: 2,
+  };
+  // Same run, same capping: only the ledger differs, and it outranks "partial"
+  // because an unbalanced run's counters are unsound rather than incomplete.
+  assert.equal(buildExtractionManifestRun({ ...args, balanced: true }).status, "partial");
+  const broken = buildExtractionManifestRun({ ...args, balanced: false });
+  assert.equal(broken.status, "broken");
+  assert.equal(broken.warnings?.ledger_unbalanced, true);
+});
+
+test("a run that recorded its own ledger cannot leave a stage unknown", () => {
+  const violations = checkLedgerBalance(
+    ledgerFixture({ cheap: null, synthesis: null }),
+  );
+  assert(
+    violations.some((line) => line.includes("cannot leave a stage unknown")),
+  );
+});
+
+test("a pre-D-105 run may say it does not know, and its known stage still closes", () => {
+  // The four 30-for-30 runs: the strong stage is recoverable and balances at
+  // 10 for 10, the cheap stage is genuinely unknown, and null is not zero.
+  assert.deepEqual(
+    checkLedgerBalance(
+      ledgerFixture({
+        candidates: null,
+        cheap: null,
+        synthesis: null,
+        strong: {
+          candidates: 10,
+          proposed: 0,
+          proposed_enrich: 0,
+          merged_into_pending: 0,
+          held_low_confidence: 0,
+          failed_validation: 0,
+          dropped_ungrounded: 10,
+          dropped_volume_cap: 0,
+          dropped_draft_cap: 0,
+        },
+        candidates_detail: [],
+        reconstruction: {
+          status: "unreconstructable",
+          reason: "rejected candidates were not persisted before D-105",
+        },
+      }),
+    ),
+    [],
+  );
+});
+
+test("a complete account must have a detail row per candidate", () => {
+  const violations = checkLedgerDetail(
+    ledgerFixture({ candidates_detail: [] }),
+  );
+  assert.equal(violations.length, 2);
+  // …and a partial one is allowed to have fewer, rather than inventing rows.
+  assert.deepEqual(
+    checkLedgerDetail(
+      ledgerFixture({
+        candidates_detail: [],
+        reconstruction: { status: "partial", reason: "lineage not persisted" },
+      }),
+    ),
+    [],
+  );
+});
+
+test("the ledger merges by run id, so mid-flight writes supersede", () => {
+  const first = ledgerFixture();
+  const older = ledgerFixture({ run_id: "2026-07-30T09:00:00.000Z" });
+  const merged = mergeLedgerRuns([older], first);
+  assert.deepEqual(
+    mergeLedgerRuns(merged, { ...first, candidates: 5 }).map(
+      (run) => run.run_id,
+    ),
+    [first.run_id, older.run_id],
+  );
+});
+
+test("the ledger builder counts the fates it is told and derives nothing", () => {
+  const ledger = new CandidateLedger();
+  const cheapOne = ledger.id("CL-14", "cheap");
+  const cheapTwo = ledger.id("CL-14", "cheap");
+  ledger.record({
+    candidate_id: cheapOne,
+    mechanism_id: "CL-14",
+    pass: "cheap",
+    fate: "into_synthesis",
+  });
+  ledger.record({
+    candidate_id: cheapTwo,
+    mechanism_id: "CL-14",
+    pass: "cheap",
+    fate: "into_synthesis",
+  });
+  ledger.recordSynthesisFold(2, 1);
+  const strongOne = ledger.id("CL-14", "strong");
+  ledger.record({
+    candidate_id: strongOne,
+    mechanism_id: "CL-14",
+    pass: "strong",
+    fate: "proposed",
+    proposal_id: "effect-cl-14-one",
+  });
+  const built = ledger.build({
+    runId: "2026-07-31T12:00:00.000Z",
+    dispatchId: null,
+    githubRunId: null,
+    mode: "effects",
+    scope: "CL-14",
+  });
+  assert.equal(built.balanced, true);
+  assert.equal(built.synthesis?.consolidated, 1);
+  assert.equal(built.candidates, 3);
+
+  // A synthesis call that dies takes its candidates with it, and says so.
+  ledger.refate(cheapTwo, "synthesis_batch_failed");
+  const afterFailure = ledger.build({
+    runId: "2026-07-31T12:00:00.000Z",
+    dispatchId: null,
+    githubRunId: null,
+    mode: "effects",
+    scope: "CL-14",
+  });
+  assert.equal(afterFailure.cheap?.synthesis_batch_failed, 1);
+  assert.equal(afterFailure.cheap?.into_synthesis, 1);
 });
 

@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ventora.dev/motivation-engine/candidate-ledger.schema.json",
+  "title": "Candidate conservation ledger (D-132)",
+  "description": "What became of every candidate each extraction run produced. Enforces candidates_in == proposals_out + merged + dropped_by_named_reason, staged across the cheap pass, synthesis and the strong pass. A run whose stage totals do not close is written to the manifest as status \"broken\", and tools/validate.ts fails. Every run in the manifest's run_history must appear here: a gap is recorded as a gap, and no run passes the invariant by having nothing said about it.",
+  "type": "object",
+  "properties": {
+    "schema_version": { "const": 1 },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "runs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/run" }
+    }
+  },
+  "required": ["schema_version", "updated_at", "runs"],
+  "additionalProperties": false,
+  "$defs": {
+    "run": {
+      "type": "object",
+      "properties": {
+        "run_id": {
+          "description": "The run's start timestamp, the same key the manifest's run_history uses.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dispatch_id": { "type": ["string", "null"] },
+        "github_run_id": { "type": ["integer", "null"], "minimum": 1 },
+        "mode": {
+          "enum": [
+            "effects",
+            "realizations",
+            "interactions",
+            "dissent",
+            "mechanism",
+            "dossier"
+          ]
+        },
+        "scope": {
+          "description": "The scope id the run was dispatched with (mechanism, pack, segment or effect).",
+          "type": "string",
+          "minLength": 1
+        },
+        "candidates": {
+          "description": "candidates_cheap + candidates_strong. A sum of two stages, not a population. null when unknown.",
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "cheap": {
+          "description": "null when the stage's numbers are genuinely unknown — which is not zero, and must not be written as zero. Runs before D-105 gated only the strong pass, so their cheap candidates were never counted.",
+          "oneOf": [{ "$ref": "#/$defs/cheapStage" }, { "type": "null" }]
+        },
+        "synthesis": {
+          "oneOf": [{ "$ref": "#/$defs/synthesisStage" }, { "type": "null" }]
+        },
+        "strong": {
+          "oneOf": [{ "$ref": "#/$defs/strongStage" }, { "type": "null" }]
+        },
+        "balanced": {
+          "description": "Computed by checkLedgerBalance in lib/candidate-ledger.ts. Stored so the manifest's status is traceable to the arithmetic that set it; the validator recomputes it rather than trusting it.",
+          "type": "boolean"
+        },
+        "reconstruction": { "$ref": "#/$defs/reconstruction" },
+        "candidates_detail": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/candidate" }
+        }
+      },
+      "required": [
+        "run_id",
+        "dispatch_id",
+        "github_run_id",
+        "mode",
+        "scope",
+        "candidates",
+        "cheap",
+        "synthesis",
+        "strong",
+        "balanced",
+        "reconstruction",
+        "candidates_detail"
+      ],
+      "additionalProperties": false
+    },
+    "cheapStage": {
+      "description": "candidates == dropped_ungrounded + synthesis_batch_failed + into_synthesis.",
+      "type": "object",
+      "properties": {
+        "candidates": { "type": "integer", "minimum": 0 },
+        "dropped_ungrounded": { "type": "integer", "minimum": 0 },
+        "synthesis_batch_failed": {
+          "description": "Grounded candidates lost with a synthesis call that failed.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "into_synthesis": { "type": "integer", "minimum": 0 }
+      },
+      "required": [
+        "candidates",
+        "dropped_ungrounded",
+        "synthesis_batch_failed",
+        "into_synthesis"
+      ],
+      "additionalProperties": false
+    },
+    "synthesisStage": {
+      "description": "into_synthesis + expanded == consolidated + candidates_strong. Folding several cheap candidates into one composed candidate is legitimate; until D-132 it had no counter, so a fold and a lost candidate were indistinguishable from outside.",
+      "type": "object",
+      "properties": {
+        "into_synthesis": { "type": "integer", "minimum": 0 },
+        "consolidated": { "type": "integer", "minimum": 0 },
+        "expanded": { "type": "integer", "minimum": 0 },
+        "candidates_strong": { "type": "integer", "minimum": 0 }
+      },
+      "required": [
+        "into_synthesis",
+        "consolidated",
+        "expanded",
+        "candidates_strong"
+      ],
+      "additionalProperties": false
+    },
+    "strongStage": {
+      "description": "candidates == proposed + proposed_enrich + merged_into_pending + held_low_confidence + failed_validation + dropped_ungrounded + dropped_volume_cap + dropped_draft_cap.",
+      "type": "object",
+      "properties": {
+        "candidates": { "type": "integer", "minimum": 0 },
+        "proposed": { "type": "integer", "minimum": 0 },
+        "proposed_enrich": {
+          "description": "Written as an enrichment of an approved artifact — an output file.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "merged_into_pending": {
+          "description": "Absorbed into an earlier pending proposal — no output file.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "held_low_confidence": { "type": "integer", "minimum": 0 },
+        "failed_validation": { "type": "integer", "minimum": 0 },
+        "dropped_ungrounded": { "type": "integer", "minimum": 0 },
+        "dropped_volume_cap": { "type": "integer", "minimum": 0 },
+        "dropped_draft_cap": {
+          "description": "Synthesis output past the first item, discarded by a draft mode (D-085).",
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "candidates",
+        "proposed",
+        "proposed_enrich",
+        "merged_into_pending",
+        "held_low_confidence",
+        "failed_validation",
+        "dropped_ungrounded",
+        "dropped_volume_cap",
+        "dropped_draft_cap"
+      ],
+      "additionalProperties": false
+    },
+    "reconstruction": {
+      "description": "How completely this run's ledger could be established: recorded (written by the run itself), reconstructed (complete, but worked out afterwards from committed evidence), partial (some fates could not be established), unreconstructable (none could). A reason is REQUIRED for anything short of \"recorded\" — that requirement is the substance of the rule.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": { "status": { "const": "recorded" } },
+          "required": ["status"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": ["reconstructed", "partial", "unreconstructable"]
+            },
+            "reason": { "type": "string", "minLength": 1 }
+          },
+          "required": ["status", "reason"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "candidate": {
+      "description": "One candidate's fate. No model text is stored: a refused candidate is already persisted in full under corpora/extraction/rejected/ (D-104), and this file answers what became of each one, not what it said.",
+      "type": "object",
+      "properties": {
+        "candidate_id": { "type": "string", "minLength": 1 },
+        "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+        "pass": { "enum": ["cheap", "strong"] },
+        "fate": {
+          "description": "Must stay equal to CANDIDATE_FATES in lib/types.ts; tools/validate.ts asserts it.",
+          "enum": [
+            "into_synthesis",
+            "dropped_ungrounded",
+            "synthesis_batch_failed",
+            "proposed",
+            "proposed_enrich",
+            "merged_into_pending",
+            "held_low_confidence",
+            "failed_validation",
+            "dropped_volume_cap",
+            "dropped_draft_cap"
+          ]
+        },
+        "reason": {
+          "description": "The failing grounding check; present only for dropped_ungrounded. Must stay equal to UNGROUNDED_DROP_REASONS in lib/types.ts.",
+          "enum": [
+            "no_citations",
+            "malformed_citation",
+            "unknown_record_id",
+            "quote_not_in_source",
+            "wrong_corpus_kind",
+            "doi_unresolved",
+            "title_mismatch",
+            "provenance_mismatch",
+            "span_role_missing",
+            "span_role_not_finding",
+            "span_role_contradicted_by_structure",
+            "premise_contradicted_downstream",
+            "proposal_not_built"
+          ]
+        },
+        "proposal_id": { "type": "string", "minLength": 1 },
+        "attribution": {
+          "description": "Whether proposal_id was written by the run or worked out afterwards. A backfilled attribution is a reading of the evidence, not a record of what happened (D-131).",
+          "enum": ["recorded", "inferred", "not_recorded"]
+        }
+      },
+      "required": ["candidate_id", "mechanism_id", "pass", "fate"],
+      "additionalProperties": false
+    }
+  }
+}

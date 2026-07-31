@@ -738,7 +738,13 @@ export type EvidenceCategory = (typeof EVIDENCE_CATEGORIES)[number];
 /** Per-category record counts, keyed by EVIDENCE_CATEGORIES entries. */
 export type CategoryCounts = Record<EvidenceCategory, number>;
 
-export type CorpusRunStatus = "success" | "partial" | "failed";
+/**
+ * "broken" (D-132) is not a degree of "partial". A partial run did less than
+ * its scope and says so; a broken run cannot account for what it did — its
+ * candidate ledger does not balance, so the numbers it reports are unsound and
+ * nothing derived from them may be read as a measurement.
+ */
+export type CorpusRunStatus = "success" | "partial" | "failed" | "broken";
 
 /**
  * Cost accounting for one run (D-022), mirrored from
@@ -1539,6 +1545,153 @@ export interface RejectedCandidateFile {
   mode: string;
   written_at: string;
   rejected: RejectedCandidateRecord[];
+}
+
+// ---------- Candidate conservation ledger (D-132) ----------
+
+/**
+ * Every terminal fate a candidate can reach, in funnel order.
+ *
+ * Closed by design: the conservation invariant is only enforceable if the
+ * outcomes partition the population, so a new way to lose a candidate has to be
+ * added here — and to the balance equations — before it can be written. That is
+ * the whole point. The three prior appearances of the silent-loss defect class
+ * (D-104's 30-for-30, D-105's uncounted cheap pass, and the cheap-to-strong
+ * 8-to-7 shrink) were each a fate with no name.
+ */
+export const CANDIDATE_FATES = [
+  /** Cheap-pass candidate handed to a synthesis call that returned. */
+  "into_synthesis",
+  /** Refused at the grounding gate; the full refusal is in corpora/extraction/rejected/. */
+  "dropped_ungrounded",
+  /** Grounded, handed to synthesis, and the synthesis call itself failed. */
+  "synthesis_batch_failed",
+  /** Written to the proposal queue as a new proposal. */
+  "proposed",
+  /** Written to the queue as an enrichment of an approved artifact. */
+  "proposed_enrich",
+  /** Absorbed into an earlier pending proposal; produces no file of its own. */
+  "merged_into_pending",
+  /** Written to the queue held below the confidence floor, or adding nothing. */
+  "held_low_confidence",
+  /** Refused by the proposal schema after provenance was assembled. */
+  "failed_validation",
+  /** Admissible but beyond max_proposals_per_mechanism. */
+  "dropped_volume_cap",
+  /** Synthesis output past the first item, which a draft mode discards (D-085). */
+  "dropped_draft_cap",
+] as const;
+
+export type CandidateFate = (typeof CANDIDATE_FATES)[number];
+
+/**
+ * One candidate's fate. No model text is stored: a refused candidate is already
+ * persisted in full under corpora/extraction/rejected/ (D-104), and this file
+ * answers "what became of each one", not "what did it say".
+ */
+export interface CandidateLedgerEntry {
+  /** Stable within a run: mechanism, pass, ordinal, and a short content hash. */
+  candidate_id: string;
+  mechanism_id: string;
+  pass: ExtractionPass;
+  fate: CandidateFate;
+  /** The grounding check that refused it; present only for dropped_ungrounded. */
+  reason?: UngroundedDropReason;
+  /** The proposal this candidate became, or was absorbed into. */
+  proposal_id?: string;
+  /**
+   * Whether `proposal_id` was written by the run or worked out afterwards.
+   * A backfilled attribution is a reading of the evidence, not a record of
+   * what happened, and the two must never be confused (D-131).
+   */
+  attribution?: "recorded" | "inferred" | "not_recorded";
+}
+
+/** Cheap-pass totals. */
+export interface CandidateLedgerCheapStage {
+  candidates: number;
+  dropped_ungrounded: number;
+  synthesis_batch_failed: number;
+  into_synthesis: number;
+}
+
+/**
+ * The cheap-to-strong stage, which is where the loss hid. Synthesis consolidates
+ * several cheap candidates into one composed candidate, which is legitimate —
+ * but it is a fate, and until D-132 it had no counter, so a consolidation and a
+ * dropped candidate looked identical from outside.
+ */
+export interface CandidateLedgerSynthesisStage {
+  into_synthesis: number;
+  consolidated: number;
+  expanded: number;
+  candidates_strong: number;
+}
+
+/** Strong-pass totals; the fates here partition candidates_strong. */
+export interface CandidateLedgerStrongStage {
+  candidates: number;
+  proposed: number;
+  proposed_enrich: number;
+  merged_into_pending: number;
+  held_low_confidence: number;
+  failed_validation: number;
+  dropped_ungrounded: number;
+  dropped_volume_cap: number;
+  dropped_draft_cap: number;
+}
+
+/**
+ * How completely this run's ledger could be established.
+ *
+ * - recorded: written by the run itself, as it happened.
+ * - reconstructed: complete, but worked out afterwards from committed evidence.
+ * - partial: some fates could not be established at all.
+ * - unreconstructable: the run predates the instrumentation and the evidence
+ *   for its accounting no longer exists.
+ *
+ * A reason is REQUIRED for everything except `recorded`. That requirement is
+ * the substance of the rule: a gap is recorded as a gap, and no run passes the
+ * invariant by having nothing said about it.
+ */
+export type CandidateLedgerReconstruction =
+  | { status: "recorded" }
+  | {
+      status: "reconstructed" | "partial" | "unreconstructable";
+      reason: string;
+    };
+
+/**
+ * One extraction run's candidate accounting (D-132).
+ *
+ * A stage is `null` when its numbers are genuinely unknown, which is not the
+ * same as zero and must not be written as zero. Runs before D-105 gated only
+ * the strong pass: their cheap pass produced candidates that were never
+ * counted, so a cheap stage of 0 would assert something false about them, and
+ * asserting it is how this defect class stayed invisible for three rounds.
+ */
+export interface CandidateLedgerRun {
+  /** The run's start timestamp — the key mergeExtractionRunHistory uses. */
+  run_id: string;
+  dispatch_id: string | null;
+  github_run_id: number | null;
+  mode: string;
+  scope: string;
+  candidates: number | null;
+  cheap: CandidateLedgerCheapStage | null;
+  synthesis: CandidateLedgerSynthesisStage | null;
+  strong: CandidateLedgerStrongStage | null;
+  /** Computed by checkLedgerBalance, stored so the manifest status is traceable. */
+  balanced: boolean;
+  reconstruction: CandidateLedgerReconstruction;
+  candidates_detail: CandidateLedgerEntry[];
+}
+
+/** corpora/extraction/ledger.json — every run's candidate accounting (D-132). */
+export interface CandidateLedgerFile {
+  schema_version: 1;
+  updated_at: string;
+  runs: CandidateLedgerRun[];
 }
 
 /** The classification of a live/recent run for the /ops live view. */
