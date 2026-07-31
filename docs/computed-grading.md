@@ -106,13 +106,17 @@ the only evidence so far that the scale is calibrated at all.
 
 ## 5. Consequences to accept before implementing
 
-- **`categories` is sparse.** All three records cited by the CL-14 proposals
-  carry an empty `categories` array, while the corpus as a whole reports 12
-  meta-analyses and 91 replications. The classifier does not tag the records
-  that actually get cited, so a rubric leaning on `categories` would grade most
-  effects as if the corpus were thinner than it is. Either the classifier is
-  fixed first, or the rubric reads `study_design` from the model and treats
-  `categories` as corroboration only.
+- **`categories` is sparse where it matters.** All three records cited by the
+  CL-14 proposals carry an empty `categories` array. Corpus-wide, across **all
+  4444 records in `corpora/evidence/**`**, the classifier tags **374
+  meta-analyses and 493 replications** — the figures previously written here,
+  12 and 91, were scoped to a single corpus and are corrected. The scope is
+  stated explicitly because the corrected numbers are large enough to be
+  misread the other way: the corpus is not thin, the classifier simply does not
+  tag the records that actually get cited. A rubric leaning on `categories`
+  would therefore grade most effects as if the evidence behind them did not
+  exist. Either the classifier is fixed first, or the rubric reads
+  `study_design` from the model and treats `categories` as corroboration only.
 - **Grades will fall.** Every existing effect proposal was graded by assertion,
   and the one corrected by hand dropped three steps. Approving this rubric means
   accepting a registry that looks weaker, because it was always this weak.
@@ -124,6 +128,39 @@ the only evidence so far that the scale is calibrated at all.
 - **Re-grading is a migration, not a side effect.** Nothing re-grades silently.
   Existing records would be re-graded by an explicit, reviewable run whose diff
   the owner reads before it is committed.
+
+## 5a. What D-130 did to `categories`, reclassified
+
+D-130 files four changes to the classifier as three bug fixes and one semantic
+change. Two of them are relabelled here, because a bug fix is a repair the code
+may make on its own and a definition change is the owner's call — and the label
+decides which one is happening. D-130 itself is not edited; `decisions.json` is
+append-only, and the reclassification is carried by **D-135**.
+
+| D-130 called it | It is | Measured effect |
+|---|---|---|
+| bug fix — age-blind citation floor | **NEW ADMISSION RULE** | foundational 414 → 771, **+357 records, +86%** |
+| semantic change — dropping bare `question` | **SEMANTIC NARROWING** (agreed) | **239 of 562** records that lost the dissent tag lost it for this reason alone, **42.5% of all losses** |
+
+**Why the citation-rate route is not a bug fix.** The old rule admitted a record
+as foundational at 1000 raw citations. The new one adds a second route — a
+sustained rate, floored at 10 years old and 250 citations total. Nothing was
+broken and then repaired: a record admitted by the new route was correctly
+excluded by the old rule as it was written. What changed is the *definition* of
+foundational, from "cited a great deal" to "cited a great deal, or cited
+steadily for a long time". That is a new way in, and it nearly doubles the
+category. Filing it as a fix would let the rubric's most weighted input change
+size by 86% without anyone approving it.
+
+**The bare-`question` drop, measured.** 42.5% is the measured share, against an
+estimate of 43% (D-131: the measured number is the one that counts, and the
+difference is stated rather than absorbed). The second-largest single cause is
+the bare `does not` catch-all at 103 records, 18.3% of losses. Total: 562
+records lost the tag and 142 gained it, netting the 1149 → 729 D-130 reports.
+Reproduce with `npm run markers:coverage`.
+
+The other two D-130 changes — singular-only negation, and the container-blind
+review test — are bug fixes as filed, and are not disputed here.
 
 ## 6. What is needed to proceed
 

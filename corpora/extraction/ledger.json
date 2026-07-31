@@ -1,0 +1,380 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-07-31T14:31:00.000Z",
+  "runs": [
+    {
+      "run_id": "2026-07-31T10:09:59.574Z",
+      "dispatch_id": "cl14-002-realizations",
+      "github_run_id": 30622558771,
+      "mode": "realizations",
+      "scope": "cl-14-002",
+      "candidates": 9,
+      "cheap": {
+        "candidates": 6,
+        "dropped_ungrounded": 3,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 3
+      },
+      "synthesis": {
+        "into_synthesis": 3,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 3
+      },
+      "strong": {
+        "candidates": 3,
+        "proposed": 3,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "reconstructed",
+        "reason": "Established after the fact from committed evidence, and complete. The three cheap-pass refusals are recorded per candidate in corpora/extraction/rejected/2026-07-31T10-09-59.574Z.json, and the three proposals carry proposed_by extraction:github-actions-30622558771. The run itself wrote only aggregate counters, so the rows are derived rather than observed — the candidate ordinals are assigned here, not by the run."
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "CL-14:cheap:01",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "unknown_record_id"
+        },
+        {
+          "candidate_id": "CL-14:cheap:02",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "unknown_record_id"
+        },
+        {
+          "candidate_id": "CL-14:cheap:03",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "unknown_record_id"
+        },
+        {
+          "candidate_id": "CL-14:cheap:04",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:05",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:06",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:strong:01",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-cl-14-context-aware-tool-simplification-c403738e29d7",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "CL-14:strong:02",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-cl-14-expertise-based-guidance-toggle-d86bcf53c129",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "CL-14:strong:03",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-cl-14-progressive-disclosure-of-advanced-f-7a339e24183c",
+          "attribution": "recorded"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-07-31T09:10:13.532Z",
+      "dispatch_id": "cl14-validation-1",
+      "github_run_id": 30618907548,
+      "mode": "effects",
+      "scope": "CL-14",
+      "candidates": 15,
+      "cheap": {
+        "candidates": 8,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 8
+      },
+      "synthesis": {
+        "into_synthesis": 8,
+        "consolidated": 1,
+        "expanded": 0,
+        "candidates_strong": 7
+      },
+      "strong": {
+        "candidates": 7,
+        "proposed": 4,
+        "proposed_enrich": 0,
+        "merged_into_pending": 3,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "partial",
+        "reason": "The run this entry exists for: 8 of its 15 candidates had no recorded fate. The stage totals are recoverable and balance — 8 cheap candidates, none refused, all 8 into synthesis, which composed 7, so exactly one fold; 7 composed candidates ending as 4 proposals and 3 absorptions. Two things are NOT recoverable. (1) Cheap-pass lineage: cheap candidates were persisted only when refused, and this run refused none, so which cheap candidate fed which composed one cannot be said, and the single fold cannot be attributed to a pair. (2) Merge targets: mergeProposals unions provenance and takes the higher confidence, leaving a merged proposal indistinguishable from one candidate that cited two records. Split-attention carries two records and two DOIs, which is what an absorption looks like — and also what a single well-cited candidate looks like, so it is not evidence. All three absorptions are therefore recorded with attribution not_recorded rather than guessed at."
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "CL-14:strong:01",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-cueing-effect-01aaa2ec2e72",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "CL-14:strong:02",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-expertise-reversal-effect-72a394e20f30",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "CL-14:strong:03",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-modality-effect-c16093817de1",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "CL-14:strong:04",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-split-attention-effect-04b908b55654",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "CL-14:strong:05",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "attribution": "not_recorded"
+        },
+        {
+          "candidate_id": "CL-14:strong:06",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "attribution": "not_recorded"
+        },
+        {
+          "candidate_id": "CL-14:strong:07",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "attribution": "not_recorded"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-07-24T16:50:11.040Z",
+      "dispatch_id": null,
+      "github_run_id": null,
+      "mode": "effects",
+      "scope": "RE-10",
+      "candidates": null,
+      "cheap": null,
+      "synthesis": null,
+      "strong": {
+        "candidates": 10,
+        "proposed": 0,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 10,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "unreconstructable",
+        "reason": "Rejected candidates were not persisted before D-105. One of the four runs in D-104's 30-for-30: every composed candidate was refused at the grounding gate, and the strong stage balances at 10 for 10 because of it. The cheap stage is null rather than zero — this run gated only the strong pass, so its cheap candidates existed and were never counted, and the manifest's candidates: 10 counts strong-pass output alone. Recording a zero there would assert something false about the run."
+      },
+      "candidates_detail": []
+    },
+    {
+      "run_id": "2026-07-24T14:58:26.447Z",
+      "dispatch_id": null,
+      "github_run_id": null,
+      "mode": "effects",
+      "scope": "FR-11",
+      "candidates": null,
+      "cheap": null,
+      "synthesis": null,
+      "strong": {
+        "candidates": 10,
+        "proposed": 0,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 10,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "unreconstructable",
+        "reason": "Rejected candidates were not persisted before D-105. One of the four runs in D-104's 30-for-30; the cheap stage is null rather than zero because this run gated only the strong pass, so its cheap candidates were never counted."
+      },
+      "candidates_detail": []
+    },
+    {
+      "run_id": "2026-07-24T14:46:46.928Z",
+      "dispatch_id": null,
+      "github_run_id": null,
+      "mode": "effects",
+      "scope": "CG-05",
+      "candidates": null,
+      "cheap": null,
+      "synthesis": null,
+      "strong": {
+        "candidates": 8,
+        "proposed": 0,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 8,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "unreconstructable",
+        "reason": "Rejected candidates were not persisted before D-105. One of the four runs in D-104's 30-for-30; the cheap stage is null rather than zero because this run gated only the strong pass, so its cheap candidates were never counted."
+      },
+      "candidates_detail": []
+    },
+    {
+      "run_id": "2026-07-24T14:44:08.000Z",
+      "dispatch_id": "cursor-cg05-c8488d2",
+      "github_run_id": 30102271340,
+      "mode": "effects",
+      "scope": "CG-05",
+      "candidates": 0,
+      "cheap": {
+        "candidates": 0,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 0
+      },
+      "synthesis": {
+        "into_synthesis": 0,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 0
+      },
+      "strong": {
+        "candidates": 0,
+        "proposed": 0,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "reconstructed",
+        "reason": "A different reason from the four 30-for-30 runs, and stated separately rather than folded in with them: this run failed with routing_404 before any model was invoked (cost.api_calls = 0, records_fetched = 0), so no candidate was ever produced. Its zeros are measured, not missing."
+      },
+      "candidates_detail": []
+    },
+    {
+      "run_id": "2026-07-24T14:41:26.000Z",
+      "dispatch_id": "cursor-cg05-973b069",
+      "github_run_id": 30102079781,
+      "mode": "effects",
+      "scope": "CG-05",
+      "candidates": 0,
+      "cheap": {
+        "candidates": 0,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 0
+      },
+      "synthesis": {
+        "into_synthesis": 0,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 0
+      },
+      "strong": {
+        "candidates": 0,
+        "proposed": 0,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "reconstructed",
+        "reason": "Failed with routing_404 before any model was invoked (cost.api_calls = 0, records_fetched = 0), so no candidate was ever produced. Its zeros are measured, not missing."
+      },
+      "candidates_detail": []
+    },
+    {
+      "run_id": "2026-07-23T14:54:52.213Z",
+      "dispatch_id": null,
+      "github_run_id": null,
+      "mode": "effects",
+      "scope": "SC-06",
+      "candidates": null,
+      "cheap": null,
+      "synthesis": null,
+      "strong": {
+        "candidates": 2,
+        "proposed": 0,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 2,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "unreconstructable",
+        "reason": "Rejected candidates were not persisted before D-105. The earliest of the four runs in D-104's 30-for-30; the cheap stage is null rather than zero because this run gated only the strong pass, so its cheap candidates were never counted."
+      },
+      "candidates_detail": []
+    }
+  ]
+}
