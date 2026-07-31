@@ -45,6 +45,12 @@
       "type": "string",
       "minLength": 1
     },
+    "parameters": {
+      "description": "Every numeric threshold the pattern depends on, named and declared instead of stated as prose (D-115). A pattern that says a user must complete a task 'three times' asserts a measured quantity; no source measured it. The pattern text carries a {name} placeholder, the default lives here, and evidence_basis says what the number rests on — so a reader can see it is a tunable default and a generator can override it without editing prose.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/patternParameter" }
+    },
     "artifact_context": {
       "type": "array",
       "minItems": 1,
@@ -95,7 +101,8 @@
       "then": {
         "properties": {
           "domain_transfer": { "type": "object" },
-          "pattern": { "type": "string" }
+          "pattern": { "type": "string" },
+          "parameters": false
         },
         "required": ["domain_transfer"],
         "not": { "required": ["pattern"] }
@@ -106,6 +113,25 @@
     "doi": {
       "type": "string",
       "pattern": "^10\\.\\d{4,9}/\\S+$"
+    },
+    "patternParameter": {
+      "description": "One tunable threshold referenced from `pattern` as {name}.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$" },
+        "value": { "type": "number" },
+        "unit": {
+          "description": "What the number counts, in words — the pattern text says {name}, so the unit is the only place a reader learns whether 3 means sessions, days, or completions.",
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_basis": {
+          "description": "What the default rests on. One literal for now, following span_absent_reason in this same schema: a filterable value, not a sentence a writer can reword into sounding measured. New values are added here when a source actually measures a threshold.",
+          "enum": ["none — default heuristic"]
+        }
+      },
+      "required": ["name", "value", "unit", "evidence_basis"],
+      "additionalProperties": false
     },
     "provenanceItem": {
       "oneOf": [

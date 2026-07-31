@@ -1215,7 +1215,16 @@ test("an effect-anchored realization is marked inferred and carries the transfer
       description_as_reported:
         "Worked examples helped novices and hindered more advanced learners.",
       pattern:
-        "Collapse the guided tour to a dismissible hint once the user has completed the core action three times.",
+        "Collapse the guided tour to a dismissible hint once the user has completed the core action {core_action_completions} times.",
+      parameters: [
+        {
+          name: "core_action_completions",
+          value: 3,
+          unit: "completions of the core action",
+          // A model may not author this; the coercion overwrites whatever it sends.
+          evidence_basis: "measured in the cited study",
+        },
+      ],
       source_domain: "medical education",
       artifact_context: ["onboarding_flow"],
       confidence: 0.6,
@@ -1232,6 +1241,15 @@ test("an effect-anchored realization is marked inferred and carries the transfer
   assert.equal(payload.domain_transfer?.source_domain, "medical education");
   assert.equal(payload.domain_transfer?.application_domain, "product UI");
   assert.match(payload.pattern ?? "", /^Collapse the guided tour/);
+  // The threshold is a declared default, and its basis is code-filled (D-115).
+  assert.deepEqual(payload.parameters, [
+    {
+      name: "core_action_completions",
+      value: 3,
+      unit: "completions of the core action",
+      evidence_basis: "none — default heuristic",
+    },
+  ]);
   // The transfer step is provenance too, written by code, quoting the effect.
   const inference = payload.provenance.filter(
     (item) => "corpus_kind" in item && item.corpus_kind === "inference",
@@ -1251,6 +1269,64 @@ test("an effect-anchored realization is marked inferred and carries the transfer
     (inference[0] as { span_absent_reason: string }).span_absent_reason,
     "no direct span — inferred from effect",
   );
+});
+
+test("a pattern that states a threshold as prose is dropped, not repaired (D-115)", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract && record.doi);
+  const provenance: KnowledgeProvenanceItem[] = [
+    {
+      mechanism_id: "CL-14",
+      corpus_record_id: record.record_id,
+      doi: record.doi,
+      title: record.title,
+      quote_or_locus: record.abstract.slice(0, 80),
+    },
+  ];
+  const context = {
+    corpus: file,
+    knownMechanismIds: new Set<string>(),
+    effectBasis: effectBasisFixture(record.record_id, record.doi, record.title),
+  };
+  const draft = (pattern: string, parameters?: unknown) =>
+    toProposal(
+      "realizations",
+      "CL-14",
+      {
+        term: "Collapsing guided tour",
+        description_as_reported:
+          "Worked examples helped novices and made no difference for advanced learners.",
+        pattern,
+        parameters,
+        source_domain: "medical education",
+        artifact_context: ["onboarding_flow"],
+        confidence: 0.6,
+      },
+      provenance,
+      "fixture-run",
+      "2026-07-31T10:00:00.000Z",
+      context,
+    );
+
+  // The number as a word and as a digit are the same invented precision.
+  assert.equal(draft("Collapse the tour after three completions."), null);
+  assert.equal(draft("Collapse the tour after 3 completions."), null);
+  // A placeholder with nothing declared behind it is not a default either.
+  assert.equal(draft("Collapse the tour after {completions} completions."), null);
+  // Nor is a declared parameter the pattern never references.
+  assert.equal(
+    draft("Collapse the tour once the user is fluent.", [
+      { name: "completions", value: 3, unit: "completions" },
+    ]),
+    null,
+  );
+  // Declared and referenced passes.
+  const ok = draft("Collapse the tour after {completions} completions.", [
+    { name: "completions", value: 3, unit: "completions of the core action" },
+  ]);
+  assert(ok?.type === "realization");
+  assert.equal(ok.payload.parameters?.length, 1);
 });
 
 test("a half-marked inference is dropped rather than proposed as evidence", () => {

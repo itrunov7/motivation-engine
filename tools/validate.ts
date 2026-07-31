@@ -68,6 +68,7 @@ import {
   inferenceGroundingErrors,
   isSpanConditionError,
   normalizeQualityText,
+  patternParameterErrors,
   realizationGroundingErrors,
   spanErrors,
 } from "../lib/proposal-quality";
@@ -1046,6 +1047,32 @@ function emptySpanTally(): SpanTally {
     declaredInference: 0,
     legacyFiles: new Set(),
   };
+}
+
+/**
+ * A realization's `pattern` may not state a threshold as prose (D-115).
+ *
+ * Schema cannot see inside a sentence, so the rule that separates a declared
+ * default from an invented measurement lives here. Applied to records and to
+ * undecided proposals alike, because the point is to catch the number before
+ * it is approved, not after.
+ */
+function checkPatternParameters(
+  file: string,
+  realization: { pattern?: unknown; parameters?: unknown },
+): boolean {
+  if (typeof realization.pattern !== "string") return true;
+  const parameters = Array.isArray(realization.parameters)
+    ? realization.parameters.filter(
+        (entry): entry is { name: string } =>
+          typeof entry === "object" &&
+          entry !== null &&
+          typeof (entry as { name?: unknown }).name === "string",
+      )
+    : [];
+  const errors = patternParameterErrors(realization.pattern, parameters);
+  for (const error of errors) fail(file, error);
+  return errors.length === 0;
 }
 
 /**
@@ -2320,8 +2347,11 @@ function main(): void {
             mechanism_id?: string;
             effect_refs?: unknown;
             derivation?: unknown;
+            pattern?: unknown;
+            parameters?: unknown;
             provenance?: KnowledgeProvenanceItem[];
           };
+          if (!checkPatternParameters(file, realization)) ok = false;
           const realizationEffectRefs = Array.isArray(realization.effect_refs)
             ? realization.effect_refs.filter(
                 (id): id is string => typeof id === "string",
@@ -2508,7 +2538,7 @@ function main(): void {
             decided_at?: string | null;
             decision_note?: string | null;
             provenance?: KnowledgeProvenanceItem[];
-            payload?: { provenance?: unknown };
+            payload?: { provenance?: unknown; pattern?: unknown; parameters?: unknown };
           };
           const parts = relative(PATHS.proposalsDir, file).split(sep);
           const expected =
@@ -2556,6 +2586,30 @@ function main(): void {
               `${proposal.type} payload provenance must exactly match envelope provenance`,
             );
             ok = false;
+          }
+          // A warning, not a failure, and only while the proposal is still
+          // undecided (D-115). A decided proposal keeps the payload it was
+          // decided on — rewriting a rejected pattern would erase the evidence
+          // of what the pipeline actually produced — and failing an undecided
+          // one would discard a whole run over a number the owner is about to
+          // fix. The hard gate is approval, in lib/proposals projectRealization.
+          if (
+            proposal.type === "realization" &&
+            proposal.payload &&
+            (proposal.status === "pending" ||
+              proposal.status === "edited" ||
+              proposal.status === "held_low_confidence") &&
+            typeof proposal.payload.pattern === "string"
+          ) {
+            const parameters = Array.isArray(proposal.payload.parameters)
+              ? (proposal.payload.parameters as { name: string }[])
+              : [];
+            for (const error of patternParameterErrors(
+              proposal.payload.pattern,
+              parameters,
+            )) {
+              console.log(`  ! ${rel(file)}: ${error} — approval is blocked until fixed`);
+            }
           }
           if (proposal.type === "dossier") {
             // D-085: every per-axis provenance item must also be carried by

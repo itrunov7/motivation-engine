@@ -43,6 +43,67 @@ export function realizationSourceText(record: {
   return `${record.title}\n${record.observation}`;
 }
 
+/**
+ * Numbers spelled as words. A threshold smuggled in as "three times" reads as
+ * measured precision exactly like "3 times" does, so both forms are caught.
+ */
+const NUMBER_WORDS = [
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "eleven",
+  "twelve",
+];
+
+const PLACEHOLDER = /\{([a-z0-9_]*)\}/g;
+const BARE_NUMBER = new RegExp(`\\d|\\b(?:${NUMBER_WORDS.join("|")})\\b`, "i");
+
+/**
+ * Whether a realization's `pattern` states its thresholds as declared,
+ * overridable parameters rather than as prose facts (D-115).
+ *
+ * The pipeline invented "three times" and wrote it as if a study had measured
+ * it. No source did. A number the pattern depends on must therefore appear as
+ * a `{name}` placeholder resolving to a declared parameter that carries its own
+ * evidence_basis; a bare digit or number-word left in the prose is a
+ * quantitative claim with no provenance, which is the thing this rejects.
+ */
+export function patternParameterErrors(
+  pattern: string,
+  parameters: { name: string }[],
+): string[] {
+  const errors: string[] = [];
+  const declared = new Set(parameters.map((parameter) => parameter.name));
+  const referenced = new Set<string>();
+  for (const [, name] of pattern.matchAll(PLACEHOLDER)) {
+    referenced.add(name);
+    if (!declared.has(name)) {
+      errors.push(`pattern references {${name}}, which is not a declared parameter`);
+    }
+  }
+  for (const name of declared) {
+    if (!referenced.has(name)) {
+      errors.push(`parameter "${name}" is declared but never referenced as {${name}} in the pattern`);
+    }
+  }
+  const prose = pattern.replace(PLACEHOLDER, " ");
+  const bare = BARE_NUMBER.exec(prose);
+  if (bare) {
+    errors.push(
+      `pattern states the number "${bare[0]}" as prose; no source measured it — ` +
+        "declare it in parameters and reference it as {name} (D-115)",
+    );
+  }
+  return errors;
+}
+
 export function normalizeQualityText(value: string): string {
   return value
     .normalize("NFKC")

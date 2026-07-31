@@ -37,13 +37,17 @@ import {
   hasNovelEnrichment,
   mergeProposals,
   normalizeQualityText,
+  patternParameterErrors,
   proposalSimilarity,
   realizationGroundingErrors,
   realizationSourceText,
   sha256Hex,
 } from "../lib/proposal-quality";
 import { writeRunProgress } from "./progress";
-import { INFERENCE_SPAN_ABSENT_REASON } from "../lib/types";
+import {
+  INFERENCE_SPAN_ABSENT_REASON,
+  PARAMETER_EVIDENCE_BASIS_NONE,
+} from "../lib/types";
 import type {
   ArtifactType,
   AxisScore,
@@ -72,6 +76,7 @@ import type {
   ReaderCoverageFile,
   Realization,
   RealizationDerivation,
+  RealizationParameter,
   RealizationCorpusFile,
   RealizationCorpusRecord,
   RealizationCorpusProvenanceItem,
@@ -258,6 +263,12 @@ export interface DraftItem {
   artifact_context?: string[];
   /** mode=realizations, effect-anchored (D-112): the transferred UI directive. */
   pattern?: string;
+  /**
+   * mode=realizations, effect-anchored (D-115): the thresholds `pattern`
+   * references as {name}. `unknown` because evidence_basis is code-filled, so
+   * whatever the model sends for it is validated away rather than trusted.
+   */
+  parameters?: unknown;
   /** mode=realizations, effect-anchored (D-112): the domain evidence came from. */
   source_domain?: string;
   pair?: string[];
@@ -1541,11 +1552,12 @@ function inferredRealizationInstruction(
 ): string {
   return [
     `Propose implementable product-UI patterns that follow from the anchored effect for ${mechanismId}.`,
-    "A pattern must be concrete enough to build without further interpretation: name the interface element, the trigger or threshold that changes it, and what the user sees before and after. \"Collapse the guided tour once the user has completed the core action three times\" is a pattern; \"adapt to user expertise\" is not.",
+    "A pattern must be concrete enough to build without further interpretation: name the interface element, the trigger or threshold that changes it, and what the user sees before and after. \"Collapse the guided tour once the user has completed the core action {core_action_completions} times\" is a pattern; \"adapt to user expertise\" is not.",
     "Fields per item:",
     "- term: a short name for the pattern.",
     "- description_as_reported: what the cited source states, in the source's own domain vocabulary. Do not describe a product interface here, and do not generalise beyond the quote.",
-    "- pattern: the product-UI directive transferred from it, in the imperative. This is your inference, not the source's claim.",
+    "- pattern: the product-UI directive transferred from it, in the imperative. This is your inference, not the source's claim. NEVER write a number in this text, as a digit or as a word — no source measured a threshold for a product interface, and a number in prose reads as if one had. Write {snake_case_name} instead and declare it in parameters.",
+    "- parameters: one entry per {name} the pattern references, as {name, value (your suggested default), unit (what the number counts, in words), evidence_basis: \"none — default heuristic\"}. Every parameter must be referenced by the pattern and every placeholder must be declared.",
     "- source_domain: the field the cited evidence was measured in, as the records themselves describe it (for example \"medical education\" or \"multimedia instructional design\"). Never write a product or software domain here.",
     `- artifact_context: where the pattern applies, from this vocabulary where one fits: ${ARTIFACT_TYPES.join("|")}.`,
     "- confidence: your confidence in the TRANSFER holding in a product interface, not in the effect being real. No source measured this pattern in a product, so a value above 0.8 is not credible.",
@@ -2482,6 +2494,31 @@ function nonEmpty(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
+/**
+ * Coerce the model's `parameters` into declared thresholds (D-115).
+ *
+ * `evidence_basis` is not read from the model. It is the one literal the schema
+ * allows, and letting a model write it would let a model claim a default was
+ * measured — the exact assertion the field exists to deny.
+ */
+function patternParameters(value: unknown): RealizationParameter[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((entry) => {
+    if (typeof entry !== "object" || entry === null) return [];
+    const { name, value: amount, unit } = entry as Record<string, unknown>;
+    if (!nonEmpty(name) || !nonEmpty(unit) || typeof amount !== "number") return [];
+    if (!Number.isFinite(amount)) return [];
+    return [
+      {
+        name: snake(name),
+        value: amount,
+        unit: unit.trim(),
+        evidence_basis: PARAMETER_EVIDENCE_BASIS_NONE,
+      },
+    ];
+  });
+}
+
 function stringList(value: unknown): string[] {
   return Array.isArray(value)
     ? Array.from(
@@ -2854,6 +2891,13 @@ export function toProposal(
       const sourceDomain =
         typeof item.source_domain === "string" ? item.source_domain.trim() : "";
       if (!inference || !pattern || !sourceDomain) return null;
+      // A threshold stated as prose is a measurement nobody made (D-115). The
+      // model is told to write {name} and declare a default; when it writes
+      // "three times" anyway, the candidate is dropped rather than repaired,
+      // because guessing which number the prose meant is inventing the same
+      // precision one layer down.
+      const parameters = patternParameters(item.parameters);
+      if (patternParameterErrors(pattern, parameters).length > 0) return null;
       itemProvenance = [...provenance, inference];
       payload = {
         ...common,
@@ -2864,6 +2908,7 @@ export function toProposal(
           application_domain: APPLICATION_DOMAIN,
         },
         pattern,
+        ...(parameters.length > 0 ? { parameters } : {}),
         provenance: itemProvenance,
         confidence: itemConfidence,
       };

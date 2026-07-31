@@ -320,7 +320,15 @@ test("an inferred realization cannot be approved before the effect it transfers 
     },
     term: "Fixture transferred pattern",
     description_as_reported: effectFact,
-    pattern: "Collapse the fixture panel after three completed core actions.",
+    pattern: "Collapse the fixture panel after {core_actions} completed core actions.",
+    parameters: [
+      {
+        name: "core_actions",
+        value: 3,
+        unit: "completed core actions",
+        evidence_basis: "none — default heuristic",
+      },
+    ],
     artifact_context: ["onboarding_flow"],
     provenance: [...provenance, inference],
     confidence: 0.6,
@@ -376,6 +384,25 @@ test("an inferred realization cannot be approved before the effect it transfers 
       "utf8",
     );
     await applyLocalTransaction(root, await approve(effectProposalPath));
+
+    // With the effect in place, the threshold is the remaining gate (D-115):
+    // the same pattern stating its number as prose is refused.
+    const proseThreshold = {
+      ...realizationProposal,
+      payload: {
+        ...realizationPayload,
+        pattern: "Collapse the fixture panel after three completed core actions.",
+        parameters: undefined,
+      },
+    };
+    const prosePath = "proposals/realization/prose-threshold.json";
+    await writeFile(
+      join(root, prosePath),
+      `${JSON.stringify({ ...proseThreshold, id: "prose-threshold" }, null, 2)}\n`,
+      "utf8",
+    );
+    await assert.rejects(approve(prosePath), /ungrounded threshold|no source measured it/);
+
     await applyLocalTransaction(root, await approve(realizationPath));
 
     const record = JSON.parse(
@@ -385,11 +412,13 @@ test("an inferred realization cannot be approved before the effect it transfers 
       effect_refs: string[];
       domain_transfer: { source_domain: string; application_domain: string };
       pattern: string;
+      parameters: { name: string; evidence_basis: string }[];
     };
     assert.equal(record.derivation, "inferred");
     assert.deepEqual(record.effect_refs, [effectId]);
     assert.equal(record.domain_transfer.application_domain, "product UI");
     assert.match(record.pattern, /^Collapse the fixture panel/);
+    assert.equal(record.parameters[0].evidence_basis, "none — default heuristic");
   } finally {
     await rm(root, { recursive: true, force: true });
   }

@@ -25,6 +25,7 @@ import type {
 import {
   groundingErrors,
   inferenceGroundingErrors,
+  patternParameterErrors,
   realizationGroundingErrors,
 } from "./proposal-quality";
 import {
@@ -547,6 +548,17 @@ async function projectRealization(
     if ((await builder.read(effectPath)) === null) {
       throw new ProposalValidationError(
         `Realization effect does not exist: ${effectId}`,
+      );
+    }
+  }
+  // A threshold in the pattern must be a declared, overridable parameter, not
+  // prose (D-115). Enforced at approval rather than only in the validator,
+  // because this is the boundary the number would cross to become knowledge.
+  if (typeof realization.pattern === "string") {
+    const errors = patternParameterErrors(realization.pattern, realization.parameters ?? []);
+    if (errors.length > 0) {
+      throw new ProposalValidationError(
+        `Realization pattern states an ungrounded threshold: ${errors.join("; ")}`,
       );
     }
   }

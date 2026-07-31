@@ -365,6 +365,32 @@ export interface RealizationDomainTransfer {
 }
 
 /**
+ * What a tunable threshold's default rests on (D-115). One literal, following
+ * the INFERENCE_SPAN_ABSENT_REASON precedent: a value a reader can filter on,
+ * not a sentence a writer can reword until it sounds measured. A second value
+ * is added here the day a source actually measures a threshold.
+ */
+export const PARAMETER_EVIDENCE_BASIS_NONE = "none — default heuristic" as const;
+
+/**
+ * One numeric threshold a `pattern` depends on, named rather than stated as
+ * prose (D-115).
+ *
+ * "once the user has completed the core task three times" reads as a measured
+ * quantity and is not one. The pattern text carries `{name}`, the default lives
+ * here, and `evidence_basis` says the number is a heuristic — so the invented
+ * precision is visible in the data instead of hidden in a sentence.
+ */
+export interface RealizationParameter {
+  /** snake_case; referenced from `pattern` as `{name}`. */
+  name: string;
+  value: number;
+  /** What the number counts — the pattern text only shows the placeholder. */
+  unit: string;
+  evidence_basis: typeof PARAMETER_EVIDENCE_BASIS_NONE;
+}
+
+/**
  * /realizations/{mechanism_id}/{id}.json — an interface, copy, or flow
  * embodiment. Distinct from Implementation, which is a product-authored
  * generator directive with metrics and hard rules attached.
@@ -386,6 +412,11 @@ export interface Realization {
   description_as_reported: string;
   /** Required when derivation is "inferred", forbidden when "reported". */
   pattern?: string;
+  /**
+   * Every numeric threshold `pattern` depends on (D-115). Required whenever the
+   * pattern carries one; forbidden when derivation is "reported".
+   */
+  parameters?: RealizationParameter[];
   artifact_context: string[];
   provenance: KnowledgeProvenanceItem[];
   confidence: number;
