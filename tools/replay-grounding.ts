@@ -40,7 +40,10 @@ import {
   normalizeQualityText,
   sha256Hex,
 } from "../lib/proposal-quality";
-import { isRealizationProvenance } from "../lib/realization-corpus";
+import {
+  isInferenceProvenance,
+  isRealizationProvenance,
+} from "../lib/realization-corpus";
 import { groundingOutcome, type DraftItem, type UngroundedReason } from "./extract";
 
 const ROOT = join(__dirname, "..");
@@ -555,6 +558,7 @@ function verifySpans(): number {
     const extractionAuthored = isExtractionAuthored(proposal.proposed_by ?? "");
     for (const source of proposal.provenance ?? []) {
       if (isRealizationProvenance(source)) continue; // no span by design (D-110)
+      if (isInferenceProvenance(source)) continue; // no span by declaration (D-112)
       if (!source.source_span) {
         spanless += 1;
         // Only a violation for pipeline output; hand-authored items predate spans.

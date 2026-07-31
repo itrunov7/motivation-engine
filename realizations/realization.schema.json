@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://ventora.dev/motivation-engine/realization.schema.json",
-  "title": "Source-grounded realization (descriptive L3 evidence)",
-  "description": "A neutral interface, copy, or flow embodiment reported by harvested sources. It describes what exists; mechanism.implementations remains the product-authored directive layer.",
+  "title": "Realization (L3 evidence, reported or inferred)",
+  "description": "An interface, copy, or flow embodiment. derivation=reported describes what a source observed; derivation=inferred carries a product-UI pattern transferred from an effect measured in another domain, and must say so in domain_transfer (D-112). mechanism.implementations remains the product-authored directive layer.",
   "type": "object",
   "properties": {
     "$schema": { "type": "string" },
@@ -14,12 +14,37 @@
       "type": "string",
       "pattern": "^[A-Z]{2}-\\d{2}$"
     },
-    "effect_id": {
-      "type": "string",
-      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    "effect_refs": {
+      "description": "First-class L2 effects this realization embodies. Named to match mechanism.effect_refs; it replaced the singular effect_id in D-112, when no record used that field yet.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+    },
+    "derivation": {
+      "description": "How this record came to exist. reported = a source described this embodiment. inferred = the pattern is a domain transfer from an effect nobody measured in a product context; it is a hypothesis for a generator, not evidence. Optional so records written before D-112 stay valid; required of anything the extraction pipeline authors, enforced in tools/validate.ts.",
+      "enum": ["reported", "inferred"]
+    },
+    "domain_transfer": {
+      "description": "The domain the evidence was measured in versus the domain the record is applied in. Equal domains mean no transfer. Carried explicitly rather than left implicit in effect.boundary, because the generator reads this record and never reads the effect (D-112).",
+      "type": "object",
+      "properties": {
+        "source_domain": { "type": "string", "minLength": 1 },
+        "application_domain": { "type": "string", "minLength": 1 }
+      },
+      "required": ["source_domain", "application_domain"],
+      "additionalProperties": false
     },
     "term": { "type": "string", "minLength": 1 },
-    "description_as_reported": { "type": "string", "minLength": 1 },
+    "description_as_reported": {
+      "description": "What the source states, in the source's own domain language. For an inferred record this is the EVIDENCE half and must not describe a product UI.",
+      "type": "string",
+      "minLength": 1
+    },
+    "pattern": {
+      "description": "The implementable product-UI directive, present only when derivation=inferred. This is the INFERENCE half: concrete enough for a generator to act on, and separated from description_as_reported so a reader can see which half a source supports.",
+      "type": "string",
+      "minLength": 1
+    },
     "artifact_context": {
       "type": "array",
       "minItems": 1,
@@ -47,6 +72,36 @@
     "confidence"
   ],
   "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": { "derivation": { "const": "inferred" } },
+        "required": ["derivation"]
+      },
+      "then": {
+        "properties": {
+          "effect_refs": { "type": "array", "minItems": 1 },
+          "domain_transfer": { "type": "object" },
+          "pattern": { "type": "string", "minLength": 1 }
+        },
+        "required": ["effect_refs", "domain_transfer", "pattern"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "derivation": { "const": "reported" } },
+        "required": ["derivation"]
+      },
+      "then": {
+        "properties": {
+          "domain_transfer": { "type": "object" },
+          "pattern": { "type": "string" }
+        },
+        "required": ["domain_transfer"],
+        "not": { "required": ["pattern"] }
+      }
+    }
+  ],
   "$defs": {
     "doi": {
       "type": "string",
@@ -55,7 +110,8 @@
     "provenanceItem": {
       "oneOf": [
         { "$ref": "#/$defs/evidenceProvenanceItem" },
-        { "$ref": "#/$defs/realizationProvenanceItem" }
+        { "$ref": "#/$defs/realizationProvenanceItem" },
+        { "$ref": "#/$defs/inferenceProvenanceItem" }
       ]
     },
     "evidenceProvenanceItem": {
@@ -78,7 +134,7 @@
       "additionalProperties": false
     },
     "provenanceSourceSpan": {
-      "description": "Where the quote sits in its source record, and which version of that record the offsets were resolved against (D-110). Carried on EVIDENCE provenance only: realizationProvenanceItem deliberately has no span, so mode=realizations extraction output is not span-verifiable and that gap is stated rather than assumed. Re-slicing lib/proposal-quality evidenceSourceText(record) at start/end must reproduce quote_or_locus byte for byte; a source_text_sha256 mismatch marks the span STALE.",
+      "description": "Where the quote sits in its source record, and which version of that record the offsets were resolved against (D-110). Carried on EVIDENCE provenance only: realizationProvenanceItem and inferenceProvenanceItem deliberately have no span, and each states why, so the gap is declared rather than assumed. Re-slicing lib/proposal-quality evidenceSourceText(record) at start/end must reproduce quote_or_locus byte for byte; a source_text_sha256 mismatch marks the span STALE.",
       "type": "object",
       "properties": {
         "start": { "type": "integer", "minimum": 0 },
@@ -107,6 +163,29 @@
         "title",
         "quote_or_locus",
         "contributed_by"
+      ],
+      "additionalProperties": false
+    },
+    "inferenceProvenanceItem": {
+      "description": "The transfer step itself, recorded as provenance (D-112). quote_or_locus is the effect's own statement, copied verbatim; there is no source_span because the statement is an L2 record's text, not a slice of a harvested document. span_absent_reason states that in the data instead of leaving an empty field to be read as an oversight. corpus_record_id and title name the evidence record the EFFECT cites, so the trail stays walkable to a source the owner can open.",
+      "type": "object",
+      "properties": {
+        "corpus_kind": { "const": "inference" },
+        "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+        "corpus_record_id": { "type": "string", "pattern": "^cr_[a-f0-9]{24}$" },
+        "effect_id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "title": { "type": "string", "minLength": 1 },
+        "quote_or_locus": { "type": "string", "minLength": 1 },
+        "span_absent_reason": { "const": "no direct span — inferred from effect" }
+      },
+      "required": [
+        "corpus_kind",
+        "mechanism_id",
+        "corpus_record_id",
+        "effect_id",
+        "title",
+        "quote_or_locus",
+        "span_absent_reason"
       ],
       "additionalProperties": false
     }

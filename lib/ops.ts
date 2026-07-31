@@ -573,7 +573,7 @@ export function loadExtractionRunSummary(): ExtractionRunSummary | undefined {
     return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
   };
   const scopeEntry = Object.entries(params).find(([key]) =>
-    ["mechanism", "pack", "segment"].includes(key),
+    ["mechanism", "pack", "segment", "effect"].includes(key),
   );
   return {
     timestamp: manifest.last_run.timestamp,

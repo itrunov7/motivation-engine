@@ -22,8 +22,15 @@ import type {
   Segment,
   SegmentsFile,
 } from "./types";
-import { groundingErrors, realizationGroundingErrors } from "./proposal-quality";
-import { isRealizationProvenance } from "./realization-corpus";
+import {
+  groundingErrors,
+  inferenceGroundingErrors,
+  realizationGroundingErrors,
+} from "./proposal-quality";
+import {
+  isInferenceProvenance,
+  isRealizationProvenance,
+} from "./realization-corpus";
 import { deriveRealizationRecordId } from "./realization-corpus";
 export { isActionableProposal, PROPOSAL_STATUS_META } from "./proposal-meta";
 
@@ -318,6 +325,24 @@ async function assertResolvableProvenance(
         `Provenance mechanism id is invalid: ${item.mechanism_id}`,
       );
     }
+    // An inference item has no span and never claimed one (D-112); it resolves
+    // against the effect it transfers from. At approval time that effect must be
+    // the authoritative record — a pending proposal is not a basis for a
+    // mutation — so this reads /effects only, not the queue.
+    if (isInferenceProvenance(item)) {
+      const effectPath = `effects/${item.mechanism_id}/${item.effect_id}.json`;
+      const text = await snapshot.read(effectPath);
+      const errors = inferenceGroundingErrors(
+        [item],
+        text === null ? null : parseJson<Effect>(effectPath, text),
+      );
+      if (errors.length > 0) {
+        throw new ProposalValidationError(
+          `Inference provenance does not resolve against ${effectPath}: ${errors.join("; ")}`,
+        );
+      }
+      continue;
+    }
     const path = isRealizationProvenance(item)
       ? `corpora/realizations/${item.mechanism_id}/records.json`
       : `corpora/evidence/${item.mechanism_id}.json`;
@@ -459,7 +484,7 @@ async function validateMechanismReferences(
           `Effect ${effect.id} references invalid realization ${realizationId}`,
         );
       }
-      if (realization.effect_id !== effect.id) {
+      if (!(realization.effect_refs ?? []).includes(effect.id)) {
         throw new ProposalValidationError(
           `Realization ${realizationId} must link back to effect ${effect.id}`,
         );
@@ -512,12 +537,32 @@ async function projectRealization(
       `Realization mechanism does not exist: ${realization.mechanism_id}`,
     );
   }
-  if (realization.effect_id) {
-    const effectPath = `effects/${realization.mechanism_id}/${realization.effect_id}.json`;
+  // Approval order is enforced here (D-112): an inferred realization may be
+  // PROPOSED against an effect that is still a proposal — a proposal resting on
+  // a proposal changes no artifact — but it cannot be APPLIED until that effect
+  // is an approved record. The owner therefore has to accept the science before
+  // the pattern transferred from it can enter the knowledge layer.
+  for (const effectId of realization.effect_refs ?? []) {
+    const effectPath = `effects/${realization.mechanism_id}/${effectId}.json`;
     if ((await builder.read(effectPath)) === null) {
       throw new ProposalValidationError(
-        `Realization effect does not exist: ${realization.effect_id}`,
+        `Realization effect does not exist: ${effectId}`,
       );
+    }
+  }
+  if (realization.derivation === "inferred") {
+    const claimed = new Set(realization.effect_refs ?? []);
+    if (!realization.provenance.some(isInferenceProvenance)) {
+      throw new ProposalValidationError(
+        "Inferred realization carries no inference provenance item recording the transfer",
+      );
+    }
+    for (const item of realization.provenance) {
+      if (isInferenceProvenance(item) && !claimed.has(item.effect_id)) {
+        throw new ProposalValidationError(
+          `Inference provenance names effect ${item.effect_id}, which is absent from effect_refs`,
+        );
+      }
     }
   }
   const realizationPath = `realizations/${realization.mechanism_id}/${realization.id}.json`;

@@ -23,6 +23,7 @@ import { basename, join } from "node:path";
 import { Ajv2020, type ValidateFunction } from "ajv/dist/2020";
 import addFormats from "ajv-formats";
 import { parse as parseYaml } from "yaml";
+import { resolveEffectBasis, type ResolvedEffectBasis } from "../lib/effect-basis";
 import {
   computeBudgetSnapshot,
   extractionPriceState,
@@ -42,6 +43,7 @@ import {
   sha256Hex,
 } from "../lib/proposal-quality";
 import { writeRunProgress } from "./progress";
+import { INFERENCE_SPAN_ABSENT_REASON } from "../lib/types";
 import type {
   ArtifactType,
   AxisScore,
@@ -52,10 +54,12 @@ import type {
   DossierDraftAxis,
   DossierDraftPayload,
   DossierEvidenceSource,
+  Effect,
   EvidenceCorpusFile,
   EvidenceCorpusRecord,
   EvidenceGrade,
   EvidenceProvenanceItem,
+  InferenceProvenanceItem,
   ExtractionModelTierConfig,
   ExtractionOpsConfig,
   HardRule,
@@ -67,6 +71,7 @@ import type {
   ProvenanceSourceSpan,
   ReaderCoverageFile,
   Realization,
+  RealizationDerivation,
   RealizationCorpusFile,
   RealizationCorpusRecord,
   RealizationCorpusProvenanceItem,
@@ -113,7 +118,7 @@ export const EXTRACTION_MODES = [
   "dossier",
 ] as const;
 export type ExtractionMode = (typeof EXTRACTION_MODES)[number];
-export type ScopeKind = "mechanism" | "pack" | "segment";
+export type ScopeKind = "mechanism" | "pack" | "segment" | "effect";
 
 /** Modes that draft a whole first-time artifact for a seed candidate (D-085). */
 export function isDraftMode(mode: ExtractionMode): mode is "mechanism" | "dossier" {
@@ -124,7 +129,40 @@ export interface ExtractionScope {
   kind: ScopeKind;
   id: string;
   mechanismIds: string[];
+  /**
+   * The L2 effect this run is aimed at, resolved from /effects or from the
+   * pending proposal queue (D-112). Present only for kind="effect", which is
+   * accepted by mode=realizations alone: it switches that mode from describing
+   * what sources observed to transferring an effect into product-UI patterns,
+   * and the effect's text is what the models are anchored on.
+   */
+  effectBasis?: ResolvedEffectBasis;
 }
+
+/**
+ * Whether this run infers product-UI patterns from an effect rather than
+ * describing observations (D-112). One derivation per run, decided by the scope,
+ * so a single proposal can never be half reported and half inferred.
+ */
+export function realizationDerivation(
+  scope: ExtractionScope,
+): RealizationDerivation {
+  return scope.kind === "effect" ? "inferred" : "reported";
+}
+
+/**
+ * The one domain every realization in this repository is applied in. Named
+ * rather than inlined because it is written into data (D-112), and a phrase
+ * written into data from three places drifts into three phrases.
+ */
+const APPLICATION_DOMAIN = "product UI";
+
+/**
+ * Where a REPORTED realization's evidence was observed: the realization corpus
+ * holds captures of shipped product interfaces (D-081), so its source domain is
+ * the application domain and there is no transfer.
+ */
+const REPORTED_SOURCE_DOMAIN = APPLICATION_DOMAIN;
 
 export interface ExtractionQuote {
   mode: ExtractionMode;
@@ -218,7 +256,10 @@ export interface DraftItem {
   term?: string;
   description_as_reported?: string;
   artifact_context?: string[];
-  effect_id?: string | null;
+  /** mode=realizations, effect-anchored (D-112): the transferred UI directive. */
+  pattern?: string;
+  /** mode=realizations, effect-anchored (D-112): the domain evidence came from. */
+  source_domain?: string;
   pair?: string[];
   type?: string;
   source?: string;
@@ -352,6 +393,7 @@ function commonItem(
 function extractionItemSchema(
   mode: ExtractionMode,
   stage: ExtractionStage,
+  derivation: RealizationDerivation = "reported",
 ): JsonSchema {
   switch (mode) {
     case "effects":
@@ -366,14 +408,27 @@ function extractionItemSchema(
         stage,
       );
     case "realizations":
+      // The inferred shape asks for the two halves separately (D-112): what the
+      // source states, in its own domain, and the product-UI pattern transferred
+      // from it. effect_refs is NOT asked for — the run knows which effect it was
+      // aimed at, and a model-authored link to an artifact is provenance the
+      // model does not get to write (D-104).
       return commonItem(
-        {
-          id: { type: ["string", "null"] },
-          term: { type: "string" },
-          description_as_reported: { type: "string" },
-          artifact_context: stringArraySchema,
-          effect_id: { type: ["string", "null"] },
-        },
+        derivation === "inferred"
+          ? {
+              id: { type: ["string", "null"] },
+              term: { type: "string" },
+              description_as_reported: { type: "string" },
+              pattern: { type: "string" },
+              source_domain: { type: "string" },
+              artifact_context: stringArraySchema,
+            }
+          : {
+              id: { type: ["string", "null"] },
+              term: { type: "string" },
+              description_as_reported: { type: "string" },
+              artifact_context: stringArraySchema,
+            },
         stage,
       );
     case "interactions":
@@ -486,6 +541,7 @@ function dossierSynthesisSchema(): JsonSchema {
 function responseItemSchema(
   mode: ExtractionMode,
   stage: ExtractionStage,
+  derivation: RealizationDerivation = "reported",
 ): JsonSchema {
   if (stage === "synthesize" && mode === "mechanism") {
     return mechanismSynthesisSchema();
@@ -493,22 +549,26 @@ function responseItemSchema(
   if (stage === "synthesize" && mode === "dossier") {
     return dossierSynthesisSchema();
   }
-  return extractionItemSchema(mode, stage);
+  return extractionItemSchema(mode, stage, derivation);
 }
 
 export function openRouterResponseFormat(
   mode: ExtractionMode,
   stage: ExtractionStage,
+  derivation: RealizationDerivation = "reported",
 ): JsonSchema {
   return {
     type: "json_schema",
     json_schema: {
-      name: `motivation_engine_${mode}_${stage}`,
+      name:
+        mode === "realizations"
+          ? `motivation_engine_realizations_${derivation}_${stage}`
+          : `motivation_engine_${mode}_${stage}`,
       strict: true,
       schema: strictObject({
         items: {
           type: "array",
-          items: responseItemSchema(mode, stage),
+          items: responseItemSchema(mode, stage, derivation),
         },
       }),
     },
@@ -522,10 +582,11 @@ export function openRouterStructuredOutputOptions(
   mode: ExtractionMode,
   stage: ExtractionStage,
   responseFormat: ExtractionModelTierConfig["response_format"],
+  derivation: RealizationDerivation = "reported",
 ): JsonSchema {
   return responseFormat === "json_schema"
     ? {
-        response_format: openRouterResponseFormat(mode, stage),
+        response_format: openRouterResponseFormat(mode, stage, derivation),
         provider: { require_parameters: true },
       }
     : { response_format: { type: "json_object" } };
@@ -564,6 +625,8 @@ export function openRouterRequestBody(args: {
   stage: ExtractionStage;
   prompt: string;
   maxTokens: number;
+  /** mode=realizations only: which item shape to ask for (D-112). */
+  derivation?: RealizationDerivation;
 }): Record<string, unknown> {
   return {
     model: args.tier.model_id,
@@ -575,6 +638,7 @@ export function openRouterRequestBody(args: {
       args.mode,
       args.stage,
       args.tier.response_format,
+      args.derivation,
     ),
     ...openRouterSamplingOptions(args.tier.supports),
     max_tokens: args.maxTokens,
@@ -813,8 +877,16 @@ export function mergeReaderCoverage(
   mode: ExtractionMode,
   processed: ReadonlyMap<string, ReaderCoverageDelta>,
   processedAt: string,
+  // Which corpus the ids belong to. Derived from the mode by default, but an
+  // effect-anchored realizations run reads the EVIDENCE corpus (D-112), and
+  // filing those ids under the realization ledger would both mislabel them and
+  // hide them from the planner, which reads back the branch it read from — so
+  // the run would re-read and re-pay for the same records forever.
+  corpusKind: "evidence" | "realization" = mode === "realizations"
+    ? "realization"
+    : "evidence",
 ): ReaderCoverageFile {
-  const kind = mode === "realizations" ? "realization" : "evidence";
+  const kind = corpusKind;
   const mechanisms = structuredClone(previous?.mechanisms ?? {});
   for (const [mechanismId, delta] of Array.from(processed.entries())) {
     const mechanism = mechanisms[mechanismId] ?? {};
@@ -864,6 +936,7 @@ function writeReaderCoverage(
   mode: ExtractionMode,
   processed: ReadonlyMap<string, ReaderCoverageDelta>,
   processedAt: string,
+  corpusKind?: "evidence" | "realization",
 ): void {
   mkdirSync(EXTRACTION_DIR, { recursive: true });
   const previous = existsSync(READER_COVERAGE_FILE)
@@ -871,7 +944,7 @@ function writeReaderCoverage(
     : null;
   writeFileSync(
     READER_COVERAGE_FILE,
-    json(mergeReaderCoverage(previous, mode, processed, processedAt)),
+    json(mergeReaderCoverage(previous, mode, processed, processedAt, corpusKind)),
   );
 }
 
@@ -1029,17 +1102,45 @@ function modeEligible(mode: ExtractionMode, mechanismId: string): boolean {
 
 export function resolveScope(
   params: Record<string, string>,
-  options: { includeSeeds?: boolean } = {},
+  options: { includeSeeds?: boolean; mode?: ExtractionMode } = {},
 ): ExtractionScope {
-  const supplied = (["mechanism", "pack", "segment"] as const).filter(
+  const supplied = (["mechanism", "pack", "segment", "effect"] as const).filter(
     (key) => params[key],
   );
   if (supplied.length !== 1) {
-    throw new Error("Provide exactly one scope: mechanism=, pack=, or segment=");
+    throw new Error(
+      "Provide exactly one scope: mechanism=, pack=, segment=, or effect=",
+    );
   }
   const kind = supplied[0];
   const id = params[kind];
   const mechanisms = fullMechanisms();
+  if (kind === "effect") {
+    // An effect scope only means anything for realizations: it is the transfer
+    // input, and no other mode consumes one (D-112).
+    if (options.mode && options.mode !== "realizations") {
+      throw new Error(
+        `effect= scope is only valid with mode=realizations, not mode=${options.mode}`,
+      );
+    }
+    const basis = resolveEffectBasis(id, ROOT);
+    if (!basis) {
+      throw new Error(
+        `Unknown effect "${id}" — expected effects/{mechanism}/${id}.json or a live proposals/effect entry`,
+      );
+    }
+    if (!mechanisms.has(basis.effect.mechanism_id)) {
+      throw new Error(
+        `Effect "${id}" belongs to ${basis.effect.mechanism_id}, which is not a full mechanism record`,
+      );
+    }
+    return {
+      kind,
+      id,
+      mechanismIds: [basis.effect.mechanism_id],
+      effectBasis: basis,
+    };
+  }
   const crossCutting = Array.from(mechanisms.values())
     .filter((mechanism) => mechanism.cross_cutting === true)
     .map((mechanism) => mechanism.id);
@@ -1101,12 +1202,30 @@ function isRealizationRecord(
   return "observation" in record;
 }
 
-function corpusFor(mode: ExtractionMode, mechanismId: string): ExtractionCorpus {
-  const path =
-    mode === "realizations"
-      ? join(REALIZATION_CORPUS_DIR, mechanismId, "records.json")
-      : join(CORPUS_DIR, `${mechanismId}.json`);
-  if (!existsSync(path) && mode === "realizations") {
+/**
+ * Which corpus a run reads. mode=realizations normally reads the interface
+ * observation corpus, but an effect-anchored run reads the EVIDENCE corpus
+ * (D-112): the material it transfers from is the literature the effect was
+ * extracted out of, and reading it there is also what makes each quote
+ * span-verifiable, which realization-corpus provenance never is (D-110).
+ */
+function readsRealizationCorpus(
+  mode: ExtractionMode,
+  scope?: ExtractionScope,
+): boolean {
+  return mode === "realizations" && scope?.kind !== "effect";
+}
+
+function corpusFor(
+  mode: ExtractionMode,
+  mechanismId: string,
+  scope?: ExtractionScope,
+): ExtractionCorpus {
+  const fromRealizations = readsRealizationCorpus(mode, scope);
+  const path = fromRealizations
+    ? join(REALIZATION_CORPUS_DIR, mechanismId, "records.json")
+    : join(CORPUS_DIR, `${mechanismId}.json`);
+  if (!existsSync(path) && fromRealizations) {
     return {
       mechanism_id: mechanismId,
       updated_at: "1970-01-01T00:00:00.000Z",
@@ -1192,9 +1311,65 @@ export function recordRelevanceTier(
   return null;
 }
 
+/**
+ * What an effect-anchored run ranks records against (D-112).
+ *
+ * Deliberately a RANKING input, never a skip decision. The reader-coverage
+ * ledger is keyed by corpus and mode, not by effect, so marking a record
+ * "irrelevant" because it misses one effect's vocabulary would hide it from
+ * every later realizations run for every other effect on the same mechanism.
+ * Ranking leaves the unread tail as `remaining`, which is what it is.
+ *
+ * DELIBERATELY UNCOVERED: records this run READS still become terminal for
+ * mode=realizations, so a second effect on the same mechanism will not re-read
+ * them. Re-reading is the spend the ledger exists to prevent, and per-effect
+ * coverage would mean a schema key per effect; the limit is stated here instead
+ * of being discovered later.
+ */
+interface EffectAnchor {
+  effect: Effect;
+  keywords: readonly string[];
+  /** Records the effect itself cites: read first, always. */
+  citedRecordIds: ReadonlySet<string>;
+}
+
+function effectAnchor(scope?: ExtractionScope): EffectAnchor | null {
+  const basis = scope?.effectBasis;
+  if (!basis) return null;
+  const { effect } = basis;
+  const keywords = new Set<string>();
+  for (const token of Array.from(
+    relevanceTokens(`${effect.name} ${effect.fact} ${effect.boundary}`),
+  )) {
+    if (!GENERIC_RELEVANCE_TOKENS.has(token)) keywords.add(token);
+  }
+  return {
+    effect,
+    keywords: Array.from(keywords).sort(),
+    citedRecordIds: new Set(
+      effect.provenance.map((item) => item.corpus_record_id),
+    ),
+  };
+}
+
+/** How closely a record speaks to the anchored effect; lower reads first. */
+function effectAffinity(
+  anchor: EffectAnchor,
+  record: ExtractionRecord,
+): 0 | 1 | 2 | 3 {
+  if (anchor.citedRecordIds.has(record.record_id)) return 0;
+  if (isRealizationRecord(record)) return 3;
+  const titleHits = keywordHits(record.title, anchor.keywords);
+  const abstractHits = keywordHits(record.abstract ?? "", anchor.keywords);
+  if (titleHits >= 1 && abstractHits >= 1) return 1;
+  if (titleHits >= 1 || abstractHits >= 2) return 2;
+  return 3;
+}
+
 export function rankRelevantRecords(
   corpus: ExtractionCorpus,
   records: readonly ExtractionRecord[],
+  anchor: EffectAnchor | null = null,
 ): { records: ExtractionRecord[]; skippedIrrelevantIds: string[] } {
   const ranked: { record: ExtractionRecord; tier: 0 | 1 | 2 }[] = [];
   const skippedIrrelevantIds: string[] = [];
@@ -1205,6 +1380,23 @@ export function rankRelevantRecords(
     } else {
       ranked.push({ record, tier });
     }
+  }
+  if (anchor) {
+    // Effect affinity outranks the corpus-wide tier: a run aimed at one effect
+    // must spend its token cap on the records that speak to that effect.
+    ranked.sort((left, right) => {
+      const affinity =
+        effectAffinity(anchor, left.record) - effectAffinity(anchor, right.record);
+      if (affinity !== 0) return affinity;
+      return (
+        left.tier - right.tier ||
+        left.record.record_id.localeCompare(right.record.record_id)
+      );
+    });
+    return {
+      records: ranked.map(({ record }) => record),
+      skippedIrrelevantIds: skippedIrrelevantIds.sort(),
+    };
   }
   ranked.sort((left, right) => {
     const leftCitations = isRealizationRecord(left.record)
@@ -1299,29 +1491,84 @@ const DOSSIER_AXES = [
  * permits, and all the resolver will accept. The prompt only explains the shape
  * the code already enforces; it is not what makes provenance immutable.
  */
-function provenanceInstruction(mode: ExtractionMode, stage: ExtractionStage): string {
+function provenanceInstruction(
+  mode: ExtractionMode,
+  stage: ExtractionStage,
+  anchor: EffectAnchor | null = null,
+): string {
   if (stage === "synthesize") {
     return "Every item must include provenance_refs: the opaque provenance handles of the candidates it draws on, copied unchanged. Never emit record ids, quotes, or offsets — provenance was established upstream and cannot be authored here. If an item has no supporting ref, omit it.";
   }
   const locus =
-    mode === "realizations"
+    mode === "realizations" && !anchor
       ? "a supplied title or observation"
       : "a supplied title or abstract";
   return `Every item must include citations [{record_id,quote_or_locus}] using only supplied records. quote_or_locus must be an exact span from ${locus}. If an item cannot be grounded, omit it.`;
+}
+
+/**
+ * The effect the run transfers from, stated to the model as the fixed anchor it
+ * is (D-112). Both passes see it: the extraction pass needs it to know which
+ * material is on-topic, and the synthesis pass composes the final patterns and
+ * would otherwise be transferring from candidates alone.
+ */
+function anchorBlock(anchor: EffectAnchor): string {
+  const { effect } = anchor;
+  return [
+    "EFFECT (the fixed anchor; treat its wording as given, do not restate it as a finding):",
+    JSON.stringify({
+      id: effect.id,
+      name: effect.name,
+      fact: effect.fact,
+      boundary: effect.boundary,
+      grade: effect.grade,
+    }),
+  ].join("\n");
+}
+
+/**
+ * What an effect-anchored realizations run asks for (D-112).
+ *
+ * Two fields, deliberately: `description_as_reported` stays inside the domain
+ * the evidence was measured in, and `pattern` is the product-UI directive
+ * transferred out of it. Splitting them is what lets a reader see which half a
+ * source supports — a single blended sentence hides the seam, and the seam is
+ * the thing under review.
+ */
+function inferredRealizationInstruction(
+  mechanismId: string,
+  provenanceField: string,
+): string {
+  return [
+    `Propose implementable product-UI patterns that follow from the anchored effect for ${mechanismId}.`,
+    "A pattern must be concrete enough to build without further interpretation: name the interface element, the trigger or threshold that changes it, and what the user sees before and after. \"Collapse the guided tour once the user has completed the core action three times\" is a pattern; \"adapt to user expertise\" is not.",
+    "Fields per item:",
+    "- term: a short name for the pattern.",
+    "- description_as_reported: what the cited source states, in the source's own domain vocabulary. Do not describe a product interface here, and do not generalise beyond the quote.",
+    "- pattern: the product-UI directive transferred from it, in the imperative. This is your inference, not the source's claim.",
+    "- source_domain: the field the cited evidence was measured in, as the records themselves describe it (for example \"medical education\" or \"multimedia instructional design\"). Never write a product or software domain here.",
+    `- artifact_context: where the pattern applies, from this vocabulary where one fits: ${ARTIFACT_TYPES.join("|")}.`,
+    "- confidence: your confidence in the TRANSFER holding in a product interface, not in the effect being real. No source measured this pattern in a product, so a value above 0.8 is not credible.",
+    `- ${provenanceField}.`,
+    "Do not claim or imply that the pattern has been tested in a product. Do not propose a pattern that merely restates the effect.",
+  ].join("\n");
 }
 
 function taskInstruction(
   mode: ExtractionMode,
   mechanismId: string,
   stage: ExtractionStage = "extract",
+  anchor: EffectAnchor | null = null,
 ): string {
   const provenanceField = stage === "synthesize" ? "provenance_refs" : "citations";
-  const shared = `Return exactly one JSON object with this envelope: {"items":[]}. Do not return markdown, code fences, prose, or a bare top-level array. ${provenanceInstruction(mode, stage)}`;
+  const shared = `Return exactly one JSON object with this envelope: {"items":[]}. Do not return markdown, code fences, prose, or a bare top-level array. ${provenanceInstruction(mode, stage, anchor)}`;
   switch (mode) {
     case "effects":
       return `${shared} Extract distinct named phenomena produced by ${mechanismId}. Fields: id, name, fact, boundary, grade (A+..C-), confidence, ${provenanceField}.`;
     case "realizations":
-      return `${shared} Extract concrete interface, copy, or flow embodiments reported in sources for ${mechanismId}. Use neutral descriptive language. Fields: id, term, description_as_reported, artifact_context (strings), optional effect_id, confidence, ${provenanceField}.`;
+      return anchor
+        ? `${shared}\n\n${inferredRealizationInstruction(mechanismId, provenanceField)}\n\n${anchorBlock(anchor)}`
+        : `${shared} Extract concrete interface, copy, or flow embodiments reported in sources for ${mechanismId}. Use neutral descriptive language. Fields: id, term, description_as_reported, artifact_context (strings), confidence, ${provenanceField}.`;
     case "interactions":
       return `${shared} Extract only pairs of known mechanism ids explicitly treated together. Fields: pair (two sorted mechanism ids), type (sequence-amplifying|reinforcing|suppressing|neutral), fact, grade, boundary, source, confidence, ${provenanceField}.`;
     case "dissent":
@@ -1333,11 +1580,22 @@ function taskInstruction(
   }
 }
 
-function synthesisInstruction(mode: ExtractionMode, mechanismId: string): string {
+function synthesisInstruction(
+  mode: ExtractionMode,
+  mechanismId: string,
+  anchor: EffectAnchor | null = null,
+): string {
   const noInvention =
     "Do not add a claim that is not supported by the candidates.";
   // Refs, not quotes: the synthesis pass has no records to quote from (D-104).
   const refsOnly = provenanceInstruction(mode, "synthesize");
+  if (mode === "realizations" && anchor) {
+    return [
+      taskInstruction(mode, mechanismId, "synthesize", anchor),
+      "Compose 3-5 distinct patterns from the candidate list: merge duplicates, drop any whose pattern is not implementable as written, and keep every ref that still applies. Two patterns that change the same interface element under the same trigger are one pattern.",
+      noInvention,
+    ].join("\n\n");
+  }
   switch (mode) {
     case "mechanism":
       return [
@@ -1363,8 +1621,9 @@ function cheapPrompt(
   mode: ExtractionMode,
   mechanismId: string,
   records: ExtractionRecord[],
+  anchor: EffectAnchor | null = null,
 ): string {
-  return `${taskInstruction(mode, mechanismId)}\n\nRECORDS:\n${JSON.stringify(
+  return `${taskInstruction(mode, mechanismId, "extract", anchor)}\n\nRECORDS:\n${JSON.stringify(
     records.map(compactRecord),
   )}`;
 }
@@ -1405,9 +1664,10 @@ function strongPrompt(
   mode: ExtractionMode,
   mechanismId: string,
   candidates: AnchoredCandidate[],
+  anchor: EffectAnchor | null = null,
 ): string {
   return [
-    synthesisInstruction(mode, mechanismId),
+    synthesisInstruction(mode, mechanismId, anchor),
     `CANDIDATES:\n${JSON.stringify(candidates.map(forSynthesis))}`,
   ].join("\n\n");
 }
@@ -1493,6 +1753,9 @@ function estimateSelected(
   mode: ExtractionMode,
   selectedByMechanism: ReadonlyMap<string, readonly ExtractionRecord[]>,
   config: ExtractionOpsConfig,
+  // The anchored prompt is longer than the plain one, so the estimate has to be
+  // built from the SAME prompt the run will send or the quote understates it.
+  anchor: EffectAnchor | null = null,
 ): Pick<ExtractionPlan, "calls" | "tokens"> {
   const cheap = configuredTier(config, "cheap");
   const strong = configuredTier(config, "strong");
@@ -1508,7 +1771,7 @@ function estimateSelected(
     );
     for (const batch of mechanismBatches) {
       cheapCalls += 1;
-      inputUpper += estimateTokens(cheapPrompt(mode, mechanismId, batch));
+      inputUpper += estimateTokens(cheapPrompt(mode, mechanismId, batch, anchor));
       outputReserved += Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call);
     }
     strongCalls += 1;
@@ -1541,6 +1804,7 @@ export function buildExtractionPlan(
   config: ExtractionOpsConfig,
   coverage: ReaderCoverageFile | null = loadReaderCoverage(),
 ): ExtractionPlan {
+  const anchor = effectAnchor(scope);
   const candidates: {
     mechanismId: string;
     corpus: ExtractionCorpus;
@@ -1551,10 +1815,10 @@ export function buildExtractionPlan(
   let alreadyCompleted = 0;
   for (const mechanismId of scope.mechanismIds) {
     if (!modeEligible(mode, mechanismId)) continue;
-    const corpus = corpusFor(mode, mechanismId);
+    const corpus = corpusFor(mode, mechanismId, scope);
     const eligible = eligibleRecords(corpus);
     eligibleTotal += eligible.length;
-    const kind = mode === "realizations" ? "realization" : "evidence";
+    const kind = readsRealizationCorpus(mode, scope) ? "realization" : "evidence";
     const priorMode = coverage?.mechanisms[mechanismId]?.[kind]?.by_mode[mode];
     const terminal = new Set([
       ...(priorMode?.processed_record_ids ?? []),
@@ -1562,7 +1826,7 @@ export function buildExtractionPlan(
     ]);
     const pending = eligible.filter((record) => !terminal.has(record.record_id));
     alreadyCompleted += eligible.length - pending.length;
-    const ranked = rankRelevantRecords(corpus, pending);
+    const ranked = rankRelevantRecords(corpus, pending, anchor);
     candidates.push({
       mechanismId,
       corpus,
@@ -1578,7 +1842,7 @@ export function buildExtractionPlan(
     selectedByMechanism.set(candidate.mechanismId, selected);
     for (const record of candidate.relevant) {
       selected.push(record);
-      const estimate = estimateSelected(mode, selectedByMechanism, config);
+      const estimate = estimateSelected(mode, selectedByMechanism, config, anchor);
       if (estimate.tokens.total_upper_bound > config.limits.per_run_tokens) {
         selected.pop();
         capReached = true;
@@ -1588,7 +1852,7 @@ export function buildExtractionPlan(
     if (capReached) break;
   }
 
-  const estimate = estimateSelected(mode, selectedByMechanism, config);
+  const estimate = estimateSelected(mode, selectedByMechanism, config, anchor);
   const mechanisms = candidates.map((candidate) => {
     const selected = selectedByMechanism.get(candidate.mechanismId) ?? [];
     return {
@@ -1713,6 +1977,7 @@ async function callOpenRouter(
   stage: ExtractionStage,
   prompt: string,
   outputReserve: number,
+  derivation: RealizationDerivation = "reported",
 ): Promise<DraftItem[]> {
   const tier = configuredTier(context.config, tierName);
   const inputUpper = estimateTokens(prompt);
@@ -1739,7 +2004,7 @@ async function callOpenRouter(
         "X-Title": "Motivation Engine extraction",
       },
       body: JSON.stringify(
-        openRouterRequestBody({ tier, mode, stage, prompt, maxTokens }),
+        openRouterRequestBody({ tier, mode, stage, prompt, maxTokens, derivation }),
       ),
     });
     if (response.ok) break;
@@ -2156,6 +2421,45 @@ export interface DraftContext {
   seed?: SeedStub;
   /** Full + seed ids; relations to anything else are dropped as ungrounded. */
   knownMechanismIds: ReadonlySet<string>;
+  /**
+   * The effect an effect-anchored realizations run transfers from (D-112).
+   * Present for that run only, and the reason a realization payload can carry
+   * derivation="inferred": the link, the domain transfer, and the inference
+   * provenance item are all built from here, by code, never by a model.
+   */
+  effectBasis?: ResolvedEffectBasis;
+}
+
+/**
+ * The transfer step, written as provenance by CODE (D-112).
+ *
+ * The model is never asked for this item. It quotes the effect's own `fact`
+ * verbatim and points at an evidence record the effect itself cites, so the
+ * trail from pattern to a paper the owner can open stays walkable — and it
+ * declares the absence of a span rather than leaving an empty field behind.
+ * Returns null when the effect cites no evidence record with a DOI-shaped
+ * corpus id, because then there is nothing to point at and the pattern would be
+ * resting on an unreachable claim.
+ */
+function inferenceProvenance(
+  basis: ResolvedEffectBasis,
+): InferenceProvenanceItem | null {
+  const { effect } = basis;
+  const cited = effect.provenance.find(
+    (item): item is EvidenceProvenanceItem =>
+      !("corpus_kind" in item && item.corpus_kind !== "evidence") &&
+      item.corpus_record_id.startsWith("cr_"),
+  );
+  if (!cited) return null;
+  return {
+    corpus_kind: "inference",
+    mechanism_id: effect.mechanism_id,
+    corpus_record_id: cited.corpus_record_id,
+    effect_id: effect.id,
+    title: cited.title,
+    quote_or_locus: effect.fact.trim(),
+    span_absent_reason: INFERENCE_SPAN_ABSENT_REASON,
+  };
 }
 
 /**
@@ -2522,27 +2826,60 @@ export function toProposal(
   ) {
     const id = slug(item.id ?? item.term);
     if (!id) return null;
-    const payload: Realization = {
+    const basis = context?.effectBasis;
+    const common = {
       id,
       mechanism_id: mechanismId,
-      ...(typeof item.effect_id === "string" && item.effect_id.trim()
-        ? { effect_id: slug(item.effect_id) }
-        : {}),
       term: item.term.trim(),
       description_as_reported: item.description_as_reported.trim(),
       artifact_context: Array.from(
         new Set(item.artifact_context.map((entry) => entry.trim())),
       ),
-      provenance,
-      confidence: itemConfidence,
     };
+    let payload: Realization;
+    let itemProvenance = provenance;
+    if (basis) {
+      // An inferred realization is refused unless every honesty field it needs
+      // is present: the pattern it tells a generator to build, the domain the
+      // evidence actually came from, and the transfer step as provenance. A
+      // half-marked inference reads as evidence, so it is dropped instead.
+      const inference = inferenceProvenance(basis);
+      const pattern = typeof item.pattern === "string" ? item.pattern.trim() : "";
+      const sourceDomain =
+        typeof item.source_domain === "string" ? item.source_domain.trim() : "";
+      if (!inference || !pattern || !sourceDomain) return null;
+      itemProvenance = [...provenance, inference];
+      payload = {
+        ...common,
+        effect_refs: [basis.effect.id],
+        derivation: "inferred",
+        domain_transfer: {
+          source_domain: sourceDomain,
+          application_domain: APPLICATION_DOMAIN,
+        },
+        pattern,
+        provenance: itemProvenance,
+        confidence: itemConfidence,
+      };
+    } else {
+      payload = {
+        ...common,
+        derivation: "reported",
+        domain_transfer: {
+          source_domain: REPORTED_SOURCE_DOMAIN,
+          application_domain: APPLICATION_DOMAIN,
+        },
+        provenance: itemProvenance,
+        confidence: itemConfidence,
+      };
+    }
     return envelope(
       {
         id: proposalId("realization", mechanismId, payload.term),
         type: "realization",
         target: mechanismId,
         payload,
-        provenance,
+        provenance: itemProvenance,
         confidence: itemConfidence,
       },
       runId,
@@ -3176,6 +3513,20 @@ export async function runExtraction(args: {
         ]) as ReadonlySet<string>,
       }
     : null;
+  // The effect this run transfers from, and the prompt anchor built from it
+  // (D-112). Both null for every other mode and scope.
+  const effectBasis = args.scope.effectBasis;
+  const anchor = effectAnchor(args.scope);
+  const derivation = realizationDerivation(args.scope);
+  const coverageCorpusKind = readsRealizationCorpus(args.mode, args.scope)
+    ? "realization"
+    : "evidence";
+  if (effectBasis) {
+    console.log(
+      `[extract] anchored on effect ${effectBasis.effect.id} (${effectBasis.origin}: ${effectBasis.path}) — ` +
+        `realizations will be proposed with derivation=inferred`,
+    );
+  }
   let responseBatchesAttempted = 0;
   let responseBatchesSucceeded = 0;
   const failedRecordIdsByMechanism = new Map<string, Set<string>>();
@@ -3226,13 +3577,18 @@ export async function runExtraction(args: {
         processedByMechanism.set(mechanismId, coverageDelta);
       }
       if (records.length === 0) continue;
-      const draftContext: DraftContext | undefined = draftContextBase
-        ? {
-            corpus,
-            seed: draftContextBase.seeds.get(mechanismId),
-            knownMechanismIds: draftContextBase.knownMechanismIds,
-          }
-        : undefined;
+      const draftContext: DraftContext | undefined =
+        draftContextBase || effectBasis
+          ? {
+              corpus,
+              seed: draftContextBase?.seeds.get(mechanismId),
+              // Only the draft modes read this set; an effect-anchored
+              // realizations run never reaches draftMechanismPayload.
+              knownMechanismIds:
+                draftContextBase?.knownMechanismIds ?? new Set<string>(),
+              ...(effectBasis ? { effectBasis } : {}),
+            }
+          : undefined;
       const candidates: DraftItem[] = [];
       const parsedRecordIds: string[] = [];
       let parsedCheapBatches = 0;
@@ -3247,8 +3603,9 @@ export async function runExtraction(args: {
             "cheap",
             args.mode,
             "extract",
-            cheapPrompt(args.mode, mechanismId, batch),
+            cheapPrompt(args.mode, mechanismId, batch, anchor),
             CHEAP_OUTPUT_RESERVE,
+            derivation,
           ),
         );
         const recordIds = batch.map((record) => record.record_id);
@@ -3320,8 +3677,9 @@ export async function runExtraction(args: {
           "strong",
           args.mode,
           "synthesize",
-          strongPrompt(args.mode, mechanismId, groundedCheap),
+          strongPrompt(args.mode, mechanismId, groundedCheap, anchor),
           STRONG_OUTPUT_RESERVE,
+          derivation,
         ),
       );
       persistAccounting();
@@ -3607,6 +3965,7 @@ export async function runExtraction(args: {
       args.mode,
       planningDeltas,
       startedAt.toISOString(),
+      coverageCorpusKind,
     );
     const sliceConfig: ExtractionOpsConfig = {
       ...args.config,
@@ -3694,6 +4053,7 @@ export async function runExtraction(args: {
     args.mode,
     processedByMechanism,
     startedAt.toISOString(),
+    coverageCorpusKind,
   );
   writeManifest(
     args.mode,
@@ -3743,7 +4103,10 @@ async function main(): Promise<void> {
       `corpora/_ops/extraction.json is invalid: ${configErrors.join("; ")}`,
     );
   }
-  const scope = resolveScope(params, { includeSeeds: isDraftMode(params.mode) });
+  const scope = resolveScope(params, {
+    includeSeeds: isDraftMode(params.mode),
+    mode: params.mode,
+  });
   if (command === "quote") {
     const quote = buildQuote(params.mode, scope, config);
     writeFileSync(QUOTE_FILE, json(quote));

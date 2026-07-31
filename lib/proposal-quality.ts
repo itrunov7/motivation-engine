@@ -1,13 +1,15 @@
 import { createHash } from "node:crypto";
 import type {
+  Effect,
   EvidenceCorpusFile,
   EvidenceProvenanceItem,
+  InferenceProvenanceItem,
   KnowledgeProvenanceItem,
   Proposal,
   RealizationCorpusFile,
   RealizationCorpusProvenanceItem,
 } from "./types";
-import { isRealizationProvenance } from "./realization-corpus";
+import { isInferenceProvenance, isRealizationProvenance } from "./realization-corpus";
 
 /** Hex sha256, the one hash used for source-text versions (D-110). */
 export function sha256Hex(value: string): string {
@@ -71,7 +73,9 @@ function comparableText(proposal: Proposal): string {
     case "effect":
       return `${proposal.payload.name} ${proposal.payload.fact} ${proposal.payload.boundary}`;
     case "realization":
-      return `${proposal.payload.term} ${proposal.payload.description_as_reported} ${proposal.payload.artifact_context.join(" ")}`;
+      return `${proposal.payload.term} ${proposal.payload.description_as_reported} ${
+        proposal.payload.pattern ?? ""
+      } ${proposal.payload.artifact_context.join(" ")}`;
     case "interaction":
       return `${proposal.payload.pair.join(" ")} ${proposal.payload.fact} ${proposal.payload.boundary}`;
     case "dossier_section":
@@ -161,11 +165,29 @@ export function mergeProposals(base: Proposal, candidate: Proposal): Proposal {
     }
     case "realization": {
       if (candidate.type !== "realization") return base;
+      // derivation and domain_transfer are NOT merged: a reported record and an
+      // inferred one make different claims about the same words, so the base's
+      // derivation stands and a cross-derivation merge keeps the base's honesty
+      // marking rather than blending the two.
+      const effectRefs = Array.from(
+        new Set([
+          ...(base.payload.effect_refs ?? []),
+          ...(candidate.payload.effect_refs ?? []),
+        ]),
+      ).sort();
+      const pattern =
+        base.payload.pattern && candidate.payload.pattern
+          ? longer(base.payload.pattern, candidate.payload.pattern)
+          : (base.payload.pattern ?? candidate.payload.pattern);
       return {
         ...common,
         type: "realization",
         payload: {
           ...base.payload,
+          ...(effectRefs.length > 0 ? { effect_refs: effectRefs } : {}),
+          // Only carried when the base is inferred; the schema forbids a pattern
+          // on a reported record, and a merge must not smuggle one in.
+          ...(base.payload.derivation === "inferred" && pattern ? { pattern } : {}),
           description_as_reported: longer(
             base.payload.description_as_reported,
             candidate.payload.description_as_reported,
@@ -287,6 +309,61 @@ export function isSpanConditionError(error: string): boolean {
   return SPAN_CONDITIONS.some((condition) => error.startsWith(`${condition} `));
 }
 
+/**
+ * Verify an inference provenance item against the effect it names (D-112).
+ *
+ * There is nothing to re-slice — that is the declared property of the item — so
+ * what CAN be checked is checked instead: that the effect exists, that the
+ * quote is the effect's own statement rather than a paraphrase of it, and that
+ * the evidence record the item points at is one the effect itself cites. An
+ * inference whose quote drifts from the effect it claims to transfer is a
+ * broken trail even though no span was ever promised.
+ *
+ * `basis` is the effect record or, before approval, the payload of the pending
+ * effect proposal. Resolution is the caller's job because the extractor, the
+ * validator, and the approval path each read the repository differently.
+ */
+export function inferenceGroundingErrors(
+  provenance: readonly InferenceProvenanceItem[],
+  basis: Effect | null,
+): string[] {
+  const errors: string[] = [];
+  for (const source of provenance) {
+    if (!basis) {
+      errors.push(`inference basis effect ${source.effect_id} does not exist`);
+      continue;
+    }
+    if (basis.id !== source.effect_id) {
+      errors.push(
+        `inference basis mismatch for ${source.effect_id}: supplied effect is ${basis.id}`,
+      );
+      continue;
+    }
+    if (basis.mechanism_id !== source.mechanism_id) {
+      errors.push(`mechanism mismatch for inference on ${source.effect_id}`);
+    }
+    const statements = [basis.fact.trim(), basis.boundary.trim()];
+    if (!statements.includes(source.quote_or_locus.trim())) {
+      errors.push(
+        `inference quote is not the own statement of effect ${source.effect_id}`,
+      );
+    }
+    const cited = basis.provenance.find(
+      (item) => item.corpus_record_id === source.corpus_record_id,
+    );
+    if (!cited) {
+      errors.push(
+        `inference record ${source.corpus_record_id} is not cited by effect ${source.effect_id}`,
+      );
+      continue;
+    }
+    if (cited.title !== source.title) {
+      errors.push(`title mismatch for ${source.corpus_record_id}`);
+    }
+  }
+  return errors;
+}
+
 export function groundingErrors(
   provenance: KnowledgeProvenanceItem[],
   corpus: EvidenceCorpusFile,
@@ -296,6 +373,16 @@ export function groundingErrors(
   for (const source of provenance) {
     if (isRealizationProvenance(source)) {
       errors.push(`wrong corpus kind for ${source.corpus_record_id}`);
+      continue;
+    }
+    if (isInferenceProvenance(source)) {
+      // Fail closed rather than skip: an inference item reaching the evidence
+      // gate means a caller forgot to route it to inferenceGroundingErrors, and
+      // a silent pass there would look exactly like a verified quote (D-112).
+      errors.push(
+        `inference provenance for effect ${source.effect_id} must be checked against ` +
+          "its effect, not against the evidence corpus",
+      );
       continue;
     }
     const record = records.get(source.corpus_record_id);

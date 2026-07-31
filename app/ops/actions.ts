@@ -345,7 +345,16 @@ const EXTRACTION_MODES: readonly ExtractionMode[] = [
   "mechanism",
   "dossier",
 ];
-const SCOPE_KINDS: readonly ScopeKind[] = ["mechanism", "pack", "segment"];
+const SCOPE_KINDS: readonly ScopeKind[] = [
+  "mechanism",
+  "pack",
+  "segment",
+  // D-112: an effect scope turns mode=realizations into a transfer run. The id
+  // is an effect id, so it is not checked against the mechanism roster; the
+  // extractor resolves it against /effects and the proposal queue and fails
+  // closed on an unknown one.
+  "effect",
+];
 
 export type ExtractionPollResult =
   | {
@@ -374,6 +383,9 @@ function validateExtractionScope(args: {
     !knownMechanismIds().includes(args.scopeId)
   ) {
     return `"${args.scopeId}" is not a known mechanism or seed candidate.`;
+  }
+  if (args.scopeKind === "effect" && args.mode !== "realizations") {
+    return "An effect scope only applies to mode=realizations (D-112).";
   }
   return null;
 }

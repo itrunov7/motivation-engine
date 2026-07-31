@@ -281,9 +281,41 @@ export interface RealizationCorpusProvenanceItem {
   contributed_by: string | null;
 }
 
+/**
+ * The reason a span is absent from an inference provenance item (D-112). One
+ * literal, not free text: an explanatory sentence that a writer can reword is a
+ * sentence a reader cannot filter on.
+ */
+export const INFERENCE_SPAN_ABSENT_REASON =
+  "no direct span — inferred from effect" as const;
+
+/**
+ * The transfer step itself, recorded as provenance (D-112).
+ *
+ * An inferred realization does not quote a source that observed the pattern —
+ * no such source exists, which is the whole point of marking it inferred. What
+ * it CAN carry is the effect statement it was transferred from, verbatim, plus
+ * the evidence record that effect cites so the trail stays walkable. There is
+ * no `source_span` because the quoted text is an L2 record's own sentence, not
+ * a slice of a harvested document, and `span_absent_reason` states that rather
+ * than leaving the missing field to be read as an oversight.
+ */
+export interface InferenceProvenanceItem {
+  corpus_kind: "inference";
+  mechanism_id: string;
+  /** The evidence record the EFFECT cites — not a record about this pattern. */
+  corpus_record_id: string;
+  effect_id: string;
+  title: string;
+  /** The effect's own statement, copied verbatim. */
+  quote_or_locus: string;
+  span_absent_reason: typeof INFERENCE_SPAN_ABSENT_REASON;
+}
+
 export type KnowledgeProvenanceItem =
   | EvidenceProvenanceItem
-  | RealizationCorpusProvenanceItem;
+  | RealizationCorpusProvenanceItem
+  | InferenceProvenanceItem;
 
 /**
  * /effects/{mechanism_id}/{effect_id}.json — a scientific phenomenon between
@@ -305,17 +337,49 @@ export interface Effect {
 }
 
 /**
- * /realizations/{mechanism_id}/{id}.json — descriptive evidence about an
- * interface, copy, or flow embodiment reported by a source. This is distinct
- * from Implementation, which is a product-authored generator directive.
+ * How a realization came to exist (D-112).
+ *
+ * `reported` — a source described this embodiment; the record describes what
+ * exists. `inferred` — the pattern is a domain transfer from an effect that
+ * nobody measured in a product context, so it is a hypothesis a generator may
+ * act on, never evidence that it works. The distinction is a field rather than
+ * a tone of voice because the generator reads the field.
+ */
+export type RealizationDerivation = "reported" | "inferred";
+
+/**
+ * The domain the evidence was measured in versus the domain the record is
+ * applied in (D-112). Equal domains mean no transfer. effect.boundary carries
+ * this implicitly for L2; realizations carry it explicitly, because the
+ * generator reads the realization and never reads the effect.
+ */
+export interface RealizationDomainTransfer {
+  source_domain: string;
+  application_domain: string;
+}
+
+/**
+ * /realizations/{mechanism_id}/{id}.json — an interface, copy, or flow
+ * embodiment. Distinct from Implementation, which is a product-authored
+ * generator directive with metrics and hard rules attached.
+ *
+ * The two text fields split evidence from inference (D-112):
+ * description_as_reported stays in the source's own domain language, and
+ * `pattern` — present only for derivation=inferred — is the product-UI
+ * directive transferred from it.
  */
 export interface Realization {
   $schema?: string;
   id: string;
   mechanism_id: string;
-  effect_id?: string;
+  /** L2 effects this realization embodies; named as in mechanism.effect_refs. */
+  effect_refs?: string[];
+  derivation?: RealizationDerivation;
+  domain_transfer?: RealizationDomainTransfer;
   term: string;
   description_as_reported: string;
+  /** Required when derivation is "inferred", forbidden when "reported". */
+  pattern?: string;
   artifact_context: string[];
   provenance: KnowledgeProvenanceItem[];
   confidence: number;

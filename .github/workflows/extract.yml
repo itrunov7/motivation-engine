@@ -21,15 +21,16 @@ on:
           - mechanism
           - dossier
       scope_kind:
-        description: "Scope resolver"
+        description: "Scope resolver (effect applies to mode=realizations only, D-112)"
         required: true
         type: choice
         options:
           - mechanism
           - pack
           - segment
+          - effect
       scope_id:
-        description: "Mechanism, pack, or segment id"
+        description: "Mechanism, pack, segment, or effect id"
         required: true
         type: string
       dry_run:

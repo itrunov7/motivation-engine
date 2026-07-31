@@ -294,6 +294,107 @@ test("approves a hand-made effect proposal into authoritative files", async () =
   }
 });
 
+test("an inferred realization cannot be approved before the effect it transfers from", async () => {
+  const root = await temporaryRepository();
+  const effectId = "transfer-basis-effect";
+  const effectFact = "A grounded fixture phenomenon.";
+  const effectProposalPath = `proposals/effect/${effectId}.json`;
+  const realizationPath = "proposals/realization/inferred-transfer.json";
+  const inference = {
+    corpus_kind: "inference" as const,
+    mechanism_id: "LA-01",
+    corpus_record_id: provenance[0].corpus_record_id,
+    effect_id: effectId,
+    title: provenance[0].title,
+    quote_or_locus: effectFact,
+    span_absent_reason: "no direct span — inferred from effect" as const,
+  };
+  const realizationPayload = {
+    id: "inferred-transfer",
+    mechanism_id: "LA-01",
+    effect_refs: [effectId],
+    derivation: "inferred",
+    domain_transfer: {
+      source_domain: "behavioural economics",
+      application_domain: "product UI",
+    },
+    term: "Fixture transferred pattern",
+    description_as_reported: effectFact,
+    pattern: "Collapse the fixture panel after three completed core actions.",
+    artifact_context: ["onboarding_flow"],
+    provenance: [...provenance, inference],
+    confidence: 0.6,
+  };
+  const realizationProposal = envelope(
+    "realization",
+    "inferred-transfer",
+    "LA-01",
+    realizationPayload,
+  ) as Record<string, unknown>;
+  realizationProposal.provenance = [...provenance, inference];
+  const approve = (path: string) =>
+    prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath: path,
+      action: "approve",
+      decidedBy: "test-owner",
+      decidedAt,
+      schemaRoot: root,
+    });
+  try {
+    await mkdir(join(root, "proposals/effect"), { recursive: true });
+    await mkdir(join(root, "proposals/realization"), { recursive: true });
+    await writeFile(
+      join(root, realizationPath),
+      `${JSON.stringify(realizationProposal, null, 2)}\n`,
+      "utf8",
+    );
+    // The effect is still a proposal: the transfer may be proposed, not applied.
+    await assert.rejects(approve(realizationPath), (error: unknown) => {
+      const message = (error as Error).message;
+      assert.match(message, /transfer-basis-effect/);
+      assert.match(message, /does not (exist|resolve)/);
+      return true;
+    });
+
+    await writeFile(
+      join(root, effectProposalPath),
+      `${JSON.stringify(
+        envelope("effect", effectId, "LA-01", {
+          id: effectId,
+          mechanism_id: "LA-01",
+          name: "Transfer basis effect",
+          fact: effectFact,
+          grade: "A",
+          source: ["10.2307/1914185"],
+          boundary: "Only a transaction fixture.",
+          realization_ids: [],
+          provenance,
+        }),
+        null,
+        2,
+      )}\n`,
+      "utf8",
+    );
+    await applyLocalTransaction(root, await approve(effectProposalPath));
+    await applyLocalTransaction(root, await approve(realizationPath));
+
+    const record = JSON.parse(
+      await readFile(join(root, "realizations/LA-01/inferred-transfer.json"), "utf8"),
+    ) as {
+      derivation: string;
+      effect_refs: string[];
+      domain_transfer: { source_domain: string; application_domain: string };
+      pattern: string;
+    };
+    assert.equal(record.derivation, "inferred");
+    assert.deepEqual(record.effect_refs, [effectId]);
+    assert.equal(record.domain_transfer.application_domain, "product UI");
+    assert.match(record.pattern, /^Collapse the fixture panel/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("approval copies a source span verbatim and refuses a stale one", async () => {
   const root = await temporaryRepository();
   try {

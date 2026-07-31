@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type {
+  InferenceProvenanceItem,
   RealizationCorpusFile,
   RealizationCorpusProvenanceItem,
   RealizationCorpusRecord,
@@ -54,4 +55,11 @@ export function isRealizationProvenance(
   item: { corpus_kind?: string },
 ): item is RealizationCorpusProvenanceItem {
   return item.corpus_kind === "realization";
+}
+
+/** Provenance for the transfer step of an inferred realization (D-112). */
+export function isInferenceProvenance(
+  item: { corpus_kind?: string },
+): item is InferenceProvenanceItem {
+  return item.corpus_kind === "inference";
 }

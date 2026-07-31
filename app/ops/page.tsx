@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { listEffectBases } from "@/lib/effect-basis";
 import { loadMechanismNodeIndex } from "@/lib/status";
 import { loadPackMap, loadSegmentsFile } from "@/lib/maturation";
 import { isOpsWriteEnabled } from "@/lib/github";
@@ -65,6 +66,11 @@ export default function OpsPage() {
   const segmentOptions = (loadSegmentsFile()?.segments ?? [])
     .filter((segment) => segment.status === "active")
     .map((segment) => segment.id);
+  // Effect scopes for mode=realizations (D-112): approved effect records plus
+  // the effects still in the proposal queue, since a realization PROPOSAL may
+  // be built on one — approval of that realization stays blocked until the
+  // effect itself is approved.
+  const effectOptions = listEffectBases().map((basis) => basis.id);
 
   // Live ops (D-086): the initial snapshot is computed from committed files
   // (fast, no network); the client polls the server action to fill in in-flight
@@ -117,6 +123,7 @@ export default function OpsPage() {
         mechanismOptions={mechanismOptions}
         packOptions={packOptions}
         segmentOptions={segmentOptions}
+        effectOptions={effectOptions}
       />
     </main>
   );

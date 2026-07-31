@@ -206,7 +206,8 @@
     "provenanceItem": {
       "oneOf": [
         { "$ref": "#/$defs/evidenceProvenanceItem" },
-        { "$ref": "#/$defs/realizationProvenanceItem" }
+        { "$ref": "#/$defs/realizationProvenanceItem" },
+        { "$ref": "#/$defs/inferenceProvenanceItem" }
       ]
     },
     "evidenceProvenanceItem": {
@@ -258,6 +259,29 @@
         "title",
         "quote_or_locus",
         "contributed_by"
+      ],
+      "additionalProperties": false
+    },
+    "inferenceProvenanceItem": {
+      "description": "The transfer step recorded as provenance (D-112): a realization whose pattern was inferred from an effect measured in another domain carries the effect's own statement verbatim, with no source_span, because that statement is an L2 record's text rather than a slice of a harvested document. span_absent_reason says so in the data. Mirrors realizations/realization.schema.json.",
+      "type": "object",
+      "properties": {
+        "corpus_kind": { "const": "inference" },
+        "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+        "corpus_record_id": { "type": "string", "pattern": "^cr_[a-f0-9]{24}$" },
+        "effect_id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "title": { "type": "string", "minLength": 1 },
+        "quote_or_locus": { "type": "string", "minLength": 1 },
+        "span_absent_reason": { "const": "no direct span — inferred from effect" }
+      },
+      "required": [
+        "corpus_kind",
+        "mechanism_id",
+        "corpus_record_id",
+        "effect_id",
+        "title",
+        "quote_or_locus",
+        "span_absent_reason"
       ],
       "additionalProperties": false
     },

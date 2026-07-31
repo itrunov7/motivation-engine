@@ -60,16 +60,21 @@ import type {
 } from "./connectors/types";
 import { CONNECTORS } from "./connectors";
 import { deriveCorpusRecordId, CORPUS_RECORD_ID_PATTERN } from "../lib/corpus-record-id";
+import { resolveEffectBasis } from "../lib/effect-basis";
 import { isExtractionAuthored } from "../lib/proposal-meta";
 import {
   evidenceSourceText,
   groundingErrors,
+  inferenceGroundingErrors,
   isSpanConditionError,
   normalizeQualityText,
   realizationGroundingErrors,
   spanErrors,
 } from "../lib/proposal-quality";
-import { isRealizationProvenance } from "../lib/realization-corpus";
+import {
+  isInferenceProvenance,
+  isRealizationProvenance,
+} from "../lib/realization-corpus";
 import type {
   BenchmarkFile,
   BenchmarkMetric,
@@ -1022,12 +1027,25 @@ interface SpanTally {
   withSpan: number;
   withoutSpan: number;
   stale: number;
+  /**
+   * Items that declare they have no span because they record an inference from
+   * an effect (D-112). Counted separately from the D-110 legacy remainder: one
+   * number is a gap the pipeline is closing, the other is a gap it announced on
+   * purpose, and adding them together would hide both.
+   */
+  declaredInference: number;
   /** Files carrying at least one spanless legacy item, for the summary line. */
   legacyFiles: Set<string>;
 }
 
 function emptySpanTally(): SpanTally {
-  return { withSpan: 0, withoutSpan: 0, stale: 0, legacyFiles: new Set() };
+  return {
+    withSpan: 0,
+    withoutSpan: 0,
+    stale: 0,
+    declaredInference: 0,
+    legacyFiles: new Set(),
+  };
 }
 
 /**
@@ -1048,6 +1066,13 @@ function checkArtifactProvenanceSpans(
   let ok = true;
   for (const source of provenance) {
     if (isRealizationProvenance(source)) continue;
+    // An inference item declares its own spanlessness (D-112). Counting it as a
+    // legacy spanless evidence item would inflate the D-110 remainder with items
+    // that are not evidence and were never going to carry offsets.
+    if (isInferenceProvenance(source)) {
+      tally.declaredInference += 1;
+      continue;
+    }
     if (!source.source_span) {
       tally.withoutSpan += 1;
       tally.legacyFiles.add(rel(file));
@@ -2232,7 +2257,9 @@ function main(): void {
           }
           const provenanceDois = new Set(
             (effect.provenance ?? []).flatMap((item) =>
-              !isRealizationProvenance(item) && typeof item.doi === "string"
+              !isRealizationProvenance(item) &&
+              !isInferenceProvenance(item) &&
+              typeof item.doi === "string"
                 ? [item.doi]
                 : [],
             ),
@@ -2268,7 +2295,7 @@ function main(): void {
 
   const realizationsByKey = new Map<
     string,
-    { file: string; effectId?: string }
+    { file: string; effectRefs: string[] }
   >();
   if (existsSync(PATHS.realizationSchema)) {
     const realizationSchemaDoc = readJson(PATHS.realizationSchema);
@@ -2291,9 +2318,15 @@ function main(): void {
           const realization = data as {
             id?: string;
             mechanism_id?: string;
-            effect_id?: string;
+            effect_refs?: unknown;
+            derivation?: unknown;
             provenance?: KnowledgeProvenanceItem[];
           };
+          const realizationEffectRefs = Array.isArray(realization.effect_refs)
+            ? realization.effect_refs.filter(
+                (id): id is string => typeof id === "string",
+              )
+            : [];
           if (
             !checkArtifactProvenanceSpans(file, realization.provenance ?? [], spanTally)
           ) {
@@ -2316,6 +2349,34 @@ function main(): void {
             fail(file, `mechanism_id "${realization.mechanism_id}" is not a full mechanism record`);
             ok = false;
           }
+          // A realization may only claim an effect that exists as an approved
+          // record (D-112). An inferred pattern whose basis is still a proposal
+          // belongs in the queue, not in /realizations.
+          // Marking a record inferred obliges it to carry the transfer step as
+          // provenance, whoever wrote it (D-112).
+          if (
+            realization.derivation === "inferred" &&
+            !(realization.provenance ?? []).some(isInferenceProvenance)
+          ) {
+            fail(
+              file,
+              "derivation=inferred but no provenance item records the inference from an " +
+                "effect (corpus_kind=\"inference\") (D-112)",
+            );
+            ok = false;
+          }
+          for (const effectId of realizationEffectRefs) {
+            if (
+              typeof realization.mechanism_id === "string" &&
+              !effectsByKey.has(`${realization.mechanism_id}\u0000${effectId}`)
+            ) {
+              fail(
+                file,
+                `effect_refs entry "${effectId}" has no effects/${realization.mechanism_id}/${effectId}.json`,
+              );
+              ok = false;
+            }
+          }
           if (
             typeof realization.mechanism_id === "string" &&
             typeof realization.id === "string"
@@ -2325,12 +2386,7 @@ function main(): void {
               fail(file, `duplicate realization ${realization.mechanism_id}/${realization.id}`);
               ok = false;
             } else {
-              realizationsByKey.set(key, {
-                file,
-                ...(typeof realization.effect_id === "string"
-                  ? { effectId: realization.effect_id }
-                  : {}),
-              });
+              realizationsByKey.set(key, { file, effectRefs: realizationEffectRefs });
             }
           }
           if (ok) console.log(`  ✓ ${rel(file)} valid (realization record)`);
@@ -2376,10 +2432,10 @@ function main(): void {
             effect.file,
             `realization_id "${realizationId}" has no realizations/${record.id}/${realizationId}.json`,
           );
-        } else if (realization.effectId !== effectId) {
+        } else if (!realization.effectRefs.includes(effectId)) {
           fail(
             effect.file,
-            `realization_id "${realizationId}" must link back with effect_id "${effectId}"`,
+            `realization_id "${realizationId}" must link back with effect_refs containing "${effectId}"`,
           );
         }
       }
@@ -2404,8 +2460,8 @@ function main(): void {
             );
           } else if (
             typeof implementation.effect_id === "string" &&
-            realization.effectId !== undefined &&
-            realization.effectId !== implementation.effect_id
+            realization.effectRefs.length > 0 &&
+            !realization.effectRefs.includes(implementation.effect_id)
           ) {
             fail(
               file,
@@ -2524,7 +2580,82 @@ function main(): void {
           const extractionAuthored = isExtractionAuthored(
             proposal.proposed_by ?? "",
           );
+          // D-112, the same shape of rule for the honesty fields: optional in
+          // the schema so the hand-authored records predating them stay valid,
+          // required of anything the pipeline writes. An unmarked realization
+          // reads as reported, so an unmarked INFERENCE would read as evidence.
+          if (extractionAuthored && proposal.type === "realization") {
+            const payload = proposal.payload as {
+              derivation?: unknown;
+              domain_transfer?: unknown;
+              provenance?: KnowledgeProvenanceItem[];
+            };
+            // An inferred pattern must carry the transfer step itself as
+            // provenance. Without it the record states a product directive and
+            // cites only papers that never mention a product — which is exactly
+            // the reading "do not present transfer as evidence" forbids.
+            if (
+              payload.derivation === "inferred" &&
+              !(payload.provenance ?? []).some(isInferenceProvenance)
+            ) {
+              fail(
+                file,
+                "inferred realization carries no inference provenance item — the transfer " +
+                  "step must be recorded, not just the sources it transfers from (D-112)",
+              );
+              ok = false;
+            }
+            if (
+              payload.derivation !== "reported" &&
+              payload.derivation !== "inferred"
+            ) {
+              fail(
+                file,
+                "extraction-authored realization carries no derivation — reported/inferred is " +
+                  "required of anything the pipeline produces (D-112)",
+              );
+              ok = false;
+            }
+            if (
+              typeof payload.domain_transfer !== "object" ||
+              payload.domain_transfer === null
+            ) {
+              fail(
+                file,
+                "extraction-authored realization carries no domain_transfer — the generator " +
+                  "reads it, so the source and application domains must be stated (D-112)",
+              );
+              ok = false;
+            }
+          }
           for (const source of proposal.provenance ?? []) {
+            // An inference item is checked against the effect it transfers from
+            // rather than against a corpus (D-112): there is no span to verify,
+            // which is the item's declared property, so what gets verified is
+            // that the effect exists and that the quote is still the effect's
+            // own statement. The basis may be a pending effect proposal — a
+            // proposal built on a proposal changes no artifact, and lib/proposals
+            // requires the approved record before either can be applied.
+            if (isInferenceProvenance(source)) {
+              const basis = resolveEffectBasis(source.effect_id, ROOT);
+              const inferenceErrors = inferenceGroundingErrors(
+                [source],
+                basis?.effect ?? null,
+              );
+              if (inferenceErrors.length > 0) {
+                fail(file, `inference provenance does not resolve: ${inferenceErrors.join("; ")}`);
+                ok = false;
+              } else {
+                spanTally.declaredInference += 1;
+                if (basis?.origin === "proposal") {
+                  console.log(
+                    `  · ${rel(file)} infers from effect ${source.effect_id}, which is still ` +
+                      `a proposal (${basis.path}) — approval is blocked until that effect is approved`,
+                  );
+                }
+              }
+              continue;
+            }
             const corpusPath = isRealizationProvenance(source)
               ? join(
                   PATHS.realizationCorporaDir,
@@ -2618,6 +2749,16 @@ function main(): void {
         : `  ${spanTally.stale} STALE — reported above by named condition.`,
     );
   }
+  // Reported next to the span figures but never added to them (D-112): these
+  // items are span-less by declaration, and folding them into either column
+  // would turn a stated gap into an accounting error.
+  console.log(
+    spanTally.declaredInference === 0
+      ? "  · no inference provenance items (D-112)"
+      : `  ${spanTally.declaredInference} further item${spanTally.declaredInference === 1 ? "" : "s"} ` +
+          "record an inference from an effect and declare they carry no span (D-112); " +
+          "each was checked against its effect instead.",
+  );
 
   finish();
 }

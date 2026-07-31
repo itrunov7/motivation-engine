@@ -732,7 +732,7 @@ test("an anchored citation stores a span that re-slices to its own quote", () =>
   assert.equal(outcome.ok, true);
   assert(outcome.ok);
   const [item] = outcome.provenance;
-  assert(item && !("corpus_kind" in item && item.corpus_kind === "realization"));
+  assert(item && !("corpus_kind" in item && item.corpus_kind !== "evidence"));
   const span = item.source_span;
   assert(span, "an extraction-authored evidence item must carry a span");
 
@@ -1164,6 +1164,158 @@ test("realization mode grounds interface observations without a DOI", () => {
     "2026-07-21T10:00:00.000Z",
   );
   assert.equal(proposal?.type, "realization");
+});
+
+/** A resolved effect basis standing in for one still in the proposal queue. */
+function effectBasisFixture(recordId: string, doi: string, title: string) {
+  return {
+    origin: "proposal" as const,
+    path: "proposals/effect/fixture.json",
+    effect: {
+      id: "cl-14-002",
+      mechanism_id: "CL-14",
+      name: "Expertise reversal effect",
+      fact: "Techniques that help early learners may interfere with advanced learners.",
+      grade: "A-" as const,
+      source: [doi],
+      boundary: "Instructional design across levels of learner expertise",
+      realization_ids: [],
+      provenance: [
+        {
+          mechanism_id: "CL-14",
+          corpus_record_id: recordId,
+          doi,
+          title,
+          quote_or_locus: "Techniques that help early learners may interfere",
+        },
+      ],
+    },
+  };
+}
+
+test("an effect-anchored realization is marked inferred and carries the transfer as provenance", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract && record.doi);
+  const provenance: KnowledgeProvenanceItem[] = [
+    {
+      mechanism_id: "CL-14",
+      corpus_record_id: record.record_id,
+      doi: record.doi,
+      title: record.title,
+      quote_or_locus: record.abstract.slice(0, 80),
+    },
+  ];
+  const basis = effectBasisFixture(record.record_id, record.doi, record.title);
+  const proposal = toProposal(
+    "realizations",
+    "CL-14",
+    {
+      term: "Collapsing guided tour",
+      description_as_reported:
+        "Worked examples helped novices and hindered more advanced learners.",
+      pattern:
+        "Collapse the guided tour to a dismissible hint once the user has completed the core action three times.",
+      source_domain: "medical education",
+      artifact_context: ["onboarding_flow"],
+      confidence: 0.6,
+    },
+    provenance,
+    "fixture-run",
+    "2026-07-31T10:00:00.000Z",
+    { corpus: file, knownMechanismIds: new Set<string>(), effectBasis: basis },
+  );
+  assert(proposal?.type === "realization");
+  const payload = proposal.payload;
+  assert.equal(payload.derivation, "inferred");
+  assert.deepEqual(payload.effect_refs, ["cl-14-002"]);
+  assert.equal(payload.domain_transfer?.source_domain, "medical education");
+  assert.equal(payload.domain_transfer?.application_domain, "product UI");
+  assert.match(payload.pattern ?? "", /^Collapse the guided tour/);
+  // The transfer step is provenance too, written by code, quoting the effect.
+  const inference = payload.provenance.filter(
+    (item) => "corpus_kind" in item && item.corpus_kind === "inference",
+  );
+  assert.equal(inference.length, 1);
+  assert.deepEqual(
+    inference,
+    proposal.provenance.filter(
+      (item) => "corpus_kind" in item && item.corpus_kind === "inference",
+    ),
+  );
+  assert.equal(
+    (inference[0] as { quote_or_locus: string }).quote_or_locus,
+    basis.effect.fact,
+  );
+  assert.equal(
+    (inference[0] as { span_absent_reason: string }).span_absent_reason,
+    "no direct span — inferred from effect",
+  );
+});
+
+test("a half-marked inference is dropped rather than proposed as evidence", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract && record.doi);
+  const provenance: KnowledgeProvenanceItem[] = [
+    {
+      mechanism_id: "CL-14",
+      corpus_record_id: record.record_id,
+      doi: record.doi,
+      title: record.title,
+      quote_or_locus: record.abstract.slice(0, 80),
+    },
+  ];
+  const context = {
+    corpus: file,
+    knownMechanismIds: new Set<string>(),
+    effectBasis: effectBasisFixture(record.record_id, record.doi, record.title),
+  };
+  const withoutPattern = toProposal(
+    "realizations",
+    "CL-14",
+    {
+      term: "Adaptive onboarding",
+      description_as_reported: "Worked examples helped novices only.",
+      source_domain: "medical education",
+      artifact_context: ["onboarding_flow"],
+      confidence: 0.6,
+    },
+    provenance,
+    "fixture-run",
+    "2026-07-31T10:00:00.000Z",
+    context,
+  );
+  const withoutSourceDomain = toProposal(
+    "realizations",
+    "CL-14",
+    {
+      term: "Adaptive onboarding",
+      description_as_reported: "Worked examples helped novices only.",
+      pattern: "Collapse the tour after three completed core actions.",
+      artifact_context: ["onboarding_flow"],
+      confidence: 0.6,
+    },
+    provenance,
+    "fixture-run",
+    "2026-07-31T10:00:00.000Z",
+    context,
+  );
+  assert.equal(withoutPattern, null);
+  assert.equal(withoutSourceDomain, null);
+});
+
+test("an effect scope ranks the records the effect cites first", () => {
+  const file = corpus();
+  const cited = file.records[file.records.length - 1];
+  const anchor = {
+    effect: effectBasisFixture(cited.record_id, cited.doi ?? "10.0/x", cited.title)
+      .effect,
+    keywords: ["expertise", "reversal"] as readonly string[],
+    citedRecordIds: new Set([cited.record_id]),
+  };
+  const ranked = rankRelevantRecords(file, file.records, anchor);
+  assert.equal(ranked.records[0]?.record_id, cited.record_id);
 });
 
 test("Wayback realization ingestion retains text but discards scripts and markup", () => {
