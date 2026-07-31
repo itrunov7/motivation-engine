@@ -60,10 +60,14 @@ import type {
 } from "./connectors/types";
 import { CONNECTORS } from "./connectors";
 import { deriveCorpusRecordId, CORPUS_RECORD_ID_PATTERN } from "../lib/corpus-record-id";
+import { isExtractionAuthored } from "../lib/proposal-meta";
 import {
+  evidenceSourceText,
   groundingErrors,
+  isSpanConditionError,
   normalizeQualityText,
   realizationGroundingErrors,
+  spanErrors,
 } from "../lib/proposal-quality";
 import { isRealizationProvenance } from "../lib/realization-corpus";
 import type {
@@ -1006,8 +1010,77 @@ function validateAgainst(
   return false;
 }
 
+/**
+ * Running count of how span coverage actually stands across the repo (D-110).
+ *
+ * Amendment 2.2 asks for the gap to be VISIBLE rather than assumed: "optional
+ * for legacy, required for new" is only an honest policy if a reader can see how
+ * much is legacy. Printed at the end of a run, so the number moves as the
+ * pipeline replaces hand-authored provenance.
+ */
+interface SpanTally {
+  withSpan: number;
+  withoutSpan: number;
+  stale: number;
+  /** Files carrying at least one spanless legacy item, for the summary line. */
+  legacyFiles: Set<string>;
+}
+
+function emptySpanTally(): SpanTally {
+  return { withSpan: 0, withoutSpan: 0, stale: 0, legacyFiles: new Set() };
+}
+
+/**
+ * Verify every evidence provenance item's stored span against the corpus by
+ * RE-SLICING it (D-110), and tally coverage.
+ *
+ * Used for the authoritative artifacts — effects and realizations — which carry
+ * no `proposed_by` and so cannot be asked whether the pipeline authored them. A
+ * span present here is verified; a span absent is counted, not failed. The
+ * "required of new items" half of the rule is enforced where authorship is
+ * known, in the proposal loop and in the extractor.
+ */
+function checkArtifactProvenanceSpans(
+  file: string,
+  provenance: readonly KnowledgeProvenanceItem[],
+  tally: SpanTally,
+): boolean {
+  let ok = true;
+  for (const source of provenance) {
+    if (isRealizationProvenance(source)) continue;
+    if (!source.source_span) {
+      tally.withoutSpan += 1;
+      tally.legacyFiles.add(rel(file));
+      continue;
+    }
+    const corpusPath = join(
+      PATHS.corporaDir,
+      "evidence",
+      `${source.mechanism_id}.json`,
+    );
+    if (!existsSync(corpusPath)) continue; // reported by the caller's own checks
+    const corpus = readJson(corpusPath) as EvidenceCorpusFile | undefined;
+    const record = corpus?.records.find(
+      (candidate) => candidate.record_id === source.corpus_record_id,
+    );
+    if (!record) continue; // likewise
+    const conditions = spanErrors(source, evidenceSourceText(record));
+    if (conditions.length === 0) {
+      tally.withSpan += 1;
+      continue;
+    }
+    for (const condition of conditions) {
+      tally.stale += 1;
+      fail(file, `stale source_span: ${condition}`);
+      ok = false;
+    }
+  }
+  return ok;
+}
+
 function main(): void {
   console.log("Motivation Engine validator\n");
+  const spanTally = emptySpanTally();
 
   // 1. Compile the mechanism schema (full + seed sub-schema).
   const mechanismSchema = readJson(PATHS.mechanismSchema);
@@ -2134,8 +2207,13 @@ function main(): void {
             mechanism_id?: string;
             realization_ids?: string[];
             source?: string[];
-            provenance?: { doi?: string | null }[];
+            provenance?: KnowledgeProvenanceItem[];
           };
+          // Approval copies provenance verbatim, so the authoritative record is
+          // where span verifiability has to hold, not just the proposal (D-110).
+          if (!checkArtifactProvenanceSpans(file, effect.provenance ?? [], spanTally)) {
+            ok = false;
+          }
           const parts = relative(PATHS.effectsDir, file).split(sep);
           const expected =
             typeof effect.mechanism_id === "string" && typeof effect.id === "string"
@@ -2154,7 +2232,9 @@ function main(): void {
           }
           const provenanceDois = new Set(
             (effect.provenance ?? []).flatMap((item) =>
-              typeof item.doi === "string" ? [item.doi] : [],
+              !isRealizationProvenance(item) && typeof item.doi === "string"
+                ? [item.doi]
+                : [],
             ),
           );
           for (const doi of effect.source ?? []) {
@@ -2212,7 +2292,13 @@ function main(): void {
             id?: string;
             mechanism_id?: string;
             effect_id?: string;
+            provenance?: KnowledgeProvenanceItem[];
           };
+          if (
+            !checkArtifactProvenanceSpans(file, realization.provenance ?? [], spanTally)
+          ) {
+            ok = false;
+          }
           const parts = relative(PATHS.realizationsDir, file).split(sep);
           const expected =
             typeof realization.mechanism_id === "string" &&
@@ -2355,6 +2441,7 @@ function main(): void {
             id?: string;
             type?: string;
             status?: string;
+            proposed_by?: string;
             decided_by?: string | null;
             decided_at?: string | null;
             decision_note?: string | null;
@@ -2431,6 +2518,12 @@ function main(): void {
               }
             }
           }
+          // D-110: an extraction-authored evidence item MUST be span-verifiable.
+          // Read from proposed_by so this is a structural check, not a naming
+          // convention the next writer can forget.
+          const extractionAuthored = isExtractionAuthored(
+            proposal.proposed_by ?? "",
+          );
           for (const source of proposal.provenance ?? []) {
             const corpusPath = isRealizationProvenance(source)
               ? join(
@@ -2457,9 +2550,38 @@ function main(): void {
                   )
                 : groundingErrors([source], corpus as EvidenceCorpusFile)
               : ["corpus is invalid"];
-            if (errors.length > 0) {
-              fail(file, `provenance does not resolve: ${errors.join("; ")}`);
+            // A stale or drifted span is reported as the named condition it is,
+            // not folded into "provenance does not resolve": the corpus text
+            // moving under a span and a quote that was never in the source are
+            // different findings with different remedies.
+            const spanConditions = errors.filter(isSpanConditionError);
+            const groundingFailures = errors.filter(
+              (error) => !isSpanConditionError(error),
+            );
+            if (groundingFailures.length > 0) {
+              fail(file, `provenance does not resolve: ${groundingFailures.join("; ")}`);
               ok = false;
+            }
+            for (const condition of spanConditions) {
+              spanTally.stale += 1;
+              fail(file, `stale source_span: ${condition}`);
+              ok = false;
+            }
+            if (isRealizationProvenance(source)) continue;
+            if (source.source_span) {
+              if (spanConditions.length === 0) spanTally.withSpan += 1;
+            } else {
+              spanTally.withoutSpan += 1;
+              if (extractionAuthored) {
+                fail(
+                  file,
+                  `extraction-authored provenance for ${source.corpus_record_id} carries no ` +
+                    "source_span — offsets are required of anything the pipeline produces (D-110)",
+                );
+                ok = false;
+              } else {
+                spanTally.legacyFiles.add(rel(file));
+              }
             }
           }
           if (ok) console.log(`  ✓ ${rel(file)} valid (${proposal.status} proposal)`);
@@ -2471,6 +2593,30 @@ function main(): void {
     }
   } else {
     console.log("  · no proposal schema yet (proposals/proposal.schema.json)");
+  }
+
+  // D-110 amendment 2.2: state the span coverage rather than leaving it assumed.
+  // "Optional for legacy, required for new" is only honest if the size of the
+  // legacy remainder is on the record every run.
+  console.log("\nSource spans (D-110):");
+  const spanTotal = spanTally.withSpan + spanTally.withoutSpan;
+  if (spanTotal === 0) {
+    console.log("  · no evidence provenance items to span-check yet");
+  } else {
+    console.log(
+      `  ${spanTally.withSpan} of ${spanTotal} evidence provenance item${spanTotal === 1 ? "" : "s"} ` +
+        `carry a verified source_span; ${spanTally.withoutSpan} predate D-110 and carry none.`,
+    );
+    if (spanTally.legacyFiles.size > 0) {
+      console.log(
+        `  spanless (legacy, valid): ${Array.from(spanTally.legacyFiles).sort().join(", ")}`,
+      );
+    }
+    console.log(
+      spanTally.stale === 0
+        ? "  0 stale — every stored span still re-slices to its own quote against the text it was resolved on."
+        : `  ${spanTally.stale} STALE — reported above by named condition.`,
+    );
   }
 
   finish();

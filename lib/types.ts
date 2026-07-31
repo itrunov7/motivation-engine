@@ -231,6 +231,25 @@ export interface SeedStub {
 
 // ---------- Effects, first-class L2 records (/effects, D-076) ----------
 
+/**
+ * Where a quote sits in its source record, and which version of that record it
+ * was resolved against (D-110).
+ *
+ * `start`/`end` are character offsets into the string
+ * `lib/proposal-quality.evidenceSourceText` returns, end-exclusive, so
+ * `evidenceSourceText(record).slice(start, end)` re-derives the quote. Offsets
+ * alone are not enough: a re-harvested or re-normalised record leaves them
+ * pointing at different words with nothing to say so, which is why the hash of
+ * the exact text they were resolved against travels with them. A mismatch makes
+ * the span STALE — a named, surfaced condition — instead of a silent relocation.
+ */
+export interface ProvenanceSourceSpan {
+  start: number;
+  end: number;
+  /** Hex sha256 of the exact source text the offsets were resolved against. */
+  source_text_sha256: string;
+}
+
 /** One literature locus grounding an effect or proposal. */
 export interface EvidenceProvenanceItem {
   /** Omitted for backwards compatibility with pre-C2 evidence records. */
@@ -241,6 +260,13 @@ export interface EvidenceProvenanceItem {
   doi: string | null;
   title: string;
   quote_or_locus: string;
+  /**
+   * Optional in the schema so hand-authored records written before D-110 stay
+   * valid, but REQUIRED of anything the extraction pipeline produces — enforced
+   * in code, in the provenance builder and in tools/validate.ts, not by
+   * convention. An extraction-authored item without it fails validation.
+   */
+  source_span?: ProvenanceSourceSpan;
 }
 
 /** One interface-evidence locus from the realization corpus (D-081). */
@@ -1240,6 +1266,15 @@ export interface RunProgressSummary {
   records_processed: number;
   records_skipped_irrelevant: number;
   records_remaining: number;
+  /**
+   * What the token cap did to the plan (D-103). `records_selected` is what the
+   * planner kept; `records_dropped_truncation` is what it left out to fit
+   * per_run_tokens. Optional only so runs recorded before D-103 stay readable
+   * as "truncation not reported" rather than as "nothing was truncated" — every
+   * run from D-103 on writes both, including at zero.
+   */
+  records_selected?: number;
+  records_dropped_truncation?: number;
   /**
    * Per-reason attribution of dropped_ungrounded (D-098); values sum to that
    * total. Optional: absent on a clean run and on runs recorded before D-098,

@@ -29,13 +29,17 @@ import {
   loadExtractionOpsConfigFromDisk,
   validateExtractionOpsConfig,
 } from "../lib/ops";
+import { EXTRACTION_RUN_ID_PREFIX } from "../lib/proposal-meta";
 import {
+  evidenceSourceText,
   groundingErrors,
   hasNovelEnrichment,
   mergeProposals,
   normalizeQualityText,
   proposalSimilarity,
   realizationGroundingErrors,
+  realizationSourceText,
+  sha256Hex,
 } from "../lib/proposal-quality";
 import { writeRunProgress } from "./progress";
 import type {
@@ -60,6 +64,7 @@ import type {
   Mechanism,
   PackMapFile,
   Proposal,
+  ProvenanceSourceSpan,
   ReaderCoverageFile,
   Realization,
   RealizationCorpusFile,
@@ -132,6 +137,13 @@ export interface ExtractionQuote {
     skipped_irrelevant: number;
     selected: number;
     remaining: number;
+    /**
+     * Relevant records the planner refused to fit under per_run_tokens (D-103).
+     * Equal to `remaining` for a single plan — the same count under the name
+     * that says WHY those records were left out, so a reader cannot mistake
+     * "the cap changed the question" for "the corpus ran out".
+     */
+    dropped_truncation: number;
   };
   capped: boolean;
   resumable: boolean;
@@ -147,6 +159,15 @@ export interface ExtractionQuote {
 interface CitationDraft {
   record_id: string;
   quote_or_locus: string;
+  /**
+   * Offsets of the quote in the record's source text, present once
+   * `anchorCitations` or `resolveRefs` has located it (D-110). Optional because
+   * a citation as a model emitted it has not been anchored yet — models are
+   * never asked for character arithmetic. Provenance that reaches a proposal
+   * must have them; see `requireSpans` in `groundingOutcome`.
+   */
+  start?: number;
+  end?: number;
 }
 
 interface ImplementationDraft {
@@ -239,7 +260,7 @@ interface DraftResponse {
   items: DraftItem[];
 }
 
-type ExtractionStage = "extract" | "synthesize";
+export type ExtractionStage = "extract" | "synthesize";
 export type ResponseTolerance =
   | "strict"
   | "markdown_code_fence"
@@ -716,6 +737,20 @@ export interface ExtractionStats {
   /** Funnel (D-090): relevant records still unread after this run (0 = corpus exhausted). */
   records_remaining: number;
   /**
+   * Records the planner KEPT across every slice of this run (D-103), summed as
+   * each slice is planned. Distinct from records_processed, which counts what
+   * was actually sent to a model: the two agree unless a slice died before its
+   * batches ran, and that divergence is itself worth reading.
+   */
+  records_selected: number;
+  /**
+   * Records the planner DROPPED to fit per_run_tokens (D-103). A run that
+   * covered a third of its scope and one that covered all of it used to look
+   * identical in the report; this is the number that tells them apart. Not the
+   * same as records_remaining, which also carries retryable failed batches.
+   */
+  records_dropped_truncation: number;
+  /**
    * Per-reason breakdown of dropped_ungrounded (D-098). Keys are
    * UngroundedReason; only non-zero reasons are present. The values always sum
    * to dropped_ungrounded — this attributes the existing total, it does not
@@ -859,6 +894,10 @@ export function extractionSummaryParams(
     records_eligible: String(stats.records_eligible),
     records_relevant: String(stats.records_relevant),
     records_remaining: String(stats.records_remaining),
+    // D-103: available / kept / dropped-to-fit, written unconditionally so a
+    // zero is a measurement and an absent field means the run predates it.
+    records_selected: String(stats.records_selected),
+    records_dropped_truncation: String(stats.records_dropped_truncation),
     // The per-pass funnel is always present from D-105 on, even at zero: its
     // absence is what tells /ops a run predates the cheap-pass gate, so writing
     // it unconditionally is what makes "not split" a truthful reading.
@@ -1581,6 +1620,7 @@ export function buildExtractionPlan(
       skipped_irrelevant: skippedIrrelevant,
       selected,
       remaining,
+      dropped_truncation: remaining,
     },
     capped: remaining > 0,
   };
@@ -1788,11 +1828,15 @@ function comparisonFor(quote: string, sourceText: string): RejectedCandidateComp
   };
 }
 
-/** The text the gate compares a quote against, for either corpus kind. */
+/**
+ * The text the gate compares a quote against, for either corpus kind. Both
+ * arms come from lib/proposal-quality so this module cannot hold a second
+ * definition of the string that spans index and hash (D-110).
+ */
 function comparableSourceText(record: ExtractionRecord): string {
-  return `${record.title}\n${
-    isRealizationRecord(record) ? record.observation : record.abstract ?? ""
-  }`;
+  return isRealizationRecord(record)
+    ? realizationSourceText(record)
+    : evidenceSourceText(record);
 }
 
 function corpusSideFor(record: ExtractionRecord): RejectedCandidateCorpusSide {
@@ -1820,7 +1864,51 @@ function reasonForGroundingError(error: string): UngroundedReason {
   if (error.startsWith("DOI does not resolve")) return "doi_unresolved";
   if (error.startsWith("title mismatch")) return "title_mismatch";
   if (error.startsWith("quote does not resolve")) return "quote_not_in_source";
+  // Span conditions (D-110) land here too: a stale, out-of-range, or
+  // non-re-slicing span is provenance that disagrees with the corpus, which is
+  // what provenance_mismatch already means. The nine causes stay nine; the
+  // specific condition survives untruncated in the refusal detail.
   return "provenance_mismatch";
+}
+
+/**
+ * Turn an anchored citation's offsets into a storable `source_span` (D-110).
+ *
+ * Null when the citation has not been anchored, or when the offsets do not fit
+ * the text — the latter must not be silently stored, because a span that cannot
+ * be re-sliced is worse than no span: it looks verifiable and is not.
+ *
+ * The hash is taken over the SAME string the slice came from, obtained from the
+ * one shared definition in lib/proposal-quality, so a stored span can always be
+ * re-checked against the text it was resolved against rather than against some
+ * later reconstruction of it.
+ */
+function anchoredSpan(
+  citation: CitationDraft,
+  rawSourceText: string,
+): { quote: string; source_span: ProvenanceSourceSpan } | null {
+  const { start, end } = citation;
+  if (
+    !Number.isInteger(start) ||
+    !Number.isInteger(end) ||
+    start === undefined ||
+    end === undefined ||
+    start < 0 ||
+    end <= start ||
+    end > rawSourceText.length
+  ) {
+    return null;
+  }
+  const quote = rawSourceText.slice(start, end);
+  if (quote.trim().length === 0) return null;
+  return {
+    quote,
+    source_span: {
+      start,
+      end,
+      source_text_sha256: sha256Hex(rawSourceText),
+    },
+  };
 }
 
 /**
@@ -1831,6 +1919,17 @@ function reasonForGroundingError(error: string): UngroundedReason {
 export function groundingOutcome(
   item: DraftItem,
   corpus: ExtractionCorpus,
+  options: {
+    /**
+     * Refuse an evidence citation that carries no anchored offsets (D-110).
+     * True for the call whose provenance becomes a proposal; false for the
+     * cheap pre-gate, which by design runs BEFORE anchoring and would
+     * otherwise refuse every candidate for lacking what it has not yet been
+     * given. This is amendment 2.2 enforced in code: nothing the pipeline
+     * writes can reach a proposal without a verifiable span.
+     */
+    requireSpans?: boolean;
+  } = {},
 ): GroundingOutcome {
   if (!Array.isArray(item.citations) || item.citations.length === 0) {
     return {
@@ -1878,25 +1977,42 @@ export function groundingOutcome(
         corpus_side: corpusSideFor(record),
       };
     }
-    provenance.push(
-      isRealizationRecord(record)
-        ? {
-            corpus_kind: "realization",
-            mechanism_id: corpus.mechanism_id,
-            corpus_record_id: record.record_id,
-            source_id: record.source_id,
-            title: record.title,
-            quote_or_locus: citation.quote_or_locus.trim(),
-            contributed_by: record.contributed_by,
-          }
-        : {
-            mechanism_id: corpus.mechanism_id,
-            corpus_record_id: record.record_id,
-            doi: record.doi,
-            title: record.title,
-            quote_or_locus: citation.quote_or_locus.trim(),
-          },
-    );
+    if (isRealizationRecord(record)) {
+      // Realization-corpus provenance deliberately carries no span (D-110), so
+      // mode=realizations output is not span-verifiable. Stated, not hidden.
+      provenance.push({
+        corpus_kind: "realization",
+        mechanism_id: corpus.mechanism_id,
+        corpus_record_id: record.record_id,
+        source_id: record.source_id,
+        title: record.title,
+        quote_or_locus: citation.quote_or_locus.trim(),
+        contributed_by: record.contributed_by,
+      });
+      continue;
+    }
+    const span = anchoredSpan(citation, rawSourceText);
+    if (!span && options.requireSpans) {
+      return {
+        ok: false,
+        reason: "malformed_citation",
+        detail:
+          `citation for ${record.record_id} carries no anchored span, so its quote could ` +
+          "not be made re-sliceable (D-110)",
+        corpus_record_id: record.record_id,
+      };
+    }
+    provenance.push({
+      mechanism_id: corpus.mechanism_id,
+      corpus_record_id: record.record_id,
+      doi: record.doi,
+      title: record.title,
+      // The quote is the SLICE, not the trimmed model string, whenever a span
+      // exists: re-slicing must reproduce it byte for byte, and a trim would
+      // make the stored text disagree with the offsets that produced it.
+      quote_or_locus: span ? span.quote : citation.quote_or_locus.trim(),
+      ...(span ? { source_span: span.source_span } : {}),
+    });
   }
   const unique = new Map(
     provenance.map((item) => [
@@ -2910,6 +3026,10 @@ export async function runExtraction(args: {
     records_eligible: plan.records.eligible_total,
     records_relevant: plan.records.selected + plan.records.remaining,
     records_remaining: plan.records.remaining,
+    // Accumulated per slice below (D-103); the first slice's figures are the
+    // starting point, not the final ones, because a run may read several.
+    records_selected: 0,
+    records_dropped_truncation: plan.records.dropped_truncation,
   };
   const proposals: Proposal[] = [];
   const existing = existingMatches();
@@ -2919,9 +3039,11 @@ export async function runExtraction(args: {
     skipped_irrelevant_record_ids: string[];
   }>();
   const validate = proposalValidator();
+  // Prefixed so "this was produced by the extraction pipeline" is a structural
+  // fact the validator can read, not a guess from a free-form string (D-110).
   const runId = process.env.GITHUB_RUN_ID
-    ? `github-actions-${process.env.GITHUB_RUN_ID}`
-    : `extract-${startedAt.toISOString()}`;
+    ? `${EXTRACTION_RUN_ID_PREFIX}github-actions-${process.env.GITHUB_RUN_ID}`
+    : `${EXTRACTION_RUN_ID_PREFIX}local-${startedAt.toISOString()}`;
 
   // Every refused candidate is persisted, not sampled (D-104), keyed by the
   // same run-start timestamp the manifest uses so the two line up.
@@ -3080,6 +3202,9 @@ export async function runExtraction(args: {
     for (const mechanism of slicePlan.mechanisms) {
       totalBatches += Math.ceil(mechanism.selected.length / batchSize);
     }
+    // What the planner kept for THIS slice, counted before any call runs, so a
+    // slice that dies mid-way still reports what it had planned to read (D-103).
+    stats.records_selected += slicePlan.records.selected;
     for (const mechanismPlan of slicePlan.mechanisms) {
       const { mechanismId, corpus } = mechanismPlan;
       const records = mechanismPlan.selected;
@@ -3269,7 +3394,10 @@ export async function runExtraction(args: {
             }),
           );
         }
-        const grounding = groundingOutcome(item, corpus);
+        // requireSpans: this outcome's provenance is what reaches the proposal,
+        // so from here on a citation without a re-sliceable span is refused
+        // rather than written (D-110).
+        const grounding = groundingOutcome(item, corpus, { requireSpans: true });
         if (!grounding.ok) {
           dropUngrounded(mechanismId, "strong", grounding, rawItem, groundedCheap);
           continue;
@@ -3447,6 +3575,7 @@ export async function runExtraction(args: {
       throw error;
     }
     stats.records_remaining = currentPlan.records.remaining;
+    stats.records_dropped_truncation = currentPlan.records.dropped_truncation;
     if (!currentPlan.capped) break; // corpus exhausted for this scope + mode
     const usedTokens = context.usage.input + context.usage.output;
     const headroom = args.config.limits.per_run_tokens - usedTokens;
@@ -3498,6 +3627,9 @@ export async function runExtraction(args: {
     failedRecordIdsByMechanism.values(),
   ).reduce((sum, recordIds) => sum + recordIds.size, 0);
   stats.records_remaining = currentPlan.records.remaining + failedRecordCount;
+  // The last slice's refusal IS the run's truncation drop: every earlier slice's
+  // leftovers were re-planned into this one (D-103).
+  stats.records_dropped_truncation = currentPlan.records.dropped_truncation;
   const runIncomplete = stats.records_remaining > 0;
   const summary: RunProgressSummary = {
     proposed: stats.proposed,
@@ -3514,6 +3646,8 @@ export async function runExtraction(args: {
     records_processed: stats.records_processed,
     records_skipped_irrelevant: stats.records_skipped_irrelevant,
     records_remaining: stats.records_remaining,
+    records_selected: stats.records_selected,
+    records_dropped_truncation: stats.records_dropped_truncation,
     ...(stats.dropped_ungrounded > 0
       ? { dropped_ungrounded_reasons: stats.dropped_ungrounded_reasons }
       : {}),
@@ -3580,7 +3714,7 @@ export async function runExtraction(args: {
     );
   }
   reportExtractProgress(
-    `${runIncomplete ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates (cheap ${stats.candidates_cheap} / strong ${stats.candidates_strong}) · ${stats.dropped_ungrounded} dropped ungrounded (cheap ${stats.dropped_ungrounded_cheap} / strong ${stats.dropped_ungrounded_strong})${ungroundedBreakdown ? ` (${ungroundedBreakdown})` : ""} · ${stats.failed_validation} failed validation · ${stats.records_remaining} remaining · ${currentPlan.records.remaining} dropped by cap truncation`,
+    `${runIncomplete ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_eligible} available / ${stats.records_selected} kept by the planner / ${stats.records_dropped_truncation} dropped to fit the ${args.config.limits.per_run_tokens}-token cap · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates (cheap ${stats.candidates_cheap} / strong ${stats.candidates_strong}) · ${stats.dropped_ungrounded} dropped ungrounded (cheap ${stats.dropped_ungrounded_cheap} / strong ${stats.dropped_ungrounded_strong})${ungroundedBreakdown ? ` (${ungroundedBreakdown})` : ""} · ${stats.failed_validation} failed validation · ${stats.records_remaining} remaining`,
     runIncomplete ? "partial" : "success",
     true,
     summary,

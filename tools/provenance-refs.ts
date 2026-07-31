@@ -60,17 +60,31 @@ export interface ProvenanceRefusal {
   compared?: RejectedCandidateComparison;
 }
 
+/**
+ * A citation with the offsets its quote was sliced at. The offsets travel with
+ * the citation rather than staying in the ledger because the ledger dies with
+ * the run, and a quote whose offsets were discarded can only be re-checked by
+ * searching for it again — which is the trust the offsets exist to replace
+ * (D-110).
+ */
+export interface AnchoredCitation {
+  record_id: string;
+  quote_or_locus: string;
+  start: number;
+  end: number;
+}
+
 export interface AnchoredCitations {
   ok: true;
   /** Citations whose quotes are source-derived slices, not model text. */
-  citations: { record_id: string; quote_or_locus: string }[];
+  citations: AnchoredCitation[];
   /** The refs to show the synthesis pass, in citation order. */
   refs: string[];
 }
 
 export interface ResolvedRefs {
   ok: true;
-  citations: { record_id: string; quote_or_locus: string }[];
+  citations: AnchoredCitation[];
 }
 
 /**
@@ -133,7 +147,7 @@ export function anchorCitations(
       corpus_record_id: null,
     };
   }
-  const anchored: { record_id: string; quote_or_locus: string }[] = [];
+  const anchored: AnchoredCitation[] = [];
   const refs: string[] = [];
   for (const citation of citations) {
     const recordId = citation?.record_id;
@@ -175,7 +189,12 @@ export function anchorCitations(
       };
     }
     refs.push(ledger.register(recordId, span.start, span.end));
-    anchored.push({ record_id: recordId, quote_or_locus: span.quote });
+    anchored.push({
+      record_id: recordId,
+      quote_or_locus: span.quote,
+      start: span.start,
+      end: span.end,
+    });
   }
   return { ok: true, citations: anchored, refs };
 }
@@ -201,7 +220,7 @@ export function resolveRefs(
       corpus_record_id: null,
     };
   }
-  const citations: { record_id: string; quote_or_locus: string }[] = [];
+  const citations: AnchoredCitation[] = [];
   const seen = new Set<string>();
   for (const ref of refs) {
     if (typeof ref !== "string" || !ref.trim()) {
@@ -253,7 +272,12 @@ export function resolveRefs(
         corpus_record_id: span.corpus_record_id,
       };
     }
-    citations.push({ record_id: span.corpus_record_id, quote_or_locus: quote });
+    citations.push({
+      record_id: span.corpus_record_id,
+      quote_or_locus: quote,
+      start: span.start,
+      end: span.end,
+    });
   }
   return { ok: true, citations };
 }

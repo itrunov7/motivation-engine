@@ -1,11 +1,45 @@
+import { createHash } from "node:crypto";
 import type {
   EvidenceCorpusFile,
+  EvidenceProvenanceItem,
   KnowledgeProvenanceItem,
   Proposal,
   RealizationCorpusFile,
   RealizationCorpusProvenanceItem,
 } from "./types";
 import { isRealizationProvenance } from "./realization-corpus";
+
+/** Hex sha256, the one hash used for source-text versions (D-110). */
+export function sha256Hex(value: string): string {
+  return createHash("sha256").update(value, "utf8").digest("hex");
+}
+
+/**
+ * The exact text the grounding gate compares an evidence quote against, and the
+ * string that `source_span` offsets and `source_text_sha256` are resolved
+ * against (D-110).
+ *
+ * Defined ONCE, here, because it had two independent implementations — this
+ * module inlined it and tools/extract.ts kept its own copy. Two definitions of
+ * "the source text" is precisely how offsets come to index one string while the
+ * gate reads another, and a byte offset into the wrong string is worse than no
+ * offset at all. Anything that stores, slices, or hashes a span must obtain the
+ * text from here.
+ */
+export function evidenceSourceText(record: {
+  title: string;
+  abstract: string | null;
+}): string {
+  return `${record.title}\n${record.abstract ?? ""}`;
+}
+
+/** The same single definition for a realization corpus record (D-110). */
+export function realizationSourceText(record: {
+  title: string;
+  observation: string;
+}): string {
+  return `${record.title}\n${record.observation}`;
+}
 
 export function normalizeQualityText(value: string): string {
   return value
@@ -179,6 +213,80 @@ export function mergeProposals(base: Proposal, candidate: Proposal): Proposal {
   }
 }
 
+/**
+ * Named conditions a stored `source_span` can be in (D-110). Distinguished from
+ * each other and from an ordinary quote failure on purpose: "the corpus text
+ * changed under this span" and "this quote is not in the source" are different
+ * facts with different remedies, and collapsing them into one message is what
+ * made the earlier ungrounded drops unreadable (D-098).
+ */
+export const SPAN_CONDITIONS = [
+  /** The offsets do not fit the source text — nothing can be sliced. */
+  "span_out_of_range",
+  /** The offsets fit, but re-slicing does not reproduce quote_or_locus. */
+  "span_does_not_reslice",
+  /** The source text no longer hashes to what the offsets were resolved against. */
+  "span_stale",
+] as const;
+export type SpanCondition = (typeof SPAN_CONDITIONS)[number];
+
+/**
+ * Verify a stored span by RE-SLICING, never by trusting the emitted quote.
+ *
+ * The hash is checked as well as the slice because the two catch different
+ * failures: a re-harvested record can still contain the quoted words at
+ * different offsets (slice mismatch), and it can also contain different words at
+ * the same offsets that happen to differ from the quote — but an edit elsewhere
+ * in the abstract shifts every later offset while leaving this one re-slicing
+ * cleanly, and only the hash sees that. A span whose text version is unknown is
+ * a span pointing into a document that may no longer exist.
+ *
+ * Returns [] when the item carries no span: absent is legacy, not invalid. That
+ * an extraction-authored item MUST carry one is enforced where authorship is
+ * known — the provenance builder and tools/validate.ts — not here.
+ */
+export function spanErrors(
+  source: EvidenceProvenanceItem,
+  rawSourceText: string,
+): string[] {
+  const span = source.source_span;
+  if (!span) return [];
+  const errors: string[] = [];
+  const actualHash = sha256Hex(rawSourceText);
+  if (actualHash !== span.source_text_sha256) {
+    errors.push(
+      `span_stale for ${source.corpus_record_id}: source text now hashes to ${actualHash}, ` +
+        `span was resolved against ${span.source_text_sha256}`,
+    );
+  }
+  if (
+    !Number.isInteger(span.start) ||
+    !Number.isInteger(span.end) ||
+    span.start < 0 ||
+    span.end <= span.start ||
+    span.end > rawSourceText.length
+  ) {
+    errors.push(
+      `span_out_of_range for ${source.corpus_record_id}: [${span.start},${span.end}) ` +
+        `does not fit ${rawSourceText.length} characters`,
+    );
+    return errors;
+  }
+  const resliced = rawSourceText.slice(span.start, span.end);
+  if (resliced !== source.quote_or_locus) {
+    errors.push(
+      `span_does_not_reslice for ${source.corpus_record_id}: [${span.start},${span.end}) ` +
+        `yields ${JSON.stringify(resliced)}, quote_or_locus is ${JSON.stringify(source.quote_or_locus)}`,
+    );
+  }
+  return errors;
+}
+
+/** True when an error string names one of the span conditions above. */
+export function isSpanConditionError(error: string): boolean {
+  return SPAN_CONDITIONS.some((condition) => error.startsWith(`${condition} `));
+}
+
 export function groundingErrors(
   provenance: KnowledgeProvenanceItem[],
   corpus: EvidenceCorpusFile,
@@ -204,11 +312,13 @@ export function groundingErrors(
     if (source.title !== record.title) {
       errors.push(`title mismatch for ${source.corpus_record_id}`);
     }
+    const rawSourceText = evidenceSourceText(record);
     const locus = normalizeQualityText(source.quote_or_locus);
-    const sourceText = normalizeQualityText(`${record.title}\n${record.abstract ?? ""}`);
+    const sourceText = normalizeQualityText(rawSourceText);
     if (!locus || !sourceText.includes(locus)) {
       errors.push(`quote does not resolve for ${source.corpus_record_id}`);
     }
+    errors.push(...spanErrors(source, rawSourceText));
   }
   return errors;
 }
@@ -238,7 +348,7 @@ export function realizationGroundingErrors(
       errors.push(`contributor mismatch for ${source.corpus_record_id}`);
     }
     const locus = normalizeQualityText(source.quote_or_locus);
-    const sourceText = normalizeQualityText(`${record.title}\n${record.observation}`);
+    const sourceText = normalizeQualityText(realizationSourceText(record));
     if (!locus || !sourceText.includes(locus)) {
       errors.push(`quote does not resolve for ${source.corpus_record_id}`);
     }

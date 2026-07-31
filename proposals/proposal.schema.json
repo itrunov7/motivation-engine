@@ -222,9 +222,21 @@
           ]
         },
         "title": { "type": "string", "minLength": 1 },
-        "quote_or_locus": { "type": "string", "minLength": 1 }
+        "quote_or_locus": { "type": "string", "minLength": 1 },
+        "source_span": { "$ref": "#/$defs/provenanceSourceSpan" }
       },
       "required": ["mechanism_id", "corpus_record_id", "doi", "title", "quote_or_locus"],
+      "additionalProperties": false
+    },
+    "provenanceSourceSpan": {
+      "description": "Where the quote sits in its source record, and which version of that record the offsets were resolved against (D-110). start/end are end-exclusive character offsets into lib/proposal-quality evidenceSourceText(record), so slicing that string at them re-derives the quote. source_text_sha256 pins the exact text: without it a re-harvested or re-normalised record silently relocates the offsets onto different words, so a mismatch marks the span STALE as a named condition instead. Optional so pre-D-110 hand-authored records stay valid; required in code of anything the extraction pipeline produces.",
+      "type": "object",
+      "properties": {
+        "start": { "type": "integer", "minimum": 0 },
+        "end": { "type": "integer", "minimum": 1 },
+        "source_text_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      },
+      "required": ["start", "end", "source_text_sha256"],
       "additionalProperties": false
     },
     "realizationProvenanceItem": {

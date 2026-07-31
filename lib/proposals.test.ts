@@ -11,6 +11,8 @@ import {
 } from "./local-transaction";
 import { commitGitDataTransaction, type GithubOpsEnv } from "./github";
 import { deriveCorpusRecordId } from "./corpus-record-id";
+import { isExtractionAuthored } from "./proposal-meta";
+import { evidenceSourceText, sha256Hex } from "./proposal-quality";
 import {
   BatchProposalValidationError,
   isActionableProposal,
@@ -19,7 +21,13 @@ import {
   prepareProposalDecision,
   type RepositorySnapshot,
 } from "./proposals";
-import type { Mechanism, Proposal, ProposalType, SegmentsFile } from "./types";
+import type {
+  EvidenceCorpusFile,
+  Mechanism,
+  Proposal,
+  ProposalType,
+  SegmentsFile,
+} from "./types";
 
 const ROOT = join(__dirname, "..");
 const decidedAt = "2026-07-20T18:00:00.000Z";
@@ -284,6 +292,104 @@ test("approves a hand-made effect proposal into authoritative files", async () =
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+test("approval copies a source span verbatim and refuses a stale one", async () => {
+  const root = await temporaryRepository();
+  try {
+    const corpus = JSON.parse(
+      await readFile(join(root, "corpora/evidence/LA-01.json"), "utf8"),
+    ) as EvidenceCorpusFile;
+    const record = corpus.records.find(
+      (candidate) => candidate.record_id === provenance[0].corpus_record_id,
+    );
+    assert(record, "fixture provenance must cite a real corpus record");
+    const sourceText = evidenceSourceText(record);
+    const start = sourceText.indexOf(provenance[0].quote_or_locus);
+    assert(start >= 0, "fixture quote must be an exact slice of the source text");
+    const source_span = {
+      start,
+      end: start + provenance[0].quote_or_locus.length,
+      source_text_sha256: sha256Hex(sourceText),
+    };
+
+    const write = async (
+      path: string,
+      id: string,
+      span: typeof source_span,
+    ): Promise<void> => {
+      await mkdir(join(root, "proposals/effect"), { recursive: true });
+      const spanned = [{ ...provenance[0], source_span: span }];
+      const body = {
+        ...(envelope("effect", id, "LA-01", {
+          id,
+          mechanism_id: "LA-01",
+          name: "Spanned test effect",
+          fact: "A grounded fixture phenomenon.",
+          grade: "A",
+          source: ["10.2307/1914185"],
+          boundary: "Only a transaction fixture.",
+          realization_ids: [],
+          provenance: spanned,
+        }) as Record<string, unknown>),
+        // The envelope and the payload must agree exactly, span included.
+        provenance: spanned,
+      };
+      await writeFile(join(root, path), `${JSON.stringify(body, null, 2)}\n`, "utf8");
+    };
+
+    const proposalPath = "proposals/effect/spanned-effect.json";
+    await write(proposalPath, "spanned-effect", source_span);
+    const transaction = await prepareProposalDecision(
+      new LocalRepositorySnapshot(root),
+      {
+        proposalPath,
+        action: "approve",
+        decidedBy: "test-owner",
+        decidedAt,
+        schemaRoot: root,
+      },
+    );
+    await applyLocalTransaction(root, transaction);
+    const effect = JSON.parse(
+      await readFile(join(root, "effects/LA-01/spanned-effect.json"), "utf8"),
+    ) as { provenance: { source_span?: typeof source_span }[] };
+    // 2.1: the authoritative record stays independently verifiable on its own.
+    assert.deepEqual(effect.provenance[0].source_span, source_span);
+
+    // A span resolved against different text must not reach an authoritative
+    // record: approval re-grounds, and the hash is what catches it.
+    const stalePath = "proposals/effect/stale-effect.json";
+    await write(stalePath, "stale-effect", {
+      ...source_span,
+      source_text_sha256: sha256Hex("other"),
+    });
+    await assert.rejects(
+      prepareProposalDecision(new LocalRepositorySnapshot(root), {
+        proposalPath: stalePath,
+        action: "approve",
+        decidedBy: "test-owner",
+        decidedAt,
+        schemaRoot: root,
+      }),
+      /span_stale/,
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("extraction authorship is a structural fact, not a naming convention", () => {
+  assert.equal(isExtractionAuthored("extraction:github-actions-1234"), true);
+  assert.equal(isExtractionAuthored("extraction:local-2026-07-31T00:00:00.000Z"), true);
+  // Everything hand-authored or owner-assisted stays legacy, so its provenance
+  // may be spanless without failing validation (D-110 amendment 2.2).
+  assert.equal(isExtractionAuthored("igor"), false);
+  assert.equal(isExtractionAuthored("owner-observation"), false);
+  assert.equal(isExtractionAuthored(""), false);
+  // The old unprefixed extractor ids must NOT read as extraction-authored:
+  // their proposals predate spans and would otherwise fail retroactively.
+  assert.equal(isExtractionAuthored("github-actions-1234"), false);
 });
 
 test("prepares one atomic batch with one enumerated decision entry", async () => {

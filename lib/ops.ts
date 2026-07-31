@@ -521,6 +521,14 @@ export interface ExtractionRunSummary {
   candidates: number;
   recordsRemaining: number;
   /**
+   * What the per-run token cap did to the plan (D-103). Null when the run
+   * predates the counters: a run that covered a third of its scope and one that
+   * covered all of it looked identical before this, so "not reported" and
+   * "nothing dropped" must stay distinguishable.
+   */
+  recordsSelected: number | null;
+  recordsDroppedTruncation: number | null;
+  /**
    * Which grounding check refused each dropped candidate (D-098), densest
    * first. Null when the run recorded no attribution — either it dropped
    * nothing, or it predates D-098. Never synthesized from the total.
@@ -583,6 +591,8 @@ export function loadExtractionRunSummary(): ExtractionRunSummary | undefined {
     recordsProcessed: number("records_processed"),
     candidates: number("candidates"),
     recordsRemaining: number("records_remaining"),
+    recordsSelected: optionalNumber("records_selected"),
+    recordsDroppedTruncation: optionalNumber("records_dropped_truncation"),
     droppedUngroundedReasons: parseUngroundedReasons(
       params.dropped_ungrounded_reasons,
     ),

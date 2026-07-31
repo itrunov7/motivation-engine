@@ -1460,8 +1460,16 @@ export function main(): void {
   const scope = packsFilter
     ? `${rescored} of ${packMap.elements.length} packs re-scored (packs= filter), rest preserved`
     : `${packMap.elements.length} packs`;
+  // D-102: the matrix holds two legitimate populations and only one of them is
+  // the pack figure /maturation reports. Naming both here is what stops the
+  // tool and the screen from looking as if they disagree about a shared fact.
+  const packCellCount = cells.filter(
+    (cell) => (cell.row_group ?? "pack") === "pack",
+  ).length;
+  const perceptionCellCount = cells.length - packCellCount;
   console.log(
-    `\nOK — ${cells.length} cells (${scope} + perception row × ${activeSegments.length} segments) → ${rel(MATRIX)}.`,
+    `\nOK — ${cells.length} cells = ${packCellCount} pack (${scope}) + ${perceptionCellCount} perception ` +
+      `(cross-cutting row × ${activeSegments.length} segments, D-067) → ${rel(MATRIX)}.`,
   );
   console.log(
     `     stage: ${config.maturity_stage} (D-060); ` +

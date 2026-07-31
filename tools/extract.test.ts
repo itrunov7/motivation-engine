@@ -4,10 +4,13 @@ import { join } from "node:path";
 import test from "node:test";
 import { extractionPriceState, validateExtractionOpsConfig } from "../lib/ops";
 import {
+  evidenceSourceText,
   groundingErrors,
   mergeProposals,
   normalizeQualityText,
   proposalSimilarity,
+  sha256Hex,
+  spanErrors,
 } from "../lib/proposal-quality";
 import type {
   CorpusManifestRun,
@@ -51,6 +54,8 @@ import {
   type Usage,
 } from "./extract";
 import { visibleReplayText } from "./connectors/realization-wayback";
+import { productionStage, rejectedParameters } from "./openrouter-preflight";
+import { anchorCitations, SpanLedger } from "./provenance-refs";
 import { rejectionRecord } from "./rejected-candidates";
 
 const ROOT = join(__dirname, "..");
@@ -202,6 +207,8 @@ function statsFixture(overrides: Partial<ExtractionStats> = {}): ExtractionStats
     records_eligible: 0,
     records_relevant: 0,
     records_remaining: 0,
+    records_selected: 0,
+    records_dropped_truncation: 0,
     ...overrides,
   };
 }
@@ -697,6 +704,114 @@ test("every grounding refusal names its own reason", () => {
   // value the check actually compared (D-104).
   assert.equal(doiOutcome.ok === false && doiOutcome.corpus_record_id, doiless.record_id);
   assert.equal(doiOutcome.ok === false && doiOutcome.corpus_side?.doi, null);
+});
+
+test("an anchored citation stores a span that re-slices to its own quote", () => {
+  const file = corpus();
+  const record = file.records.find(
+    (candidate) => candidate.abstract && candidate.doi,
+  );
+  assert(record?.abstract);
+  const sourceText = evidenceSourceText(record);
+  const ledger = new SpanLedger();
+  // Quote it the way a model would — with mangled punctuation the gate
+  // tolerates — so the stored span is proven to be the SOURCE's text and not
+  // the model's string.
+  const modelQuote = record.abstract.slice(10, 90).replace(/-/g, "\u2010");
+  const anchored = anchorCitations(
+    [{ record_id: record.record_id, quote_or_locus: modelQuote }],
+    () => sourceText,
+    ledger,
+  );
+  assert.equal(anchored.ok, true);
+  assert(anchored.ok);
+
+  const outcome = groundingOutcome({ citations: anchored.citations }, file, {
+    requireSpans: true,
+  });
+  assert.equal(outcome.ok, true);
+  assert(outcome.ok);
+  const [item] = outcome.provenance;
+  assert(item && !("corpus_kind" in item && item.corpus_kind === "realization"));
+  const span = item.source_span;
+  assert(span, "an extraction-authored evidence item must carry a span");
+
+  // Criterion (d): verified by RE-SLICING, not by trusting the emitted quote.
+  assert.equal(sourceText.slice(span.start, span.end), item.quote_or_locus);
+  assert.equal(span.source_text_sha256, sha256Hex(sourceText));
+  assert.equal(spanErrors(item, sourceText).length, 0);
+  assert.notEqual(item.quote_or_locus, modelQuote);
+});
+
+test("a stored span reports staleness and drift as distinct named conditions", () => {
+  const file = corpus();
+  const record = file.records.find(
+    (candidate) => candidate.abstract && candidate.abstract.length > 300,
+  );
+  assert(record?.abstract);
+  const sourceText = evidenceSourceText(record);
+  const base = {
+    mechanism_id: file.mechanism_id,
+    corpus_record_id: record.record_id,
+    doi: record.doi,
+    title: record.title,
+  };
+
+  const fresh = {
+    ...base,
+    quote_or_locus: sourceText.slice(40, 120),
+    source_span: {
+      start: 40,
+      end: 120,
+      source_text_sha256: sha256Hex(sourceText),
+    },
+  };
+  assert.deepEqual(spanErrors(fresh, sourceText), []);
+
+  // Re-harvested record: the offsets still slice cleanly, so only the hash can
+  // tell that they were resolved against different text.
+  const stale = spanErrors(fresh, `${sourceText} appended by a re-harvest.`);
+  assert.equal(stale.length, 1);
+  assert(stale[0].startsWith("span_stale "));
+
+  const drifted = spanErrors(
+    { ...fresh, quote_or_locus: "words no slice of this record produces" },
+    sourceText,
+  );
+  assert(drifted.some((error) => error.startsWith("span_does_not_reslice ")));
+
+  const outOfRange = spanErrors(
+    {
+      ...fresh,
+      source_span: { ...fresh.source_span, end: sourceText.length + 50 },
+    },
+    sourceText,
+  );
+  assert(outOfRange.some((error) => error.startsWith("span_out_of_range ")));
+
+  // A legacy item without a span is not invalid — absence is the pre-D-110
+  // state, and requiring it of NEW items is enforced where authorship is known.
+  assert.deepEqual(spanErrors({ ...base, quote_or_locus: "x" }, sourceText), []);
+});
+
+test("provenance reaching a proposal is refused when it carries no span", () => {
+  const file = corpus();
+  const record = file.records.find(
+    (candidate) => candidate.abstract && candidate.doi,
+  );
+  assert(record?.abstract);
+  const unanchored = {
+    citations: [
+      { record_id: record.record_id, quote_or_locus: record.abstract.slice(0, 80) },
+    ],
+  };
+  // The cheap pre-gate runs before anchoring, so it must still admit this.
+  assert.equal(groundingOutcome(unanchored, file).ok, true);
+  // The call whose provenance becomes a proposal must not (amendment 2.2).
+  const refused = groundingOutcome(unanchored, file, { requireSpans: true });
+  assert.equal(refused.ok, false);
+  assert.equal(refused.ok === false && refused.reason, "malformed_citation");
+  assert(refused.ok === false && refused.detail.includes("no anchored span"));
 });
 
 test("a refusal carries both compared strings untruncated", () => {
@@ -1379,6 +1494,8 @@ test("run summary exposes every quality-gate and cap outcome", () => {
         records_eligible: 200,
         records_relevant: 120,
         records_remaining: 95,
+        records_selected: 25,
+        records_dropped_truncation: 95,
       }),
     ),
     {
@@ -1396,6 +1513,8 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       records_eligible: "200",
       records_relevant: "120",
       records_remaining: "95",
+      records_selected: "25",
+      records_dropped_truncation: "95",
       candidates_cheap: "12",
       candidates_strong: "3",
       dropped_ungrounded_cheap: "1",
@@ -1417,6 +1536,107 @@ test("the per-pass funnel is written even at zero so absence means pre-gate", ()
   // The per-reason maps stay absent when nothing was dropped.
   assert.equal("dropped_ungrounded_reasons_cheap" in params, false);
   assert.equal("dropped_ungrounded_reasons_strong" in params, false);
+  // D-103 counters follow the same present-at-zero rule: absence is what
+  // identifies a run recorded before the truncation figures existed.
+  assert.equal(params.records_selected, "0");
+  assert.equal(params.records_dropped_truncation, "0");
+});
+
+test("preflight probes each tier with the stage that tier actually runs", () => {
+  // Probing both tiers with "synthesize" proved the cheap tier could route a
+  // schema it never sends, and left the schema it does send untested (D-107).
+  assert.equal(productionStage("cheap"), "extract");
+  assert.equal(productionStage("strong"), "synthesize");
+
+  const cheapBody = openRouterRequestBody({
+    tier: configured.tiers.cheap,
+    mode: "effects",
+    stage: productionStage("cheap"),
+    prompt: "probe",
+    maxTokens: 1,
+  });
+  const strongBody = openRouterRequestBody({
+    tier: configured.tiers.strong,
+    mode: "effects",
+    stage: productionStage("strong"),
+    prompt: "probe",
+    maxTokens: 1,
+  });
+  const schemaName = (body: Record<string, unknown>): string | undefined =>
+    (
+      body.response_format as
+        | { json_schema?: { name?: string } }
+        | undefined
+    )?.json_schema?.name;
+  // Each tier must be proven against its own schema, so the two probes differ.
+  assert.notEqual(schemaName(strongBody), schemaName(cheapBody));
+  assert.equal(cheapBody.max_tokens, 1);
+  assert.equal(strongBody.max_tokens, 1);
+});
+
+test("a 404 names the parameter its own body blames, and never guesses", () => {
+  const sent = ["response_format", "provider", "temperature"];
+  assert.deepEqual(
+    rejectedParameters(
+      '{"error":{"message":"No endpoints found that support tool use"}}',
+      sent,
+    ),
+    ["provider"],
+  );
+  assert.deepEqual(
+    rejectedParameters(
+      '{"error":{"message":"temperature is not supported by this model"}}',
+      sent,
+    ),
+    ["temperature"],
+  );
+  assert.deepEqual(
+    rejectedParameters('{"error":{"message":"json_schema is unsupported"}}', sent),
+    ["response_format"],
+  );
+  // A parameter the request never carried cannot be blamed for the refusal.
+  assert.deepEqual(
+    rejectedParameters('{"error":{"message":"temperature unsupported"}}', [
+      "response_format",
+    ]),
+    [],
+  );
+  // Silence is reported as silence; the caller widens to the whole sent set
+  // rather than picking one.
+  assert.deepEqual(rejectedParameters('{"error":{"message":"upstream error"}}', sent), []);
+});
+
+test("a truncated plan reports available, kept, and dropped as three numbers", () => {
+  const config: ExtractionOpsConfig = {
+    ...configured,
+    limits: {
+      ...configured.limits,
+      // Small enough that the fixed per-batch overhead admits one batch and
+      // refuses the next, which is the condition D-103 exists to describe.
+      per_run_tokens: 30000,
+      records_per_batch: 5,
+    },
+  };
+  const plan = buildExtractionPlan(
+    "effects",
+    { kind: "mechanism", id: "CL-14", mechanismIds: ["CL-14"] },
+    config,
+    null,
+  );
+  assert(plan.capped, "expected a plan the per-run cap had to truncate");
+  assert(plan.records.eligible_total > 0);
+  assert(plan.records.selected > 0, "the planner must keep something");
+  assert(
+    plan.records.dropped_truncation > 0,
+    "a capped plan must report what it dropped to fit",
+  );
+  // "Available" is the corpus; "kept" plus "dropped" is the relevant subset.
+  // Reading only two of the three cannot tell a full-scope run from a slice.
+  assert.equal(plan.records.dropped_truncation, plan.records.remaining);
+  assert(
+    plan.records.selected + plan.records.dropped_truncation <=
+      plan.records.eligible_total,
+  );
 });
 
 test("a run that dies mid-way still leaves its spend on the monthly cap", () => {

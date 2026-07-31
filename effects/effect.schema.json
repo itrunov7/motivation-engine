@@ -69,9 +69,21 @@
           ]
         },
         "title": { "type": "string", "minLength": 1 },
-        "quote_or_locus": { "type": "string", "minLength": 1 }
+        "quote_or_locus": { "type": "string", "minLength": 1 },
+        "source_span": { "$ref": "#/$defs/provenanceSourceSpan" }
       },
       "required": ["mechanism_id", "corpus_record_id", "doi", "title", "quote_or_locus"],
+      "additionalProperties": false
+    },
+    "provenanceSourceSpan": {
+      "description": "Where the quote sits in its source record, and which version of that record the offsets were resolved against (D-110). Approval copies provenance verbatim out of the proposal, so the authoritative effect record stays independently verifiable: re-slicing lib/proposal-quality evidenceSourceText(record) at start/end must reproduce quote_or_locus byte for byte, and source_text_sha256 must still match that text. A hash mismatch marks the span STALE rather than letting the offsets quote different words.",
+      "type": "object",
+      "properties": {
+        "start": { "type": "integer", "minimum": 0 },
+        "end": { "type": "integer", "minimum": 1 },
+        "source_text_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      },
+      "required": ["start", "end", "source_text_sha256"],
       "additionalProperties": false
     }
   }

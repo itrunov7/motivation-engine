@@ -101,6 +101,16 @@
         "records_processed": { "type": "integer", "minimum": 0 },
         "records_skipped_irrelevant": { "type": "integer", "minimum": 0 },
         "records_remaining": { "type": "integer", "minimum": 0 },
+        "records_selected": {
+          "description": "Records the planner kept across every slice of the run (D-103). Optional; absent means the run predates D-103, not that nothing was selected.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "records_dropped_truncation": {
+          "description": "Relevant records the planner dropped to fit limits.per_run_tokens (D-103). Truncation stays as the enforcement mechanism; silence about it does not. Optional; absent means the run predates D-103.",
+          "type": "integer",
+          "minimum": 0
+        },
         "candidates_cheap": { "type": "integer", "minimum": 0 },
         "candidates_strong": { "type": "integer", "minimum": 0 },
         "dropped_ungrounded_cheap": { "type": "integer", "minimum": 0 },

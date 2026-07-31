@@ -101,6 +101,13 @@ function ExtractionRunPanel({ run }: { run: ExtractionRunSummary | null }) {
             pre-filter → {run.recordsProcessed} sent to model · {run.candidates}{" "}
             candidates · {run.recordsRemaining} remaining
           </p>
+          {/* D-103: the token cap enforces itself by truncating the plan, so a
+              run that answered a smaller question must say so out loud. */}
+          <p className="mt-1 font-mono text-[11px] text-[#7C93A8]">
+            {run.recordsDroppedTruncation === null || run.recordsSelected === null
+              ? "token cap: truncation not reported — this run predates the counter (D-103)"
+              : `token cap: ${run.recordsSelected} records kept by the planner · ${run.recordsDroppedTruncation} dropped to fit per_run_tokens`}
+          </p>
           <dl className="mt-4 grid gap-3 sm:grid-cols-3">
             {outcomes.map(([label, value]) => (
               <div key={label} className="rounded-md border border-[#243329] bg-[#1A2620] p-3">

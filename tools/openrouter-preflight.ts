@@ -24,7 +24,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { validateExtractionOpsConfig } from "../lib/ops";
 import type { ExtractionOpsConfig } from "../lib/types";
-import { openRouterRequestBody } from "./extract";
+import { openRouterRequestBody, type ExtractionStage } from "./extract";
 
 const ROOT = join(__dirname, "..");
 const CONFIG_PATH = join(ROOT, "corpora", "_ops", "extraction.json");
@@ -40,6 +40,56 @@ interface TierVerdict {
   promptTokens: number | null;
   completionTokens: number | null;
   detail: string;
+  /** The production stage this tier runs, and therefore the schema proven. */
+  stage: ExtractionStage;
+  /**
+   * Whether the request carried a json_schema response format at all, and
+   * whether the provider honoured it. Honoured is EVIDENCE, not assertion:
+   * response_format json_schema sent together with provider.require_parameters
+   * true means OpenRouter routes only to a provider that accepts every
+   * parameter, so a 2xx is that provider having accepted the schema.
+   */
+  jsonSchemaSent: boolean;
+  jsonSchemaAccepted: boolean | null;
+  /** Provider OpenRouter resolved to, or null when the response omitted it. */
+  provider: string | null;
+  /** The exact body sent, kept for the non-2xx dump. */
+  requestBody: Record<string, unknown>;
+  /** Optional parameters the error text actually names, when it names any. */
+  rejectedParameters: string[];
+}
+
+/**
+ * The stage each tier runs in production (D-107).
+ *
+ * The cheap tier extracts and the strong tier synthesizes, and the two stages
+ * carry DIFFERENT response schemas — synthesize uses the refs-only provenance
+ * schema D-104 depends on. Probing both tiers with "synthesize", as this tool
+ * previously did, therefore proved the cheap tier could route a schema it never
+ * sends and left its real one untested.
+ */
+export function productionStage(tier: "cheap" | "strong"): ExtractionStage {
+  return tier === "cheap" ? "extract" : "synthesize";
+}
+
+/**
+ * Name the optional parameters an error body actually blames.
+ *
+ * Only the keys the request really carried are considered, so the report cannot
+ * accuse the request of something it never sent. When the body names none, the
+ * caller reports the whole sent set as the suspect set — guessing one parameter
+ * out of several would be an invented finding.
+ */
+export function rejectedParameters(errorText: string, sent: string[]): string[] {
+  const haystack = errorText.toLowerCase();
+  const candidates = new Map<string, string[]>([
+    ["response_format", ["response_format", "json_schema", "structured output"]],
+    ["provider", ["require_parameters", "no endpoints found", "no allowed provider"]],
+    ["temperature", ["temperature"]],
+  ]);
+  return sent.filter((key) =>
+    (candidates.get(key) ?? [key]).some((needle) => haystack.includes(needle)),
+  );
 }
 
 function loadConfig(): ExtractionOpsConfig {
@@ -59,13 +109,14 @@ async function probe(
   if (!tier.model_id) {
     throw new Error(`tiers.${tierName}.model_id is null — nothing to preflight`);
   }
-  // The production body, verbatim, differing only in max_tokens and the prompt.
-  // "effects"/"synthesize" is the strictest combination: it carries the
-  // refs-only provenance schema that D-104 depends on.
+  // The production body, verbatim, differing only in max_tokens and the prompt —
+  // including the stage THIS tier actually runs, so the schema being proven is
+  // the schema the tier will send.
+  const stage = productionStage(tierName);
   const body = openRouterRequestBody({
     tier,
     mode: "effects",
-    stage: "synthesize",
+    stage,
     prompt: 'Return {"items":[]}.',
     maxTokens: 1,
   });
@@ -83,32 +134,51 @@ async function probe(
   const sent = Object.keys(body).filter(
     (key) => !["model", "messages", "max_tokens"].includes(key),
   );
+  const responseFormat = body.response_format as { type?: string } | undefined;
+  const jsonSchemaSent = responseFormat?.type === "json_schema";
+  const shared = {
+    tier: tierName,
+    model: tier.model_id,
+    sent,
+    stage,
+    jsonSchemaSent,
+    requestBody: body,
+  };
   if (!response.ok) {
     return {
-      tier: tierName,
-      model: tier.model_id,
+      ...shared,
       routed: false,
       status: response.status,
-      sent,
       promptTokens: null,
       completionTokens: null,
-      // The body names the offending parameter, which is the whole diagnostic.
-      detail: text.slice(0, 500),
+      // Untruncated: a 404 body is the whole diagnostic, and the previous
+      // 500-character clip is how the rejected parameter went unnamed.
+      detail: text,
+      jsonSchemaAccepted: jsonSchemaSent ? false : null,
+      provider: null,
+      rejectedParameters: rejectedParameters(text, sent),
     };
   }
   const parsed = JSON.parse(text) as {
     usage?: { prompt_tokens?: number; completion_tokens?: number };
     model?: string;
+    provider?: string;
   };
   return {
-    tier: tierName,
+    ...shared,
     model: parsed.model ?? tier.model_id,
     routed: true,
     status: response.status,
-    sent,
     promptTokens: parsed.usage?.prompt_tokens ?? null,
     completionTokens: parsed.usage?.completion_tokens ?? null,
     detail: "routed and returned a usage block",
+    // A 2xx under require_parameters is the provider having honoured every
+    // parameter, json_schema included. Null when no schema was sent, so
+    // "not applicable" never reads as "accepted".
+    jsonSchemaAccepted: jsonSchemaSent ? true : null,
+    // Reported as absent rather than inferred from the model id.
+    provider: typeof parsed.provider === "string" ? parsed.provider : null,
+    rejectedParameters: [],
   };
 }
 
@@ -126,36 +196,79 @@ async function main(): Promise<void> {
   }
 
   console.log(`[preflight] extraction.json version ${config.version}`);
+  // Two independent checks, reported independently: a partial pass is a fail,
+  // and the tier that routed must not read as evidence about the tier that did not.
   for (const verdict of verdicts) {
     const tier = config.tiers[verdict.tier];
     console.log(
       [
-        `  ${verdict.tier.padEnd(6)} ${verdict.model}`,
-        `    response_format=${tier.response_format} supports.temperature=${tier.supports.temperature} supports.structured_outputs=${tier.supports.structured_outputs}`,
-        `    optional params sent: ${verdict.sent.join(", ") || "none"}`,
-        `    ${verdict.routed ? "ROUTED" : "REFUSED"} ${verdict.status} — ${verdict.detail}`,
+        "",
+        `  ── ${verdict.tier} tier — ${verdict.model} (production stage: ${verdict.stage})`,
+        `     declared: response_format=${tier.response_format} supports.temperature=${tier.supports.temperature} supports.structured_outputs=${tier.supports.structured_outputs}`,
+        `     optional params sent: ${verdict.sent.join(", ") || "none"}`,
+        `     HTTP status: ${verdict.status} — ${verdict.routed ? "ROUTED" : "REFUSED"}`,
+        `     json_schema: ${jsonSchemaLine(verdict)}`,
+        `     resolved provider: ${verdict.provider ?? "not returned by the response — reported absent rather than inferred"}`,
         verdict.routed
-          ? `    usage: prompt=${verdict.promptTokens} completion=${verdict.completionTokens}`
-          : "    usage: none — no provider accepted the request, so this spend is unattributable (D-106)",
+          ? `     usage: prompt=${verdict.promptTokens} completion=${verdict.completionTokens}`
+          : "     usage: none — no provider accepted the request, so this spend is unattributable (D-106)",
       ].join("\n"),
     );
+    if (!verdict.routed) {
+      console.log(`     error body (untruncated):\n${indent(verdict.detail, 7)}`);
+      console.log(
+        `     rejected parameter: ${
+          verdict.rejectedParameters.length > 0
+            ? verdict.rejectedParameters.join(", ")
+            : `not named by the response — the suspect set is everything sent: ${verdict.sent.join(", ") || "none"}`
+        }`,
+      );
+      // The body carries no secret: the key travels in the Authorization header.
+      console.log(
+        `     full request body as sent:\n${indent(JSON.stringify(verdict.requestBody, null, 2), 7)}`,
+      );
+    }
   }
 
   const refused = verdicts.filter((verdict) => !verdict.routed);
   if (refused.length > 0) {
     console.error(
-      `[preflight] ${refused.length} tier(s) did not route: ${refused
+      `\n[preflight] ${refused.length} of ${verdicts.length} tier(s) did not route: ${refused
         .map((verdict) => `${verdict.tier}=${verdict.status}`)
-        .join(" ")}. Fix the tier's supports block or response_format before dispatching a run.`,
+        .join(" ")}. A partial pass is a fail — the untested tier will 404 mid-run and leave no usage block to attribute (D-106). Fix the tier's supports block or response_format before dispatching a run.`,
     );
     process.exit(1);
   }
   console.log(
-    "[preflight] both tiers route with the production parameter set; a run will not 404 on its first call.",
+    "\n[preflight] both tiers routed with their own production parameter set and stage; a run will not 404 on its first call.",
   );
 }
 
-void main().catch((error: unknown) => {
-  console.error(`[preflight] ${error instanceof Error ? error.message : error}`);
-  process.exit(1);
-});
+function jsonSchemaLine(verdict: TierVerdict): string {
+  if (!verdict.jsonSchemaSent) {
+    return `not sent — this tier's response_format is ${
+      (verdict.requestBody.response_format as { type?: string } | undefined)?.type ??
+      "unset"
+    }, so nothing about json_schema support is proven here`;
+  }
+  return verdict.jsonSchemaAccepted
+    ? "sent and ACCEPTED — response_format=json_schema went out alongside provider.require_parameters=true, which routes only to a provider honouring every parameter, so this 2xx is that provider having accepted the schema"
+    : "sent and REJECTED — no provider honoured it at these parameters";
+}
+
+function indent(text: string, spaces: number): string {
+  const pad = " ".repeat(spaces);
+  return text
+    .split("\n")
+    .map((line) => `${pad}${line}`)
+    .join("\n");
+}
+
+// Guarded so the pure helpers above can be imported by the test suite without
+// firing a live probe as a side effect of the import.
+if (require.main === module) {
+  void main().catch((error: unknown) => {
+    console.error(`[preflight] ${error instanceof Error ? error.message : error}`);
+    process.exit(1);
+  });
+}

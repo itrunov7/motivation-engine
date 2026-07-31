@@ -230,6 +230,9 @@ function extractionCounters(run: LiveRecentRun): {
   relevant: number;
   processed: number;
   remaining: number;
+  /** Null when the run predates D-103 and reported no truncation figures. */
+  selected: number | null;
+  droppedTruncation: number | null;
   ungroundedReasons: { reason: UngroundedDropReason; count: number }[] | null;
   perPass: PassCounters | null;
 } | null {
@@ -253,6 +256,8 @@ function extractionCounters(run: LiveRecentRun): {
       relevant: fromSummary.records_relevant,
       processed: fromSummary.records_processed,
       remaining: fromSummary.records_remaining,
+      selected: fromSummary.records_selected ?? null,
+      droppedTruncation: fromSummary.records_dropped_truncation ?? null,
       ungroundedReasons: sortedUngroundedReasons(
         fromSummary.dropped_ungrounded_reasons,
       ),
@@ -294,6 +299,12 @@ function extractionCounters(run: LiveRecentRun): {
     relevant: numeric("records_relevant"),
     processed: numeric("records_processed"),
     remaining: numeric("records_remaining"),
+    selected:
+      run.params.records_selected === undefined ? null : numeric("records_selected"),
+    droppedTruncation:
+      run.params.records_dropped_truncation === undefined
+        ? null
+        : numeric("records_dropped_truncation"),
     ungroundedReasons: parseUngroundedReasons(run.params.dropped_ungrounded_reasons),
     // Absent, not zero, is what marks a run from before the cheap-pass gate.
     perPass:
@@ -441,6 +452,11 @@ function RecentRow({ run, now }: { run: LiveRecentRun; now: number }) {
             funnel: {counters.eligible} eligible → {counters.relevant} passed pre-filter →{" "}
             {counters.processed} sent to model · {counters.candidates} candidates ·{" "}
             {counters.remaining} remaining
+          </p>
+          <p className="mt-0.5 font-mono text-[10px] text-[#7C93A8]">
+            {counters.selected === null || counters.droppedTruncation === null
+              ? "token cap: truncation not reported — this run predates the counter (D-103)"
+              : `token cap: ${counters.selected} kept by the planner · ${counters.droppedTruncation} dropped to fit per_run_tokens`}
           </p>
           {counters.droppedUngrounded > 0 ? (
             <p className="mt-0.5 font-mono text-[10px] text-[#E4B54E]">

@@ -22,17 +22,25 @@
  *   npm run replay-grounding -- synth --mechanism CL-14 --count 10
  *   npm run replay-grounding -- mutate --mechanism CL-14
  *   npm run replay-grounding -- replay corpora/extraction/rejected/<run>.json
+ *   npm run replay-grounding -- verify-spans
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import type {
   EvidenceCorpusFile,
   EvidenceCorpusRecord,
+  KnowledgeProvenanceItem,
   RejectedCandidateFile,
   RejectedCandidateRecord,
 } from "../lib/types";
-import { normalizeQualityText } from "../lib/proposal-quality";
+import { isExtractionAuthored } from "../lib/proposal-meta";
+import {
+  evidenceSourceText,
+  normalizeQualityText,
+  sha256Hex,
+} from "../lib/proposal-quality";
+import { isRealizationProvenance } from "../lib/realization-corpus";
 import { groundingOutcome, type DraftItem, type UngroundedReason } from "./extract";
 
 const ROOT = join(__dirname, "..");
@@ -505,6 +513,144 @@ function replay(path: string): number {
 }
 
 // ---------------------------------------------------------------------------
+// verify-spans — the independent witness for criterion (d)
+// ---------------------------------------------------------------------------
+
+/**
+ * Re-slice every proposal's stored offsets and recheck the hash (D-110).
+ *
+ * Deliberately a SECOND implementation of the check the validator runs, and
+ * deliberately arithmetic rather than search: it reads `[start,end)` out of the
+ * file, cuts the corpus text itself, and compares bytes to the stored quote. It
+ * never looks for the quote in the source, because finding it there would only
+ * prove the string occurs somewhere — the question is whether the offsets the
+ * proposal claims are the offsets the quote actually came from.
+ *
+ * The verdict is computed here from the corpus on disk, not read from any field
+ * the pipeline wrote, so a bug in the writer cannot make its own output look
+ * verified.
+ */
+function verifySpans(): number {
+  const files = listProposalFiles(join(ROOT, "proposals"));
+  console.log(`verify-spans — ${files.length} proposal file(s) under proposals/\n`);
+  if (files.length === 0) {
+    console.log("No proposals on disk yet, so there is nothing to verify (D-110).");
+    return 0;
+  }
+
+  const header = `${"record_id".padEnd(28)}${"span".padEnd(16)}${"reslice".padEnd(10)}${"hash".padEnd(10)}proposal`;
+  console.log(header);
+  console.log("-".repeat(header.length));
+
+  let checked = 0;
+  let spanless = 0;
+  let failures = 0;
+  const corpora = new Map<string, EvidenceCorpusFile | null>();
+
+  for (const file of files) {
+    const proposal = JSON.parse(readFileSync(file, "utf8")) as {
+      proposed_by?: string;
+      provenance?: KnowledgeProvenanceItem[];
+    };
+    const extractionAuthored = isExtractionAuthored(proposal.proposed_by ?? "");
+    for (const source of proposal.provenance ?? []) {
+      if (isRealizationProvenance(source)) continue; // no span by design (D-110)
+      if (!source.source_span) {
+        spanless += 1;
+        // Only a violation for pipeline output; hand-authored items predate spans.
+        if (extractionAuthored) failures += 1;
+        console.log(
+          `${source.corpus_record_id.padEnd(28)}${"absent".padEnd(16)}${"—".padEnd(10)}${"—".padEnd(10)}${rel(file)}` +
+            (extractionAuthored ? "  ← EXTRACTION-AUTHORED, span required" : "  (legacy)"),
+        );
+        continue;
+      }
+      const key = source.mechanism_id;
+      if (!corpora.has(key)) {
+        const path = join(CORPUS_DIR, `${key}.json`);
+        corpora.set(
+          key,
+          existsSync(path)
+            ? (JSON.parse(readFileSync(path, "utf8")) as EvidenceCorpusFile)
+            : null,
+        );
+      }
+      const record = corpora
+        .get(key)
+        ?.records.find((candidate) => candidate.record_id === source.corpus_record_id);
+      const { start, end, source_text_sha256 } = source.source_span;
+      if (!record) {
+        failures += 1;
+        console.log(
+          `${source.corpus_record_id.padEnd(28)}${`[${start},${end})`.padEnd(16)}${"n/a".padEnd(10)}${"n/a".padEnd(10)}${rel(file)}  ← record not in corpus`,
+        );
+        continue;
+      }
+      checked += 1;
+      const sourceText = evidenceSourceText(record);
+      const inRange = start >= 0 && end > start && end <= sourceText.length;
+      const resliced = inRange ? sourceText.slice(start, end) : null;
+      const reslices = resliced === source.quote_or_locus;
+      const hashMatches = sha256Hex(sourceText) === source_text_sha256;
+      if (!reslices || !hashMatches) failures += 1;
+      console.log(
+        `${source.corpus_record_id.padEnd(28)}${`[${start},${end})`.padEnd(16)}` +
+          `${(inRange ? (reslices ? "identical" : "DIFFERS") : "OUT OF RANGE").padEnd(10)}` +
+          `${(hashMatches ? "match" : "STALE").padEnd(10)}${rel(file)}`,
+      );
+      if (inRange && !reslices) {
+        console.log(`    stored quote: ${JSON.stringify(source.quote_or_locus)}`);
+        console.log(`    re-sliced:    ${JSON.stringify(resliced)}`);
+        console.log(`    first divergence at byte ${firstDivergence(source.quote_or_locus, resliced ?? "")}`);
+      }
+    }
+  }
+
+  console.log("");
+  console.log(
+    `${checked} span(s) re-sliced against the corpus on disk; ${spanless} evidence item(s) carry no span.`,
+  );
+  if (failures > 0) {
+    console.log(
+      `${failures} failure(s) — criterion (d) is NOT met: a stored span did not reproduce its own quote, ` +
+        "its record is missing, or extraction-authored provenance shipped without offsets.",
+    );
+    return 1;
+  }
+  console.log(
+    checked === 0
+      ? "No spans to verify yet — criterion (d) is unproven rather than met."
+      : "OK — every stored span re-slices to its own quote byte for byte, against text that still hashes to what the offsets were resolved on.",
+  );
+  return 0;
+}
+
+/** Byte index where two strings first differ; their common length when neither diverges. */
+function firstDivergence(left: string, right: string): number {
+  const a = Buffer.from(left, "utf8");
+  const b = Buffer.from(right, "utf8");
+  const shared = Math.min(a.length, b.length);
+  for (let index = 0; index < shared; index += 1) {
+    if (a[index] !== b[index]) return index;
+  }
+  return shared;
+}
+
+function listProposalFiles(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+  const out: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      out.push(...listProposalFiles(path));
+    } else if (entry.name.endsWith(".json") && !entry.name.endsWith(".schema.json")) {
+      out.push(path);
+    }
+  }
+  return out.sort();
+}
+
+// ---------------------------------------------------------------------------
 // cli
 // ---------------------------------------------------------------------------
 
@@ -520,6 +666,7 @@ function usage(): never {
       "  npm run replay-grounding -- synth  [--mechanism CL-14] [--count 10]",
       "  npm run replay-grounding -- mutate [--mechanism CL-14] [--count 10]",
       "  npm run replay-grounding -- replay <path-to-rejected-file>",
+      "  npm run replay-grounding -- verify-spans",
     ].join("\n"),
   );
   process.exit(1);
@@ -547,6 +694,9 @@ function main(): void {
       process.exitCode = replay(path);
       return;
     }
+    case "verify-spans":
+      process.exitCode = verifySpans();
+      return;
     default:
       usage();
   }
