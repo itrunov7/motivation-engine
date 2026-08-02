@@ -405,6 +405,37 @@ re-measurement happens before that decision.
 
 ---
 
+## 8. A human path where lexical matching cannot reach
+
+Section 4's `Does Threat Have an Advantage After All?` is the case the
+vocabulary session cannot fix by adding another pattern: it reads as dissent
+because a reader recognizes a paper *interrogating* a claimed effect, not
+because any surface string says so, and the next such title will not share a
+stem with this one either — no marker list closes that gap, because it is not
+a lexical gap. The fix is a field the classifier never writes and never reads
+for its own output: `owner_dissent: { set_by, set_at, reason }` on the corpus
+record, sitting beside — never inside — `categories`. `categories.dissent`
+stays exactly what `classifyRecord` computed, so a retag or a marker-vocabulary
+change can always be re-run and diffed against a clean baseline; `owner_dissent`
+is a second, independently-provenanced signal that the D-019 gate and the
+maturation cockpit would read as `dissent_effective = categories.includes
+("dissent") || owner_dissent != null`, while a report can always split that
+back into "the regex found this" versus "a human asserted this, and said why."
+`set_by` is necessarily the literal `"owner"` given the single-password auth
+model (rule 6) — there is no per-user identity to record, and this design does
+not add one — but the shape still carries who/when/why because the who is a
+fact worth stating on the record even when it has exactly one possible value
+today; `set_at` is an ISO timestamp, and `reason` is free text, mirroring the
+existing owner-annotation pattern in `pinned_evidence[].reason`. Consistent
+with rule 1, this can never become an app write surface: like
+`pinned_evidence`, it would be authored in git on the corpus record and
+reviewed like any other `data:` commit, never edited through a form — the
+narrow write surfaces already carved out for `/corpora/_ops/**` and `/review`
+stay exactly as narrow. No schema, type, or validator change ships with this
+paragraph; it names the field and the boundary so the owner can approve or
+reject the shape before `lib/types.ts`, the JSON schema, and
+`tools/retag-categories.ts`'s reporting are touched.
+
 ## What this packet asks for
 
 1. Approve or reject the **retag** (`npm run retag:categories --apply`), knowing
@@ -414,3 +445,5 @@ re-measurement happens before that decision.
    (729 → 851).
 3. If both are approved, they apply in one run and the corpus is measured once
    afterwards.
+4. Approve or reject the **`owner_dissent` field design** in section 8 before
+   any schema, type, or validator change is written.
