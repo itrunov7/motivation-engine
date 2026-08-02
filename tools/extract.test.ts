@@ -2,16 +2,25 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
+import {
+  checkLedgerBalance,
+  checkLedgerDetail,
+} from "../lib/candidate-ledger";
 import { extractionPriceState, validateExtractionOpsConfig } from "../lib/ops";
 import {
+  evidenceSourceText,
   groundingErrors,
   mergeProposals,
   normalizeQualityText,
   proposalSimilarity,
+  sha256Hex,
+  spanErrors,
 } from "../lib/proposal-quality";
 import type {
+  CandidateLedgerRun,
   CorpusManifestRun,
   EvidenceCorpusFile,
+  EvidenceCorpusRecord,
   ExtractionOpsConfig,
   KnowledgeProvenanceItem,
   Proposal,
@@ -50,7 +59,10 @@ import {
   type UngroundedReason,
   type Usage,
 } from "./extract";
+import { CandidateLedger, mergeLedgerRuns } from "./candidate-ledger";
 import { visibleReplayText } from "./connectors/realization-wayback";
+import { productionStage, rejectedParameters } from "./openrouter-preflight";
+import { anchorCitations, SpanLedger } from "./provenance-refs";
 import { rejectionRecord } from "./rejected-candidates";
 
 const ROOT = join(__dirname, "..");
@@ -179,6 +191,26 @@ function corpus(): EvidenceCorpusFile {
   ) as EvidenceCorpusFile;
 }
 
+/**
+ * A citation carrying the role that lets it through the D-129 gate.
+ *
+ * Every test that is measuring something OTHER than the role gate uses this, so
+ * a span-role refusal cannot masquerade as the failure the test names. Tests of
+ * the gate itself pass their own role.
+ *
+ * `null` OMITS the field. Not `undefined`: an omitted argument and an explicit
+ * `undefined` are the same thing to a default parameter, so `undefined` would
+ * silently produce the default "finding" and a test asserting span_role_missing
+ * would pass a perfectly labelled citation.
+ */
+function cite(recordId: string, quote: string, spanRole: unknown = "finding") {
+  return {
+    record_id: recordId,
+    quote_or_locus: quote,
+    ...(spanRole === null ? {} : { span_role: spanRole }),
+  };
+}
+
 /** A zeroed stats block; tests override only the counters they assert on. */
 function statsFixture(overrides: Partial<ExtractionStats> = {}): ExtractionStats {
   return {
@@ -196,12 +228,21 @@ function statsFixture(overrides: Partial<ExtractionStats> = {}): ExtractionStats
     failed_validation: 0,
     proposed: 0,
     merged: 0,
+    merged_into_pending: 0,
+    proposed_enrich: 0,
     held_low_confidence: 0,
     dropped_volume_cap: 0,
     dropped_volume_cap_high_confidence: 0,
+    dropped_draft_cap: 0,
+    into_synthesis: 0,
+    cheap_synthesis_failed: 0,
+    consolidated_by_synthesis: 0,
+    expanded_by_synthesis: 0,
     records_eligible: 0,
     records_relevant: 0,
     records_remaining: 0,
+    records_selected: 0,
+    records_dropped_truncation: 0,
     ...overrides,
   };
 }
@@ -586,30 +627,20 @@ test("grounding accepts exact loci and rejects invented or unknown citations", (
   assert(record?.abstract);
   const exact = record.abstract.slice(0, 80);
   const grounded = groundedProvenance(
-    {
-      citations: [{ record_id: record.record_id, quote_or_locus: exact }],
-    },
+    { citations: [cite(record.record_id, exact)] },
     file,
   );
   assert.equal(grounded?.[0].corpus_record_id, record.record_id);
   assert.equal(
     groundedProvenance(
-      {
-        citations: [
-          { record_id: record.record_id, quote_or_locus: "This span was invented." },
-        ],
-      },
+      { citations: [cite(record.record_id, "This span was invented.")] },
       file,
     ),
     null,
   );
   assert.equal(
     groundedProvenance(
-      {
-        citations: [
-          { record_id: "cr_000000000000000000000000", quote_or_locus: exact },
-        ],
-      },
+      { citations: [cite("cr_000000000000000000000000", exact)] },
       file,
     ),
     null,
@@ -637,7 +668,7 @@ test("every grounding refusal names its own reason", () => {
   const exact = record.abstract.slice(0, 80);
 
   const accepted = groundingOutcome(
-    { citations: [{ record_id: record.record_id, quote_or_locus: exact }] },
+    { citations: [cite(record.record_id, exact)] },
     file,
   );
   assert.equal(accepted.ok, true);
@@ -645,25 +676,26 @@ test("every grounding refusal names its own reason", () => {
   const cases: [DraftItem, UngroundedReason][] = [
     [{ citations: [] }, "no_citations"],
     [{}, "no_citations"],
+    [{ citations: [cite(record.record_id, "   ")] }, "malformed_citation"],
     [
-      { citations: [{ record_id: record.record_id, quote_or_locus: "   " }] },
-      "malformed_citation",
-    ],
-    [
-      {
-        citations: [
-          { record_id: "cr_000000000000000000000000", quote_or_locus: exact },
-        ],
-      },
+      { citations: [cite("cr_000000000000000000000000", exact)] },
       "unknown_record_id",
     ],
     [
-      {
-        citations: [
-          { record_id: record.record_id, quote_or_locus: "This span was invented." },
-        ],
-      },
+      { citations: [cite(record.record_id, "This span was invented.")] },
       "quote_not_in_source",
+    ],
+    // D-129. The role is checked per citation; the finding requirement is a
+    // property of the item, so an item citing only a method span is refused even
+    // though that citation is impeccably grounded.
+    [{ citations: [cite(record.record_id, exact, null)] }, "span_role_missing"],
+    [
+      { citations: [cite(record.record_id, exact, "conclusion")] },
+      "span_role_missing",
+    ],
+    [
+      { citations: [cite(record.record_id, exact, "method")] },
+      "span_role_not_finding",
     ],
   ];
   for (const [item, expected] of cases) {
@@ -686,9 +718,7 @@ test("every grounding refusal names its own reason", () => {
     records: [...file.records, doiless],
   };
   const doiOutcome = groundingOutcome(
-    {
-      citations: [{ record_id: doiless.record_id, quote_or_locus: exact }],
-    },
+    { citations: [cite(doiless.record_id, exact)] },
     withDoiless,
   );
   assert.equal(doiOutcome.ok, false);
@@ -697,6 +727,249 @@ test("every grounding refusal names its own reason", () => {
   // value the check actually compared (D-104).
   assert.equal(doiOutcome.ok === false && doiOutcome.corpus_record_id, doiless.record_id);
   assert.equal(doiOutcome.ok === false && doiOutcome.corpus_side?.doi, null);
+});
+
+test("an anchored citation stores a span that re-slices to its own quote", () => {
+  const file = corpus();
+  const record = file.records.find(
+    (candidate) => candidate.abstract && candidate.doi,
+  );
+  assert(record?.abstract);
+  const sourceText = evidenceSourceText(record);
+  const ledger = new SpanLedger();
+  // Quote it the way a model would — with mangled punctuation the gate
+  // tolerates — so the stored span is proven to be the SOURCE's text and not
+  // the model's string.
+  const modelQuote = record.abstract.slice(10, 90).replace(/-/g, "\u2010");
+  const anchored = anchorCitations(
+    [cite(record.record_id, modelQuote)],
+    () => sourceText,
+    ledger,
+  );
+  assert.equal(anchored.ok, true);
+  assert(anchored.ok);
+
+  const outcome = groundingOutcome({ citations: anchored.citations }, file, {
+    requireSpans: true,
+  });
+  assert.equal(outcome.ok, true);
+  assert(outcome.ok);
+  const [item] = outcome.provenance;
+  assert(item && !("corpus_kind" in item && item.corpus_kind !== "evidence"));
+  const span = item.source_span;
+  assert(span, "an extraction-authored evidence item must carry a span");
+  // The role survives anchoring and is PERSISTED on the provenance item (D-129),
+  // so a reader of the record can see the citation is the paper's own result.
+  assert.equal(anchored.citations[0].span_role, "finding");
+  assert.equal(item.span_role, "finding");
+
+  // Criterion (d): verified by RE-SLICING, not by trusting the emitted quote.
+  assert.equal(sourceText.slice(span.start, span.end), item.quote_or_locus);
+  assert.equal(span.source_text_sha256, sha256Hex(sourceText));
+  assert.equal(spanErrors(item, sourceText).length, 0);
+  assert.notEqual(item.quote_or_locus, modelQuote);
+});
+
+test("a stored span reports staleness and drift as distinct named conditions", () => {
+  const file = corpus();
+  const record = file.records.find(
+    (candidate) => candidate.abstract && candidate.abstract.length > 300,
+  );
+  assert(record?.abstract);
+  const sourceText = evidenceSourceText(record);
+  const base = {
+    mechanism_id: file.mechanism_id,
+    corpus_record_id: record.record_id,
+    doi: record.doi,
+    title: record.title,
+  };
+
+  const fresh = {
+    ...base,
+    quote_or_locus: sourceText.slice(40, 120),
+    source_span: {
+      start: 40,
+      end: 120,
+      source_text_sha256: sha256Hex(sourceText),
+    },
+  };
+  assert.deepEqual(spanErrors(fresh, sourceText), []);
+
+  // Re-harvested record: the offsets still slice cleanly, so only the hash can
+  // tell that they were resolved against different text.
+  const stale = spanErrors(fresh, `${sourceText} appended by a re-harvest.`);
+  assert.equal(stale.length, 1);
+  assert(stale[0].startsWith("span_stale "));
+
+  const drifted = spanErrors(
+    { ...fresh, quote_or_locus: "words no slice of this record produces" },
+    sourceText,
+  );
+  assert(drifted.some((error) => error.startsWith("span_does_not_reslice ")));
+
+  const outOfRange = spanErrors(
+    {
+      ...fresh,
+      source_span: { ...fresh.source_span, end: sourceText.length + 50 },
+    },
+    sourceText,
+  );
+  assert(outOfRange.some((error) => error.startsWith("span_out_of_range ")));
+
+  // A legacy item without a span is not invalid — absence is the pre-D-110
+  // state, and requiring it of NEW items is enforced where authorship is known.
+  assert.deepEqual(spanErrors({ ...base, quote_or_locus: "x" }, sourceText), []);
+});
+
+test("provenance reaching a proposal is refused when it carries no span", () => {
+  const file = corpus();
+  const record = file.records.find(
+    (candidate) => candidate.abstract && candidate.doi,
+  );
+  assert(record?.abstract);
+  const unanchored = {
+    citations: [cite(record.record_id, record.abstract.slice(0, 80))],
+  };
+  // The cheap pre-gate runs before anchoring, so it must still admit this.
+  assert.equal(groundingOutcome(unanchored, file).ok, true);
+  // The call whose provenance becomes a proposal must not (amendment 2.2).
+  const refused = groundingOutcome(unanchored, file, { requireSpans: true });
+  assert.equal(refused.ok, false);
+  assert.equal(refused.ok === false && refused.reason, "malformed_citation");
+  assert(refused.ok === false && refused.detail.includes("no anchored span"));
+});
+
+test("the run that exposed D-129 replays: a verbatim premise is refused, its findings are not", () => {
+  const file = corpus();
+  // Tabbers, Martens & van Merriënboer 2004 — the record that grounded BOTH the
+  // rejected modality proposal (D-123) and the narrowed cueing effect (D-126).
+  // Not a synthetic fixture: the gate has to separate these spans of THIS text,
+  // because separating them is the entire reason it exists.
+  const record = file.records.find(
+    (candidate) => candidate.record_id === "cr_09815b8bafeb7050b14d4cd8",
+  );
+  assert(record, "the Tabbers record must stay in the CL-14 corpus for this test");
+  const source = evidenceSourceText(record);
+
+  // 369-638 is the span the rejected modality proposal actually stored;
+  // 1190-1260 and 1369-1527 are the two the approved cueing effect carries.
+  const premise = source.slice(369, 638);
+  const results = source.slice(1190, 1260);
+  const conclusions = source.slice(1369, 1527);
+  // Guard the offsets: if a re-harvest moves them, the test must say so rather
+  // than quietly assert about different sentences.
+  assert.match(premise, /^replacing visual text with spoken text/);
+  assert.match(results, /^Adding visual cues to the pictures/);
+  assert.match(conclusions, /^Only a weak cueing effect/);
+
+  // What the pipeline actually did: quote the BACKGROUND sentence and call it a
+  // finding. The paper labels that section itself, so the structure refuses it.
+  const asFinding = groundingOutcome(
+    { citations: [cite(record.record_id, premise, "finding")] },
+    file,
+  );
+  assert.equal(asFinding.ok, false);
+  assert.equal(
+    asFinding.ok === false && asFinding.reason,
+    "span_role_contradicted_by_structure",
+  );
+  assert(asFinding.ok === false && asFinding.detail.includes("BACKGROUND"));
+
+  // Labelled honestly, the same span is a valid citation and a useless one: the
+  // item rests on nothing the study observed.
+  const asBackground = groundingOutcome(
+    { citations: [cite(record.record_id, premise, "background")] },
+    file,
+  );
+  assert.equal(asBackground.ok, false);
+  assert.equal(
+    asBackground.ok === false && asBackground.reason,
+    "span_role_not_finding",
+  );
+
+  // Both spans the owner approved must survive. The CONCLUSIONS one is the
+  // sharper case: it CONTAINS "reverse", and the sentence after it explains the
+  // reversal, so a naive downstream check would refuse the paper's own verdict.
+  for (const quote of [results, conclusions]) {
+    const outcome = groundingOutcome(
+      { citations: [cite(record.record_id, quote, "finding")] },
+      file,
+    );
+    assert.equal(outcome.ok, true, `findings span refused: ${quote.slice(0, 48)}`);
+  }
+
+  // An item may cite the premise ALONGSIDE the finding — which is the shape
+  // cl-14-001 was narrowed to. One finding is enough; zero is not.
+  const both = groundingOutcome(
+    {
+      citations: [
+        cite(record.record_id, premise, "background"),
+        cite(record.record_id, results, "finding"),
+      ],
+    },
+    file,
+  );
+  assert.equal(both.ok, true);
+  assert(both.ok);
+  assert.deepEqual(
+    both.provenance.map((item) => ("span_role" in item ? item.span_role : null)),
+    ["background", "finding"],
+  );
+});
+
+test("an unlabelled abstract falls back to the sentence that reverses the premise", () => {
+  const file = corpus();
+  const record = file.records.find(
+    (candidate) => candidate.record_id === "cr_09815b8bafeb7050b14d4cd8",
+  );
+  assert(record);
+  // The same paper with its section headings stripped — which is what most of
+  // this corpus looks like. The structural check goes silent, so the downstream
+  // check is all that stands between a background premise and a filed fact.
+  const flattened: EvidenceCorpusRecord = {
+    ...record,
+    abstract: (record.abstract ?? "").replace(
+      /\b(BACKGROUND|AIMS|SAMPLE|METHOD|RESULTS|CONCLUSIONS): /g,
+      "",
+    ),
+  };
+  const flatFile: EvidenceCorpusFile = {
+    ...file,
+    records: [flattened, ...file.records.filter((r) => r.record_id !== record.record_id)],
+  };
+  const source = evidenceSourceText(flattened);
+  const premise = source.slice(
+    source.indexOf("replacing visual text with spoken text"),
+    source.indexOf("less mental effort spent") + "less mental effort spent".length,
+  );
+
+  const refused = groundingOutcome(
+    { citations: [cite(record.record_id, premise, "finding")] },
+    flatFile,
+  );
+  assert.equal(refused.ok, false);
+  assert.equal(
+    refused.ok === false && refused.reason,
+    "premise_contradicted_downstream",
+  );
+  // The refusal names the marked word, the contradicting sentence and the shared
+  // vocabulary, so a false positive is arguable rather than merely mysterious.
+  assert(refused.ok === false && refused.detail.includes("reverse"));
+  assert(refused.ok === false && refused.detail.includes("modality"));
+
+  // And the finding sentences still pass with the headings gone.
+  for (const marker of [
+    "Adding visual cues to the pictures resulted in higher retention scores",
+    "Only a weak cueing effect and even a reverse modality effect have been found",
+  ]) {
+    const at = source.indexOf(marker);
+    assert(at >= 0);
+    const outcome = groundingOutcome(
+      { citations: [cite(record.record_id, source.slice(at, at + marker.length), "finding")] },
+      flatFile,
+    );
+    assert.equal(outcome.ok, true, `refused: ${marker.slice(0, 40)}`);
+  }
 });
 
 test("a refusal carries both compared strings untruncated", () => {
@@ -1051,6 +1324,269 @@ test("realization mode grounds interface observations without a DOI", () => {
   assert.equal(proposal?.type, "realization");
 });
 
+/** A resolved effect basis standing in for one still in the proposal queue. */
+function effectBasisFixture(recordId: string, doi: string, title: string) {
+  return {
+    origin: "proposal" as const,
+    path: "proposals/effect/fixture.json",
+    effect: {
+      id: "cl-14-002",
+      mechanism_id: "CL-14",
+      name: "Expertise reversal effect",
+      fact: "Techniques that help early learners may interfere with advanced learners.",
+      grade: "A-" as const,
+      source: [doi],
+      boundary: "Instructional design across levels of learner expertise",
+      realization_ids: [],
+      provenance: [
+        {
+          mechanism_id: "CL-14",
+          corpus_record_id: recordId,
+          doi,
+          title,
+          quote_or_locus: "Techniques that help early learners may interfere",
+        },
+      ],
+    },
+  };
+}
+
+test("an effect-anchored realization is marked inferred and carries the transfer as provenance", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract && record.doi);
+  const provenance: KnowledgeProvenanceItem[] = [
+    {
+      mechanism_id: "CL-14",
+      corpus_record_id: record.record_id,
+      doi: record.doi,
+      title: record.title,
+      quote_or_locus: record.abstract.slice(0, 80),
+    },
+  ];
+  const basis = effectBasisFixture(record.record_id, record.doi, record.title);
+  const proposal = toProposal(
+    "realizations",
+    "CL-14",
+    {
+      term: "Collapsing guided tour",
+      description_as_reported:
+        "Worked examples helped novices and hindered more advanced learners.",
+      pattern:
+        "Collapse the guided tour to a dismissible hint once the user has completed the core action {core_action_completions} times.",
+      parameters: [
+        {
+          name: "core_action_completions",
+          value: 3,
+          unit: "completions of the core action",
+          // A model may not author this; the coercion overwrites whatever it sends.
+          evidence_basis: "measured in the cited study",
+        },
+      ],
+      source_domain: "medical education",
+      artifact_context: ["onboarding_flow"],
+      confidence: 0.6,
+    },
+    provenance,
+    "fixture-run",
+    "2026-07-31T10:00:00.000Z",
+    { corpus: file, knownMechanismIds: new Set<string>(), effectBasis: basis },
+  );
+  assert(proposal?.type === "realization");
+  const payload = proposal.payload;
+  assert.equal(payload.derivation, "inferred");
+  assert.deepEqual(payload.effect_refs, ["cl-14-002"]);
+  assert.equal(payload.domain_transfer?.source_domain, "medical education");
+  assert.equal(payload.domain_transfer?.application_domain, "product UI");
+  assert.match(payload.pattern ?? "", /^Collapse the guided tour/);
+  // The threshold is a declared default, and its basis is code-filled (D-115).
+  assert.deepEqual(payload.parameters, [
+    {
+      name: "core_action_completions",
+      value: 3,
+      unit: "completions of the core action",
+      evidence_basis: "none — default heuristic",
+    },
+  ]);
+  // The transfer step is provenance too, written by code, quoting the effect.
+  const inference = payload.provenance.filter(
+    (item) => "corpus_kind" in item && item.corpus_kind === "inference",
+  );
+  assert.equal(inference.length, 1);
+  assert.deepEqual(
+    inference,
+    proposal.provenance.filter(
+      (item) => "corpus_kind" in item && item.corpus_kind === "inference",
+    ),
+  );
+  assert.equal(
+    (inference[0] as { quote_or_locus: string }).quote_or_locus,
+    basis.effect.fact,
+  );
+  assert.equal(
+    (inference[0] as { span_absent_reason: string }).span_absent_reason,
+    "no direct span — inferred from effect",
+  );
+});
+
+test("a pattern that states a threshold as prose is dropped, not repaired (D-115)", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract && record.doi);
+  const provenance: KnowledgeProvenanceItem[] = [
+    {
+      mechanism_id: "CL-14",
+      corpus_record_id: record.record_id,
+      doi: record.doi,
+      title: record.title,
+      quote_or_locus: record.abstract.slice(0, 80),
+    },
+  ];
+  const context = {
+    corpus: file,
+    knownMechanismIds: new Set<string>(),
+    effectBasis: effectBasisFixture(record.record_id, record.doi, record.title),
+  };
+  const draft = (pattern: string, parameters?: unknown) =>
+    toProposal(
+      "realizations",
+      "CL-14",
+      {
+        term: "Collapsing guided tour",
+        description_as_reported:
+          "Worked examples helped novices and made no difference for advanced learners.",
+        pattern,
+        parameters,
+        source_domain: "medical education",
+        artifact_context: ["onboarding_flow"],
+        confidence: 0.6,
+      },
+      provenance,
+      "fixture-run",
+      "2026-07-31T10:00:00.000Z",
+      context,
+    );
+
+  // The number as a word and as a digit are the same invented precision.
+  assert.equal(draft("Collapse the tour after three completions."), null);
+  assert.equal(draft("Collapse the tour after 3 completions."), null);
+  // A placeholder with nothing declared behind it is not a default either.
+  assert.equal(draft("Collapse the tour after {completions} completions."), null);
+  // Nor is a declared parameter the pattern never references.
+  assert.equal(
+    draft("Collapse the tour once the user is fluent.", [
+      { name: "completions", value: 3, unit: "completions" },
+    ]),
+    null,
+  );
+  // Declared and referenced passes.
+  const ok = draft("Collapse the tour after {completions} completions.", [
+    { name: "completions", value: 3, unit: "completions of the core action" },
+  ]);
+  assert(ok?.type === "realization");
+  assert.equal(ok.payload.parameters?.length, 1);
+});
+
+test("a half-marked inference is dropped rather than proposed as evidence", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract && record.doi);
+  const provenance: KnowledgeProvenanceItem[] = [
+    {
+      mechanism_id: "CL-14",
+      corpus_record_id: record.record_id,
+      doi: record.doi,
+      title: record.title,
+      quote_or_locus: record.abstract.slice(0, 80),
+    },
+  ];
+  const context = {
+    corpus: file,
+    knownMechanismIds: new Set<string>(),
+    effectBasis: effectBasisFixture(record.record_id, record.doi, record.title),
+  };
+  const withoutPattern = toProposal(
+    "realizations",
+    "CL-14",
+    {
+      term: "Adaptive onboarding",
+      description_as_reported: "Worked examples helped novices only.",
+      source_domain: "medical education",
+      artifact_context: ["onboarding_flow"],
+      confidence: 0.6,
+    },
+    provenance,
+    "fixture-run",
+    "2026-07-31T10:00:00.000Z",
+    context,
+  );
+  const withoutSourceDomain = toProposal(
+    "realizations",
+    "CL-14",
+    {
+      term: "Adaptive onboarding",
+      description_as_reported: "Worked examples helped novices only.",
+      pattern: "Collapse the tour after three completed core actions.",
+      artifact_context: ["onboarding_flow"],
+      confidence: 0.6,
+    },
+    provenance,
+    "fixture-run",
+    "2026-07-31T10:00:00.000Z",
+    context,
+  );
+  assert.equal(withoutPattern, null);
+  assert.equal(withoutSourceDomain, null);
+});
+
+test("a realization id comes from its term, not from the model's own id", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract && record.doi);
+  const provenance: KnowledgeProvenanceItem[] = [
+    {
+      mechanism_id: "CL-14",
+      corpus_record_id: record.record_id,
+      doi: record.doi,
+      title: record.title,
+      quote_or_locus: record.abstract.slice(0, 80),
+    },
+  ];
+  const ids = ["Collapsing guided tour", "Deferred advanced toolbar"].map((term) => {
+    const proposal = toProposal(
+      "realizations",
+      "CL-14",
+      {
+        // The first effect-anchored run labelled two different patterns "p1".
+        id: "cl-14-002-p1",
+        term,
+        description_as_reported: "The source reports a fixture pattern.",
+        artifact_context: ["onboarding"],
+        confidence: 0.6,
+      },
+      provenance,
+      "fixture-run",
+      "2026-07-31T10:00:00.000Z",
+    );
+    assert(proposal?.type === "realization");
+    return proposal.payload.id;
+  });
+  assert.deepEqual(ids, ["collapsing-guided-tour", "deferred-advanced-toolbar"]);
+});
+
+test("an effect scope ranks the records the effect cites first", () => {
+  const file = corpus();
+  const cited = file.records[file.records.length - 1];
+  const anchor = {
+    effect: effectBasisFixture(cited.record_id, cited.doi ?? "10.0/x", cited.title)
+      .effect,
+    keywords: ["expertise", "reversal"] as readonly string[],
+    citedRecordIds: new Set([cited.record_id]),
+  };
+  const ranked = rankRelevantRecords(file, file.records, anchor);
+  assert.equal(ranked.records[0]?.record_id, cited.record_id);
+});
+
 test("Wayback realization ingestion retains text but discards scripts and markup", () => {
   assert.equal(
     visibleReplayText(
@@ -1192,7 +1728,7 @@ test("mode=dossier grounds axes per-citation and leaves ungrounded axes unscored
   assert(record?.abstract && record.doi);
   const exact = record.abstract.slice(0, 80);
   const provenance = groundedProvenance(
-    { citations: [{ record_id: record.record_id, quote_or_locus: exact }] },
+    { citations: [cite(record.record_id, exact)] },
     file,
   );
   assert(provenance);
@@ -1204,10 +1740,7 @@ test("mode=dossier grounds axes per-citation and leaves ungrounded axes unscored
     score: 2,
     rationale: "Grounded rationale from the cited abstract.",
     citations: [
-      {
-        record_id: record.record_id,
-        quote_or_locus: grounded ? exact : "This span was invented.",
-      },
+      cite(record.record_id, grounded ? exact : "This span was invented."),
     ],
   });
   const proposal = toProposal(
@@ -1379,6 +1912,8 @@ test("run summary exposes every quality-gate and cap outcome", () => {
         records_eligible: 200,
         records_relevant: 120,
         records_remaining: 95,
+        records_selected: 25,
+        records_dropped_truncation: 95,
       }),
     ),
     {
@@ -1396,12 +1931,24 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       records_eligible: "200",
       records_relevant: "120",
       records_remaining: "95",
+      records_selected: "25",
+      records_dropped_truncation: "95",
       candidates_cheap: "12",
       candidates_strong: "3",
       dropped_ungrounded_cheap: "1",
       dropped_ungrounded_strong: "1",
       dropped_ungrounded_reasons_cheap: "doi_unresolved=1",
       dropped_ungrounded_reasons_strong: "doi_unresolved=1",
+      // Unconditional from D-132 on, at zero as much as at anything else: an
+      // absent conservation counter means the run predates the invariant, which
+      // is a different claim from "nothing happened at that stage".
+      merged_into_pending: "0",
+      proposed_enrich: "0",
+      dropped_draft_cap: "0",
+      into_synthesis: "0",
+      cheap_synthesis_failed: "0",
+      consolidated_by_synthesis: "0",
+      expanded_by_synthesis: "0",
     },
   );
 });
@@ -1417,6 +1964,107 @@ test("the per-pass funnel is written even at zero so absence means pre-gate", ()
   // The per-reason maps stay absent when nothing was dropped.
   assert.equal("dropped_ungrounded_reasons_cheap" in params, false);
   assert.equal("dropped_ungrounded_reasons_strong" in params, false);
+  // D-103 counters follow the same present-at-zero rule: absence is what
+  // identifies a run recorded before the truncation figures existed.
+  assert.equal(params.records_selected, "0");
+  assert.equal(params.records_dropped_truncation, "0");
+});
+
+test("preflight probes each tier with the stage that tier actually runs", () => {
+  // Probing both tiers with "synthesize" proved the cheap tier could route a
+  // schema it never sends, and left the schema it does send untested (D-107).
+  assert.equal(productionStage("cheap"), "extract");
+  assert.equal(productionStage("strong"), "synthesize");
+
+  const cheapBody = openRouterRequestBody({
+    tier: configured.tiers.cheap,
+    mode: "effects",
+    stage: productionStage("cheap"),
+    prompt: "probe",
+    maxTokens: 1,
+  });
+  const strongBody = openRouterRequestBody({
+    tier: configured.tiers.strong,
+    mode: "effects",
+    stage: productionStage("strong"),
+    prompt: "probe",
+    maxTokens: 1,
+  });
+  const schemaName = (body: Record<string, unknown>): string | undefined =>
+    (
+      body.response_format as
+        | { json_schema?: { name?: string } }
+        | undefined
+    )?.json_schema?.name;
+  // Each tier must be proven against its own schema, so the two probes differ.
+  assert.notEqual(schemaName(strongBody), schemaName(cheapBody));
+  assert.equal(cheapBody.max_tokens, 1);
+  assert.equal(strongBody.max_tokens, 1);
+});
+
+test("a 404 names the parameter its own body blames, and never guesses", () => {
+  const sent = ["response_format", "provider", "temperature"];
+  assert.deepEqual(
+    rejectedParameters(
+      '{"error":{"message":"No endpoints found that support tool use"}}',
+      sent,
+    ),
+    ["provider"],
+  );
+  assert.deepEqual(
+    rejectedParameters(
+      '{"error":{"message":"temperature is not supported by this model"}}',
+      sent,
+    ),
+    ["temperature"],
+  );
+  assert.deepEqual(
+    rejectedParameters('{"error":{"message":"json_schema is unsupported"}}', sent),
+    ["response_format"],
+  );
+  // A parameter the request never carried cannot be blamed for the refusal.
+  assert.deepEqual(
+    rejectedParameters('{"error":{"message":"temperature unsupported"}}', [
+      "response_format",
+    ]),
+    [],
+  );
+  // Silence is reported as silence; the caller widens to the whole sent set
+  // rather than picking one.
+  assert.deepEqual(rejectedParameters('{"error":{"message":"upstream error"}}', sent), []);
+});
+
+test("a truncated plan reports available, kept, and dropped as three numbers", () => {
+  const config: ExtractionOpsConfig = {
+    ...configured,
+    limits: {
+      ...configured.limits,
+      // Small enough that the fixed per-batch overhead admits one batch and
+      // refuses the next, which is the condition D-103 exists to describe.
+      per_run_tokens: 30000,
+      records_per_batch: 5,
+    },
+  };
+  const plan = buildExtractionPlan(
+    "effects",
+    { kind: "mechanism", id: "CL-14", mechanismIds: ["CL-14"] },
+    config,
+    null,
+  );
+  assert(plan.capped, "expected a plan the per-run cap had to truncate");
+  assert(plan.records.eligible_total > 0);
+  assert(plan.records.selected > 0, "the planner must keep something");
+  assert(
+    plan.records.dropped_truncation > 0,
+    "a capped plan must report what it dropped to fit",
+  );
+  // "Available" is the corpus; "kept" plus "dropped" is the relevant subset.
+  // Reading only two of the three cannot tell a full-scope run from a slice.
+  assert.equal(plan.records.dropped_truncation, plan.records.remaining);
+  assert(
+    plan.records.selected + plan.records.dropped_truncation <=
+      plan.records.eligible_total,
+  );
 });
 
 test("a run that dies mid-way still leaves its spend on the monthly cap", () => {
@@ -1496,5 +2144,312 @@ test("a clean run carries no drop-reason field at all", () => {
     }),
   );
   assert.equal("dropped_ungrounded_reasons" in params, false);
+});
+
+// ---------- Candidate conservation (D-132) ----------
+
+/** A ledger run whose stages close; tests break one stage at a time. */
+function ledgerFixture(
+  overrides: Partial<CandidateLedgerRun> = {},
+): CandidateLedgerRun {
+  return {
+    run_id: "2026-07-31T09:00:00.000Z",
+    dispatch_id: null,
+    github_run_id: null,
+    mode: "effects",
+    scope: "CL-14",
+    candidates: 5,
+    cheap: {
+      candidates: 3,
+      dropped_ungrounded: 1,
+      synthesis_batch_failed: 0,
+      into_synthesis: 2,
+    },
+    synthesis: {
+      into_synthesis: 2,
+      consolidated: 0,
+      expanded: 0,
+      candidates_strong: 2,
+    },
+    strong: {
+      candidates: 2,
+      proposed: 1,
+      proposed_enrich: 0,
+      merged_into_pending: 1,
+      held_low_confidence: 0,
+      failed_validation: 0,
+      dropped_ungrounded: 0,
+      dropped_volume_cap: 0,
+      dropped_draft_cap: 0,
+    },
+    balanced: true,
+    reconstruction: { status: "recorded" },
+    candidates_detail: [
+      {
+        candidate_id: "CL-14:cheap:01",
+        mechanism_id: "CL-14",
+        pass: "cheap",
+        fate: "dropped_ungrounded",
+        reason: "unknown_record_id",
+      },
+      {
+        candidate_id: "CL-14:cheap:02",
+        mechanism_id: "CL-14",
+        pass: "cheap",
+        fate: "into_synthesis",
+      },
+      {
+        candidate_id: "CL-14:cheap:03",
+        mechanism_id: "CL-14",
+        pass: "cheap",
+        fate: "into_synthesis",
+      },
+      {
+        candidate_id: "CL-14:strong:01",
+        mechanism_id: "CL-14",
+        pass: "strong",
+        fate: "proposed",
+        proposal_id: "effect-cl-14-one",
+        attribution: "recorded",
+      },
+      {
+        candidate_id: "CL-14:strong:02",
+        mechanism_id: "CL-14",
+        pass: "strong",
+        fate: "merged_into_pending",
+        proposal_id: "effect-cl-14-one",
+        attribution: "recorded",
+      },
+    ],
+    ...overrides,
+  };
+}
+
+test("a balanced ledger passes every stage equation", () => {
+  assert.deepEqual(checkLedgerBalance(ledgerFixture()), []);
+  assert.deepEqual(checkLedgerDetail(ledgerFixture()), []);
+});
+
+test("a cheap candidate that stops being mentioned fails the invariant", () => {
+  // The 8-to-7 shape: candidates enter synthesis and fewer come out, with no
+  // fold recorded. Before D-132 this was arithmetic nobody performed.
+  const violations = checkLedgerBalance(
+    ledgerFixture({
+      candidates: 4,
+      synthesis: {
+        into_synthesis: 2,
+        consolidated: 0,
+        expanded: 0,
+        candidates_strong: 1,
+      },
+      strong: {
+        candidates: 1,
+        proposed: 1,
+        proposed_enrich: 0,
+        merged_into_pending: 0,
+        held_low_confidence: 0,
+        failed_validation: 0,
+        dropped_ungrounded: 0,
+        dropped_volume_cap: 0,
+        dropped_draft_cap: 0,
+      },
+    }),
+  );
+  assert(violations.some((line) => line.startsWith("synthesis stage")));
+});
+
+test("naming the fold is what makes the same shrink balance", () => {
+  assert.deepEqual(
+    checkLedgerBalance(
+      ledgerFixture({
+        candidates: 4,
+        synthesis: {
+          into_synthesis: 2,
+          consolidated: 1,
+          expanded: 0,
+          candidates_strong: 1,
+        },
+        strong: {
+          candidates: 1,
+          proposed: 1,
+          proposed_enrich: 0,
+          merged_into_pending: 0,
+          held_low_confidence: 0,
+          failed_validation: 0,
+          dropped_ungrounded: 0,
+          dropped_volume_cap: 0,
+          dropped_draft_cap: 0,
+        },
+        candidates_detail: [],
+        reconstruction: { status: "partial", reason: "lineage not persisted" },
+      }),
+    ),
+    [],
+  );
+});
+
+test("a strong candidate with no outcome fails the invariant", () => {
+  const violations = checkLedgerBalance(
+    ledgerFixture({
+      strong: {
+        candidates: 2,
+        proposed: 1,
+        proposed_enrich: 0,
+        merged_into_pending: 0,
+        held_low_confidence: 0,
+        failed_validation: 0,
+        dropped_ungrounded: 0,
+        dropped_volume_cap: 0,
+        dropped_draft_cap: 0,
+      },
+    }),
+  );
+  assert(violations.some((line) => line.startsWith("strong stage")));
+});
+
+test("an unbalanced run is broken, not partial", () => {
+  const args = {
+    mode: "effects" as const,
+    scope: resolveScope({ mechanism: "CG-05" }),
+    startedAt: new Date("2026-07-31T12:00:00.000Z"),
+    config: configured,
+    usage: {
+      input: 100,
+      output: 20,
+      calls: 2,
+      byTier: {
+        cheap: { input: 60, output: 10, calls: 1 },
+        strong: { input: 40, output: 10, calls: 1 },
+      },
+    },
+    stats: statsFixture({ candidates: 4, candidates_cheap: 2, candidates_strong: 2 }),
+    filesWritten: 0,
+    capped: true,
+    durationS: 2,
+  };
+  // Same run, same capping: only the ledger differs, and it outranks "partial"
+  // because an unbalanced run's counters are unsound rather than incomplete.
+  assert.equal(buildExtractionManifestRun({ ...args, balanced: true }).status, "partial");
+  const broken = buildExtractionManifestRun({ ...args, balanced: false });
+  assert.equal(broken.status, "broken");
+  assert.equal(broken.warnings?.ledger_unbalanced, true);
+});
+
+test("a run that recorded its own ledger cannot leave a stage unknown", () => {
+  const violations = checkLedgerBalance(
+    ledgerFixture({ cheap: null, synthesis: null }),
+  );
+  assert(
+    violations.some((line) => line.includes("cannot leave a stage unknown")),
+  );
+});
+
+test("a pre-D-105 run may say it does not know, and its known stage still closes", () => {
+  // The four 30-for-30 runs: the strong stage is recoverable and balances at
+  // 10 for 10, the cheap stage is genuinely unknown, and null is not zero.
+  assert.deepEqual(
+    checkLedgerBalance(
+      ledgerFixture({
+        candidates: null,
+        cheap: null,
+        synthesis: null,
+        strong: {
+          candidates: 10,
+          proposed: 0,
+          proposed_enrich: 0,
+          merged_into_pending: 0,
+          held_low_confidence: 0,
+          failed_validation: 0,
+          dropped_ungrounded: 10,
+          dropped_volume_cap: 0,
+          dropped_draft_cap: 0,
+        },
+        candidates_detail: [],
+        reconstruction: {
+          status: "unreconstructable",
+          reason: "rejected candidates were not persisted before D-105",
+        },
+      }),
+    ),
+    [],
+  );
+});
+
+test("a complete account must have a detail row per candidate", () => {
+  const violations = checkLedgerDetail(
+    ledgerFixture({ candidates_detail: [] }),
+  );
+  assert.equal(violations.length, 2);
+  // …and a partial one is allowed to have fewer, rather than inventing rows.
+  assert.deepEqual(
+    checkLedgerDetail(
+      ledgerFixture({
+        candidates_detail: [],
+        reconstruction: { status: "partial", reason: "lineage not persisted" },
+      }),
+    ),
+    [],
+  );
+});
+
+test("the ledger merges by run id, so mid-flight writes supersede", () => {
+  const first = ledgerFixture();
+  const older = ledgerFixture({ run_id: "2026-07-30T09:00:00.000Z" });
+  const merged = mergeLedgerRuns([older], first);
+  assert.deepEqual(
+    mergeLedgerRuns(merged, { ...first, candidates: 5 }).map(
+      (run) => run.run_id,
+    ),
+    [first.run_id, older.run_id],
+  );
+});
+
+test("the ledger builder counts the fates it is told and derives nothing", () => {
+  const ledger = new CandidateLedger();
+  const cheapOne = ledger.id("CL-14", "cheap");
+  const cheapTwo = ledger.id("CL-14", "cheap");
+  ledger.record({
+    candidate_id: cheapOne,
+    mechanism_id: "CL-14",
+    pass: "cheap",
+    fate: "into_synthesis",
+  });
+  ledger.record({
+    candidate_id: cheapTwo,
+    mechanism_id: "CL-14",
+    pass: "cheap",
+    fate: "into_synthesis",
+  });
+  ledger.recordSynthesisFold(2, 1);
+  const strongOne = ledger.id("CL-14", "strong");
+  ledger.record({
+    candidate_id: strongOne,
+    mechanism_id: "CL-14",
+    pass: "strong",
+    fate: "proposed",
+    proposal_id: "effect-cl-14-one",
+  });
+  const built = ledger.build({
+    runId: "2026-07-31T12:00:00.000Z",
+    dispatchId: null,
+    githubRunId: null,
+    mode: "effects",
+    scope: "CL-14",
+  });
+  assert.equal(built.balanced, true);
+  assert.equal(built.synthesis?.consolidated, 1);
+  assert.equal(built.candidates, 3);
+
+  // A synthesis call that dies takes its candidates with it, and says so.
+  ledger.refate(cheapTwo, "synthesis_batch_failed");
+  const afterFailure = ledger.build({
+    runId: "2026-07-31T12:00:00.000Z",
+    dispatchId: null,
+    githubRunId: null,
+    mode: "effects",
+    scope: "CL-14",
+  });
+  assert.equal(afterFailure.cheap?.synthesis_batch_failed, 1);
+  assert.equal(afterFailure.cheap?.into_synthesis, 1);
 });
 

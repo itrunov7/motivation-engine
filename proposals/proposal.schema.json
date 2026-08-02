@@ -206,7 +206,8 @@
     "provenanceItem": {
       "oneOf": [
         { "$ref": "#/$defs/evidenceProvenanceItem" },
-        { "$ref": "#/$defs/realizationProvenanceItem" }
+        { "$ref": "#/$defs/realizationProvenanceItem" },
+        { "$ref": "#/$defs/inferenceProvenanceItem" }
       ]
     },
     "evidenceProvenanceItem": {
@@ -222,9 +223,27 @@
           ]
         },
         "title": { "type": "string", "minLength": 1 },
-        "quote_or_locus": { "type": "string", "minLength": 1 }
+        "quote_or_locus": { "type": "string", "minLength": 1 },
+        "source_span": { "$ref": "#/$defs/provenanceSourceSpan" },
+        "span_role": { "$ref": "#/$defs/spanRole" }
       },
       "required": ["mechanism_id", "corpus_record_id", "doi", "title", "quote_or_locus"],
+      "additionalProperties": false
+    },
+    "spanRole": {
+      "description": "What the quoted span is DOING in the source it was cut from (D-129). Asserted by the extraction pass — the only pass that reads a record — then checked against the source text: a span inside a labelled BACKGROUND or METHOD section cannot be a finding, and a span the same source later reverses is not one either. Only span_role=finding reports what the cited source observed, and an item whose citations carry no finding is refused. Optional so items written before D-129 stay valid; required in code of anything the extraction pipeline produces.",
+      "type": "string",
+      "enum": ["background", "hypothesis", "method", "finding", "limitation"]
+    },
+    "provenanceSourceSpan": {
+      "description": "Where the quote sits in its source record, and which version of that record the offsets were resolved against (D-110). start/end are end-exclusive character offsets into lib/proposal-quality evidenceSourceText(record), so slicing that string at them re-derives the quote. source_text_sha256 pins the exact text: without it a re-harvested or re-normalised record silently relocates the offsets onto different words, so a mismatch marks the span STALE as a named condition instead. Optional so pre-D-110 hand-authored records stay valid; required in code of anything the extraction pipeline produces.",
+      "type": "object",
+      "properties": {
+        "start": { "type": "integer", "minimum": 0 },
+        "end": { "type": "integer", "minimum": 1 },
+        "source_text_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      },
+      "required": ["start", "end", "source_text_sha256"],
       "additionalProperties": false
     },
     "realizationProvenanceItem": {
@@ -246,6 +265,29 @@
         "title",
         "quote_or_locus",
         "contributed_by"
+      ],
+      "additionalProperties": false
+    },
+    "inferenceProvenanceItem": {
+      "description": "The transfer step recorded as provenance (D-112): a realization whose pattern was inferred from an effect measured in another domain carries the effect's own statement verbatim, with no source_span, because that statement is an L2 record's text rather than a slice of a harvested document. span_absent_reason says so in the data. Mirrors realizations/realization.schema.json.",
+      "type": "object",
+      "properties": {
+        "corpus_kind": { "const": "inference" },
+        "mechanism_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{2}$" },
+        "corpus_record_id": { "type": "string", "pattern": "^cr_[a-f0-9]{24}$" },
+        "effect_id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "title": { "type": "string", "minLength": 1 },
+        "quote_or_locus": { "type": "string", "minLength": 1 },
+        "span_absent_reason": { "const": "no direct span — inferred from effect" }
+      },
+      "required": [
+        "corpus_kind",
+        "mechanism_id",
+        "corpus_record_id",
+        "effect_id",
+        "title",
+        "quote_or_locus",
+        "span_absent_reason"
       ],
       "additionalProperties": false
     },

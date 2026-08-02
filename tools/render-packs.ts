@@ -292,7 +292,12 @@ function realizationsFor(
     (realizationsByMechanism.get(mechanism.id) ?? []).map((realization) => ({
       id: realization.id,
       mechanism_id: realization.mechanism_id,
-      ...(realization.effect_id === undefined ? {} : { effect_id: realization.effect_id }),
+      // The pack datasheet carries one effect per realization; effect_refs is a
+      // list, so the first ref is projected and the rest stay in the record
+      // (D-112). No current realization declares more than one.
+      ...(realization.effect_refs?.[0] === undefined
+        ? {}
+        : { effect_id: realization.effect_refs[0] }),
       term: realization.term,
       description_as_reported: realization.description_as_reported,
       artifact_context: realization.artifact_context,

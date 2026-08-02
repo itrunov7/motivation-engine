@@ -1,0 +1,11 @@
+# Data — not code. Exclude from Cursor indexing and agent context.
+# When a task needs a number from these, run a committed script; never read
+# records into context.
+
+corpora/
+analysis/
+decisions/decisions.json
+
+# Generated artifact directories (projections; never hand-edit)
+cards/
+packs/export/

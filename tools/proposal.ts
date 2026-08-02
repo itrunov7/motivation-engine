@@ -27,7 +27,7 @@ function usage(): never {
       "  npm run proposal -- list\n" +
       "  npm run proposal -- show proposals/{type}/{id}.json\n" +
       "  npm run proposal -- approve|reject proposals/{type}/{id}.json [--actor=owner] [--reason=text]\n" +
-      "  npm run proposal -- edit proposals/{type}/{id}.json --payload-json='{...}' [--actor=owner]",
+      "  npm run proposal -- edit proposals/{type}/{id}.json --payload-json='{...}' [--confidence=0.55] [--actor=owner]",
   );
   process.exit(1);
 }
@@ -76,6 +76,8 @@ async function main(): Promise<void> {
     if (!payloadJson) usage();
     editedPayload = JSON.parse(payloadJson);
   }
+  const rawConfidence = option("confidence");
+  if (rawConfidence !== undefined && command !== "edit") usage();
   const request: ProposalDecisionRequest = {
     proposalPath,
     action: command,
@@ -83,6 +85,7 @@ async function main(): Promise<void> {
     decidedAt: new Date().toISOString(),
     reason: option("reason"),
     editedPayload,
+    ...(rawConfidence === undefined ? {} : { editedConfidence: Number(rawConfidence) }),
     schemaRoot: ROOT,
   };
   const transaction = await prepareProposalDecision(

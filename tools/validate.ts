@@ -60,15 +60,30 @@ import type {
 } from "./connectors/types";
 import { CONNECTORS } from "./connectors";
 import { deriveCorpusRecordId, CORPUS_RECORD_ID_PATTERN } from "../lib/corpus-record-id";
+import { resolveEffectBasis } from "../lib/effect-basis";
+import { isExtractionAuthored, requiresSpanRole } from "../lib/proposal-meta";
 import {
+  evidenceSourceText,
   groundingErrors,
+  inferenceGroundingErrors,
+  isSpanConditionError,
   normalizeQualityText,
+  patternParameterErrors,
   realizationGroundingErrors,
+  spanErrors,
 } from "../lib/proposal-quality";
-import { isRealizationProvenance } from "../lib/realization-corpus";
+import {
+  isInferenceProvenance,
+  isRealizationProvenance,
+} from "../lib/realization-corpus";
+import {
+  checkLedgerBalance,
+  checkLedgerDetail,
+} from "../lib/candidate-ledger";
 import type {
   BenchmarkFile,
   BenchmarkMetric,
+  CandidateLedgerFile,
   CorpusManifest,
   EvidenceCorpusFile,
   HeartbeatFile,
@@ -84,7 +99,11 @@ import type {
   Segment,
   SegmentCandidate,
 } from "../lib/types";
-import { UNGROUNDED_DROP_REASONS } from "../lib/types";
+import {
+  CANDIDATE_FATES,
+  isSpanRole,
+  UNGROUNDED_DROP_REASONS,
+} from "../lib/types";
 import {
   KNOWN_CONNECTOR_IDS,
   OPS_PATHS,
@@ -127,6 +146,14 @@ const PATHS = {
     "rejected-candidates.schema.json",
   ),
   rejectedCandidatesDir: join(ROOT, "corpora", "extraction", "rejected"),
+  candidateLedgerSchema: join(
+    ROOT,
+    "corpora",
+    "_ops",
+    "candidate-ledger.schema.json",
+  ),
+  candidateLedger: join(ROOT, "corpora", "extraction", "ledger.json"),
+  extractionManifest: join(ROOT, "corpora", "extraction", "manifest.json"),
   heartbeat: join(ROOT, "corpora", "_health", "heartbeat.json"),
   segments: join(ROOT, "segments", "segments.yaml"),
   segmentCandidates: join(ROOT, "segments", "candidates.json"),
@@ -555,7 +582,12 @@ const manifestCostSchema = {
 
 const manifestRunProperties = {
   timestamp: { type: "string", format: "date-time" },
-  status: { type: "string", enum: ["success", "partial", "failed"] },
+  status: {
+    // "broken" (D-132) is a run whose candidate ledger does not balance: its
+    // counters are unsound, which is a different claim from "partial".
+    type: "string",
+    enum: ["success", "partial", "failed", "broken"],
+  },
   params: { type: "object", additionalProperties: { type: "string" } },
   records_fetched: { type: "integer", minimum: 0 },
   files_written: { type: "integer", minimum: 0 },
@@ -1006,8 +1038,139 @@ function validateAgainst(
   return false;
 }
 
+/**
+ * Running count of how span coverage actually stands across the repo (D-110).
+ *
+ * Amendment 2.2 asks for the gap to be VISIBLE rather than assumed: "optional
+ * for legacy, required for new" is only an honest policy if a reader can see how
+ * much is legacy. Printed at the end of a run, so the number moves as the
+ * pipeline replaces hand-authored provenance.
+ */
+interface SpanTally {
+  withSpan: number;
+  withoutSpan: number;
+  stale: number;
+  /**
+   * Items that declare they have no span because they record an inference from
+   * an effect (D-112). Counted separately from the D-110 legacy remainder: one
+   * number is a gap the pipeline is closing, the other is a gap it announced on
+   * purpose, and adding them together would hide both.
+   */
+  declaredInference: number;
+  /** Files carrying at least one spanless legacy item, for the summary line. */
+  legacyFiles: Set<string>;
+  /**
+   * The same shape of count for span_role (D-129). Kept in the same tally
+   * because the two answer one question — how much of the corpus-grounded
+   * knowledge is machine-checkable — and reporting them apart would let one
+   * number look healthy while the other rots.
+   */
+  withRole: number;
+  withoutRole: number;
+  /** How the roles that ARE recorded break down, for the summary line. */
+  roleCounts: Map<string, number>;
+  /** Files carrying at least one roleless legacy item. */
+  rolelessFiles: Set<string>;
+}
+
+function emptySpanTally(): SpanTally {
+  return {
+    withSpan: 0,
+    withoutSpan: 0,
+    stale: 0,
+    declaredInference: 0,
+    legacyFiles: new Set(),
+    withRole: 0,
+    withoutRole: 0,
+    roleCounts: new Map(),
+    rolelessFiles: new Set(),
+  };
+}
+
+/**
+ * A realization's `pattern` may not state a threshold as prose (D-115).
+ *
+ * Schema cannot see inside a sentence, so the rule that separates a declared
+ * default from an invented measurement lives here. Applied to records and to
+ * undecided proposals alike, because the point is to catch the number before
+ * it is approved, not after.
+ */
+function checkPatternParameters(
+  file: string,
+  realization: { pattern?: unknown; parameters?: unknown },
+): boolean {
+  if (typeof realization.pattern !== "string") return true;
+  const parameters = Array.isArray(realization.parameters)
+    ? realization.parameters.filter(
+        (entry): entry is { name: string } =>
+          typeof entry === "object" &&
+          entry !== null &&
+          typeof (entry as { name?: unknown }).name === "string",
+      )
+    : [];
+  const errors = patternParameterErrors(realization.pattern, parameters);
+  for (const error of errors) fail(file, error);
+  return errors.length === 0;
+}
+
+/**
+ * Verify every evidence provenance item's stored span against the corpus by
+ * RE-SLICING it (D-110), and tally coverage.
+ *
+ * Used for the authoritative artifacts — effects and realizations — which carry
+ * no `proposed_by` and so cannot be asked whether the pipeline authored them. A
+ * span present here is verified; a span absent is counted, not failed. The
+ * "required of new items" half of the rule is enforced where authorship is
+ * known, in the proposal loop and in the extractor.
+ */
+function checkArtifactProvenanceSpans(
+  file: string,
+  provenance: readonly KnowledgeProvenanceItem[],
+  tally: SpanTally,
+): boolean {
+  let ok = true;
+  for (const source of provenance) {
+    if (isRealizationProvenance(source)) continue;
+    // An inference item declares its own spanlessness (D-112). Counting it as a
+    // legacy spanless evidence item would inflate the D-110 remainder with items
+    // that are not evidence and were never going to carry offsets.
+    if (isInferenceProvenance(source)) {
+      tally.declaredInference += 1;
+      continue;
+    }
+    if (!source.source_span) {
+      tally.withoutSpan += 1;
+      tally.legacyFiles.add(rel(file));
+      continue;
+    }
+    const corpusPath = join(
+      PATHS.corporaDir,
+      "evidence",
+      `${source.mechanism_id}.json`,
+    );
+    if (!existsSync(corpusPath)) continue; // reported by the caller's own checks
+    const corpus = readJson(corpusPath) as EvidenceCorpusFile | undefined;
+    const record = corpus?.records.find(
+      (candidate) => candidate.record_id === source.corpus_record_id,
+    );
+    if (!record) continue; // likewise
+    const conditions = spanErrors(source, evidenceSourceText(record));
+    if (conditions.length === 0) {
+      tally.withSpan += 1;
+      continue;
+    }
+    for (const condition of conditions) {
+      tally.stale += 1;
+      fail(file, `stale source_span: ${condition}`);
+      ok = false;
+    }
+  }
+  return ok;
+}
+
 function main(): void {
   console.log("Motivation Engine validator\n");
+  const spanTally = emptySpanTally();
 
   // 1. Compile the mechanism schema (full + seed sub-schema).
   const mechanismSchema = readJson(PATHS.mechanismSchema);
@@ -1518,6 +1681,106 @@ function main(): void {
     fail(PATHS.rejectedCandidatesSchema, "missing rejected-candidates schema");
   }
 
+  // 9b-iii. HARD RULE — candidate conservation (D-132).
+  //
+  // Every candidate an extraction run produced must end somewhere the ledger
+  // can name: candidates_in == proposals_out + merged + dropped_by_named_reason,
+  // staged across the cheap pass, synthesis, and the strong pass.
+  //
+  // Two failures, both fatal, and the second is the one that matters. A ledger
+  // that does not close means the run cannot say what it did. A run with NO
+  // ledger entry means the same thing while looking clean — which is exactly how
+  // this defect class survived three appearances (D-104, D-105, and the
+  // cheap-to-strong shrink that motivated this entry). So absence is not a pass:
+  // every run in the manifest must be accounted for, and a run whose accounting
+  // is genuinely unrecoverable says so, in writing, with a reason.
+  if (existsSync(PATHS.candidateLedgerSchema)) {
+    const schema = readJson(PATHS.candidateLedgerSchema);
+    if (schema !== undefined && existsSync(PATHS.candidateLedger)) {
+      const validateLedger = ajv.compile(schema as object);
+      const data = readJson(PATHS.candidateLedger);
+      if (data !== undefined) {
+        let ok = validateAgainst(validateLedger, PATHS.candidateLedger, data);
+        const ledger = data as CandidateLedgerFile;
+        const byRunId = new Map(
+          (ledger.runs ?? []).map((run) => [run.run_id, run]),
+        );
+        for (const run of ledger.runs ?? []) {
+          const violations = [
+            ...checkLedgerBalance(run),
+            ...checkLedgerDetail(run),
+          ];
+          for (const violation of violations) {
+            fail(PATHS.candidateLedger, `${run.run_id}: ${violation}`);
+            ok = false;
+          }
+          // `balanced` is stored so the manifest status is traceable to the
+          // arithmetic that set it, but it is recomputed here rather than
+          // trusted: a hand-edited true would otherwise buy a pass.
+          const balanced = checkLedgerBalance(run).length === 0;
+          if (run.balanced !== balanced) {
+            fail(
+              PATHS.candidateLedger,
+              `${run.run_id}: balanced is recorded as ${run.balanced} but the stage totals say ${balanced}`,
+            );
+            ok = false;
+          }
+        }
+
+        // Every run the manifest reports must appear in the ledger, and a
+        // ledger entry that does not balance must be reflected in that run's
+        // status. Reading both directions is the point: neither file may quietly
+        // disagree with the other about what happened.
+        const manifest = existsSync(PATHS.extractionManifest)
+          ? (readJson(PATHS.extractionManifest) as CorpusManifest | undefined)
+          : undefined;
+        const manifestRuns = [
+          ...(manifest?.last_run ? [manifest.last_run] : []),
+          ...(manifest?.run_history ?? []),
+        ];
+        const seen = new Set<string>();
+        for (const run of manifestRuns) {
+          if (seen.has(run.timestamp)) continue;
+          seen.add(run.timestamp);
+          const entry = byRunId.get(run.timestamp);
+          if (!entry) {
+            fail(
+              PATHS.candidateLedger,
+              `extraction run ${run.timestamp} has no candidate-ledger entry — a run with no accounting is not a run that balanced (D-132)`,
+            );
+            ok = false;
+            continue;
+          }
+          const balanced = checkLedgerBalance(entry).length === 0;
+          if (!balanced && run.status !== "broken") {
+            fail(
+              PATHS.extractionManifest,
+              `run ${run.timestamp} has an unbalanced candidate ledger but is recorded as "${run.status}" — an unbalanced run is broken, not partial (D-132)`,
+            );
+            ok = false;
+          }
+        }
+        if (ok) {
+          const count = (status: string): number =>
+            (ledger.runs ?? []).filter(
+              (run) => run.reconstruction.status === status,
+            ).length;
+          console.log(
+            `  ✓ ${rel(PATHS.candidateLedger)} valid (${ledger.runs.length} runs balance; ` +
+              `${count("recorded")} recorded, ${count("reconstructed")} reconstructed, ` +
+              `${count("partial")} partly reconstructed, ${count("unreconstructable")} declared unreconstructable, D-132)`,
+          );
+        }
+      }
+    } else if (!existsSync(PATHS.candidateLedger)) {
+      console.log(
+        "  · no candidate ledger yet (written by every extraction run from D-132 on)",
+      );
+    }
+  } else {
+    fail(PATHS.candidateLedgerSchema, "missing candidate-ledger schema");
+  }
+
   // 9c. Benchmark files (D-029): every /corpora/benchmarks/{source_id}.json
   // is owner-prepared data normalized by tools/ingest-report.ts. Beyond the
   // manifest contract above, the RECORD shape is validated here, and the
@@ -1725,6 +1988,47 @@ function main(): void {
       fail(
         PATHS.rejectedCandidatesSchema,
         `rejection reason enum [${schemaReasons.join(", ")}] does not equal ` +
+          `UNGROUNDED_DROP_REASONS [${declaredReasons.join(", ")}] — update both when adding a reason`,
+      );
+    }
+  }
+
+  // Same guard for the conservation ledger (D-132), on both of its closed
+  // vocabularies. The fate list is the invariant: if the schema accepted a fate
+  // the balance equations do not count, a candidate could be written into a
+  // named bucket that no equation reads — which is the silent loss again,
+  // wearing a label.
+  if (existsSync(PATHS.candidateLedgerSchema)) {
+    const schema = readJson(PATHS.candidateLedgerSchema) as
+      | {
+          $defs?: {
+            candidate?: {
+              properties?: {
+                fate?: { enum?: string[] };
+                reason?: { enum?: string[] };
+              };
+            };
+          };
+        }
+      | undefined;
+    const schemaFates = [
+      ...(schema?.$defs?.candidate?.properties?.fate?.enum ?? []),
+    ].sort();
+    const declaredFates = [...CANDIDATE_FATES].sort();
+    if (schemaFates.join(",") !== declaredFates.join(",")) {
+      fail(
+        PATHS.candidateLedgerSchema,
+        `candidate fate enum [${schemaFates.join(", ")}] does not equal ` +
+          `CANDIDATE_FATES [${declaredFates.join(", ")}] — update both, and the balance equations, when adding a fate`,
+      );
+    }
+    const schemaLedgerReasons = [
+      ...(schema?.$defs?.candidate?.properties?.reason?.enum ?? []),
+    ].sort();
+    if (schemaLedgerReasons.join(",") !== declaredReasons.join(",")) {
+      fail(
+        PATHS.candidateLedgerSchema,
+        `candidate reason enum [${schemaLedgerReasons.join(", ")}] does not equal ` +
           `UNGROUNDED_DROP_REASONS [${declaredReasons.join(", ")}] — update both when adding a reason`,
       );
     }
@@ -2134,8 +2438,13 @@ function main(): void {
             mechanism_id?: string;
             realization_ids?: string[];
             source?: string[];
-            provenance?: { doi?: string | null }[];
+            provenance?: KnowledgeProvenanceItem[];
           };
+          // Approval copies provenance verbatim, so the authoritative record is
+          // where span verifiability has to hold, not just the proposal (D-110).
+          if (!checkArtifactProvenanceSpans(file, effect.provenance ?? [], spanTally)) {
+            ok = false;
+          }
           const parts = relative(PATHS.effectsDir, file).split(sep);
           const expected =
             typeof effect.mechanism_id === "string" && typeof effect.id === "string"
@@ -2154,7 +2463,11 @@ function main(): void {
           }
           const provenanceDois = new Set(
             (effect.provenance ?? []).flatMap((item) =>
-              typeof item.doi === "string" ? [item.doi] : [],
+              !isRealizationProvenance(item) &&
+              !isInferenceProvenance(item) &&
+              typeof item.doi === "string"
+                ? [item.doi]
+                : [],
             ),
           );
           for (const doi of effect.source ?? []) {
@@ -2188,7 +2501,7 @@ function main(): void {
 
   const realizationsByKey = new Map<
     string,
-    { file: string; effectId?: string }
+    { file: string; effectRefs: string[] }
   >();
   if (existsSync(PATHS.realizationSchema)) {
     const realizationSchemaDoc = readJson(PATHS.realizationSchema);
@@ -2211,8 +2524,23 @@ function main(): void {
           const realization = data as {
             id?: string;
             mechanism_id?: string;
-            effect_id?: string;
+            effect_refs?: unknown;
+            derivation?: unknown;
+            pattern?: unknown;
+            parameters?: unknown;
+            provenance?: KnowledgeProvenanceItem[];
           };
+          if (!checkPatternParameters(file, realization)) ok = false;
+          const realizationEffectRefs = Array.isArray(realization.effect_refs)
+            ? realization.effect_refs.filter(
+                (id): id is string => typeof id === "string",
+              )
+            : [];
+          if (
+            !checkArtifactProvenanceSpans(file, realization.provenance ?? [], spanTally)
+          ) {
+            ok = false;
+          }
           const parts = relative(PATHS.realizationsDir, file).split(sep);
           const expected =
             typeof realization.mechanism_id === "string" &&
@@ -2230,6 +2558,34 @@ function main(): void {
             fail(file, `mechanism_id "${realization.mechanism_id}" is not a full mechanism record`);
             ok = false;
           }
+          // A realization may only claim an effect that exists as an approved
+          // record (D-112). An inferred pattern whose basis is still a proposal
+          // belongs in the queue, not in /realizations.
+          // Marking a record inferred obliges it to carry the transfer step as
+          // provenance, whoever wrote it (D-112).
+          if (
+            realization.derivation === "inferred" &&
+            !(realization.provenance ?? []).some(isInferenceProvenance)
+          ) {
+            fail(
+              file,
+              "derivation=inferred but no provenance item records the inference from an " +
+                "effect (corpus_kind=\"inference\") (D-112)",
+            );
+            ok = false;
+          }
+          for (const effectId of realizationEffectRefs) {
+            if (
+              typeof realization.mechanism_id === "string" &&
+              !effectsByKey.has(`${realization.mechanism_id}\u0000${effectId}`)
+            ) {
+              fail(
+                file,
+                `effect_refs entry "${effectId}" has no effects/${realization.mechanism_id}/${effectId}.json`,
+              );
+              ok = false;
+            }
+          }
           if (
             typeof realization.mechanism_id === "string" &&
             typeof realization.id === "string"
@@ -2239,12 +2595,7 @@ function main(): void {
               fail(file, `duplicate realization ${realization.mechanism_id}/${realization.id}`);
               ok = false;
             } else {
-              realizationsByKey.set(key, {
-                file,
-                ...(typeof realization.effect_id === "string"
-                  ? { effectId: realization.effect_id }
-                  : {}),
-              });
+              realizationsByKey.set(key, { file, effectRefs: realizationEffectRefs });
             }
           }
           if (ok) console.log(`  ✓ ${rel(file)} valid (realization record)`);
@@ -2290,10 +2641,10 @@ function main(): void {
             effect.file,
             `realization_id "${realizationId}" has no realizations/${record.id}/${realizationId}.json`,
           );
-        } else if (realization.effectId !== effectId) {
+        } else if (!realization.effectRefs.includes(effectId)) {
           fail(
             effect.file,
-            `realization_id "${realizationId}" must link back with effect_id "${effectId}"`,
+            `realization_id "${realizationId}" must link back with effect_refs containing "${effectId}"`,
           );
         }
       }
@@ -2318,8 +2669,8 @@ function main(): void {
             );
           } else if (
             typeof implementation.effect_id === "string" &&
-            realization.effectId !== undefined &&
-            realization.effectId !== implementation.effect_id
+            realization.effectRefs.length > 0 &&
+            !realization.effectRefs.includes(implementation.effect_id)
           ) {
             fail(
               file,
@@ -2347,6 +2698,11 @@ function main(): void {
         const proposalFiles = listJsonFilesRecursive(PATHS.proposalsDir).filter(
           (file) => file !== PATHS.proposalSchema,
         );
+        // Where each undecided proposal WOULD land if approved. Two of them
+        // aimed at one path are two proposals that cannot both be accepted, and
+        // the second approval would fail on a write that already exists — a
+        // collision the queue should show while it is still cheap to resolve.
+        const pendingRecordPaths = new Map<string, string[]>();
         for (const file of proposalFiles) {
           const data = readJson(file);
           if (data === undefined) continue;
@@ -2354,12 +2710,14 @@ function main(): void {
           const proposal = data as {
             id?: string;
             type?: string;
+            target?: string;
             status?: string;
+            proposed_by?: string;
             decided_by?: string | null;
             decided_at?: string | null;
             decision_note?: string | null;
             provenance?: KnowledgeProvenanceItem[];
-            payload?: { provenance?: unknown };
+            payload?: { provenance?: unknown; pattern?: unknown; parameters?: unknown };
           };
           const parts = relative(PATHS.proposalsDir, file).split(sep);
           const expected =
@@ -2370,15 +2728,24 @@ function main(): void {
             fail(file, "path must match proposals/{type}/{id}.json");
             ok = false;
           }
+          // decided_by/decided_at mean somebody DECIDED, which no undecided
+          // proposal has. decision_note is different on an edited one (D-113):
+          // it records why the payload was changed, and an edit with no stated
+          // reason is the ungrounded override the note exists to prevent.
           if (
             (proposal.status === "pending" ||
               proposal.status === "edited" ||
               proposal.status === "held_low_confidence") &&
-            (proposal.decided_by !== null ||
-              proposal.decided_at !== null ||
-              proposal.decision_note !== null)
+            (proposal.decided_by !== null || proposal.decided_at !== null)
           ) {
-            fail(file, `${proposal.status} proposal must not carry decision metadata`);
+            fail(file, `${proposal.status} proposal must not carry a decider`);
+            ok = false;
+          }
+          if (
+            (proposal.status === "pending" || proposal.status === "held_low_confidence") &&
+            proposal.decision_note !== null
+          ) {
+            fail(file, `${proposal.status} proposal must not carry a decision_note`);
             ok = false;
           }
           if (
@@ -2408,6 +2775,30 @@ function main(): void {
             );
             ok = false;
           }
+          // A warning, not a failure, and only while the proposal is still
+          // undecided (D-115). A decided proposal keeps the payload it was
+          // decided on — rewriting a rejected pattern would erase the evidence
+          // of what the pipeline actually produced — and failing an undecided
+          // one would discard a whole run over a number the owner is about to
+          // fix. The hard gate is approval, in lib/proposals projectRealization.
+          if (
+            proposal.type === "realization" &&
+            proposal.payload &&
+            (proposal.status === "pending" ||
+              proposal.status === "edited" ||
+              proposal.status === "held_low_confidence") &&
+            typeof proposal.payload.pattern === "string"
+          ) {
+            const parameters = Array.isArray(proposal.payload.parameters)
+              ? (proposal.payload.parameters as { name: string }[])
+              : [];
+            for (const error of patternParameterErrors(
+              proposal.payload.pattern,
+              parameters,
+            )) {
+              console.log(`  ! ${rel(file)}: ${error} — approval is blocked until fixed`);
+            }
+          }
           if (proposal.type === "dossier") {
             // D-085: every per-axis provenance item must also be carried by
             // the envelope, so the grounding loop below re-grounds each axis
@@ -2431,7 +2822,92 @@ function main(): void {
               }
             }
           }
+          // D-110: an extraction-authored evidence item MUST be span-verifiable.
+          // Read from proposed_by so this is a structural check, not a naming
+          // convention the next writer can forget.
+          const extractionAuthored = isExtractionAuthored(
+            proposal.proposed_by ?? "",
+          );
+          // D-129 needs the same structural test PLUS a cutoff, because unlike
+          // D-110 it arrives after the pipeline has already written items and
+          // the decision forbids backfilling them. See SPAN_ROLE_REQUIRED_FROM.
+          const roleRequired = requiresSpanRole(proposal);
+          // D-112, the same shape of rule for the honesty fields: optional in
+          // the schema so the hand-authored records predating them stay valid,
+          // required of anything the pipeline writes. An unmarked realization
+          // reads as reported, so an unmarked INFERENCE would read as evidence.
+          if (extractionAuthored && proposal.type === "realization") {
+            const payload = proposal.payload as {
+              derivation?: unknown;
+              domain_transfer?: unknown;
+              provenance?: KnowledgeProvenanceItem[];
+            };
+            // An inferred pattern must carry the transfer step itself as
+            // provenance. Without it the record states a product directive and
+            // cites only papers that never mention a product — which is exactly
+            // the reading "do not present transfer as evidence" forbids.
+            if (
+              payload.derivation === "inferred" &&
+              !(payload.provenance ?? []).some(isInferenceProvenance)
+            ) {
+              fail(
+                file,
+                "inferred realization carries no inference provenance item — the transfer " +
+                  "step must be recorded, not just the sources it transfers from (D-112)",
+              );
+              ok = false;
+            }
+            if (
+              payload.derivation !== "reported" &&
+              payload.derivation !== "inferred"
+            ) {
+              fail(
+                file,
+                "extraction-authored realization carries no derivation — reported/inferred is " +
+                  "required of anything the pipeline produces (D-112)",
+              );
+              ok = false;
+            }
+            if (
+              typeof payload.domain_transfer !== "object" ||
+              payload.domain_transfer === null
+            ) {
+              fail(
+                file,
+                "extraction-authored realization carries no domain_transfer — the generator " +
+                  "reads it, so the source and application domains must be stated (D-112)",
+              );
+              ok = false;
+            }
+          }
           for (const source of proposal.provenance ?? []) {
+            // An inference item is checked against the effect it transfers from
+            // rather than against a corpus (D-112): there is no span to verify,
+            // which is the item's declared property, so what gets verified is
+            // that the effect exists and that the quote is still the effect's
+            // own statement. The basis may be a pending effect proposal — a
+            // proposal built on a proposal changes no artifact, and lib/proposals
+            // requires the approved record before either can be applied.
+            if (isInferenceProvenance(source)) {
+              const basis = resolveEffectBasis(source.effect_id, ROOT);
+              const inferenceErrors = inferenceGroundingErrors(
+                [source],
+                basis?.effect ?? null,
+              );
+              if (inferenceErrors.length > 0) {
+                fail(file, `inference provenance does not resolve: ${inferenceErrors.join("; ")}`);
+                ok = false;
+              } else {
+                spanTally.declaredInference += 1;
+                if (basis?.origin === "proposal") {
+                  console.log(
+                    `  · ${rel(file)} infers from effect ${source.effect_id}, which is still ` +
+                      `a proposal (${basis.path}) — approval is blocked until that effect is approved`,
+                  );
+                }
+              }
+              continue;
+            }
             const corpusPath = isRealizationProvenance(source)
               ? join(
                   PATHS.realizationCorporaDir,
@@ -2457,12 +2933,92 @@ function main(): void {
                   )
                 : groundingErrors([source], corpus as EvidenceCorpusFile)
               : ["corpus is invalid"];
-            if (errors.length > 0) {
-              fail(file, `provenance does not resolve: ${errors.join("; ")}`);
+            // A stale or drifted span is reported as the named condition it is,
+            // not folded into "provenance does not resolve": the corpus text
+            // moving under a span and a quote that was never in the source are
+            // different findings with different remedies.
+            const spanConditions = errors.filter(isSpanConditionError);
+            const groundingFailures = errors.filter(
+              (error) => !isSpanConditionError(error),
+            );
+            if (groundingFailures.length > 0) {
+              fail(file, `provenance does not resolve: ${groundingFailures.join("; ")}`);
               ok = false;
             }
+            for (const condition of spanConditions) {
+              spanTally.stale += 1;
+              fail(file, `stale source_span: ${condition}`);
+              ok = false;
+            }
+            if (isRealizationProvenance(source)) continue;
+            if (source.source_span) {
+              if (spanConditions.length === 0) spanTally.withSpan += 1;
+            } else {
+              spanTally.withoutSpan += 1;
+              if (extractionAuthored) {
+                fail(
+                  file,
+                  `extraction-authored provenance for ${source.corpus_record_id} carries no ` +
+                    "source_span — offsets are required of anything the pipeline produces (D-110)",
+                );
+                ok = false;
+              } else {
+                spanTally.legacyFiles.add(rel(file));
+              }
+            }
+            // D-129, enforced in the same shape as D-110 above. A verbatim quote
+            // proves the words are the source's; only the role says whether the
+            // source was reporting them or restating someone else's prediction.
+            if (isSpanRole(source.span_role)) {
+              spanTally.withRole += 1;
+              spanTally.roleCounts.set(
+                source.span_role,
+                (spanTally.roleCounts.get(source.span_role) ?? 0) + 1,
+              );
+            } else {
+              spanTally.withoutRole += 1;
+              if (roleRequired) {
+                fail(
+                  file,
+                  `extraction-authored provenance for ${source.corpus_record_id} carries no ` +
+                    "span_role — the rhetorical role is required of anything the pipeline " +
+                    "produces, because a verbatim quote of a background premise grounds " +
+                    "nothing (D-129)",
+                );
+                ok = false;
+              } else {
+                spanTally.rolelessFiles.add(rel(file));
+              }
+            }
+          }
+          const payloadId = (proposal.payload as { id?: unknown } | undefined)?.id;
+          if (
+            (proposal.type === "effect" || proposal.type === "realization") &&
+            typeof proposal.target === "string" &&
+            typeof payloadId === "string" &&
+            (proposal.status === "pending" ||
+              proposal.status === "edited" ||
+              proposal.status === "held_low_confidence")
+          ) {
+            const key = `${proposal.type}s/${proposal.target}/${payloadId}.json`;
+            pendingRecordPaths.set(key, [
+              ...(pendingRecordPaths.get(key) ?? []),
+              rel(file),
+            ]);
           }
           if (ok) console.log(`  ✓ ${rel(file)} valid (${proposal.status} proposal)`);
+        }
+        for (const [target, files] of Array.from(pendingRecordPaths.entries())) {
+          if (files.length > 1) {
+            // A warning, not a failure: both proposals are individually valid,
+            // nothing authoritative is wrong yet, and failing here would mean a
+            // whole extraction run is discarded over a naming clash. The owner
+            // resolves it by approving one and rejecting or renaming the other.
+            console.log(
+              `  ! ${files.length} undecided proposals would all be written to ${target}: ` +
+                `${files.join(", ")} — only one can be approved as-is`,
+            );
+          }
         }
         if (proposalFiles.length === 0) {
           console.log("  · no proposals yet (honest empty state)");
@@ -2471,6 +3027,64 @@ function main(): void {
     }
   } else {
     console.log("  · no proposal schema yet (proposals/proposal.schema.json)");
+  }
+
+  // D-110 amendment 2.2: state the span coverage rather than leaving it assumed.
+  // "Optional for legacy, required for new" is only honest if the size of the
+  // legacy remainder is on the record every run.
+  console.log("\nSource spans (D-110):");
+  const spanTotal = spanTally.withSpan + spanTally.withoutSpan;
+  if (spanTotal === 0) {
+    console.log("  · no evidence provenance items to span-check yet");
+  } else {
+    console.log(
+      `  ${spanTally.withSpan} of ${spanTotal} evidence provenance item${spanTotal === 1 ? "" : "s"} ` +
+        `carry a verified source_span; ${spanTally.withoutSpan} predate D-110 and carry none.`,
+    );
+    if (spanTally.legacyFiles.size > 0) {
+      console.log(
+        `  spanless (legacy, valid): ${Array.from(spanTally.legacyFiles).sort().join(", ")}`,
+      );
+    }
+    console.log(
+      spanTally.stale === 0
+        ? "  0 stale — every stored span still re-slices to its own quote against the text it was resolved on."
+        : `  ${spanTally.stale} STALE — reported above by named condition.`,
+    );
+  }
+  // Reported next to the span figures but never added to them (D-112): these
+  // items are span-less by declaration, and folding them into either column
+  // would turn a stated gap into an accounting error.
+  console.log(
+    spanTally.declaredInference === 0
+      ? "  · no inference provenance items (D-112)"
+      : `  ${spanTally.declaredInference} further item${spanTally.declaredInference === 1 ? "" : "s"} ` +
+          "record an inference from an effect and declare they carry no span (D-112); " +
+          "each was checked against its effect instead.",
+  );
+
+  // The same accounting for span_role (D-129), and for the same reason: the
+  // decision says optional-for-legacy and required-for-new, which is only a
+  // policy rather than a loophole while the remainder is counted every run.
+  console.log("\nSpan roles (D-129):");
+  const roleTotal = spanTally.withRole + spanTally.withoutRole;
+  if (roleTotal === 0) {
+    console.log("  · no evidence provenance items to role-check yet");
+  } else {
+    const breakdown = Array.from(spanTally.roleCounts.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([role, count]) => `${count} ${role}`)
+      .join(", ");
+    console.log(
+      `  ${spanTally.withRole} of ${roleTotal} evidence provenance item${roleTotal === 1 ? "" : "s"} ` +
+        `carry a span_role; ${spanTally.withoutRole} predate D-129 and carry none.`,
+    );
+    if (breakdown) console.log(`  roles recorded: ${breakdown}.`);
+    if (spanTally.rolelessFiles.size > 0) {
+      console.log(
+        `  roleless (legacy, valid): ${Array.from(spanTally.rolelessFiles).sort().join(", ")}`,
+      );
+    }
   }
 
   finish();

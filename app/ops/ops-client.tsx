@@ -19,7 +19,7 @@ import type {
   OpsConnectorConfig,
   QuoteArtifact,
 } from "@/lib/ops";
-import type { ExtractionQuote } from "@/tools/extract";
+import type { ExtractionQuote, ScopeKind } from "@/tools/extract";
 import {
   confirmExtractionRunAction,
   confirmRealRunAction,
@@ -37,7 +37,7 @@ import {
 // ---------- Shared props ----------
 
 export interface LastRunView {
-  status: "success" | "partial" | "failed";
+  status: "success" | "partial" | "failed" | "broken";
   timestamp: string;
   apiCalls: number | null;
   estimatedUsd: number | null;
@@ -72,6 +72,7 @@ export interface OpsClientProps {
   mechanismOptions: MechanismOption[];
   packOptions: string[];
   segmentOptions: string[];
+  effectOptions: string[];
 }
 
 function ExtractionRunPanel({ run }: { run: ExtractionRunSummary | null }) {
@@ -100,6 +101,13 @@ function ExtractionRunPanel({ run }: { run: ExtractionRunSummary | null }) {
             funnel: {run.recordsEligible} eligible → {run.recordsRelevant} passed
             pre-filter → {run.recordsProcessed} sent to model · {run.candidates}{" "}
             candidates · {run.recordsRemaining} remaining
+          </p>
+          {/* D-103: the token cap enforces itself by truncating the plan, so a
+              run that answered a smaller question must say so out loud. */}
+          <p className="mt-1 font-mono text-[11px] text-[#7C93A8]">
+            {run.recordsDroppedTruncation === null || run.recordsSelected === null
+              ? "token cap: truncation not reported — this run predates the counter (D-103)"
+              : `token cap: ${run.recordsSelected} records kept by the planner · ${run.recordsDroppedTruncation} dropped to fit per_run_tokens`}
           </p>
           <dl className="mt-4 grid gap-3 sm:grid-cols-3">
             {outcomes.map(([label, value]) => (
@@ -213,6 +221,9 @@ const RUN_COLOR: Record<LastRunView["status"], string> = {
   success: C.accent,
   partial: C.amber,
   failed: C.alert,
+  // D-132: the candidate ledger did not balance, so this run's counters are
+  // unsound rather than merely incomplete.
+  broken: C.alert,
 };
 
 /** Cadence in words — a client copy of lib/ops.describeCadence (lib/ops pulls
@@ -811,7 +822,12 @@ function QuoteConfirm({
 
 const EXTRACTION_MODE_OPTIONS: { id: string; label: string; help: string }[] = [
   { id: "effects", label: "effects", help: "distinct named phenomena (L2)" },
-  { id: "realizations", label: "realizations", help: "interface embodiments (L3)" },
+  {
+    id: "realizations",
+    label: "realizations",
+    help:
+      "interface embodiments (L3) — scoped to a mechanism it reads observed artifacts; scoped to an effect it transfers that effect into product-UI patterns marked derivation=inferred",
+  },
   { id: "interactions", label: "interactions", help: "mechanism pairs treated together" },
   { id: "dissent", label: "dissent", help: "critiques and failed replications" },
   { id: "mechanism", label: "mechanism record", help: "draft a full L1 record for a seed candidate" },
@@ -838,15 +854,17 @@ function ExtractionDispatchPanel({
   optionById,
   packOptions,
   segmentOptions,
+  effectOptions,
 }: {
   writeEnabled: boolean;
   mechanismOptions: MechanismOption[];
   optionById: Map<string, MechanismOption>;
   packOptions: string[];
   segmentOptions: string[];
+  effectOptions: string[];
 }) {
   const [mode, setMode] = useState("effects");
-  const [scopeKind, setScopeKind] = useState<"mechanism" | "pack" | "segment">("mechanism");
+  const [scopeKind, setScopeKind] = useState<ScopeKind>("mechanism");
   const [scopeId, setScopeId] = useState(mechanismOptions[0]?.id ?? "");
   const [phase, setPhase] = useState<ExtractionPhase>({ kind: "idle" });
 
@@ -860,7 +878,9 @@ function ExtractionDispatchPanel({
       ? mechanismOptions.map((option) => option.id)
       : scopeKind === "pack"
         ? packOptions
-        : segmentOptions;
+        : scopeKind === "segment"
+          ? segmentOptions
+          : effectOptions;
   const selectedScopeId = scopeIds.includes(scopeId) ? scopeId : scopeIds[0] ?? "";
 
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -959,6 +979,11 @@ function ExtractionDispatchPanel({
             disabled={!writeEnabled || busy}
             onChange={(e) => {
               setMode(e.target.value);
+              // An effect scope only applies to mode=realizations (D-112), so
+              // leaving that mode drops back to the mechanism scope.
+              if (e.target.value !== "realizations" && scopeKind === "effect") {
+                setScopeKind("mechanism");
+              }
               discardQuote();
             }}
             className="rounded-md border border-[#243329] bg-[#0E1512] px-2.5 py-1.5 font-mono text-sm text-[#E6EFE8] outline-none focus:border-[#34D399] disabled:opacity-50"
@@ -976,7 +1001,7 @@ function ExtractionDispatchPanel({
             value={scopeKind}
             disabled={!writeEnabled || busy}
             onChange={(e) => {
-              setScopeKind(e.target.value as "mechanism" | "pack" | "segment");
+              setScopeKind(e.target.value as ScopeKind);
               discardQuote();
             }}
             className="rounded-md border border-[#243329] bg-[#0E1512] px-2.5 py-1.5 font-mono text-sm text-[#E6EFE8] outline-none focus:border-[#34D399] disabled:opacity-50"
@@ -984,6 +1009,9 @@ function ExtractionDispatchPanel({
             <option value="mechanism">one mechanism</option>
             <option value="pack">a pack</option>
             <option value="segment">a segment</option>
+            {mode === "realizations" && effectOptions.length > 0 && (
+              <option value="effect">an effect (transfer)</option>
+            )}
           </select>
         </label>
         <label className="flex flex-col gap-1">
@@ -1579,6 +1607,7 @@ export default function OpsClient({
   mechanismOptions,
   packOptions,
   segmentOptions,
+  effectOptions,
 }: OpsClientProps) {
   const optionById = new Map(mechanismOptions.map((o) => [o.id, o]));
   // The page renders from the deploy-time filesystem snapshot; config saved
@@ -1648,6 +1677,7 @@ export default function OpsClient({
         optionById={optionById}
         packOptions={packOptions}
         segmentOptions={segmentOptions}
+        effectOptions={effectOptions}
       />
 
       {status === "loading" && (

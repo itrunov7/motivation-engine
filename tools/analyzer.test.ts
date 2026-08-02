@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import type {
@@ -9,12 +10,32 @@ import type {
 import { main } from "./analyzer";
 
 const ROOT = join(__dirname, "..");
+const COMMITTED_MATRIX = join(ROOT, "analysis", "sufficiency-matrix.json");
+
+/**
+ * Compute a matrix into a throwaway directory (D-134).
+ *
+ * The point is what it does NOT do: this test used to call main() with no
+ * arguments, which rewrote the committed analysis/sufficiency-matrix.json every
+ * time the suite ran. That makes `git status` an unreliable signal — the file is
+ * always dirty, so a real change to it is indistinguishable from test noise —
+ * and it means running tests can commit a regenerated artifact nobody chose to
+ * regenerate. A test observes; it does not write to the repo.
+ */
+function computeMatrix(): { matrix: SufficiencyMatrix; raw: string } {
+  const dir = mkdtempSync(join(tmpdir(), "analyzer-"));
+  try {
+    const path = join(dir, "sufficiency-matrix.json");
+    main({ matrixPath: path });
+    const raw = readFileSync(path, "utf8");
+    return { matrix: JSON.parse(raw) as SufficiencyMatrix, raw };
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
 
 test("grouped sufficiency is fail-closed, traced, and exposes core-ux depth", () => {
-  main();
-  const matrix = JSON.parse(
-    readFileSync(join(ROOT, "analysis", "sufficiency-matrix.json"), "utf8"),
-  ) as SufficiencyMatrix;
+  const { matrix } = computeMatrix();
   const packCells = matrix.cells.filter(
     (cell) => (cell.row_group ?? "pack") === "pack",
   );
@@ -93,5 +114,25 @@ test("grouped sufficiency is fail-closed, traced, and exposes core-ux depth", ()
             `registry/mechanisms/_seed/${candidate.id}.json`,
       ),
     ),
+  );
+});
+
+test("the committed matrix equals what a fresh computation produces", () => {
+  // Not a restore, a check. Now that the suite no longer rewrites the committed
+  // file, nothing keeps it in step with the inputs except this assertion —
+  // otherwise a change to the pack map or an approved realization would leave a
+  // stale matrix on disk and every screen reading it would be quietly wrong.
+  //
+  // generated_at is excluded because it is a clock reading, not a measurement:
+  // two identical computations differ in it by construction.
+  const fresh = computeMatrix().matrix;
+  const committed = JSON.parse(
+    readFileSync(COMMITTED_MATRIX, "utf8"),
+  ) as SufficiencyMatrix;
+  const comparable = ({ generated_at: _drop, ...rest }: SufficiencyMatrix) => rest;
+  assert.deepEqual(
+    comparable(fresh),
+    comparable(committed),
+    "analysis/sufficiency-matrix.json is stale — run `npm run analyze` and commit the result deliberately",
   );
 });

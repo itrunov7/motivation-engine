@@ -23,21 +23,34 @@ import { basename, join } from "node:path";
 import { Ajv2020, type ValidateFunction } from "ajv/dist/2020";
 import addFormats from "ajv-formats";
 import { parse as parseYaml } from "yaml";
+import { resolveEffectBasis, type ResolvedEffectBasis } from "../lib/effect-basis";
 import {
   computeBudgetSnapshot,
   extractionPriceState,
   loadExtractionOpsConfigFromDisk,
   validateExtractionOpsConfig,
 } from "../lib/ops";
+import { EXTRACTION_RUN_ID_PREFIX } from "../lib/proposal-meta";
 import {
+  evidenceSourceText,
   groundingErrors,
   hasNovelEnrichment,
   mergeProposals,
   normalizeQualityText,
+  patternParameterErrors,
   proposalSimilarity,
   realizationGroundingErrors,
+  realizationSourceText,
+  sha256Hex,
 } from "../lib/proposal-quality";
 import { writeRunProgress } from "./progress";
+import { checkSpanRole } from "../lib/span-role";
+import {
+  INFERENCE_SPAN_ABSENT_REASON,
+  isSpanRole,
+  PARAMETER_EVIDENCE_BASIS_NONE,
+  SPAN_ROLES,
+} from "../lib/types";
 import type {
   ArtifactType,
   AxisScore,
@@ -48,10 +61,12 @@ import type {
   DossierDraftAxis,
   DossierDraftPayload,
   DossierEvidenceSource,
+  Effect,
   EvidenceCorpusFile,
   EvidenceCorpusRecord,
   EvidenceGrade,
   EvidenceProvenanceItem,
+  InferenceProvenanceItem,
   ExtractionModelTierConfig,
   ExtractionOpsConfig,
   HardRule,
@@ -60,8 +75,11 @@ import type {
   Mechanism,
   PackMapFile,
   Proposal,
+  ProvenanceSourceSpan,
   ReaderCoverageFile,
   Realization,
+  RealizationDerivation,
+  RealizationParameter,
   RealizationCorpusFile,
   RealizationCorpusRecord,
   RealizationCorpusProvenanceItem,
@@ -73,6 +91,7 @@ import type {
   Segment,
   SeedStub,
   SegmentsFile,
+  SpanRole,
   UngroundedDropReason,
 } from "../lib/types";
 import {
@@ -85,6 +104,8 @@ import {
   rejectionRecord,
   type RejectionLog,
 } from "./rejected-candidates";
+import { CandidateLedger, writeCandidateLedger } from "./candidate-ledger";
+import { checkLedgerBalance } from "../lib/candidate-ledger";
 
 const ROOT = join(__dirname, "..");
 const CORPUS_DIR = join(ROOT, "corpora", "evidence");
@@ -108,7 +129,7 @@ export const EXTRACTION_MODES = [
   "dossier",
 ] as const;
 export type ExtractionMode = (typeof EXTRACTION_MODES)[number];
-export type ScopeKind = "mechanism" | "pack" | "segment";
+export type ScopeKind = "mechanism" | "pack" | "segment" | "effect";
 
 /** Modes that draft a whole first-time artifact for a seed candidate (D-085). */
 export function isDraftMode(mode: ExtractionMode): mode is "mechanism" | "dossier" {
@@ -119,7 +140,40 @@ export interface ExtractionScope {
   kind: ScopeKind;
   id: string;
   mechanismIds: string[];
+  /**
+   * The L2 effect this run is aimed at, resolved from /effects or from the
+   * pending proposal queue (D-112). Present only for kind="effect", which is
+   * accepted by mode=realizations alone: it switches that mode from describing
+   * what sources observed to transferring an effect into product-UI patterns,
+   * and the effect's text is what the models are anchored on.
+   */
+  effectBasis?: ResolvedEffectBasis;
 }
+
+/**
+ * Whether this run infers product-UI patterns from an effect rather than
+ * describing observations (D-112). One derivation per run, decided by the scope,
+ * so a single proposal can never be half reported and half inferred.
+ */
+export function realizationDerivation(
+  scope: ExtractionScope,
+): RealizationDerivation {
+  return scope.kind === "effect" ? "inferred" : "reported";
+}
+
+/**
+ * The one domain every realization in this repository is applied in. Named
+ * rather than inlined because it is written into data (D-112), and a phrase
+ * written into data from three places drifts into three phrases.
+ */
+const APPLICATION_DOMAIN = "product UI";
+
+/**
+ * Where a REPORTED realization's evidence was observed: the realization corpus
+ * holds captures of shipped product interfaces (D-081), so its source domain is
+ * the application domain and there is no transfer.
+ */
+const REPORTED_SOURCE_DOMAIN = APPLICATION_DOMAIN;
 
 export interface ExtractionQuote {
   mode: ExtractionMode;
@@ -132,6 +186,13 @@ export interface ExtractionQuote {
     skipped_irrelevant: number;
     selected: number;
     remaining: number;
+    /**
+     * Relevant records the planner refused to fit under per_run_tokens (D-103).
+     * Equal to `remaining` for a single plan — the same count under the name
+     * that says WHY those records were left out, so a reader cannot mistake
+     * "the cap changed the question" for "the corpus ran out".
+     */
+    dropped_truncation: number;
   };
   capped: boolean;
   resumable: boolean;
@@ -147,6 +208,22 @@ export interface ExtractionQuote {
 interface CitationDraft {
   record_id: string;
   quote_or_locus: string;
+  /**
+   * Offsets of the quote in the record's source text, present once
+   * `anchorCitations` or `resolveRefs` has located it (D-110). Optional because
+   * a citation as a model emitted it has not been anchored yet — models are
+   * never asked for character arithmetic. Provenance that reaches a proposal
+   * must have them; see `requireSpans` in `groundingOutcome`.
+   */
+  start?: number;
+  end?: number;
+  /**
+   * What the span is doing in its source (D-129). Asserted by the extraction
+   * model, which is the pass that actually read the record, then checked against
+   * the text. Typed loosely because it arrives from a model: `spanRoleOutcome`
+   * validates it against SPAN_ROLES rather than trusting the string.
+   */
+  span_role?: unknown;
 }
 
 interface ImplementationDraft {
@@ -197,7 +274,16 @@ export interface DraftItem {
   term?: string;
   description_as_reported?: string;
   artifact_context?: string[];
-  effect_id?: string | null;
+  /** mode=realizations, effect-anchored (D-112): the transferred UI directive. */
+  pattern?: string;
+  /**
+   * mode=realizations, effect-anchored (D-115): the thresholds `pattern`
+   * references as {name}. `unknown` because evidence_basis is code-filled, so
+   * whatever the model sends for it is validated away rather than trusted.
+   */
+  parameters?: unknown;
+  /** mode=realizations, effect-anchored (D-112): the domain evidence came from. */
+  source_domain?: string;
   pair?: string[];
   type?: string;
   source?: string;
@@ -239,7 +325,7 @@ interface DraftResponse {
   items: DraftItem[];
 }
 
-type ExtractionStage = "extract" | "synthesize";
+export type ExtractionStage = "extract" | "synthesize";
 export type ResponseTolerance =
   | "strict"
   | "markdown_code_fence"
@@ -268,8 +354,13 @@ const citationSchema: JsonSchema = {
   properties: {
     record_id: { type: "string" },
     quote_or_locus: { type: "string" },
+    // Required of the extraction model, and an enum rather than a free string:
+    // the gate that reads it is only as good as the vocabulary being closed
+    // (D-129). A model that cannot decide has "background" available, which
+    // costs it the candidate — that is the intended price.
+    span_role: { type: "string", enum: [...SPAN_ROLES] },
   },
-  required: ["record_id", "quote_or_locus"],
+  required: ["record_id", "quote_or_locus", "span_role"],
 };
 
 const citationsSchema: JsonSchema = {
@@ -331,6 +422,7 @@ function commonItem(
 function extractionItemSchema(
   mode: ExtractionMode,
   stage: ExtractionStage,
+  derivation: RealizationDerivation = "reported",
 ): JsonSchema {
   switch (mode) {
     case "effects":
@@ -345,14 +437,27 @@ function extractionItemSchema(
         stage,
       );
     case "realizations":
+      // The inferred shape asks for the two halves separately (D-112): what the
+      // source states, in its own domain, and the product-UI pattern transferred
+      // from it. effect_refs is NOT asked for — the run knows which effect it was
+      // aimed at, and a model-authored link to an artifact is provenance the
+      // model does not get to write (D-104).
       return commonItem(
-        {
-          id: { type: ["string", "null"] },
-          term: { type: "string" },
-          description_as_reported: { type: "string" },
-          artifact_context: stringArraySchema,
-          effect_id: { type: ["string", "null"] },
-        },
+        derivation === "inferred"
+          ? {
+              id: { type: ["string", "null"] },
+              term: { type: "string" },
+              description_as_reported: { type: "string" },
+              pattern: { type: "string" },
+              source_domain: { type: "string" },
+              artifact_context: stringArraySchema,
+            }
+          : {
+              id: { type: ["string", "null"] },
+              term: { type: "string" },
+              description_as_reported: { type: "string" },
+              artifact_context: stringArraySchema,
+            },
         stage,
       );
     case "interactions":
@@ -465,6 +570,7 @@ function dossierSynthesisSchema(): JsonSchema {
 function responseItemSchema(
   mode: ExtractionMode,
   stage: ExtractionStage,
+  derivation: RealizationDerivation = "reported",
 ): JsonSchema {
   if (stage === "synthesize" && mode === "mechanism") {
     return mechanismSynthesisSchema();
@@ -472,22 +578,26 @@ function responseItemSchema(
   if (stage === "synthesize" && mode === "dossier") {
     return dossierSynthesisSchema();
   }
-  return extractionItemSchema(mode, stage);
+  return extractionItemSchema(mode, stage, derivation);
 }
 
 export function openRouterResponseFormat(
   mode: ExtractionMode,
   stage: ExtractionStage,
+  derivation: RealizationDerivation = "reported",
 ): JsonSchema {
   return {
     type: "json_schema",
     json_schema: {
-      name: `motivation_engine_${mode}_${stage}`,
+      name:
+        mode === "realizations"
+          ? `motivation_engine_realizations_${derivation}_${stage}`
+          : `motivation_engine_${mode}_${stage}`,
       strict: true,
       schema: strictObject({
         items: {
           type: "array",
-          items: responseItemSchema(mode, stage),
+          items: responseItemSchema(mode, stage, derivation),
         },
       }),
     },
@@ -501,10 +611,11 @@ export function openRouterStructuredOutputOptions(
   mode: ExtractionMode,
   stage: ExtractionStage,
   responseFormat: ExtractionModelTierConfig["response_format"],
+  derivation: RealizationDerivation = "reported",
 ): JsonSchema {
   return responseFormat === "json_schema"
     ? {
-        response_format: openRouterResponseFormat(mode, stage),
+        response_format: openRouterResponseFormat(mode, stage, derivation),
         provider: { require_parameters: true },
       }
     : { response_format: { type: "json_object" } };
@@ -543,6 +654,8 @@ export function openRouterRequestBody(args: {
   stage: ExtractionStage;
   prompt: string;
   maxTokens: number;
+  /** mode=realizations only: which item shape to ask for (D-112). */
+  derivation?: RealizationDerivation;
 }): Record<string, unknown> {
   return {
     model: args.tier.model_id,
@@ -554,6 +667,7 @@ export function openRouterRequestBody(args: {
       args.mode,
       args.stage,
       args.tier.response_format,
+      args.derivation,
     ),
     ...openRouterSamplingOptions(args.tier.supports),
     max_tokens: args.maxTokens,
@@ -705,16 +819,58 @@ export interface ExtractionStats {
   dropped_ungrounded_strong: number;
   failed_validation: number;
   proposed: number;
+  /**
+   * Kept as the sum of the two fates below, because /ops and every committed
+   * run entry already read it. On its own it is not an outcome: it conflated a
+   * candidate ABSORBED into a pending proposal (no file) with one WRITTEN as an
+   * enrichment of an approved artifact (a file), so proposals_out was not
+   * derivable from it (D-132).
+   */
   merged: number;
+  /** Absorbed into an earlier pending proposal; produces no file of its own. */
+  merged_into_pending: number;
+  /** Written to the queue as an enrichment of an approved artifact. */
+  proposed_enrich: number;
   held_low_confidence: number;
   dropped_volume_cap: number;
   dropped_volume_cap_high_confidence: number;
+  /**
+   * Synthesis output past the first item, discarded by a draft mode (D-085).
+   * Previously never counted as a candidate at all, so a draft run that
+   * composed four artifacts and kept one reported having composed one.
+   */
+  dropped_draft_cap: number;
+  /**
+   * The cheap-to-strong stage (D-132), where the loss hid. Grounded cheap
+   * candidates handed to a synthesis call that RETURNED, those lost with a
+   * synthesis call that failed, and the fold between the two totals — a
+   * consolidation of several candidates into one is legitimate, but it is a
+   * fate, and until now it had no name and no counter.
+   */
+  into_synthesis: number;
+  cheap_synthesis_failed: number;
+  consolidated_by_synthesis: number;
+  expanded_by_synthesis: number;
   /** Funnel (D-090): total eligible records in the corpus at run start. */
   records_eligible: number;
   /** Funnel (D-090): eligible records that passed the cheap relevance pre-filter. */
   records_relevant: number;
   /** Funnel (D-090): relevant records still unread after this run (0 = corpus exhausted). */
   records_remaining: number;
+  /**
+   * Records the planner KEPT across every slice of this run (D-103), summed as
+   * each slice is planned. Distinct from records_processed, which counts what
+   * was actually sent to a model: the two agree unless a slice died before its
+   * batches ran, and that divergence is itself worth reading.
+   */
+  records_selected: number;
+  /**
+   * Records the planner DROPPED to fit per_run_tokens (D-103). A run that
+   * covered a third of its scope and one that covered all of it used to look
+   * identical in the report; this is the number that tells them apart. Not the
+   * same as records_remaining, which also carries retryable failed batches.
+   */
+  records_dropped_truncation: number;
   /**
    * Per-reason breakdown of dropped_ungrounded (D-098). Keys are
    * UngroundedReason; only non-zero reasons are present. The values always sum
@@ -778,8 +934,16 @@ export function mergeReaderCoverage(
   mode: ExtractionMode,
   processed: ReadonlyMap<string, ReaderCoverageDelta>,
   processedAt: string,
+  // Which corpus the ids belong to. Derived from the mode by default, but an
+  // effect-anchored realizations run reads the EVIDENCE corpus (D-112), and
+  // filing those ids under the realization ledger would both mislabel them and
+  // hide them from the planner, which reads back the branch it read from — so
+  // the run would re-read and re-pay for the same records forever.
+  corpusKind: "evidence" | "realization" = mode === "realizations"
+    ? "realization"
+    : "evidence",
 ): ReaderCoverageFile {
-  const kind = mode === "realizations" ? "realization" : "evidence";
+  const kind = corpusKind;
   const mechanisms = structuredClone(previous?.mechanisms ?? {});
   for (const [mechanismId, delta] of Array.from(processed.entries())) {
     const mechanism = mechanisms[mechanismId] ?? {};
@@ -829,6 +993,7 @@ function writeReaderCoverage(
   mode: ExtractionMode,
   processed: ReadonlyMap<string, ReaderCoverageDelta>,
   processedAt: string,
+  corpusKind?: "evidence" | "realization",
 ): void {
   mkdirSync(EXTRACTION_DIR, { recursive: true });
   const previous = existsSync(READER_COVERAGE_FILE)
@@ -836,7 +1001,7 @@ function writeReaderCoverage(
     : null;
   writeFileSync(
     READER_COVERAGE_FILE,
-    json(mergeReaderCoverage(previous, mode, processed, processedAt)),
+    json(mergeReaderCoverage(previous, mode, processed, processedAt, corpusKind)),
   );
 }
 
@@ -859,6 +1024,10 @@ export function extractionSummaryParams(
     records_eligible: String(stats.records_eligible),
     records_relevant: String(stats.records_relevant),
     records_remaining: String(stats.records_remaining),
+    // D-103: available / kept / dropped-to-fit, written unconditionally so a
+    // zero is a measurement and an absent field means the run predates it.
+    records_selected: String(stats.records_selected),
+    records_dropped_truncation: String(stats.records_dropped_truncation),
     // The per-pass funnel is always present from D-105 on, even at zero: its
     // absence is what tells /ops a run predates the cheap-pass gate, so writing
     // it unconditionally is what makes "not split" a truthful reading.
@@ -866,6 +1035,16 @@ export function extractionSummaryParams(
     candidates_strong: String(stats.candidates_strong),
     dropped_ungrounded_cheap: String(stats.dropped_ungrounded_cheap),
     dropped_ungrounded_strong: String(stats.dropped_ungrounded_strong),
+    // The conservation counters (D-132), also unconditional: a run whose params
+    // lack them predates the invariant, and that is exactly what the ledger's
+    // reconstruction status has to say out loud rather than leave to inference.
+    merged_into_pending: String(stats.merged_into_pending),
+    proposed_enrich: String(stats.proposed_enrich),
+    dropped_draft_cap: String(stats.dropped_draft_cap),
+    into_synthesis: String(stats.into_synthesis),
+    cheap_synthesis_failed: String(stats.cheap_synthesis_failed),
+    consolidated_by_synthesis: String(stats.consolidated_by_synthesis),
+    expanded_by_synthesis: String(stats.expanded_by_synthesis),
     // Only present when something was actually dropped, so a clean run does
     // not carry an empty field and pre-D-098 runs stay readable as absent.
     ...(stats.dropped_ungrounded > 0
@@ -990,17 +1169,45 @@ function modeEligible(mode: ExtractionMode, mechanismId: string): boolean {
 
 export function resolveScope(
   params: Record<string, string>,
-  options: { includeSeeds?: boolean } = {},
+  options: { includeSeeds?: boolean; mode?: ExtractionMode } = {},
 ): ExtractionScope {
-  const supplied = (["mechanism", "pack", "segment"] as const).filter(
+  const supplied = (["mechanism", "pack", "segment", "effect"] as const).filter(
     (key) => params[key],
   );
   if (supplied.length !== 1) {
-    throw new Error("Provide exactly one scope: mechanism=, pack=, or segment=");
+    throw new Error(
+      "Provide exactly one scope: mechanism=, pack=, segment=, or effect=",
+    );
   }
   const kind = supplied[0];
   const id = params[kind];
   const mechanisms = fullMechanisms();
+  if (kind === "effect") {
+    // An effect scope only means anything for realizations: it is the transfer
+    // input, and no other mode consumes one (D-112).
+    if (options.mode && options.mode !== "realizations") {
+      throw new Error(
+        `effect= scope is only valid with mode=realizations, not mode=${options.mode}`,
+      );
+    }
+    const basis = resolveEffectBasis(id, ROOT);
+    if (!basis) {
+      throw new Error(
+        `Unknown effect "${id}" — expected effects/{mechanism}/${id}.json or a live proposals/effect entry`,
+      );
+    }
+    if (!mechanisms.has(basis.effect.mechanism_id)) {
+      throw new Error(
+        `Effect "${id}" belongs to ${basis.effect.mechanism_id}, which is not a full mechanism record`,
+      );
+    }
+    return {
+      kind,
+      id,
+      mechanismIds: [basis.effect.mechanism_id],
+      effectBasis: basis,
+    };
+  }
   const crossCutting = Array.from(mechanisms.values())
     .filter((mechanism) => mechanism.cross_cutting === true)
     .map((mechanism) => mechanism.id);
@@ -1062,12 +1269,30 @@ function isRealizationRecord(
   return "observation" in record;
 }
 
-function corpusFor(mode: ExtractionMode, mechanismId: string): ExtractionCorpus {
-  const path =
-    mode === "realizations"
-      ? join(REALIZATION_CORPUS_DIR, mechanismId, "records.json")
-      : join(CORPUS_DIR, `${mechanismId}.json`);
-  if (!existsSync(path) && mode === "realizations") {
+/**
+ * Which corpus a run reads. mode=realizations normally reads the interface
+ * observation corpus, but an effect-anchored run reads the EVIDENCE corpus
+ * (D-112): the material it transfers from is the literature the effect was
+ * extracted out of, and reading it there is also what makes each quote
+ * span-verifiable, which realization-corpus provenance never is (D-110).
+ */
+function readsRealizationCorpus(
+  mode: ExtractionMode,
+  scope?: ExtractionScope,
+): boolean {
+  return mode === "realizations" && scope?.kind !== "effect";
+}
+
+function corpusFor(
+  mode: ExtractionMode,
+  mechanismId: string,
+  scope?: ExtractionScope,
+): ExtractionCorpus {
+  const fromRealizations = readsRealizationCorpus(mode, scope);
+  const path = fromRealizations
+    ? join(REALIZATION_CORPUS_DIR, mechanismId, "records.json")
+    : join(CORPUS_DIR, `${mechanismId}.json`);
+  if (!existsSync(path) && fromRealizations) {
     return {
       mechanism_id: mechanismId,
       updated_at: "1970-01-01T00:00:00.000Z",
@@ -1153,9 +1378,65 @@ export function recordRelevanceTier(
   return null;
 }
 
+/**
+ * What an effect-anchored run ranks records against (D-112).
+ *
+ * Deliberately a RANKING input, never a skip decision. The reader-coverage
+ * ledger is keyed by corpus and mode, not by effect, so marking a record
+ * "irrelevant" because it misses one effect's vocabulary would hide it from
+ * every later realizations run for every other effect on the same mechanism.
+ * Ranking leaves the unread tail as `remaining`, which is what it is.
+ *
+ * DELIBERATELY UNCOVERED: records this run READS still become terminal for
+ * mode=realizations, so a second effect on the same mechanism will not re-read
+ * them. Re-reading is the spend the ledger exists to prevent, and per-effect
+ * coverage would mean a schema key per effect; the limit is stated here instead
+ * of being discovered later.
+ */
+interface EffectAnchor {
+  effect: Effect;
+  keywords: readonly string[];
+  /** Records the effect itself cites: read first, always. */
+  citedRecordIds: ReadonlySet<string>;
+}
+
+function effectAnchor(scope?: ExtractionScope): EffectAnchor | null {
+  const basis = scope?.effectBasis;
+  if (!basis) return null;
+  const { effect } = basis;
+  const keywords = new Set<string>();
+  for (const token of Array.from(
+    relevanceTokens(`${effect.name} ${effect.fact} ${effect.boundary}`),
+  )) {
+    if (!GENERIC_RELEVANCE_TOKENS.has(token)) keywords.add(token);
+  }
+  return {
+    effect,
+    keywords: Array.from(keywords).sort(),
+    citedRecordIds: new Set(
+      effect.provenance.map((item) => item.corpus_record_id),
+    ),
+  };
+}
+
+/** How closely a record speaks to the anchored effect; lower reads first. */
+function effectAffinity(
+  anchor: EffectAnchor,
+  record: ExtractionRecord,
+): 0 | 1 | 2 | 3 {
+  if (anchor.citedRecordIds.has(record.record_id)) return 0;
+  if (isRealizationRecord(record)) return 3;
+  const titleHits = keywordHits(record.title, anchor.keywords);
+  const abstractHits = keywordHits(record.abstract ?? "", anchor.keywords);
+  if (titleHits >= 1 && abstractHits >= 1) return 1;
+  if (titleHits >= 1 || abstractHits >= 2) return 2;
+  return 3;
+}
+
 export function rankRelevantRecords(
   corpus: ExtractionCorpus,
   records: readonly ExtractionRecord[],
+  anchor: EffectAnchor | null = null,
 ): { records: ExtractionRecord[]; skippedIrrelevantIds: string[] } {
   const ranked: { record: ExtractionRecord; tier: 0 | 1 | 2 }[] = [];
   const skippedIrrelevantIds: string[] = [];
@@ -1166,6 +1447,23 @@ export function rankRelevantRecords(
     } else {
       ranked.push({ record, tier });
     }
+  }
+  if (anchor) {
+    // Effect affinity outranks the corpus-wide tier: a run aimed at one effect
+    // must spend its token cap on the records that speak to that effect.
+    ranked.sort((left, right) => {
+      const affinity =
+        effectAffinity(anchor, left.record) - effectAffinity(anchor, right.record);
+      if (affinity !== 0) return affinity;
+      return (
+        left.tier - right.tier ||
+        left.record.record_id.localeCompare(right.record.record_id)
+      );
+    });
+    return {
+      records: ranked.map(({ record }) => record),
+      skippedIrrelevantIds: skippedIrrelevantIds.sort(),
+    };
   }
   ranked.sort((left, right) => {
     const leftCitations = isRealizationRecord(left.record)
@@ -1260,29 +1558,97 @@ const DOSSIER_AXES = [
  * permits, and all the resolver will accept. The prompt only explains the shape
  * the code already enforces; it is not what makes provenance immutable.
  */
-function provenanceInstruction(mode: ExtractionMode, stage: ExtractionStage): string {
+function provenanceInstruction(
+  mode: ExtractionMode,
+  stage: ExtractionStage,
+  anchor: EffectAnchor | null = null,
+): string {
   if (stage === "synthesize") {
     return "Every item must include provenance_refs: the opaque provenance handles of the candidates it draws on, copied unchanged. Never emit record ids, quotes, or offsets — provenance was established upstream and cannot be authored here. If an item has no supporting ref, omit it.";
   }
   const locus =
-    mode === "realizations"
+    mode === "realizations" && !anchor
       ? "a supplied title or observation"
       : "a supplied title or abstract";
-  return `Every item must include citations [{record_id,quote_or_locus}] using only supplied records. quote_or_locus must be an exact span from ${locus}. If an item cannot be grounded, omit it.`;
+  return [
+    `Every item must include citations [{record_id,quote_or_locus,span_role}] using only supplied records.`,
+    `quote_or_locus must be an exact span from ${locus}.`,
+    "span_role states what the span is DOING in the source it was cut from, and is checked against the text:",
+    "- background: what the literature, a theory, or prior work says. Includes anything the source is restating rather than testing, and anything it introduces in order to motivate its own question.",
+    "- hypothesis: what this source predicted or set out to test.",
+    "- method: what was done — design, materials, participants, procedure.",
+    "- finding: what THIS source observed in ITS OWN data. Results and conclusions about those results.",
+    "- limitation: what this source says it cannot show, or where its result did not hold.",
+    "A verbatim quote can still misrepresent a paper. A sentence that states what cognitive load theory PREDICTS is background even if the paper agrees with it, and even if the same paper later confirms it — and some papers report the OPPOSITE of the prediction they open with. Read the sentences after your quote before choosing: if the source goes on to qualify or contradict it, the span is background, not a finding.",
+    "Only span_role=finding can ground a fact, so a candidate whose only citations are background, hypothesis, method, or limitation will be dropped. Do not relabel a background span as a finding to save an item — a dropped candidate costs nothing, a false one is filed as knowledge.",
+    "If an item cannot be grounded, omit it.",
+  ].join(" ");
+}
+
+/**
+ * The effect the run transfers from, stated to the model as the fixed anchor it
+ * is (D-112). Both passes see it: the extraction pass needs it to know which
+ * material is on-topic, and the synthesis pass composes the final patterns and
+ * would otherwise be transferring from candidates alone.
+ */
+function anchorBlock(anchor: EffectAnchor): string {
+  const { effect } = anchor;
+  return [
+    "EFFECT (the fixed anchor; treat its wording as given, do not restate it as a finding):",
+    JSON.stringify({
+      id: effect.id,
+      name: effect.name,
+      fact: effect.fact,
+      boundary: effect.boundary,
+      grade: effect.grade,
+    }),
+  ].join("\n");
+}
+
+/**
+ * What an effect-anchored realizations run asks for (D-112).
+ *
+ * Two fields, deliberately: `description_as_reported` stays inside the domain
+ * the evidence was measured in, and `pattern` is the product-UI directive
+ * transferred out of it. Splitting them is what lets a reader see which half a
+ * source supports — a single blended sentence hides the seam, and the seam is
+ * the thing under review.
+ */
+function inferredRealizationInstruction(
+  mechanismId: string,
+  provenanceField: string,
+): string {
+  return [
+    `Propose implementable product-UI patterns that follow from the anchored effect for ${mechanismId}.`,
+    "A pattern must be concrete enough to build without further interpretation: name the interface element, the trigger or threshold that changes it, and what the user sees before and after. \"Collapse the guided tour once the user has completed the core action {core_action_completions} times\" is a pattern; \"adapt to user expertise\" is not.",
+    "Fields per item:",
+    "- term: a short name for the pattern.",
+    "- description_as_reported: what the cited source states, in the source's own domain vocabulary. Do not describe a product interface here, and do not generalise beyond the quote.",
+    "- pattern: the product-UI directive transferred from it, in the imperative. This is your inference, not the source's claim. NEVER write a number in this text, as a digit or as a word — no source measured a threshold for a product interface, and a number in prose reads as if one had. Write {snake_case_name} instead and declare it in parameters.",
+    "- parameters: one entry per {name} the pattern references, as {name, value (your suggested default), unit (what the number counts, in words), evidence_basis: \"none — default heuristic\"}. Every parameter must be referenced by the pattern and every placeholder must be declared.",
+    "- source_domain: the field the cited evidence was measured in, as the records themselves describe it (for example \"medical education\" or \"multimedia instructional design\"). Never write a product or software domain here.",
+    `- artifact_context: where the pattern applies, from this vocabulary where one fits: ${ARTIFACT_TYPES.join("|")}.`,
+    "- confidence: your confidence in the TRANSFER holding in a product interface, not in the effect being real. No source measured this pattern in a product, so a value above 0.8 is not credible.",
+    `- ${provenanceField}.`,
+    "Do not claim or imply that the pattern has been tested in a product. Do not propose a pattern that merely restates the effect.",
+  ].join("\n");
 }
 
 function taskInstruction(
   mode: ExtractionMode,
   mechanismId: string,
   stage: ExtractionStage = "extract",
+  anchor: EffectAnchor | null = null,
 ): string {
   const provenanceField = stage === "synthesize" ? "provenance_refs" : "citations";
-  const shared = `Return exactly one JSON object with this envelope: {"items":[]}. Do not return markdown, code fences, prose, or a bare top-level array. ${provenanceInstruction(mode, stage)}`;
+  const shared = `Return exactly one JSON object with this envelope: {"items":[]}. Do not return markdown, code fences, prose, or a bare top-level array. ${provenanceInstruction(mode, stage, anchor)}`;
   switch (mode) {
     case "effects":
       return `${shared} Extract distinct named phenomena produced by ${mechanismId}. Fields: id, name, fact, boundary, grade (A+..C-), confidence, ${provenanceField}.`;
     case "realizations":
-      return `${shared} Extract concrete interface, copy, or flow embodiments reported in sources for ${mechanismId}. Use neutral descriptive language. Fields: id, term, description_as_reported, artifact_context (strings), optional effect_id, confidence, ${provenanceField}.`;
+      return anchor
+        ? `${shared}\n\n${inferredRealizationInstruction(mechanismId, provenanceField)}\n\n${anchorBlock(anchor)}`
+        : `${shared} Extract concrete interface, copy, or flow embodiments reported in sources for ${mechanismId}. Use neutral descriptive language. Fields: id, term, description_as_reported, artifact_context (strings), confidence, ${provenanceField}.`;
     case "interactions":
       return `${shared} Extract only pairs of known mechanism ids explicitly treated together. Fields: pair (two sorted mechanism ids), type (sequence-amplifying|reinforcing|suppressing|neutral), fact, grade, boundary, source, confidence, ${provenanceField}.`;
     case "dissent":
@@ -1294,11 +1660,22 @@ function taskInstruction(
   }
 }
 
-function synthesisInstruction(mode: ExtractionMode, mechanismId: string): string {
+function synthesisInstruction(
+  mode: ExtractionMode,
+  mechanismId: string,
+  anchor: EffectAnchor | null = null,
+): string {
   const noInvention =
     "Do not add a claim that is not supported by the candidates.";
   // Refs, not quotes: the synthesis pass has no records to quote from (D-104).
   const refsOnly = provenanceInstruction(mode, "synthesize");
+  if (mode === "realizations" && anchor) {
+    return [
+      taskInstruction(mode, mechanismId, "synthesize", anchor),
+      "Compose 3-5 distinct patterns from the candidate list: merge duplicates, drop any whose pattern is not implementable as written, and keep every ref that still applies. Two patterns that change the same interface element under the same trigger are one pattern.",
+      noInvention,
+    ].join("\n\n");
+  }
   switch (mode) {
     case "mechanism":
       return [
@@ -1324,8 +1701,9 @@ function cheapPrompt(
   mode: ExtractionMode,
   mechanismId: string,
   records: ExtractionRecord[],
+  anchor: EffectAnchor | null = null,
 ): string {
-  return `${taskInstruction(mode, mechanismId)}\n\nRECORDS:\n${JSON.stringify(
+  return `${taskInstruction(mode, mechanismId, "extract", anchor)}\n\nRECORDS:\n${JSON.stringify(
     records.map(compactRecord),
   )}`;
 }
@@ -1366,9 +1744,10 @@ function strongPrompt(
   mode: ExtractionMode,
   mechanismId: string,
   candidates: AnchoredCandidate[],
+  anchor: EffectAnchor | null = null,
 ): string {
   return [
-    synthesisInstruction(mode, mechanismId),
+    synthesisInstruction(mode, mechanismId, anchor),
     `CANDIDATES:\n${JSON.stringify(candidates.map(forSynthesis))}`,
   ].join("\n\n");
 }
@@ -1454,6 +1833,9 @@ function estimateSelected(
   mode: ExtractionMode,
   selectedByMechanism: ReadonlyMap<string, readonly ExtractionRecord[]>,
   config: ExtractionOpsConfig,
+  // The anchored prompt is longer than the plain one, so the estimate has to be
+  // built from the SAME prompt the run will send or the quote understates it.
+  anchor: EffectAnchor | null = null,
 ): Pick<ExtractionPlan, "calls" | "tokens"> {
   const cheap = configuredTier(config, "cheap");
   const strong = configuredTier(config, "strong");
@@ -1469,7 +1851,7 @@ function estimateSelected(
     );
     for (const batch of mechanismBatches) {
       cheapCalls += 1;
-      inputUpper += estimateTokens(cheapPrompt(mode, mechanismId, batch));
+      inputUpper += estimateTokens(cheapPrompt(mode, mechanismId, batch, anchor));
       outputReserved += Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call);
     }
     strongCalls += 1;
@@ -1502,6 +1884,7 @@ export function buildExtractionPlan(
   config: ExtractionOpsConfig,
   coverage: ReaderCoverageFile | null = loadReaderCoverage(),
 ): ExtractionPlan {
+  const anchor = effectAnchor(scope);
   const candidates: {
     mechanismId: string;
     corpus: ExtractionCorpus;
@@ -1512,10 +1895,10 @@ export function buildExtractionPlan(
   let alreadyCompleted = 0;
   for (const mechanismId of scope.mechanismIds) {
     if (!modeEligible(mode, mechanismId)) continue;
-    const corpus = corpusFor(mode, mechanismId);
+    const corpus = corpusFor(mode, mechanismId, scope);
     const eligible = eligibleRecords(corpus);
     eligibleTotal += eligible.length;
-    const kind = mode === "realizations" ? "realization" : "evidence";
+    const kind = readsRealizationCorpus(mode, scope) ? "realization" : "evidence";
     const priorMode = coverage?.mechanisms[mechanismId]?.[kind]?.by_mode[mode];
     const terminal = new Set([
       ...(priorMode?.processed_record_ids ?? []),
@@ -1523,7 +1906,7 @@ export function buildExtractionPlan(
     ]);
     const pending = eligible.filter((record) => !terminal.has(record.record_id));
     alreadyCompleted += eligible.length - pending.length;
-    const ranked = rankRelevantRecords(corpus, pending);
+    const ranked = rankRelevantRecords(corpus, pending, anchor);
     candidates.push({
       mechanismId,
       corpus,
@@ -1539,7 +1922,7 @@ export function buildExtractionPlan(
     selectedByMechanism.set(candidate.mechanismId, selected);
     for (const record of candidate.relevant) {
       selected.push(record);
-      const estimate = estimateSelected(mode, selectedByMechanism, config);
+      const estimate = estimateSelected(mode, selectedByMechanism, config, anchor);
       if (estimate.tokens.total_upper_bound > config.limits.per_run_tokens) {
         selected.pop();
         capReached = true;
@@ -1549,7 +1932,7 @@ export function buildExtractionPlan(
     if (capReached) break;
   }
 
-  const estimate = estimateSelected(mode, selectedByMechanism, config);
+  const estimate = estimateSelected(mode, selectedByMechanism, config, anchor);
   const mechanisms = candidates.map((candidate) => {
     const selected = selectedByMechanism.get(candidate.mechanismId) ?? [];
     return {
@@ -1581,6 +1964,7 @@ export function buildExtractionPlan(
       skipped_irrelevant: skippedIrrelevant,
       selected,
       remaining,
+      dropped_truncation: remaining,
     },
     capped: remaining > 0,
   };
@@ -1673,6 +2057,7 @@ async function callOpenRouter(
   stage: ExtractionStage,
   prompt: string,
   outputReserve: number,
+  derivation: RealizationDerivation = "reported",
 ): Promise<DraftItem[]> {
   const tier = configuredTier(context.config, tierName);
   const inputUpper = estimateTokens(prompt);
@@ -1699,7 +2084,7 @@ async function callOpenRouter(
         "X-Title": "Motivation Engine extraction",
       },
       body: JSON.stringify(
-        openRouterRequestBody({ tier, mode, stage, prompt, maxTokens }),
+        openRouterRequestBody({ tier, mode, stage, prompt, maxTokens, derivation }),
       ),
     });
     if (response.ok) break;
@@ -1788,11 +2173,15 @@ function comparisonFor(quote: string, sourceText: string): RejectedCandidateComp
   };
 }
 
-/** The text the gate compares a quote against, for either corpus kind. */
+/**
+ * The text the gate compares a quote against, for either corpus kind. Both
+ * arms come from lib/proposal-quality so this module cannot hold a second
+ * definition of the string that spans index and hash (D-110).
+ */
 function comparableSourceText(record: ExtractionRecord): string {
-  return `${record.title}\n${
-    isRealizationRecord(record) ? record.observation : record.abstract ?? ""
-  }`;
+  return isRealizationRecord(record)
+    ? realizationSourceText(record)
+    : evidenceSourceText(record);
 }
 
 function corpusSideFor(record: ExtractionRecord): RejectedCandidateCorpusSide {
@@ -1820,7 +2209,51 @@ function reasonForGroundingError(error: string): UngroundedReason {
   if (error.startsWith("DOI does not resolve")) return "doi_unresolved";
   if (error.startsWith("title mismatch")) return "title_mismatch";
   if (error.startsWith("quote does not resolve")) return "quote_not_in_source";
+  // Span conditions (D-110) land here too: a stale, out-of-range, or
+  // non-re-slicing span is provenance that disagrees with the corpus, which is
+  // what provenance_mismatch already means. The nine causes stay nine; the
+  // specific condition survives untruncated in the refusal detail.
   return "provenance_mismatch";
+}
+
+/**
+ * Turn an anchored citation's offsets into a storable `source_span` (D-110).
+ *
+ * Null when the citation has not been anchored, or when the offsets do not fit
+ * the text — the latter must not be silently stored, because a span that cannot
+ * be re-sliced is worse than no span: it looks verifiable and is not.
+ *
+ * The hash is taken over the SAME string the slice came from, obtained from the
+ * one shared definition in lib/proposal-quality, so a stored span can always be
+ * re-checked against the text it was resolved against rather than against some
+ * later reconstruction of it.
+ */
+function anchoredSpan(
+  citation: CitationDraft,
+  rawSourceText: string,
+): { quote: string; source_span: ProvenanceSourceSpan } | null {
+  const { start, end } = citation;
+  if (
+    !Number.isInteger(start) ||
+    !Number.isInteger(end) ||
+    start === undefined ||
+    end === undefined ||
+    start < 0 ||
+    end <= start ||
+    end > rawSourceText.length
+  ) {
+    return null;
+  }
+  const quote = rawSourceText.slice(start, end);
+  if (quote.trim().length === 0) return null;
+  return {
+    quote,
+    source_span: {
+      start,
+      end,
+      source_text_sha256: sha256Hex(rawSourceText),
+    },
+  };
 }
 
 /**
@@ -1831,7 +2264,33 @@ function reasonForGroundingError(error: string): UngroundedReason {
 export function groundingOutcome(
   item: DraftItem,
   corpus: ExtractionCorpus,
+  options: {
+    /**
+     * Refuse an evidence citation that carries no anchored offsets (D-110).
+     * True for the call whose provenance becomes a proposal; false for the
+     * cheap pre-gate, which by design runs BEFORE anchoring and would
+     * otherwise refuse every candidate for lacking what it has not yet been
+     * given. This is amendment 2.2 enforced in code: nothing the pipeline
+     * writes can reach a proposal without a verifiable span.
+     */
+    requireSpans?: boolean;
+    /**
+     * Check the rhetorical role of every evidence citation, and require the item
+     * to carry at least one finding (D-129). Defaults to TRUE: the pipeline must
+     * not be able to skip it by forgetting a flag, which is the opposite default
+     * from `requireSpans` because that check needs anchoring to have happened
+     * first and this one does not.
+     *
+     * The only caller that turns it off is tools/replay-grounding.ts, replaying
+     * a candidate recorded before this field existed. Such a candidate has no
+     * roles to check, and reporting `span_role_missing` for it would overwrite
+     * the reason it was actually refused for — destroying the record of the
+     * defect the replay exists to re-examine.
+     */
+    requireSpanRole?: boolean;
+  } = {},
 ): GroundingOutcome {
+  const checkRoles = options.requireSpanRole !== false;
   if (!Array.isArray(item.citations) || item.citations.length === 0) {
     return {
       ok: false,
@@ -1842,6 +2301,11 @@ export function groundingOutcome(
   }
   const records = new Map(corpus.records.map((record) => [record.record_id, record]));
   const provenance: KnowledgeProvenanceItem[] = [];
+  // Whether any citation reports what its own source OBSERVED (D-129). Tracked
+  // across the whole item rather than per citation, because an item may
+  // legitimately cite the premise its finding confirms — cl-14-001 does exactly
+  // that — but an item with no finding at all rests on nothing observed.
+  let sawFinding = false;
   for (const citation of item.citations) {
     if (
       typeof citation?.record_id !== "string" ||
@@ -1878,25 +2342,67 @@ export function groundingOutcome(
         corpus_side: corpusSideFor(record),
       };
     }
-    provenance.push(
-      isRealizationRecord(record)
-        ? {
-            corpus_kind: "realization",
-            mechanism_id: corpus.mechanism_id,
-            corpus_record_id: record.record_id,
-            source_id: record.source_id,
-            title: record.title,
-            quote_or_locus: citation.quote_or_locus.trim(),
-            contributed_by: record.contributed_by,
-          }
-        : {
-            mechanism_id: corpus.mechanism_id,
-            corpus_record_id: record.record_id,
-            doi: record.doi,
-            title: record.title,
-            quote_or_locus: citation.quote_or_locus.trim(),
-          },
-    );
+    if (isRealizationRecord(record)) {
+      // Realization-corpus provenance deliberately carries no span (D-110), so
+      // mode=realizations output is not span-verifiable. Stated, not hidden.
+      provenance.push({
+        corpus_kind: "realization",
+        mechanism_id: corpus.mechanism_id,
+        corpus_record_id: record.record_id,
+        source_id: record.source_id,
+        title: record.title,
+        quote_or_locus: citation.quote_or_locus.trim(),
+        contributed_by: record.contributed_by,
+      });
+      continue;
+    }
+    if (checkRoles) {
+      const verdict = checkSpanRole({
+        asserted: citation.span_role,
+        source: rawSourceText,
+        quote: citation.quote_or_locus,
+        start: citation.start,
+        end: citation.end,
+      });
+      if (!verdict.ok) {
+        return {
+          ok: false,
+          reason: verdict.reason,
+          detail: `${verdict.detail} — record ${record.record_id}`,
+          corpus_record_id: record.record_id,
+          compared: comparisonFor(citation.quote_or_locus, rawSourceText),
+          corpus_side: corpusSideFor(record),
+        };
+      }
+      if (verdict.role === "finding") sawFinding = true;
+    }
+    const span = anchoredSpan(citation, rawSourceText);
+    if (!span && options.requireSpans) {
+      return {
+        ok: false,
+        reason: "malformed_citation",
+        detail:
+          `citation for ${record.record_id} carries no anchored span, so its quote could ` +
+          "not be made re-sliceable (D-110)",
+        corpus_record_id: record.record_id,
+      };
+    }
+    provenance.push({
+      mechanism_id: corpus.mechanism_id,
+      corpus_record_id: record.record_id,
+      doi: record.doi,
+      title: record.title,
+      // The quote is the SLICE, not the trimmed model string, whenever a span
+      // exists: re-slicing must reproduce it byte for byte, and a trim would
+      // make the stored text disagree with the offsets that produced it.
+      quote_or_locus: span ? span.quote : citation.quote_or_locus.trim(),
+      ...(span ? { source_span: span.source_span } : {}),
+      // Persisted, not merely checked (D-129). A reader asking why an effect is
+      // graded as it is needs to know that a citation is the paper's own result
+      // rather than its opening premise, and re-deriving that would mean
+      // re-reading the source with the same judgement that was already made.
+      ...(isSpanRole(citation.span_role) ? { span_role: citation.span_role } : {}),
+    });
   }
   const unique = new Map(
     provenance.map((item) => [
@@ -1923,6 +2429,21 @@ export function groundingOutcome(
       return refusalForGroundingError(errors[0], result, records);
     }
     return { ok: true, provenance: result };
+  }
+  // An evidence-grounded item must rest on something a source OBSERVED (D-129).
+  // Applied to evidence corpora only: a realization-corpus record is an owner's
+  // observation of an interface, which has no results section to sit in and no
+  // background section to be mistaken for — the observation IS the finding.
+  if (checkRoles && !sawFinding) {
+    return {
+      ok: false,
+      reason: "span_role_not_finding",
+      detail:
+        "no citation carried span_role=finding, so the item rests on background, " +
+        "hypothesis, method or limitation spans alone — none of which report what " +
+        "a source observed (D-129)",
+      corpus_record_id: result[0]?.corpus_record_id ?? null,
+    };
   }
   const errors = groundingErrors(result, corpus);
   if (errors.length > 0) {
@@ -2040,6 +2561,45 @@ export interface DraftContext {
   seed?: SeedStub;
   /** Full + seed ids; relations to anything else are dropped as ungrounded. */
   knownMechanismIds: ReadonlySet<string>;
+  /**
+   * The effect an effect-anchored realizations run transfers from (D-112).
+   * Present for that run only, and the reason a realization payload can carry
+   * derivation="inferred": the link, the domain transfer, and the inference
+   * provenance item are all built from here, by code, never by a model.
+   */
+  effectBasis?: ResolvedEffectBasis;
+}
+
+/**
+ * The transfer step, written as provenance by CODE (D-112).
+ *
+ * The model is never asked for this item. It quotes the effect's own `fact`
+ * verbatim and points at an evidence record the effect itself cites, so the
+ * trail from pattern to a paper the owner can open stays walkable — and it
+ * declares the absence of a span rather than leaving an empty field behind.
+ * Returns null when the effect cites no evidence record with a DOI-shaped
+ * corpus id, because then there is nothing to point at and the pattern would be
+ * resting on an unreachable claim.
+ */
+function inferenceProvenance(
+  basis: ResolvedEffectBasis,
+): InferenceProvenanceItem | null {
+  const { effect } = basis;
+  const cited = effect.provenance.find(
+    (item): item is EvidenceProvenanceItem =>
+      !("corpus_kind" in item && item.corpus_kind !== "evidence") &&
+      item.corpus_record_id.startsWith("cr_"),
+  );
+  if (!cited) return null;
+  return {
+    corpus_kind: "inference",
+    mechanism_id: effect.mechanism_id,
+    corpus_record_id: cited.corpus_record_id,
+    effect_id: effect.id,
+    title: cited.title,
+    quote_or_locus: effect.fact.trim(),
+    span_absent_reason: INFERENCE_SPAN_ABSENT_REASON,
+  };
 }
 
 /**
@@ -2060,6 +2620,31 @@ const PRIOR_WEIGHT_BY_GRADE: Record<EvidenceGrade, number> = {
 
 function nonEmpty(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
+}
+
+/**
+ * Coerce the model's `parameters` into declared thresholds (D-115).
+ *
+ * `evidence_basis` is not read from the model. It is the one literal the schema
+ * allows, and letting a model write it would let a model claim a default was
+ * measured — the exact assertion the field exists to deny.
+ */
+function patternParameters(value: unknown): RealizationParameter[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((entry) => {
+    if (typeof entry !== "object" || entry === null) return [];
+    const { name, value: amount, unit } = entry as Record<string, unknown>;
+    if (!nonEmpty(name) || !nonEmpty(unit) || typeof amount !== "number") return [];
+    if (!Number.isFinite(amount)) return [];
+    return [
+      {
+        name: snake(name),
+        value: amount,
+        unit: unit.trim(),
+        evidence_basis: PARAMETER_EVIDENCE_BASIS_NONE,
+      },
+    ];
+  });
 }
 
 function stringList(value: unknown): string[] {
@@ -2404,29 +2989,76 @@ export function toProposal(
     item.artifact_context.length > 0 &&
     item.artifact_context.every((entry) => typeof entry === "string" && entry.trim())
   ) {
-    const id = slug(item.id ?? item.term);
+    // The record id comes from the TERM, never from the model's own id field.
+    // A realization id becomes a filename and the handle an implementation
+    // points at, and the first effect-anchored run returned "cl-14-002-p1" for
+    // two different patterns — a label that is neither unique nor readable. The
+    // term is both, and it is the same string the proposal id is already hashed
+    // from, so one term can only ever occupy one file.
+    const id = slug(item.term);
     if (!id) return null;
-    const payload: Realization = {
+    const basis = context?.effectBasis;
+    const common = {
       id,
       mechanism_id: mechanismId,
-      ...(typeof item.effect_id === "string" && item.effect_id.trim()
-        ? { effect_id: slug(item.effect_id) }
-        : {}),
       term: item.term.trim(),
       description_as_reported: item.description_as_reported.trim(),
       artifact_context: Array.from(
         new Set(item.artifact_context.map((entry) => entry.trim())),
       ),
-      provenance,
-      confidence: itemConfidence,
     };
+    let payload: Realization;
+    let itemProvenance = provenance;
+    if (basis) {
+      // An inferred realization is refused unless every honesty field it needs
+      // is present: the pattern it tells a generator to build, the domain the
+      // evidence actually came from, and the transfer step as provenance. A
+      // half-marked inference reads as evidence, so it is dropped instead.
+      const inference = inferenceProvenance(basis);
+      const pattern = typeof item.pattern === "string" ? item.pattern.trim() : "";
+      const sourceDomain =
+        typeof item.source_domain === "string" ? item.source_domain.trim() : "";
+      if (!inference || !pattern || !sourceDomain) return null;
+      // A threshold stated as prose is a measurement nobody made (D-115). The
+      // model is told to write {name} and declare a default; when it writes
+      // "three times" anyway, the candidate is dropped rather than repaired,
+      // because guessing which number the prose meant is inventing the same
+      // precision one layer down.
+      const parameters = patternParameters(item.parameters);
+      if (patternParameterErrors(pattern, parameters).length > 0) return null;
+      itemProvenance = [...provenance, inference];
+      payload = {
+        ...common,
+        effect_refs: [basis.effect.id],
+        derivation: "inferred",
+        domain_transfer: {
+          source_domain: sourceDomain,
+          application_domain: APPLICATION_DOMAIN,
+        },
+        pattern,
+        ...(parameters.length > 0 ? { parameters } : {}),
+        provenance: itemProvenance,
+        confidence: itemConfidence,
+      };
+    } else {
+      payload = {
+        ...common,
+        derivation: "reported",
+        domain_transfer: {
+          source_domain: REPORTED_SOURCE_DOMAIN,
+          application_domain: APPLICATION_DOMAIN,
+        },
+        provenance: itemProvenance,
+        confidence: itemConfidence,
+      };
+    }
     return envelope(
       {
         id: proposalId("realization", mechanismId, payload.term),
         type: "realization",
         target: mechanismId,
         payload,
-        provenance,
+        provenance: itemProvenance,
         confidence: itemConfidence,
       },
       runId,
@@ -2708,10 +3340,21 @@ export function buildExtractionManifestRun(args: {
   capped: boolean;
   incomplete?: boolean;
   durationS: number;
+  /**
+   * Whether this run's candidate ledger closes (D-132). False outranks capped
+   * and incomplete: a run that cannot account for its candidates is not a run
+   * that did less than its scope, it is a run whose numbers cannot be read.
+   */
+  balanced?: boolean;
 }): CorpusManifestRun {
+  const unbalanced = args.balanced === false;
   return {
     timestamp: args.startedAt.toISOString(),
-    status: args.capped || args.incomplete ? "partial" : "success",
+    status: unbalanced
+      ? "broken"
+      : args.capped || args.incomplete
+        ? "partial"
+        : "success",
     params: {
       mode: args.mode,
       [args.scope.kind]: args.scope.id,
@@ -2730,7 +3373,8 @@ export function buildExtractionManifestRun(args: {
       : null,
     ...(args.stats.dropped_ungrounded > 0 ||
       args.stats.failed_validation > 0 ||
-      args.capped
+      args.capped ||
+      unbalanced
       ? {
           warnings: {
             ...(args.stats.dropped_ungrounded > 0
@@ -2740,6 +3384,7 @@ export function buildExtractionManifestRun(args: {
               ? { validation_failed: true }
               : {}),
             ...(args.capped ? { capped: true } : {}),
+            ...(unbalanced ? { ledger_unbalanced: true } : {}),
           },
         }
       : {}),
@@ -2791,6 +3436,7 @@ function writeManifest(
   capped: boolean,
   incomplete: boolean,
   status?: CorpusRunStatus,
+  balanced = true,
 ): void {
   mkdirSync(EXTRACTION_DIR, { recursive: true });
   const duration = Math.round(((Date.now() - startedAt.getTime()) / 1000) * 100) / 100;
@@ -2805,8 +3451,13 @@ function writeManifest(
     capped,
     incomplete,
     durationS: duration,
+    balanced,
   });
-  const run: CorpusManifestRun = status ? { ...built, status } : built;
+  // An explicit status still cannot overwrite "broken": a failed run whose
+  // ledger also does not balance is broken, because "failed" would invite the
+  // reading that its counters are merely incomplete rather than unsound.
+  const run: CorpusManifestRun =
+    status && built.status !== "broken" ? { ...built, status } : built;
   const previous = existsSync(MANIFEST_FILE)
     ? readJson<CorpusManifest>(MANIFEST_FILE)
     : null;
@@ -2901,15 +3552,26 @@ export async function runExtraction(args: {
     failed_validation: 0,
     proposed: 0,
     merged: 0,
+    merged_into_pending: 0,
+    proposed_enrich: 0,
     held_low_confidence: 0,
     dropped_volume_cap: 0,
     dropped_volume_cap_high_confidence: 0,
+    dropped_draft_cap: 0,
+    into_synthesis: 0,
+    cheap_synthesis_failed: 0,
+    consolidated_by_synthesis: 0,
+    expanded_by_synthesis: 0,
     // Funnel is fixed at run start (D-090): total eligible and the relevant
     // subset that cleared the pre-filter. records_remaining is updated after
     // the last slice.
     records_eligible: plan.records.eligible_total,
     records_relevant: plan.records.selected + plan.records.remaining,
     records_remaining: plan.records.remaining,
+    // Accumulated per slice below (D-103); the first slice's figures are the
+    // starting point, not the final ones, because a run may read several.
+    records_selected: 0,
+    records_dropped_truncation: plan.records.dropped_truncation,
   };
   const proposals: Proposal[] = [];
   const existing = existingMatches();
@@ -2919,9 +3581,11 @@ export async function runExtraction(args: {
     skipped_irrelevant_record_ids: string[];
   }>();
   const validate = proposalValidator();
+  // Prefixed so "this was produced by the extraction pipeline" is a structural
+  // fact the validator can read, not a guess from a free-form string (D-110).
   const runId = process.env.GITHUB_RUN_ID
-    ? `github-actions-${process.env.GITHUB_RUN_ID}`
-    : `extract-${startedAt.toISOString()}`;
+    ? `${EXTRACTION_RUN_ID_PREFIX}github-actions-${process.env.GITHUB_RUN_ID}`
+    : `${EXTRACTION_RUN_ID_PREFIX}local-${startedAt.toISOString()}`;
 
   // Every refused candidate is persisted, not sampled (D-104), keyed by the
   // same run-start timestamp the manifest uses so the two line up.
@@ -2934,6 +3598,9 @@ export async function runExtraction(args: {
       : null,
   });
 
+  // Every candidate's fate, whether or not anything went wrong with it (D-132).
+  const candidateLedger = new CandidateLedger();
+
   /**
    * Record one refusal against both the counters and the committed log.
    * `cheapOrigin` is present for strong-pass drops: the strong pass never sees
@@ -2945,9 +3612,17 @@ export async function runExtraction(args: {
     pass: ExtractionPass,
     refusal: GroundingRefusal,
     item: DraftItem,
+    candidateId: string,
     cheapOrigin?: unknown,
   ): void => {
     recordUngroundedDrop(stats, pass, refusal.reason);
+    candidateLedger.record({
+      candidate_id: candidateId,
+      mechanism_id: mechanismId,
+      pass,
+      fate: "dropped_ungrounded",
+      reason: refusal.reason,
+    });
     reportUngroundedDrop(mechanismId, pass, refusal.reason, refusal.detail);
     rejections.add(
       rejectionRecord({
@@ -3005,6 +3680,40 @@ export async function runExtraction(args: {
   reportExtractProgress("reading corpora", "running", false);
 
   /**
+   * Write the candidate ledger for this run and report whether it closes
+   * (D-132). Written on the same cadence as the manifest, and on the way out of
+   * a throw, for the same reason: a run that dies still has to say what became
+   * of the candidates it had already produced.
+   */
+  const persistLedger = (): boolean => {
+    try {
+      const ledgerRun = candidateLedger.build({
+        runId: startedAt.toISOString(),
+        dispatchId: process.env.OPS_DISPATCH_ID ?? null,
+        githubRunId: process.env.GITHUB_RUN_ID
+          ? Number(process.env.GITHUB_RUN_ID)
+          : null,
+        mode: args.mode,
+        scope: args.scope.id,
+      });
+      if (!ledgerRun.balanced) {
+        for (const violation of checkLedgerBalance(ledgerRun)) {
+          console.error(
+            `[extract] candidate ledger does not balance — ${violation}`,
+          );
+        }
+      }
+      writeCandidateLedger(ledgerRun);
+      return ledgerRun.balanced;
+    } catch (error) {
+      console.warn(
+        `[extract] could not persist the candidate ledger: ${(error as Error).message}`,
+      );
+      return true;
+    }
+  };
+
+  /**
    * Persist this run's spend to the manifest mid-flight (D-099).
    *
    * The monthly cap is computed from committed corpus manifests, so a run that
@@ -3025,6 +3734,9 @@ export async function runExtraction(args: {
         `[extract] could not persist rejected candidates: ${(error as Error).message}`,
       );
     }
+    // The ledger is written before the manifest because the manifest's status
+    // depends on whether it balances (D-132).
+    const balanced = persistLedger();
     try {
       writeManifest(
         args.mode,
@@ -3037,6 +3749,7 @@ export async function runExtraction(args: {
         currentPlan.capped,
         true,
         status,
+        balanced,
       );
     } catch (error) {
       console.warn(
@@ -3054,6 +3767,20 @@ export async function runExtraction(args: {
         ]) as ReadonlySet<string>,
       }
     : null;
+  // The effect this run transfers from, and the prompt anchor built from it
+  // (D-112). Both null for every other mode and scope.
+  const effectBasis = args.scope.effectBasis;
+  const anchor = effectAnchor(args.scope);
+  const derivation = realizationDerivation(args.scope);
+  const coverageCorpusKind = readsRealizationCorpus(args.mode, args.scope)
+    ? "realization"
+    : "evidence";
+  if (effectBasis) {
+    console.log(
+      `[extract] anchored on effect ${effectBasis.effect.id} (${effectBasis.origin}: ${effectBasis.path}) — ` +
+        `realizations will be proposed with derivation=inferred`,
+    );
+  }
   let responseBatchesAttempted = 0;
   let responseBatchesSucceeded = 0;
   const failedRecordIdsByMechanism = new Map<string, Set<string>>();
@@ -3080,6 +3807,9 @@ export async function runExtraction(args: {
     for (const mechanism of slicePlan.mechanisms) {
       totalBatches += Math.ceil(mechanism.selected.length / batchSize);
     }
+    // What the planner kept for THIS slice, counted before any call runs, so a
+    // slice that dies mid-way still reports what it had planned to read (D-103).
+    stats.records_selected += slicePlan.records.selected;
     for (const mechanismPlan of slicePlan.mechanisms) {
       const { mechanismId, corpus } = mechanismPlan;
       const records = mechanismPlan.selected;
@@ -3101,13 +3831,18 @@ export async function runExtraction(args: {
         processedByMechanism.set(mechanismId, coverageDelta);
       }
       if (records.length === 0) continue;
-      const draftContext: DraftContext | undefined = draftContextBase
-        ? {
-            corpus,
-            seed: draftContextBase.seeds.get(mechanismId),
-            knownMechanismIds: draftContextBase.knownMechanismIds,
-          }
-        : undefined;
+      const draftContext: DraftContext | undefined =
+        draftContextBase || effectBasis
+          ? {
+              corpus,
+              seed: draftContextBase?.seeds.get(mechanismId),
+              // Only the draft modes read this set; an effect-anchored
+              // realizations run never reaches draftMechanismPayload.
+              knownMechanismIds:
+                draftContextBase?.knownMechanismIds ?? new Set<string>(),
+              ...(effectBasis ? { effectBasis } : {}),
+            }
+          : undefined;
       const candidates: DraftItem[] = [];
       const parsedRecordIds: string[] = [];
       let parsedCheapBatches = 0;
@@ -3122,8 +3857,9 @@ export async function runExtraction(args: {
             "cheap",
             args.mode,
             "extract",
-            cheapPrompt(args.mode, mechanismId, batch),
+            cheapPrompt(args.mode, mechanismId, batch, anchor),
             CHEAP_OUTPUT_RESERVE,
+            derivation,
           ),
         );
         const recordIds = batch.map((record) => record.record_id);
@@ -3156,10 +3892,15 @@ export async function runExtraction(args: {
         return record ? comparableSourceText(record) : null;
       };
       const groundedCheap: AnchoredCandidate[] = [];
+      // Parallel to groundedCheap, so a synthesis call that dies can name the
+      // candidates it took down with it instead of leaving them counted as
+      // having entered a stage they never came out of (D-132).
+      const groundedCheapIds: string[] = [];
       for (const item of candidates) {
+        const candidateId = candidateLedger.id(mechanismId, "cheap");
         const grounding = groundingOutcome(item, corpus);
         if (!grounding.ok) {
-          dropUngrounded(mechanismId, "cheap", grounding, item);
+          dropUngrounded(mechanismId, "cheap", grounding, item, candidateId);
           continue;
         }
         // Anchor provenance to offsets while the record is still in view
@@ -3167,12 +3908,19 @@ export async function runExtraction(args: {
         // pass can author or alter it.
         const anchored = anchorCitations(item.citations, sourceTextFor, ledger);
         if (!anchored.ok) {
-          dropUngrounded(mechanismId, "cheap", anchored, item);
+          dropUngrounded(mechanismId, "cheap", anchored, item, candidateId);
           continue;
         }
         groundedCheap.push({
           item: { ...item, citations: anchored.citations },
           refs: anchored.refs,
+        });
+        groundedCheapIds.push(candidateId);
+        candidateLedger.record({
+          candidate_id: candidateId,
+          mechanism_id: mechanismId,
+          pass: "cheap",
+          fate: "into_synthesis",
         });
       }
       if (groundedCheap.length === 0) {
@@ -3195,12 +3943,20 @@ export async function runExtraction(args: {
           "strong",
           args.mode,
           "synthesize",
-          strongPrompt(args.mode, mechanismId, groundedCheap),
+          strongPrompt(args.mode, mechanismId, groundedCheap, anchor),
           STRONG_OUTPUT_RESERVE,
+          derivation,
         ),
       );
       persistAccounting();
       if (!synthesisResult.ok) {
+        // These candidates were grounded and paid for, and the call that was
+        // meant to compose them died. That is a fate with a name, not a gap
+        // between two totals (D-132).
+        for (const candidateId of groundedCheapIds) {
+          candidateLedger.refate(candidateId, "synthesis_batch_failed");
+        }
+        stats.cheap_synthesis_failed += groundedCheapIds.length;
         recordFailedBatch(
           mechanismId,
           "strong",
@@ -3213,15 +3969,43 @@ export async function runExtraction(args: {
       coverageDelta.processed_record_ids.push(...parsedRecordIds);
       processedByMechanism.set(mechanismId, coverageDelta);
 
+      stats.into_synthesis += groundedCheapIds.length;
+      // Count what the model composed, not what survives the draft cap below:
+      // candidates_strong used to be assigned AFTER the slice, so a draft run
+      // that composed four artifacts and kept one reported one candidate and
+      // discarded three without a counter (D-132).
+      const composed = synthesisResult.value;
+      stats.candidates += composed.length;
+      stats.candidates_strong += composed.length;
+      candidateLedger.recordSynthesisFold(
+        groundedCheapIds.length,
+        composed.length,
+      );
+      if (composed.length < groundedCheapIds.length) {
+        stats.consolidated_by_synthesis +=
+          groundedCheapIds.length - composed.length;
+      } else {
+        stats.expanded_by_synthesis +=
+          composed.length - groundedCheapIds.length;
+      }
+      const strongIds = composed.map(() =>
+        candidateLedger.id(mechanismId, "strong"),
+      );
       // A draft mode composes exactly one first-time artifact per mechanism.
-      const synthesized = isDraftMode(args.mode)
-        ? synthesisResult.value.slice(0, 1)
-        : synthesisResult.value;
-      stats.candidates += synthesized.length;
-      stats.candidates_strong += synthesized.length;
+      const synthesized = isDraftMode(args.mode) ? composed.slice(0, 1) : composed;
+      for (let at = synthesized.length; at < composed.length; at += 1) {
+        stats.dropped_draft_cap += 1;
+        candidateLedger.record({
+          candidate_id: strongIds[at],
+          mechanism_id: mechanismId,
+          pass: "strong",
+          fate: "dropped_draft_cap",
+        });
+      }
       const admissible: {
         proposal: Proposal;
-        outcome: "proposed" | "merged";
+        outcome: "proposed" | "proposed_enrich";
+        candidateId: string;
       }[] = [];
       const held: Proposal[] = [];
       // Every ref the synthesis pass was shown, across all candidates. A ref
@@ -3229,7 +4013,18 @@ export async function runExtraction(args: {
       const suppliedRefs = new Set(
         groundedCheap.flatMap((candidate) => candidate.refs),
       );
-      for (const rawItem of synthesized) {
+      for (let index = 0; index < synthesized.length; index += 1) {
+        const rawItem = synthesized[index];
+        const candidateId = strongIds[index];
+        const failedValidation = (): void => {
+          stats.failed_validation += 1;
+          candidateLedger.record({
+            candidate_id: candidateId,
+            mechanism_id: mechanismId,
+            pass: "strong",
+            fate: "failed_validation",
+          });
+        };
         // Rebuild citations from refs before gating: the quote is sliced out of
         // the record at the stored offsets, so the string the gate inspects was
         // written by the corpus, not by a model that never read it.
@@ -3240,7 +4035,14 @@ export async function runExtraction(args: {
           ledger,
         );
         if (!resolved.ok) {
-          dropUngrounded(mechanismId, "strong", resolved, rawItem, groundedCheap);
+          dropUngrounded(
+            mechanismId,
+            "strong",
+            resolved,
+            rawItem,
+            candidateId,
+            groundedCheap,
+          );
           continue;
         }
         const item: DraftItem = { ...rawItem, citations: resolved.citations };
@@ -3269,9 +4071,19 @@ export async function runExtraction(args: {
             }),
           );
         }
-        const grounding = groundingOutcome(item, corpus);
+        // requireSpans: this outcome's provenance is what reaches the proposal,
+        // so from here on a citation without a re-sliceable span is refused
+        // rather than written (D-110).
+        const grounding = groundingOutcome(item, corpus, { requireSpans: true });
         if (!grounding.ok) {
-          dropUngrounded(mechanismId, "strong", grounding, rawItem, groundedCheap);
+          dropUngrounded(
+            mechanismId,
+            "strong",
+            grounding,
+            rawItem,
+            candidateId,
+            groundedCheap,
+          );
           continue;
         }
         const proposal = toProposal(
@@ -3294,12 +4106,13 @@ export async function runExtraction(args: {
               corpus_record_id: grounding.provenance[0]?.corpus_record_id ?? null,
             },
             rawItem,
+            candidateId,
             groundedCheap,
           );
           continue;
         }
         if (!validate(proposal)) {
-          stats.failed_validation += 1;
+          failedValidation();
           reportValidationFailure(validate, "candidate", mechanismId);
           continue;
         }
@@ -3330,7 +4143,7 @@ export async function runExtraction(args: {
             } as Proposal;
           }
           if (!validate(merged)) {
-            stats.failed_validation += 1;
+            failedValidation();
             reportValidationFailure(validate, "pending merge", mechanismId);
             continue;
           }
@@ -3346,11 +4159,20 @@ export async function runExtraction(args: {
             if (heldIndex >= 0) held[heldIndex] = merged;
           }
           stats.merged += 1;
+          stats.merged_into_pending += 1;
+          candidateLedger.record({
+            candidate_id: candidateId,
+            mechanism_id: mechanismId,
+            pass: "strong",
+            fate: "merged_into_pending",
+            proposal_id: merged.id,
+            attribution: "recorded",
+          });
           continue;
         }
 
         let gatedProposal = proposal;
-        let outcome: "proposed" | "merged" = "proposed";
+        let outcome: "proposed" | "proposed_enrich" = "proposed";
         let addsValue = true;
         if (duplicate?.authoritative) {
           const merged = mergeProposals(duplicate.proposal, proposal);
@@ -3361,11 +4183,11 @@ export async function runExtraction(args: {
             payload: merged.payload,
             provenance: merged.provenance,
           } as Proposal;
-          outcome = "merged";
+          outcome = "proposed_enrich";
         }
 
         if (!validate(gatedProposal)) {
-          stats.failed_validation += 1;
+          failedValidation();
           reportValidationFailure(
             validate,
             "authoritative enrichment",
@@ -3393,9 +4215,16 @@ export async function runExtraction(args: {
             authoritative: false,
           });
           stats.held_low_confidence += 1;
+          candidateLedger.record({
+            candidate_id: candidateId,
+            mechanism_id: mechanismId,
+            pass: "strong",
+            fate: "held_low_confidence",
+            proposal_id: heldProposal.id,
+          });
           continue;
         }
-        admissible.push({ proposal: gatedProposal, outcome });
+        admissible.push({ proposal: gatedProposal, outcome, candidateId });
         existing.push({
           proposal: gatedProposal,
           path: null,
@@ -3422,7 +4251,30 @@ export async function runExtraction(args: {
         ({ proposal: overflowProposal }) =>
           overflowProposal.confidence >= 0.8,
       ).length;
-      for (const entry of admitted) stats[entry.outcome] += 1;
+      for (const entry of overflow) {
+        candidateLedger.record({
+          candidate_id: entry.candidateId,
+          mechanism_id: mechanismId,
+          pass: "strong",
+          fate: "dropped_volume_cap",
+        });
+      }
+      for (const entry of admitted) {
+        stats[entry.outcome] += 1;
+        // `merged` stays the sum of the two merge-shaped fates, because every
+        // committed run entry and the /ops reader already read it (D-132).
+        if (entry.outcome === "proposed_enrich") stats.merged += 1;
+        candidateLedger.record({
+          candidate_id: entry.candidateId,
+          mechanism_id: mechanismId,
+          pass: "strong",
+          fate: entry.outcome,
+          proposal_id: entry.proposal.id,
+          ...(entry.outcome === "proposed_enrich"
+            ? { attribution: "recorded" as const }
+            : {}),
+        });
+      }
       proposals.push(
         ...admitted.map(({ proposal: admittedProposal }) => admittedProposal),
         ...held,
@@ -3447,6 +4299,7 @@ export async function runExtraction(args: {
       throw error;
     }
     stats.records_remaining = currentPlan.records.remaining;
+    stats.records_dropped_truncation = currentPlan.records.dropped_truncation;
     if (!currentPlan.capped) break; // corpus exhausted for this scope + mode
     const usedTokens = context.usage.input + context.usage.output;
     const headroom = args.config.limits.per_run_tokens - usedTokens;
@@ -3478,6 +4331,7 @@ export async function runExtraction(args: {
       args.mode,
       planningDeltas,
       startedAt.toISOString(),
+      coverageCorpusKind,
     );
     const sliceConfig: ExtractionOpsConfig = {
       ...args.config,
@@ -3498,6 +4352,9 @@ export async function runExtraction(args: {
     failedRecordIdsByMechanism.values(),
   ).reduce((sum, recordIds) => sum + recordIds.size, 0);
   stats.records_remaining = currentPlan.records.remaining + failedRecordCount;
+  // The last slice's refusal IS the run's truncation drop: every earlier slice's
+  // leftovers were re-planned into this one (D-103).
+  stats.records_dropped_truncation = currentPlan.records.dropped_truncation;
   const runIncomplete = stats.records_remaining > 0;
   const summary: RunProgressSummary = {
     proposed: stats.proposed,
@@ -3514,6 +4371,8 @@ export async function runExtraction(args: {
     records_processed: stats.records_processed,
     records_skipped_irrelevant: stats.records_skipped_irrelevant,
     records_remaining: stats.records_remaining,
+    records_selected: stats.records_selected,
+    records_dropped_truncation: stats.records_dropped_truncation,
     ...(stats.dropped_ungrounded > 0
       ? { dropped_ungrounded_reasons: stats.dropped_ungrounded_reasons }
       : {}),
@@ -3560,7 +4419,9 @@ export async function runExtraction(args: {
     args.mode,
     processedByMechanism,
     startedAt.toISOString(),
+    coverageCorpusKind,
   );
+  const ledgerBalanced = persistLedger();
   writeManifest(
     args.mode,
     args.scope,
@@ -3571,6 +4432,8 @@ export async function runExtraction(args: {
     proposals.length + pendingWrites.size,
     currentPlan.capped,
     runIncomplete,
+    undefined,
+    ledgerBalanced,
   );
   const ungroundedBreakdown = formatUngroundedReasons(stats.dropped_ungrounded_reasons);
   if (rejections.count() > 0) {
@@ -3580,7 +4443,7 @@ export async function runExtraction(args: {
     );
   }
   reportExtractProgress(
-    `${runIncomplete ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates (cheap ${stats.candidates_cheap} / strong ${stats.candidates_strong}) · ${stats.dropped_ungrounded} dropped ungrounded (cheap ${stats.dropped_ungrounded_cheap} / strong ${stats.dropped_ungrounded_strong})${ungroundedBreakdown ? ` (${ungroundedBreakdown})` : ""} · ${stats.failed_validation} failed validation · ${stats.records_remaining} remaining · ${currentPlan.records.remaining} dropped by cap truncation`,
+    `${runIncomplete ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_eligible} available / ${stats.records_selected} kept by the planner / ${stats.records_dropped_truncation} dropped to fit the ${args.config.limits.per_run_tokens}-token cap · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates (cheap ${stats.candidates_cheap} / strong ${stats.candidates_strong}) · ${stats.dropped_ungrounded} dropped ungrounded (cheap ${stats.dropped_ungrounded_cheap} / strong ${stats.dropped_ungrounded_strong})${ungroundedBreakdown ? ` (${ungroundedBreakdown})` : ""} · ${stats.failed_validation} failed validation · ${stats.records_remaining} remaining`,
     runIncomplete ? "partial" : "success",
     true,
     summary,
@@ -3609,7 +4472,10 @@ async function main(): Promise<void> {
       `corpora/_ops/extraction.json is invalid: ${configErrors.join("; ")}`,
     );
   }
-  const scope = resolveScope(params, { includeSeeds: isDraftMode(params.mode) });
+  const scope = resolveScope(params, {
+    includeSeeds: isDraftMode(params.mode),
+    mode: params.mode,
+  });
   if (command === "quote") {
     const quote = buildQuote(params.mode, scope, config);
     writeFileSync(QUOTE_FILE, json(quote));

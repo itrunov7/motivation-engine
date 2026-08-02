@@ -11,6 +11,8 @@ import {
 } from "./local-transaction";
 import { commitGitDataTransaction, type GithubOpsEnv } from "./github";
 import { deriveCorpusRecordId } from "./corpus-record-id";
+import { isExtractionAuthored } from "./proposal-meta";
+import { evidenceSourceText, sha256Hex } from "./proposal-quality";
 import {
   BatchProposalValidationError,
   isActionableProposal,
@@ -19,7 +21,13 @@ import {
   prepareProposalDecision,
   type RepositorySnapshot,
 } from "./proposals";
-import type { Mechanism, Proposal, ProposalType, SegmentsFile } from "./types";
+import type {
+  EvidenceCorpusFile,
+  Mechanism,
+  Proposal,
+  ProposalType,
+  SegmentsFile,
+} from "./types";
 
 const ROOT = join(__dirname, "..");
 const decidedAt = "2026-07-20T18:00:00.000Z";
@@ -284,6 +292,234 @@ test("approves a hand-made effect proposal into authoritative files", async () =
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+test("an inferred realization cannot be approved before the effect it transfers from", async () => {
+  const root = await temporaryRepository();
+  const effectId = "transfer-basis-effect";
+  const effectFact = "A grounded fixture phenomenon.";
+  const effectProposalPath = `proposals/effect/${effectId}.json`;
+  const realizationPath = "proposals/realization/inferred-transfer.json";
+  const inference = {
+    corpus_kind: "inference" as const,
+    mechanism_id: "LA-01",
+    corpus_record_id: provenance[0].corpus_record_id,
+    effect_id: effectId,
+    title: provenance[0].title,
+    quote_or_locus: effectFact,
+    span_absent_reason: "no direct span — inferred from effect" as const,
+  };
+  const realizationPayload = {
+    id: "inferred-transfer",
+    mechanism_id: "LA-01",
+    effect_refs: [effectId],
+    derivation: "inferred",
+    domain_transfer: {
+      source_domain: "behavioural economics",
+      application_domain: "product UI",
+    },
+    term: "Fixture transferred pattern",
+    description_as_reported: effectFact,
+    pattern: "Collapse the fixture panel after {core_actions} completed core actions.",
+    parameters: [
+      {
+        name: "core_actions",
+        value: 3,
+        unit: "completed core actions",
+        evidence_basis: "none — default heuristic",
+      },
+    ],
+    artifact_context: ["onboarding_flow"],
+    provenance: [...provenance, inference],
+    confidence: 0.6,
+  };
+  const realizationProposal = envelope(
+    "realization",
+    "inferred-transfer",
+    "LA-01",
+    realizationPayload,
+  ) as Record<string, unknown>;
+  realizationProposal.provenance = [...provenance, inference];
+  const approve = (path: string) =>
+    prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath: path,
+      action: "approve",
+      decidedBy: "test-owner",
+      decidedAt,
+      schemaRoot: root,
+    });
+  try {
+    await mkdir(join(root, "proposals/effect"), { recursive: true });
+    await mkdir(join(root, "proposals/realization"), { recursive: true });
+    await writeFile(
+      join(root, realizationPath),
+      `${JSON.stringify(realizationProposal, null, 2)}\n`,
+      "utf8",
+    );
+    // The effect is still a proposal: the transfer may be proposed, not applied.
+    await assert.rejects(approve(realizationPath), (error: unknown) => {
+      const message = (error as Error).message;
+      assert.match(message, /transfer-basis-effect/);
+      assert.match(message, /does not (exist|resolve)/);
+      return true;
+    });
+
+    await writeFile(
+      join(root, effectProposalPath),
+      `${JSON.stringify(
+        envelope("effect", effectId, "LA-01", {
+          id: effectId,
+          mechanism_id: "LA-01",
+          name: "Transfer basis effect",
+          fact: effectFact,
+          grade: "A",
+          source: ["10.2307/1914185"],
+          boundary: "Only a transaction fixture.",
+          realization_ids: [],
+          provenance,
+        }),
+        null,
+        2,
+      )}\n`,
+      "utf8",
+    );
+    await applyLocalTransaction(root, await approve(effectProposalPath));
+
+    // With the effect in place, the threshold is the remaining gate (D-115):
+    // the same pattern stating its number as prose is refused.
+    const proseThreshold = {
+      ...realizationProposal,
+      payload: {
+        ...realizationPayload,
+        pattern: "Collapse the fixture panel after three completed core actions.",
+        parameters: undefined,
+      },
+    };
+    const prosePath = "proposals/realization/prose-threshold.json";
+    await writeFile(
+      join(root, prosePath),
+      `${JSON.stringify({ ...proseThreshold, id: "prose-threshold" }, null, 2)}\n`,
+      "utf8",
+    );
+    await assert.rejects(approve(prosePath), /ungrounded threshold|no source measured it/);
+
+    await applyLocalTransaction(root, await approve(realizationPath));
+
+    const record = JSON.parse(
+      await readFile(join(root, "realizations/LA-01/inferred-transfer.json"), "utf8"),
+    ) as {
+      derivation: string;
+      effect_refs: string[];
+      domain_transfer: { source_domain: string; application_domain: string };
+      pattern: string;
+      parameters: { name: string; evidence_basis: string }[];
+    };
+    assert.equal(record.derivation, "inferred");
+    assert.deepEqual(record.effect_refs, [effectId]);
+    assert.equal(record.domain_transfer.application_domain, "product UI");
+    assert.match(record.pattern, /^Collapse the fixture panel/);
+    assert.equal(record.parameters[0].evidence_basis, "none — default heuristic");
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("approval copies a source span verbatim and refuses a stale one", async () => {
+  const root = await temporaryRepository();
+  try {
+    const corpus = JSON.parse(
+      await readFile(join(root, "corpora/evidence/LA-01.json"), "utf8"),
+    ) as EvidenceCorpusFile;
+    const record = corpus.records.find(
+      (candidate) => candidate.record_id === provenance[0].corpus_record_id,
+    );
+    assert(record, "fixture provenance must cite a real corpus record");
+    const sourceText = evidenceSourceText(record);
+    const start = sourceText.indexOf(provenance[0].quote_or_locus);
+    assert(start >= 0, "fixture quote must be an exact slice of the source text");
+    const source_span = {
+      start,
+      end: start + provenance[0].quote_or_locus.length,
+      source_text_sha256: sha256Hex(sourceText),
+    };
+
+    const write = async (
+      path: string,
+      id: string,
+      span: typeof source_span,
+    ): Promise<void> => {
+      await mkdir(join(root, "proposals/effect"), { recursive: true });
+      const spanned = [{ ...provenance[0], source_span: span }];
+      const body = {
+        ...(envelope("effect", id, "LA-01", {
+          id,
+          mechanism_id: "LA-01",
+          name: "Spanned test effect",
+          fact: "A grounded fixture phenomenon.",
+          grade: "A",
+          source: ["10.2307/1914185"],
+          boundary: "Only a transaction fixture.",
+          realization_ids: [],
+          provenance: spanned,
+        }) as Record<string, unknown>),
+        // The envelope and the payload must agree exactly, span included.
+        provenance: spanned,
+      };
+      await writeFile(join(root, path), `${JSON.stringify(body, null, 2)}\n`, "utf8");
+    };
+
+    const proposalPath = "proposals/effect/spanned-effect.json";
+    await write(proposalPath, "spanned-effect", source_span);
+    const transaction = await prepareProposalDecision(
+      new LocalRepositorySnapshot(root),
+      {
+        proposalPath,
+        action: "approve",
+        decidedBy: "test-owner",
+        decidedAt,
+        schemaRoot: root,
+      },
+    );
+    await applyLocalTransaction(root, transaction);
+    const effect = JSON.parse(
+      await readFile(join(root, "effects/LA-01/spanned-effect.json"), "utf8"),
+    ) as { provenance: { source_span?: typeof source_span }[] };
+    // 2.1: the authoritative record stays independently verifiable on its own.
+    assert.deepEqual(effect.provenance[0].source_span, source_span);
+
+    // A span resolved against different text must not reach an authoritative
+    // record: approval re-grounds, and the hash is what catches it.
+    const stalePath = "proposals/effect/stale-effect.json";
+    await write(stalePath, "stale-effect", {
+      ...source_span,
+      source_text_sha256: sha256Hex("other"),
+    });
+    await assert.rejects(
+      prepareProposalDecision(new LocalRepositorySnapshot(root), {
+        proposalPath: stalePath,
+        action: "approve",
+        decidedBy: "test-owner",
+        decidedAt,
+        schemaRoot: root,
+      }),
+      /span_stale/,
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("extraction authorship is a structural fact, not a naming convention", () => {
+  assert.equal(isExtractionAuthored("extraction:github-actions-1234"), true);
+  assert.equal(isExtractionAuthored("extraction:local-2026-07-31T00:00:00.000Z"), true);
+  // Everything hand-authored or owner-assisted stays legacy, so its provenance
+  // may be spanless without failing validation (D-110 amendment 2.2).
+  assert.equal(isExtractionAuthored("igor"), false);
+  assert.equal(isExtractionAuthored("owner-observation"), false);
+  assert.equal(isExtractionAuthored(""), false);
+  // The old unprefixed extractor ids must NOT read as extraction-authored:
+  // their proposals predate spans and would otherwise fail retroactively.
+  assert.equal(isExtractionAuthored("github-actions-1234"), false);
 });
 
 test("prepares one atomic batch with one enumerated decision entry", async () => {
@@ -733,6 +969,294 @@ test("applied rejection records the reason and leaves artifacts untouched", asyn
     };
     assert.equal(decided.status, "rejected");
     assert.equal(decided.decision_note, "The cited locus does not support the claim.");
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("an owner reason survives an edit and the approval that follows it", async () => {
+  const root = await temporaryRepository();
+  const proposalPath = "proposals/effect/regraded-effect.json";
+  const basis =
+    "Provisional grade. Corpus evidence = one secondary source. " +
+    "Model-asserted A rejected as ungrounded.";
+  const payload = {
+    id: "regraded-effect",
+    mechanism_id: "LA-01",
+    name: "Regraded test effect",
+    fact: "A grounded fixture phenomenon.",
+    grade: "A",
+    source: ["10.2307/1914185"],
+    boundary: "Only a transaction fixture.",
+    realization_ids: [],
+    provenance,
+  };
+  try {
+    await mkdir(join(root, "proposals/effect"), { recursive: true });
+    await writeFile(
+      join(root, proposalPath),
+      `${JSON.stringify(envelope("effect", "regraded-effect", "LA-01", payload), null, 2)}\n`,
+      "utf8",
+    );
+
+    const edit = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "edit",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason: basis,
+      editedPayload: { ...payload, grade: "C+", grade_basis: basis },
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, edit);
+
+    const edited = JSON.parse(await readFile(join(root, proposalPath), "utf8")) as {
+      status: string;
+      decided_by: string | null;
+      decision_note: string | null;
+      payload: { grade: string; grade_basis: string };
+    };
+    assert.equal(edited.status, "edited");
+    // Nobody has decided yet, but the reason for the change is recorded.
+    assert.equal(edited.decided_by, null);
+    assert.equal(edited.decision_note, basis);
+    assert.equal(edited.payload.grade, "C+");
+    assert.equal(edited.payload.grade_basis, basis);
+
+    const approval = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "approve",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason: basis,
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, approval);
+
+    const decisions = JSON.parse(
+      await readFile(join(root, "decisions/decisions.json"), "utf8"),
+    ) as { decisions: { id: string; body: string }[] };
+    const [editDecision, approvalDecision] = decisions.decisions.slice(-2);
+    assert.equal(editDecision.id, edit.decisionId);
+    assert.equal(approvalDecision.id, approval.decisionId);
+    for (const decision of [editDecision, approvalDecision]) {
+      assert(decision.body.includes(`Reason: ${basis}`));
+    }
+
+    const effect = JSON.parse(
+      await readFile(join(root, "effects/LA-01/regraded-effect.json"), "utf8"),
+    ) as { grade: string; grade_basis: string };
+    assert.equal(effect.grade, "C+");
+    assert.equal(effect.grade_basis, basis);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("an owner corrects envelope confidence through the edit transaction (D-122)", async () => {
+  const root = await temporaryRepository();
+  const proposalPath = "proposals/effect/reconfidenced-effect.json";
+  const reason = "One source reporting a weak result; the pipeline's 0.9 was unearned.";
+  const payload = {
+    id: "reconfidenced-effect",
+    mechanism_id: "LA-01",
+    name: "Reconfidenced test effect",
+    fact: "A grounded fixture phenomenon.",
+    grade: "B",
+    source: ["10.2307/1914185"],
+    boundary: "Only a transaction fixture.",
+    realization_ids: [],
+    provenance,
+  };
+  try {
+    await mkdir(join(root, "proposals/effect"), { recursive: true });
+    await writeFile(
+      join(root, proposalPath),
+      `${JSON.stringify(
+        envelope("effect", "reconfidenced-effect", "LA-01", payload),
+        null,
+        2,
+      )}\n`,
+      "utf8",
+    );
+
+    const edit = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "edit",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason,
+      editedPayload: { ...payload, grade: "C" },
+      editedConfidence: 0.55,
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, edit);
+
+    const edited = JSON.parse(await readFile(join(root, proposalPath), "utf8")) as {
+      confidence: number;
+      payload: { grade: string };
+    };
+    assert.equal(edited.confidence, 0.55);
+    assert.equal(edited.payload.grade, "C");
+
+    // Omitting the flag on a later edit leaves the corrected number alone.
+    const second = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "edit",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason,
+      editedPayload: { ...payload, grade: "C-" },
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, second);
+    const again = JSON.parse(await readFile(join(root, proposalPath), "utf8")) as {
+      confidence: number;
+    };
+    assert.equal(again.confidence, 0.55);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("an edit can drop a mis-anchored citation, and the envelope follows (D-124)", async () => {
+  const root = await temporaryRepository();
+  const proposalPath = "proposals/effect/narrowed-effect.json";
+  const second = {
+    mechanism_id: "LA-01",
+    corpus_record_id: deriveCorpusRecordId({
+      doi: "10.1037/0022-0663.87.2.319",
+      title: "A second fixture source, cited but never evidence",
+      year: 1995,
+    }),
+    doi: "10.1037/0022-0663.87.2.319",
+    title: "A second fixture source, cited but never evidence",
+    quote_or_locus: "a prescription rather than a finding",
+  };
+  const payload = {
+    id: "narrowed-effect",
+    mechanism_id: "LA-01",
+    name: "Narrowed test effect",
+    fact: "A grounded fixture phenomenon.",
+    grade: "A",
+    source: ["10.2307/1914185", "10.1037/0022-0663.87.2.319"],
+    boundary: "Only a transaction fixture.",
+    realization_ids: [],
+    provenance: [...provenance, second],
+  };
+  const proposal = {
+    ...(envelope("effect", "narrowed-effect", "LA-01", payload) as Proposal),
+    provenance: [...provenance, second],
+  };
+  try {
+    await mkdir(join(root, "proposals/effect"), { recursive: true });
+    await writeFile(
+      join(root, proposalPath),
+      `${JSON.stringify(proposal, null, 2)}\n`,
+      "utf8",
+    );
+
+    // Drop the second citation from BOTH source and payload provenance. The
+    // envelope still carries it at this point; the transaction must bring it
+    // down rather than fail the equality check.
+    const edit = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "edit",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason: "The second citation is a design prescription, not evidence.",
+      editedPayload: {
+        ...payload,
+        grade: "C+",
+        source: ["10.2307/1914185"],
+        provenance,
+      },
+      editedConfidence: 0.7,
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, edit);
+
+    const edited = JSON.parse(await readFile(join(root, proposalPath), "utf8")) as {
+      confidence: number;
+      provenance: { corpus_record_id: string }[];
+      payload: { grade: string; source: string[]; provenance: { corpus_record_id: string }[] };
+    };
+    assert.equal(edited.provenance.length, 1);
+    assert.equal(edited.payload.provenance.length, 1);
+    assert.deepEqual(edited.payload.source, ["10.2307/1914185"]);
+    assert.equal(edited.confidence, 0.7);
+    assert.equal(edited.payload.grade, "C+");
+
+    // And the narrowed record projects with the single citation.
+    const approval = await prepareProposalDecision(new LocalRepositorySnapshot(root), {
+      proposalPath,
+      action: "approve",
+      decidedBy: "test-owner",
+      decidedAt,
+      reason: "Narrowed to the evidence that survives.",
+      schemaRoot: root,
+    });
+    await applyLocalTransaction(root, approval);
+    const effect = JSON.parse(
+      await readFile(join(root, "effects/LA-01/narrowed-effect.json"), "utf8"),
+    ) as { source: string[]; provenance: unknown[] };
+    assert.deepEqual(effect.source, ["10.2307/1914185"]);
+    assert.equal(effect.provenance.length, 1);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("an out-of-range or misplaced confidence correction is refused by name", async () => {
+  const root = await temporaryRepository();
+  const proposalPath = "proposals/effect/refused-confidence.json";
+  const payload = {
+    id: "refused-confidence",
+    mechanism_id: "LA-01",
+    name: "Refused confidence fixture",
+    fact: "A grounded fixture phenomenon.",
+    grade: "B",
+    source: ["10.2307/1914185"],
+    boundary: "Only a transaction fixture.",
+    realization_ids: [],
+    provenance,
+  };
+  try {
+    await mkdir(join(root, "proposals/effect"), { recursive: true });
+    await writeFile(
+      join(root, proposalPath),
+      `${JSON.stringify(envelope("effect", "refused-confidence", "LA-01", payload), null, 2)}\n`,
+      "utf8",
+    );
+
+    await assert.rejects(
+      prepareProposalDecision(new LocalRepositorySnapshot(root), {
+        proposalPath,
+        action: "edit",
+        decidedBy: "test-owner",
+        decidedAt,
+        reason: "out of range",
+        editedPayload: payload,
+        editedConfidence: 1.4,
+        schemaRoot: root,
+      }),
+      /editedConfidence must be a number between 0 and 1/,
+    );
+
+    // Approval is not a place to change the number: the payload it approves is
+    // the one that was reviewed.
+    await assert.rejects(
+      prepareProposalDecision(new LocalRepositorySnapshot(root), {
+        proposalPath,
+        action: "approve",
+        decidedBy: "test-owner",
+        decidedAt,
+        reason: "approving",
+        editedConfidence: 0.5,
+        schemaRoot: root,
+      }),
+      /only accepted on an edit/,
+    );
   } finally {
     await rm(root, { recursive: true, force: true });
   }

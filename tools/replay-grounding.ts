@@ -22,17 +22,28 @@
  *   npm run replay-grounding -- synth --mechanism CL-14 --count 10
  *   npm run replay-grounding -- mutate --mechanism CL-14
  *   npm run replay-grounding -- replay corpora/extraction/rejected/<run>.json
+ *   npm run replay-grounding -- verify-spans
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import type {
   EvidenceCorpusFile,
   EvidenceCorpusRecord,
+  KnowledgeProvenanceItem,
   RejectedCandidateFile,
   RejectedCandidateRecord,
 } from "../lib/types";
-import { normalizeQualityText } from "../lib/proposal-quality";
+import { isExtractionAuthored } from "../lib/proposal-meta";
+import {
+  evidenceSourceText,
+  normalizeQualityText,
+  sha256Hex,
+} from "../lib/proposal-quality";
+import {
+  isInferenceProvenance,
+  isRealizationProvenance,
+} from "../lib/realization-corpus";
 import { groundingOutcome, type DraftItem, type UngroundedReason } from "./extract";
 
 const ROOT = join(__dirname, "..");
@@ -174,14 +185,29 @@ interface GroundedCandidate {
   item: DraftItem;
 }
 
-function candidateFor(record: EvidenceCorpusRecord, quote: string): DraftItem {
+function candidateFor(
+  record: EvidenceCorpusRecord,
+  quote: string,
+  // A probe is grounded BY CONSTRUCTION, so it asserts the role that lets it
+  // through (D-129). Any other default would make the 0.1 control fail for a
+  // reason the control is not measuring, and the mutation axes below vary this
+  // deliberately instead. `null` omits the field — not `undefined`, which a
+  // default parameter cannot distinguish from an absent argument.
+  spanRole: unknown = "finding",
+): DraftItem {
   return {
     name: `replay probe for ${record.record_id}`,
     fact: "Constructed offline by tools/replay-grounding.ts; never proposed.",
     boundary: "Not a scientific claim.",
     grade: "C-",
     confidence: 0.5,
-    citations: [{ record_id: record.record_id, quote_or_locus: quote }],
+    citations: [
+      {
+        record_id: record.record_id,
+        quote_or_locus: quote,
+        ...(spanRole === null ? {} : { span_role: spanRole }),
+      },
+    ],
   };
 }
 
@@ -240,6 +266,7 @@ function synth(mechanismId: string, count: number): number {
   console.log("-".repeat(header.length));
 
   let refused = 0;
+  let roleRefused = 0;
   for (let index = 0; index < candidates.length; index += 1) {
     const candidate = candidates[index];
     const outcome = groundingOutcome(candidate.item, corpus);
@@ -250,25 +277,53 @@ function synth(mechanismId: string, count: number): number {
         `${String(candidate.quote.length).padEnd(13)}${label}`,
     );
     if (!outcome.ok) {
-      refused += 1;
+      // A probe is grounded by construction but NOT role-honest by
+      // construction (D-129): it quotes the opening of an abstract, which is
+      // usually background, and asserts "finding" because that is the only role
+      // that reaches the rest of the gate. When the role checks refuse it they
+      // are working, so counting that as the grounding bug this part exists to
+      // rule out would make the control cry wolf.
+      if (isSpanRoleRefusal(outcome.reason)) roleRefused += 1;
+      else refused += 1;
       console.log(`      detail: ${outcome.detail}`);
-      reportComparison(candidate.quote, sourceTextFor(candidate.record));
+      if (!isSpanRoleRefusal(outcome.reason)) {
+        reportComparison(candidate.quote, sourceTextFor(candidate.record));
+      }
     }
   }
 
   console.log("");
   if (refused > 0) {
     console.log(
-      `FAIL — ${refused} of ${candidates.length} definitionally grounded candidates were refused. ` +
-        "That is the bug: the gate rejects provenance it constructed itself.",
+      `FAIL — ${refused} of ${candidates.length} definitionally grounded candidates were refused ` +
+        "on GROUNDING. That is the bug: the gate rejects provenance it constructed itself.",
     );
     return 1;
   }
   console.log(
-    `OK — all ${candidates.length} admitted. The gate admits provenance that is ` +
-      "grounded by construction, so a 100% drop rate is not the gate refusing valid input.",
+    `OK — ${candidates.length - roleRefused} of ${candidates.length} admitted, and the ` +
+      `${roleRefused} refusal${roleRefused === 1 ? "" : "s"} ${roleRefused === 1 ? "is" : "are"} ` +
+      "on span_role, not on grounding. The gate admits provenance that is grounded by " +
+      "construction, so a 100% drop rate is not the gate refusing valid input.",
   );
+  if (roleRefused > 0) {
+    console.log(
+      "   A probe quotes the OPENING of an abstract and asserts span_role=finding, which is " +
+        "usually a lie — the role checks catching that is the D-129 gate working, not the " +
+        "grounding gate failing.",
+    );
+  }
   return 0;
+}
+
+/** Whether a refusal came from the D-129 role checks rather than from grounding. */
+function isSpanRoleRefusal(reason: UngroundedReason): boolean {
+  return (
+    reason === "span_role_missing" ||
+    reason === "span_role_not_finding" ||
+    reason === "span_role_contradicted_by_structure" ||
+    reason === "premise_contradicted_downstream"
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -285,6 +340,13 @@ interface Mutation {
   quote?: (quote: string) => string;
   /** Rewrite the corpus record the candidate is checked against. */
   record?: (record: EvidenceCorpusRecord) => EvidenceCorpusRecord;
+  /**
+   * Replace the asserted span_role, `undefined` meaning omit the field (D-129).
+   * A separate axis from `quote` because it varies what the candidate CLAIMS
+   * about a span rather than the span itself, and the two must be measurable
+   * apart: the point of the matrix is one axis per row.
+   */
+  spanRole?: { value: unknown };
 }
 
 const MUTATIONS: Mutation[] = [
@@ -381,6 +443,30 @@ const MUTATIONS: Mutation[] = [
     note: "negative control, must refuse",
     quote: () => "--- ... ---",
   },
+  {
+    name: "span_role_omitted",
+    target: "candidate",
+    note: "D-129, must refuse",
+    spanRole: { value: null },
+  },
+  {
+    name: "span_role_unknown_value",
+    target: "candidate",
+    note: "D-129, must refuse",
+    spanRole: { value: "conclusion" },
+  },
+  {
+    name: "span_role_background",
+    target: "candidate",
+    note: "D-129, must refuse: no finding in the item",
+    spanRole: { value: "background" },
+  },
+  {
+    name: "span_role_method",
+    target: "candidate",
+    note: "D-129, must refuse: no finding in the item",
+    spanRole: { value: "method" },
+  },
 ];
 
 /** Swap one record inside a corpus, leaving every other field identical. */
@@ -422,7 +508,10 @@ function mutate(mechanismId: string, count: number): number {
       const quote = mutation.quote ? mutation.quote(candidate.quote) : candidate.quote;
       const record = mutation.record ? mutation.record(candidate.record) : candidate.record;
       const activeCorpus = mutation.record ? corpusWithRecord(corpus, record) : corpus;
-      const outcome = groundingOutcome(candidateFor(record, quote), activeCorpus);
+      const probe = mutation.spanRole
+        ? candidateFor(record, quote, mutation.spanRole.value)
+        : candidateFor(record, quote);
+      const outcome = groundingOutcome(probe, activeCorpus);
       if (outcome.ok) admitted += 1;
       else reasons.set(outcome.reason, (reasons.get(outcome.reason) ?? 0) + 1);
     }
@@ -452,10 +541,27 @@ function mutate(mechanismId: string, count: number): number {
 // replay — re-check a candidate the pipeline dropped (D-104)
 // ---------------------------------------------------------------------------
 
+/**
+ * Whether a persisted candidate carries any span_role at all (D-129).
+ *
+ * A candidate recorded before the field existed has none, and replaying it under
+ * the role gate would report span_role_missing for every one of them — burying
+ * the reason each was ACTUALLY refused for, which is the only thing the replay
+ * exists to re-examine. So the gate is applied to candidates that could have
+ * carried a role and withheld from those that could not.
+ */
+function carriesSpanRole(item: DraftItem): boolean {
+  return (item.citations ?? []).some(
+    (citation) => (citation as { span_role?: unknown }).span_role !== undefined,
+  );
+}
+
 function replayRecord(entry: RejectedCandidateRecord, index: number): boolean {
   const corpus = loadCorpus(entry.mechanism_id);
-  const outcome = groundingOutcome(entry.item as DraftItem, corpus);
-  const label = outcomeLabel(outcome);
+  const item = entry.item as DraftItem;
+  const preRole = !carriesSpanRole(item);
+  const outcome = groundingOutcome(item, corpus, { requireSpanRole: !preRole });
+  const label = `${outcomeLabel(outcome)}${preRole ? "*" : ""}`;
   const agrees = !outcome.ok && outcome.reason === entry.reason;
 
   console.log(
@@ -488,11 +594,22 @@ function replay(path: string): number {
   console.log("-".repeat(header.length));
 
   let differs = 0;
+  let preRole = 0;
   for (let index = 0; index < file.rejected.length; index += 1) {
-    if (!replayRecord(file.rejected[index], index)) differs += 1;
+    const entry = file.rejected[index];
+    if (!carriesSpanRole(entry.item as DraftItem)) preRole += 1;
+    if (!replayRecord(entry, index)) differs += 1;
   }
 
   console.log("");
+  if (preRole > 0) {
+    console.log(
+      `* ${preRole} of ${file.rejected.length} candidates carry no span_role and were ` +
+        "replayed WITHOUT the D-129 role gate — they were recorded before the field " +
+        "existed, and reporting span_role_missing for them would hide what they were " +
+        "actually refused for.",
+    );
+  }
   if (differs > 0) {
     console.log(
       `${differs} of ${file.rejected.length} replayed to a different verdict — the corpus or the gate ` +
@@ -502,6 +619,145 @@ function replay(path: string): number {
   }
   console.log(`OK — all ${file.rejected.length} rejections reproduce offline.`);
   return 0;
+}
+
+// ---------------------------------------------------------------------------
+// verify-spans — the independent witness for criterion (d)
+// ---------------------------------------------------------------------------
+
+/**
+ * Re-slice every proposal's stored offsets and recheck the hash (D-110).
+ *
+ * Deliberately a SECOND implementation of the check the validator runs, and
+ * deliberately arithmetic rather than search: it reads `[start,end)` out of the
+ * file, cuts the corpus text itself, and compares bytes to the stored quote. It
+ * never looks for the quote in the source, because finding it there would only
+ * prove the string occurs somewhere — the question is whether the offsets the
+ * proposal claims are the offsets the quote actually came from.
+ *
+ * The verdict is computed here from the corpus on disk, not read from any field
+ * the pipeline wrote, so a bug in the writer cannot make its own output look
+ * verified.
+ */
+function verifySpans(): number {
+  const files = listProposalFiles(join(ROOT, "proposals"));
+  console.log(`verify-spans — ${files.length} proposal file(s) under proposals/\n`);
+  if (files.length === 0) {
+    console.log("No proposals on disk yet, so there is nothing to verify (D-110).");
+    return 0;
+  }
+
+  const header = `${"record_id".padEnd(28)}${"span".padEnd(16)}${"reslice".padEnd(10)}${"hash".padEnd(10)}proposal`;
+  console.log(header);
+  console.log("-".repeat(header.length));
+
+  let checked = 0;
+  let spanless = 0;
+  let failures = 0;
+  const corpora = new Map<string, EvidenceCorpusFile | null>();
+
+  for (const file of files) {
+    const proposal = JSON.parse(readFileSync(file, "utf8")) as {
+      proposed_by?: string;
+      provenance?: KnowledgeProvenanceItem[];
+    };
+    const extractionAuthored = isExtractionAuthored(proposal.proposed_by ?? "");
+    for (const source of proposal.provenance ?? []) {
+      if (isRealizationProvenance(source)) continue; // no span by design (D-110)
+      if (isInferenceProvenance(source)) continue; // no span by declaration (D-112)
+      if (!source.source_span) {
+        spanless += 1;
+        // Only a violation for pipeline output; hand-authored items predate spans.
+        if (extractionAuthored) failures += 1;
+        console.log(
+          `${source.corpus_record_id.padEnd(28)}${"absent".padEnd(16)}${"—".padEnd(10)}${"—".padEnd(10)}${rel(file)}` +
+            (extractionAuthored ? "  ← EXTRACTION-AUTHORED, span required" : "  (legacy)"),
+        );
+        continue;
+      }
+      const key = source.mechanism_id;
+      if (!corpora.has(key)) {
+        const path = join(CORPUS_DIR, `${key}.json`);
+        corpora.set(
+          key,
+          existsSync(path)
+            ? (JSON.parse(readFileSync(path, "utf8")) as EvidenceCorpusFile)
+            : null,
+        );
+      }
+      const record = corpora
+        .get(key)
+        ?.records.find((candidate) => candidate.record_id === source.corpus_record_id);
+      const { start, end, source_text_sha256 } = source.source_span;
+      if (!record) {
+        failures += 1;
+        console.log(
+          `${source.corpus_record_id.padEnd(28)}${`[${start},${end})`.padEnd(16)}${"n/a".padEnd(10)}${"n/a".padEnd(10)}${rel(file)}  ← record not in corpus`,
+        );
+        continue;
+      }
+      checked += 1;
+      const sourceText = evidenceSourceText(record);
+      const inRange = start >= 0 && end > start && end <= sourceText.length;
+      const resliced = inRange ? sourceText.slice(start, end) : null;
+      const reslices = resliced === source.quote_or_locus;
+      const hashMatches = sha256Hex(sourceText) === source_text_sha256;
+      if (!reslices || !hashMatches) failures += 1;
+      console.log(
+        `${source.corpus_record_id.padEnd(28)}${`[${start},${end})`.padEnd(16)}` +
+          `${(inRange ? (reslices ? "identical" : "DIFFERS") : "OUT OF RANGE").padEnd(10)}` +
+          `${(hashMatches ? "match" : "STALE").padEnd(10)}${rel(file)}`,
+      );
+      if (inRange && !reslices) {
+        console.log(`    stored quote: ${JSON.stringify(source.quote_or_locus)}`);
+        console.log(`    re-sliced:    ${JSON.stringify(resliced)}`);
+        console.log(`    first divergence at byte ${firstDivergence(source.quote_or_locus, resliced ?? "")}`);
+      }
+    }
+  }
+
+  console.log("");
+  console.log(
+    `${checked} span(s) re-sliced against the corpus on disk; ${spanless} evidence item(s) carry no span.`,
+  );
+  if (failures > 0) {
+    console.log(
+      `${failures} failure(s) — criterion (d) is NOT met: a stored span did not reproduce its own quote, ` +
+        "its record is missing, or extraction-authored provenance shipped without offsets.",
+    );
+    return 1;
+  }
+  console.log(
+    checked === 0
+      ? "No spans to verify yet — criterion (d) is unproven rather than met."
+      : "OK — every stored span re-slices to its own quote byte for byte, against text that still hashes to what the offsets were resolved on.",
+  );
+  return 0;
+}
+
+/** Byte index where two strings first differ; their common length when neither diverges. */
+function firstDivergence(left: string, right: string): number {
+  const a = Buffer.from(left, "utf8");
+  const b = Buffer.from(right, "utf8");
+  const shared = Math.min(a.length, b.length);
+  for (let index = 0; index < shared; index += 1) {
+    if (a[index] !== b[index]) return index;
+  }
+  return shared;
+}
+
+function listProposalFiles(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+  const out: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      out.push(...listProposalFiles(path));
+    } else if (entry.name.endsWith(".json") && !entry.name.endsWith(".schema.json")) {
+      out.push(path);
+    }
+  }
+  return out.sort();
 }
 
 // ---------------------------------------------------------------------------
@@ -520,6 +776,7 @@ function usage(): never {
       "  npm run replay-grounding -- synth  [--mechanism CL-14] [--count 10]",
       "  npm run replay-grounding -- mutate [--mechanism CL-14] [--count 10]",
       "  npm run replay-grounding -- replay <path-to-rejected-file>",
+      "  npm run replay-grounding -- verify-spans",
     ].join("\n"),
   );
   process.exit(1);
@@ -547,6 +804,9 @@ function main(): void {
       process.exitCode = replay(path);
       return;
     }
+    case "verify-spans":
+      process.exitCode = verifySpans();
+      return;
     default:
       usage();
   }

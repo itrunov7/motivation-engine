@@ -231,6 +231,50 @@ export interface SeedStub {
 
 // ---------- Effects, first-class L2 records (/effects, D-076) ----------
 
+/**
+ * Where a quote sits in its source record, and which version of that record it
+ * was resolved against (D-110).
+ *
+ * `start`/`end` are character offsets into the string
+ * `lib/proposal-quality.evidenceSourceText` returns, end-exclusive, so
+ * `evidenceSourceText(record).slice(start, end)` re-derives the quote. Offsets
+ * alone are not enough: a re-harvested or re-normalised record leaves them
+ * pointing at different words with nothing to say so, which is why the hash of
+ * the exact text they were resolved against travels with them. A mismatch makes
+ * the span STALE — a named, surfaced condition — instead of a silent relocation.
+ */
+export interface ProvenanceSourceSpan {
+  start: number;
+  end: number;
+  /** Hex sha256 of the exact source text the offsets were resolved against. */
+  source_text_sha256: string;
+}
+
+/**
+ * What a span is DOING in the text it was cut from (D-129).
+ *
+ * A quote can be verbatim and still misrepresent the paper, because a paper is
+ * not one voice: it restates what the literature predicts, states what it set
+ * out to test, describes what it did, reports what it found, and admits what it
+ * cannot show. Only the fourth of those is a finding. Two of the four proposals
+ * from the first extraction run quoted a background premise as though the study
+ * had found it, and one of those papers went on to report the opposite — a
+ * failure no grounding check can catch, because the quote was genuinely there.
+ */
+export const SPAN_ROLES = [
+  "background",
+  "hypothesis",
+  "method",
+  "finding",
+  "limitation",
+] as const;
+
+export type SpanRole = (typeof SPAN_ROLES)[number];
+
+export function isSpanRole(value: unknown): value is SpanRole {
+  return typeof value === "string" && (SPAN_ROLES as readonly string[]).includes(value);
+}
+
 /** One literature locus grounding an effect or proposal. */
 export interface EvidenceProvenanceItem {
   /** Omitted for backwards compatibility with pre-C2 evidence records. */
@@ -241,6 +285,21 @@ export interface EvidenceProvenanceItem {
   doi: string | null;
   title: string;
   quote_or_locus: string;
+  /**
+   * Optional in the schema so hand-authored records written before D-110 stay
+   * valid, but REQUIRED of anything the extraction pipeline produces — enforced
+   * in code, in the provenance builder and in tools/validate.ts, not by
+   * convention. An extraction-authored item without it fails validation.
+   */
+  source_span?: ProvenanceSourceSpan;
+  /**
+   * The rhetorical role of this span in its source (D-129). Enforced exactly as
+   * `source_span` above: optional in the schema so items written before D-129
+   * stay valid, required in code of anything the extraction pipeline produces.
+   * Absent means the item predates the decision, which is a different fact from
+   * a role nobody could determine.
+   */
+  span_role?: SpanRole;
 }
 
 /** One interface-evidence locus from the realization corpus (D-081). */
@@ -255,9 +314,41 @@ export interface RealizationCorpusProvenanceItem {
   contributed_by: string | null;
 }
 
+/**
+ * The reason a span is absent from an inference provenance item (D-112). One
+ * literal, not free text: an explanatory sentence that a writer can reword is a
+ * sentence a reader cannot filter on.
+ */
+export const INFERENCE_SPAN_ABSENT_REASON =
+  "no direct span — inferred from effect" as const;
+
+/**
+ * The transfer step itself, recorded as provenance (D-112).
+ *
+ * An inferred realization does not quote a source that observed the pattern —
+ * no such source exists, which is the whole point of marking it inferred. What
+ * it CAN carry is the effect statement it was transferred from, verbatim, plus
+ * the evidence record that effect cites so the trail stays walkable. There is
+ * no `source_span` because the quoted text is an L2 record's own sentence, not
+ * a slice of a harvested document, and `span_absent_reason` states that rather
+ * than leaving the missing field to be read as an oversight.
+ */
+export interface InferenceProvenanceItem {
+  corpus_kind: "inference";
+  mechanism_id: string;
+  /** The evidence record the EFFECT cites — not a record about this pattern. */
+  corpus_record_id: string;
+  effect_id: string;
+  title: string;
+  /** The effect's own statement, copied verbatim. */
+  quote_or_locus: string;
+  span_absent_reason: typeof INFERENCE_SPAN_ABSENT_REASON;
+}
+
 export type KnowledgeProvenanceItem =
   | EvidenceProvenanceItem
-  | RealizationCorpusProvenanceItem;
+  | RealizationCorpusProvenanceItem
+  | InferenceProvenanceItem;
 
 /**
  * /effects/{mechanism_id}/{effect_id}.json — a scientific phenomenon between
@@ -271,6 +362,12 @@ export interface Effect {
   name: string;
   fact: string;
   grade: EvidenceGrade;
+  /**
+   * What corpus evidence the grade rests on, in the owner's words. Optional
+   * while grades are still corrected by hand; required once grading is
+   * computed from the corpus rather than asserted.
+   */
+  grade_basis?: string;
   /** Supporting DOIs. */
   source: string[];
   boundary: string;
@@ -279,17 +376,80 @@ export interface Effect {
 }
 
 /**
- * /realizations/{mechanism_id}/{id}.json — descriptive evidence about an
- * interface, copy, or flow embodiment reported by a source. This is distinct
- * from Implementation, which is a product-authored generator directive.
+ * How a realization came to exist (D-112).
+ *
+ * `reported` — a source described this embodiment; the record describes what
+ * exists. `inferred` — the pattern is a domain transfer from an effect that
+ * nobody measured in a product context, so it is a hypothesis a generator may
+ * act on, never evidence that it works. The distinction is a field rather than
+ * a tone of voice because the generator reads the field.
+ */
+export type RealizationDerivation = "reported" | "inferred";
+
+/**
+ * The domain the evidence was measured in versus the domain the record is
+ * applied in (D-112). Equal domains mean no transfer. effect.boundary carries
+ * this implicitly for L2; realizations carry it explicitly, because the
+ * generator reads the realization and never reads the effect.
+ */
+export interface RealizationDomainTransfer {
+  source_domain: string;
+  application_domain: string;
+}
+
+/**
+ * What a tunable threshold's default rests on (D-115). One literal, following
+ * the INFERENCE_SPAN_ABSENT_REASON precedent: a value a reader can filter on,
+ * not a sentence a writer can reword until it sounds measured. A second value
+ * is added here the day a source actually measures a threshold.
+ */
+export const PARAMETER_EVIDENCE_BASIS_NONE = "none — default heuristic" as const;
+
+/**
+ * One numeric threshold a `pattern` depends on, named rather than stated as
+ * prose (D-115).
+ *
+ * "once the user has completed the core task three times" reads as a measured
+ * quantity and is not one. The pattern text carries `{name}`, the default lives
+ * here, and `evidence_basis` says the number is a heuristic — so the invented
+ * precision is visible in the data instead of hidden in a sentence.
+ */
+export interface RealizationParameter {
+  /** snake_case; referenced from `pattern` as `{name}`. */
+  name: string;
+  value: number;
+  /** What the number counts — the pattern text only shows the placeholder. */
+  unit: string;
+  evidence_basis: typeof PARAMETER_EVIDENCE_BASIS_NONE;
+}
+
+/**
+ * /realizations/{mechanism_id}/{id}.json — an interface, copy, or flow
+ * embodiment. Distinct from Implementation, which is a product-authored
+ * generator directive with metrics and hard rules attached.
+ *
+ * The two text fields split evidence from inference (D-112):
+ * description_as_reported stays in the source's own domain language, and
+ * `pattern` — present only for derivation=inferred — is the product-UI
+ * directive transferred from it.
  */
 export interface Realization {
   $schema?: string;
   id: string;
   mechanism_id: string;
-  effect_id?: string;
+  /** L2 effects this realization embodies; named as in mechanism.effect_refs. */
+  effect_refs?: string[];
+  derivation?: RealizationDerivation;
+  domain_transfer?: RealizationDomainTransfer;
   term: string;
   description_as_reported: string;
+  /** Required when derivation is "inferred", forbidden when "reported". */
+  pattern?: string;
+  /**
+   * Every numeric threshold `pattern` depends on (D-115). Required whenever the
+   * pattern carries one; forbidden when derivation is "reported".
+   */
+  parameters?: RealizationParameter[];
   artifact_context: string[];
   provenance: KnowledgeProvenanceItem[];
   confidence: number;
@@ -578,7 +738,13 @@ export type EvidenceCategory = (typeof EVIDENCE_CATEGORIES)[number];
 /** Per-category record counts, keyed by EVIDENCE_CATEGORIES entries. */
 export type CategoryCounts = Record<EvidenceCategory, number>;
 
-export type CorpusRunStatus = "success" | "partial" | "failed";
+/**
+ * "broken" (D-132) is not a degree of "partial". A partial run did less than
+ * its scope and says so; a broken run cannot account for what it did — its
+ * candidate ledger does not balance, so the numbers it reports are unsound and
+ * nothing derived from them may be read as a measurement.
+ */
+export type CorpusRunStatus = "success" | "partial" | "failed" | "broken";
 
 /**
  * Cost accounting for one run (D-022), mirrored from
@@ -1241,6 +1407,15 @@ export interface RunProgressSummary {
   records_skipped_irrelevant: number;
   records_remaining: number;
   /**
+   * What the token cap did to the plan (D-103). `records_selected` is what the
+   * planner kept; `records_dropped_truncation` is what it left out to fit
+   * per_run_tokens. Optional only so runs recorded before D-103 stay readable
+   * as "truncation not reported" rather than as "nothing was truncated" — every
+   * run from D-103 on writes both, including at zero.
+   */
+  records_selected?: number;
+  records_dropped_truncation?: number;
+  /**
    * Per-reason attribution of dropped_ungrounded (D-098); values sum to that
    * total. Optional: absent on a clean run and on runs recorded before D-098,
    * so /ops must render an honest "not attributed" state rather than zeros.
@@ -1283,6 +1458,14 @@ export const UNGROUNDED_DROP_REASONS = [
   "title_mismatch",
   /** Provenance mechanism/source/contributor disagrees with the corpus. */
   "provenance_mismatch",
+  /** A citation carried no span_role, or one outside the vocabulary (D-129). */
+  "span_role_missing",
+  /** The span is background/hypothesis/method/limitation, so it grounds no fact (D-129). */
+  "span_role_not_finding",
+  /** The model called it a finding; the source's own section labels say otherwise (D-129). */
+  "span_role_contradicted_by_structure",
+  /** A later sentence in the same stored text contradicts the quoted span (D-129). */
+  "premise_contradicted_downstream",
   /** The proposal builder rejected the item after provenance was assembled. */
   "proposal_not_built",
 ] as const;
@@ -1362,6 +1545,153 @@ export interface RejectedCandidateFile {
   mode: string;
   written_at: string;
   rejected: RejectedCandidateRecord[];
+}
+
+// ---------- Candidate conservation ledger (D-132) ----------
+
+/**
+ * Every terminal fate a candidate can reach, in funnel order.
+ *
+ * Closed by design: the conservation invariant is only enforceable if the
+ * outcomes partition the population, so a new way to lose a candidate has to be
+ * added here — and to the balance equations — before it can be written. That is
+ * the whole point. The three prior appearances of the silent-loss defect class
+ * (D-104's 30-for-30, D-105's uncounted cheap pass, and the cheap-to-strong
+ * 8-to-7 shrink) were each a fate with no name.
+ */
+export const CANDIDATE_FATES = [
+  /** Cheap-pass candidate handed to a synthesis call that returned. */
+  "into_synthesis",
+  /** Refused at the grounding gate; the full refusal is in corpora/extraction/rejected/. */
+  "dropped_ungrounded",
+  /** Grounded, handed to synthesis, and the synthesis call itself failed. */
+  "synthesis_batch_failed",
+  /** Written to the proposal queue as a new proposal. */
+  "proposed",
+  /** Written to the queue as an enrichment of an approved artifact. */
+  "proposed_enrich",
+  /** Absorbed into an earlier pending proposal; produces no file of its own. */
+  "merged_into_pending",
+  /** Written to the queue held below the confidence floor, or adding nothing. */
+  "held_low_confidence",
+  /** Refused by the proposal schema after provenance was assembled. */
+  "failed_validation",
+  /** Admissible but beyond max_proposals_per_mechanism. */
+  "dropped_volume_cap",
+  /** Synthesis output past the first item, which a draft mode discards (D-085). */
+  "dropped_draft_cap",
+] as const;
+
+export type CandidateFate = (typeof CANDIDATE_FATES)[number];
+
+/**
+ * One candidate's fate. No model text is stored: a refused candidate is already
+ * persisted in full under corpora/extraction/rejected/ (D-104), and this file
+ * answers "what became of each one", not "what did it say".
+ */
+export interface CandidateLedgerEntry {
+  /** Stable within a run: mechanism, pass, ordinal, and a short content hash. */
+  candidate_id: string;
+  mechanism_id: string;
+  pass: ExtractionPass;
+  fate: CandidateFate;
+  /** The grounding check that refused it; present only for dropped_ungrounded. */
+  reason?: UngroundedDropReason;
+  /** The proposal this candidate became, or was absorbed into. */
+  proposal_id?: string;
+  /**
+   * Whether `proposal_id` was written by the run or worked out afterwards.
+   * A backfilled attribution is a reading of the evidence, not a record of
+   * what happened, and the two must never be confused (D-131).
+   */
+  attribution?: "recorded" | "inferred" | "not_recorded";
+}
+
+/** Cheap-pass totals. */
+export interface CandidateLedgerCheapStage {
+  candidates: number;
+  dropped_ungrounded: number;
+  synthesis_batch_failed: number;
+  into_synthesis: number;
+}
+
+/**
+ * The cheap-to-strong stage, which is where the loss hid. Synthesis consolidates
+ * several cheap candidates into one composed candidate, which is legitimate —
+ * but it is a fate, and until D-132 it had no counter, so a consolidation and a
+ * dropped candidate looked identical from outside.
+ */
+export interface CandidateLedgerSynthesisStage {
+  into_synthesis: number;
+  consolidated: number;
+  expanded: number;
+  candidates_strong: number;
+}
+
+/** Strong-pass totals; the fates here partition candidates_strong. */
+export interface CandidateLedgerStrongStage {
+  candidates: number;
+  proposed: number;
+  proposed_enrich: number;
+  merged_into_pending: number;
+  held_low_confidence: number;
+  failed_validation: number;
+  dropped_ungrounded: number;
+  dropped_volume_cap: number;
+  dropped_draft_cap: number;
+}
+
+/**
+ * How completely this run's ledger could be established.
+ *
+ * - recorded: written by the run itself, as it happened.
+ * - reconstructed: complete, but worked out afterwards from committed evidence.
+ * - partial: some fates could not be established at all.
+ * - unreconstructable: the run predates the instrumentation and the evidence
+ *   for its accounting no longer exists.
+ *
+ * A reason is REQUIRED for everything except `recorded`. That requirement is
+ * the substance of the rule: a gap is recorded as a gap, and no run passes the
+ * invariant by having nothing said about it.
+ */
+export type CandidateLedgerReconstruction =
+  | { status: "recorded" }
+  | {
+      status: "reconstructed" | "partial" | "unreconstructable";
+      reason: string;
+    };
+
+/**
+ * One extraction run's candidate accounting (D-132).
+ *
+ * A stage is `null` when its numbers are genuinely unknown, which is not the
+ * same as zero and must not be written as zero. Runs before D-105 gated only
+ * the strong pass: their cheap pass produced candidates that were never
+ * counted, so a cheap stage of 0 would assert something false about them, and
+ * asserting it is how this defect class stayed invisible for three rounds.
+ */
+export interface CandidateLedgerRun {
+  /** The run's start timestamp — the key mergeExtractionRunHistory uses. */
+  run_id: string;
+  dispatch_id: string | null;
+  github_run_id: number | null;
+  mode: string;
+  scope: string;
+  candidates: number | null;
+  cheap: CandidateLedgerCheapStage | null;
+  synthesis: CandidateLedgerSynthesisStage | null;
+  strong: CandidateLedgerStrongStage | null;
+  /** Computed by checkLedgerBalance, stored so the manifest status is traceable. */
+  balanced: boolean;
+  reconstruction: CandidateLedgerReconstruction;
+  candidates_detail: CandidateLedgerEntry[];
+}
+
+/** corpora/extraction/ledger.json — every run's candidate accounting (D-132). */
+export interface CandidateLedgerFile {
+  schema_version: 1;
+  updated_at: string;
+  runs: CandidateLedgerRun[];
 }
 
 /** The classification of a live/recent run for the /ops live view. */

@@ -1,6 +1,6 @@
 {
   "version": "0.5.0",
-  "generated_at": "2026-07-30T13:10:14.573Z",
+  "generated_at": "2026-07-31T12:10:13.503Z",
   "config_version": "0.3.0",
   "maturity_stage": "seed",
   "thresholds": {
@@ -34366,8 +34366,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -34433,6 +34433,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -34440,6 +34443,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -34534,14 +34538,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -34572,8 +34576,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -34639,6 +34643,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -34646,6 +34653,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -34740,14 +34748,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -34778,8 +34786,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -34845,6 +34853,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -34852,6 +34863,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -34946,14 +34958,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -34984,8 +34996,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -35051,6 +35063,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -35058,6 +35073,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -35152,14 +35168,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -35190,8 +35206,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -35257,6 +35273,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -35264,6 +35283,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -35358,14 +35378,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -35396,8 +35416,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -35463,6 +35483,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -35470,6 +35493,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -35564,14 +35588,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -35602,8 +35626,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -35669,6 +35693,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -35676,6 +35703,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -35770,14 +35798,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -35808,8 +35836,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -35875,6 +35903,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -35882,6 +35913,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -35976,14 +36008,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -36014,8 +36046,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -36081,6 +36113,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -36088,6 +36123,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -36182,14 +36218,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -36220,8 +36256,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -36287,6 +36323,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -36294,6 +36333,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -36388,14 +36428,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -36426,8 +36466,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -36493,6 +36533,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -36500,6 +36543,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -36594,14 +36638,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -36632,8 +36676,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -36699,6 +36743,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -36706,6 +36753,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -36800,14 +36848,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -36838,8 +36886,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -36905,6 +36953,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -36912,6 +36963,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -37006,14 +37058,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -37044,8 +37096,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -37111,6 +37163,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -37118,6 +37173,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -37212,14 +37268,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"
@@ -37250,8 +37306,8 @@
         "corpus_size_vs_field_estimate": null,
         "source_diversity": 1,
         "recency_balance": 0.4105,
-        "effect_coverage": 0,
-        "realization_density": 0,
+        "effect_coverage": 0.1667,
+        "realization_density": 0.0556,
         "dissent_completeness": 1,
         "grade_sufficiency": 0.8667,
         "interaction_coverage": 0.6667,
@@ -37317,6 +37373,9 @@
           "measured": true,
           "sources": [
             "effects/effect.schema.json",
+            "effects/CL-14/cl-14-001.json",
+            "effects/CL-14/cl-14-002.json",
+            "effects/CL-14/cl14-cueing.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -37324,6 +37383,7 @@
           "measured": true,
           "sources": [
             "realizations/realization.schema.json",
+            "realizations/CL-14/expertise-based-guidance-toggle.json",
             "analysis/analyzer.config.yaml"
           ]
         },
@@ -37418,14 +37478,14 @@
         },
         {
           "criterion": "effect_coverage",
-          "value": 0,
+          "value": 0.1667,
           "threshold": 0.5,
           "fix_type": "pipeline",
           "what_would_close_it": "grounded effect extraction followed by owner approval into /effects"
         },
         {
           "criterion": "realization_density",
-          "value": 0,
+          "value": 0.0556,
           "threshold": 0.34,
           "fix_type": "pipeline",
           "what_would_close_it": "realization-corpus reading followed by owner approval into /realizations"

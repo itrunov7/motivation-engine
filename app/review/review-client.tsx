@@ -364,8 +364,15 @@ function ProposalCard({
                   ? ` · interface · ${source.source_id}${
                       source.contributed_by ? ` · ${source.contributed_by}` : ""
                     }`
-                  : " · literature"}
+                  : "corpus_kind" in source && source.corpus_kind === "inference"
+                    ? ` · inferred from effect ${source.effect_id}`
+                    : " · literature"}
               </span>
+              {"corpus_kind" in source && source.corpus_kind === "inference" ? (
+                <p className="mt-1 font-mono text-[11px] uppercase tracking-wider text-[#E4B54E]">
+                  {source.span_absent_reason}
+                </p>
+              ) : null}
               <p className="mt-1">{source.quote_or_locus}</p>
             </li>
           ))}
@@ -375,7 +382,9 @@ function ProposalCard({
       <section className="mt-4 rounded-md border border-[#243329] bg-[#1A2620] p-4">
         <h3 className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8]">
           {proposal.type === "realization"
-            ? "Source-grounded realization"
+            ? proposal.payload.derivation === "inferred"
+              ? "Inferred realization — a transfer, not a finding"
+              : "Source-grounded realization"
             : proposal.type === "dossier"
               ? "Drafted dossier — every score is proposed"
               : proposal.type === "mechanism"
@@ -383,10 +392,27 @@ function ProposalCard({
                 : "Proposed content"}
         </h3>
         {proposal.type === "realization" ? (
-          <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">
-            Descriptive evidence about an embodiment reported in sources; this is not a
-            product-authored generator directive.
-          </p>
+          proposal.payload.derivation === "inferred" ? (
+            <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">
+              <span className="text-[#E4B54E]">
+                No source measured this pattern in a product interface.
+              </span>{" "}
+              <code className="font-mono text-[11px] text-[#E6EFE8]">
+                description_as_reported
+              </code>{" "}
+              is what the cited evidence states, in{" "}
+              {proposal.payload.domain_transfer?.source_domain ?? "its own domain"};{" "}
+              <code className="font-mono text-[11px] text-[#E6EFE8]">pattern</code> is the
+              directive transferred into{" "}
+              {proposal.payload.domain_transfer?.application_domain ?? "product UI"}, and
+              that half is inference. Check the transfer, not only the quote.
+            </p>
+          ) : (
+            <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">
+              Descriptive evidence about an embodiment reported in sources; this is not a
+              product-authored generator directive.
+            </p>
+          )
         ) : null}
         {proposal.type === "mechanism" ? (
           <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">

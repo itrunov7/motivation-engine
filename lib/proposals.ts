@@ -22,8 +22,16 @@ import type {
   Segment,
   SegmentsFile,
 } from "./types";
-import { groundingErrors, realizationGroundingErrors } from "./proposal-quality";
-import { isRealizationProvenance } from "./realization-corpus";
+import {
+  groundingErrors,
+  inferenceGroundingErrors,
+  patternParameterErrors,
+  realizationGroundingErrors,
+} from "./proposal-quality";
+import {
+  isInferenceProvenance,
+  isRealizationProvenance,
+} from "./realization-corpus";
 import { deriveRealizationRecordId } from "./realization-corpus";
 export { isActionableProposal, PROPOSAL_STATUS_META } from "./proposal-meta";
 
@@ -59,6 +67,13 @@ export interface ProposalDecisionRequest {
   reason?: string;
   /** Complete replacement payload for an edit. */
   editedPayload?: unknown;
+  /**
+   * Envelope confidence, corrected by the owner as part of the edit (D-122).
+   * Omitted leaves the pipeline's number untouched; a corrected one travels
+   * through the same transaction as the payload, so the reason that explains
+   * the payload explains the number too.
+   */
+  editedConfidence?: number;
   /** Repository root containing the actual JSON schemas. Defaults to cwd. */
   schemaRoot?: string;
 }
@@ -308,6 +323,23 @@ function assertPayloadProvenance(proposal: Proposal): void {
   }
 }
 
+/**
+ * The envelope provenance an edited proposal should carry (D-124).
+ *
+ * Only for effect and realization, the two types whose schema requires payload
+ * and envelope provenance to be exactly equal. For every other type the
+ * envelope is authored independently and is left alone.
+ */
+function envelopeProvenanceForEdit(
+  proposal: Proposal,
+  editedPayload: unknown,
+): { provenance?: unknown } {
+  if (proposal.type !== "effect" && proposal.type !== "realization") return {};
+  if (typeof editedPayload !== "object" || editedPayload === null) return {};
+  const provenance = (editedPayload as { provenance?: unknown }).provenance;
+  return Array.isArray(provenance) ? { provenance } : {};
+}
+
 async function assertResolvableProvenance(
   snapshot: RepositorySnapshot,
   proposal: Proposal,
@@ -317,6 +349,24 @@ async function assertResolvableProvenance(
       throw new ProposalValidationError(
         `Provenance mechanism id is invalid: ${item.mechanism_id}`,
       );
+    }
+    // An inference item has no span and never claimed one (D-112); it resolves
+    // against the effect it transfers from. At approval time that effect must be
+    // the authoritative record — a pending proposal is not a basis for a
+    // mutation — so this reads /effects only, not the queue.
+    if (isInferenceProvenance(item)) {
+      const effectPath = `effects/${item.mechanism_id}/${item.effect_id}.json`;
+      const text = await snapshot.read(effectPath);
+      const errors = inferenceGroundingErrors(
+        [item],
+        text === null ? null : parseJson<Effect>(effectPath, text),
+      );
+      if (errors.length > 0) {
+        throw new ProposalValidationError(
+          `Inference provenance does not resolve against ${effectPath}: ${errors.join("; ")}`,
+        );
+      }
+      continue;
     }
     const path = isRealizationProvenance(item)
       ? `corpora/realizations/${item.mechanism_id}/records.json`
@@ -459,7 +509,7 @@ async function validateMechanismReferences(
           `Effect ${effect.id} references invalid realization ${realizationId}`,
         );
       }
-      if (realization.effect_id !== effect.id) {
+      if (!(realization.effect_refs ?? []).includes(effect.id)) {
         throw new ProposalValidationError(
           `Realization ${realizationId} must link back to effect ${effect.id}`,
         );
@@ -512,12 +562,43 @@ async function projectRealization(
       `Realization mechanism does not exist: ${realization.mechanism_id}`,
     );
   }
-  if (realization.effect_id) {
-    const effectPath = `effects/${realization.mechanism_id}/${realization.effect_id}.json`;
+  // Approval order is enforced here (D-112): an inferred realization may be
+  // PROPOSED against an effect that is still a proposal — a proposal resting on
+  // a proposal changes no artifact — but it cannot be APPLIED until that effect
+  // is an approved record. The owner therefore has to accept the science before
+  // the pattern transferred from it can enter the knowledge layer.
+  for (const effectId of realization.effect_refs ?? []) {
+    const effectPath = `effects/${realization.mechanism_id}/${effectId}.json`;
     if ((await builder.read(effectPath)) === null) {
       throw new ProposalValidationError(
-        `Realization effect does not exist: ${realization.effect_id}`,
+        `Realization effect does not exist: ${effectId}`,
       );
+    }
+  }
+  // A threshold in the pattern must be a declared, overridable parameter, not
+  // prose (D-115). Enforced at approval rather than only in the validator,
+  // because this is the boundary the number would cross to become knowledge.
+  if (typeof realization.pattern === "string") {
+    const errors = patternParameterErrors(realization.pattern, realization.parameters ?? []);
+    if (errors.length > 0) {
+      throw new ProposalValidationError(
+        `Realization pattern states an ungrounded threshold: ${errors.join("; ")}`,
+      );
+    }
+  }
+  if (realization.derivation === "inferred") {
+    const claimed = new Set(realization.effect_refs ?? []);
+    if (!realization.provenance.some(isInferenceProvenance)) {
+      throw new ProposalValidationError(
+        "Inferred realization carries no inference provenance item recording the transfer",
+      );
+    }
+    for (const item of realization.provenance) {
+      if (isInferenceProvenance(item) && !claimed.has(item.effect_id)) {
+        throw new ProposalValidationError(
+          `Inference provenance names effect ${item.effect_id}, which is absent from effect_refs`,
+        );
+      }
     }
   }
   const realizationPath = `realizations/${realization.mechanism_id}/${realization.id}.json`;
@@ -862,11 +943,28 @@ async function applyProposalDecision(
   if (request.action === "reject" && !reason) {
     throw new ProposalValidationError("A non-empty reason is required to reject a proposal");
   }
-  if (
-    (request.action === "edit" || request.action === "edit_approve") &&
-    request.editedPayload === undefined
-  ) {
+  const editing = request.action === "edit" || request.action === "edit_approve";
+  if (editing && request.editedPayload === undefined) {
     throw new ProposalValidationError("A complete payload is required to edit a proposal");
+  }
+  if (request.editedConfidence !== undefined) {
+    if (!editing) {
+      throw new ProposalValidationError(
+        "editedConfidence is only accepted on an edit; approving or rejecting cannot change the number",
+      );
+    }
+    // The schema bound is checked below with the rest of the envelope, but a
+    // NaN or an out-of-range number should name the flag that carried it
+    // rather than surface as a JSON Schema path.
+    if (
+      !Number.isFinite(request.editedConfidence) ||
+      request.editedConfidence < 0 ||
+      request.editedConfidence > 1
+    ) {
+      throw new ProposalValidationError(
+        `editedConfidence must be a number between 0 and 1, received ${String(request.editedConfidence)}`,
+      );
+    }
   }
 
   const proposalText = await requireText(builder, request.proposalPath);
@@ -882,10 +980,24 @@ async function applyProposalDecision(
   assertPendingTransition(proposal.status, request.action);
   assertPayloadProvenance(proposal);
 
-  const workingProposal =
-    request.action === "edit" || request.action === "edit_approve"
-      ? ({ ...proposal, payload: request.editedPayload } as Proposal)
-      : proposal;
+  const workingProposal = editing
+    ? ({
+        ...proposal,
+        payload: request.editedPayload,
+        // For the types whose schema declares payload and envelope provenance
+        // IDENTICAL, the envelope is a projection of the payload, so an edited
+        // payload carries its provenance up (D-124). Without this an owner can
+        // never drop a mis-anchored citation or re-anchor a span: the edit
+        // would always fail the equality check it cannot reach. Mirroring
+        // cannot mask a divergence, because the proposal as read was already
+        // checked for one above, and the mirrored provenance is re-grounded
+        // against the corpus before anything is projected.
+        ...envelopeProvenanceForEdit(proposal, request.editedPayload),
+        ...(request.editedConfidence === undefined
+          ? {}
+          : { confidence: request.editedConfidence }),
+      } as Proposal)
+    : proposal;
   assertSchema("edited proposal envelope/payload", validators.proposal, workingProposal);
   assertPayloadProvenance(workingProposal);
 
@@ -902,9 +1014,13 @@ async function applyProposalDecision(
       ? {
           ...workingProposal,
           status: "edited",
+          // Nobody has decided yet, so decided_by/at stay null — but the reason
+          // the payload was changed is the only record of WHY it differs from
+          // what the pipeline proposed, and dropping it leaves an edited value
+          // as unexplained as the asserted one it replaced.
           decided_by: null,
           decided_at: null,
-          decision_note: null,
+          decision_note: reason ?? null,
         }
       : {
           ...workingProposal,
@@ -1158,17 +1274,25 @@ export async function prepareProposalDecision(
   const builder = new MutationBuilder(snapshot);
   const applied = await applyProposalDecision(builder, request, validators);
   const reason = request.reason?.trim();
+  // A rejection always states its reason; an approval or an edit states one
+  // when the owner supplied it. The reason is the only provenance an
+  // owner-corrected value has — a grade changed from A- to C+ with no recorded
+  // basis is exactly the ungrounded assertion the correction was meant to
+  // remove, so it is appended to every action rather than to one.
+  const outcome =
+    applied.actionPast === "approved"
+      ? "The validated proposal status and authoritative projection were committed atomically."
+      : applied.actionPast === "rejected"
+        ? "No authoritative artifact was changed."
+        : "The validated proposal payload was updated for further review. No authoritative artifact was changed.";
   const decisionId = await appendDecision(
     builder,
     request.decidedAt,
     `Proposal ${applied.proposalId} ${applied.actionPast}`,
     `Owner ${request.decidedBy.trim()} ${applied.actionPast} ${applied.proposalType} proposal ` +
       `${applied.proposalId} for ${applied.target}. ` +
-      (applied.actionPast === "approved"
-        ? "The validated proposal status and authoritative projection were committed atomically."
-        : applied.actionPast === "rejected"
-          ? `No authoritative artifact was changed. Reason: ${reason}`
-          : "The validated proposal payload was updated for further review. No authoritative artifact was changed."),
+      outcome +
+      (reason ? ` Reason: ${reason}` : ""),
   );
 
   const mutations = builder.mutations();
@@ -1246,6 +1370,7 @@ export async function prepareBatchProposalDecision(
   const enumeration = appliedItems
     .map((item) => `${item.proposalId}: ${item.actionPast}`)
     .join("; ");
+  const batchReason = request.reason?.trim();
   const decisionId = await appendDecision(
     builder,
     request.decidedAt,
@@ -1253,7 +1378,8 @@ export async function prepareBatchProposalDecision(
     `Owner ${request.decidedBy.trim()} completed one atomic batch. Outcomes: ${enumeration}. ` +
       (request.action === "approve"
         ? "Every proposal and projected artifact was validated before the single commit."
-        : `No authoritative artifact was changed. Shared reason: ${request.reason?.trim()}`),
+        : "No authoritative artifact was changed.") +
+      (batchReason ? ` Shared reason: ${batchReason}` : ""),
   );
   return {
     action: request.action,

@@ -822,25 +822,202 @@ async function searchSemanticScholar(
 /** "foundational" threshold: citation count of a field-anchoring work. */
 const FOUNDATIONAL_MIN_CITATIONS = 1000;
 
+/**
+ * The age-normalised route to `foundational` (D-130).
+ *
+ * A raw citation cutoff is a cutoff on ATTENTION-YEARS, not on standing: the
+ * literature has grown, so a 2015 paper reaches 1000 citations on a topic where
+ * a 1995 paper of the same standing reached 900 and stopped. Mousavi, Low &
+ * Sweller 1995 — the primary experimental source behind cl-14-001, six
+ * experiments, the paper the split-attention literature builds on — sits at 958
+ * and was therefore NOT foundational, while a 2015 review of it would be.
+ *
+ * So a second route: a sustained citation RATE. Both floors are deliberate. The
+ * age floor keeps a fast-starting recent paper out, because "foundational" is a
+ * claim about a work having anchored a field and two years cannot show that. The
+ * absolute floor keeps out an old paper with a high rate over a tiny total.
+ */
+const FOUNDATIONAL_MIN_CITATIONS_PER_YEAR = 20;
+const FOUNDATIONAL_MIN_AGE_YEARS = 10;
+const FOUNDATIONAL_MIN_CITATIONS_BY_RATE = 250;
+
 /** "recent" window: published within the last N years. */
 const RECENT_WINDOW_YEARS = 5;
 
-/** Review/meta-analysis signal in a title. */
-const META_ANALYSIS_TITLE = /\bmeta-?analy|systematic review/i;
+/**
+ * Review/meta-analysis signal in a title (D-130).
+ *
+ * Broadened from `meta-analy|systematic review` to the review GENRES that
+ * appear in this corpus. The narrow pattern read "The Split-Attention Principle
+ * in Multimedia Learning" — a handbook chapter that reviews a literature, and
+ * the second citation the model attached to cl-14-001 — as primary research,
+ * which is how a design prescription came to be filed as evidence for a
+ * phenomenon.
+ */
+const META_ANALYSIS_TITLE =
+  /\bmeta-?analy|\b(?:systematic|scoping|narrative|umbrella|integrative|critical|literature)\s+review\b|\breview\s+of\s+(?:the\s+)?(?:literature|research|evidence|empirical)\b|\bresearch\s+synthesis\b/i;
+
+/**
+ * A title that announces a review-shaped chapter (D-130). Applied ONLY to
+ * book chapters and reference entries, whose OpenAlex type says nothing about
+ * whether the text reports a study or surveys other people's: "principle",
+ * "handbook" and "encyclopedia" in a chapter title are genre words, but in a
+ * journal article's title they are not.
+ */
+const REVIEW_CHAPTER_TITLE =
+  /\bprinciples?\b|\bhandbook\b|\bencyclopedia\b|\bchapter\b|\boverview\b|\bstate of the (?:art|science)\b/i;
+
+const REVIEW_CHAPTER_TYPES = new Set(["book-chapter", "reference-entry", "book"]);
 
 /** Replication signal in a title or abstract. */
 const REPLICATION_MARKERS = /\breplicat/i;
 
 /**
- * Disconfirmation markers: text patterns of papers that push back on a
- * mainstream claim. A documented constant, not a hidden judgment — records
- * matching none of these in title/abstract/pin_reason are not dissent.
+ * The verbs a negation has to be attached to before it counts as dissent
+ * (D-130). Enumerated because "does not" alone is ordinary prose — "the task
+ * does not require prior training" is a method note, not a refutation — while
+ * "does not replicate" and "did not generalise" are the thing the category is
+ * for.
  */
-const DISSENT_MARKERS =
-  /\bfail(s|ed|ure)? to\b|\bno evidence\b|\babsence of\b|\bdoes not\b|\bnot replicate\b|critique|\bquestion(s|ing)?\b|reconsider|overestimat|publication bias|boundary condition/i;
+const DISSENT_CLAIM_VERBS =
+  "replicate|replicated|reproduce|reproduced|generalise|generalize|generalised|generalized|hold|extend|transfer|support|supported|confirm|confirmed|predict|predicted|persist|persisted|materialise|materialize|materialised|materialized|obtain|obtained";
 
-function isReviewLike(record: EvidenceRecord): boolean {
-  return record.openalex_type === "review" || META_ANALYSIS_TITLE.test(record.title);
+/**
+ * The weaker half. A negated OUTCOME verb is a null result — "did not affect
+ * recall" is a finding of no effect — but the same words carry a method note or
+ * an off-topic aside just as often, and this group is the single largest source
+ * of dissent tags in the corpus. Named separately from the claim verbs precisely
+ * so its cost is visible: tools/retag-categories.ts reports how many records it
+ * is the SOLE reason for, which is the number to look at before keeping it.
+ */
+const DISSENT_OUTCOME_VERBS =
+  "differ|improve|improved|benefit|benefited|emerge|appear|survive|occur|occurred|eliminate|reduce|increase|affect|influence|moderate|mediate";
+
+const DISSENT_NEGATED_VERBS = `${DISSENT_CLAIM_VERBS}|${DISSENT_OUTCOME_VERBS}`;
+
+/**
+ * The negation itself. "does not" was the whole of the old rule; every other
+ * form of the same sentence — do/did/was/were/could not — was invisible, which
+ * is how "do not easily generalise" in Tabbers 2004 went untagged.
+ */
+const DISSENT_NEGATION =
+  "\\b(?:(?:do|does|did|was|were|is|are|has|have|had|could|would|can|will|may|might)\\s+not|" +
+  "cannot|can't|won't|don't|doesn't|didn't|wasn't|weren't|isn't|aren't|hasn't|haven't|hadn't|" +
+  "couldn't|wouldn't|neither)\\s+";
+
+/**
+ * Disconfirmation markers, as NAMED and SCOPED alternatives (D-130).
+ *
+ * Previously one long alternation, which failed in both directions at once. It
+ * missed the commonest form of refutation in this corpus — it matched "does not"
+ * but not "do not", "did not", "was not" or "were not" — and it swept in any
+ * abstract containing the word "question", which is most of them, so the
+ * category simultaneously under-detected real dissent and over-reported it.
+ *
+ * Named rather than anonymous so tools/retag-categories.ts can report which
+ * marker is the SOLE reason a record is tagged. A category the owner cannot
+ * audit marker by marker is a category the owner cannot approve.
+ */
+export interface DissentMarker {
+  name: string;
+  pattern: RegExp;
+}
+
+export const DISSENT_MARKERS: readonly DissentMarker[] = [
+  {
+    name: "neg+claim-verb",
+    pattern: new RegExp(`${DISSENT_NEGATION}(?:${DISSENT_CLAIM_VERBS})\\b`, "i"),
+  },
+  {
+    name: "neg+outcome-verb",
+    pattern: new RegExp(`${DISSENT_NEGATION}(?:${DISSENT_OUTCOME_VERBS})\\b`, "i"),
+  },
+  {
+    name: "fail-to+verb",
+    pattern: new RegExp(
+      `\\bfail(?:s|ed|ure|ures|ing)?\\s+to\\s+(?:${DISSENT_NEGATED_VERBS})\\b`,
+      "i",
+    ),
+  },
+  { name: "no-evidence", pattern: /\bno evidence (?:of|for|that|was|has)\b/i },
+  {
+    name: "no-significant",
+    pattern:
+      /\bno (?:statistically )?(?:significant|reliable|detectable|measurable|discernible) (?:effect|difference|differences|benefit|advantage|improvement|gain|change|association|correlation|relationship)\b/i,
+  },
+  {
+    name: "absence-of",
+    pattern:
+      /\babsence of (?:an? )?(?:\w+ ){0,2}(?:effect|effects|difference|differences|benefit|association|correlation|evidence|support)\b/i,
+  },
+  { name: "not-replicate", pattern: /\bnot (?:be )?replicat/i },
+  { name: "failed-replication", pattern: /\b(?:failed|unsuccessful) replicat/i },
+  {
+    name: "reverse-effect",
+    pattern: /\breverse[ds]?\b(?![-\s]?engineer)(?:\s+\w+){0,2}\s+effect\b/i,
+  },
+  { name: "reversal-of", pattern: /\breversal of (?:the |an? )?\w+ effect\b/i },
+  { name: "only-a-weak", pattern: /\bonly (?:a )?(?:very )?(?:weak|small|modest|marginal)\b/i },
+  { name: "contrary-to", pattern: /\bcontrary to\b/i },
+  { name: "opposite", pattern: /\bopposite (?:of|to|direction|pattern|effect)\b/i },
+  { name: "critique", pattern: /\bcritique|\bcritical (?:appraisal|examination|reappraisal)\b/i },
+  { name: "call-into-question", pattern: /\bcalls?(?:ed|ing)? into question\b/i },
+  { name: "reconsider", pattern: /\breconsider|\breappraisal\b|\bre-?examin/i },
+  { name: "overestimated", pattern: /\boverestimat|\bexaggerat|\binflated (?:effect|estimate)/i },
+  { name: "publication-bias", pattern: /\bpublication bias\b|\bp-?hacking\b|\bfile drawer\b/i },
+  { name: "boundary-condition", pattern: /\bboundar(?:y|ies) condition/i },
+  { name: "does-not-generalise", pattern: /\bnot (?:easily )?generalis|\bnot (?:easily )?generaliz/i },
+  { name: "null-result", pattern: /\bnull (?:result|results|finding|findings|effect)\b/i },
+];
+
+/** Which dissent markers fire on a text, by name (D-130). */
+export function dissentMarkersIn(text: string): string[] {
+  return DISSENT_MARKERS.filter((marker) => marker.pattern.test(text)).map(
+    (marker) => marker.name,
+  );
+}
+
+/**
+ * The only fields classification reads (D-130). Declared structurally so the
+ * retag tool and the tests can classify a record read back off DISK — typed
+ * `EvidenceCorpusRecord` in lib/types — through the exact same functions the
+ * harvester applies, rather than through a second copy of the rules.
+ */
+export interface ClassifiableRecord {
+  title: string;
+  abstract: string | null;
+  citations: number | null;
+  year: number | null;
+  openalex_type: string | null;
+  pin_reason?: string;
+}
+
+export function isReviewLike(record: ClassifiableRecord): boolean {
+  if (record.openalex_type === "review") return true;
+  if (META_ANALYSIS_TITLE.test(record.title)) return true;
+  return (
+    record.openalex_type !== null &&
+    REVIEW_CHAPTER_TYPES.has(record.openalex_type) &&
+    REVIEW_CHAPTER_TITLE.test(record.title)
+  );
+}
+
+/**
+ * Whether a record anchors its field by citation weight (D-130): the raw total,
+ * or a sustained rate over a long enough run. Exported so the retag tool and the
+ * tests measure the same rule the harvester applies.
+ */
+export function isFoundationalByCitations(
+  record: ClassifiableRecord,
+  currentYear: number,
+): boolean {
+  if (record.citations === null) return false;
+  if (record.citations >= FOUNDATIONAL_MIN_CITATIONS) return true;
+  if (record.year === null) return false;
+  const age = currentYear - record.year;
+  if (age < FOUNDATIONAL_MIN_AGE_YEARS) return false;
+  if (record.citations < FOUNDATIONAL_MIN_CITATIONS_BY_RATE) return false;
+  return record.citations / age >= FOUNDATIONAL_MIN_CITATIONS_PER_YEAR;
 }
 
 /**
@@ -914,15 +1091,17 @@ export function isTopicalGraphAnchor(record: EvidenceRecord, keys: string[]): bo
   );
 }
 
-function classifyRecord(record: EvidenceRecord, currentYear: number): EvidenceCategory[] {
+export function classifyRecord(
+  record: ClassifiableRecord,
+  currentYear: number,
+): EvidenceCategory[] {
   const titleAbstract = `${record.title} ${record.abstract ?? ""}`;
   const dissentText = `${titleAbstract} ${record.pin_reason ?? ""}`;
   const matches: Record<EvidenceCategory, boolean> = {
-    foundational:
-      record.citations !== null && record.citations >= FOUNDATIONAL_MIN_CITATIONS,
+    foundational: isFoundationalByCitations(record, currentYear),
     "meta-analysis": isReviewLike(record),
     replication: REPLICATION_MARKERS.test(titleAbstract),
-    dissent: DISSENT_MARKERS.test(dissentText),
+    dissent: dissentMarkersIn(dissentText).length > 0,
     recent:
       record.year !== null && record.year >= currentYear - RECENT_WINDOW_YEARS,
   };

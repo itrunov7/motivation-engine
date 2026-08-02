@@ -306,6 +306,10 @@ export const RUN_STATUS_META: Record<CorpusRunStatus, StatusMeta> = {
   success: { label: "success", color: "#34D399" },
   partial: { label: "partial", color: "#E4B54E" },
   failed: { label: "failed", color: ALERT_COLOR },
+  // Alert-coloured alongside "failed" (D-132): a run whose candidate ledger
+  // does not balance reports numbers that cannot be read, which is a worse
+  // state to be in than one that stopped early and said so.
+  broken: { label: "broken", color: ALERT_COLOR },
 };
 
 /** One corpus manifest with its directory name, for the /connectors page. */

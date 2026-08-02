@@ -205,8 +205,11 @@ function CoverageRowLine({ label, counts }: { label: string; counts: StatusCount
       <div className="flex-1">
         <CoverageBar counts={counts} />
       </div>
-      <span className="w-12 shrink-0 text-right font-mono text-xs text-[#E6EFE8]">
-        {counts.pctGreen}%
+      {/* D-102: the per-pack rows are over segments and the per-segment rows
+          over packs, so each row states the population it was computed over. */}
+      <span className="w-24 shrink-0 text-right font-mono text-xs text-[#E6EFE8]">
+        {counts.pctGreen}%{" "}
+        <span className="text-[#7C93A8]">of {counts.total}</span>
       </span>
     </div>
   );
@@ -807,9 +810,13 @@ export default function MaturationPage() {
               stage: {matrix.maturity_stage}
             </span>
           )}
+          {/* D-102: a ratio names its denominator at the point of display. The
+              pack grid and the pack-plus-perception grid are two legitimate
+              populations, and an unlabelled percentage lets a reader mistake
+              one for the other — or read the two surfaces as disagreeing. */}
           {coverage && (
             <span className="rounded-full border border-[#243329] bg-[#1A2620] px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-[#8CA495]">
-              {coverage.overall.pctGreen}% green
+              {coverage.overall.pctGreen}% green of {coverage.overall.total} pack cells
             </span>
           )}
         </div>
@@ -860,8 +867,8 @@ export default function MaturationPage() {
           title="Sufficiency matrix"
           subtitle="Packs (rows) × active segments (columns), plus the cross-cutting perception row (S7) scored once per segment as its own group (D-067). Cell color = computed status; hover for breadth, depth, and quality gaps with their source files and filler routes."
           footer={
-            matrix
-              ? `computed from ${matrixRel}${segmentsFile ? ` + ${segmentsRel}` : ""} · ${matrix.cells.length} cells · config ${matrix.config_version} · stage ${matrix.maturity_stage}`
+            matrix && coverage
+              ? `computed from ${matrixRel}${segmentsFile ? ` + ${segmentsRel}` : ""} · ${matrix.cells.length} cells = ${coverage.overall.total} pack + ${coverage.perception.total} perception (D-102) · config ${matrix.config_version} · stage ${matrix.maturity_stage}`
               : matrixRel
           }
         >
