@@ -6,28 +6,46 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-07-21T13:19:12.562Z",
-    "status": "partial",
+    "timestamp": "2026-08-03T08:32:41.371Z",
+    "status": "success",
     "params": {
-      "mechanism": "CL-14",
-      "terms": "split attention effect;cognitive load measurement replication;working memory limits information processing;extraneous cognitive load instructional;cognitive load theory"
+      "mechanism": "CL-14"
     },
-    "records_fetched": 790,
-    "files_written": 0,
-    "duration_s": 0.31,
-    "error": "api.openalex.org upstream cooldown is 38448s; checkpoint and resume later; logical run CL-14-mrun56vs checkpointed at query 70/1090",
+    "records_fetched": 511,
+    "files_written": 1,
+    "duration_s": 47.29,
     "warnings": {
-      "resume_required": true
+      "low_novelty": true
     },
     "cost": {
-      "api_calls": 1,
-      "duration_s": 0.31,
+      "api_calls": 48,
+      "duration_s": 47.29,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-03T08:32:41.371Z",
+      "status": "success",
+      "params": {
+        "mechanism": "CL-14"
+      },
+      "records_fetched": 511,
+      "files_written": 1,
+      "duration_s": 47.29,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 48,
+        "duration_s": 47.29,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-21T13:19:12.562Z",
       "status": "partial",
@@ -413,26 +431,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-07-20T07:56:47.041Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14"
-      },
-      "records_fetched": 366,
-      "files_written": 1,
-      "duration_s": 80.84,
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 51,
-        "duration_s": 80.84,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -462,14 +460,14 @@
     },
     {
       "path": "CL-14.json",
-      "records": 497,
-      "bytes": 3824137,
+      "records": 511,
+      "bytes": 3805506,
       "categories": {
-        "foundational": 33,
-        "meta-analysis": 12,
+        "foundational": 72,
+        "meta-analysis": 18,
         "replication": 91,
-        "dissent": 187,
-        "recent": 245
+        "dissent": 119,
+        "recent": 258
       }
     },
     {
@@ -703,7 +701,7 @@
     {
       "path": "digests/CL-14.md",
       "records": 0,
-      "bytes": 21533
+      "bytes": 21011
     },
     {
       "path": "digests/IF-18.md",
