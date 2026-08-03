@@ -1,7 +1,43 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:51:37.155Z",
+  "updated_at": "2026-08-03T13:52:22.015Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:52:21.881Z",
+      "dispatch_id": "effects-wide-RE-10",
+      "github_run_id": 30819942732,
+      "mode": "effects",
+      "scope": "RE-10",
+      "candidates": 0,
+      "cheap": {
+        "candidates": 0,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 0
+      },
+      "synthesis": {
+        "into_synthesis": 0,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 0
+      },
+      "strong": {
+        "candidates": 0,
+        "proposed": 0,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": []
+    },
     {
       "run_id": "2026-08-03T13:51:28.839Z",
       "dispatch_id": "effects-wide-FR-11",
@@ -2902,144 +2938,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-sc-17-controlled-salience-suppression-f59e5566d1dd"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:43:49.858Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "PS-13",
-      "candidates": 15,
-      "cheap": {
-        "candidates": 8,
-        "dropped_ungrounded": 0,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 8
-      },
-      "synthesis": {
-        "into_synthesis": 8,
-        "consolidated": 1,
-        "expanded": 0,
-        "candidates_strong": 7
-      },
-      "strong": {
-        "candidates": 7,
-        "proposed": 3,
-        "proposed_enrich": 0,
-        "merged_into_pending": 4,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "PS-13:cheap:01",
-          "mechanism_id": "PS-13",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PS-13:cheap:02",
-          "mechanism_id": "PS-13",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PS-13:cheap:03",
-          "mechanism_id": "PS-13",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PS-13:cheap:04",
-          "mechanism_id": "PS-13",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PS-13:cheap:05",
-          "mechanism_id": "PS-13",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PS-13:cheap:06",
-          "mechanism_id": "PS-13",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PS-13:strong:03",
-          "mechanism_id": "PS-13",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-ps-13-pictorial-superiority-effect-55e17aaab339",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "PS-13:strong:04",
-          "mechanism_id": "PS-13",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-ps-13-pictorial-superiority-effect-55e17aaab339",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "PS-13:strong:05",
-          "mechanism_id": "PS-13",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-ps-13-picture-superiority-effect-0f55cd04f9c9",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "PS-13:strong:01",
-          "mechanism_id": "PS-13",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ps-13-picture-superiority-effect-0f55cd04f9c9"
-        },
-        {
-          "candidate_id": "PS-13:strong:02",
-          "mechanism_id": "PS-13",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ps-13-pictorial-superiority-effect-55e17aaab339"
-        },
-        {
-          "candidate_id": "PS-13:cheap:07",
-          "mechanism_id": "PS-13",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PS-13:cheap:08",
-          "mechanism_id": "PS-13",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PS-13:strong:06",
-          "mechanism_id": "PS-13",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-ps-13-picture-superiority-effect-0f55cd04f9c9",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "PS-13:strong:07",
-          "mechanism_id": "PS-13",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ps-13-symbol-superiority-effect-ada57e38c00a"
         }
       ]
     }
