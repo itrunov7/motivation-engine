@@ -9,8 +9,9 @@
  * approval, and lib/proposals enforces that by requiring the record itself.
  * This module reports which one it found instead of flattening them.
  */
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { safeReaddirSync } from "./fs-safe";
 import type { Effect, Proposal } from "./types";
 
 export type EffectBasisOrigin = "artifact" | "proposal";
@@ -37,7 +38,7 @@ function readJson<T>(path: string): T | null {
 
 function jsonFilesIn(directory: string): string[] {
   if (!existsSync(directory) || !statSync(directory).isDirectory()) return [];
-  return readdirSync(directory)
+  return safeReaddirSync(directory)
     .filter(
       (name) =>
         name.endsWith(".json") &&
@@ -59,9 +60,9 @@ export function listEffectBases(
   const found = new Map<string, { id: string; mechanismId: string; origin: EffectBasisOrigin }>();
   const effectsRoot = join(root, "effects");
   if (existsSync(effectsRoot)) {
-    for (const entry of readdirSync(effectsRoot).sort()) {
+    for (const entry of safeReaddirSync(effectsRoot).sort()) {
       const directory = join(effectsRoot, entry);
-      if (!statSync(directory).isDirectory()) continue;
+      if (!existsSync(directory) || !statSync(directory).isDirectory()) continue;
       for (const path of jsonFilesIn(directory)) {
         const effect = readJson<Effect>(path);
         if (!effect?.id) continue;
@@ -101,7 +102,7 @@ export function resolveEffectBasis(
   if (!EFFECT_ID.test(effectId)) return null;
   const effectsRoot = join(root, "effects");
   if (existsSync(effectsRoot)) {
-    for (const entry of readdirSync(effectsRoot).sort()) {
+    for (const entry of safeReaddirSync(effectsRoot).sort()) {
       const path = join(effectsRoot, entry, `${effectId}.json`);
       if (!existsSync(path)) continue;
       const effect = readJson<Effect>(path);

@@ -6,8 +6,9 @@
  * authoritative for the same mechanism, never against other pending
  * proposals — only an approved record is a "closest existing record".
  */
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { safeReaddirSync } from "./fs-safe";
 import type { Realization } from "./types";
 
 const MECHANISM_ID = /^[A-Z]{2}-\d{2}$/;
@@ -28,7 +29,7 @@ export function listApprovedRealizations(
   if (!MECHANISM_ID.test(mechanismId)) return [];
   const directory = join(root, "realizations", mechanismId);
   if (!existsSync(directory) || !statSync(directory).isDirectory()) return [];
-  return readdirSync(directory)
+  return safeReaddirSync(directory)
     .filter(
       (name) => name.endsWith(".json") && name !== "realization.schema.json",
     )

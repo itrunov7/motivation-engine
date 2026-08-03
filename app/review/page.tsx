@@ -31,35 +31,122 @@ class GithubSnapshot implements RepositorySnapshot {
   }
 }
 
-function localProposalPaths(): string[] {
-  const root = join(process.cwd(), "proposals");
-  if (!existsSync(root)) return [];
-  return PROPOSAL_TYPES.flatMap((type) => {
-    const directory = join(root, type);
-    if (!existsSync(directory)) return [];
-    return readdirSync(directory)
-      .filter((name) => name.endsWith(".json"))
-      .sort()
-      .map((name) => `proposals/${type}/${name}`);
-  });
+/** A proposal (or a whole proposal-type directory) that could not be read or
+ * parsed. Reported to the owner instead of thrown — see BrokenProposals. */
+export interface BrokenProposal {
+  path: string;
+  error: string;
 }
 
+/**
+ * Lists every proposals/{type}/*.json path, one readdirSync per type,
+ * EACH GUARDED SEPARATELY (D-148): a directory-scan failure for one type
+ * (a transient EMFILE under load, a permissions error) must not discard the
+ * other six types' proposals, and must not throw past this function — it is
+ * reported as a BrokenProposal instead, so the owner sees exactly what could
+ * not be listed and why, rather than a blank or crashed /review.
+ */
+function localProposalPaths(): { paths: string[]; errors: BrokenProposal[] } {
+  const root = join(process.cwd(), "proposals");
+  if (!existsSync(root)) return { paths: [], errors: [] };
+  const errors: BrokenProposal[] = [];
+  const paths = PROPOSAL_TYPES.flatMap((type) => {
+    const directory = join(root, type);
+    try {
+      if (!existsSync(directory)) return [];
+      return readdirSync(directory)
+        .filter((name) => name.endsWith(".json"))
+        .sort()
+        .map((name) => `proposals/${type}/${name}`);
+    } catch (error) {
+      errors.push({
+        path: `proposals/${type}`,
+        error: `Could not list ${type} proposals: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      });
+      return [];
+    }
+  });
+  return { paths, errors };
+}
+
+/**
+ * Runs `fn` over `items` with at most `limit` in flight at once.
+ *
+ * D-148: /review used an unbounded Promise.all over every proposal path —
+ * up to ~230 on this queue — and each enrichment can itself trigger several
+ * more synchronous directory scans (computeProposalFlags' triage checks
+ * re-scan proposals/effect and realizations/{mechanism} per item). Vercel's
+ * production incident (digest 2259791759) was exactly this: EMFILE, too
+ * many open files, scanning proposals/effect — the queue's own size,
+ * fanned out with no ceiling, exhausted the runtime's file descriptors.
+ * Bounding concurrency here keeps peak simultaneous file/network handles
+ * proportional to `limit`, not to the queue size.
+ */
+async function forEachWithConcurrency<T>(
+  items: T[],
+  limit: number,
+  fn: (item: T) => Promise<void>,
+): Promise<void> {
+  let cursor = 0;
+  async function worker(): Promise<void> {
+    while (cursor < items.length) {
+      const item = items[cursor++];
+      await fn(item);
+    }
+  }
+  const workerCount = Math.max(1, Math.min(limit, items.length));
+  await Promise.all(Array.from({ length: workerCount }, worker));
+}
+
+const ENRICH_CONCURRENCY = 8;
+
+/**
+ * Triage flags and source context are advisory (rule: "flags advise, they
+ * never block Accept") and read from disk independently of the proposal
+ * itself (computeProposalFlags re-scans realizations/effects for the
+ * DUPLICATE/WEAK ANCHOR checks). A failure here — including a transient
+ * EMFILE — must degrade to "no flags, no resolved context" rather than
+ * take down the whole card: the proposal is still exactly as reviewable
+ * without them, just without a second opinion this render.
+ */
 function attachReviewAids(proposal: Proposal): Pick<
   ReviewProposal,
   "flags" | "sourceContexts"
 > {
-  return {
-    flags: computeProposalFlags(proposal),
-    sourceContexts: proposal.provenance.map((item) => buildSourceContext(item)),
-  };
+  let flags: ReviewProposal["flags"] = [];
+  try {
+    flags = computeProposalFlags(proposal);
+  } catch {
+    flags = [];
+  }
+  const sourceContexts = proposal.provenance.map((item) => {
+    try {
+      return buildSourceContext(item);
+    } catch {
+      return null;
+    }
+  });
+  return { flags, sourceContexts };
 }
 
+/**
+ * Enriches every proposal path with bounded concurrency (D-148) and full
+ * per-item isolation: a proposal that cannot be read, parsed, or enriched
+ * is reported as a BrokenProposal and excluded from the reviewable list,
+ * but it can never fail the OTHERS — /review must stay readable for every
+ * well-formed proposal even when one record on disk is malformed or a
+ * transient I/O error hits mid-render.
+ */
 async function enrich(
   snapshot: RepositorySnapshot,
   paths: string[],
-): Promise<ReviewProposal[]> {
-  return Promise.all(
-    paths.map(async (path) => {
+): Promise<{ proposals: ReviewProposal[]; broken: BrokenProposal[] }> {
+  const proposals: ReviewProposal[] = [];
+  const broken: BrokenProposal[] = [];
+  await forEachWithConcurrency(paths, ENRICH_CONCURRENCY, async (path) => {
+    try {
       const text = await snapshot.read(path);
       if (!text) throw new Error(`Proposal disappeared while loading: ${path}`);
       const proposal = JSON.parse(text) as Proposal;
@@ -68,11 +155,12 @@ async function enrich(
         !isActionableProposal(proposal) &&
         !(proposal.status === "held_low_confidence" && proposal.operation === "enrich")
       ) {
-        return { path, proposal, preview: [], ...aids };
+        proposals.push({ path, proposal, preview: [], ...aids });
+        return;
       }
       try {
         const preview = await prepareProposalPreview(snapshot, path);
-        return {
+        proposals.push({
           path,
           proposal,
           preview: preview.map((mutation) => ({
@@ -81,31 +169,38 @@ async function enrich(
             after: mutation.content,
           })),
           ...aids,
-        };
+        });
       } catch (previewError) {
-        return {
+        proposals.push({
           path,
           proposal,
           preview: [],
           previewError:
             previewError instanceof Error ? previewError.message : String(previewError),
           ...aids,
-        };
+        });
       }
-    }),
-  );
+    } catch (error) {
+      broken.push({ path, error: error instanceof Error ? error.message : String(error) });
+    }
+  });
+  return { proposals, broken };
 }
 
 async function loadQueue(): Promise<{
   proposals: ReviewProposal[];
+  broken: BrokenProposal[];
   writeEnabled: boolean;
   error: string | null;
 }> {
   const env = readGithubOpsEnv();
   if (!env) {
     const snapshot = new LocalSnapshot();
+    const { paths, errors } = localProposalPaths();
+    const { proposals, broken } = await enrich(snapshot, paths);
     return {
-      proposals: await enrich(snapshot, localProposalPaths()),
+      proposals,
+      broken: [...errors, ...broken],
       writeEnabled: false,
       error: null,
     };
@@ -119,15 +214,20 @@ async function loadQueue(): Promise<{
       .filter((entry) => entry.type === "file" && entry.name.endsWith(".json"))
       .map((entry) => entry.path)
       .sort();
+    const { proposals, broken } = await enrich(new GithubSnapshot(env), paths);
     return {
-      proposals: await enrich(new GithubSnapshot(env), paths),
+      proposals,
+      broken,
       writeEnabled: true,
       error: null,
     };
   } catch (loadError) {
     const snapshot = new LocalSnapshot();
+    const { paths, errors } = localProposalPaths();
+    const { proposals, broken } = await enrich(snapshot, paths);
     return {
-      proposals: await enrich(snapshot, localProposalPaths()),
+      proposals,
+      broken: [...errors, ...broken],
       writeEnabled: false,
       error: loadError instanceof Error ? loadError.message : String(loadError),
     };
@@ -161,7 +261,7 @@ export default async function ReviewPage({
 }: {
   searchParams?: { type?: string; target?: string; confidence?: string };
 }) {
-  const { proposals, writeEnabled, error } = await loadQueue();
+  const { proposals, broken, writeEnabled, error } = await loadQueue();
   const mechanisms = loadFullMechanisms()
     .map((mechanism) => ({ id: mechanism.id, name: mechanism.name }))
     .sort((left, right) => left.id.localeCompare(right.id));
@@ -232,6 +332,22 @@ export default async function ReviewPage({
       {error && (
         <div className="mt-4 rounded-lg border border-[#F87171]/30 bg-[#151F1A] p-4 text-sm text-[#F87171]">
           Live proposals could not be loaded: {error}. Showing the deployed snapshot.
+        </div>
+      )}
+      {broken.length > 0 && (
+        <div className="mt-4 rounded-lg border border-[#F87171]/30 bg-[#151F1A] p-4 text-sm text-[#F87171]">
+          <p>
+            {broken.length} proposal{broken.length === 1 ? "" : "s"} could not be read or
+            parsed and {broken.length === 1 ? "is" : "are"} excluded from the queue below —
+            everything else still loaded normally.
+          </p>
+          <ul className="mt-2 space-y-1 font-mono text-xs">
+            {broken.map((item) => (
+              <li key={item.path}>
+                {item.path}: {item.error}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
