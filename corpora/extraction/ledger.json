@@ -1,7 +1,109 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:46:52.935Z",
+  "updated_at": "2026-08-03T13:48:03.910Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:47:45.576Z",
+      "dispatch_id": "effects-wide-CG-05",
+      "github_run_id": 30819577674,
+      "mode": "effects",
+      "scope": "CG-05",
+      "candidates": 10,
+      "cheap": {
+        "candidates": 5,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 5
+      },
+      "synthesis": {
+        "into_synthesis": 5,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 5
+      },
+      "strong": {
+        "candidates": 5,
+        "proposed": 5,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "CG-05:cheap:01",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CG-05:cheap:02",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CG-05:cheap:03",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CG-05:cheap:04",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CG-05:cheap:05",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CG-05:strong:01",
+          "mechanism_id": "CG-05",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cg-05-curiosity-as-a-mediator-of-impulsive-beb3329b98f2"
+        },
+        {
+          "candidate_id": "CG-05:strong:02",
+          "mechanism_id": "CG-05",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cg-05-curiosity-as-a-predictor-of-web-pane-9a1565a7a20b"
+        },
+        {
+          "candidate_id": "CG-05:strong:05",
+          "mechanism_id": "CG-05",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cg-05-curiosity-gap-5041d134922b"
+        },
+        {
+          "candidate_id": "CG-05:strong:04",
+          "mechanism_id": "CG-05",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cg-05-association-between-growth-mindsets--23cf226e8358"
+        },
+        {
+          "candidate_id": "CG-05:strong:03",
+          "mechanism_id": "CG-05",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cg-05-curiosity-as-a-predictor-of-health-a-cfa9ee165d55"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:46:21.792Z",
       "dispatch_id": "effects-wide-LA-01",
@@ -3103,109 +3205,6 @@
           "fate": "proposed_enrich",
           "proposal_id": "effect-cl-14-split-attention-effect-04b908b55654",
           "attribution": "recorded"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:41:42.705Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "ZE-07",
-      "candidates": 10,
-      "cheap": {
-        "candidates": 5,
-        "dropped_ungrounded": 0,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 5
-      },
-      "synthesis": {
-        "into_synthesis": 5,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 5
-      },
-      "strong": {
-        "candidates": 5,
-        "proposed": 4,
-        "proposed_enrich": 0,
-        "merged_into_pending": 1,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "ZE-07:cheap:01",
-          "mechanism_id": "ZE-07",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "ZE-07:cheap:02",
-          "mechanism_id": "ZE-07",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "ZE-07:cheap:03",
-          "mechanism_id": "ZE-07",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "ZE-07:strong:03",
-          "mechanism_id": "ZE-07",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-ze-07-zeigarnik-effect-ff85288cec7e",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "ZE-07:strong:02",
-          "mechanism_id": "ZE-07",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ze-07-ovsiankina-effect-c5ff6eba39a5"
-        },
-        {
-          "candidate_id": "ZE-07:strong:01",
-          "mechanism_id": "ZE-07",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ze-07-zeigarnik-effect-ff85288cec7e"
-        },
-        {
-          "candidate_id": "ZE-07:cheap:04",
-          "mechanism_id": "ZE-07",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "ZE-07:cheap:05",
-          "mechanism_id": "ZE-07",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "ZE-07:strong:04",
-          "mechanism_id": "ZE-07",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ze-07-gamification-mechanics-92d3864ca6e6"
-        },
-        {
-          "candidate_id": "ZE-07:strong:05",
-          "mechanism_id": "ZE-07",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ze-07-social-gamification-elements-b38155d9734c"
         }
       ]
     }
