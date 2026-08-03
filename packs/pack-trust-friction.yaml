@@ -96,14 +96,73 @@ cross_cutting_perception:
 # ─────────────────────────────────────────────
 effects:
 
-  [] # no approved first-class effects referenced by this pack's mechanisms
+  - id: chromatic-asymmetry-in-visual-attention
+    mechanism_id: CL-14
+    name: Chromatic Asymmetry in Visual Attention
+    fact: "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency."
+    grade: C+
+    source: ["10.3390/sym18010076"]
+    boundary: Standardized reading tasks with white text.
+    realization_ids: []
+
+  - id: cl-14-001
+    mechanism_id: CL-14
+    name: Split-attention effect
+    fact: The split-attention effect occurs when students must split their attention between multiple sources of information, which results in a heavy cognitive load.
+    grade: C+
+    source: ["10.1037/0022-0663.87.2.319"]
+    boundary: Instructional design and multimedia learning
+    realization_ids: []
+
+  - id: cl-14-002
+    mechanism_id: CL-14
+    name: Expertise reversal effect
+    fact: Instructional techniques that facilitate learning among early learners may not help and may even interfere with learning among more advanced learners.
+    grade: C+
+    source: ["10.3109/0142159x.2014.889290"]
+    boundary: Instructional design for varying levels of learner expertise
+    realization_ids: [expertise-based-guidance-toggle]
+
+  - id: cl-14-01
+    mechanism_id: CL-14
+    name: Imagination Effect
+    fact: Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.
+    grade: C+
+    source: ["10.1002/acp.1061"]
+    boundary: Applies to learning procedures or concepts; effectiveness depends on the mode of presentation (integrated vs. split-attention).
+    realization_ids: []
+
+  - id: cl14-cueing
+    mechanism_id: CL-14
+    name: Cueing effect
+    fact: Adding visual cues that relate elements of a picture to the text raised retention scores in a learner-paced classroom study, but the same study reports only a weak cueing effect that does not easily generalise to non-laboratory settings.
+    grade: C
+    source: ["10.1348/000709904322848824"]
+    boundary: Learner-paced, non-laboratory multimedia instruction
+    realization_ids: []
+
+  - id: tracing-and-pointing
+    mechanism_id: CL-14
+    name: Tracing and pointing
+    fact: Tracing and pointing actions using the index finger on lesson materials enhance learning and reduce extraneous cognitive load.
+    grade: C+
+    source: ["10.1007/s10648-025-10005-7"]
+    boundary: Native Chinese-speaking adult participants learning about the human circulatory system from paper-based materials.
+    realization_ids: []
 
 # ─────────────────────────────────────────────
 # LAYER 3 — REALIZATIONS (source-grounded evidence palette)
 # ─────────────────────────────────────────────
 realizations:
 
-  [] # no approved source-grounded realizations exist for this pack
+  - id: expertise-based-guidance-toggle
+    mechanism_id: CL-14
+    effect_id: cl-14-002
+    term: Expertise-based guidance toggle
+    description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    artifact_context: ["onboarding", "dashboard_widget"]
+    confidence: 0.6
+    source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
 
 # ─────────────────────────────────────────────
 # IMPLEMENTATIONS (product-authored generator directives)
