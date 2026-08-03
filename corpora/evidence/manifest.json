@@ -6,28 +6,44 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-03T10:37:41.656Z",
+    "timestamp": "2026-08-03T10:45:53.716Z",
     "status": "partial",
     "params": {
-      "mechanism": "DE-23",
-      "terms": "default effect decision making subscription retention;default option organ donation policy subscription retention;effort reduction friction conversion subscription retention"
+      "mechanism": "RR-25",
+      "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
     },
-    "records_fetched": 0,
-    "files_written": 0,
-    "duration_s": 0.13,
-    "error": "upstream API quota requires a later continuation; logical run DE-23-msd3i5jt checkpointed at query 1/630",
-    "warnings": {
-      "resume_required": true
-    },
+    "records_fetched": 71,
+    "files_written": 1,
+    "duration_s": 43.63,
+    "error": "search openalex canon \"recognition versus recall memory b2b enterprise\": api.openalex.org upstream cooldown is 48141s; checkpoint and resume later",
     "cost": {
-      "api_calls": 1,
-      "duration_s": 0.13,
+      "api_calls": 46,
+      "duration_s": 43.63,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-03T10:45:53.716Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 71,
+      "files_written": 1,
+      "duration_s": 43.63,
+      "error": "search openalex canon \"recognition versus recall memory b2b enterprise\": api.openalex.org upstream cooldown is 48141s; checkpoint and resume later",
+      "cost": {
+        "api_calls": 46,
+        "duration_s": 43.63,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-03T10:37:41.656Z",
       "status": "partial",
@@ -434,27 +450,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-03T08:42:39.838Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14",
-        "terms": ""
-      },
-      "records_fetched": 511,
-      "files_written": 1,
-      "duration_s": 47.48,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.48,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -660,6 +655,18 @@
         "replication": 0,
         "dissent": 0,
         "recent": 0
+      }
+    },
+    {
+      "path": "RR-25.json",
+      "records": 71,
+      "bytes": 160705,
+      "categories": {
+        "foundational": 1,
+        "meta-analysis": 1,
+        "replication": 10,
+        "dissent": 3,
+        "recent": 32
       }
     },
     {
