@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-03T08:52:48.587Z",
+    "timestamp": "2026-08-03T08:55:27.859Z",
     "status": "success",
     "params": {
       "mechanism": "CL-14",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 511,
     "files_written": 1,
-    "duration_s": 47.28,
+    "duration_s": 47.44,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 48,
-      "duration_s": 47.28,
+      "duration_s": 47.44,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-03T08:55:27.859Z",
+      "status": "success",
+      "params": {
+        "mechanism": "CL-14",
+        "terms": ""
+      },
+      "records_fetched": 511,
+      "files_written": 1,
+      "duration_s": 47.44,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 48,
+        "duration_s": 47.44,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-03T08:52:48.587Z",
       "status": "success",
@@ -412,28 +433,6 @@
       "cost": {
         "api_calls": 141,
         "duration_s": 550,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-20T15:32:56.513Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "SC-17"
-      },
-      "records_fetched": 307,
-      "files_written": 1,
-      "duration_s": 573.35,
-      "error": "semantic-scholar critique \"visual attention web page critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar critique \"eye movements reading screen critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar boundary \"eye movements reading screen boundary conditions moderators\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar canon \"banner blindness advertising\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar critique \"banner blindness advertising critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar boundary \"banner blindness advertising boundary conditions moderators\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar critique \"web page fixation attention advertisement critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar canon \"visual hierarchy attention interface\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar critique \"visual hierarchy attention interface critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar critique \"attention capture web design critique criticism\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional). · semantic-scholar boundary \"attention capture web design boundary conditions moderators\": max_calls_per_run limit (150) from the _ops connector config reached — the run's request budget is spent (raise limits.max_calls_per_run in /corpora/_ops/connectors/ if intentional).",
-      "warnings": {
-        "s2_throttled": true,
-        "capped": true
-      },
-      "cost": {
-        "api_calls": 150,
-        "duration_s": 573.35,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
