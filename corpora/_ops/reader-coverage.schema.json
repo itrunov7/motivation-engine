@@ -4,7 +4,7 @@
   "title": "Extraction reader coverage ledger",
   "type": "object",
   "properties": {
-    "version": { "const": "1.1.0" },
+    "version": { "const": "1.2.0" },
     "updated_at": { "type": "string", "format": "date-time" },
     "mechanisms": {
       "type": "object",
@@ -69,6 +69,39 @@
       "additionalProperties": false
     },
     "modeState": {
+      "type": "object",
+      "properties": {
+        "processed_record_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(?:cr|rr)_[a-f0-9]{24}$"
+          }
+        },
+        "skipped_irrelevant_record_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(?:cr|rr)_[a-f0-9]{24}$"
+          }
+        },
+        "processed_at": { "type": "string", "format": "date-time" },
+        "by_effect": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "additionalProperties": { "$ref": "#/$defs/effectState" }
+        }
+      },
+      "required": [
+        "processed_record_ids",
+        "skipped_irrelevant_record_ids",
+        "processed_at"
+      ],
+      "additionalProperties": false
+    },
+    "effectState": {
       "type": "object",
       "properties": {
         "processed_record_ids": {

@@ -1606,6 +1606,52 @@ function main(): void {
                     ok = false;
                   }
                 }
+                // D-140: by_effect is a further breakdown of this SAME
+                // mode's terminal set, keyed by effect. Only mode=realizations
+                // ever populates it (an effect-anchored run), but the check is
+                // written generically rather than mode-gated, since the
+                // invariant — "an effect's terminal ids are a subset of this
+                // mode's own terminal ids" — holds regardless of which mode
+                // it appears on.
+                const modeTerminal = new Set([
+                  ...modeState.processed_record_ids,
+                  ...modeState.skipped_irrelevant_record_ids,
+                ]);
+                for (const [effectId, effectState] of Object.entries(
+                  modeState.by_effect ?? {},
+                )) {
+                  const effectProcessed = new Set(
+                    effectState.processed_record_ids,
+                  );
+                  for (const id of effectState.skipped_irrelevant_record_ids) {
+                    if (effectProcessed.has(id)) {
+                      fail(
+                        PATHS.readerCoverage,
+                        `${mechanismId}.${kind}.${mode}.by_effect.${effectId} marks ${id} both processed and skipped_irrelevant`,
+                      );
+                      ok = false;
+                    }
+                  }
+                  for (const id of [
+                    ...effectState.processed_record_ids,
+                    ...effectState.skipped_irrelevant_record_ids,
+                  ]) {
+                    if (!currentIds.has(id)) {
+                      fail(
+                        PATHS.readerCoverage,
+                        `${mechanismId}.${kind}.${mode}.by_effect.${effectId} references unknown record ${id}`,
+                      );
+                      ok = false;
+                    }
+                    if (!modeTerminal.has(id)) {
+                      fail(
+                        PATHS.readerCoverage,
+                        `${mechanismId}.${kind}.${mode}.by_effect.${effectId} terminal record ${id} is missing from ${mode}'s own terminal set`,
+                      );
+                      ok = false;
+                    }
+                  }
+                }
               }
             }
           }

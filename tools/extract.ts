@@ -929,6 +929,10 @@ export interface ReaderCoverageDelta {
   skipped_irrelevant_record_ids: readonly string[];
 }
 
+function sortedUnion(...groups: (readonly string[] | undefined)[]): string[] {
+  return Array.from(new Set(groups.flatMap((group) => group ?? []))).sort();
+}
+
 export function mergeReaderCoverage(
   previous: ReaderCoverageFile | null,
   mode: ExtractionMode,
@@ -942,6 +946,12 @@ export function mergeReaderCoverage(
   corpusKind: "evidence" | "realization" = mode === "realizations"
     ? "realization"
     : "evidence",
+  // The effect this run is anchored on (D-140), present only for a
+  // scope_kind="effect" realizations run. When set, the delta is ALSO
+  // recorded into by_effect[effectId] — the bucket buildExtractionPlan
+  // consults for an effect-anchored run's terminal set — in addition to the
+  // mode-level union below, which keeps its pre-D-140 meaning unchanged.
+  effectId?: string,
 ): ReaderCoverageFile {
   const kind = corpusKind;
   const mechanisms = structuredClone(previous?.mechanisms ?? {});
@@ -949,26 +959,36 @@ export function mergeReaderCoverage(
     const mechanism = mechanisms[mechanismId] ?? {};
     const prior = mechanism[kind];
     const priorMode = prior?.by_mode[mode];
-    const modeProcessed = Array.from(
-      new Set([
-        ...(priorMode?.processed_record_ids ?? []),
-        ...delta.processed_record_ids,
-      ]),
-    ).sort();
-    const modeSkipped = Array.from(
-      new Set([
-        ...(priorMode?.skipped_irrelevant_record_ids ?? []),
-        ...delta.skipped_irrelevant_record_ids,
-      ]),
-    ).sort();
+    const modeProcessed = sortedUnion(
+      priorMode?.processed_record_ids,
+      delta.processed_record_ids,
+    );
+    const modeSkipped = sortedUnion(
+      priorMode?.skipped_irrelevant_record_ids,
+      delta.skipped_irrelevant_record_ids,
+    );
+    const byEffect = effectId
+      ? {
+          ...(priorMode?.by_effect ?? {}),
+          [effectId]: {
+            processed_record_ids: sortedUnion(
+              priorMode?.by_effect?.[effectId]?.processed_record_ids,
+              delta.processed_record_ids,
+            ),
+            skipped_irrelevant_record_ids: sortedUnion(
+              priorMode?.by_effect?.[effectId]?.skipped_irrelevant_record_ids,
+              delta.skipped_irrelevant_record_ids,
+            ),
+            processed_at: processedAt,
+          },
+        }
+      : priorMode?.by_effect;
     mechanism[kind] = {
-      processed_record_ids: Array.from(
-        new Set([
-          ...(prior?.processed_record_ids ?? []),
-          ...modeProcessed,
-          ...modeSkipped,
-        ]),
-      ).sort(),
+      processed_record_ids: sortedUnion(
+        prior?.processed_record_ids,
+        modeProcessed,
+        modeSkipped,
+      ),
       processed_at: processedAt,
       modes: Array.from(new Set([...(prior?.modes ?? []), mode])).sort(),
       by_mode: {
@@ -977,13 +997,14 @@ export function mergeReaderCoverage(
           processed_record_ids: modeProcessed,
           skipped_irrelevant_record_ids: modeSkipped,
           processed_at: processedAt,
+          ...(byEffect ? { by_effect: byEffect } : {}),
         },
       },
     };
     mechanisms[mechanismId] = mechanism;
   }
   return {
-    version: "1.1.0",
+    version: "1.2.0",
     updated_at: processedAt,
     mechanisms,
   };
@@ -994,6 +1015,7 @@ function writeReaderCoverage(
   processed: ReadonlyMap<string, ReaderCoverageDelta>,
   processedAt: string,
   corpusKind?: "evidence" | "realization",
+  effectId?: string,
 ): void {
   mkdirSync(EXTRACTION_DIR, { recursive: true });
   const previous = existsSync(READER_COVERAGE_FILE)
@@ -1001,7 +1023,9 @@ function writeReaderCoverage(
     : null;
   writeFileSync(
     READER_COVERAGE_FILE,
-    json(mergeReaderCoverage(previous, mode, processed, processedAt, corpusKind)),
+    json(
+      mergeReaderCoverage(previous, mode, processed, processedAt, corpusKind, effectId),
+    ),
   );
 }
 
@@ -1885,6 +1909,7 @@ export function buildExtractionPlan(
   coverage: ReaderCoverageFile | null = loadReaderCoverage(),
 ): ExtractionPlan {
   const anchor = effectAnchor(scope);
+  const effectId = scope.effectBasis?.effect.id;
   const candidates: {
     mechanismId: string;
     corpus: ExtractionCorpus;
@@ -1900,9 +1925,16 @@ export function buildExtractionPlan(
     eligibleTotal += eligible.length;
     const kind = readsRealizationCorpus(mode, scope) ? "realization" : "evidence";
     const priorMode = coverage?.mechanisms[mechanismId]?.[kind]?.by_mode[mode];
+    // D-140: an effect-anchored run's terminal set is scoped to THIS effect
+    // alone. A record terminal for one effect on this mechanism must not
+    // block a second effect's read of the same literature — that ceiling
+    // was the whole limitation D-112 stated rather than fixed. Every other
+    // mode (and a non-effect-anchored realizations run) keeps the pre-D-140
+    // mode-level union.
+    const terminalSource = effectId ? priorMode?.by_effect?.[effectId] : priorMode;
     const terminal = new Set([
-      ...(priorMode?.processed_record_ids ?? []),
-      ...(priorMode?.skipped_irrelevant_record_ids ?? []),
+      ...(terminalSource?.processed_record_ids ?? []),
+      ...(terminalSource?.skipped_irrelevant_record_ids ?? []),
     ]);
     const pending = eligible.filter((record) => !terminal.has(record.record_id));
     alreadyCompleted += eligible.length - pending.length;
@@ -3775,6 +3807,10 @@ export async function runExtraction(args: {
   const coverageCorpusKind = readsRealizationCorpus(args.mode, args.scope)
     ? "realization"
     : "evidence";
+  // D-140: threaded into every mergeReaderCoverage/writeReaderCoverage call
+  // below so an effect-anchored run's terminal reads land in
+  // by_effect[effectId] as well as the mode-level union.
+  const coverageEffectId = effectBasis?.effect.id;
   if (effectBasis) {
     console.log(
       `[extract] anchored on effect ${effectBasis.effect.id} (${effectBasis.origin}: ${effectBasis.path}) — ` +
@@ -4332,6 +4368,7 @@ export async function runExtraction(args: {
       planningDeltas,
       startedAt.toISOString(),
       coverageCorpusKind,
+      coverageEffectId,
     );
     const sliceConfig: ExtractionOpsConfig = {
       ...args.config,
@@ -4420,6 +4457,7 @@ export async function runExtraction(args: {
     processedByMechanism,
     startedAt.toISOString(),
     coverageCorpusKind,
+    coverageEffectId,
   );
   const ledgerBalanced = persistLedger();
   writeManifest(

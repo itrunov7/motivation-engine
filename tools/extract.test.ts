@@ -55,6 +55,7 @@ import {
   toProposal,
   type DraftItem,
   type ExtractionMode,
+  type ExtractionScope,
   type ExtractionStats,
   type UngroundedReason,
   type Usage,
@@ -512,6 +513,68 @@ test("reader coverage unions exact record ids and modes", () => {
   });
 });
 
+test("mergeReaderCoverage records an effect-anchored delta into by_effect without disturbing the mode-level union (D-140)", () => {
+  const first = mergeReaderCoverage(
+    null,
+    "realizations",
+    new Map([
+      [
+        "CL-14",
+        {
+          processed_record_ids: ["cr_111111111111111111111111"],
+          skipped_irrelevant_record_ids: [],
+        },
+      ],
+    ]),
+    "2026-08-03T10:00:00.000Z",
+    "evidence",
+    "cl-14-002",
+  );
+  const modeState = first.mechanisms["CL-14"].evidence?.by_mode.realizations;
+  assert.deepEqual(modeState?.processed_record_ids, [
+    "cr_111111111111111111111111",
+  ]);
+  assert.deepEqual(modeState?.by_effect, {
+    "cl-14-002": {
+      processed_record_ids: ["cr_111111111111111111111111"],
+      skipped_irrelevant_record_ids: [],
+      processed_at: "2026-08-03T10:00:00.000Z",
+    },
+  });
+  // A second effect on the same mechanism adds its OWN bucket; the
+  // mode-level union grows to include both effects' ids, but neither
+  // effect's by_effect bucket sees the other's.
+  const second = mergeReaderCoverage(
+    first,
+    "realizations",
+    new Map([
+      [
+        "CL-14",
+        {
+          processed_record_ids: ["cr_222222222222222222222222"],
+          skipped_irrelevant_record_ids: [],
+        },
+      ],
+    ]),
+    "2026-08-03T11:00:00.000Z",
+    "evidence",
+    "cl-14-999",
+  );
+  const secondModeState = second.mechanisms["CL-14"].evidence?.by_mode.realizations;
+  assert.deepEqual(secondModeState?.processed_record_ids, [
+    "cr_111111111111111111111111",
+    "cr_222222222222222222222222",
+  ]);
+  assert.deepEqual(
+    secondModeState?.by_effect?.["cl-14-002"]?.processed_record_ids,
+    ["cr_111111111111111111111111"],
+  );
+  assert.deepEqual(
+    secondModeState?.by_effect?.["cl-14-999"]?.processed_record_ids,
+    ["cr_222222222222222222222222"],
+  );
+});
+
 test("resume state is isolated by extraction mode", () => {
   const file = JSON.parse(
     readFileSync(join(ROOT, "corpora/evidence/SC-06.json"), "utf8"),
@@ -519,7 +582,7 @@ test("resume state is isolated by extraction mode", () => {
   const terminalId = file.records.find((record) => record.abstract)?.record_id;
   assert(terminalId);
   const coverage: ReaderCoverageFile = {
-    version: "1.1.0",
+    version: "1.2.0",
     updated_at: "2026-07-23T10:00:00.000Z",
     mechanisms: {
       "SC-06": {
@@ -547,6 +610,92 @@ test("resume state is isolated by extraction mode", () => {
   assert.equal(
     buildExtractionPlan("dissent", scope, configured, coverage).records
       .already_completed,
+    0,
+  );
+});
+
+test("effect-anchored realizations coverage is isolated per effect (D-140)", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.doi);
+  const doi = record.doi;
+  const scopeForEffect = (effectId: string): ExtractionScope => ({
+    kind: "effect",
+    id: effectId,
+    mechanismIds: ["CL-14"],
+    effectBasis: {
+      origin: "proposal",
+      path: "proposals/effect/fixture.json",
+      effect: {
+        id: effectId,
+        mechanism_id: "CL-14",
+        name: "Fixture effect",
+        fact: "Fixture fact for coverage isolation.",
+        grade: "A-",
+        source: [doi],
+        boundary: "fixture boundary",
+        realization_ids: [],
+        provenance: [
+          {
+            mechanism_id: "CL-14",
+            corpus_record_id: record.record_id,
+            doi,
+            title: record.title,
+            quote_or_locus: "Fixture fact for coverage isolation.",
+          },
+        ],
+      },
+    },
+  });
+  // The record is terminal for cl-14-002 only — the effect the fixture ledger
+  // below was "read" under.
+  const coverage: ReaderCoverageFile = {
+    version: "1.2.0",
+    updated_at: "2026-08-03T10:00:00.000Z",
+    mechanisms: {
+      "CL-14": {
+        evidence: {
+          processed_record_ids: [record.record_id],
+          processed_at: "2026-08-03T10:00:00.000Z",
+          modes: ["realizations"],
+          by_mode: {
+            realizations: {
+              processed_record_ids: [record.record_id],
+              skipped_irrelevant_record_ids: [],
+              processed_at: "2026-08-03T10:00:00.000Z",
+              by_effect: {
+                "cl-14-002": {
+                  processed_record_ids: [record.record_id],
+                  skipped_irrelevant_record_ids: [],
+                  processed_at: "2026-08-03T10:00:00.000Z",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+  // Same effect that read it: terminal, not re-selected (the pre-D-140
+  // behavior, preserved).
+  assert.equal(
+    buildExtractionPlan(
+      "realizations",
+      scopeForEffect("cl-14-002"),
+      configured,
+      coverage,
+    ).records.already_completed,
+    1,
+  );
+  // A DIFFERENT effect on the same mechanism: the D-112 ceiling is lifted —
+  // the record is eligible again because this effect never read it.
+  assert.equal(
+    buildExtractionPlan(
+      "realizations",
+      scopeForEffect("cl-14-999"),
+      configured,
+      coverage,
+    ).records.already_completed,
     0,
   );
 });

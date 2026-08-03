@@ -1244,12 +1244,32 @@ export type ReaderCoverageMode =
   | "mechanism"
   | "dossier";
 
-export interface ReaderCoverageModeState {
+/** Terminal ids for one reading pass — a mode overall, or one effect within it. */
+export interface ReaderCoverageEffectState {
   /** Records that reached the mode's cheap extraction model. */
   processed_record_ids: string[];
   /** Records rejected by the deterministic title + abstract relevance gate. */
   skipped_irrelevant_record_ids: string[];
   processed_at: string;
+}
+
+export interface ReaderCoverageModeState extends ReaderCoverageEffectState {
+  /**
+   * Effect-anchored terminal reads, keyed by effect id (D-140, lifting the
+   * D-112 ceiling). Present only on mode="realizations" once at least one
+   * scope_kind="effect" run has read against this mechanism's evidence
+   * corpus. A record terminal for one effect is NOT terminal for another —
+   * that is the entire point of this key — so the planner consults this
+   * bucket instead of the mode-level fields above when the current run is
+   * effect-anchored. The mode-level `processed_record_ids` /
+   * `skipped_irrelevant_record_ids` above remain the UNION across every
+   * effect (plus any non-effect-anchored run on this mode) and are
+   * unchanged in meaning: they are what extraction_completeness, the
+   * analyzer, and tools/validate.ts's existing cross-checks read, so this
+   * key is a strict refinement recorded alongside the union, never a
+   * replacement for it.
+   */
+  by_effect?: Record<string, ReaderCoverageEffectState>;
 }
 
 export interface ReaderCoverageCorpus {
@@ -1265,7 +1285,7 @@ export interface ReaderCoverageCorpus {
 
 /** Exact cumulative reader ledger written by successful Actions extraction runs. */
 export interface ReaderCoverageFile {
-  version: "1.1.0";
+  version: "1.2.0";
   updated_at: string;
   mechanisms: Record<
     string,
