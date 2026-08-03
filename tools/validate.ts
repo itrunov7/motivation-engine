@@ -1123,6 +1123,48 @@ function checkPatternParameters(
  * "required of new items" half of the rule is enforced where authorship is
  * known, in the proposal loop and in the extractor.
  */
+/**
+ * Content identity for one evidence provenance item, used to tell a genuine
+ * D-129 gate violation apart from a pre-existing item an "enrich" proposal
+ * merely carries forward unchanged (extract.ts mergeProposals copies the
+ * committed record's old provenance verbatim into the new envelope). Built
+ * from the fields approval copies byte-for-byte, so a match means "this is
+ * the same citation the record already had", not "a similar one".
+ */
+function provenanceContentKey(item: {
+  corpus_record_id: string;
+  quote_or_locus: string;
+  source_span?: { start: number; end: number; source_text_sha256: string } | null;
+}): string {
+  return JSON.stringify({
+    corpus_record_id: item.corpus_record_id,
+    quote_or_locus: item.quote_or_locus,
+    source_span: item.source_span ?? null,
+  });
+}
+
+/**
+ * Indexes the roleless evidence items already committed in one authoritative
+ * effect/realization record, so the proposal loop below can recognize them
+ * later no matter which run's envelope re-carries them (D-129).
+ */
+function recordLegacyRolelessSignatures(
+  index: Map<string, Set<string>>,
+  key: string,
+  provenance: readonly KnowledgeProvenanceItem[],
+): void {
+  for (const item of provenance) {
+    if (isRealizationProvenance(item) || isInferenceProvenance(item)) continue;
+    if (isSpanRole(item.span_role)) continue;
+    let signatures = index.get(key);
+    if (!signatures) {
+      signatures = new Set();
+      index.set(key, signatures);
+    }
+    signatures.add(provenanceContentKey(item));
+  }
+}
+
 function checkArtifactProvenanceSpans(
   file: string,
   provenance: readonly KnowledgeProvenanceItem[],
@@ -2456,6 +2498,17 @@ function main(): void {
   // effects/{mechanism}/{effect}.json record, then enforce both sides of the
   // mechanism/effect/realization references.
   const effectsByKey = new Map<string, { file: string; realizationIds: string[] }>();
+  // Content identity of every roleless item already committed in an
+  // authoritative effect/realization record, keyed by the same
+  // mechanism_id\u0000id the proposal side uses. An "enrich" proposal that
+  // adds a new citation to an existing record copies the OLD items into its
+  // own provenance array unchanged (extract.ts mergeProposals); the proposal
+  // envelope's proposed_at is the enrichment run's timestamp, not the item's,
+  // so proposed_at alone cannot tell "this item predates D-129" from "this
+  // item violates it". Matching against what is already on disk can: an item
+  // byte-identical to one already roleless in the committed record predates
+  // the gate no matter which run's envelope it now rides inside.
+  const legacyRolelessSignatures = new Map<string, Set<string>>();
   const fullRecordById = new Map(
     fullRecords.flatMap(({ record }) =>
       typeof record.id === "string" ? [[record.id, record] as const] : [],
@@ -2490,6 +2543,13 @@ function main(): void {
           // where span verifiability has to hold, not just the proposal (D-110).
           if (!checkArtifactProvenanceSpans(file, effect.provenance ?? [], spanTally)) {
             ok = false;
+          }
+          if (typeof effect.mechanism_id === "string" && typeof effect.id === "string") {
+            recordLegacyRolelessSignatures(
+              legacyRolelessSignatures,
+              `${effect.mechanism_id}\u0000${effect.id}`,
+              effect.provenance ?? [],
+            );
           }
           const parts = relative(PATHS.effectsDir, file).split(sep);
           const expected =
@@ -2586,6 +2646,16 @@ function main(): void {
             !checkArtifactProvenanceSpans(file, realization.provenance ?? [], spanTally)
           ) {
             ok = false;
+          }
+          if (
+            typeof realization.mechanism_id === "string" &&
+            typeof realization.id === "string"
+          ) {
+            recordLegacyRolelessSignatures(
+              legacyRolelessSignatures,
+              `${realization.mechanism_id}\u0000${realization.id}`,
+              realization.provenance ?? [],
+            );
           }
           const parts = relative(PATHS.realizationsDir, file).split(sep);
           const expected =
@@ -2878,6 +2948,22 @@ function main(): void {
           // D-110 it arrives after the pipeline has already written items and
           // the decision forbids backfilling them. See SPAN_ROLE_REQUIRED_FROM.
           const roleRequired = requiresSpanRole(proposal);
+          // requiresSpanRole answers for the PROPOSAL as a whole, keyed on its
+          // own proposed_at. That is too coarse for "enrich": extract.ts's
+          // mergeProposals copies the target's existing provenance items into
+          // the new envelope unchanged, so an enrichment proposed today can
+          // legitimately still carry an item that predates the gate. Look up
+          // that item's content against what is already committed for this
+          // same target before trusting the proposal-level verdict for it.
+          const targetPayloadId =
+            (proposal.type === "effect" || proposal.type === "realization") &&
+            proposal.payload &&
+            typeof (proposal.payload as { id?: unknown }).id === "string"
+              ? (proposal.payload as { id: string }).id
+              : null;
+          const legacyRolelessForTarget = targetPayloadId
+            ? legacyRolelessSignatures.get(`${proposal.target}\u0000${targetPayloadId}`)
+            : undefined;
           // D-112, the same shape of rule for the honesty fields: optional in
           // the schema so the hand-authored records predating them stay valid,
           // required of anything the pipeline writes. An unmarked realization
@@ -3023,7 +3109,9 @@ function main(): void {
               );
             } else {
               spanTally.withoutRole += 1;
-              if (roleRequired) {
+              const carriesForwardLegacyItem =
+                legacyRolelessForTarget?.has(provenanceContentKey(source)) === true;
+              if (roleRequired && !carriesForwardLegacyItem) {
                 fail(
                   file,
                   `extraction-authored provenance for ${source.corpus_record_id} carries no ` +
