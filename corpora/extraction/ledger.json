@@ -1,7 +1,84 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:50:01.748Z",
+  "updated_at": "2026-08-03T13:50:54.073Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:50:46.132Z",
+      "dispatch_id": "effects-wide-EN-03",
+      "github_run_id": 30819815508,
+      "mode": "effects",
+      "scope": "EN-03",
+      "candidates": 6,
+      "cheap": {
+        "candidates": 3,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 3
+      },
+      "synthesis": {
+        "into_synthesis": 3,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 3
+      },
+      "strong": {
+        "candidates": 3,
+        "proposed": 2,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "EN-03:cheap:01",
+          "mechanism_id": "EN-03",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "EN-03:cheap:02",
+          "mechanism_id": "EN-03",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "EN-03:cheap:03",
+          "mechanism_id": "EN-03",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "EN-03:strong:01",
+          "mechanism_id": "EN-03",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-en-03-mere-ownership-effect-1b0db8298502",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "EN-03:strong:02",
+          "mechanism_id": "EN-03",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-en-03-ownership-based-attentional-bias-788b3488100d"
+        },
+        {
+          "candidate_id": "EN-03:strong:03",
+          "mechanism_id": "EN-03",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-en-03-pet-enhancement-bias-e46be74ee9b1"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:49:55.604Z",
       "dispatch_id": "effects-wide-ZE-07",
@@ -3032,142 +3109,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-pf-16-relative-fluency-and-liking-4a6e49b73b4a"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:42:52.220Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "MM-15",
-      "candidates": 15,
-      "cheap": {
-        "candidates": 8,
-        "dropped_ungrounded": 1,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 7
-      },
-      "synthesis": {
-        "into_synthesis": 7,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 7
-      },
-      "strong": {
-        "candidates": 7,
-        "proposed": 6,
-        "proposed_enrich": 0,
-        "merged_into_pending": 1,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "MM-15:cheap:01",
-          "mechanism_id": "MM-15",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "MM-15:cheap:02",
-          "mechanism_id": "MM-15",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "MM-15:cheap:03",
-          "mechanism_id": "MM-15",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "MM-15:cheap:04",
-          "mechanism_id": "MM-15",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "MM-15:strong:02",
-          "mechanism_id": "MM-15",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-mm-15-modality-effect-15a0a9dbcac4"
-        },
-        {
-          "candidate_id": "MM-15:strong:01",
-          "mechanism_id": "MM-15",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-mm-15-spatial-contiguity-principle-99513b7fa4e9"
-        },
-        {
-          "candidate_id": "MM-15:strong:04",
-          "mechanism_id": "MM-15",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-mm-15-coherence-effect-1dcb3d7b384c"
-        },
-        {
-          "candidate_id": "MM-15:strong:03",
-          "mechanism_id": "MM-15",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-mm-15-redundancy-effect-c1c7ed537b36"
-        },
-        {
-          "candidate_id": "MM-15:cheap:05",
-          "mechanism_id": "MM-15",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "MM-15:cheap:06",
-          "mechanism_id": "MM-15",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "quote_not_in_source"
-        },
-        {
-          "candidate_id": "MM-15:cheap:07",
-          "mechanism_id": "MM-15",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "MM-15:cheap:08",
-          "mechanism_id": "MM-15",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "MM-15:strong:05",
-          "mechanism_id": "MM-15",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-mm-15-redundancy-effect-c1c7ed537b36",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "MM-15:strong:06",
-          "mechanism_id": "MM-15",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-mm-15-coherence-principle-e5f3e87947e3"
-        },
-        {
-          "candidate_id": "MM-15:strong:07",
-          "mechanism_id": "MM-15",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-mm-15-embodiment-principle-9de1468ae5d1"
         }
       ]
     }
