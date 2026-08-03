@@ -6,11 +6,12 @@
     "id": "en-03-02",
     "mechanism_id": "EN-03",
     "name": "Mere Ownership Effect",
-    "fact": "Mere ownership of an object can lead to an increase in the evaluation of domain-specific self-efficacy.",
+    "fact": "The mere ownership effect, where object preference changes following an ownership manipulation, is predicted by activity in the medial prefrontal cortex (MPFC).",
     "grade": "A-",
     "source": [
       "10.1016/j.jesp.2020.104005",
-      "10.1037/0022-3514.62.2.229"
+      "10.1037/0022-3514.62.2.229",
+      "10.1093/scan/nst082"
     ],
     "boundary": "The effect is contingent on the importance of the owned object's functional attribute to the self, particularly when the self-concept is threatened.",
     "realization_ids": [],
@@ -51,6 +52,19 @@
           "start": 462,
           "end": 523,
           "source_text_sha256": "5234dc0d29be38a796eb0e61359fa430a0f3a2958b413d9ef9a23dba10d18f90"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "EN-03",
+        "corpus_record_id": "cr_83bc6bf8b86dcd3c91c1df09",
+        "doi": "10.1093/scan/nst082",
+        "title": "Extended self: spontaneous activation of medial prefrontal cortex by objects that are ‘mine’",
+        "quote_or_locus": "In addition, change in object preference following the ownership manipulation (a mere ownership effect) was predicted by activity in MPFC",
+        "source_span": {
+          "start": 1071,
+          "end": 1208,
+          "source_text_sha256": "4db64aea06cabcec720e686051fa4c05471cdb4c682d534c1083f234bc629ecf"
         },
         "span_role": "finding"
       }
@@ -95,9 +109,22 @@
         "source_text_sha256": "5234dc0d29be38a796eb0e61359fa430a0f3a2958b413d9ef9a23dba10d18f90"
       },
       "span_role": "finding"
+    },
+    {
+      "mechanism_id": "EN-03",
+      "corpus_record_id": "cr_83bc6bf8b86dcd3c91c1df09",
+      "doi": "10.1093/scan/nst082",
+      "title": "Extended self: spontaneous activation of medial prefrontal cortex by objects that are ‘mine’",
+      "quote_or_locus": "In addition, change in object preference following the ownership manipulation (a mere ownership effect) was predicted by activity in MPFC",
+      "source_span": {
+        "start": 1071,
+        "end": 1208,
+        "source_text_sha256": "4db64aea06cabcec720e686051fa4c05471cdb4c682d534c1083f234bc629ecf"
+      },
+      "span_role": "finding"
     }
   ],
-  "confidence": 0.85,
+  "confidence": 0.95,
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:38:01.060Z",

@@ -1,0 +1,56 @@
+{
+  "id": "effect-sc-17-fss-net-skin-lesion-segmentation-98b05b378421",
+  "type": "effect",
+  "target": "SC-17",
+  "payload": {
+    "id": "fss-net-skin-lesion-segmentation",
+    "mechanism_id": "SC-17",
+    "name": "FSS-Net skin lesion segmentation",
+    "fact": "The FSS-Net model achieves IoU/DSC scores of 92.4%/96.0% on ISIC2018, 87.3%/93.2% on HAM10000, and 95.2%/97.5% on PH2 datasets.",
+    "grade": "A",
+    "source": [
+      "10.1371/journal.pone.0344622"
+    ],
+    "boundary": "Skin lesion segmentation.",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "SC-17",
+        "corpus_record_id": "cr_6c6a14af7dcf6be6e4b29262",
+        "doi": "10.1371/journal.pone.0344622",
+        "title": "SegMan-based dual-prior network with boundary-augmented hybrid attention for robust skin lesion segmentation",
+        "quote_or_locus": "Evaluated on three public datasets—ISIC2018, HAM10000, and PH2—the proposed method achieves IoU/DSC scores of 92.4%/96.0%, 87.3%/93.2%, and 95.2%/97.5%, respectively",
+        "source_span": {
+          "start": 1033,
+          "end": 1198,
+          "source_text_sha256": "438066575756be2b1fc6470a68ef66b9804d5dd88acafd3903f140a710b76a0c"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "SC-17",
+      "corpus_record_id": "cr_6c6a14af7dcf6be6e4b29262",
+      "doi": "10.1371/journal.pone.0344622",
+      "title": "SegMan-based dual-prior network with boundary-augmented hybrid attention for robust skin lesion segmentation",
+      "quote_or_locus": "Evaluated on three public datasets—ISIC2018, HAM10000, and PH2—the proposed method achieves IoU/DSC scores of 92.4%/96.0%, 87.3%/93.2%, and 95.2%/97.5%, respectively",
+      "source_span": {
+        "start": 1033,
+        "end": 1198,
+        "source_text_sha256": "438066575756be2b1fc6470a68ef66b9804d5dd88acafd3903f140a710b76a0c"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.95,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-30818373159",
+  "proposed_at": "2026-08-03T13:32:20.847Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

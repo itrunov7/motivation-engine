@@ -449,7 +449,7 @@ function BudgetPanel({
         )}
         <p className="mt-3 text-xs leading-relaxed text-[#8CA495]">
           {extraction
-            ? `Token cap: ${extraction.limits.monthly_tokens.toLocaleString()} monthly · ${extraction.limits.per_run_tokens.toLocaleString()} per run. Quality gates: confidence ≥ ${Math.round(extraction.limits.confidence_floor * 100)}% · duplicate similarity ≥ ${Math.round(extraction.limits.duplicate_similarity * 100)}% · max ${extraction.limits.max_proposals_per_mechanism} proposals per mechanism. Prices verified: ${extraction.prices_verified_on ?? "not yet configured"}. Routing: cheap ${extraction.tiers.cheap.model_id ?? "unset"} · strong ${extraction.tiers.strong.model_id ?? "unset"}.`
+            ? `Token cap: ${extraction.limits.monthly_tokens.toLocaleString()} monthly · ${extraction.limits.per_run_tokens.toLocaleString()} per run. Quality gates: confidence ≥ ${Math.round(extraction.limits.confidence_floor * 100)}% · duplicate similarity ≥ ${Math.round(extraction.limits.duplicate_similarity * 100)}% · ${extraction.limits.max_proposals_per_mechanism === null ? "no per-slice proposal ceiling" : `max ${extraction.limits.max_proposals_per_mechanism} proposals per mechanism per slice`}. Prices verified: ${extraction.prices_verified_on ?? "not yet configured"}. Routing: cheap ${extraction.tiers.cheap.model_id ?? "unset"} · strong ${extraction.tiers.strong.model_id ?? "unset"}.`
             : "corpora/_ops/extraction.json is missing; extraction cannot quote or run."}
         </p>
       </div>

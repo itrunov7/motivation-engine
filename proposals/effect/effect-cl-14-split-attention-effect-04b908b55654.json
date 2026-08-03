@@ -6,14 +6,15 @@
     "id": "cl-14-001",
     "mechanism_id": "CL-14",
     "name": "Split-attention effect",
-    "fact": "The split-attention effect occurs when students must split their attention between multiple sources of information, which results in a heavy cognitive load.",
+    "fact": "The split-attention effect occurs when learners must mentally integrate disparate sources of information, imposing an extraneous cognitive load that interferes with learning; spatially integrated learning materials reduce this effect compared to spatially separated materials.",
     "grade": "C+",
     "grade_basis": "Corpus evidence = one primary study (Mousavi, Low & Sweller 1995), six experiments on geometry worked examples. Narrowed from the model's A: the clause 'increases extraneous working memory load' was not in any cited span, and the second citation (Ayres & Sweller 2005, The Split-Attention Principle in Multimedia Learning) was a design prescription -- 'it is important to avoid formats that require learners to split their attention' -- rather than evidence, so it was dropped from both provenance and source. Capped below the A band because a single-DOI basis is capped there unconditionally. The first provenance item is the paper's own premise, not its finding; the second item is the finding that the prediction built on that premise held across six experiments, which is why the record is graded on a confirmed premise rather than on an unchecked one. Grade reflects OUR corpus provenance, not the literature at large; to be re-graded when the computed rubric (D-114) lands.",
     "source": [
       "10.1037/0022-0663.87.2.319",
-      "10.1109/rita.2023.3250580"
+      "10.1037/a0021994",
+      "10.2190/mg7x-4j8n-ckyr-p06t"
     ],
-    "boundary": "Applies to learning data structures in computer science.",
+    "boundary": "Instructional design for computer-based training software and educational learning environments.",
     "realization_ids": [],
     "provenance": [
       {
@@ -42,14 +43,53 @@
       },
       {
         "mechanism_id": "CL-14",
-        "corpus_record_id": "cr_bb24fe2aef25808a289293aa",
-        "doi": "10.1109/rita.2023.3250580",
-        "title": "Applying Cognitive Load Theory and the Split Attention Effect to Learning Data Structures",
-        "quote_or_locus": "the spatial and temporal integration of linked list node diagrams and the corresponding worked example code for the implementation of its basic operations can benefit students with learning gaps in previous introductory programming courses",
+        "corpus_record_id": "cr_76ae18bea4a2e49ba96086d5",
+        "doi": "10.1037/a0021994",
+        "title": "Spatially distributed instructions improve learning outcomes and efficiency.",
+        "quote_or_locus": "cognitive load theorists suggest that spatially integrated learning materials should be used instead of spatially separated materials, thereby reducing the split-attention effect",
         "source_span": {
-          "start": 1003,
-          "end": 1242,
-          "source_text_sha256": "bbf827536fecf5ad0d5dda900404613396c976197edb39ab09adf4c06759f28f"
+          "start": 308,
+          "end": 486,
+          "source_text_sha256": "2c8a9b32e12f09c0eadc64a08d73bc022d5cefa30b381fe3f97cd2e12b1799c0"
+        },
+        "span_role": "background"
+      },
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_76ae18bea4a2e49ba96086d5",
+        "doi": "10.1037/a0021994",
+        "title": "Spatially distributed instructions improve learning outcomes and efficiency.",
+        "quote_or_locus": "Study 1 showed that the distributed-display instructions led learners to more efficient learning; learners finished the task faster and scored higher in the overall learning test",
+        "source_span": {
+          "start": 1172,
+          "end": 1350,
+          "source_text_sha256": "2c8a9b32e12f09c0eadc64a08d73bc022d5cefa30b381fe3f97cd2e12b1799c0"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_775ecbecd614a00717de1731",
+        "doi": "10.2190/mg7x-4j8n-ckyr-p06t",
+        "title": "Some Conditions under Which Integrated Computer-Based Training Software Can Facilitate Learning",
+        "quote_or_locus": "Previous work has indicated that split-attention can interfere with learning because the need to mentally integrate material imposes an extraneous cognitive load",
+        "source_span": {
+          "start": 305,
+          "end": 466,
+          "source_text_sha256": "6252a158be4f65626be205b7b46ab9ec4cfc5b6cdc23e990f565ec55c9975783"
+        },
+        "span_role": "background"
+      },
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_775ecbecd614a00717de1731",
+        "doi": "10.2190/mg7x-4j8n-ckyr-p06t",
+        "title": "Some Conditions under Which Integrated Computer-Based Training Software Can Facilitate Learning",
+        "quote_or_locus": "Specifically, in areas of high information complexity, the integrated computer-based training software group clearly outperformed both the conventional manual plus computer software group, and the computer-based training software plus hard-copy group, thus demonstrating both split-attention and redundancy effects",
+        "source_span": {
+          "start": 1432,
+          "end": 1746,
+          "source_text_sha256": "6252a158be4f65626be205b7b46ab9ec4cfc5b6cdc23e990f565ec55c9975783"
         },
         "span_role": "finding"
       }
@@ -82,22 +122,61 @@
     },
     {
       "mechanism_id": "CL-14",
-      "corpus_record_id": "cr_bb24fe2aef25808a289293aa",
-      "doi": "10.1109/rita.2023.3250580",
-      "title": "Applying Cognitive Load Theory and the Split Attention Effect to Learning Data Structures",
-      "quote_or_locus": "the spatial and temporal integration of linked list node diagrams and the corresponding worked example code for the implementation of its basic operations can benefit students with learning gaps in previous introductory programming courses",
+      "corpus_record_id": "cr_76ae18bea4a2e49ba96086d5",
+      "doi": "10.1037/a0021994",
+      "title": "Spatially distributed instructions improve learning outcomes and efficiency.",
+      "quote_or_locus": "cognitive load theorists suggest that spatially integrated learning materials should be used instead of spatially separated materials, thereby reducing the split-attention effect",
       "source_span": {
-        "start": 1003,
-        "end": 1242,
-        "source_text_sha256": "bbf827536fecf5ad0d5dda900404613396c976197edb39ab09adf4c06759f28f"
+        "start": 308,
+        "end": 486,
+        "source_text_sha256": "2c8a9b32e12f09c0eadc64a08d73bc022d5cefa30b381fe3f97cd2e12b1799c0"
+      },
+      "span_role": "background"
+    },
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_76ae18bea4a2e49ba96086d5",
+      "doi": "10.1037/a0021994",
+      "title": "Spatially distributed instructions improve learning outcomes and efficiency.",
+      "quote_or_locus": "Study 1 showed that the distributed-display instructions led learners to more efficient learning; learners finished the task faster and scored higher in the overall learning test",
+      "source_span": {
+        "start": 1172,
+        "end": 1350,
+        "source_text_sha256": "2c8a9b32e12f09c0eadc64a08d73bc022d5cefa30b381fe3f97cd2e12b1799c0"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_775ecbecd614a00717de1731",
+      "doi": "10.2190/mg7x-4j8n-ckyr-p06t",
+      "title": "Some Conditions under Which Integrated Computer-Based Training Software Can Facilitate Learning",
+      "quote_or_locus": "Previous work has indicated that split-attention can interfere with learning because the need to mentally integrate material imposes an extraneous cognitive load",
+      "source_span": {
+        "start": 305,
+        "end": 466,
+        "source_text_sha256": "6252a158be4f65626be205b7b46ab9ec4cfc5b6cdc23e990f565ec55c9975783"
+      },
+      "span_role": "background"
+    },
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_775ecbecd614a00717de1731",
+      "doi": "10.2190/mg7x-4j8n-ckyr-p06t",
+      "title": "Some Conditions under Which Integrated Computer-Based Training Software Can Facilitate Learning",
+      "quote_or_locus": "Specifically, in areas of high information complexity, the integrated computer-based training software group clearly outperformed both the conventional manual plus computer software group, and the computer-based training software plus hard-copy group, thus demonstrating both split-attention and redundancy effects",
+      "source_span": {
+        "start": 1432,
+        "end": 1746,
+        "source_text_sha256": "6252a158be4f65626be205b7b46ab9ec4cfc5b6cdc23e990f565ec55c9975783"
       },
       "span_role": "finding"
     }
   ],
-  "confidence": 0.75,
+  "confidence": 0.95,
   "operation": "enrich",
-  "proposed_by": "extraction:github-actions-30806106326",
-  "proposed_at": "2026-08-03T10:42:21.863Z",
+  "proposed_by": "extraction:github-actions-30818192427",
+  "proposed_at": "2026-08-03T13:30:00.552Z",
   "status": "pending",
   "hold_reason": null,
   "decided_by": null,

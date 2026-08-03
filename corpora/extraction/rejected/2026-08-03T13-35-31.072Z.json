@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-03T13:35:31.072Z",
+  "dispatch_id": "effects-wide-SP-08",
+  "github_run_id": 30818620808,
+  "mode": "effects",
+  "written_at": "2026-08-03T13:36:05.863Z",
+  "rejected": [
+    {
+      "mechanism_id": "SP-08",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "premise_contradicted_downstream",
+      "detail": "span_role=finding asserted for a span the same source later reverses: marker fail-to+verb matched \"fails to mediate\" in \"Additionally, consumer expectancy mediates the influence of sustainability attitude, motivation, and facilitating conditions on purchasing behavior but fails to mediate the effect of herding behavior.\", sharing attitude, behavior, condition, facilitating, herding, influence, purchasing, sustainability with the quote (D-129) — record cr_54ea7112c771e159ca429726",
+      "corpus_record_id": "cr_54ea7112c771e159ca429726",
+      "item": {
+        "id": "SP-08-03",
+        "name": "Herding behavior in electric motorcycle purchasing",
+        "fact": "Herding behavior has a positive impact on the purchasing behavior of electric motorcycles.",
+        "boundary": "Electric motorcycle consumers in Bali",
+        "grade": "B+",
+        "confidence": 0.85,
+        "citations": [
+          {
+            "record_id": "cr_54ea7112c771e159ca429726",
+            "quote_or_locus": "the findings reveal that perceived behavioral control negatively influences purchasing behavior, while herding behavior, sustainability attitude, and facilitating conditions have a positive impact.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_54ea7112c771e159ca429726",
+          "quote_or_locus": "the findings reveal that perceived behavioral control negatively influences purchasing behavior, while herding behavior, sustainability attitude, and facilitating conditions have a positive impact.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "the findings reveal that perceived behavioral control negatively influences purchasing behavior, while herding behavior, sustainability attitude, and facilitating conditions have a positive impact.",
+        "quote_normalized": "the findings reveal that perceived behavioral control negatively influences purchasing behavior while herding behavior sustainability attitude and facilitating conditions have a positive impact",
+        "source_raw": "Purchasing Behavior of Electric Motorcycles in Bali: The Mediating Role of Consumer Expectancy\nThe development of electric vehicles, particularly electric motorcycles, has seen an increase in sales in Indonesia; however, their contribution remains significantly low compared to conventional motorcycles. Despite being more competitively priced, electric motorcycles accounted for only 1% of total motorcycle sales in 2022. This phenomenon highlights an intriguing gap for research, particularly concerning consumer purchasing behavior. This study aims to analyze the influence of perceived behavioral control, herding behavior, sustainability attitude, motivation, and facilitating conditions on the purchasing behavior of electric motorcycles in Bali, with consumer expectancy as a mediating variable. The research employs a quantitative method by distributing questionnaires to electric motorcycle consumers and analyzes the data using SEM-PLS. The findings reveal that perceived behavioral control negatively influences purchasing behavior, while herding behavior, sustainability attitude, and facilitating conditions have a positive impact. Interestingly, motivation does not affect purchasing behavior. Additionally, consumer expectancy mediates the influence of sustainability attitude, motivation, and facilitating conditions on purchasing behavior but fails to mediate the effect of herding behavior.",
+        "source_normalized": "purchasing behavior of electric motorcycles in bali the mediating role of consumer expectancy the development of electric vehicles particularly electric motorcycles has seen an increase in sales in indonesia however their contribution remains significantly low compared to conventional motorcycles despite being more competitively priced electric motorcycles accounted for only 1 of total motorcycle sales in 2022 this phenomenon highlights an intriguing gap for research particularly concerning consumer purchasing behavior this study aims to analyze the influence of perceived behavioral control herding behavior sustainability attitude motivation and facilitating conditions on the purchasing behavior of electric motorcycles in bali with consumer expectancy as a mediating variable the research employs a quantitative method by distributing questionnaires to electric motorcycle consumers and analyzes the data using sem pls the findings reveal that perceived behavioral control negatively influences purchasing behavior while herding behavior sustainability attitude and facilitating conditions have a positive impact interestingly motivation does not affect purchasing behavior additionally consumer expectancy mediates the influence of sustainability attitude motivation and facilitating conditions on purchasing behavior but fails to mediate the effect of herding behavior"
+      },
+      "corpus_side": {
+        "doi": "10.54783/ijsoc.v6i4.1331",
+        "title": "Purchasing Behavior of Electric Motorcycles in Bali: The Mediating Role of Consumer Expectancy"
+      }
+    }
+  ]
+}

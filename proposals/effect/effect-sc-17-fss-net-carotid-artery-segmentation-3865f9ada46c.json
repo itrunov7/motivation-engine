@@ -1,0 +1,56 @@
+{
+  "id": "effect-sc-17-fss-net-carotid-artery-segmentation-3865f9ada46c",
+  "type": "effect",
+  "target": "SC-17",
+  "payload": {
+    "id": "fss-net-carotid-artery-segmentation",
+    "mechanism_id": "SC-17",
+    "name": "FSS-Net carotid artery segmentation",
+    "fact": "The FSS-Net model achieves a Dice score of 96.46% for carotid artery segmentation in ultrasound imaging.",
+    "grade": "A",
+    "source": [
+      "10.1016/j.displa.2026.103523"
+    ],
+    "boundary": "Carotid artery ultrasound segmentation.",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "SC-17",
+        "corpus_record_id": "cr_9ba37a3cb14627277b51274f",
+        "doi": "10.1016/j.displa.2026.103523",
+        "title": "FSS-Net: frequency-spatial synergy network with wavelet attention for carotid artery ultrasound segmentation",
+        "quote_or_locus": "Extensive experiments on carotid ultrasound datasets show that FSS-Net achieves a Dice score (DSC) of 96.46% and strong robustness under low SNR conditions",
+        "source_span": {
+          "start": 972,
+          "end": 1127,
+          "source_text_sha256": "d5235eed29dcf1be3d6461b4d06c25dfb0cdc664cd64f3e87e4b95223c6c6002"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "SC-17",
+      "corpus_record_id": "cr_9ba37a3cb14627277b51274f",
+      "doi": "10.1016/j.displa.2026.103523",
+      "title": "FSS-Net: frequency-spatial synergy network with wavelet attention for carotid artery ultrasound segmentation",
+      "quote_or_locus": "Extensive experiments on carotid ultrasound datasets show that FSS-Net achieves a Dice score (DSC) of 96.46% and strong robustness under low SNR conditions",
+      "source_span": {
+        "start": 972,
+        "end": 1127,
+        "source_text_sha256": "d5235eed29dcf1be3d6461b4d06c25dfb0cdc664cd64f3e87e4b95223c6c6002"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.95,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-30818373159",
+  "proposed_at": "2026-08-03T13:32:20.847Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

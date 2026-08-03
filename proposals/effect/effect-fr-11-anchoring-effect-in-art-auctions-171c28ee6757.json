@@ -6,14 +6,28 @@
     "id": "fr-11-04",
     "mechanism_id": "FR-11",
     "name": "Anchoring Effect in Art Auctions",
-    "fact": "The anchoring effect significantly influences bidders' offers through prior auction prices or pre-sale estimates.",
+    "fact": "The anchoring effect is a psychological principle used in the beauty services industry to construct an impression of value.",
     "grade": "B",
     "source": [
-      "10.54254/2754-1169/2024.18720"
+      "10.54254/2754-1169/2024.18720",
+      "10.70315/uloap.ulmdi.2025.0201002"
     ],
-    "boundary": "Art auctions.",
+    "boundary": "Beauty services industry",
     "realization_ids": [],
     "provenance": [
+      {
+        "mechanism_id": "FR-11",
+        "corpus_record_id": "cr_734580906c017f98dc267898",
+        "doi": "10.70315/uloap.ulmdi.2025.0201002",
+        "title": "The Psychological Aspects of Pricing in the Beauty Sector",
+        "quote_or_locus": "Underlying psychological principles, i.e., the anchoring effect, price-quality heuristic, Social proof and the decoy effect are worthy tools in the construction of this impression",
+        "source_span": {
+          "start": 1046,
+          "end": 1225,
+          "source_text_sha256": "d3e9a1fce20492e705caa124072474e24fe14b3d79daf5b5db744290aca7a64a"
+        },
+        "span_role": "finding"
+      },
       {
         "mechanism_id": "FR-11",
         "corpus_record_id": "cr_83b1aca602fb01de1f368073",
@@ -32,6 +46,19 @@
   "provenance": [
     {
       "mechanism_id": "FR-11",
+      "corpus_record_id": "cr_734580906c017f98dc267898",
+      "doi": "10.70315/uloap.ulmdi.2025.0201002",
+      "title": "The Psychological Aspects of Pricing in the Beauty Sector",
+      "quote_or_locus": "Underlying psychological principles, i.e., the anchoring effect, price-quality heuristic, Social proof and the decoy effect are worthy tools in the construction of this impression",
+      "source_span": {
+        "start": 1046,
+        "end": 1225,
+        "source_text_sha256": "d3e9a1fce20492e705caa124072474e24fe14b3d79daf5b5db744290aca7a64a"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "FR-11",
       "corpus_record_id": "cr_83b1aca602fb01de1f368073",
       "doi": "10.54254/2754-1169/2024.18720",
       "title": "Study on the Price Formation Mechanism of Art Auctions from the Perspective of Behavioral Economics: The Influence of Anchoring Effect and Endowment Effect",
@@ -44,7 +71,7 @@
       "span_role": "finding"
     }
   ],
-  "confidence": 0.8,
+  "confidence": 0.9,
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:38:25.744Z",
