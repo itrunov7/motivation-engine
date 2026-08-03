@@ -1,7 +1,223 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:36:05.890Z",
+  "updated_at": "2026-08-03T13:37:36.978Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:36:56.159Z",
+      "dispatch_id": "effects-wide-PF-16",
+      "github_run_id": 30818739383,
+      "mode": "effects",
+      "scope": "PF-16",
+      "candidates": 27,
+      "cheap": {
+        "candidates": 16,
+        "dropped_ungrounded": 5,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 11
+      },
+      "synthesis": {
+        "into_synthesis": 11,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 11
+      },
+      "strong": {
+        "candidates": 11,
+        "proposed": 10,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "PF-16:cheap:01",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "PF-16:cheap:02",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:03",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:04",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:05",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:06",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:07",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:08",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "PF-16:cheap:09",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:10",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "doi_unresolved"
+        },
+        {
+          "candidate_id": "PF-16:cheap:11",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:12",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:13",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "PF-16:cheap:14",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "PF-16:cheap:15",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:16",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:strong:01",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-pf-16-illusory-truth-effect-fluency-based--d79774a3a94a",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "PF-16:strong:08",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-processing-fluency-f9b3eb0e0dfd"
+        },
+        {
+          "candidate_id": "PF-16:strong:02",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-aesthetic-usability-effect-a0a0fab054a3"
+        },
+        {
+          "candidate_id": "PF-16:strong:06",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-crossmodal-fluency-based-preference-02046ba0e7ba"
+        },
+        {
+          "candidate_id": "PF-16:strong:07",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-implicit-affective-preference-for-vi-ecacd1a2be19"
+        },
+        {
+          "candidate_id": "PF-16:strong:11",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-machine-like-isa-effectiveness-5fcdae16d694"
+        },
+        {
+          "candidate_id": "PF-16:strong:04",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-ticker-fluency-effect-1e692ec11de5"
+        },
+        {
+          "candidate_id": "PF-16:strong:09",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-verbal-fluency-bdc4a996ea6f"
+        },
+        {
+          "candidate_id": "PF-16:strong:05",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-word-segmentation-cues-7707dd5b51a6"
+        },
+        {
+          "candidate_id": "PF-16:strong:10",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-perceptual-fluency-in-sacred-heritag-6386328655fb"
+        },
+        {
+          "candidate_id": "PF-16:strong:03",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-preference-fluency-in-ai-interaction-a9176b0e0b19"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:35:31.072Z",
       "dispatch_id": "effects-wide-SP-08",
@@ -2871,147 +3087,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-id-12-reverse-foot-in-the-door-effect-8ec2c49463ca"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:38:46.972Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "HA-04",
-      "candidates": 16,
-      "cheap": {
-        "candidates": 8,
-        "dropped_ungrounded": 0,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 8
-      },
-      "synthesis": {
-        "into_synthesis": 8,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 8
-      },
-      "strong": {
-        "candidates": 8,
-        "proposed": 8,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "HA-04:cheap:01",
-          "mechanism_id": "HA-04",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "HA-04:cheap:02",
-          "mechanism_id": "HA-04",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "HA-04:cheap:03",
-          "mechanism_id": "HA-04",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "HA-04:cheap:04",
-          "mechanism_id": "HA-04",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "HA-04:cheap:05",
-          "mechanism_id": "HA-04",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "HA-04:cheap:06",
-          "mechanism_id": "HA-04",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "HA-04:strong:02",
-          "mechanism_id": "HA-04",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ha-04-habit-formation-curve-07bee6d4a8f0"
-        },
-        {
-          "candidate_id": "HA-04:strong:04",
-          "mechanism_id": "HA-04",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ha-04-context-dependent-habit-disruption-eaba350662b2"
-        },
-        {
-          "candidate_id": "HA-04:strong:05",
-          "mechanism_id": "HA-04",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ha-04-dental-flossing-habit-formation-50eedc07cf86"
-        },
-        {
-          "candidate_id": "HA-04:strong:03",
-          "mechanism_id": "HA-04",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ha-04-habit-intention-moderation-5ae6db47ccef"
-        },
-        {
-          "candidate_id": "HA-04:strong:01",
-          "mechanism_id": "HA-04",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ha-04-habitual-automaticity-5d63b190ccc0"
-        },
-        {
-          "candidate_id": "HA-04:strong:06",
-          "mechanism_id": "HA-04",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ha-04-prospective-memory-and-habit-formati-cafbfa19e78a"
-        },
-        {
-          "candidate_id": "HA-04:cheap:07",
-          "mechanism_id": "HA-04",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "HA-04:cheap:08",
-          "mechanism_id": "HA-04",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "HA-04:strong:07",
-          "mechanism_id": "HA-04",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ha-04-habit-recollection-dissociation-e995edabbecb"
-        },
-        {
-          "candidate_id": "HA-04:strong:08",
-          "mechanism_id": "HA-04",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-ha-04-dorsomedial-striatum-dms-habit-bias-85dccfb71e65"
         }
       ]
     }
