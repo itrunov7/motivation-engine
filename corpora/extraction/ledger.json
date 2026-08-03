@@ -1,7 +1,99 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:50:54.073Z",
+  "updated_at": "2026-08-03T13:51:37.155Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:51:28.839Z",
+      "dispatch_id": "effects-wide-FR-11",
+      "github_run_id": 30819868396,
+      "mode": "effects",
+      "scope": "FR-11",
+      "candidates": 8,
+      "cheap": {
+        "candidates": 4,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 4
+      },
+      "synthesis": {
+        "into_synthesis": 4,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 4
+      },
+      "strong": {
+        "candidates": 4,
+        "proposed": 1,
+        "proposed_enrich": 0,
+        "merged_into_pending": 3,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "FR-11:cheap:01",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:cheap:02",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:cheap:03",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:cheap:04",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:strong:01",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-fr-11-anchoring-effect-in-art-auctions-171c28ee6757",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "FR-11:strong:03",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-fr-11-anchoring-effect-in-art-auctions-171c28ee6757",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "FR-11:strong:04",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-fr-11-anchoring-effect-in-art-auctions-171c28ee6757",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "FR-11:strong:02",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-fr-11-price-quality-heuristic-da3c5dfc199c"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:50:46.132Z",
       "dispatch_id": "effects-wide-EN-03",
@@ -2948,167 +3040,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-ps-13-symbol-superiority-effect-ada57e38c00a"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:43:12.101Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "PF-16",
-      "candidates": 19,
-      "cheap": {
-        "candidates": 11,
-        "dropped_ungrounded": 1,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 10
-      },
-      "synthesis": {
-        "into_synthesis": 10,
-        "consolidated": 2,
-        "expanded": 0,
-        "candidates_strong": 8
-      },
-      "strong": {
-        "candidates": 8,
-        "proposed": 7,
-        "proposed_enrich": 0,
-        "merged_into_pending": 1,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "PF-16:cheap:01",
-          "mechanism_id": "PF-16",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PF-16:cheap:02",
-          "mechanism_id": "PF-16",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PF-16:cheap:03",
-          "mechanism_id": "PF-16",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PF-16:cheap:04",
-          "mechanism_id": "PF-16",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PF-16:cheap:05",
-          "mechanism_id": "PF-16",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PF-16:cheap:06",
-          "mechanism_id": "PF-16",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PF-16:cheap:07",
-          "mechanism_id": "PF-16",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "premise_contradicted_downstream"
-        },
-        {
-          "candidate_id": "PF-16:strong:01",
-          "mechanism_id": "PF-16",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-pf-16-illusory-truth-effect-fluency-based--d79774a3a94a"
-        },
-        {
-          "candidate_id": "PF-16:strong:02",
-          "mechanism_id": "PF-16",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-pf-16-fluency-based-aesthetic-pleasure-eva-7046b0d3a23c"
-        },
-        {
-          "candidate_id": "PF-16:strong:03",
-          "mechanism_id": "PF-16",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-pf-16-fluency-based-aesthetic-interest-a95937ecece3"
-        },
-        {
-          "candidate_id": "PF-16:strong:04",
-          "mechanism_id": "PF-16",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-pf-16-perceptual-fluency-effect-on-brand-p-8dc799d16508"
-        },
-        {
-          "candidate_id": "PF-16:cheap:08",
-          "mechanism_id": "PF-16",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PF-16:cheap:09",
-          "mechanism_id": "PF-16",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PF-16:cheap:10",
-          "mechanism_id": "PF-16",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PF-16:cheap:11",
-          "mechanism_id": "PF-16",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "PF-16:strong:05",
-          "mechanism_id": "PF-16",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-pf-16-illusory-truth-effect-fluency-based--d79774a3a94a",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "PF-16:strong:06",
-          "mechanism_id": "PF-16",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-pf-16-fluency-truth-association-f4c05aec2338"
-        },
-        {
-          "candidate_id": "PF-16:strong:07",
-          "mechanism_id": "PF-16",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-pf-16-perceptual-fluency-and-approach-acti-7c4e9b33637d"
-        },
-        {
-          "candidate_id": "PF-16:strong:08",
-          "mechanism_id": "PF-16",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-pf-16-relative-fluency-and-liking-4a6e49b73b4a"
         }
       ]
     }
