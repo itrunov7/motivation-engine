@@ -266,8 +266,12 @@ test("resolves mechanism, pack, and segment scopes deterministically", () => {
 test("quotes are deterministic and enforce the per-run token cap", () => {
   const scope = resolveScope({ mechanism: "CL-14" });
   const now = new Date("2026-07-21T10:00:00.000Z");
-  const first = buildQuote("effects", scope, configured, now);
-  const second = buildQuote("effects", scope, configured, now);
+  // Coverage pinned to null: this measures the ESTIMATOR, so it must not depend
+  // on how much of CL-14 has been read by the time the suite runs. Reading live
+  // coverage made it pass only while records happened to be outstanding, and the
+  // wide effects sweep exhausted the corpus.
+  const first = buildQuote("effects", scope, configured, now, null);
+  const second = buildQuote("effects", scope, configured, now, null);
   assert.deepEqual(first, second);
   assert(first.calls.cheap > 0);
   assert.equal(first.calls.strong, 1);
@@ -276,6 +280,7 @@ test("quotes are deterministic and enforce the per-run token cap", () => {
     scope,
     { ...configured, limits: { ...configured.limits, per_run_tokens: 1 } },
     now,
+    null,
   );
   assert.equal(blocked.allowed, false);
   assert(blocked.reasons.some((reason) => reason.includes("per-run cap")));
@@ -457,6 +462,10 @@ test("monthly token exhaustion blocks the estimate before extraction", () => {
       limits: { ...configured.limits, monthly_tokens: 0 },
     },
     new Date("2026-07-21T10:00:00.000Z"),
+    // As above: a cap of 0 must block on this run's own upper bound alone, with
+    // no dependence on live coverage or on which months are still inside the
+    // manifest's 20-run history window.
+    null,
   );
   assert.equal(quote.allowed, false);
   assert(quote.reasons.some((reason) => reason.includes("monthly token cap")));
