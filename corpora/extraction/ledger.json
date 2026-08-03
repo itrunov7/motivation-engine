@@ -1,7 +1,207 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:34:48.633Z",
+  "updated_at": "2026-08-03T13:36:05.890Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:35:31.072Z",
+      "dispatch_id": "effects-wide-SP-08",
+      "github_run_id": 30818620808,
+      "mode": "effects",
+      "scope": "SP-08",
+      "candidates": 25,
+      "cheap": {
+        "candidates": 13,
+        "dropped_ungrounded": 1,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 12
+      },
+      "synthesis": {
+        "into_synthesis": 12,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 12
+      },
+      "strong": {
+        "candidates": 12,
+        "proposed": 12,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "SP-08:cheap:01",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:02",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:03",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:04",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:05",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "SP-08:cheap:06",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:07",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:08",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:09",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:10",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:11",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:12",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:13",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:strong:01",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-descriptive-norm-backfire-5a37c20b9117"
+        },
+        {
+          "candidate_id": "SP-08:strong:10",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-e64d-and-apilimod-inhibition-of-sars-55d592d13de2"
+        },
+        {
+          "candidate_id": "SP-08:strong:11",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-eipa-inhibition-of-sars-cov-2-b30c047781c9"
+        },
+        {
+          "candidate_id": "SP-08:strong:07",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-geopolitical-impact-on-herding-behav-3d990201904f"
+        },
+        {
+          "candidate_id": "SP-08:strong:06",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-herding-behavior-and-market-liquidit-2fe108cc5769"
+        },
+        {
+          "candidate_id": "SP-08:strong:05",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-herding-behavior-in-esg-investing-d24b2116a32a"
+        },
+        {
+          "candidate_id": "SP-08:strong:03",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-herding-behavior-in-live-streaming-c-3734b777bf6c"
+        },
+        {
+          "candidate_id": "SP-08:strong:09",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-irrational-food-hoarding-8190ca65f29f"
+        },
+        {
+          "candidate_id": "SP-08:strong:08",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-rational-food-hoarding-c2e813ee8ad5"
+        },
+        {
+          "candidate_id": "SP-08:strong:02",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-descriptive-norm-reactance-a2dfc8a2db46"
+        },
+        {
+          "candidate_id": "SP-08:strong:04",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-herding-behavior-in-fast-fashion-pur-a44d2dd260c5"
+        },
+        {
+          "candidate_id": "SP-08:strong:12",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-hiv-1-inhibitor-activity-against-sar-546b3646bbe5"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:34:11.981Z",
       "dispatch_id": "effects-wide-PS-13",
@@ -2812,167 +3012,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-ha-04-dorsomedial-striatum-dms-habit-bias-85dccfb71e65"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:38:25.744Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "FR-11",
-      "candidates": 19,
-      "cheap": {
-        "candidates": 11,
-        "dropped_ungrounded": 2,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 9
-      },
-      "synthesis": {
-        "into_synthesis": 9,
-        "consolidated": 1,
-        "expanded": 0,
-        "candidates_strong": 8
-      },
-      "strong": {
-        "candidates": 8,
-        "proposed": 8,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "FR-11:cheap:01",
-          "mechanism_id": "FR-11",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "FR-11:cheap:02",
-          "mechanism_id": "FR-11",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "premise_contradicted_downstream"
-        },
-        {
-          "candidate_id": "FR-11:cheap:03",
-          "mechanism_id": "FR-11",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "FR-11:cheap:04",
-          "mechanism_id": "FR-11",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "FR-11:cheap:05",
-          "mechanism_id": "FR-11",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "FR-11:cheap:06",
-          "mechanism_id": "FR-11",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "premise_contradicted_downstream"
-        },
-        {
-          "candidate_id": "FR-11:cheap:07",
-          "mechanism_id": "FR-11",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "FR-11:strong:01",
-          "mechanism_id": "FR-11",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-fr-11-heuristic-vetoing-7ff1f71008ef"
-        },
-        {
-          "candidate_id": "FR-11:strong:02",
-          "mechanism_id": "FR-11",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-fr-11-attribute-framing-effect-da44d4e115c4"
-        },
-        {
-          "candidate_id": "FR-11:strong:04",
-          "mechanism_id": "FR-11",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-fr-11-attribute-framing-in-ipos-36027fe02297"
-        },
-        {
-          "candidate_id": "FR-11:strong:03",
-          "mechanism_id": "FR-11",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-fr-11-anchoring-effect-in-art-auctions-171c28ee6757"
-        },
-        {
-          "candidate_id": "FR-11:cheap:08",
-          "mechanism_id": "FR-11",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "FR-11:cheap:09",
-          "mechanism_id": "FR-11",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "FR-11:cheap:10",
-          "mechanism_id": "FR-11",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "FR-11:cheap:11",
-          "mechanism_id": "FR-11",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "FR-11:strong:05",
-          "mechanism_id": "FR-11",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-fr-11-anchoring-and-adjustment-f564460ca14f"
-        },
-        {
-          "candidate_id": "FR-11:strong:07",
-          "mechanism_id": "FR-11",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-fr-11-break-even-effect-97dbed9dd083"
-        },
-        {
-          "candidate_id": "FR-11:strong:06",
-          "mechanism_id": "FR-11",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-fr-11-house-money-effect-c943e3dfb632"
-        },
-        {
-          "candidate_id": "FR-11:strong:08",
-          "mechanism_id": "FR-11",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-fr-11-endowment-effect-1a69d498b221"
         }
       ]
     }
