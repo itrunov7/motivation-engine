@@ -1,0 +1,56 @@
+{
+  "id": "effect-sc-06-cmmrd-cancer-incidence-19d71eb7813a",
+  "type": "effect",
+  "target": "SC-06",
+  "payload": {
+    "id": "sc-06-03",
+    "mechanism_id": "SC-06",
+    "name": "CMMRD cancer incidence",
+    "fact": "The cumulative cancer incidence by age 18 years in patients with constitutional mismatch repair deficiency (CMMRD) is 90%.",
+    "grade": "A",
+    "source": [
+      "10.1016/s1470-2045(24)00026-3"
+    ],
+    "boundary": "International cohort of 201 patients with CMMRD.",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_7b4af1f02518550ea8b631c5",
+        "doi": "10.1016/s1470-2045(24)00026-3",
+        "title": "Clinical and biological landscape of constitutional mismatch-repair deficiency syndrome: an International Replication Repair Deficiency Consortium cohort study.",
+        "quote_or_locus": "The cumulative cancer incidence by age 18 years was 90% (95% CI 80-99",
+        "source_span": {
+          "start": 1801,
+          "end": 1870,
+          "source_text_sha256": "7d38e0c6fe45db7db0bb451cef4049ca0e84f5b3597f2ba173880d4420608ce8"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_7b4af1f02518550ea8b631c5",
+      "doi": "10.1016/s1470-2045(24)00026-3",
+      "title": "Clinical and biological landscape of constitutional mismatch-repair deficiency syndrome: an International Replication Repair Deficiency Consortium cohort study.",
+      "quote_or_locus": "The cumulative cancer incidence by age 18 years was 90% (95% CI 80-99",
+      "source_span": {
+        "start": 1801,
+        "end": 1870,
+        "source_text_sha256": "7d38e0c6fe45db7db0bb451cef4049ca0e84f5b3597f2ba173880d4420608ce8"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.95,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-30819102323",
+  "proposed_at": "2026-08-03T13:41:42.965Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}
