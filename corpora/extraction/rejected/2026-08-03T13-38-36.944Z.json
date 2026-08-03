@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-03T13:38:36.944Z",
+  "dispatch_id": "effects-wide-MM-15",
+  "github_run_id": 30818854515,
+  "mode": "effects",
+  "written_at": "2026-08-03T13:39:41.794Z",
+  "rejected": [
+    {
+      "mechanism_id": "MM-15",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "quote_not_in_source",
+      "detail": "quote not a substring of cr_48b756c0a1c35e2d28572759: \"Findings indicate: (1) Cue interventions significantly enhanced online learning outcomes at a moderate effect size ( p <\"",
+      "corpus_record_id": "cr_48b756c0a1c35e2d28572759",
+      "item": {
+        "id": "MM-15-002",
+        "name": "Cueing Intervention Effect",
+        "fact": "Cue interventions in multimedia learning significantly enhance online learning outcomes, with social cues outperforming visual cues, while combined cues can exhibit a negative effect.",
+        "boundary": "The effectiveness of cueing is moderated by variables such as educational level, learning materials, and cue type.",
+        "grade": "A",
+        "confidence": 0.95,
+        "citations": [
+          {
+            "record_id": "cr_48b756c0a1c35e2d28572759",
+            "quote_or_locus": "Findings indicate: (1) Cue interventions significantly enhanced online learning outcomes at a moderate effect size ( p < 0.001); (2) Social cues (g = 0.634) significantly outperformed visual cues (g = 0.261) in enhancing effects, while combined cues exhibited a negative effect (g = −0.635)",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_48b756c0a1c35e2d28572759",
+          "quote_or_locus": "Findings indicate: (1) Cue interventions significantly enhanced online learning outcomes at a moderate effect size ( p < 0.001); (2) Social cues (g = 0.634) significantly outperformed visual cues (g = 0.261) in enhancing effects, while combined cues exhibited a negative effect (g = −0.635)",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "Findings indicate: (1) Cue interventions significantly enhanced online learning outcomes at a moderate effect size ( p < 0.001); (2) Social cues (g = 0.634) significantly outperformed visual cues (g = 0.261) in enhancing effects, while combined cues exhibited a negative effect (g = −0.635)",
+        "quote_normalized": "findings indicate 1 cue interventions significantly enhanced online learning outcomes at a moderate effect size p 0 001 2 social cues g 0 634 significantly outperformed visual cues g 0 261 in enhancing effects while combined cues exhibited a negative effect g 0 635",
+        "source_raw": "Effects of cueing interventions on online learning outcomes: a meta-analytic review of 40 studies\nAs a key element in multimedia learning design, cues influence learning outcomes through psychological mechanisms such as attention guidance, cognitive load regulation, and learning motivation stimulation. To systematically examine the effects of different cue interventions on online learning outcomes, this meta-analysis integrated 40 experimental and quasi-experimental studies ( N = 5,049) published between 2000 and 2025. It conducted in-depth analyses focusing on moderating variables such as educational level, learning material type, and cue type. Cue types encompassed social cues (teaching proxies, teaching gestures), visual cues (subtitles, color, bold, highlighting), and combined cues (social and visual cues). Findings indicate: (1) Cue interventions significantly enhanced online learning outcomes at a moderate effect size ( p &amp;lt; 0.001); (2) Social cues (g = 0.634) significantly outperformed visual cues (g = 0.261) in enhancing effects, while combined cues exhibited a negative effect (g = −0.635); (3) Learning outcomes were significantly moderated by variables including educational level, learning materials, assessment tools, total gaze duration, and instructional video length. Collectively, these findings elucidate the influence mechanism of cue intervention, aiming to provide theoretical insights and practical guidance for optimizing online learning environments and enhancing student learning outcomes.",
+        "source_normalized": "effects of cueing interventions on online learning outcomes a meta analytic review of 40 studies as a key element in multimedia learning design cues influence learning outcomes through psychological mechanisms such as attention guidance cognitive load regulation and learning motivation stimulation to systematically examine the effects of different cue interventions on online learning outcomes this meta analysis integrated 40 experimental and quasi experimental studies n 5 049 published between 2000 and 2025 it conducted in depth analyses focusing on moderating variables such as educational level learning material type and cue type cue types encompassed social cues teaching proxies teaching gestures visual cues subtitles color bold highlighting and combined cues social and visual cues findings indicate 1 cue interventions significantly enhanced online learning outcomes at a moderate effect size p amp lt 0 001 2 social cues g 0 634 significantly outperformed visual cues g 0 261 in enhancing effects while combined cues exhibited a negative effect g 0 635 3 learning outcomes were significantly moderated by variables including educational level learning materials assessment tools total gaze duration and instructional video length collectively these findings elucidate the influence mechanism of cue intervention aiming to provide theoretical insights and practical guidance for optimizing online learning environments and enhancing student learning outcomes"
+      },
+      "corpus_side": {
+        "doi": "10.3389/fpsyg.2026.1717604",
+        "title": "Effects of cueing interventions on online learning outcomes: a meta-analytic review of 40 studies"
+      }
+    },
+    {
+      "mechanism_id": "MM-15",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "quote_not_in_source",
+      "detail": "quote not a substring of cr_9e272705cf7cec9f1765a94b: \"the meta-analysis... confirmed the existence of a redundancy effect and a novelty effect in MALL practice.\"",
+      "corpus_record_id": "cr_9e272705cf7cec9f1765a94b",
+      "item": {
+        "id": "mm15_002",
+        "name": "Redundancy Effect",
+        "fact": "The redundancy effect, where presenting information in multiple redundant formats (such as text and audio simultaneously) can hinder learning, is confirmed in mobile-assisted language learning (MALL) practice.",
+        "boundary": "Mobile-assisted language learning (MALL)",
+        "grade": "A-",
+        "confidence": 0.9,
+        "citations": [
+          {
+            "record_id": "cr_9e272705cf7cec9f1765a94b",
+            "quote_or_locus": "the meta-analysis... confirmed the existence of a redundancy effect and a novelty effect in MALL practice.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_9e272705cf7cec9f1765a94b",
+          "quote_or_locus": "the meta-analysis... confirmed the existence of a redundancy effect and a novelty effect in MALL practice.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "the meta-analysis... confirmed the existence of a redundancy effect and a novelty effect in MALL practice.",
+        "quote_normalized": "the meta analysis confirmed the existence of a redundancy effect and a novelty effect in mall practice",
+        "source_raw": "Narrative review and meta-analysis of MALL research on L2 skills\nAbstract This study employed a narrative review and a meta-analysis to synthesize the literature on mobile-assisted language learning (MALL). Following a systematic retrieval of literature from 2008 to 2017, 17 studies with 22 effect sizes were included based on predetermined inclusion and exclusion criteria. By categorizing the characteristics of the studies retrieved, the narrative review revealed a detailed picture of MALL research in terms of the language aspects targeted, theoretical frameworks addressed, mobile technologies adopted, and multimedia components used. The qualitative review helped to contextualize and interpret the results found in the meta-analysis, which revealed a large effect for mobile technologies in language learning, identified three variables (i.e. type of activities, modality of delivery, and duration of treatment) that might influence the effectiveness of mobile technologies, and confirmed the existence of a redundancy effect and a novelty effect in MALL practice. Implications for future research and pedagogy are discussed.",
+        "source_normalized": "narrative review and meta analysis of mall research on l2 skills abstract this study employed a narrative review and a meta analysis to synthesize the literature on mobile assisted language learning mall following a systematic retrieval of literature from 2008 to 2017 17 studies with 22 effect sizes were included based on predetermined inclusion and exclusion criteria by categorizing the characteristics of the studies retrieved the narrative review revealed a detailed picture of mall research in terms of the language aspects targeted theoretical frameworks addressed mobile technologies adopted and multimedia components used the qualitative review helped to contextualize and interpret the results found in the meta analysis which revealed a large effect for mobile technologies in language learning identified three variables i e type of activities modality of delivery and duration of treatment that might influence the effectiveness of mobile technologies and confirmed the existence of a redundancy effect and a novelty effect in mall practice implications for future research and pedagogy are discussed"
+      },
+      "corpus_side": {
+        "doi": "10.1017/s0958344020000221",
+        "title": "Narrative review and meta-analysis of MALL research on L2 skills"
+      }
+    },
+    {
+      "mechanism_id": "MM-15",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "quote_not_in_source",
+      "detail": "quote not a substring of cr_0be68325a082b429988c0a0a: \"In this paper, we propose a highly secure, multi-phase image encryption scheme based on a 3D continuous Lorenz chaotic s\"",
+      "corpus_record_id": "cr_0be68325a082b429988c0a0a",
+      "item": {
+        "id": "MM-15-001",
+        "name": "Multi-phase image encryption",
+        "fact": "The proposed multi-phase image encryption scheme utilizes a 3D continuous Lorenz chaotic system and a bidirectional non-linear diffusion mechanism to achieve near-ideal performance metrics, including an Information Entropy of 7.9984 and a Number of Pixels Change Rate (NPCR) of 99.80%.",
+        "boundary": "3D continuous Lorenz chaotic system and bidirectional non-linear diffusion mechanism",
+        "grade": "A",
+        "confidence": 0.95,
+        "citations": [
+          {
+            "record_id": "cr_0be68325a082b429988c0a0a",
+            "quote_or_locus": "In this paper, we propose a highly secure, multi-phase image encryption scheme based on a 3D continuous Lorenz chaotic system combined with a novel bidirectional non-linear diffusion mechanism. ... The algorithm possesses a key space exceeding 2^256, yielding an Information Entropy of 7.9984, adjacent pixel correlations approaching zero (?0.00), a Number of Pixels Change Rate (NPCR) of 99.80%, and a Unified Average Changing Intensity (UACI) of 33.65%.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_0be68325a082b429988c0a0a",
+          "quote_or_locus": "In this paper, we propose a highly secure, multi-phase image encryption scheme based on a 3D continuous Lorenz chaotic system combined with a novel bidirectional non-linear diffusion mechanism. ... The algorithm possesses a key space exceeding 2^256, yielding an Information Entropy of 7.9984, adjacent pixel correlations approaching zero (?0.00), a Number of Pixels Change Rate (NPCR) of 99.80%, and a Unified Average Changing Intensity (UACI) of 33.65%.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "In this paper, we propose a highly secure, multi-phase image encryption scheme based on a 3D continuous Lorenz chaotic system combined with a novel bidirectional non-linear diffusion mechanism. ... The algorithm possesses a key space exceeding 2^256, yielding an Information Entropy of 7.9984, adjacent pixel correlations approaching zero (?0.00), a Number of Pixels Change Rate (NPCR) of 99.80%, and a Unified Average Changing Intensity (UACI) of 33.65%.",
+        "quote_normalized": "in this paper we propose a highly secure multi phase image encryption scheme based on a 3d continuous lorenz chaotic system combined with a novel bidirectional non linear diffusion mechanism the algorithm possesses a key space exceeding 2 256 yielding an information entropy of 7 9984 adjacent pixel correlations approaching zero 0 00 a number of pixels change rate npcr of 99 80 and a unified average changing intensity uaci of 33 65",
+        "source_raw": "A cryptographically secure image encryption scheme based on continuous chaotic systems and feedback substitution\nThe rapid growth of digital multimedia communication over insecure public networks necessitates robust and efficient encryption algorithms. While low-dimensional chaotic maps are frequently employed in cryptography due to their high sensitivity to initial conditions and low computational overhead, they often suffer from poor diffusion characteristics, limited key spaces, and vulnerabilities to phase space reconstruction, leaving them vulnerable to statistical and differential attacks. In this paper, we propose a highly secure, multi-phase image encryption scheme based on a 3D continuous Lorenz chaotic system combined with a novel bidirectional non-linear diffusion mechanism. The proposed encryption process operates in two distinct phases obeying Shannon’s principles of confusion and diffusion: first, a chaotic permutation step disrupts the high spatial redundancy of the original image using dynamically generated indices derived from the Lorenz x-sequence. Second, a bidirectional diffusion process incorporating 3-bit circular rotations and modulo addition is applied utilizing the z-sequence to guarantee a massive avalanche effect. Security analyses and experimental evaluations demonstrate that the proposed scheme achieves near-ideal performance metrics. The algorithm possesses a key space exceeding 2^256, yielding an Information Entropy of 7.9984, adjacent pixel correlations approaching zero (?0.00), a Number of Pixels Change Rate (NPCR) of 99.80%, and a Unified Average Changing Intensity (UACI) of 33.65%. These results confirm that the proposed cryptosystem is highly resistant to brute-force, statistical, and differential cryptanalysis, making it highly suitable for secure digital image communication.",
+        "source_normalized": "a cryptographically secure image encryption scheme based on continuous chaotic systems and feedback substitution the rapid growth of digital multimedia communication over insecure public networks necessitates robust and efficient encryption algorithms while low dimensional chaotic maps are frequently employed in cryptography due to their high sensitivity to initial conditions and low computational overhead they often suffer from poor diffusion characteristics limited key spaces and vulnerabilities to phase space reconstruction leaving them vulnerable to statistical and differential attacks in this paper we propose a highly secure multi phase image encryption scheme based on a 3d continuous lorenz chaotic system combined with a novel bidirectional non linear diffusion mechanism the proposed encryption process operates in two distinct phases obeying shannon s principles of confusion and diffusion first a chaotic permutation step disrupts the high spatial redundancy of the original image using dynamically generated indices derived from the lorenz x sequence second a bidirectional diffusion process incorporating 3 bit circular rotations and modulo addition is applied utilizing the z sequence to guarantee a massive avalanche effect security analyses and experimental evaluations demonstrate that the proposed scheme achieves near ideal performance metrics the algorithm possesses a key space exceeding 2 256 yielding an information entropy of 7 9984 adjacent pixel correlations approaching zero 0 00 a number of pixels change rate npcr of 99 80 and a unified average changing intensity uaci of 33 65 these results confirm that the proposed cryptosystem is highly resistant to brute force statistical and differential cryptanalysis making it highly suitable for secure digital image communication"
+      },
+      "corpus_side": {
+        "doi": "10.33545/26633582.2026.v8.i2b.295",
+        "title": "A cryptographically secure image encryption scheme based on continuous chaotic systems and feedback substitution"
+      }
+    },
+    {
+      "mechanism_id": "MM-15",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "quote_not_in_source",
+      "detail": "quote not a substring of cr_158e4b17750bd1b2390a776a: \"In this work, we propose BLINK (Bird Swarm Optimization (BSO)-Hypertuned Lattice-Based Image eNcryption Kernel), a novel\"",
+      "corpus_record_id": "cr_158e4b17750bd1b2390a776a",
+      "item": {
+        "id": "MM-15-002",
+        "name": "BLINK multi-image encryption framework",
+        "fact": "The BLINK framework integrates chaotic lattice dynamics, eigen-coupled channel interaction, and Bird Swarm Optimization (BSO) to achieve superior entropy and enhanced resistance to statistical and differential attacks in multi-image settings.",
+        "boundary": "Multi-image encryption framework using chaotic lattice dynamics and BSO",
+        "grade": "A",
+        "confidence": 0.95,
+        "citations": [
+          {
+            "record_id": "cr_158e4b17750bd1b2390a776a",
+            "quote_or_locus": "In this work, we propose BLINK (Bird Swarm Optimization (BSO)-Hypertuned Lattice-Based Image eNcryption Kernel), a novel entropy-preserving multi-image encryption framework integrating chaotic lattice dynamics, eigen-coupled channel interaction, and optimization-driven parameter tuning. ... Experimental evaluations demonstrate superior entropy, reduced pixel correlation, and enhanced resistance to statistical and differential attacks compared to existing schemes",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_158e4b17750bd1b2390a776a",
+          "quote_or_locus": "In this work, we propose BLINK (Bird Swarm Optimization (BSO)-Hypertuned Lattice-Based Image eNcryption Kernel), a novel entropy-preserving multi-image encryption framework integrating chaotic lattice dynamics, eigen-coupled channel interaction, and optimization-driven parameter tuning. ... Experimental evaluations demonstrate superior entropy, reduced pixel correlation, and enhanced resistance to statistical and differential attacks compared to existing schemes",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "In this work, we propose BLINK (Bird Swarm Optimization (BSO)-Hypertuned Lattice-Based Image eNcryption Kernel), a novel entropy-preserving multi-image encryption framework integrating chaotic lattice dynamics, eigen-coupled channel interaction, and optimization-driven parameter tuning. ... Experimental evaluations demonstrate superior entropy, reduced pixel correlation, and enhanced resistance to statistical and differential attacks compared to existing schemes",
+        "quote_normalized": "in this work we propose blink bird swarm optimization bso hypertuned lattice based image encryption kernel a novel entropy preserving multi image encryption framework integrating chaotic lattice dynamics eigen coupled channel interaction and optimization driven parameter tuning experimental evaluations demonstrate superior entropy reduced pixel correlation and enhanced resistance to statistical and differential attacks compared to existing schemes",
+        "source_raw": "Bird swarm optimized chaotic lattice framework for parallel multi image encryption\nThe exponential growth of multimedia communication demands secure, efficient, and scalable image encryption frameworks capable of handling high-dimensional correlated data. Existing chaotic and hybrid encryption schemes demonstrate strong nonlinearity but often suffer from redundant computations, weak inter-channel coupling, and limited adaptability in multi-image settings. In this work, we propose BLINK (Bird Swarm Optimization (BSO)-Hypertuned Lattice-Based Image eNcryption Kernel), a novel entropy-preserving multi-image encryption framework integrating chaotic lattice dynamics, eigen-coupled channel interaction, and optimization-driven parameter tuning. The proposed approach introduces a PSI-based amortized eigen-coupled chaotic lattice mechanism that enables efficient reuse of invariant chaotic structures while maintaining non-deterministic behavior. BSO is employed for adaptive hyperparameter tuning and secure seed generation, with cryptographic safeguards ensuring randomness quality. Furthermore, the framework aligns with post-quantum security principles through lattice-based constructs inspired by learning with errors. Experimental evaluations demonstrate superior entropy, reduced pixel correlation, and enhanced resistance to statistical and differential attacks compared to existing schemes, making BLINK suitable for secure multi-image encrypted transmission.",
+        "source_normalized": "bird swarm optimized chaotic lattice framework for parallel multi image encryption the exponential growth of multimedia communication demands secure efficient and scalable image encryption frameworks capable of handling high dimensional correlated data existing chaotic and hybrid encryption schemes demonstrate strong nonlinearity but often suffer from redundant computations weak inter channel coupling and limited adaptability in multi image settings in this work we propose blink bird swarm optimization bso hypertuned lattice based image encryption kernel a novel entropy preserving multi image encryption framework integrating chaotic lattice dynamics eigen coupled channel interaction and optimization driven parameter tuning the proposed approach introduces a psi based amortized eigen coupled chaotic lattice mechanism that enables efficient reuse of invariant chaotic structures while maintaining non deterministic behavior bso is employed for adaptive hyperparameter tuning and secure seed generation with cryptographic safeguards ensuring randomness quality furthermore the framework aligns with post quantum security principles through lattice based constructs inspired by learning with errors experimental evaluations demonstrate superior entropy reduced pixel correlation and enhanced resistance to statistical and differential attacks compared to existing schemes making blink suitable for secure multi image encrypted transmission"
+      },
+      "corpus_side": {
+        "doi": "10.1038/s41598-026-59919-4",
+        "title": "Bird swarm optimized chaotic lattice framework for parallel multi image encryption"
+      }
+    }
+  ]
+}

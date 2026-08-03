@@ -1,7 +1,223 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:37:36.978Z",
+  "updated_at": "2026-08-03T13:39:41.821Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:38:36.944Z",
+      "dispatch_id": "effects-wide-MM-15",
+      "github_run_id": 30818854515,
+      "mode": "effects",
+      "scope": "MM-15",
+      "candidates": 27,
+      "cheap": {
+        "candidates": 17,
+        "dropped_ungrounded": 4,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 13
+      },
+      "synthesis": {
+        "into_synthesis": 13,
+        "consolidated": 3,
+        "expanded": 0,
+        "candidates_strong": 10
+      },
+      "strong": {
+        "candidates": 10,
+        "proposed": 7,
+        "proposed_enrich": 0,
+        "merged_into_pending": 3,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "MM-15:cheap:01",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:02",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:03",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:04",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:05",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:06",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:07",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:08",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:09",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "MM-15:cheap:10",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:11",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:12",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:13",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "MM-15:cheap:14",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:15",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "MM-15:cheap:16",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "MM-15:cheap:17",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:strong:02",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-mm-15-redundancy-effect-c1c7ed537b36",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "MM-15:strong:03",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-mm-15-redundancy-effect-c1c7ed537b36",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "MM-15:strong:09",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-mm-15-modality-effect-15a0a9dbcac4",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "MM-15:strong:01",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-content-redundancy-7686ab66e7bd"
+        },
+        {
+          "candidate_id": "MM-15:strong:08",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-extended-reality-digital-storytellin-9679c3ef5fbd"
+        },
+        {
+          "candidate_id": "MM-15:strong:04",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-facial-anthropomorphism-6344b937a3f7"
+        },
+        {
+          "candidate_id": "MM-15:strong:10",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-high-precision-infrared-detection-me-b60d61b33947"
+        },
+        {
+          "candidate_id": "MM-15:strong:06",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-multimedia-principle-c2061e1c96d8"
+        },
+        {
+          "candidate_id": "MM-15:strong:07",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-interactive-multimedia-effectiveness-8a5be62c636d"
+        },
+        {
+          "candidate_id": "MM-15:strong:05",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-signaling-principle-5b48004b7495"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:36:56.159Z",
       "dispatch_id": "effects-wide-PF-16",
@@ -3004,89 +3220,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-la-01-loss-aversion-in-airline-revenue-f18f8a1d516d"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:39:08.996Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "ID-12",
-      "candidates": 7,
-      "cheap": {
-        "candidates": 4,
-        "dropped_ungrounded": 1,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 3
-      },
-      "synthesis": {
-        "into_synthesis": 3,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 3
-      },
-      "strong": {
-        "candidates": 3,
-        "proposed": 3,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "ID-12:cheap:01",
-          "mechanism_id": "ID-12",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "ID-12:cheap:02",
-          "mechanism_id": "ID-12",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "ID-12:strong:02",
-          "mechanism_id": "ID-12",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-id-12-door-in-the-face-technique-150770fda08a"
-        },
-        {
-          "candidate_id": "ID-12:strong:01",
-          "mechanism_id": "ID-12",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-id-12-foot-in-the-door-technique-e05e39523cb4"
-        },
-        {
-          "candidate_id": "ID-12:cheap:03",
-          "mechanism_id": "ID-12",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "quote_not_in_source"
-        },
-        {
-          "candidate_id": "ID-12:cheap:04",
-          "mechanism_id": "ID-12",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "ID-12:strong:03",
-          "mechanism_id": "ID-12",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-id-12-reverse-foot-in-the-door-effect-8ec2c49463ca"
         }
       ]
     }
