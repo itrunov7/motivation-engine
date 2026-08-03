@@ -1,0 +1,56 @@
+{
+  "id": "effect-sc-17-yolov12-enhanced-valve-nozzle-detect-8b5fde38cecb",
+  "type": "effect",
+  "target": "SC-17",
+  "payload": {
+    "id": "yolov12-enhanced-valve-nozzle-detection",
+    "mechanism_id": "SC-17",
+    "name": "YOLOv12-Enhanced valve nozzle detection",
+    "fact": "The YOLOv12-Enhanced model achieves 71.0% mAP50 and 54.4% mAP5095 in industrial valve nozzle detection, outperforming the baseline YOLOv12n.",
+    "grade": "A",
+    "source": [
+      "10.54254/2977-3903/2026.32185"
+    ],
+    "boundary": "Industrial valve nozzle detection.",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "SC-17",
+        "corpus_record_id": "cr_40ccc69d1a2159aa7203ab72",
+        "doi": "10.54254/2977-3903/2026.32185",
+        "title": "YOLOv12-enhanced: multi-scale attention and edge information fusion for industrial valve nozzle detection",
+        "quote_or_locus": "Experimental evaluation on the Pascal VOC dataset shows that the proposed model achieves 71.0% mAP50 and 54.4% mAP5095 under identical training conditions, exceeding the baseline YOLOv12n",
+        "source_span": {
+          "start": 944,
+          "end": 1131,
+          "source_text_sha256": "27914c5efe0832a5af96172006f37e34f19a8e590aa02ed4376a0dbc20df98c1"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "SC-17",
+      "corpus_record_id": "cr_40ccc69d1a2159aa7203ab72",
+      "doi": "10.54254/2977-3903/2026.32185",
+      "title": "YOLOv12-enhanced: multi-scale attention and edge information fusion for industrial valve nozzle detection",
+      "quote_or_locus": "Experimental evaluation on the Pascal VOC dataset shows that the proposed model achieves 71.0% mAP50 and 54.4% mAP5095 under identical training conditions, exceeding the baseline YOLOv12n",
+      "source_span": {
+        "start": 944,
+        "end": 1131,
+        "source_text_sha256": "27914c5efe0832a5af96172006f37e34f19a8e590aa02ed4376a0dbc20df98c1"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.95,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-30818373159",
+  "proposed_at": "2026-08-03T13:32:20.847Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

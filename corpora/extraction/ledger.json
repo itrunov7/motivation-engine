@@ -1,7 +1,319 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:31:25.010Z",
+  "updated_at": "2026-08-03T13:33:26.139Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:32:20.847Z",
+      "dispatch_id": "effects-wide-SC-17",
+      "github_run_id": 30818373159,
+      "mode": "effects",
+      "scope": "SC-17",
+      "candidates": 42,
+      "cheap": {
+        "candidates": 24,
+        "dropped_ungrounded": 4,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 20
+      },
+      "synthesis": {
+        "into_synthesis": 20,
+        "consolidated": 2,
+        "expanded": 0,
+        "candidates_strong": 18
+      },
+      "strong": {
+        "candidates": 18,
+        "proposed": 17,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "SC-17:cheap:01",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:02",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:03",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "doi_unresolved"
+        },
+        {
+          "candidate_id": "SC-17:cheap:04",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:05",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:06",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:07",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "SC-17:cheap:08",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:09",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:10",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:11",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:12",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:13",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:14",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:15",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "SC-17:cheap:16",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "SC-17:cheap:17",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:18",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:19",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:20",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:21",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:22",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:23",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:24",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:strong:01",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-sc-17-banner-blindness-f29299afec5f",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "SC-17:strong:12",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-event-bound-formations-bdc09eb24b46"
+        },
+        {
+          "candidate_id": "SC-17:strong:04",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-binocular-advantage-in-reading-5784246ecbc7"
+        },
+        {
+          "candidate_id": "SC-17:strong:14",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-affective-asymmetry-in-irony-process-2ee94cd3b96f"
+        },
+        {
+          "candidate_id": "SC-17:strong:17",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-ar-and-vr-dwell-time-increase-8b6617c34c79"
+        },
+        {
+          "candidate_id": "SC-17:strong:16",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-ar-and-vr-engagement-bypass-06f63403c9f7"
+        },
+        {
+          "candidate_id": "SC-17:strong:05",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-cognitive-bottleneck-in-auditory-aug-dc74d96c64ed"
+        },
+        {
+          "candidate_id": "SC-17:strong:08",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-fss-net-carotid-artery-segmentation-3865f9ada46c"
+        },
+        {
+          "candidate_id": "SC-17:strong:07",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-fss-net-skin-lesion-segmentation-98b05b378421"
+        },
+        {
+          "candidate_id": "SC-17:strong:09",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-gallery-based-layout-visual-search-e-531db570cdb0"
+        },
+        {
+          "candidate_id": "SC-17:strong:13",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-inductive-ads-a9abbbe52cff"
+        },
+        {
+          "candidate_id": "SC-17:strong:11",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-proximate-microcelebrification-5d051791a98f"
+        },
+        {
+          "candidate_id": "SC-17:strong:10",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-spatial-asymmetry-in-vr-menu-visual--df2e323444b8"
+        },
+        {
+          "candidate_id": "SC-17:strong:06",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-yolov12-enhanced-valve-nozzle-detect-8b5fde38cecb"
+        },
+        {
+          "candidate_id": "SC-17:strong:15",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-cognitive-attraction-in-misinformati-77ea7fd9af28"
+        },
+        {
+          "candidate_id": "SC-17:strong:03",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-h-shape-pattern-4206c045dc02"
+        },
+        {
+          "candidate_id": "SC-17:strong:02",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-native-ad-blindness-ae9ef1eb3142"
+        },
+        {
+          "candidate_id": "SC-17:strong:18",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-ostensive-inferential-social-critici-dc43219effbb"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:30:00.552Z",
       "dispatch_id": "effects-wide-CL-14",
@@ -2620,116 +2932,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-en-03-name-liking-da0153edc05c"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:37:43.467Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "CG-05",
-      "candidates": 11,
-      "cheap": {
-        "candidates": 7,
-        "dropped_ungrounded": 3,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 4
-      },
-      "synthesis": {
-        "into_synthesis": 4,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 4
-      },
-      "strong": {
-        "candidates": 4,
-        "proposed": 4,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "CG-05:cheap:01",
-          "mechanism_id": "CG-05",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "quote_not_in_source"
-        },
-        {
-          "candidate_id": "CG-05:cheap:02",
-          "mechanism_id": "CG-05",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "quote_not_in_source"
-        },
-        {
-          "candidate_id": "CG-05:cheap:03",
-          "mechanism_id": "CG-05",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "quote_not_in_source"
-        },
-        {
-          "candidate_id": "CG-05:cheap:04",
-          "mechanism_id": "CG-05",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "CG-05:cheap:05",
-          "mechanism_id": "CG-05",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "CG-05:strong:02",
-          "mechanism_id": "CG-05",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-cg-05-backward-curiosity-272a17837abd"
-        },
-        {
-          "candidate_id": "CG-05:strong:01",
-          "mechanism_id": "CG-05",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-cg-05-forward-curiosity-9553fd539dc9"
-        },
-        {
-          "candidate_id": "CG-05:cheap:06",
-          "mechanism_id": "CG-05",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "CG-05:cheap:07",
-          "mechanism_id": "CG-05",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "CG-05:strong:03",
-          "mechanism_id": "CG-05",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-cg-05-rhetorical-mirage-18dfa09ba93c"
-        },
-        {
-          "candidate_id": "CG-05:strong:04",
-          "mechanism_id": "CG-05",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-cg-05-black-metaphors-4f7c25342a07"
         }
       ]
     }
