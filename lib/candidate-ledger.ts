@@ -39,6 +39,7 @@ const FATE_STAGE: Record<CandidateFate, "cheap" | "strong" | "either"> = {
   proposed_enrich: "strong",
   merged_into_pending: "strong",
   held_low_confidence: "strong",
+  held_non_transferable: "strong",
   failed_validation: "strong",
   dropped_volume_cap: "strong",
   dropped_draft_cap: "strong",
@@ -153,11 +154,12 @@ export function checkLedgerBalance(run: CandidateLedgerRun): string[] {
         strong.proposed_enrich +
         strong.merged_into_pending +
         strong.held_low_confidence +
+        (strong.held_non_transferable ?? 0) +
         strong.failed_validation +
         strong.dropped_ungrounded +
         strong.dropped_volume_cap +
         strong.dropped_draft_cap,
-      "proposed + proposed_enrich + merged_into_pending + held_low_confidence + failed_validation + dropped_ungrounded_strong + dropped_volume_cap + dropped_draft_cap",
+      "proposed + proposed_enrich + merged_into_pending + held_low_confidence + held_non_transferable + failed_validation + dropped_ungrounded_strong + dropped_volume_cap + dropped_draft_cap",
     );
   }
 
@@ -179,6 +181,7 @@ export function checkLedgerBalance(run: CandidateLedgerRun): string[] {
           strong.proposed_enrich,
           strong.merged_into_pending,
           strong.held_low_confidence,
+          strong.held_non_transferable ?? 0,
           strong.failed_validation,
           strong.dropped_ungrounded,
           strong.dropped_volume_cap,

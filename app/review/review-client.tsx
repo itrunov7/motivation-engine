@@ -728,6 +728,35 @@ function ProposalCard({
           It remains visible for inspection but cannot be approved unless a later
           grounded run strengthens and merges it.
         </p>
+      ) : proposal.status === "held_non_transferable" ? (
+        <div className="mt-4 text-xs text-[#E4B54E]">
+          <p>
+            Held by the transferability rules: grounded, but nothing here names
+            something a product surface could act on. Nothing was discarded — the
+            record and the reasoning below both stay, and no source record was
+            marked as read because of this.
+          </p>
+          {proposal.transferability && (
+            <dl className="mt-3 space-y-1 font-mono text-[10px] text-[#8CA495]">
+              {proposal.transferability.checks.map((check) => (
+                <div key={check.check} className="flex gap-2">
+                  <dt
+                    className={
+                      check.outcome === "fail"
+                        ? "w-24 shrink-0 uppercase text-[#F87171]"
+                        : check.outcome === "warn"
+                          ? "w-24 shrink-0 uppercase text-[#E4B54E]"
+                          : "w-24 shrink-0 uppercase text-[#34D399]"
+                    }
+                  >
+                    {check.check}
+                  </dt>
+                  <dd>{check.reason}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
       ) : (
         <p className="mt-4 text-xs text-[#7C93A8]">
           Decided by {proposal.decided_by ?? "unknown"} at{" "}
@@ -963,18 +992,17 @@ export default function ReviewClient({
   const router = useRouter();
   const cardNodes = useRef(new Map<string, HTMLElement>());
 
+  // Both held statuses drop out of the primary queue: neither can be acted on,
+  // and the point of the transferability pass is that its holds cost the
+  // reader nothing. They stay listed below, in full, with their reasons.
+  const isHeld = (status: string): boolean =>
+    status === "held_low_confidence" || status === "held_non_transferable";
   const held = useMemo(
-    () =>
-      proposals.filter(
-        (item) => item.proposal.status === "held_low_confidence",
-      ),
+    () => proposals.filter((item) => isHeld(item.proposal.status)),
     [proposals],
   );
   const primary = useMemo(
-    () =>
-      proposals.filter(
-        (item) => item.proposal.status !== "held_low_confidence",
-      ),
+    () => proposals.filter((item) => !isHeld(item.proposal.status)),
     [proposals],
   );
   const navigable = useMemo(() => [...primary, ...held], [primary, held]);
@@ -1194,11 +1222,13 @@ export default function ReviewClient({
       {held.length > 0 && (
         <details className="rounded-lg border border-[#E4B54E]/30 bg-[#151F1A] p-4">
           <summary className="cursor-pointer font-display text-lg text-[#E4B54E]">
-            Low-confidence bucket · {held.length}
+            Held bucket · {held.length}
           </summary>
           <p className="mt-2 text-xs text-[#8CA495]">
-            Collapsed by default. These grounded items did not clear the configured
-            confidence floor or added no material enrichment.
+            Collapsed by default. These grounded items did not clear the
+            configured confidence floor, added no material enrichment, or were
+            held by the transferability rules. Nothing here was discarded: each
+            card carries the reason it was set aside.
           </p>
           <div className="mt-4 space-y-4">{held.map(renderCard)}</div>
         </details>

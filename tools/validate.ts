@@ -80,6 +80,11 @@ import {
   checkLedgerBalance,
   checkLedgerDetail,
 } from "../lib/candidate-ledger";
+import {
+  judgeTransferability,
+  transferabilityClaimOfProposal,
+  transferabilityDrift,
+} from "../lib/transferability";
 import type {
   BenchmarkFile,
   BenchmarkMetric,
@@ -96,6 +101,7 @@ import type {
   ReaderCoverageFile,
   RealizationCorpusProvenanceItem,
   RejectedCandidateFile,
+  Proposal,
   Segment,
   SegmentCandidate,
 } from "../lib/types";
@@ -2851,14 +2857,17 @@ function main(): void {
           if (
             (proposal.status === "pending" ||
               proposal.status === "edited" ||
-              proposal.status === "held_low_confidence") &&
+              proposal.status === "held_low_confidence" ||
+              proposal.status === "held_non_transferable") &&
             (proposal.decided_by !== null || proposal.decided_at !== null)
           ) {
             fail(file, `${proposal.status} proposal must not carry a decider`);
             ok = false;
           }
           if (
-            (proposal.status === "pending" || proposal.status === "held_low_confidence") &&
+            (proposal.status === "pending" ||
+              proposal.status === "held_low_confidence" ||
+              proposal.status === "held_non_transferable") &&
             proposal.decision_note !== null
           ) {
             fail(file, `${proposal.status} proposal must not carry a decision_note`);
@@ -2878,6 +2887,32 @@ function main(): void {
               proposal.decision_note.trim().length === 0)
           ) {
             fail(file, "rejected proposal must carry a non-empty decision_note");
+            ok = false;
+          }
+          // D-160. The rules are pure and read only what this file already
+          // stores, so "would today's rules still say this?" is answerable here
+          // for free — and a stored verdict that no longer replays is the exact
+          // drift the ruleset version exists to surface.
+          const storedVerdict = (proposal as unknown as Proposal).transferability;
+          if (storedVerdict) {
+            const claim = transferabilityClaimOfProposal(proposal as unknown as Proposal);
+            if (!claim) {
+              fail(file, "carries a transferability verdict but is not a judgeable claim");
+              ok = false;
+            } else {
+              const drift = transferabilityDrift(storedVerdict, judgeTransferability(claim));
+              if (drift) {
+                fail(file, `stored transferability verdict no longer replays: ${drift}`);
+                ok = false;
+              }
+            }
+            if (storedVerdict.transferable && proposal.status === "held_non_transferable") {
+              fail(file, "held as not transferable while its own verdict says transferable");
+              ok = false;
+            }
+          }
+          if (proposal.status === "held_non_transferable" && !storedVerdict) {
+            fail(file, "held_non_transferable proposal must carry the verdict that held it");
             ok = false;
           }
           if (
@@ -2902,7 +2937,8 @@ function main(): void {
             proposal.payload &&
             (proposal.status === "pending" ||
               proposal.status === "edited" ||
-              proposal.status === "held_low_confidence") &&
+              proposal.status === "held_low_confidence" ||
+              proposal.status === "held_non_transferable") &&
             typeof proposal.payload.pattern === "string"
           ) {
             const parameters = Array.isArray(proposal.payload.parameters)
@@ -3132,7 +3168,8 @@ function main(): void {
             typeof payloadId === "string" &&
             (proposal.status === "pending" ||
               proposal.status === "edited" ||
-              proposal.status === "held_low_confidence")
+              proposal.status === "held_low_confidence" ||
+              proposal.status === "held_non_transferable")
           ) {
             const key = `${proposal.type}s/${proposal.target}/${payloadId}.json`;
             pendingRecordPaths.set(key, [

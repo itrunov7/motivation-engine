@@ -1289,7 +1289,10 @@ export async function prepareProposalDecision(
     builder,
     request.decidedAt,
     `Proposal ${applied.proposalId} ${applied.actionPast}`,
-    `Owner ${request.decidedBy.trim()} ${applied.actionPast} ${applied.proposalType} proposal ` +
+    // The decider names itself. The literal "Owner" that stood here was true of
+    // every decision until one was delegated, and a log that calls a delegate
+    // the owner destroys the only fact the field exists to carry (D-159).
+    `${request.decidedBy.trim()} ${applied.actionPast} ${applied.proposalType} proposal ` +
       `${applied.proposalId} for ${applied.target}. ` +
       outcome +
       (reason ? ` Reason: ${reason}` : ""),
@@ -1375,7 +1378,7 @@ export async function prepareBatchProposalDecision(
     builder,
     request.decidedAt,
     `Batch ${actionPast(request.action)} ${appliedItems.length} proposals`,
-    `Owner ${request.decidedBy.trim()} completed one atomic batch. Outcomes: ${enumeration}. ` +
+    `${request.decidedBy.trim()} completed one atomic batch. Outcomes: ${enumeration}. ` +
       (request.action === "approve"
         ? "Every proposal and projected artifact was validated before the single commit."
         : "No authoritative artifact was changed.") +

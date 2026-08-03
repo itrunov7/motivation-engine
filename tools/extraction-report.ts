@@ -284,6 +284,7 @@ function main(): void {
       bump(ledgerTotals, "enrich", entry.strong.proposed_enrich);
       bump(ledgerTotals, "merged", entry.strong.merged_into_pending);
       bump(ledgerTotals, "held", entry.strong.held_low_confidence);
+      bump(ledgerTotals, "held_nt", entry.strong.held_non_transferable ?? 0);
       bump(ledgerTotals, "failed_validation", entry.strong.failed_validation);
       bump(ledgerTotals, "ungr_strong", entry.strong.dropped_ungrounded);
       bump(ledgerTotals, "vcap", entry.strong.dropped_volume_cap);
@@ -321,11 +322,12 @@ function main(): void {
         get("enrich") +
         get("merged") +
         get("held") +
+        get("held_nt") +
         get("failed_validation") +
         get("ungr_strong") +
         get("vcap") +
         get("draft_cap"),
-      "proposed + proposed_enrich + merged_into_pending + held_low_confidence + failed_validation + dropped_ungrounded_strong + dropped_volume_cap + dropped_draft_cap",
+      "proposed + proposed_enrich + merged_into_pending + held_low_confidence + held_non_transferable + failed_validation + dropped_ungrounded_strong + dropped_volume_cap + dropped_draft_cap",
     ],
   ];
   for (const [label, left, leftExpr, right, rightExpr] of equations) {

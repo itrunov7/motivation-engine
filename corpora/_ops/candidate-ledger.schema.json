@@ -120,7 +120,7 @@
       "additionalProperties": false
     },
     "strongStage": {
-      "description": "candidates == proposed + proposed_enrich + merged_into_pending + held_low_confidence + failed_validation + dropped_ungrounded + dropped_volume_cap + dropped_draft_cap.",
+      "description": "candidates == proposed + proposed_enrich + merged_into_pending + held_low_confidence + held_non_transferable + failed_validation + dropped_ungrounded + dropped_volume_cap + dropped_draft_cap. held_non_transferable is optional: every run before D-160 predates the transferability pass and took no such measurement, and writing 0 into those runs would assert one.",
       "type": "object",
       "properties": {
         "candidates": { "type": "integer", "minimum": 0 },
@@ -136,6 +136,11 @@
           "minimum": 0
         },
         "held_low_confidence": { "type": "integer", "minimum": 0 },
+        "held_non_transferable": {
+          "description": "Held by the transferability rules (D-160). Optional: absent means the run predates the pass, which is not the same as a run that judged nothing non-transferable.",
+          "type": "integer",
+          "minimum": 0
+        },
         "failed_validation": { "type": "integer", "minimum": 0 },
         "dropped_ungrounded": { "type": "integer", "minimum": 0 },
         "dropped_volume_cap": { "type": "integer", "minimum": 0 },
@@ -197,6 +202,7 @@
             "proposed_enrich",
             "merged_into_pending",
             "held_low_confidence",
+            "held_non_transferable",
             "failed_validation",
             "dropped_volume_cap",
             "dropped_draft_cap"

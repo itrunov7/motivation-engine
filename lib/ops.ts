@@ -522,6 +522,8 @@ export interface ExtractionRunSummary {
   /** Null for runs committed before D-091 introduced this counter. */
   failedValidation: number | null;
   heldLowConfidence: number;
+  /** Null for runs committed before D-160 introduced the transferability pass. */
+  heldNonTransferable: number | null;
   droppedVolumeCap: number;
   droppedVolumeCapHighConfidence: number;
   /** Relevance funnel (D-090); 0 for runs predating the funnel counters. */
@@ -594,6 +596,7 @@ export function loadExtractionRunSummary(): ExtractionRunSummary | undefined {
     droppedUngrounded: number("dropped_ungrounded"),
     failedValidation: optionalNumber("failed_validation"),
     heldLowConfidence: number("held_low_confidence"),
+    heldNonTransferable: optionalNumber("held_non_transferable"),
     droppedVolumeCap: number("dropped_volume_cap"),
     droppedVolumeCapHighConfidence: number("dropped_volume_cap_high_confidence"),
     recordsEligible: number("records_eligible"),

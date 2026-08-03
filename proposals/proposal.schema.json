@@ -51,17 +51,29 @@
     },
     "status": {
       "type": "string",
-      "enum": ["pending", "approved", "rejected", "edited", "held_low_confidence"]
+      "enum": [
+        "pending",
+        "approved",
+        "rejected",
+        "edited",
+        "held_low_confidence",
+        "held_non_transferable"
+      ]
     },
     "hold_reason": {
       "anyOf": [
         {
           "type": "string",
-          "enum": ["below_confidence_floor", "no_material_enrichment"]
+          "enum": [
+            "below_confidence_floor",
+            "no_material_enrichment",
+            "not_transferable"
+          ]
         },
         { "type": "null" }
       ]
     },
+    "transferability": { "$ref": "#/$defs/transferabilityVerdict" },
     "decided_by": {
       "type": ["string", "null"],
       "minLength": 1
@@ -97,16 +109,38 @@
   "allOf": [
     {
       "if": {
-        "properties": { "status": { "const": "held_low_confidence" } },
+        "properties": {
+          "status": {
+            "enum": ["held_low_confidence", "held_non_transferable"]
+          }
+        },
         "required": ["status"]
       },
       "then": {
-        "properties": {
-          "hold_reason": {
-            "type": "string",
-            "enum": ["below_confidence_floor", "no_material_enrichment"]
+        "allOf": [
+          {
+            "if": {
+              "properties": { "status": { "const": "held_low_confidence" } },
+              "required": ["status"]
+            },
+            "then": {
+              "properties": {
+                "hold_reason": {
+                  "type": "string",
+                  "enum": ["below_confidence_floor", "no_material_enrichment"]
+                }
+              }
+            },
+            "else": {
+              "description": "A transferability hold states the verdict that produced it. A held record with no stored reasoning is the irreversible-filter-without-diagnostics failure the hold exists to avoid.",
+              "properties": {
+                "hold_reason": { "const": "not_transferable" },
+                "transferability": { "$ref": "#/$defs/transferabilityVerdict" }
+              },
+              "required": ["transferability"]
+            }
           }
-        }
+        ]
       },
       "else": {
         "properties": { "hold_reason": { "type": "null" } }
@@ -202,6 +236,52 @@
     "doi": {
       "type": "string",
       "pattern": "^10\\.\\d{4,9}/\\S+$"
+    },
+    "transferabilityVerdict": {
+      "description": "What the transferability rules decided about this claim, and why (D-160). Judged at extraction from the claim alone — fact, boundary, source title — never from the source text, which is what makes it replayable offline from this file with no corpus and no network. A refusal never drops the candidate and never writes reader coverage: it produces status=held_non_transferable carrying this verdict, so the record and its reasoning both survive. Absent on everything written before the pass existed and on everything hand-authored, because a verdict invented for a claim no rule ever judged would be an assertion wearing the pipeline's authority.",
+      "type": "object",
+      "properties": {
+        "ruleset_version": {
+          "description": "Which version of the rules produced this verdict. A stored verdict is only interpretable next to them.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "transferable": { "type": "boolean" },
+        "escalated_by_warning_pair": {
+          "description": "True when no single check refused and the verdict turned on the subject+population warning pair — the one scoring rule the owner did not specify outright, kept separable so its effect can always be measured on its own.",
+          "type": "boolean"
+        },
+        "checks": {
+          "description": "All four checks, always, in order: subject, variable, direction, population.",
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "properties": {
+              "check": {
+                "type": "string",
+                "enum": ["subject", "variable", "direction", "population"]
+              },
+              "outcome": {
+                "description": "fail refuses on its own; warn refuses only in company; pass admits.",
+                "type": "string",
+                "enum": ["pass", "warn", "fail"]
+              },
+              "reason": { "type": "string", "minLength": 1 }
+            },
+            "required": ["check", "outcome", "reason"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "ruleset_version",
+        "transferable",
+        "escalated_by_warning_pair",
+        "checks"
+      ],
+      "additionalProperties": false
     },
     "provenanceItem": {
       "oneOf": [

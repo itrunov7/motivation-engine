@@ -83,6 +83,7 @@ function ExtractionRunPanel({ run }: { run: ExtractionRunSummary | null }) {
         ["dropped ungrounded", run.droppedUngrounded],
         ["failed validation", run.failedValidation],
         ["held low confidence", run.heldLowConfidence],
+        ["held not transferable", run.heldNonTransferable],
         ["dropped at volume cap", run.droppedVolumeCap],
         ["high-confidence overflow", run.droppedVolumeCapHighConfidence],
       ]

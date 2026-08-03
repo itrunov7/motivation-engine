@@ -9,6 +9,10 @@ export const PROPOSAL_STATUS_META: Record<
   approved: { label: "approved", actionable: false },
   rejected: { label: "rejected", actionable: false },
   held_low_confidence: { label: "held — low confidence", actionable: false },
+  held_non_transferable: {
+    label: "held — not transferable",
+    actionable: false,
+  },
 };
 
 export function isActionableProposal(proposal: Proposal): boolean {

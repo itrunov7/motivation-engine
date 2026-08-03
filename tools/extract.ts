@@ -32,6 +32,10 @@ import {
 } from "../lib/ops";
 import { EXTRACTION_RUN_ID_PREFIX } from "../lib/proposal-meta";
 import {
+  judgeTransferability,
+  transferabilityClaimOfProposal,
+} from "../lib/transferability";
+import {
   evidenceSourceText,
   groundingErrors,
   hasNovelEnrichment,
@@ -832,6 +836,15 @@ export interface ExtractionStats {
   /** Written to the queue as an enrichment of an approved artifact. */
   proposed_enrich: number;
   held_low_confidence: number;
+  /**
+   * Grounded, and refused by the transferability rules (D-160). A HELD fate,
+   * not a dropped one: the proposal file is written with the verdict that held
+   * it, and no reader coverage is consumed, so the record can always be
+   * reconsidered. Counted separately from held_low_confidence because the two
+   * say different things — one is "we are unsure", the other is "there is
+   * nothing here a product can act on".
+   */
+  held_non_transferable: number;
   dropped_volume_cap: number;
   dropped_volume_cap_high_confidence: number;
   /**
@@ -1041,6 +1054,7 @@ export function extractionSummaryParams(
     dropped_ungrounded: String(stats.dropped_ungrounded),
     failed_validation: String(stats.failed_validation),
     held_low_confidence: String(stats.held_low_confidence),
+    held_non_transferable: String(stats.held_non_transferable),
     dropped_volume_cap: String(stats.dropped_volume_cap),
     dropped_volume_cap_high_confidence: String(
       stats.dropped_volume_cap_high_confidence,
@@ -3195,6 +3209,10 @@ function existingMatches(): ExistingMatch[] {
   for (const file of listJsonRecursive(PROPOSALS_DIR)) {
     if (basename(file) === "proposal.schema.json") continue;
     const proposal = readJson<Proposal>(file);
+    // held_non_transferable is deliberately absent (D-160). A held record is a
+    // valid merge target only if a later candidate merging into it could still
+    // be reviewed; merging into a non-transferable hold would silently bury a
+    // candidate the rules never judged.
     if (
       proposal.status === "pending" ||
       proposal.status === "edited" ||
@@ -3587,6 +3605,7 @@ export async function runExtraction(args: {
     merged_into_pending: 0,
     proposed_enrich: 0,
     held_low_confidence: 0,
+    held_non_transferable: 0,
     dropped_volume_cap: 0,
     dropped_volume_cap_high_confidence: 0,
     dropped_draft_cap: 0,
@@ -4152,10 +4171,53 @@ export async function runExtraction(args: {
           reportValidationFailure(validate, "candidate", mechanismId);
           continue;
         }
+
+        // D-160 — transferability. The last question asked before a grounded
+        // claim can become an actionable proposal: is there anything here a
+        // product surface could act on? Judged from the claim alone, so it
+        // costs nothing and replays offline from the written file.
+        //
+        // A refusal HOLDS rather than drops. Nothing below writes reader
+        // coverage, deletes a candidate, or marks a source record terminal —
+        // the record and the reasoning that set it aside both survive in the
+        // queue, one owner action away from being reconsidered. That is the
+        // whole difference between this gate and the relevance skip, which
+        // removes a record from consideration with no diagnostic at all.
+        const claim = transferabilityClaimOfProposal(proposal);
+        const verdict = claim ? judgeTransferability(claim) : null;
+        // Recorded on admitted claims too: a gate that files only its refusals
+        // cannot be audited for what it let through.
+        const judged = verdict
+          ? ({ ...proposal, transferability: verdict } as Proposal)
+          : proposal;
+        if (verdict && !verdict.transferable) {
+          const heldProposal = {
+            ...judged,
+            status: "held_non_transferable",
+            hold_reason: "not_transferable",
+          } as Proposal;
+          if (!validate(heldProposal)) {
+            failedValidation();
+            reportValidationFailure(validate, "non-transferable hold", mechanismId);
+            continue;
+          }
+          held.push(heldProposal);
+          stats.held_non_transferable += 1;
+          candidateLedger.record({
+            candidate_id: candidateId,
+            mechanism_id: mechanismId,
+            pass: "strong",
+            fate: "held_non_transferable",
+            proposal_id: heldProposal.id,
+            attribution: "recorded",
+          });
+          continue;
+        }
+
         const duplicate = existing
           .map((entry) => ({
             entry,
-            score: proposalSimilarity(entry.proposal, proposal),
+            score: proposalSimilarity(entry.proposal, judged),
           }))
           .filter(({ score }) => score >= args.config.limits.duplicate_similarity)
           .sort(
@@ -4166,7 +4228,7 @@ export async function runExtraction(args: {
 
         if (duplicate && !duplicate.authoritative) {
           const previous = duplicate.proposal;
-          let merged = mergeProposals(duplicate.proposal, proposal);
+          let merged = mergeProposals(duplicate.proposal, judged);
           if (
             previous.status === "held_low_confidence" &&
             merged.confidence >= args.config.limits.confidence_floor &&
@@ -4207,14 +4269,14 @@ export async function runExtraction(args: {
           continue;
         }
 
-        let gatedProposal = proposal;
+        let gatedProposal = judged;
         let outcome: "proposed" | "proposed_enrich" = "proposed";
         let addsValue = true;
         if (duplicate?.authoritative) {
-          const merged = mergeProposals(duplicate.proposal, proposal);
+          const merged = mergeProposals(duplicate.proposal, judged);
           addsValue = hasNovelEnrichment(duplicate.proposal, merged);
           gatedProposal = {
-            ...proposal,
+            ...judged,
             operation: "enrich",
             payload: merged.payload,
             provenance: merged.provenance,
@@ -4400,6 +4462,7 @@ export async function runExtraction(args: {
     dropped_ungrounded: stats.dropped_ungrounded,
     failed_validation: stats.failed_validation,
     held_low_confidence: stats.held_low_confidence,
+    held_non_transferable: stats.held_non_transferable,
     dropped_volume_cap: stats.dropped_volume_cap,
     dropped_volume_cap_high_confidence:
       stats.dropped_volume_cap_high_confidence,

@@ -9,6 +9,7 @@ import {
   LocalRepositorySnapshot,
 } from "../lib/local-transaction";
 import {
+  prepareBatchProposalDecision,
   prepareProposalDecision,
   PROPOSAL_TYPES,
   type ProposalDecisionRequest,
@@ -27,7 +28,8 @@ function usage(): never {
       "  npm run proposal -- list\n" +
       "  npm run proposal -- show proposals/{type}/{id}.json\n" +
       "  npm run proposal -- approve|reject proposals/{type}/{id}.json [--actor=owner] [--reason=text]\n" +
-      "  npm run proposal -- edit proposals/{type}/{id}.json --payload-json='{...}' [--confidence=0.55] [--actor=owner]",
+      "  npm run proposal -- edit|edit-approve proposals/{type}/{id}.json --payload-json='{...}' [--confidence=0.55] [--actor=owner] [--reason=text]\n" +
+      "  npm run proposal -- batch-reject proposals/a.json proposals/b.json --reason=text [--actor=owner]",
   );
   process.exit(1);
 }
@@ -63,25 +65,54 @@ async function main(): Promise<void> {
     process.stdout.write(readFileSync(join(ROOT, proposalPath), "utf8"));
     return;
   }
+
+  const actor = option("actor") ?? process.env.REVIEW_DECIDED_BY ?? "owner";
+
+  // One reason, one decision entry, many proposals: the shape a verdict takes
+  // when it is a rule applied to a set rather than a judgement of one record.
+  if (command === "batch-reject") {
+    const paths = process.argv.slice(3).filter((argument) => !argument.startsWith("--"));
+    const reason = option("reason");
+    if (paths.length === 0 || !reason) usage();
+    const batch = await prepareBatchProposalDecision(new LocalRepositorySnapshot(ROOT), {
+      proposalPaths: paths,
+      action: "reject",
+      decidedBy: actor,
+      decidedAt: new Date().toISOString(),
+      reason,
+      schemaRoot: ROOT,
+    });
+    await applyLocalTransaction(ROOT, batch);
+    console.log(
+      `batch-reject ${batch.proposalIds.length} proposals; ` +
+        `${batch.mutations.length} files changed; decision ${batch.decisionId}`,
+    );
+    return;
+  }
+
   if (
     !proposalPath ||
-    (command !== "approve" && command !== "reject" && command !== "edit")
+    (command !== "approve" &&
+      command !== "reject" &&
+      command !== "edit" &&
+      command !== "edit-approve")
   ) {
     usage();
   }
+  const editing = command === "edit" || command === "edit-approve";
 
   let editedPayload: unknown;
-  if (command === "edit") {
+  if (editing) {
     const payloadJson = option("payload-json");
     if (!payloadJson) usage();
     editedPayload = JSON.parse(payloadJson);
   }
   const rawConfidence = option("confidence");
-  if (rawConfidence !== undefined && command !== "edit") usage();
+  if (rawConfidence !== undefined && !editing) usage();
   const request: ProposalDecisionRequest = {
     proposalPath,
-    action: command,
-    decidedBy: option("actor") ?? process.env.REVIEW_DECIDED_BY ?? "owner",
+    action: command === "edit-approve" ? "edit_approve" : command,
+    decidedBy: actor,
     decidedAt: new Date().toISOString(),
     reason: option("reason"),
     editedPayload,

@@ -516,6 +516,57 @@ export interface Dossier {
   flag_completes_core?: boolean;
 }
 
+// ---------- Transferability (D-160) ----------
+
+/**
+ * The four questions asked of a grounded claim before it becomes a proposal.
+ * Order is fixed because a verdict is read as a sentence, not a set.
+ */
+export const TRANSFERABILITY_CHECKS = [
+  /** Is this about a person and an artifact, a person in an institution, or neither? */
+  "subject",
+  /** Does it name something an interface can actually change? */
+  "variable",
+  /** Does it state a direction, or only describe? */
+  "direction",
+  /** Does it depend on expertise the general product user does not have? */
+  "population",
+] as const;
+
+export type TransferabilityCheck = (typeof TRANSFERABILITY_CHECKS)[number];
+
+/**
+ * `fail` refuses on its own; `warn` only refuses in company (see
+ * lib/transferability.ts). The distinction is the whole point: a classroom
+ * finding about layout is a warning, not a refusal.
+ */
+export type TransferabilityOutcome = "pass" | "warn" | "fail";
+
+export interface TransferabilityCheckResult {
+  check: TransferabilityCheck;
+  outcome: TransferabilityOutcome;
+  /**
+   * Why, in words — stated for passes as well as refusals. A verdict that
+   * records only its failures cannot be argued with, and the reason strings are
+   * what make an offline replay reviewable rather than merely reproducible.
+   */
+  reason: string;
+}
+
+export interface TransferabilityVerdict {
+  /** Bumped whenever the rules change, so a stored verdict names the rules that produced it. */
+  ruleset_version: number;
+  transferable: boolean;
+  /** All four checks, always, in TRANSFERABILITY_CHECKS order. */
+  checks: TransferabilityCheckResult[];
+  /**
+   * True when no single check refused and the verdict turned on the pair of
+   * warnings instead. Recorded separately because that rule is the one part of
+   * the scoring the owner did not specify outright.
+   */
+  escalated_by_warning_pair: boolean;
+}
+
 // ---------- Universal proposal store (/proposals, D-076) ----------
 
 export type ProposalType =
@@ -532,7 +583,14 @@ export type ProposalStatus =
   | "approved"
   | "rejected"
   | "edited"
-  | "held_low_confidence";
+  | "held_low_confidence"
+  /**
+   * Grounded, and refused by the transferability rules at extraction (D-160).
+   * A held status rather than a drop: the candidate is written, kept out of the
+   * actionable queue, and recoverable by one owner action. Nothing is destroyed
+   * and no reader coverage is consumed.
+   */
+  | "held_non_transferable";
 
 export type ProposalOperation = "create" | "enrich";
 
@@ -609,7 +667,18 @@ export interface ProposalEnvelope<TType extends ProposalType, TPayload> {
   /** ISO timestamp. */
   proposed_at: string;
   status: ProposalStatus;
-  hold_reason: "below_confidence_floor" | "no_material_enrichment" | null;
+  hold_reason:
+    | "below_confidence_floor"
+    | "no_material_enrichment"
+    | "not_transferable"
+    | null;
+  /**
+   * Why the transferability rules admitted or refused this claim (D-160).
+   * Absent on everything written before the pass existed, and on anything
+   * hand-authored: a verdict invented for a claim no rule ever judged would be
+   * the same substitution `span_role` was introduced to prevent.
+   */
+  transferability?: TransferabilityVerdict;
   decided_by: string | null;
   /** ISO timestamp, or null before a decision. */
   decided_at: string | null;
@@ -1424,6 +1493,11 @@ export interface RunProgressSummary {
   dropped_ungrounded: number;
   failed_validation: number;
   held_low_confidence: number;
+  /**
+   * Held by the transferability rules (D-160). Optional so runs recorded before
+   * the pass existed read as "not measured" rather than as a measured zero.
+   */
+  held_non_transferable?: number;
   dropped_volume_cap: number;
   dropped_volume_cap_high_confidence: number;
   candidates: number;
@@ -1601,6 +1675,12 @@ export const CANDIDATE_FATES = [
   "merged_into_pending",
   /** Written to the queue held below the confidence floor, or adding nothing. */
   "held_low_confidence",
+  /**
+   * Written to the queue held by the transferability rules (D-160). A held
+   * fate, not a dropped one: the proposal file exists, carries the verdict that
+   * set it aside, and one owner action puts it back in play.
+   */
+  "held_non_transferable",
   /** Refused by the proposal schema after provenance was assembled. */
   "failed_validation",
   /** Admissible but beyond max_proposals_per_mechanism. */
@@ -1666,6 +1746,14 @@ export interface CandidateLedgerStrongStage {
   dropped_ungrounded: number;
   dropped_volume_cap: number;
   dropped_draft_cap: number;
+  /**
+   * Optional, because every run before D-160 predates the transferability pass
+   * and wrote no such counter. Absent means the run could not produce this
+   * fate; writing 0 into those runs would assert a measurement nobody took.
+   * Read as 0 by the balance equation, which is sound only because the fate did
+   * not exist then.
+   */
+  held_non_transferable?: number;
 }
 
 /**

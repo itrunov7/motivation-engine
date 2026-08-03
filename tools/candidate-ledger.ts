@@ -154,6 +154,7 @@ export class CandidateLedger {
       proposed_enrich: this.count("strong", "proposed_enrich"),
       merged_into_pending: this.count("strong", "merged_into_pending"),
       held_low_confidence: this.count("strong", "held_low_confidence"),
+      held_non_transferable: this.count("strong", "held_non_transferable"),
       failed_validation: this.count("strong", "failed_validation"),
       dropped_ungrounded: this.count("strong", "dropped_ungrounded"),
       dropped_volume_cap: this.count("strong", "dropped_volume_cap"),
