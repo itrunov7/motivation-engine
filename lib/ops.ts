@@ -282,11 +282,21 @@ export function validateExtractionOpsConfig(data: unknown): string[] {
       "per_run_tokens",
       "monthly_tokens",
       "records_per_batch",
-      "max_proposals_per_mechanism",
     ] as const) {
       if (!isNonNegativeInteger(data.limits[key]) || data.limits[key] < 1) {
         errors.push(`limits.${key} must be an integer ≥ 1`);
       }
+    }
+    // null is a configured verdict, not a missing value: the per-slice proposal
+    // ceiling is off (D-143). Absent or non-integer still fails.
+    if (
+      data.limits.max_proposals_per_mechanism !== null &&
+      (!isNonNegativeInteger(data.limits.max_proposals_per_mechanism) ||
+        data.limits.max_proposals_per_mechanism < 1)
+    ) {
+      errors.push(
+        "limits.max_proposals_per_mechanism must be an integer ≥ 1, or null for no ceiling",
+      );
     }
     for (const key of ["confidence_floor", "duplicate_similarity"] as const) {
       if (

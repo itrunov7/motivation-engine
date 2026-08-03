@@ -396,6 +396,29 @@ test("the quote config guard fails with an explicit named message (D-088)", () =
   assert.equal(validateExtractionOpsConfig(configured).length, 0);
 });
 
+test("a null per-slice proposal ceiling is a configured verdict, not a missing value (D-143)", () => {
+  const uncapped = {
+    ...configured,
+    limits: { ...configured.limits, max_proposals_per_mechanism: null },
+  };
+  assert.deepEqual(validateExtractionOpsConfig(uncapped), []);
+
+  // Absent still fails: only an explicit null turns the ceiling off, so a
+  // dropped field can never be read as "no cap".
+  for (const bad of [undefined, 0, -1, 2.5, "none"]) {
+    const errors = validateExtractionOpsConfig({
+      ...configured,
+      limits: { ...configured.limits, max_proposals_per_mechanism: bad },
+    });
+    assert(
+      errors.some((error) =>
+        error.includes("limits.max_proposals_per_mechanism"),
+      ),
+      `expected a named error for ${String(bad)}`,
+    );
+  }
+});
+
 test("manifest cost accounts for each configured model and reconciles totals", () => {
   const cost = buildExtractionManifestCost(
     configured,

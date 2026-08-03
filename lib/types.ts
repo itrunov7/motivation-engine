@@ -1232,7 +1232,14 @@ export interface ExtractionOpsConfig {
     records_per_batch: number;
     confidence_floor: number;
     duplicate_similarity: number;
-    max_proposals_per_mechanism: number;
+    /**
+     * Count ceiling on proposals admitted per mechanism per SLICE, or null for
+     * no ceiling (D-143). Slice size is a consequence of the token budget, so a
+     * count cap makes yield depend on how the budget happened to be cut rather
+     * than on any property of the candidate; null is the honest way to say the
+     * ceiling is off, since a large integer is still a ceiling.
+     */
+    max_proposals_per_mechanism: number | null;
   };
 }
 

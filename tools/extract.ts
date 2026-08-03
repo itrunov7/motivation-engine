@@ -4275,13 +4275,14 @@ export async function runExtraction(args: {
             proposalIdentity(right.proposal),
           ),
       );
-      const admitted = admissible.slice(
-        0,
-        args.config.limits.max_proposals_per_mechanism,
-      );
-      const overflow = admissible.slice(
-        args.config.limits.max_proposals_per_mechanism,
-      );
+      // null disables the ceiling (D-143), so every admissible candidate is
+      // written and dropped_volume_cap reports a MEASURED zero rather than the
+      // absence of a counter.
+      const volumeCap = args.config.limits.max_proposals_per_mechanism;
+      const admitted =
+        volumeCap === null ? admissible : admissible.slice(0, volumeCap);
+      const overflow =
+        volumeCap === null ? [] : admissible.slice(volumeCap);
       stats.dropped_volume_cap += overflow.length;
       stats.dropped_volume_cap_high_confidence += overflow.filter(
         ({ proposal: overflowProposal }) =>
