@@ -1,7 +1,438 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T10:45:09.222Z",
+  "updated_at": "2026-08-03T13:31:25.010Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:30:00.552Z",
+      "dispatch_id": "effects-wide-CL-14",
+      "github_run_id": 30818192427,
+      "mode": "effects",
+      "scope": "CL-14",
+      "candidates": 60,
+      "cheap": {
+        "candidates": 34,
+        "dropped_ungrounded": 6,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 28
+      },
+      "synthesis": {
+        "into_synthesis": 28,
+        "consolidated": 2,
+        "expanded": 0,
+        "candidates_strong": 26
+      },
+      "strong": {
+        "candidates": 26,
+        "proposed": 24,
+        "proposed_enrich": 1,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "CL-14:cheap:01",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:02",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:03",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "doi_unresolved"
+        },
+        {
+          "candidate_id": "CL-14:cheap:04",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:05",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:06",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:07",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:08",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:09",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:10",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:11",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:12",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:13",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "CL-14:cheap:14",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:15",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:16",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:17",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:18",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:19",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:20",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:21",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:22",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:23",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "CL-14:cheap:24",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:25",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:26",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "doi_unresolved"
+        },
+        {
+          "candidate_id": "CL-14:cheap:27",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:28",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:29",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:30",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:31",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:32",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "CL-14:cheap:33",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:34",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "CL-14:strong:16",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-cl-14-extraneous-cognitive-load-suppressio-3daae68fd700",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "CL-14:strong:14",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-co-cognition-ac97054c0052"
+        },
+        {
+          "candidate_id": "CL-14:strong:11",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-cognitive-drift-b108cccb20b8"
+        },
+        {
+          "candidate_id": "CL-14:strong:03",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-cognitive-load-moderation-of-affecti-2d9064373eb3"
+        },
+        {
+          "candidate_id": "CL-14:strong:26",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-cognitive-load-reduction-via-multimo-b265d228d9c1"
+        },
+        {
+          "candidate_id": "CL-14:strong:20",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-cognitive-load-threshold-boundary-co-daf4aab1cd1b"
+        },
+        {
+          "candidate_id": "CL-14:strong:13",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-constraint-collapse-5b6700ea9b63"
+        },
+        {
+          "candidate_id": "CL-14:strong:05",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-element-interactivity-as-a-boundary--724dbb2c8db0"
+        },
+        {
+          "candidate_id": "CL-14:strong:09",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-extraneous-cognitive-load-suppressio-3daae68fd700"
+        },
+        {
+          "candidate_id": "CL-14:strong:08",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-germane-cognitive-load-mediation-f5be8b0e7ecc"
+        },
+        {
+          "candidate_id": "CL-14:strong:21",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-interpretive-load-a4e46e772130"
+        },
+        {
+          "candidate_id": "CL-14:strong:15",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-intrinsic-cognitive-load-cab49c0f68b8"
+        },
+        {
+          "candidate_id": "CL-14:strong:12",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-memory-drift-7e627a94664c"
+        },
+        {
+          "candidate_id": "CL-14:strong:07",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-multimodal-feedback-synergy-7e1d19e9f523"
+        },
+        {
+          "candidate_id": "CL-14:strong:18",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-redundancy-effect-453b93c6eb4c"
+        },
+        {
+          "candidate_id": "CL-14:strong:01",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-same-category-advantage-747cd51d1faf"
+        },
+        {
+          "candidate_id": "CL-14:strong:25",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-semiotic-informed-digital-health-int-6ae57678db7f"
+        },
+        {
+          "candidate_id": "CL-14:strong:17",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed_enrich",
+          "proposal_id": "effect-cl-14-split-attention-effect-04b908b55654",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "CL-14:strong:19",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-tracing-and-pointing-5a8b0827979f"
+        },
+        {
+          "candidate_id": "CL-14:strong:10",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-wsi-induced-cognitive-load-reduction-d72fd5713373"
+        },
+        {
+          "candidate_id": "CL-14:strong:04",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-xai-scaffolding-effect-on-cognitive--c6d5fa7f0090"
+        },
+        {
+          "candidate_id": "CL-14:strong:02",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-attention-tunneling-3b701385074a"
+        },
+        {
+          "candidate_id": "CL-14:strong:06",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-chromatic-asymmetry-in-visual-attent-86a450d258a0"
+        },
+        {
+          "candidate_id": "CL-14:strong:24",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-dialogue-based-tts-lesson-format-6344b7e060e8"
+        },
+        {
+          "candidate_id": "CL-14:strong:22",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-signal-cost-asymmetry-20f531c0745c"
+        },
+        {
+          "candidate_id": "CL-14:strong:23",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-interpretive-time-parameter-b16728b4f261"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T10:44:50.921Z",
       "dispatch_id": null,
@@ -2299,107 +2730,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-cg-05-black-metaphors-4f7c25342a07"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-07-31T10:09:59.574Z",
-      "dispatch_id": "cl14-002-realizations",
-      "github_run_id": 30622558771,
-      "mode": "realizations",
-      "scope": "cl-14-002",
-      "candidates": 9,
-      "cheap": {
-        "candidates": 6,
-        "dropped_ungrounded": 3,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 3
-      },
-      "synthesis": {
-        "into_synthesis": 3,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 3
-      },
-      "strong": {
-        "candidates": 3,
-        "proposed": 3,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "reconstructed",
-        "reason": "Established after the fact from committed evidence, and complete. The three cheap-pass refusals are recorded per candidate in corpora/extraction/rejected/2026-07-31T10-09-59.574Z.json, and the three proposals carry proposed_by extraction:github-actions-30622558771. The run itself wrote only aggregate counters, so the rows are derived rather than observed — the candidate ordinals are assigned here, not by the run."
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "CL-14:cheap:01",
-          "mechanism_id": "CL-14",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "unknown_record_id"
-        },
-        {
-          "candidate_id": "CL-14:cheap:02",
-          "mechanism_id": "CL-14",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "unknown_record_id"
-        },
-        {
-          "candidate_id": "CL-14:cheap:03",
-          "mechanism_id": "CL-14",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "unknown_record_id"
-        },
-        {
-          "candidate_id": "CL-14:cheap:04",
-          "mechanism_id": "CL-14",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "CL-14:cheap:05",
-          "mechanism_id": "CL-14",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "CL-14:cheap:06",
-          "mechanism_id": "CL-14",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "CL-14:strong:01",
-          "mechanism_id": "CL-14",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "realization-cl-14-context-aware-tool-simplification-c403738e29d7",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "CL-14:strong:02",
-          "mechanism_id": "CL-14",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "realization-cl-14-expertise-based-guidance-toggle-d86bcf53c129",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "CL-14:strong:03",
-          "mechanism_id": "CL-14",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "realization-cl-14-progressive-disclosure-of-advanced-f-7a339e24183c",
-          "attribution": "recorded"
         }
       ]
     }
