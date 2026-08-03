@@ -1,7 +1,2307 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-07-31T14:31:00.000Z",
+  "updated_at": "2026-08-03T10:45:09.222Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T10:44:50.921Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "realizations",
+      "scope": "ZE-07",
+      "candidates": 2,
+      "cheap": {
+        "candidates": 1,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 1
+      },
+      "synthesis": {
+        "into_synthesis": 1,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 1
+      },
+      "strong": {
+        "candidates": 1,
+        "proposed": 1,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "ZE-07:cheap:01",
+          "mechanism_id": "ZE-07",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ZE-07:strong:01",
+          "mechanism_id": "ZE-07",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-ze-07-duolingo-landing-page-hero-8913a2a5fe87"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:44:35.264Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "SC-17",
+      "candidates": 12,
+      "cheap": {
+        "candidates": 6,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 6
+      },
+      "synthesis": {
+        "into_synthesis": 6,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 6
+      },
+      "strong": {
+        "candidates": 6,
+        "proposed": 6,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "SC-17:cheap:01",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:02",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:03",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:strong:01",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-banner-blindness-f29299afec5f"
+        },
+        {
+          "candidate_id": "SC-17:strong:03",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-shrinking-perceptual-span-hypothesis-6a04db60736e"
+        },
+        {
+          "candidate_id": "SC-17:strong:02",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-text-ad-blindness-bf867259ddfd"
+        },
+        {
+          "candidate_id": "SC-17:cheap:04",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:05",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:cheap:06",
+          "mechanism_id": "SC-17",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-17:strong:04",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-automatic-salience-capture-b055fcaa98fe"
+        },
+        {
+          "candidate_id": "SC-17:strong:06",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-automatic-salience-suppression-7adead657c62"
+        },
+        {
+          "candidate_id": "SC-17:strong:05",
+          "mechanism_id": "SC-17",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-17-controlled-salience-suppression-f59e5566d1dd"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:43:49.858Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "PS-13",
+      "candidates": 15,
+      "cheap": {
+        "candidates": 8,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 8
+      },
+      "synthesis": {
+        "into_synthesis": 8,
+        "consolidated": 1,
+        "expanded": 0,
+        "candidates_strong": 7
+      },
+      "strong": {
+        "candidates": 7,
+        "proposed": 3,
+        "proposed_enrich": 0,
+        "merged_into_pending": 4,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "PS-13:cheap:01",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:02",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:03",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:04",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:05",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:06",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:strong:03",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-ps-13-pictorial-superiority-effect-55e17aaab339",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "PS-13:strong:04",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-ps-13-pictorial-superiority-effect-55e17aaab339",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "PS-13:strong:05",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-ps-13-picture-superiority-effect-0f55cd04f9c9",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "PS-13:strong:01",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ps-13-picture-superiority-effect-0f55cd04f9c9"
+        },
+        {
+          "candidate_id": "PS-13:strong:02",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ps-13-pictorial-superiority-effect-55e17aaab339"
+        },
+        {
+          "candidate_id": "PS-13:cheap:07",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:08",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:strong:06",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-ps-13-picture-superiority-effect-0f55cd04f9c9",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "PS-13:strong:07",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ps-13-symbol-superiority-effect-ada57e38c00a"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:43:12.101Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "PF-16",
+      "candidates": 19,
+      "cheap": {
+        "candidates": 11,
+        "dropped_ungrounded": 1,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 10
+      },
+      "synthesis": {
+        "into_synthesis": 10,
+        "consolidated": 2,
+        "expanded": 0,
+        "candidates_strong": 8
+      },
+      "strong": {
+        "candidates": 8,
+        "proposed": 7,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "PF-16:cheap:01",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:02",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:03",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:04",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:05",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:06",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:07",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "PF-16:strong:01",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-illusory-truth-effect-fluency-based--d79774a3a94a"
+        },
+        {
+          "candidate_id": "PF-16:strong:02",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-fluency-based-aesthetic-pleasure-eva-7046b0d3a23c"
+        },
+        {
+          "candidate_id": "PF-16:strong:03",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-fluency-based-aesthetic-interest-a95937ecece3"
+        },
+        {
+          "candidate_id": "PF-16:strong:04",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-perceptual-fluency-effect-on-brand-p-8dc799d16508"
+        },
+        {
+          "candidate_id": "PF-16:cheap:08",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:09",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:10",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:cheap:11",
+          "mechanism_id": "PF-16",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PF-16:strong:05",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-pf-16-illusory-truth-effect-fluency-based--d79774a3a94a",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "PF-16:strong:06",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-fluency-truth-association-f4c05aec2338"
+        },
+        {
+          "candidate_id": "PF-16:strong:07",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-perceptual-fluency-and-approach-acti-7c4e9b33637d"
+        },
+        {
+          "candidate_id": "PF-16:strong:08",
+          "mechanism_id": "PF-16",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-pf-16-relative-fluency-and-liking-4a6e49b73b4a"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:42:52.220Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "MM-15",
+      "candidates": 15,
+      "cheap": {
+        "candidates": 8,
+        "dropped_ungrounded": 1,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 7
+      },
+      "synthesis": {
+        "into_synthesis": 7,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 7
+      },
+      "strong": {
+        "candidates": 7,
+        "proposed": 6,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "MM-15:cheap:01",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:02",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:03",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:04",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:strong:02",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-modality-effect-15a0a9dbcac4"
+        },
+        {
+          "candidate_id": "MM-15:strong:01",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-spatial-contiguity-principle-99513b7fa4e9"
+        },
+        {
+          "candidate_id": "MM-15:strong:04",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-coherence-effect-1dcb3d7b384c"
+        },
+        {
+          "candidate_id": "MM-15:strong:03",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-redundancy-effect-c1c7ed537b36"
+        },
+        {
+          "candidate_id": "MM-15:cheap:05",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:06",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "MM-15:cheap:07",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:08",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:strong:05",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-mm-15-redundancy-effect-c1c7ed537b36",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "MM-15:strong:06",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-coherence-principle-e5f3e87947e3"
+        },
+        {
+          "candidate_id": "MM-15:strong:07",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-mm-15-embodiment-principle-9de1468ae5d1"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:42:36.524Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "IF-18",
+      "candidates": 9,
+      "cheap": {
+        "candidates": 6,
+        "dropped_ungrounded": 3,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 3
+      },
+      "synthesis": {
+        "into_synthesis": 3,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 3
+      },
+      "strong": {
+        "candidates": 3,
+        "proposed": 2,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "IF-18:cheap:01",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "IF-18:cheap:02",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "IF-18:cheap:03",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "IF-18:strong:01",
+          "mechanism_id": "IF-18",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-if-18-scent-based-navigation-3f337f1c60c2"
+        },
+        {
+          "candidate_id": "IF-18:strong:02",
+          "mechanism_id": "IF-18",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-if-18-information-scent-in-visual-search-b504f81df5ea"
+        },
+        {
+          "candidate_id": "IF-18:cheap:04",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "doi_unresolved"
+        },
+        {
+          "candidate_id": "IF-18:cheap:05",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "IF-18:strong:03",
+          "mechanism_id": "IF-18",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-if-18-information-scent-in-visual-search-b504f81df5ea",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "IF-18:cheap:06",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:42:21.863Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "CL-14",
+      "candidates": 10,
+      "cheap": {
+        "candidates": 6,
+        "dropped_ungrounded": 2,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 4
+      },
+      "synthesis": {
+        "into_synthesis": 4,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 4
+      },
+      "strong": {
+        "candidates": 4,
+        "proposed": 2,
+        "proposed_enrich": 2,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "CL-14:cheap:01",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:02",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:03",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "span_role_contradicted_by_structure"
+        },
+        {
+          "candidate_id": "CL-14:strong:02",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed_enrich",
+          "proposal_id": "effect-cl-14-expertise-reversal-effect-72a394e20f30",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "CL-14:strong:01",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-imagination-effect-ae9f5dd80f99"
+        },
+        {
+          "candidate_id": "CL-14:cheap:04",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:05",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "CL-14:cheap:06",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:strong:04",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cl-14-southern-route-preference-a00accc51c04"
+        },
+        {
+          "candidate_id": "CL-14:strong:03",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed_enrich",
+          "proposal_id": "effect-cl-14-split-attention-effect-04b908b55654",
+          "attribution": "recorded"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:41:42.705Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "ZE-07",
+      "candidates": 10,
+      "cheap": {
+        "candidates": 5,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 5
+      },
+      "synthesis": {
+        "into_synthesis": 5,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 5
+      },
+      "strong": {
+        "candidates": 5,
+        "proposed": 4,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "ZE-07:cheap:01",
+          "mechanism_id": "ZE-07",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ZE-07:cheap:02",
+          "mechanism_id": "ZE-07",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ZE-07:cheap:03",
+          "mechanism_id": "ZE-07",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ZE-07:strong:03",
+          "mechanism_id": "ZE-07",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-ze-07-zeigarnik-effect-ff85288cec7e",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "ZE-07:strong:02",
+          "mechanism_id": "ZE-07",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ze-07-ovsiankina-effect-c5ff6eba39a5"
+        },
+        {
+          "candidate_id": "ZE-07:strong:01",
+          "mechanism_id": "ZE-07",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ze-07-zeigarnik-effect-ff85288cec7e"
+        },
+        {
+          "candidate_id": "ZE-07:cheap:04",
+          "mechanism_id": "ZE-07",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ZE-07:cheap:05",
+          "mechanism_id": "ZE-07",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ZE-07:strong:04",
+          "mechanism_id": "ZE-07",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ze-07-gamification-mechanics-92d3864ca6e6"
+        },
+        {
+          "candidate_id": "ZE-07:strong:05",
+          "mechanism_id": "ZE-07",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ze-07-social-gamification-elements-b38155d9734c"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:41:15.407Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "VR-02",
+      "candidates": 13,
+      "cheap": {
+        "candidates": 7,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 7
+      },
+      "synthesis": {
+        "into_synthesis": 7,
+        "consolidated": 1,
+        "expanded": 0,
+        "candidates_strong": 6
+      },
+      "strong": {
+        "candidates": 6,
+        "proposed": 6,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "VR-02:cheap:01",
+          "mechanism_id": "VR-02",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "VR-02:cheap:02",
+          "mechanism_id": "VR-02",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "VR-02:cheap:03",
+          "mechanism_id": "VR-02",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "VR-02:cheap:04",
+          "mechanism_id": "VR-02",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "VR-02:cheap:05",
+          "mechanism_id": "VR-02",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "VR-02:strong:04",
+          "mechanism_id": "VR-02",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-vr-02-breaking-point-in-progressive-ratio--b8d05db2c250"
+        },
+        {
+          "candidate_id": "VR-02:strong:03",
+          "mechanism_id": "VR-02",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-vr-02-dissociation-of-reward-anticipation--9bfb468ed166"
+        },
+        {
+          "candidate_id": "VR-02:strong:01",
+          "mechanism_id": "VR-02",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-vr-02-dopamine-reward-prediction-error-sig-f6db55ac50e1"
+        },
+        {
+          "candidate_id": "VR-02:strong:02",
+          "mechanism_id": "VR-02",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-vr-02-ventral-striatal-reward-expectation--b66475ec1930"
+        },
+        {
+          "candidate_id": "VR-02:cheap:06",
+          "mechanism_id": "VR-02",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "VR-02:cheap:07",
+          "mechanism_id": "VR-02",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "VR-02:strong:05",
+          "mechanism_id": "VR-02",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-vr-02-intermittent-control-in-human-quiet--37d44fdc9fe2"
+        },
+        {
+          "candidate_id": "VR-02:strong:06",
+          "mechanism_id": "VR-02",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-vr-02-intermittent-motion-planning-for-har-e41467bad066"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:40:49.959Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "ST-09",
+      "candidates": 14,
+      "cheap": {
+        "candidates": 7,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 7
+      },
+      "synthesis": {
+        "into_synthesis": 7,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 7
+      },
+      "strong": {
+        "candidates": 7,
+        "proposed": 5,
+        "proposed_enrich": 0,
+        "merged_into_pending": 2,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "ST-09:cheap:01",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:02",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:03",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:04",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:05",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:strong:02",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-st-09-conspicuous-consumption-e598e2311eff",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "ST-09:strong:01",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-conspicuous-consumption-e598e2311eff"
+        },
+        {
+          "candidate_id": "ST-09:strong:05",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-luxury-product-signaling-for-relatio-f17a7e0d35cd"
+        },
+        {
+          "candidate_id": "ST-09:strong:04",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-luxury-product-signaling-of-partner--ee981a766767"
+        },
+        {
+          "candidate_id": "ST-09:strong:03",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-luxury-product-signaling-to-deter-fe-7caa24cddd19"
+        },
+        {
+          "candidate_id": "ST-09:cheap:06",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:07",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:strong:07",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-st-09-conspicuous-consumption-e598e2311eff",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "ST-09:strong:06",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-red-sneakers-effect-f201bc066ced"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:40:30.239Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "SP-08",
+      "candidates": 12,
+      "cheap": {
+        "candidates": 6,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 6
+      },
+      "synthesis": {
+        "into_synthesis": 6,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 6
+      },
+      "strong": {
+        "candidates": 6,
+        "proposed": 5,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "SP-08:cheap:01",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:02",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:03",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:04",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:strong:01",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-descriptive-norms-f21b43b5f401"
+        },
+        {
+          "candidate_id": "SP-08:strong:04",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-determinants-of-information-usefulne-c531c2581ec2"
+        },
+        {
+          "candidate_id": "SP-08:strong:03",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-herd-behavior-in-online-review-adopt-5f1c94dee618"
+        },
+        {
+          "candidate_id": "SP-08:strong:02",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-injunctive-norms-1446a701450a"
+        },
+        {
+          "candidate_id": "SP-08:cheap:05",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:cheap:06",
+          "mechanism_id": "SP-08",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SP-08:strong:06",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-sp-08-group-cohesion-d8c443088d4e",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "SP-08:strong:05",
+          "mechanism_id": "SP-08",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sp-08-group-cohesion-d8c443088d4e"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:40:10.210Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "SC-06",
+      "candidates": 16,
+      "cheap": {
+        "candidates": 9,
+        "dropped_ungrounded": 2,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 7
+      },
+      "synthesis": {
+        "into_synthesis": 7,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 7
+      },
+      "strong": {
+        "candidates": 7,
+        "proposed": 7,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "SC-06:cheap:01",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "SC-06:cheap:02",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-06:cheap:03",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-06:cheap:04",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-06:cheap:05",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "SC-06:cheap:06",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-06:strong:01",
+          "mechanism_id": "SC-06",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-06-limited-time-scarcity-lts-93f9b5deee75"
+        },
+        {
+          "candidate_id": "SC-06:strong:02",
+          "mechanism_id": "SC-06",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-06-scarcity-induced-aggression-eda3dfb8c806"
+        },
+        {
+          "candidate_id": "SC-06:strong:03",
+          "mechanism_id": "SC-06",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-06-scarcity-induced-arousal-polarizatio-785954351ce2"
+        },
+        {
+          "candidate_id": "SC-06:strong:04",
+          "mechanism_id": "SC-06",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-06-scarcity-marketing-effect-on-consume-40bd938ebc17"
+        },
+        {
+          "candidate_id": "SC-06:cheap:07",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-06:cheap:08",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-06:cheap:09",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-06:strong:05",
+          "mechanism_id": "SC-06",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-06-scarcity-induced-impulse-buying-72175b48b45a"
+        },
+        {
+          "candidate_id": "SC-06:strong:06",
+          "mechanism_id": "SC-06",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-06-arousal-as-a-mediator-of-scarcity-ef-f1d6bfb5ebff"
+        },
+        {
+          "candidate_id": "SC-06:strong:07",
+          "mechanism_id": "SC-06",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-sc-06-negative-impact-of-scarcity-communic-ce9e9148eb92"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:39:51.940Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "RE-10",
+      "candidates": 13,
+      "cheap": {
+        "candidates": 7,
+        "dropped_ungrounded": 1,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 6
+      },
+      "synthesis": {
+        "into_synthesis": 6,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 6
+      },
+      "strong": {
+        "candidates": 6,
+        "proposed": 6,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "RE-10:cheap:01",
+          "mechanism_id": "RE-10",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "RE-10:cheap:02",
+          "mechanism_id": "RE-10",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "RE-10:cheap:03",
+          "mechanism_id": "RE-10",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "RE-10:strong:01",
+          "mechanism_id": "RE-10",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-re-10-generalized-reciprocity-21b3bd0ff75e"
+        },
+        {
+          "candidate_id": "RE-10:strong:03",
+          "mechanism_id": "RE-10",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-re-10-reciprocity-nudge-boomerang-effect-638c28c5d7b3"
+        },
+        {
+          "candidate_id": "RE-10:strong:02",
+          "mechanism_id": "RE-10",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-re-10-retaliation-effect-e589be05dc8e"
+        },
+        {
+          "candidate_id": "RE-10:cheap:04",
+          "mechanism_id": "RE-10",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "RE-10:cheap:05",
+          "mechanism_id": "RE-10",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "RE-10:cheap:06",
+          "mechanism_id": "RE-10",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "RE-10:cheap:07",
+          "mechanism_id": "RE-10",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "RE-10:strong:04",
+          "mechanism_id": "RE-10",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-re-10-pay-it-forward-reciprocity-in-presch-42d05a73ff88"
+        },
+        {
+          "candidate_id": "RE-10:strong:05",
+          "mechanism_id": "RE-10",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-re-10-social-contagion-of-cheating-via-obs-538a7a697119"
+        },
+        {
+          "candidate_id": "RE-10:strong:06",
+          "mechanism_id": "RE-10",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-re-10-reciprocity-in-socially-bonded-pairs-a5278ca60a04"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:39:21.808Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "LA-01",
+      "candidates": 17,
+      "cheap": {
+        "candidates": 9,
+        "dropped_ungrounded": 1,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 8
+      },
+      "synthesis": {
+        "into_synthesis": 8,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 8
+      },
+      "strong": {
+        "candidates": 8,
+        "proposed": 5,
+        "proposed_enrich": 0,
+        "merged_into_pending": 3,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "LA-01:cheap:01",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:02",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:03",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:04",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:05",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:strong:03",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-la-01-endowment-effect-7981e8c02cee",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "LA-01:strong:04",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-la-01-endowment-effect-7981e8c02cee",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "LA-01:strong:05",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-la-01-endowment-effect-7981e8c02cee",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "LA-01:strong:01",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-la-01-endowment-effect-7981e8c02cee"
+        },
+        {
+          "candidate_id": "LA-01:strong:02",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-la-01-myopic-loss-aversion-bf422dde143f"
+        },
+        {
+          "candidate_id": "LA-01:cheap:06",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:07",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:08",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:09",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "LA-01:strong:08",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-la-01-loss-aversion-in-internet-gaming-dis-33dad5eb6074"
+        },
+        {
+          "candidate_id": "LA-01:strong:06",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-la-01-loss-aversion-in-noninstrumental-inf-c12d84c08482"
+        },
+        {
+          "candidate_id": "LA-01:strong:07",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-la-01-loss-aversion-in-airline-revenue-f18f8a1d516d"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:39:08.996Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "ID-12",
+      "candidates": 7,
+      "cheap": {
+        "candidates": 4,
+        "dropped_ungrounded": 1,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 3
+      },
+      "synthesis": {
+        "into_synthesis": 3,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 3
+      },
+      "strong": {
+        "candidates": 3,
+        "proposed": 3,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "ID-12:cheap:01",
+          "mechanism_id": "ID-12",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ID-12:cheap:02",
+          "mechanism_id": "ID-12",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ID-12:strong:02",
+          "mechanism_id": "ID-12",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-id-12-door-in-the-face-technique-150770fda08a"
+        },
+        {
+          "candidate_id": "ID-12:strong:01",
+          "mechanism_id": "ID-12",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-id-12-foot-in-the-door-technique-e05e39523cb4"
+        },
+        {
+          "candidate_id": "ID-12:cheap:03",
+          "mechanism_id": "ID-12",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "ID-12:cheap:04",
+          "mechanism_id": "ID-12",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ID-12:strong:03",
+          "mechanism_id": "ID-12",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-id-12-reverse-foot-in-the-door-effect-8ec2c49463ca"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:38:46.972Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "HA-04",
+      "candidates": 16,
+      "cheap": {
+        "candidates": 8,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 8
+      },
+      "synthesis": {
+        "into_synthesis": 8,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 8
+      },
+      "strong": {
+        "candidates": 8,
+        "proposed": 8,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "HA-04:cheap:01",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:02",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:03",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:04",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:05",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:06",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:strong:02",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ha-04-habit-formation-curve-07bee6d4a8f0"
+        },
+        {
+          "candidate_id": "HA-04:strong:04",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ha-04-context-dependent-habit-disruption-eaba350662b2"
+        },
+        {
+          "candidate_id": "HA-04:strong:05",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ha-04-dental-flossing-habit-formation-50eedc07cf86"
+        },
+        {
+          "candidate_id": "HA-04:strong:03",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ha-04-habit-intention-moderation-5ae6db47ccef"
+        },
+        {
+          "candidate_id": "HA-04:strong:01",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ha-04-habitual-automaticity-5d63b190ccc0"
+        },
+        {
+          "candidate_id": "HA-04:strong:06",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ha-04-prospective-memory-and-habit-formati-cafbfa19e78a"
+        },
+        {
+          "candidate_id": "HA-04:cheap:07",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:08",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:strong:07",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ha-04-habit-recollection-dissociation-e995edabbecb"
+        },
+        {
+          "candidate_id": "HA-04:strong:08",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ha-04-dorsomedial-striatum-dms-habit-bias-85dccfb71e65"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:38:25.744Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "FR-11",
+      "candidates": 19,
+      "cheap": {
+        "candidates": 11,
+        "dropped_ungrounded": 2,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 9
+      },
+      "synthesis": {
+        "into_synthesis": 9,
+        "consolidated": 1,
+        "expanded": 0,
+        "candidates_strong": 8
+      },
+      "strong": {
+        "candidates": 8,
+        "proposed": 8,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "FR-11:cheap:01",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:cheap:02",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "FR-11:cheap:03",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:cheap:04",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:cheap:05",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:cheap:06",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "FR-11:cheap:07",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:strong:01",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-fr-11-heuristic-vetoing-7ff1f71008ef"
+        },
+        {
+          "candidate_id": "FR-11:strong:02",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-fr-11-attribute-framing-effect-da44d4e115c4"
+        },
+        {
+          "candidate_id": "FR-11:strong:04",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-fr-11-attribute-framing-in-ipos-36027fe02297"
+        },
+        {
+          "candidate_id": "FR-11:strong:03",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-fr-11-anchoring-effect-in-art-auctions-171c28ee6757"
+        },
+        {
+          "candidate_id": "FR-11:cheap:08",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:cheap:09",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:cheap:10",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:cheap:11",
+          "mechanism_id": "FR-11",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "FR-11:strong:05",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-fr-11-anchoring-and-adjustment-f564460ca14f"
+        },
+        {
+          "candidate_id": "FR-11:strong:07",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-fr-11-break-even-effect-97dbed9dd083"
+        },
+        {
+          "candidate_id": "FR-11:strong:06",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-fr-11-house-money-effect-c943e3dfb632"
+        },
+        {
+          "candidate_id": "FR-11:strong:08",
+          "mechanism_id": "FR-11",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-fr-11-endowment-effect-1a69d498b221"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:38:01.060Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "EN-03",
+      "candidates": 12,
+      "cheap": {
+        "candidates": 6,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 6
+      },
+      "synthesis": {
+        "into_synthesis": 6,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 6
+      },
+      "strong": {
+        "candidates": 6,
+        "proposed": 4,
+        "proposed_enrich": 0,
+        "merged_into_pending": 2,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "EN-03:cheap:01",
+          "mechanism_id": "EN-03",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "EN-03:cheap:02",
+          "mechanism_id": "EN-03",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "EN-03:cheap:03",
+          "mechanism_id": "EN-03",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "EN-03:cheap:04",
+          "mechanism_id": "EN-03",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "EN-03:strong:04",
+          "mechanism_id": "EN-03",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-en-03-mere-ownership-effect-1b0db8298502",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "EN-03:strong:01",
+          "mechanism_id": "EN-03",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-en-03-endowment-effect-b5ef6d9f7ef8"
+        },
+        {
+          "candidate_id": "EN-03:strong:02",
+          "mechanism_id": "EN-03",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-en-03-mere-ownership-effect-1b0db8298502"
+        },
+        {
+          "candidate_id": "EN-03:strong:03",
+          "mechanism_id": "EN-03",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-en-03-mere-touch-effect-4b1b2b74178a"
+        },
+        {
+          "candidate_id": "EN-03:cheap:05",
+          "mechanism_id": "EN-03",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "EN-03:cheap:06",
+          "mechanism_id": "EN-03",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "EN-03:strong:05",
+          "mechanism_id": "EN-03",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-en-03-mere-ownership-effect-1b0db8298502",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "EN-03:strong:06",
+          "mechanism_id": "EN-03",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-en-03-name-liking-da0153edc05c"
+        }
+      ]
+    },
+    {
+      "run_id": "2026-08-03T10:37:43.467Z",
+      "dispatch_id": null,
+      "github_run_id": 30806106326,
+      "mode": "effects",
+      "scope": "CG-05",
+      "candidates": 11,
+      "cheap": {
+        "candidates": 7,
+        "dropped_ungrounded": 3,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 4
+      },
+      "synthesis": {
+        "into_synthesis": 4,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 4
+      },
+      "strong": {
+        "candidates": 4,
+        "proposed": 4,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "CG-05:cheap:01",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "CG-05:cheap:02",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "CG-05:cheap:03",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "CG-05:cheap:04",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CG-05:cheap:05",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CG-05:strong:02",
+          "mechanism_id": "CG-05",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cg-05-backward-curiosity-272a17837abd"
+        },
+        {
+          "candidate_id": "CG-05:strong:01",
+          "mechanism_id": "CG-05",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cg-05-forward-curiosity-9553fd539dc9"
+        },
+        {
+          "candidate_id": "CG-05:cheap:06",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CG-05:cheap:07",
+          "mechanism_id": "CG-05",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CG-05:strong:03",
+          "mechanism_id": "CG-05",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cg-05-rhetorical-mirage-18dfa09ba93c"
+        },
+        {
+          "candidate_id": "CG-05:strong:04",
+          "mechanism_id": "CG-05",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-cg-05-black-metaphors-4f7c25342a07"
+        }
+      ]
+    },
     {
       "run_id": "2026-07-31T10:09:59.574Z",
       "dispatch_id": "cl14-002-realizations",
@@ -102,279 +2402,6 @@
           "attribution": "recorded"
         }
       ]
-    },
-    {
-      "run_id": "2026-07-31T09:10:13.532Z",
-      "dispatch_id": "cl14-validation-1",
-      "github_run_id": 30618907548,
-      "mode": "effects",
-      "scope": "CL-14",
-      "candidates": 15,
-      "cheap": {
-        "candidates": 8,
-        "dropped_ungrounded": 0,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 8
-      },
-      "synthesis": {
-        "into_synthesis": 8,
-        "consolidated": 1,
-        "expanded": 0,
-        "candidates_strong": 7
-      },
-      "strong": {
-        "candidates": 7,
-        "proposed": 4,
-        "proposed_enrich": 0,
-        "merged_into_pending": 3,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "partial",
-        "reason": "The run this entry exists for: 8 of its 15 candidates had no recorded fate. The stage totals are recoverable and balance — 8 cheap candidates, none refused, all 8 into synthesis, which composed 7, so exactly one fold; 7 composed candidates ending as 4 proposals and 3 absorptions. Two things are NOT recoverable. (1) Cheap-pass lineage: cheap candidates were persisted only when refused, and this run refused none, so which cheap candidate fed which composed one cannot be said, and the single fold cannot be attributed to a pair. (2) Merge targets: mergeProposals unions provenance and takes the higher confidence, leaving a merged proposal indistinguishable from one candidate that cited two records. Split-attention carries two records and two DOIs, which is what an absorption looks like — and also what a single well-cited candidate looks like, so it is not evidence. All three absorptions are therefore recorded with attribution not_recorded rather than guessed at."
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "CL-14:strong:01",
-          "mechanism_id": "CL-14",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-cl-14-cueing-effect-01aaa2ec2e72",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "CL-14:strong:02",
-          "mechanism_id": "CL-14",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-cl-14-expertise-reversal-effect-72a394e20f30",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "CL-14:strong:03",
-          "mechanism_id": "CL-14",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-cl-14-modality-effect-c16093817de1",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "CL-14:strong:04",
-          "mechanism_id": "CL-14",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-cl-14-split-attention-effect-04b908b55654",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "CL-14:strong:05",
-          "mechanism_id": "CL-14",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "attribution": "not_recorded"
-        },
-        {
-          "candidate_id": "CL-14:strong:06",
-          "mechanism_id": "CL-14",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "attribution": "not_recorded"
-        },
-        {
-          "candidate_id": "CL-14:strong:07",
-          "mechanism_id": "CL-14",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "attribution": "not_recorded"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-07-24T16:50:11.040Z",
-      "dispatch_id": null,
-      "github_run_id": null,
-      "mode": "effects",
-      "scope": "RE-10",
-      "candidates": null,
-      "cheap": null,
-      "synthesis": null,
-      "strong": {
-        "candidates": 10,
-        "proposed": 0,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 10,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "unreconstructable",
-        "reason": "Rejected candidates were not persisted before D-105. One of the four runs in D-104's 30-for-30: every composed candidate was refused at the grounding gate, and the strong stage balances at 10 for 10 because of it. The cheap stage is null rather than zero — this run gated only the strong pass, so its cheap candidates existed and were never counted, and the manifest's candidates: 10 counts strong-pass output alone. Recording a zero there would assert something false about the run."
-      },
-      "candidates_detail": []
-    },
-    {
-      "run_id": "2026-07-24T14:58:26.447Z",
-      "dispatch_id": null,
-      "github_run_id": null,
-      "mode": "effects",
-      "scope": "FR-11",
-      "candidates": null,
-      "cheap": null,
-      "synthesis": null,
-      "strong": {
-        "candidates": 10,
-        "proposed": 0,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 10,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "unreconstructable",
-        "reason": "Rejected candidates were not persisted before D-105. One of the four runs in D-104's 30-for-30; the cheap stage is null rather than zero because this run gated only the strong pass, so its cheap candidates were never counted."
-      },
-      "candidates_detail": []
-    },
-    {
-      "run_id": "2026-07-24T14:46:46.928Z",
-      "dispatch_id": null,
-      "github_run_id": null,
-      "mode": "effects",
-      "scope": "CG-05",
-      "candidates": null,
-      "cheap": null,
-      "synthesis": null,
-      "strong": {
-        "candidates": 8,
-        "proposed": 0,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 8,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "unreconstructable",
-        "reason": "Rejected candidates were not persisted before D-105. One of the four runs in D-104's 30-for-30; the cheap stage is null rather than zero because this run gated only the strong pass, so its cheap candidates were never counted."
-      },
-      "candidates_detail": []
-    },
-    {
-      "run_id": "2026-07-24T14:44:08.000Z",
-      "dispatch_id": "cursor-cg05-c8488d2",
-      "github_run_id": 30102271340,
-      "mode": "effects",
-      "scope": "CG-05",
-      "candidates": 0,
-      "cheap": {
-        "candidates": 0,
-        "dropped_ungrounded": 0,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 0
-      },
-      "synthesis": {
-        "into_synthesis": 0,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 0
-      },
-      "strong": {
-        "candidates": 0,
-        "proposed": 0,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "reconstructed",
-        "reason": "A different reason from the four 30-for-30 runs, and stated separately rather than folded in with them: this run failed with routing_404 before any model was invoked (cost.api_calls = 0, records_fetched = 0), so no candidate was ever produced. Its zeros are measured, not missing."
-      },
-      "candidates_detail": []
-    },
-    {
-      "run_id": "2026-07-24T14:41:26.000Z",
-      "dispatch_id": "cursor-cg05-973b069",
-      "github_run_id": 30102079781,
-      "mode": "effects",
-      "scope": "CG-05",
-      "candidates": 0,
-      "cheap": {
-        "candidates": 0,
-        "dropped_ungrounded": 0,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 0
-      },
-      "synthesis": {
-        "into_synthesis": 0,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 0
-      },
-      "strong": {
-        "candidates": 0,
-        "proposed": 0,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "reconstructed",
-        "reason": "Failed with routing_404 before any model was invoked (cost.api_calls = 0, records_fetched = 0), so no candidate was ever produced. Its zeros are measured, not missing."
-      },
-      "candidates_detail": []
-    },
-    {
-      "run_id": "2026-07-23T14:54:52.213Z",
-      "dispatch_id": null,
-      "github_run_id": null,
-      "mode": "effects",
-      "scope": "SC-06",
-      "candidates": null,
-      "cheap": null,
-      "synthesis": null,
-      "strong": {
-        "candidates": 2,
-        "proposed": 0,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 2,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "unreconstructable",
-        "reason": "Rejected candidates were not persisted before D-105. The earliest of the four runs in D-104's 30-for-30; the cheap stage is null rather than zero because this run gated only the strong pass, so its cheap candidates were never counted."
-      },
-      "candidates_detail": []
     }
   ]
 }

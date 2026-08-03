@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-03T10:42:36.524Z",
+  "dispatch_id": null,
+  "github_run_id": 30806106326,
+  "mode": "effects",
+  "written_at": "2026-08-03T10:42:51.314Z",
+  "rejected": [
+    {
+      "mechanism_id": "IF-18",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "premise_contradicted_downstream",
+      "detail": "span_role=finding asserted for a span the same source later reverses: marker no-significant matched \"no significant difference\" in \"There was no significant difference in model predictions between the lowly relevant picture condition and no-picture condition.\", sharing condition, picture, relevant with the quote (D-129) — record cr_f76ae7996e340361e2feab3a",
+      "corpus_record_id": "cr_f76ae7996e340361e2feab3a",
+      "item": {
+        "id": "if-18-003",
+        "name": "CoLiDeS + Pic Navigation",
+        "fact": "Incorporating semantic information from pictures into the CoLiDeS model (CoLiDeS + Pic) predicts a significantly greater number of actual user clicks under highly relevant picture conditions compared to conditions with low or no picture relevance.",
+        "boundary": "Web navigation behavior",
+        "grade": "B+",
+        "confidence": 0.85,
+        "citations": [
+          {
+            "record_id": "cr_f76ae7996e340361e2feab3a",
+            "quote_or_locus": "Also, under thehighly relevant picture condition, CoLiDeS + Pic predicts significantly greater number of actual user clicks.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_f76ae7996e340361e2feab3a",
+          "quote_or_locus": "Also, under thehighly relevant picture condition, CoLiDeS + Pic predicts significantly greater number of actual user clicks.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "Also, under thehighly relevant picture condition, CoLiDeS + Pic predicts significantly greater number of actual user clicks.",
+        "quote_normalized": "also under thehighly relevant picture condition colides pic predicts significantly greater number of actual user clicks",
+        "source_raw": "Evaluating CoLiDeS + Pic: the role of relevance of pictures in user navigation behaviour\nCoLiDeS + Pic is a cognitive model of web-navigation that incorporates semantic information from pictures intoCoLiDeS. In our earlier research, we have demonstrated that by incorporating semantic information from pictures, CoLiDeS + Pic can predict the hyperlinks on the shortest path more frequently, and also with greater information scent, compared to earlier cognitive models of web-navigation like CoLiDeS that relied only on textualinformation from hyperlinks. In this article, we investigate the following research questions. First, would the increase in information scent have an impact on the actual user navigation behaviour? Second, do users actually follow the navigation path predicted by CoLiDeS + Pic? In other words, would CoLiDeS + Pic predict actual user navigation behaviour more accurately than CoLiDeS? We investigate these questions by varying the relevance of pictures on aweb page and studying the impact of varying relevance on the user navigation patterns. We found that under the highly relevant picture condition, users were more accurate and took less time to finish their tasks. Also, under thehighly relevant picture condition, CoLiDeS + Pic predicts significantly greater number of actual user clicks. There was no significant difference in model predictions between the lowly relevant picture condition and no-picture condition. These results validate the predictions made by CoLiDeS + Pic.",
+        "source_normalized": "evaluating colides pic the role of relevance of pictures in user navigation behaviour colides pic is a cognitive model of web navigation that incorporates semantic information from pictures intocolides in our earlier research we have demonstrated that by incorporating semantic information from pictures colides pic can predict the hyperlinks on the shortest path more frequently and also with greater information scent compared to earlier cognitive models of web navigation like colides that relied only on textualinformation from hyperlinks in this article we investigate the following research questions first would the increase in information scent have an impact on the actual user navigation behaviour second do users actually follow the navigation path predicted by colides pic in other words would colides pic predict actual user navigation behaviour more accurately than colides we investigate these questions by varying the relevance of pictures on aweb page and studying the impact of varying relevance on the user navigation patterns we found that under the highly relevant picture condition users were more accurate and took less time to finish their tasks also under thehighly relevant picture condition colides pic predicts significantly greater number of actual user clicks there was no significant difference in model predictions between the lowly relevant picture condition and no picture condition these results validate the predictions made by colides pic"
+      },
+      "corpus_side": {
+        "doi": "10.1080/0144929x.2011.606335",
+        "title": "Evaluating CoLiDeS + Pic: the role of relevance of pictures in user navigation behaviour"
+      }
+    },
+    {
+      "mechanism_id": "IF-18",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "doi_unresolved",
+      "detail": "DOI does not resolve for cr_9b40c12983e47701309a54c2",
+      "corpus_record_id": "cr_9b40c12983e47701309a54c2",
+      "item": {
+        "id": "if18_001",
+        "name": "Information Foraging Theory",
+        "fact": "Information foraging theory posits that humans, like animals, forage for information in patches, where they must decide between exploiting a current patch or exploring for new ones based on the rate of information gain.",
+        "boundary": "Information foraging in external environments and memory",
+        "grade": "A",
+        "confidence": 0.95,
+        "citations": [
+          {
+            "record_id": "cr_9b40c12983e47701309a54c2",
+            "quote_or_locus": "Information Foraging (IF) models are predicated on an analogy between these regulatory processes and the way in which animals forage for food in the wild.",
+            "span_role": "background"
+          },
+          {
+            "record_id": "cr_9b40c12983e47701309a54c2",
+            "quote_or_locus": "Younger adults demonstrated faster uptake (i.e., number of words found as a function of time) from individual puzzles than older adults but experienced more deceleration of rates during the search.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_9b40c12983e47701309a54c2",
+          "quote_or_locus": "Information Foraging (IF) models are predicated on an analogy between these regulatory processes and the way in which animals forage for food in the wild.",
+          "span_role": "background"
+        },
+        {
+          "record_id": "cr_9b40c12983e47701309a54c2",
+          "quote_or_locus": "Younger adults demonstrated faster uptake (i.e., number of words found as a function of time) from individual puzzles than older adults but experienced more deceleration of rates during the search.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "Information Foraging (IF) models are predicated on an analogy between these regulatory processes and the way in which animals forage for food in the wild.",
+        "quote_normalized": "information foraging if models are predicated on an analogy between these regulatory processes and the way in which animals forage for food in the wild",
+        "source_raw": "Information Foraging in the Unknown Patches across the Life Span\nInformation Foraging in the Unknown Patches across the Life Span Jessie Chin 1 (chin5@illinois.edu), Brennan Payne 1 (payne12@illinois.edu), Andrew Battles 2 (battles2@illinois.edu), Wai-Tat Fu 3 (wfu@illinois.edu), Daniel Morrow 1 (dgm@illinois.edu), Elizabeth A. L. Stine-Morrow 1 (eals@illinois.edu) Department of Educational Psychology, 2 Department of Electrical & Computer Engineering, Department of Computer Science University of Illinois at Urbana Champaign 405 N Mathews Ave Urbana, IL 61801 USA Abstract This study used a word search puzzle paradigm to examine the effects of task environment and individual differences in ability on information foraging. Younger and older adults attempted to maximize the number of items found in a set of 4 puzzles in which they were at liberty to search within a puzzle or switch between them. Younger adults demonstrated faster uptake (i.e., number of words found as a function of time) from individual puzzles than older adults but experienced more deceleration of rates during the search. Additionally, older adults switched less often and their switching was less dependent on the uptake rate compared to younger adults. Both younger and older adults stayed longer than was optimal in a patch, older adults were especially likely to persevere suboptimally. Collectively, these results suggest that individuals may differentially optimize information gain through self-regulation of exploration and exploitation. Keywords: Information foraging; cognitive aging; adaptive behavior. information uptake; Introduction Self-regulation of cognition in natural environments almost always involves alternating phases of exploration, which entails search in the service of deciding how effort will be allocated, and exploitation, or task engagement in which effort is allocated to meet task-specific goals. Information Foraging (IF) models are predicated on an analogy between these regulatory processes and the way in which animals forage for food in the wild. Information foraging has been used to account for how people search for information in external environments, such as the WWW (e.g., Fu & Pirolli, 2007; Payne et al., 2007; Pirolli & Card, 1999) and in memory (Hills et al., 2010, 2012). However, even though IF presents a compelling metaphor, there is actually very little empirical research investigating the alignment between IF principles and how people interact with the environment to search and make use of information sources (Metcalfe & Jacobs, 2010). There is also little work that has examined how individual differences afford or constrain search in and uptake from information sources. In this study, we used a simple word search puzzle to explore these issues. According to the IF theory (Fu & Pirolli, 2007; Pirolli & Card, 1999), certain basic properties of animal foraging can be applied to the way human seek and consume information. First, food is distributed in the wild in clusters, or “patches,” that vary in their profitability (i.e., potential yield) and in their tractability (i.e., how much of an investment of resources is needed for exploitation; e.g., apples on low branches or high branches). Resources in the patch are often finite and unknown to the foragers in advance, though “scent cues” may provide hints about profitability of the patch. Second, as patches become depleted, the rate of uptake decelerates. Third, the forager faces a tradeoff between gaining nutrients from exploiting a patch and consuming energy from exploring for food (e.g., to move among patches). The optimal foraging theory predicts that animals will stay in a patch until the expected rate of gain falls below the overall rate of gain, which takes into account the cost of moving to a new patch (Charnov, 1976; Stephens & Kreb, 1986). Finally, because food is crucial to survival, foragers work to maximize their food uptake and rarely revisit a depleted patch (Stephen, Brown & Ydenberg, 2007; Stephens & Krebs, 1986). There are similarities and differences between animal foraging and human information foraging. For example, information is often clustered into patches (e.g., particular forms of print resources, webpages), though units of information are often hard to quantify in everyday life. Although information seekers may sometimes find it difficult to estimate profitability and tractability before visiting a patch, they may judge the richness or relevance of information based on their knowledge or expertise. Learners often selectively allocate their attention to materials as long as they perceive themselves to be learning, and disengage if they perceive their rate of learning to decrease below a threshold (e.g., Metcalfe, 2002; Metcalfe & Kornell, 2005). While information seekers have been found to adjust their search behavior to the statistical structures of the task environments (e.g., Fu & Pirolli, 2007), given the limited computational capacity and imperfect knowledge of human beings, the decision to explore a new task or exploit the current one is often suboptimal due to the biased representation of the local environment (e.g., Simon, 1956). For example, Payne, Duggan and Neth (2007) found, in a series of cognitive foraging experiments, that switch decisions could not be entirely predicted by the rate of gain from a patch. Rather, people tended to switch more than optimal without monitoring the real-time change of expected gain. Finally, empirical studies show that information seekers often revisit information patches (e.g. Payne et al., 2007). In fact, unlike food, information will not be exhausted after consumption. Therefore, the benefit of",
+        "source_normalized": "information foraging in the unknown patches across the life span information foraging in the unknown patches across the life span jessie chin 1 chin5 illinois edu brennan payne 1 payne12 illinois edu andrew battles 2 battles2 illinois edu wai tat fu 3 wfu illinois edu daniel morrow 1 dgm illinois edu elizabeth a l stine morrow 1 eals illinois edu department of educational psychology 2 department of electrical computer engineering department of computer science university of illinois at urbana champaign 405 n mathews ave urbana il 61801 usa abstract this study used a word search puzzle paradigm to examine the effects of task environment and individual differences in ability on information foraging younger and older adults attempted to maximize the number of items found in a set of 4 puzzles in which they were at liberty to search within a puzzle or switch between them younger adults demonstrated faster uptake i e number of words found as a function of time from individual puzzles than older adults but experienced more deceleration of rates during the search additionally older adults switched less often and their switching was less dependent on the uptake rate compared to younger adults both younger and older adults stayed longer than was optimal in a patch older adults were especially likely to persevere suboptimally collectively these results suggest that individuals may differentially optimize information gain through self regulation of exploration and exploitation keywords information foraging cognitive aging adaptive behavior information uptake introduction self regulation of cognition in natural environments almost always involves alternating phases of exploration which entails search in the service of deciding how effort will be allocated and exploitation or task engagement in which effort is allocated to meet task specific goals information foraging if models are predicated on an analogy between these regulatory processes and the way in which animals forage for food in the wild information foraging has been used to account for how people search for information in external environments such as the www e g fu pirolli 2007 payne et al 2007 pirolli card 1999 and in memory hills et al 2010 2012 however even though if presents a compelling metaphor there is actually very little empirical research investigating the alignment between if principles and how people interact with the environment to search and make use of information sources metcalfe jacobs 2010 there is also little work that has examined how individual differences afford or constrain search in and uptake from information sources in this study we used a simple word search puzzle to explore these issues according to the if theory fu pirolli 2007 pirolli card 1999 certain basic properties of animal foraging can be applied to the way human seek and consume information first food is distributed in the wild in clusters or patches that vary in their profitability i e potential yield and in their tractability i e how much of an investment of resources is needed for exploitation e g apples on low branches or high branches resources in the patch are often finite and unknown to the foragers in advance though scent cues may provide hints about profitability of the patch second as patches become depleted the rate of uptake decelerates third the forager faces a tradeoff between gaining nutrients from exploiting a patch and consuming energy from exploring for food e g to move among patches the optimal foraging theory predicts that animals will stay in a patch until the expected rate of gain falls below the overall rate of gain which takes into account the cost of moving to a new patch charnov 1976 stephens kreb 1986 finally because food is crucial to survival foragers work to maximize their food uptake and rarely revisit a depleted patch stephen brown ydenberg 2007 stephens krebs 1986 there are similarities and differences between animal foraging and human information foraging for example information is often clustered into patches e g particular forms of print resources webpages though units of information are often hard to quantify in everyday life although information seekers may sometimes find it difficult to estimate profitability and tractability before visiting a patch they may judge the richness or relevance of information based on their knowledge or expertise learners often selectively allocate their attention to materials as long as they perceive themselves to be learning and disengage if they perceive their rate of learning to decrease below a threshold e g metcalfe 2002 metcalfe kornell 2005 while information seekers have been found to adjust their search behavior to the statistical structures of the task environments e g fu pirolli 2007 given the limited computational capacity and imperfect knowledge of human beings the decision to explore a new task or exploit the current one is often suboptimal due to the biased representation of the local environment e g simon 1956 for example payne duggan and neth 2007 found in a series of cognitive foraging experiments that switch decisions could not be entirely predicted by the rate of gain from a patch rather people tended to switch more than optimal without monitoring the real time change of expected gain finally empirical studies show that information seekers often revisit information patches e g payne et al 2007 in fact unlike food information will not be exhausted after consumption therefore the benefit of"
+      },
+      "corpus_side": {
+        "doi": null,
+        "title": "Information Foraging in the Unknown Patches across the Life Span"
+      }
+    }
+  ]
+}

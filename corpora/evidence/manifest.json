@@ -6,27 +6,288 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-03T08:57:02.383Z",
-    "status": "success",
+    "timestamp": "2026-08-03T10:37:41.656Z",
+    "status": "partial",
     "params": {
-      "mechanism": "CL-14",
-      "terms": ""
+      "mechanism": "DE-23",
+      "terms": "default effect decision making subscription retention;default option organ donation policy subscription retention;effort reduction friction conversion subscription retention"
     },
-    "records_fetched": 511,
-    "files_written": 1,
-    "duration_s": 48.22,
+    "records_fetched": 0,
+    "files_written": 0,
+    "duration_s": 0.13,
+    "error": "upstream API quota requires a later continuation; logical run DE-23-msd3i5jt checkpointed at query 1/630",
     "warnings": {
-      "low_novelty": true
+      "resume_required": true
     },
     "cost": {
-      "api_calls": 48,
-      "duration_s": 48.22,
+      "api_calls": 1,
+      "duration_s": 0.13,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-03T10:37:41.656Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "DE-23",
+        "terms": "default effect decision making subscription retention;default option organ donation policy subscription retention;effort reduction friction conversion subscription retention"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 0.13,
+      "error": "upstream API quota requires a later continuation; logical run DE-23-msd3i5jt checkpointed at query 1/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.13,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-08-03T10:37:41.210Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "CO-19",
+        "terms": "competence need satisfaction self-determination subscription retention;perceived competence technology use subscription retention;self-efficacy interface use subscription retention"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 0.14,
+      "error": "upstream API quota requires a later continuation; logical run CO-19-msd3i57g checkpointed at query 1/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.14,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-08-03T10:37:40.758Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "AU-20",
+        "terms": "autonomy need satisfaction technology subscription retention;perceived control user interface subscription retention;user control reversibility undo subscription retention"
+      },
+      "records_fetched": 104,
+      "files_written": 0,
+      "duration_s": 0.14,
+      "error": "upstream API quota requires a later continuation; logical run AU-20-msd3i4ux checkpointed at query 1/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.14,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-08-03T10:37:40.306Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "AE-26",
+        "terms": "aesthetic usability effect subscription retention;what is beautiful is usable subscription retention;visual aesthetics perceived usability subscription retention"
+      },
+      "records_fetched": 66,
+      "files_written": 0,
+      "duration_s": 0.14,
+      "error": "upstream API quota requires a later continuation; logical run AE-26-msd3i4id checkpointed at query 1/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.14,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-08-03T10:37:39.862Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 0.13,
+      "error": "upstream API quota requires a later continuation; logical run RR-25-msd3i45z checkpointed at query 1/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.13,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-08-03T10:37:39.413Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 0.13,
+      "error": "upstream API quota requires a later continuation; logical run FL-24-msd3i3ti checkpointed at query 1/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.13,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-08-03T10:37:38.965Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FB-21",
+        "terms": "response time human computer interaction b2b enterprise;system feedback latency user perception b2b enterprise;interaction latency tolerance thresholds b2b enterprise"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 0.13,
+      "error": "upstream API quota requires a later continuation; logical run FB-21-msd3i3h2 checkpointed at query 1/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.13,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-08-03T10:37:38.511Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "ER-22",
+        "terms": "error recovery user interface b2b enterprise;undo reversibility interaction design b2b enterprise;error message comprehension usability b2b enterprise"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 0.13,
+      "error": "upstream API quota requires a later continuation; logical run ER-22-msd3i34h checkpointed at query 1/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.13,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-08-03T10:37:38.059Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "DE-23",
+        "terms": "default effect decision making b2b enterprise;default option organ donation policy b2b enterprise;effort reduction friction conversion b2b enterprise"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 0.14,
+      "error": "upstream API quota requires a later continuation; logical run DE-23-msd3i2rw checkpointed at query 1/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.14,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-08-03T10:36:30.773Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "CO-19",
+        "terms": "competence need satisfaction self-determination b2b enterprise;perceived competence technology use b2b enterprise;self-efficacy interface use b2b enterprise"
+      },
+      "records_fetched": 52,
+      "files_written": 0,
+      "duration_s": 67.01,
+      "error": "upstream API quota requires a later continuation; logical run CO-19-msd3gmuv checkpointed at query 44/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 55,
+        "duration_s": 67.01,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-08-03T10:35:35.531Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "AU-20",
+        "terms": "autonomy need satisfaction technology b2b enterprise;perceived control user interface b2b enterprise;user control reversibility undo b2b enterprise"
+      },
+      "records_fetched": 104,
+      "files_written": 1,
+      "duration_s": 54.96,
+      "error": "search semantic-scholar cross-domain \"perceived control user interface b2b enterprise cross-domain generalization\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 52,
+        "duration_s": 54.96,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
+    {
+      "timestamp": "2026-08-03T10:35:00.407Z",
+      "status": "success",
+      "params": {
+        "mechanism": "AE-26",
+        "terms": "aesthetic usability effect b2b enterprise;what is beautiful is usable b2b enterprise;visual aesthetics perceived usability b2b enterprise"
+      },
+      "records_fetched": 66,
+      "files_written": 1,
+      "duration_s": 34.85,
+      "cost": {
+        "api_calls": 35,
+        "duration_s": 34.85,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-03T08:57:02.383Z",
       "status": "success",
@@ -194,252 +455,33 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-03T08:40:01.250Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14",
-        "terms": ""
-      },
-      "records_fetched": 511,
-      "files_written": 1,
-      "duration_s": 47.3,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.3,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-03T08:37:38.909Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14",
-        "terms": ""
-      },
-      "records_fetched": 511,
-      "files_written": 1,
-      "duration_s": 47.32,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.32,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-03T08:35:36.106Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14",
-        "terms": ""
-      },
-      "records_fetched": 511,
-      "files_written": 1,
-      "duration_s": 47.3,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.3,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-03T08:33:54.206Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14",
-        "terms": ""
-      },
-      "records_fetched": 511,
-      "files_written": 1,
-      "duration_s": 47.44,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.44,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-03T08:32:41.371Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14"
-      },
-      "records_fetched": 511,
-      "files_written": 1,
-      "duration_s": 47.29,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.29,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-21T13:19:12.562Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "CL-14",
-        "terms": "split attention effect;cognitive load measurement replication;working memory limits information processing;extraneous cognitive load instructional;cognitive load theory"
-      },
-      "records_fetched": 790,
-      "files_written": 0,
-      "duration_s": 0.31,
-      "error": "api.openalex.org upstream cooldown is 38448s; checkpoint and resume later; logical run CL-14-mrun56vs checkpointed at query 70/1090",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 1,
-        "duration_s": 0.31,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-21T12:35:46.249Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "CL-14"
-      },
-      "records_fetched": 497,
-      "files_written": 1,
-      "duration_s": 234.16,
-      "error": "search semantic-scholar critique \"cognitive load theory critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar boundary \"cognitive load theory boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar canon \"extraneous cognitive load instructional\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar application \"extraneous cognitive load instructional applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar replication \"extraneous cognitive load instructional replication\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar cross-domain \"extraneous cognitive load instructional cross-domain generalization\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar recent \"working memory limits information processing\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar critique \"working memory limits information processing critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar boundary \"working memory limits information processing boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar canon \"cognitive load measurement replication\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true,
-        "capped": true
-      },
-      "cost": {
-        "api_calls": 150,
-        "duration_s": 234.16,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-21T12:33:35.528Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14",
-        "terms": "extraneous cognitive load instructional;working memory limits information processing;cognitive load measurement replication;split attention effect;cognitive load theory"
-      },
-      "records_fetched": 1000,
-      "files_written": 1,
-      "duration_s": 34.81,
-      "warnings": {
-        "capped": true
-      },
-      "cost": {
-        "api_calls": 28,
-        "duration_s": 34.81,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-21T12:31:45.827Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14"
-      },
-      "records_fetched": 896,
-      "files_written": 1,
-      "duration_s": 60.05,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 49,
-        "duration_s": 60.05,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-21T12:29:58.963Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14"
-      },
-      "records_fetched": 896,
-      "files_written": 1,
-      "duration_s": 72.55,
-      "cost": {
-        "api_calls": 60,
-        "duration_s": 72.55,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-20T16:07:39.292Z",
-      "status": "success",
-      "params": {
-        "mechanism": "IF-18"
-      },
-      "records_fetched": 227,
-      "files_written": 1,
-      "duration_s": 97.55,
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 57,
-        "duration_s": 97.55,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-20T16:04:50.221Z",
-      "status": "success",
-      "params": {
-        "mechanism": "SC-17"
-      },
-      "records_fetched": 390,
-      "files_written": 1,
-      "duration_s": 71.23,
-      "cost": {
-        "api_calls": 62,
-        "duration_s": 71.23,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
+    {
+      "path": "AE-26.json",
+      "records": 66,
+      "bytes": 178024,
+      "categories": {
+        "foundational": 1,
+        "meta-analysis": 0,
+        "replication": 0,
+        "dissent": 19,
+        "recent": 33
+      }
+    },
+    {
+      "path": "AU-20.json",
+      "records": 104,
+      "bytes": 354029,
+      "categories": {
+        "foundational": 3,
+        "meta-analysis": 2,
+        "replication": 13,
+        "dissent": 9,
+        "recent": 67
+      }
+    },
     {
       "path": "CG-05.json",
       "records": 185,

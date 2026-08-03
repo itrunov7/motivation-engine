@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-03T10:40:10.210Z",
+  "dispatch_id": null,
+  "github_run_id": 30806106326,
+  "mode": "effects",
+  "written_at": "2026-08-03T10:40:29.332Z",
+  "rejected": [
+    {
+      "mechanism_id": "SC-06",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "premise_contradicted_downstream",
+      "detail": "span_role=finding asserted for a span the same source later reverses: marker neg+outcome-verb matched \"did not moderate\" in \"Finally, although personal impulsiveness positively affected a consumer’s impulse purchase, it did not moderate the influence of perceived arousal on impulse purchase.\", sharing arousal, consumer, impulse, perceived, purchase with the quote (D-129) — record cr_bad94ba129e866e7d04d831c",
+      "corpus_record_id": "cr_bad94ba129e866e7d04d831c",
+      "item": {
+        "id": "SC-06-01",
+        "name": "Limited-Quantity Scarcity (LQS)",
+        "fact": "Limited-quantity scarcity increases a consumer's perceived arousal, which subsequently leads to impulse purchase.",
+        "boundary": "Online retail environment",
+        "grade": "A",
+        "confidence": 0.95,
+        "citations": [
+          {
+            "record_id": "cr_bad94ba129e866e7d04d831c",
+            "quote_or_locus": "The results provided strong evidence that both LQS and LTS increased a consumer’s perceived arousal, which then led to impulse purchase.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_bad94ba129e866e7d04d831c",
+          "quote_or_locus": "The results provided strong evidence that both LQS and LTS increased a consumer’s perceived arousal, which then led to impulse purchase.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "The results provided strong evidence that both LQS and LTS increased a consumer’s perceived arousal, which then led to impulse purchase.",
+        "quote_normalized": "the results provided strong evidence that both lqs and lts increased a consumer s perceived arousal which then led to impulse purchase",
+        "source_raw": "How does scarcity promotion lead to impulse purchase in the online market? A field experiment\nAbstract Online retailers employ two strategies of limited-quantity and limited-time to entice consumers’ impulse purchases. However, little research has investigated the effects of these promotion strategies. Drawing on the competitive arousal model and the scarcity model, this paper develops a research model to demonstrate the influences of limited-quantity scarcity (LQS) and limited-time scarcity (LTS) on impulse purchase through the mediating mechanism of perceived arousal. By setting up a new online store on a well-known Chinese e-commerce platform, we conducted a field experiment with 182 participants to test our research model. The results provided strong evidence that both LQS and LTS increased a consumer’s perceived arousal, which then led to impulse purchase. Furthermore, there was an interaction effect between the two types of scarcity strategies on perceived arousal. Finally, although personal impulsiveness positively affected a consumer’s impulse purchase, it did not moderate the influence of perceived arousal on impulse purchase. Our findings provide both theoretical implications and design guidelines on triumphant employment of scarcity promotion strategies.",
+        "source_normalized": "how does scarcity promotion lead to impulse purchase in the online market a field experiment abstract online retailers employ two strategies of limited quantity and limited time to entice consumers impulse purchases however little research has investigated the effects of these promotion strategies drawing on the competitive arousal model and the scarcity model this paper develops a research model to demonstrate the influences of limited quantity scarcity lqs and limited time scarcity lts on impulse purchase through the mediating mechanism of perceived arousal by setting up a new online store on a well known chinese e commerce platform we conducted a field experiment with 182 participants to test our research model the results provided strong evidence that both lqs and lts increased a consumer s perceived arousal which then led to impulse purchase furthermore there was an interaction effect between the two types of scarcity strategies on perceived arousal finally although personal impulsiveness positively affected a consumer s impulse purchase it did not moderate the influence of perceived arousal on impulse purchase our findings provide both theoretical implications and design guidelines on triumphant employment of scarcity promotion strategies"
+      },
+      "corpus_side": {
+        "doi": "10.1016/j.im.2020.103283",
+        "title": "How does scarcity promotion lead to impulse purchase in the online market? A field experiment"
+      }
+    },
+    {
+      "mechanism_id": "SC-06",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "premise_contradicted_downstream",
+      "detail": "span_role=finding asserted for a span the same source later reverses: marker no-significant matched \"no statistically significant difference\" in \"There is no statistically significant difference in purchase intention of consumers with high and low needs for uniqueness in a situation of scarcity appeal messaging.\", sharing appeal, consumer, scarcity with the quote (D-129) — record cr_0f9cc77e62ca13171dd6c342",
+      "corpus_record_id": "cr_0f9cc77e62ca13171dd6c342",
+      "item": {
+        "id": "scarcity_appeal_favorable_response",
+        "name": "Quantity Scarcity Appeal",
+        "fact": "Consumers respond more favorably to quantity scarcity appeal offers compared to no-scarcity appeal offers.",
+        "boundary": "Consumer behavior in promotional settings",
+        "grade": "A",
+        "confidence": 0.95,
+        "citations": [
+          {
+            "record_id": "cr_0f9cc77e62ca13171dd6c342",
+            "quote_or_locus": "Consumers respond more favourably to quantity scarcity appeal offer when compared with no-scarcity appeal offer.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_0f9cc77e62ca13171dd6c342",
+          "quote_or_locus": "Consumers respond more favourably to quantity scarcity appeal offer when compared with no-scarcity appeal offer.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "Consumers respond more favourably to quantity scarcity appeal offer when compared with no-scarcity appeal offer.",
+        "quote_normalized": "consumers respond more favourably to quantity scarcity appeal offer when compared with no scarcity appeal offer",
+        "source_raw": "An Examination of Response of Consumers with Different Levels of Uniqueness to Limited Quantity Offers\nExecutive Summary Marketers try to influence consumers through promotional offers by restricting availability of products to a limited number of customers, a limited time period, or a specific segment, thereby creating a perception of scarcity. Such promotional appeal of making a product or offer scarce is called as scarcity appeal. Literature suggests that people with high need for uniqueness (NFU) prefer scarce products, or at least products which are depleting fast. However, the relationship between scarcity of offers and the NFU has not been much explored. The objective of this research is to understand how consumers with different levels of uniqueness respond to the scarcity appeal offer, especially with discount. Hypotheses relate to variability of purchase intent and attitude towards the product due to scarcity versus no-scarcity sales promotion appeals and by consumers with high and low needs for uniqueness. Proposed hypotheses were tested using 2 × 2 between-subjects factorial design. Quantity scarcity and no-scarcity appeals were manipulated using pre-tested and validated scenarios. Product used in the scenarios (laptop) was identified through an iterative process of seeking inputs from respondents with demographic profile similar to those in the final sample. Consumers’ need for uniqueness (CNFU) purchase intention, and attitude towards product were measured using scales that were pre-tested and validated using accepted protocols. On testing the formulated hypotheses using experimental design, it was found that: Consumers respond more favourably to quantity scarcity appeal offer when compared with no-scarcity appeal offer. Consumers with higher NFU indicate higher purchase intention in a no-scarcity appeal situation when compared with those with low NFU. There is no statistically significant difference in purchase intention of consumers with high and low needs for uniqueness in a situation of scarcity appeal messaging.",
+        "source_normalized": "an examination of response of consumers with different levels of uniqueness to limited quantity offers executive summary marketers try to influence consumers through promotional offers by restricting availability of products to a limited number of customers a limited time period or a specific segment thereby creating a perception of scarcity such promotional appeal of making a product or offer scarce is called as scarcity appeal literature suggests that people with high need for uniqueness nfu prefer scarce products or at least products which are depleting fast however the relationship between scarcity of offers and the nfu has not been much explored the objective of this research is to understand how consumers with different levels of uniqueness respond to the scarcity appeal offer especially with discount hypotheses relate to variability of purchase intent and attitude towards the product due to scarcity versus no scarcity sales promotion appeals and by consumers with high and low needs for uniqueness proposed hypotheses were tested using 2 2 between subjects factorial design quantity scarcity and no scarcity appeals were manipulated using pre tested and validated scenarios product used in the scenarios laptop was identified through an iterative process of seeking inputs from respondents with demographic profile similar to those in the final sample consumers need for uniqueness cnfu purchase intention and attitude towards product were measured using scales that were pre tested and validated using accepted protocols on testing the formulated hypotheses using experimental design it was found that consumers respond more favourably to quantity scarcity appeal offer when compared with no scarcity appeal offer consumers with higher nfu indicate higher purchase intention in a no scarcity appeal situation when compared with those with low nfu there is no statistically significant difference in purchase intention of consumers with high and low needs for uniqueness in a situation of scarcity appeal messaging"
+      },
+      "corpus_side": {
+        "doi": "10.1177/0256090916663390",
+        "title": "An Examination of Response of Consumers with Different Levels of Uniqueness to Limited Quantity Offers"
+      }
+    }
+  ]
+}

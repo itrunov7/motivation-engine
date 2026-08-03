@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-03T10:42:52.220Z",
+  "dispatch_id": null,
+  "github_run_id": 30806106326,
+  "mode": "effects",
+  "written_at": "2026-08-03T10:43:11.181Z",
+  "rejected": [
+    {
+      "mechanism_id": "MM-15",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "quote_not_in_source",
+      "detail": "quote not a substring of cr_8ba9259da1066e1a65a79d73: \"Providing single-modality cueing (either visual cueing or auditory cueing) in multimedia lessons does not consistently i\"",
+      "corpus_record_id": "cr_8ba9259da1066e1a65a79d73",
+      "item": {
+        "id": "mm15_signaling_principle",
+        "name": "Signaling Principle",
+        "fact": "People learn more deeply from multimedia messages when cues are added that guide attention to relevant elements or highlight the organization of essential material.",
+        "boundary": "Single-modality cueing does not consistently improve learning; coordinated dual cues (auditory and visual) are more effective.",
+        "grade": "A",
+        "confidence": 0.95,
+        "citations": [
+          {
+            "record_id": "cr_818a8cc4eb2cbca5de239d24",
+            "quote_or_locus": "The signaling principle, also known as the cueing principle, refers to the finding that people learn more deeply from a multimedia message when cues are added that guide attention to the relevant elements of the material or highlight the organization of the essential material.",
+            "span_role": "finding"
+          },
+          {
+            "record_id": "cr_8ba9259da1066e1a65a79d73",
+            "quote_or_locus": "Providing single-modality cueing (either visual cueing or auditory cueing) in multimedia lessons does not consistently improve learning outcomes. ... Across all 3 experiments, students spent more time attending to the relevant portion of the graphic and performed better on posttests if coordinated cues were added to the lesson",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_818a8cc4eb2cbca5de239d24",
+          "quote_or_locus": "The signaling principle, also known as the cueing principle, refers to the finding that people learn more deeply from a multimedia message when cues are added that guide attention to the relevant elements of the material or highlight the organization of the essential material.",
+          "span_role": "finding"
+        },
+        {
+          "record_id": "cr_8ba9259da1066e1a65a79d73",
+          "quote_or_locus": "Providing single-modality cueing (either visual cueing or auditory cueing) in multimedia lessons does not consistently improve learning outcomes. ... Across all 3 experiments, students spent more time attending to the relevant portion of the graphic and performed better on posttests if coordinated cues were added to the lesson",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "Providing single-modality cueing (either visual cueing or auditory cueing) in multimedia lessons does not consistently improve learning outcomes. ... Across all 3 experiments, students spent more time attending to the relevant portion of the graphic and performed better on posttests if coordinated cues were added to the lesson",
+        "quote_normalized": "providing single modality cueing either visual cueing or auditory cueing in multimedia lessons does not consistently improve learning outcomes across all 3 experiments students spent more time attending to the relevant portion of the graphic and performed better on posttests if coordinated cues were added to the lesson",
+        "source_raw": "Coordinating visual and auditory cueing in multimedia learning.\nProviding single-modality cueing (either visual cueing or auditory cueing) in multimedia lessons does not consistently improve learning outcomes. In 3 eye-tracking experiments, some students learned an onscreen lesson with an oral explanation of graphics and then took a posttest on the material (no cues group). Across all 3 experiments, students spent more time attending to the relevant portion of the graphic and performed better on posttests if coordinated cues were added to the lesson (coordinated dual cues group), in which key elements were spoken with deeper intonation (auditory cue) at the same time the element turned red in the graphic (visual cue). Presenting coordinated visual and auditory cues also resulted in better posttest performance than presenting only a visual cue (visual-only cues group) or auditory cue alone (auditory-only cues group) in Experiment 1, or presenting visual and auditory cues that were unmatched (mismatched dual cues group) in Experiment 2 or unsynchronized (visual-before-auditory cues group and visual-after-auditory cues group) in Experiment 3. These findings extend and sharpen the signaling principle concerning how best to highlight instructional material in multimedia learning, using coordinated auditory and visual cues. (PsycINFO Database Record (c) 2019 APA, all rights reserved)",
+        "source_normalized": "coordinating visual and auditory cueing in multimedia learning providing single modality cueing either visual cueing or auditory cueing in multimedia lessons does not consistently improve learning outcomes in 3 eye tracking experiments some students learned an onscreen lesson with an oral explanation of graphics and then took a posttest on the material no cues group across all 3 experiments students spent more time attending to the relevant portion of the graphic and performed better on posttests if coordinated cues were added to the lesson coordinated dual cues group in which key elements were spoken with deeper intonation auditory cue at the same time the element turned red in the graphic visual cue presenting coordinated visual and auditory cues also resulted in better posttest performance than presenting only a visual cue visual only cues group or auditory cue alone auditory only cues group in experiment 1 or presenting visual and auditory cues that were unmatched mismatched dual cues group in experiment 2 or unsynchronized visual before auditory cues group and visual after auditory cues group in experiment 3 these findings extend and sharpen the signaling principle concerning how best to highlight instructional material in multimedia learning using coordinated auditory and visual cues psycinfo database record c 2019 apa all rights reserved"
+      },
+      "corpus_side": {
+        "doi": "10.1037/edu0000285",
+        "title": "Coordinating visual and auditory cueing in multimedia learning."
+      }
+    }
+  ]
+}

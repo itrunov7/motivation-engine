@@ -10,11 +10,24 @@
     "grade": "C+",
     "grade_basis": "Corpus evidence = one primary study (Mousavi, Low & Sweller 1995), six experiments on geometry worked examples. Narrowed from the model's A: the clause 'increases extraneous working memory load' was not in any cited span, and the second citation (Ayres & Sweller 2005, The Split-Attention Principle in Multimedia Learning) was a design prescription -- 'it is important to avoid formats that require learners to split their attention' -- rather than evidence, so it was dropped from both provenance and source. Capped below the A band because a single-DOI basis is capped there unconditionally. The first provenance item is the paper's own premise, not its finding; the second item is the finding that the prediction built on that premise held across six experiments, which is why the record is graded on a confirmed premise rather than on an unchecked one. Grade reflects OUR corpus provenance, not the literature at large; to be re-graded when the computed rubric (D-114) lands.",
     "source": [
-      "10.1037/0022-0663.87.2.319"
+      "10.1037/0022-0663.87.2.319",
+      "10.1109/rita.2023.3250580"
     ],
-    "boundary": "Instructional design and multimedia learning",
+    "boundary": "Applies to learning data structures in computer science.",
     "realization_ids": [],
     "provenance": [
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_16d3d5c5c3244176195fe4a7",
+        "doi": "10.1037/0022-0663.87.2.319",
+        "title": "Reducing cognitive load by mixing auditory and visual presentation modes.",
+        "quote_or_locus": "The results of 6 experiments supported this hypothesis",
+        "source_span": {
+          "start": 871,
+          "end": 925,
+          "source_text_sha256": "c19beafdde8d65849576add9f5de6dd01ee760dc2cb5f86b253d12ae389dcbb2"
+        }
+      },
       {
         "mechanism_id": "CL-14",
         "corpus_record_id": "cr_16d3d5c5c3244176195fe4a7",
@@ -29,19 +42,32 @@
       },
       {
         "mechanism_id": "CL-14",
-        "corpus_record_id": "cr_16d3d5c5c3244176195fe4a7",
-        "doi": "10.1037/0022-0663.87.2.319",
-        "title": "Reducing cognitive load by mixing auditory and visual presentation modes.",
-        "quote_or_locus": "The results of 6 experiments supported this hypothesis",
+        "corpus_record_id": "cr_bb24fe2aef25808a289293aa",
+        "doi": "10.1109/rita.2023.3250580",
+        "title": "Applying Cognitive Load Theory and the Split Attention Effect to Learning Data Structures",
+        "quote_or_locus": "the spatial and temporal integration of linked list node diagrams and the corresponding worked example code for the implementation of its basic operations can benefit students with learning gaps in previous introductory programming courses",
         "source_span": {
-          "start": 871,
-          "end": 925,
-          "source_text_sha256": "c19beafdde8d65849576add9f5de6dd01ee760dc2cb5f86b253d12ae389dcbb2"
-        }
+          "start": 1003,
+          "end": 1242,
+          "source_text_sha256": "bbf827536fecf5ad0d5dda900404613396c976197edb39ab09adf4c06759f28f"
+        },
+        "span_role": "finding"
       }
     ]
   },
   "provenance": [
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_16d3d5c5c3244176195fe4a7",
+      "doi": "10.1037/0022-0663.87.2.319",
+      "title": "Reducing cognitive load by mixing auditory and visual presentation modes.",
+      "quote_or_locus": "The results of 6 experiments supported this hypothesis",
+      "source_span": {
+        "start": 871,
+        "end": 925,
+        "source_text_sha256": "c19beafdde8d65849576add9f5de6dd01ee760dc2cb5f86b253d12ae389dcbb2"
+      }
+    },
     {
       "mechanism_id": "CL-14",
       "corpus_record_id": "cr_16d3d5c5c3244176195fe4a7",
@@ -56,24 +82,25 @@
     },
     {
       "mechanism_id": "CL-14",
-      "corpus_record_id": "cr_16d3d5c5c3244176195fe4a7",
-      "doi": "10.1037/0022-0663.87.2.319",
-      "title": "Reducing cognitive load by mixing auditory and visual presentation modes.",
-      "quote_or_locus": "The results of 6 experiments supported this hypothesis",
+      "corpus_record_id": "cr_bb24fe2aef25808a289293aa",
+      "doi": "10.1109/rita.2023.3250580",
+      "title": "Applying Cognitive Load Theory and the Split Attention Effect to Learning Data Structures",
+      "quote_or_locus": "the spatial and temporal integration of linked list node diagrams and the corresponding worked example code for the implementation of its basic operations can benefit students with learning gaps in previous introductory programming courses",
       "source_span": {
-        "start": 871,
-        "end": 925,
-        "source_text_sha256": "c19beafdde8d65849576add9f5de6dd01ee760dc2cb5f86b253d12ae389dcbb2"
-      }
+        "start": 1003,
+        "end": 1242,
+        "source_text_sha256": "bbf827536fecf5ad0d5dda900404613396c976197edb39ab09adf4c06759f28f"
+      },
+      "span_role": "finding"
     }
   ],
-  "confidence": 0.7,
-  "operation": "create",
-  "proposed_by": "extraction:github-actions-30618907548",
-  "proposed_at": "2026-07-31T09:10:13.532Z",
-  "status": "approved",
+  "confidence": 0.75,
+  "operation": "enrich",
+  "proposed_by": "extraction:github-actions-30806106326",
+  "proposed_at": "2026-08-03T10:42:21.863Z",
+  "status": "pending",
   "hold_reason": null,
-  "decided_by": "owner",
-  "decided_at": "2026-07-31T12:09:40.571Z",
-  "decision_note": "Approved at C+ after the narrowing in D-127. This is the first CL-14 effect resting on a primary experimental paper rather than a review, and it is still capped in the C band because the corpus holds exactly one DOI for it -- the split-attention literature is far larger than our corpus of it, and the grade states what WE hold, not what the field holds. The record is deliberately less than the model claimed: no extraneous-load mechanism, no second source, no A."
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
 }

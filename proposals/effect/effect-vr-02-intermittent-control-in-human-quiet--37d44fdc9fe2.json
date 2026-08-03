@@ -1,0 +1,56 @@
+{
+  "id": "effect-vr-02-intermittent-control-in-human-quiet--37d44fdc9fe2",
+  "type": "effect",
+  "target": "VR-02",
+  "payload": {
+    "id": "vr-02-01",
+    "mechanism_id": "VR-02",
+    "name": "Intermittent control in human quiet stance",
+    "fact": "Optimal neural control for balancing a one-segment inverted pendulum model, derived via delayed reinforcement learning, exhibits intermittent rather than continuous characteristics.",
+    "grade": "A",
+    "source": [
+      "10.1016/j.medengphy.2024.104197"
+    ],
+    "boundary": "Human quiet stance control",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "VR-02",
+        "corpus_record_id": "cr_4984b452adc27e8b3dd5e0cb",
+        "doi": "10.1016/j.medengphy.2024.104197",
+        "title": "Delayed reinforcement learning converges to intermittent control for human quiet stance.",
+        "quote_or_locus": "The simulation results indicated that the optimal neural controller exhibits intermittent, and not continuous, characteristics",
+        "source_span": {
+          "start": 1135,
+          "end": 1261,
+          "source_text_sha256": "750851a2a32508980980600444fac03b73a8a2138109ac44da35958df5bb2fbf"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "VR-02",
+      "corpus_record_id": "cr_4984b452adc27e8b3dd5e0cb",
+      "doi": "10.1016/j.medengphy.2024.104197",
+      "title": "Delayed reinforcement learning converges to intermittent control for human quiet stance.",
+      "quote_or_locus": "The simulation results indicated that the optimal neural controller exhibits intermittent, and not continuous, characteristics",
+      "source_span": {
+        "start": 1135,
+        "end": 1261,
+        "source_text_sha256": "750851a2a32508980980600444fac03b73a8a2138109ac44da35958df5bb2fbf"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.95,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-30806106326",
+  "proposed_at": "2026-08-03T10:41:15.407Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

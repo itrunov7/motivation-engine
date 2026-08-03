@@ -1,0 +1,56 @@
+{
+  "id": "effect-vr-02-intermittent-motion-planning-for-har-e41467bad066",
+  "type": "effect",
+  "target": "VR-02",
+  "payload": {
+    "id": "vr-02-02",
+    "mechanism_id": "VR-02",
+    "name": "Intermittent motion planning for harvesting robots",
+    "fact": "An intermittent motion planning model using deep reinforcement learning for a dual-arm harvesting robot reduced vehicle parking frequency by 46.5% and 36.1% and decreased arm idleness by 42.9% and 33.9% compared to grid-based and area division algorithms.",
+    "grade": "A",
+    "source": [
+      "10.3390/biomimetics9020105"
+    ],
+    "boundary": "Dual-arm tomato harvesting robot in greenhouse",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "VR-02",
+        "corpus_record_id": "cr_dbcecfb2d10f705523a40445",
+        "doi": "10.3390/biomimetics9020105",
+        "title": "Intermittent Stop-Move Motion Planning for Dual-Arm Tomato Harvesting Robot in Greenhouse Based on Deep Reinforcement Learning",
+        "quote_or_locus": "In tomato greenhouse experiments, the model reduced vehicle parking frequency by 46.5% and 36.1% and decreased arm idleness by 42.9% and 33.9%, compared to grid-based and area division algorithms",
+        "source_span": {
+          "start": 1109,
+          "end": 1304,
+          "source_text_sha256": "50c4ee3e8f22ff756399245ae519356a1355d7e1d7cebf0b64109f522e280d08"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "VR-02",
+      "corpus_record_id": "cr_dbcecfb2d10f705523a40445",
+      "doi": "10.3390/biomimetics9020105",
+      "title": "Intermittent Stop-Move Motion Planning for Dual-Arm Tomato Harvesting Robot in Greenhouse Based on Deep Reinforcement Learning",
+      "quote_or_locus": "In tomato greenhouse experiments, the model reduced vehicle parking frequency by 46.5% and 36.1% and decreased arm idleness by 42.9% and 33.9%, compared to grid-based and area division algorithms",
+      "source_span": {
+        "start": 1109,
+        "end": 1304,
+        "source_text_sha256": "50c4ee3e8f22ff756399245ae519356a1355d7e1d7cebf0b64109f522e280d08"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.95,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-30806106326",
+  "proposed_at": "2026-08-03T10:41:15.407Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

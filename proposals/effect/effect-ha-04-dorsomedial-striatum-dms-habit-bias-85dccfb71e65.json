@@ -1,0 +1,56 @@
+{
+  "id": "effect-ha-04-dorsomedial-striatum-dms-habit-bias-85dccfb71e65",
+  "type": "effect",
+  "target": "HA-04",
+  "payload": {
+    "id": "ha-04-02",
+    "mechanism_id": "HA-04",
+    "name": "Dorsomedial Striatum (DMS) Habit Bias",
+    "fact": "Dopamine release in the dorsomedial striatum (DMS) increases during action-sequence initiation and decreases during action-sequence completion in habitual rats, and optogenetic stimulation of DMS dopamine release accelerates habit formation.",
+    "grade": "B+",
+    "source": [
+      "10.1016/j.cub.2021.12.027"
+    ],
+    "boundary": "Rat action-sequence tasks",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "HA-04",
+        "corpus_record_id": "cr_84d4d33c8052062fc9f09fc9",
+        "doi": "10.1016/j.cub.2021.12.027",
+        "title": "Striatal dopamine signals are region specific and temporally stable across action-sequence habit formation",
+        "quote_or_locus": "DMS dopamine release increased during action-sequence initiation and decreased during action-sequence completion in habitual rats, whereas non-habitual rats showed opposite effects. Consistently, optogenetic stimulation of DMS dopamine release accelerated habit formation",
+        "source_span": {
+          "start": 825,
+          "end": 1096,
+          "source_text_sha256": "9f35e7ca16c5ffdd65641b0135a477b52f63dd747062655e7ead8be68c60a13c"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "HA-04",
+      "corpus_record_id": "cr_84d4d33c8052062fc9f09fc9",
+      "doi": "10.1016/j.cub.2021.12.027",
+      "title": "Striatal dopamine signals are region specific and temporally stable across action-sequence habit formation",
+      "quote_or_locus": "DMS dopamine release increased during action-sequence initiation and decreased during action-sequence completion in habitual rats, whereas non-habitual rats showed opposite effects. Consistently, optogenetic stimulation of DMS dopamine release accelerated habit formation",
+      "source_span": {
+        "start": 825,
+        "end": 1096,
+        "source_text_sha256": "9f35e7ca16c5ffdd65641b0135a477b52f63dd747062655e7ead8be68c60a13c"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.85,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-30806106326",
+  "proposed_at": "2026-08-03T10:38:46.972Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

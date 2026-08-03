@@ -1,0 +1,83 @@
+{
+  "id": "effect-vr-02-dopamine-reward-prediction-error-sig-f6db55ac50e1",
+  "type": "effect",
+  "target": "VR-02",
+  "payload": {
+    "id": "dopamine-reward-prediction-error-signal",
+    "mechanism_id": "VR-02",
+    "name": "Dopamine reward prediction error signal",
+    "fact": "Dopamine neurons are activated by rewarding events that are better than predicted, remain uninfluenced by events that are as good as predicted, are depressed by events that are worse than predicted, and show a phasic response to liquid reward delivered without prior predictive stimuli.",
+    "grade": "A",
+    "source": [
+      "10.1152/jn.1998.80.1.1",
+      "10.1152/jn.1994.72.2.1024"
+    ],
+    "boundary": "Midbrain dopamine neurons",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "VR-02",
+        "corpus_record_id": "cr_eb08fc2775e2d30e333cc6f7",
+        "doi": "10.1152/jn.1998.80.1.1",
+        "title": "Predictive Reward Signal of Dopamine Neurons",
+        "quote_or_locus": "Dopamine neurons are activated by rewarding events that are better than predicted, remain uninfluenced by events that are as good as predicted, and are depressed by events that are worse than predicted",
+        "source_span": {
+          "start": 996,
+          "end": 1197,
+          "source_text_sha256": "bf4f74cf402c9eb29857309237c8c15e340699f1f64720e146fcb7c5aa958e42"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "VR-02",
+        "corpus_record_id": "cr_5a3a9595f33dde9a3ddf80f1",
+        "doi": "10.1152/jn.1994.72.2.1024",
+        "title": "Importance of unpredictability for reward responses in primate dopamine neurons",
+        "quote_or_locus": "Three quarters of dopamine neurons showed a short-latency, phasic response to liquid that was delivered outside the task without being predicted by phasic stimuli",
+        "source_span": {
+          "start": 429,
+          "end": 591,
+          "source_text_sha256": "ba291bcb03a9fa508a68fc133d2d8ad2667fbfc240544747eb7aa9ec5f52c916"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "VR-02",
+      "corpus_record_id": "cr_eb08fc2775e2d30e333cc6f7",
+      "doi": "10.1152/jn.1998.80.1.1",
+      "title": "Predictive Reward Signal of Dopamine Neurons",
+      "quote_or_locus": "Dopamine neurons are activated by rewarding events that are better than predicted, remain uninfluenced by events that are as good as predicted, and are depressed by events that are worse than predicted",
+      "source_span": {
+        "start": 996,
+        "end": 1197,
+        "source_text_sha256": "bf4f74cf402c9eb29857309237c8c15e340699f1f64720e146fcb7c5aa958e42"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "VR-02",
+      "corpus_record_id": "cr_5a3a9595f33dde9a3ddf80f1",
+      "doi": "10.1152/jn.1994.72.2.1024",
+      "title": "Importance of unpredictability for reward responses in primate dopamine neurons",
+      "quote_or_locus": "Three quarters of dopamine neurons showed a short-latency, phasic response to liquid that was delivered outside the task without being predicted by phasic stimuli",
+      "source_span": {
+        "start": 429,
+        "end": 591,
+        "source_text_sha256": "ba291bcb03a9fa508a68fc133d2d8ad2667fbfc240544747eb7aa9ec5f52c916"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.9,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-30806106326",
+  "proposed_at": "2026-08-03T10:41:15.407Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

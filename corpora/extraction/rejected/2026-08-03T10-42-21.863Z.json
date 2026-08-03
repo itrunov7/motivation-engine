@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-03T10:42:21.863Z",
+  "dispatch_id": null,
+  "github_run_id": 30806106326,
+  "mode": "effects",
+  "written_at": "2026-08-03T10:42:35.557Z",
+  "rejected": [
+    {
+      "mechanism_id": "CL-14",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "span_role_contradicted_by_structure",
+      "detail": "span_role=finding asserted for a span inside the source's own \"BACKGROUND & AIMS\" section, which admits only background|hypothesis (offsets 857-1127, D-129) — record cr_5a52828b07639115a0f33ecf",
+      "corpus_record_id": "cr_5a52828b07639115a0f33ecf",
+      "item": {
+        "id": "CL-14-03",
+        "name": "Intrinsic Load Reversal",
+        "fact": "Higher prior knowledge can lead to higher reported intrinsic cognitive load in complex systems where novices underestimate problem complexity.",
+        "boundary": "Applies to complex problem-solving tasks, such as ecological systems or specific mathematics word problems.",
+        "grade": "B+",
+        "confidence": 0.9,
+        "citations": [
+          {
+            "record_id": "cr_5a52828b07639115a0f33ecf",
+            "quote_or_locus": "In Study 1 with 118 participants from the Black Forest area in Germany, participants with higher levels of forestry and ecological expertise evaluated a problem relating to the restructuring of the Black Forest to adapt to climate change as more complex than did novices.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_5a52828b07639115a0f33ecf",
+          "quote_or_locus": "In Study 1 with 118 participants from the Black Forest area in Germany, participants with higher levels of forestry and ecological expertise evaluated a problem relating to the restructuring of the Black Forest to adapt to climate change as more complex than did novices.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "In Study 1 with 118 participants from the Black Forest area in Germany, participants with higher levels of forestry and ecological expertise evaluated a problem relating to the restructuring of the Black Forest to adapt to climate change as more complex than did novices.",
+        "quote_normalized": "in study 1 with 118 participants from the black forest area in germany participants with higher levels of forestry and ecological expertise evaluated a problem relating to the restructuring of the black forest to adapt to climate change as more complex than did novices",
+        "source_raw": "Can prior knowledge increase task complexity? – Cases in which higher prior knowledge leads to higher intrinsic cognitive load\nBACKGROUND & AIMS: Cognitive load theory assumes that the higher the learner's prior knowledge (i.e., the more expert the learner), the lower the intrinsic cognitive load (complexity) experienced for a given problem. While this is the case in many scenarios, there can be cases in which the converse is also true, resulting in more expert learners reporting higher intrinsic cognitive load than novices for the same problem. This can occur in relation to problems involving complex systems (e.g., ecological systems), for which novices' problem representations may underestimate problem complexity and therefore report lower intrinsic load than experts. This finding is borne out in the current paper. SAMPLES, METHODS & RESULTS: In Study 1 with 118 participants from the Black Forest area in Germany, participants with higher levels of forestry and ecological expertise evaluated a problem relating to the restructuring of the Black Forest to adapt to climate change as more complex than did novices. In Study 2 (within-subjects design, n = 66 primary-school students), we conceptually replicated this finding in a domain more typical of cognitive load theory studies, mathematics. We found that higher prior knowledge also reduced the underestimation of the complexity of 'tricky', but frequently used, mathematics word problems. CONCLUSION: Our findings suggest that cognitive load theory's assumptions about intrinsic load and prior knowledge should be refined, as there seems to exist a sub-set of problem-solving tasks for which the traditional relationship between prior knowledge and reported ICL is reversed.",
+        "source_normalized": "can prior knowledge increase task complexity cases in which higher prior knowledge leads to higher intrinsic cognitive load background aims cognitive load theory assumes that the higher the learner s prior knowledge i e the more expert the learner the lower the intrinsic cognitive load complexity experienced for a given problem while this is the case in many scenarios there can be cases in which the converse is also true resulting in more expert learners reporting higher intrinsic cognitive load than novices for the same problem this can occur in relation to problems involving complex systems e g ecological systems for which novices problem representations may underestimate problem complexity and therefore report lower intrinsic load than experts this finding is borne out in the current paper samples methods results in study 1 with 118 participants from the black forest area in germany participants with higher levels of forestry and ecological expertise evaluated a problem relating to the restructuring of the black forest to adapt to climate change as more complex than did novices in study 2 within subjects design n 66 primary school students we conceptually replicated this finding in a domain more typical of cognitive load theory studies mathematics we found that higher prior knowledge also reduced the underestimation of the complexity of tricky but frequently used mathematics word problems conclusion our findings suggest that cognitive load theory s assumptions about intrinsic load and prior knowledge should be refined as there seems to exist a sub set of problem solving tasks for which the traditional relationship between prior knowledge and reported icl is reversed"
+      },
+      "corpus_side": {
+        "doi": "10.1111/bjep.12563",
+        "title": "Can prior knowledge increase task complexity? – Cases in which higher prior knowledge leads to higher intrinsic cognitive load"
+      }
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "premise_contradicted_downstream",
+      "detail": "span_role=finding asserted for a span the same source later reverses: marker neg+outcome-verb matched \"did not influence\" in \"Social processes did not influence learning with disfluent material as well.\", sharing learning, material, processe with the quote (D-129) — record cr_dcfa1ec84cd2e384426df579",
+      "corpus_record_id": "cr_dcfa1ec84cd2e384426df579",
+      "item": {
+        "id": "cl-14-002",
+        "name": "Disfluency Effect",
+        "fact": "Element interactivity of learning material is a boundary condition for the disfluency effect; low element interactivity allows disfluency to have a positive effect on learning outcomes, while high element interactivity leads to negative impacts on learning efficiency and extraneous load.",
+        "boundary": "Applies to instructional texts manipulated by font type (computerized vs. handwritten).",
+        "grade": "A",
+        "confidence": 0.95,
+        "citations": [
+          {
+            "record_id": "cr_dcfa1ec84cd2e384426df579",
+            "quote_or_locus": "element interactivity (complexity or connectedness of information within the learning material) of the learning material is a boundary condition that determines the effects of disfluency. When element interactivity is low, disfluency had a positive effect on learning outcomes and germane processes. When element interactivity increases, disfluency had negative impacts on learning efficiency (Experiment 2 and 3) and extraneous load (Experiment 3).",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_dcfa1ec84cd2e384426df579",
+          "quote_or_locus": "element interactivity (complexity or connectedness of information within the learning material) of the learning material is a boundary condition that determines the effects of disfluency. When element interactivity is low, disfluency had a positive effect on learning outcomes and germane processes. When element interactivity increases, disfluency had negative impacts on learning efficiency (Experiment 2 and 3) and extraneous load (Experiment 3).",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "element interactivity (complexity or connectedness of information within the learning material) of the learning material is a boundary condition that determines the effects of disfluency. When element interactivity is low, disfluency had a positive effect on learning outcomes and germane processes. When element interactivity increases, disfluency had negative impacts on learning efficiency (Experiment 2 and 3) and extraneous load (Experiment 3).",
+        "quote_normalized": "element interactivity complexity or connectedness of information within the learning material of the learning material is a boundary condition that determines the effects of disfluency when element interactivity is low disfluency had a positive effect on learning outcomes and germane processes when element interactivity increases disfluency had negative impacts on learning efficiency experiment 2 and 3 and extraneous load experiment 3",
+        "source_raw": "Is There a (Dis-)Fluency Effect in Learning With Handwritten Instructional Texts? Evidence From Three Studies\nThe disfluency effect postulates that intentionally inserted desirable difficulties can have a beneficial effect on learning. Nevertheless, there is an ongoing discussion about the emergence of this effect since studies could not replicate this effect or even found opposite effects. To clarify boundary effects of the disfluency effect and to investigate potential social effects of disfluency operationalized through handwritten material, three studies ( N 1 = 97; N 2 = 102; N 3 = 103) were carried out. In all three experiments, instructional texts were manipulated in terms of disfluency (computerized font vs. handwritten font). Learning outcomes and cognitive load were measured in all experiments. Furthermore, metacognitive variables (Experiment 2 and 3) and social presence (Experiment 3) were measured. Results were ambiguous, indicating that element interactivity (complexity or connectedness of information within the learning material) of the learning material is a boundary condition that determines the effects of disfluency. When element interactivity is low, disfluency had a positive effect on learning outcomes and germane processes. When element interactivity increases, disfluency had negative impacts on learning efficiency (Experiment 2 and 3) and extraneous load (Experiment 3). In contrast to common explanations of the disfluency effect, a disfluent font had no metacognitive benefits. Social processes did not influence learning with disfluent material as well.",
+        "source_normalized": "is there a dis fluency effect in learning with handwritten instructional texts evidence from three studies the disfluency effect postulates that intentionally inserted desirable difficulties can have a beneficial effect on learning nevertheless there is an ongoing discussion about the emergence of this effect since studies could not replicate this effect or even found opposite effects to clarify boundary effects of the disfluency effect and to investigate potential social effects of disfluency operationalized through handwritten material three studies n 1 97 n 2 102 n 3 103 were carried out in all three experiments instructional texts were manipulated in terms of disfluency computerized font vs handwritten font learning outcomes and cognitive load were measured in all experiments furthermore metacognitive variables experiment 2 and 3 and social presence experiment 3 were measured results were ambiguous indicating that element interactivity complexity or connectedness of information within the learning material of the learning material is a boundary condition that determines the effects of disfluency when element interactivity is low disfluency had a positive effect on learning outcomes and germane processes when element interactivity increases disfluency had negative impacts on learning efficiency experiment 2 and 3 and extraneous load experiment 3 in contrast to common explanations of the disfluency effect a disfluent font had no metacognitive benefits social processes did not influence learning with disfluent material as well"
+      },
+      "corpus_side": {
+        "doi": "10.3389/feduc.2021.678798",
+        "title": "Is There a (Dis-)Fluency Effect in Learning With Handwritten Instructional Texts? Evidence From Three Studies"
+      }
+    }
+  ]
+}

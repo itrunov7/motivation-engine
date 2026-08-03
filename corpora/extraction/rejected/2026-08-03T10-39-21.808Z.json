@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-03T10:39:21.808Z",
+  "dispatch_id": null,
+  "github_run_id": 30806106326,
+  "mode": "effects",
+  "written_at": "2026-08-03T10:39:51.065Z",
+  "rejected": [
+    {
+      "mechanism_id": "LA-01",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "quote_not_in_source",
+      "detail": "quote not a substring of cr_723ec302158af15df570b9bc: \"Smokers were less loss averse than never-smokers... Loss aversion was also a significant independent risk factor for alc\"",
+      "corpus_record_id": "cr_723ec302158af15df570b9bc",
+      "item": {
+        "id": "LA-01-04",
+        "name": "Loss aversion in substance use",
+        "fact": "Lower levels of loss aversion are associated with higher risk for cigarette smoking, alcohol use, and other drug use.",
+        "boundary": "Substance use and addiction",
+        "grade": "A",
+        "confidence": 0.95,
+        "citations": [
+          {
+            "record_id": "cr_723ec302158af15df570b9bc",
+            "quote_or_locus": "Smokers were less loss averse than never-smokers... Loss aversion was also a significant independent risk factor for alcohol... and other drug use",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_723ec302158af15df570b9bc",
+          "quote_or_locus": "Smokers were less loss averse than never-smokers... Loss aversion was also a significant independent risk factor for alcohol... and other drug use",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "Smokers were less loss averse than never-smokers... Loss aversion was also a significant independent risk factor for alcohol... and other drug use",
+        "quote_normalized": "smokers were less loss averse than never smokers loss aversion was also a significant independent risk factor for alcohol and other drug use",
+        "source_raw": "Loss aversion and risk for cigarette smoking and other substance use\nBackground: Cigarette smoking is among the leading preventable causes of global morbidity and mortality. We aimed to determine whether individual differences in loss aversion, a bias in decision-making wherein losses are valued greater than gains, predicts smoking and other addiction risk. Methods: We recruited current daily cigarette smokers (n = 181; > 10 cigarettes per day) and never-smokers (n = 237; < 100 cigarettes lifetime) from the United States using Amazon Mechanical Turk. Groups were matched on gender, educational attainment, and age. All completed items related to current cigarette smoking, alcohol use, other drug use, sleep problems, and depressed mood, and task-based measures of loss aversion and delay discounting, a decision-making bias associated with cigarette smoking. Results: Smokers were less loss averse than never-smokers (F(1, 411) = 24.19, η2 = 0.02, p < .0001) even after accounting for delay discounting (F(1, 410) = 20.53, η2 = 0.02, p < .0001). Loss aversion was also a significant independent risk factor for alcohol (F(1, 410) = 21.47, η2 = 0.02, p < .0001) and other drug use (F(1, 410) = 54.12, η2 = 0.04, p < .0001), although not other behavioral-health conditions (i.e., sleep disturbance, depressed mood). Further analyses revealed that co-occurring low loss aversion and high delay discounting were independently associated with greater risk for patterns of substance use. Conclusions: Loss aversion was associated with current cigarette smoking and other substance use patterns independent of delay discounting. Loss aversion may warrant attention as a protective factor and potential target for preventive intervention for substance use and addiction.",
+        "source_normalized": "loss aversion and risk for cigarette smoking and other substance use background cigarette smoking is among the leading preventable causes of global morbidity and mortality we aimed to determine whether individual differences in loss aversion a bias in decision making wherein losses are valued greater than gains predicts smoking and other addiction risk methods we recruited current daily cigarette smokers n 181 10 cigarettes per day and never smokers n 237 100 cigarettes lifetime from the united states using amazon mechanical turk groups were matched on gender educational attainment and age all completed items related to current cigarette smoking alcohol use other drug use sleep problems and depressed mood and task based measures of loss aversion and delay discounting a decision making bias associated with cigarette smoking results smokers were less loss averse than never smokers f 1 411 24 19 2 0 02 p 0001 even after accounting for delay discounting f 1 410 20 53 2 0 02 p 0001 loss aversion was also a significant independent risk factor for alcohol f 1 410 21 47 2 0 02 p 0001 and other drug use f 1 410 54 12 2 0 04 p 0001 although not other behavioral health conditions i e sleep disturbance depressed mood further analyses revealed that co occurring low loss aversion and high delay discounting were independently associated with greater risk for patterns of substance use conclusions loss aversion was associated with current cigarette smoking and other substance use patterns independent of delay discounting loss aversion may warrant attention as a protective factor and potential target for preventive intervention for substance use and addiction"
+      },
+      "corpus_side": {
+        "doi": "10.1016/j.drugalcdep.2022.109307",
+        "title": "Loss aversion and risk for cigarette smoking and other substance use"
+      }
+    }
+  ]
+}

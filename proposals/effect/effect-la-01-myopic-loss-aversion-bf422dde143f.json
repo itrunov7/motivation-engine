@@ -1,0 +1,83 @@
+{
+  "id": "effect-la-01-myopic-loss-aversion-bf422dde143f",
+  "type": "effect",
+  "target": "LA-01",
+  "payload": {
+    "id": "la-01-02",
+    "mechanism_id": "LA-01",
+    "name": "Myopic Loss Aversion",
+    "fact": "Myopic loss aversion is the combination of loss aversion and frequent evaluation of investment portfolios, which leads to more conservative risk-taking.",
+    "grade": "A",
+    "source": [
+      "10.2307/2118511",
+      "10.1162/003355397555226"
+    ],
+    "boundary": "Risky choice",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_75334bef0434f6747fb12847",
+        "doi": "10.2307/2118511",
+        "title": "Myopic Loss Aversion and the Equity Premium Puzzle",
+        "quote_or_locus": "We dub this combination “myopic loss aversion.” Using simulations, we find that the size of the equity premium is consistent with the previously estimated parameters of prospect theory if investors evaluate their portfolios annually",
+        "source_span": {
+          "start": 466,
+          "end": 698,
+          "source_text_sha256": "a4dd9fe8fe5a47ef31f321a5861d8d44ff5aa5d79ddb2a3ef96c423b5ab48b78"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_cf28e680606a9cd5502c78b3",
+        "doi": "10.1162/003355397555226",
+        "title": "The Effect of Myopia and Loss Aversion on Risk Taking: An Experimental Test",
+        "quote_or_locus": "The investors who got the most frequent feedback (and thus the most information) took the least risk and earned the least money",
+        "source_span": {
+          "start": 588,
+          "end": 715,
+          "source_text_sha256": "6311e934c0c7a1e87dea484593049d0585c34287f751ab92a441380400b8180d"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_75334bef0434f6747fb12847",
+      "doi": "10.2307/2118511",
+      "title": "Myopic Loss Aversion and the Equity Premium Puzzle",
+      "quote_or_locus": "We dub this combination “myopic loss aversion.” Using simulations, we find that the size of the equity premium is consistent with the previously estimated parameters of prospect theory if investors evaluate their portfolios annually",
+      "source_span": {
+        "start": 466,
+        "end": 698,
+        "source_text_sha256": "a4dd9fe8fe5a47ef31f321a5861d8d44ff5aa5d79ddb2a3ef96c423b5ab48b78"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_cf28e680606a9cd5502c78b3",
+      "doi": "10.1162/003355397555226",
+      "title": "The Effect of Myopia and Loss Aversion on Risk Taking: An Experimental Test",
+      "quote_or_locus": "The investors who got the most frequent feedback (and thus the most information) took the least risk and earned the least money",
+      "source_span": {
+        "start": 588,
+        "end": 715,
+        "source_text_sha256": "6311e934c0c7a1e87dea484593049d0585c34287f751ab92a441380400b8180d"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.95,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-30806106326",
+  "proposed_at": "2026-08-03T10:39:21.808Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}
