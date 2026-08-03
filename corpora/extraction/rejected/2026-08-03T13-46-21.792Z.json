@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-03T13:46:21.792Z",
+  "dispatch_id": "effects-wide-LA-01",
+  "github_run_id": 30819464753,
+  "mode": "effects",
+  "written_at": "2026-08-03T13:46:52.910Z",
+  "rejected": [
+    {
+      "mechanism_id": "LA-01",
+      "mode": "effects",
+      "pass": "cheap",
+      "reason": "span_role_not_finding",
+      "detail": "no citation carried span_role=finding, so the item rests on background, hypothesis, method or limitation spans alone — none of which report what a source observed (D-129)",
+      "corpus_record_id": "cr_60409e89fd032d7726d8040e",
+      "item": {
+        "id": "LA-01-01",
+        "name": "Loss Aversion",
+        "fact": "Loss aversion is a behavioral bias where individuals are more negatively affected by the prospect of losing money than by the prospect of gaining an equivalent amount.",
+        "boundary": "General behavioral finance",
+        "grade": "A+",
+        "confidence": 1,
+        "citations": [
+          {
+            "record_id": "cr_60409e89fd032d7726d8040e",
+            "quote_or_locus": "As a behavioral bias known as \"Loss Aversion,\" it states that people are more negatively affected by the prospect of losing money than they are by the prospect of gaining it.",
+            "span_role": "background"
+          },
+          {
+            "record_id": "cr_e8a1af22da9d8525655b4ceb",
+            "quote_or_locus": "The psychophysics of value induce risk aversion in the domain of gains and risk seeking in the domain of losses.",
+            "span_role": "background"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_60409e89fd032d7726d8040e",
+          "quote_or_locus": "As a behavioral bias known as \"Loss Aversion,\" it states that people are more negatively affected by the prospect of losing money than they are by the prospect of gaining it.",
+          "span_role": "background"
+        },
+        {
+          "record_id": "cr_e8a1af22da9d8525655b4ceb",
+          "quote_or_locus": "The psychophysics of value induce risk aversion in the domain of gains and risk seeking in the domain of losses.",
+          "span_role": "background"
+        }
+      ]
+    }
+  ]
+}

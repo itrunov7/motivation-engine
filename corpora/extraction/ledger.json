@@ -1,7 +1,158 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:45:34.339Z",
+  "updated_at": "2026-08-03T13:46:52.935Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:46:21.792Z",
+      "dispatch_id": "effects-wide-LA-01",
+      "github_run_id": 30819464753,
+      "mode": "effects",
+      "scope": "LA-01",
+      "candidates": 17,
+      "cheap": {
+        "candidates": 9,
+        "dropped_ungrounded": 1,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 8
+      },
+      "synthesis": {
+        "into_synthesis": 8,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 8
+      },
+      "strong": {
+        "candidates": 8,
+        "proposed": 5,
+        "proposed_enrich": 0,
+        "merged_into_pending": 3,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "LA-01:cheap:01",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "span_role_not_finding"
+        },
+        {
+          "candidate_id": "LA-01:cheap:02",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:03",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:04",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:05",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:06",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:07",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:08",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:09",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:strong:01",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-la-01-myopic-loss-aversion-bf422dde143f",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "LA-01:strong:03",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-la-01-hyperopic-loss-aversion-cf269a9a9e0a",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "LA-01:strong:05",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-la-01-endowment-effect-7981e8c02cee",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "LA-01:strong:02",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-la-01-hyperopic-loss-aversion-cf269a9a9e0a"
+        },
+        {
+          "candidate_id": "LA-01:strong:04",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-la-01-house-money-effect-647040cc7265"
+        },
+        {
+          "candidate_id": "LA-01:strong:08",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-la-01-anchoring-effect-dca84c85e08a"
+        },
+        {
+          "candidate_id": "LA-01:strong:07",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-la-01-herding-behavior-d2074fecaff3"
+        },
+        {
+          "candidate_id": "LA-01:strong:06",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-la-01-overconfidence-bias-690cdbfccf57"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:45:18.004Z",
       "dispatch_id": "effects-wide-ID-12",
@@ -3055,127 +3206,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-ze-07-social-gamification-elements-b38155d9734c"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:41:15.407Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "VR-02",
-      "candidates": 13,
-      "cheap": {
-        "candidates": 7,
-        "dropped_ungrounded": 0,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 7
-      },
-      "synthesis": {
-        "into_synthesis": 7,
-        "consolidated": 1,
-        "expanded": 0,
-        "candidates_strong": 6
-      },
-      "strong": {
-        "candidates": 6,
-        "proposed": 6,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "VR-02:cheap:01",
-          "mechanism_id": "VR-02",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "VR-02:cheap:02",
-          "mechanism_id": "VR-02",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "VR-02:cheap:03",
-          "mechanism_id": "VR-02",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "VR-02:cheap:04",
-          "mechanism_id": "VR-02",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "VR-02:cheap:05",
-          "mechanism_id": "VR-02",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "VR-02:strong:04",
-          "mechanism_id": "VR-02",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-vr-02-breaking-point-in-progressive-ratio--b8d05db2c250"
-        },
-        {
-          "candidate_id": "VR-02:strong:03",
-          "mechanism_id": "VR-02",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-vr-02-dissociation-of-reward-anticipation--9bfb468ed166"
-        },
-        {
-          "candidate_id": "VR-02:strong:01",
-          "mechanism_id": "VR-02",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-vr-02-dopamine-reward-prediction-error-sig-f6db55ac50e1"
-        },
-        {
-          "candidate_id": "VR-02:strong:02",
-          "mechanism_id": "VR-02",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-vr-02-ventral-striatal-reward-expectation--b66475ec1930"
-        },
-        {
-          "candidate_id": "VR-02:cheap:06",
-          "mechanism_id": "VR-02",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "VR-02:cheap:07",
-          "mechanism_id": "VR-02",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "VR-02:strong:05",
-          "mechanism_id": "VR-02",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-vr-02-intermittent-control-in-human-quiet--37d44fdc9fe2"
-        },
-        {
-          "candidate_id": "VR-02:strong:06",
-          "mechanism_id": "VR-02",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-vr-02-intermittent-motion-planning-for-har-e41467bad066"
         }
       ]
     }
