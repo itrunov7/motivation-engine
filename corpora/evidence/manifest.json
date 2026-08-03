@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-03T08:55:27.859Z",
+    "timestamp": "2026-08-03T08:57:02.383Z",
     "status": "success",
     "params": {
       "mechanism": "CL-14",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 511,
     "files_written": 1,
-    "duration_s": 47.44,
+    "duration_s": 48.22,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 48,
-      "duration_s": 47.44,
+      "duration_s": 48.22,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-03T08:57:02.383Z",
+      "status": "success",
+      "params": {
+        "mechanism": "CL-14",
+        "terms": ""
+      },
+      "records_fetched": 511,
+      "files_written": 1,
+      "duration_s": 48.22,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 48,
+        "duration_s": 48.22,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-03T08:55:27.859Z",
       "status": "success",
@@ -412,27 +433,6 @@
       "cost": {
         "api_calls": 62,
         "duration_s": 71.23,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-07-20T15:43:16.017Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "IF-18"
-      },
-      "records_fetched": 175,
-      "files_written": 1,
-      "duration_s": 550,
-      "error": "semantic-scholar boundary \"information foraging theory Pirolli boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar canon \"information scent user navigation\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar boundary \"information scent user navigation boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar critique \"web navigation cue judgment critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · semantic-scholar critique \"information seeking behaviour interface critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 141,
-        "duration_s": 550,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
