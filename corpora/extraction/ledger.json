@@ -1,7 +1,58 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:49:09.048Z",
+  "updated_at": "2026-08-03T13:50:01.748Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:49:55.604Z",
+      "dispatch_id": "effects-wide-ZE-07",
+      "github_run_id": 30819741590,
+      "mode": "effects",
+      "scope": "ZE-07",
+      "candidates": 2,
+      "cheap": {
+        "candidates": 1,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 1
+      },
+      "synthesis": {
+        "into_synthesis": 1,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 1
+      },
+      "strong": {
+        "candidates": 1,
+        "proposed": 0,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "ZE-07:cheap:01",
+          "mechanism_id": "ZE-07",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ZE-07:strong:01",
+          "mechanism_id": "ZE-07",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-ze-07-zeigarnik-effect-ff85288cec7e",
+          "attribution": "recorded"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:48:52.603Z",
       "dispatch_id": "effects-wide-VR-02",
@@ -3117,104 +3168,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-mm-15-embodiment-principle-9de1468ae5d1"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:42:36.524Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "IF-18",
-      "candidates": 9,
-      "cheap": {
-        "candidates": 6,
-        "dropped_ungrounded": 3,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 3
-      },
-      "synthesis": {
-        "into_synthesis": 3,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 3
-      },
-      "strong": {
-        "candidates": 3,
-        "proposed": 2,
-        "proposed_enrich": 0,
-        "merged_into_pending": 1,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "IF-18:cheap:01",
-          "mechanism_id": "IF-18",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "IF-18:cheap:02",
-          "mechanism_id": "IF-18",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "IF-18:cheap:03",
-          "mechanism_id": "IF-18",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "premise_contradicted_downstream"
-        },
-        {
-          "candidate_id": "IF-18:strong:01",
-          "mechanism_id": "IF-18",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-if-18-scent-based-navigation-3f337f1c60c2"
-        },
-        {
-          "candidate_id": "IF-18:strong:02",
-          "mechanism_id": "IF-18",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-if-18-information-scent-in-visual-search-b504f81df5ea"
-        },
-        {
-          "candidate_id": "IF-18:cheap:04",
-          "mechanism_id": "IF-18",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "doi_unresolved"
-        },
-        {
-          "candidate_id": "IF-18:cheap:05",
-          "mechanism_id": "IF-18",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "IF-18:strong:03",
-          "mechanism_id": "IF-18",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-if-18-information-scent-in-visual-search-b504f81df5ea",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "IF-18:cheap:06",
-          "mechanism_id": "IF-18",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "quote_not_in_source"
         }
       ]
     }
