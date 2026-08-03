@@ -1,7 +1,165 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:33:26.139Z",
+  "updated_at": "2026-08-03T13:34:48.633Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:34:11.981Z",
+      "dispatch_id": "effects-wide-PS-13",
+      "github_run_id": 30818526934,
+      "mode": "effects",
+      "scope": "PS-13",
+      "candidates": 18,
+      "cheap": {
+        "candidates": 10,
+        "dropped_ungrounded": 2,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 8
+      },
+      "synthesis": {
+        "into_synthesis": 8,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 8
+      },
+      "strong": {
+        "candidates": 8,
+        "proposed": 5,
+        "proposed_enrich": 0,
+        "merged_into_pending": 3,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "PS-13:cheap:01",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:02",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:03",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:04",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:05",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:06",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:07",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:08",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "PS-13:cheap:09",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "PS-13:cheap:10",
+          "mechanism_id": "PS-13",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "PS-13:strong:01",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-ps-13-picture-superiority-effect-0f55cd04f9c9",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "PS-13:strong:05",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-ps-13-group-ica-task-related-components-c4f8a43bb2f2",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "PS-13:strong:06",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-ps-13-group-ica-task-related-components-c4f8a43bb2f2",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "PS-13:strong:08",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ps-13-concrete-superiority-effect-in-aging-129a28099744"
+        },
+        {
+          "candidate_id": "PS-13:strong:07",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ps-13-fancj-mediated-g4-resolution-359bc9042c17"
+        },
+        {
+          "candidate_id": "PS-13:strong:04",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ps-13-group-ica-task-related-components-c4f8a43bb2f2"
+        },
+        {
+          "candidate_id": "PS-13:strong:02",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ps-13-animacy-effect-f763f21bf76f"
+        },
+        {
+          "candidate_id": "PS-13:strong:03",
+          "mechanism_id": "PS-13",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ps-13-agent-advantage-effect-80765f43f3f8"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:32:20.847Z",
       "dispatch_id": "effects-wide-SC-17",
@@ -2815,123 +2973,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-fr-11-endowment-effect-1a69d498b221"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:38:01.060Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "EN-03",
-      "candidates": 12,
-      "cheap": {
-        "candidates": 6,
-        "dropped_ungrounded": 0,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 6
-      },
-      "synthesis": {
-        "into_synthesis": 6,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 6
-      },
-      "strong": {
-        "candidates": 6,
-        "proposed": 4,
-        "proposed_enrich": 0,
-        "merged_into_pending": 2,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "EN-03:cheap:01",
-          "mechanism_id": "EN-03",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "EN-03:cheap:02",
-          "mechanism_id": "EN-03",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "EN-03:cheap:03",
-          "mechanism_id": "EN-03",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "EN-03:cheap:04",
-          "mechanism_id": "EN-03",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "EN-03:strong:04",
-          "mechanism_id": "EN-03",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-en-03-mere-ownership-effect-1b0db8298502",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "EN-03:strong:01",
-          "mechanism_id": "EN-03",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-en-03-endowment-effect-b5ef6d9f7ef8"
-        },
-        {
-          "candidate_id": "EN-03:strong:02",
-          "mechanism_id": "EN-03",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-en-03-mere-ownership-effect-1b0db8298502"
-        },
-        {
-          "candidate_id": "EN-03:strong:03",
-          "mechanism_id": "EN-03",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-en-03-mere-touch-effect-4b1b2b74178a"
-        },
-        {
-          "candidate_id": "EN-03:cheap:05",
-          "mechanism_id": "EN-03",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "EN-03:cheap:06",
-          "mechanism_id": "EN-03",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "EN-03:strong:05",
-          "mechanism_id": "EN-03",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-en-03-mere-ownership-effect-1b0db8298502",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "EN-03:strong:06",
-          "mechanism_id": "EN-03",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-en-03-name-liking-da0153edc05c"
         }
       ]
     }
