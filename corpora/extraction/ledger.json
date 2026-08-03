@@ -1,7 +1,156 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:43:18.935Z",
+  "updated_at": "2026-08-03T13:44:31.201Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:44:06.770Z",
+      "dispatch_id": "effects-wide-ST-09",
+      "github_run_id": 30819291329,
+      "mode": "effects",
+      "scope": "ST-09",
+      "candidates": 17,
+      "cheap": {
+        "candidates": 9,
+        "dropped_ungrounded": 1,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 8
+      },
+      "synthesis": {
+        "into_synthesis": 8,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 8
+      },
+      "strong": {
+        "candidates": 8,
+        "proposed": 7,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "ST-09:cheap:01",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:02",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:03",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:04",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:05",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:06",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:07",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:08",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "ST-09:cheap:09",
+          "mechanism_id": "ST-09",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "ST-09:strong:05",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-st-09-conspicuous-consumption-e598e2311eff",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "ST-09:strong:04",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-conspicuous-omni-signaling-d3c2ac1ac978"
+        },
+        {
+          "candidate_id": "ST-09:strong:03",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-income-inequality-and-status-consump-b122175c1243"
+        },
+        {
+          "candidate_id": "ST-09:strong:06",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-smartphone-battery-depletion-effect--fe41faf2f91c"
+        },
+        {
+          "candidate_id": "ST-09:strong:01",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-status-seeking-behavior-in-ovulating-f4750edd845d"
+        },
+        {
+          "candidate_id": "ST-09:strong:02",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-testosterone-induced-preference-for--1fce95d09d2b"
+        },
+        {
+          "candidate_id": "ST-09:strong:08",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-attenuation-of-battery-induced-varie-6f1d33590797"
+        },
+        {
+          "candidate_id": "ST-09:strong:07",
+          "mechanism_id": "ST-09",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-st-09-drivers-of-battery-induced-variety-s-8ebbe24623b2"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:42:48.823Z",
       "dispatch_id": "effects-wide-HA-04",
@@ -3007,122 +3156,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-st-09-red-sneakers-effect-f201bc066ced"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:40:30.239Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "SP-08",
-      "candidates": 12,
-      "cheap": {
-        "candidates": 6,
-        "dropped_ungrounded": 0,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 6
-      },
-      "synthesis": {
-        "into_synthesis": 6,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 6
-      },
-      "strong": {
-        "candidates": 6,
-        "proposed": 5,
-        "proposed_enrich": 0,
-        "merged_into_pending": 1,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "SP-08:cheap:01",
-          "mechanism_id": "SP-08",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SP-08:cheap:02",
-          "mechanism_id": "SP-08",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SP-08:cheap:03",
-          "mechanism_id": "SP-08",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SP-08:cheap:04",
-          "mechanism_id": "SP-08",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SP-08:strong:01",
-          "mechanism_id": "SP-08",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sp-08-descriptive-norms-f21b43b5f401"
-        },
-        {
-          "candidate_id": "SP-08:strong:04",
-          "mechanism_id": "SP-08",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sp-08-determinants-of-information-usefulne-c531c2581ec2"
-        },
-        {
-          "candidate_id": "SP-08:strong:03",
-          "mechanism_id": "SP-08",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sp-08-herd-behavior-in-online-review-adopt-5f1c94dee618"
-        },
-        {
-          "candidate_id": "SP-08:strong:02",
-          "mechanism_id": "SP-08",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sp-08-injunctive-norms-1446a701450a"
-        },
-        {
-          "candidate_id": "SP-08:cheap:05",
-          "mechanism_id": "SP-08",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SP-08:cheap:06",
-          "mechanism_id": "SP-08",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SP-08:strong:06",
-          "mechanism_id": "SP-08",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-sp-08-group-cohesion-d8c443088d4e",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "SP-08:strong:05",
-          "mechanism_id": "SP-08",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sp-08-group-cohesion-d8c443088d4e"
         }
       ]
     }

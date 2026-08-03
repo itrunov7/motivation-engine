@@ -3,73 +3,144 @@
   "source_ids": [],
   "connector_version": "1.1.0",
   "last_run": {
-    "timestamp": "2026-08-03T13:42:48.823Z",
-    "status": "partial",
+    "timestamp": "2026-08-03T13:44:06.770Z",
+    "status": "success",
     "params": {
       "mode": "effects",
-      "mechanism": "HA-04",
-      "candidates": "9",
+      "mechanism": "ST-09",
+      "candidates": "17",
       "records_processed": "90",
       "records_skipped_irrelevant": "0",
-      "proposed": "2",
-      "merged": "2",
-      "dropped_ungrounded": "0",
-      "failed_validation": "1",
+      "proposed": "7",
+      "merged": "1",
+      "dropped_ungrounded": "1",
+      "failed_validation": "0",
       "held_low_confidence": "0",
       "dropped_volume_cap": "0",
       "dropped_volume_cap_high_confidence": "0",
-      "records_eligible": "157",
+      "records_eligible": "134",
       "records_relevant": "90",
-      "records_remaining": "25",
+      "records_remaining": "0",
       "records_selected": "90",
       "records_dropped_truncation": "0",
-      "candidates_cheap": "5",
-      "candidates_strong": "4",
-      "dropped_ungrounded_cheap": "0",
+      "candidates_cheap": "9",
+      "candidates_strong": "8",
+      "dropped_ungrounded_cheap": "1",
       "dropped_ungrounded_strong": "0",
-      "merged_into_pending": "2",
+      "merged_into_pending": "1",
       "proposed_enrich": "0",
       "dropped_draft_cap": "0",
-      "into_synthesis": "5",
+      "into_synthesis": "8",
       "cheap_synthesis_failed": "0",
-      "consolidated_by_synthesis": "1",
-      "expanded_by_synthesis": "0"
+      "consolidated_by_synthesis": "0",
+      "expanded_by_synthesis": "0",
+      "dropped_ungrounded_reasons": "quote_not_in_source=1",
+      "dropped_ungrounded_reasons_cheap": "quote_not_in_source=1"
     },
     "records_fetched": 90,
-    "files_written": 2,
-    "duration_s": 30.11,
-    "dispatch_id": "effects-wide-HA-04",
-    "github_run_id": 30819197240,
+    "files_written": 8,
+    "duration_s": 24.43,
+    "dispatch_id": "effects-wide-ST-09",
+    "github_run_id": 30819291329,
     "warnings": {
-      "validation_failed": true
+      "ungrounded_dropped": true
     },
     "cost": {
       "api_calls": 5,
-      "duration_s": 30.11,
-      "tokens_in": 48475,
-      "tokens_out": 2914,
-      "estimated_usd": 0.0354525,
+      "duration_s": 24.43,
+      "tokens_in": 59983,
+      "tokens_out": 3221,
+      "estimated_usd": 0.03672825,
       "models": [
         {
           "tier": "cheap",
           "model_id": "google/gemini-3.1-flash-lite",
           "api_calls": 4,
-          "tokens_in": 47062,
-          "tokens_out": 974,
-          "estimated_usd": 0.0132265
+          "tokens_in": 58189,
+          "tokens_out": 1602,
+          "estimated_usd": 0.01695025
         },
         {
           "tier": "strong",
           "model_id": "anthropic/claude-sonnet-5",
           "api_calls": 1,
-          "tokens_in": 1413,
-          "tokens_out": 1940,
-          "estimated_usd": 0.022226
+          "tokens_in": 1794,
+          "tokens_out": 1619,
+          "estimated_usd": 0.019778
         }
       ]
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-03T13:44:06.770Z",
+      "status": "success",
+      "params": {
+        "mode": "effects",
+        "mechanism": "ST-09",
+        "candidates": "17",
+        "records_processed": "90",
+        "records_skipped_irrelevant": "0",
+        "proposed": "7",
+        "merged": "1",
+        "dropped_ungrounded": "1",
+        "failed_validation": "0",
+        "held_low_confidence": "0",
+        "dropped_volume_cap": "0",
+        "dropped_volume_cap_high_confidence": "0",
+        "records_eligible": "134",
+        "records_relevant": "90",
+        "records_remaining": "0",
+        "records_selected": "90",
+        "records_dropped_truncation": "0",
+        "candidates_cheap": "9",
+        "candidates_strong": "8",
+        "dropped_ungrounded_cheap": "1",
+        "dropped_ungrounded_strong": "0",
+        "merged_into_pending": "1",
+        "proposed_enrich": "0",
+        "dropped_draft_cap": "0",
+        "into_synthesis": "8",
+        "cheap_synthesis_failed": "0",
+        "consolidated_by_synthesis": "0",
+        "expanded_by_synthesis": "0",
+        "dropped_ungrounded_reasons": "quote_not_in_source=1",
+        "dropped_ungrounded_reasons_cheap": "quote_not_in_source=1"
+      },
+      "records_fetched": 90,
+      "files_written": 8,
+      "duration_s": 24.43,
+      "dispatch_id": "effects-wide-ST-09",
+      "github_run_id": 30819291329,
+      "warnings": {
+        "ungrounded_dropped": true
+      },
+      "cost": {
+        "api_calls": 5,
+        "duration_s": 24.43,
+        "tokens_in": 59983,
+        "tokens_out": 3221,
+        "estimated_usd": 0.03672825,
+        "models": [
+          {
+            "tier": "cheap",
+            "model_id": "google/gemini-3.1-flash-lite",
+            "api_calls": 4,
+            "tokens_in": 58189,
+            "tokens_out": 1602,
+            "estimated_usd": 0.01695025
+          },
+          {
+            "tier": "strong",
+            "model_id": "anthropic/claude-sonnet-5",
+            "api_calls": 1,
+            "tokens_in": 1794,
+            "tokens_out": 1619,
+            "estimated_usd": 0.019778
+          }
+        ]
+      }
+    },
     {
       "timestamp": "2026-08-03T13:42:48.823Z",
       "status": "partial",
@@ -1363,80 +1434,13 @@
           }
         ]
       }
-    },
-    {
-      "timestamp": "2026-08-03T10:40:30.239Z",
-      "status": "partial",
-      "params": {
-        "mode": "effects",
-        "mechanism": "SP-08",
-        "candidates": "12",
-        "records_processed": "47",
-        "records_skipped_irrelevant": "5",
-        "proposed": "5",
-        "merged": "1",
-        "dropped_ungrounded": "0",
-        "failed_validation": "0",
-        "held_low_confidence": "0",
-        "dropped_volume_cap": "0",
-        "dropped_volume_cap_high_confidence": "0",
-        "records_eligible": "174",
-        "records_relevant": "169",
-        "records_remaining": "122",
-        "records_selected": "47",
-        "records_dropped_truncation": "122",
-        "candidates_cheap": "6",
-        "candidates_strong": "6",
-        "dropped_ungrounded_cheap": "0",
-        "dropped_ungrounded_strong": "0",
-        "merged_into_pending": "1",
-        "proposed_enrich": "0",
-        "dropped_draft_cap": "0",
-        "into_synthesis": "6",
-        "cheap_synthesis_failed": "0",
-        "consolidated_by_synthesis": "0",
-        "expanded_by_synthesis": "0"
-      },
-      "records_fetched": 52,
-      "files_written": 5,
-      "duration_s": 18.83,
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "warnings": {
-        "capped": true
-      },
-      "cost": {
-        "api_calls": 5,
-        "duration_s": 18.83,
-        "tokens_in": 25496,
-        "tokens_out": 1972,
-        "estimated_usd": 0.02179025,
-        "models": [
-          {
-            "tier": "cheap",
-            "model_id": "google/gemini-3.1-flash-lite",
-            "api_calls": 3,
-            "tokens_in": 23205,
-            "tokens_out": 978,
-            "estimated_usd": 0.00726825
-          },
-          {
-            "tier": "strong",
-            "model_id": "anthropic/claude-sonnet-5",
-            "api_calls": 2,
-            "tokens_in": 2291,
-            "tokens_out": 994,
-            "estimated_usd": 0.014522
-          }
-        ]
-      }
     }
   ],
   "data_files": [
     {
       "path": "coverage.json",
-      "records": 2772,
-      "bytes": 253441
+      "records": 2862,
+      "bytes": 261181
     }
   ]
 }
