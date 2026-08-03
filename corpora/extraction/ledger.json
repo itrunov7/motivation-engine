@@ -1,7 +1,104 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:42:09.939Z",
+  "updated_at": "2026-08-03T13:43:18.935Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:42:48.823Z",
+      "dispatch_id": "effects-wide-HA-04",
+      "github_run_id": 30819197240,
+      "mode": "effects",
+      "scope": "HA-04",
+      "candidates": 9,
+      "cheap": {
+        "candidates": 5,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 5
+      },
+      "synthesis": {
+        "into_synthesis": 5,
+        "consolidated": 1,
+        "expanded": 0,
+        "candidates_strong": 4
+      },
+      "strong": {
+        "candidates": 4,
+        "proposed": 2,
+        "proposed_enrich": 0,
+        "merged_into_pending": 2,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "HA-04:cheap:01",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:02",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:03",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:04",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:05",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:strong:02",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-ha-04-static-habit-0c74de466f68",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "HA-04:strong:03",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-ha-04-static-habit-0c74de466f68",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "HA-04:strong:01",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ha-04-static-habit-0c74de466f68"
+        },
+        {
+          "candidate_id": "HA-04:strong:04",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-ha-04-habit-loop-31608f35245a"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:41:42.965Z",
       "dispatch_id": "effects-wide-SC-06",
@@ -3026,148 +3123,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-sp-08-group-cohesion-d8c443088d4e"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:40:10.210Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "SC-06",
-      "candidates": 16,
-      "cheap": {
-        "candidates": 9,
-        "dropped_ungrounded": 2,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 7
-      },
-      "synthesis": {
-        "into_synthesis": 7,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 7
-      },
-      "strong": {
-        "candidates": 7,
-        "proposed": 7,
-        "proposed_enrich": 0,
-        "merged_into_pending": 0,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "SC-06:cheap:01",
-          "mechanism_id": "SC-06",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "premise_contradicted_downstream"
-        },
-        {
-          "candidate_id": "SC-06:cheap:02",
-          "mechanism_id": "SC-06",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SC-06:cheap:03",
-          "mechanism_id": "SC-06",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SC-06:cheap:04",
-          "mechanism_id": "SC-06",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SC-06:cheap:05",
-          "mechanism_id": "SC-06",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "premise_contradicted_downstream"
-        },
-        {
-          "candidate_id": "SC-06:cheap:06",
-          "mechanism_id": "SC-06",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SC-06:strong:01",
-          "mechanism_id": "SC-06",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sc-06-limited-time-scarcity-lts-93f9b5deee75"
-        },
-        {
-          "candidate_id": "SC-06:strong:02",
-          "mechanism_id": "SC-06",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sc-06-scarcity-induced-aggression-eda3dfb8c806"
-        },
-        {
-          "candidate_id": "SC-06:strong:03",
-          "mechanism_id": "SC-06",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sc-06-scarcity-induced-arousal-polarizatio-785954351ce2"
-        },
-        {
-          "candidate_id": "SC-06:strong:04",
-          "mechanism_id": "SC-06",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sc-06-scarcity-marketing-effect-on-consume-40bd938ebc17"
-        },
-        {
-          "candidate_id": "SC-06:cheap:07",
-          "mechanism_id": "SC-06",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SC-06:cheap:08",
-          "mechanism_id": "SC-06",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SC-06:cheap:09",
-          "mechanism_id": "SC-06",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "SC-06:strong:05",
-          "mechanism_id": "SC-06",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sc-06-scarcity-induced-impulse-buying-72175b48b45a"
-        },
-        {
-          "candidate_id": "SC-06:strong:06",
-          "mechanism_id": "SC-06",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sc-06-arousal-as-a-mediator-of-scarcity-ef-f1d6bfb5ebff"
-        },
-        {
-          "candidate_id": "SC-06:strong:07",
-          "mechanism_id": "SC-06",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-sc-06-negative-impact-of-scarcity-communic-ce9e9148eb92"
         }
       ]
     }
