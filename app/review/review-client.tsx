@@ -1,9 +1,19 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+  type ReactElement,
+} from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { isActionableProposal, PROPOSAL_STATUS_META } from "@/lib/proposal-meta";
+import type { ProposalFlag } from "@/lib/review-flags";
+import type { SourceContext } from "@/lib/source-context";
 import type { DossierDraftAxis, Proposal } from "@/lib/types";
 import {
   approveProposalAction,
@@ -28,6 +38,9 @@ export interface ReviewProposal {
   proposal: Proposal;
   preview: { path: string; before: string | null; after: string | null }[];
   previewError?: string;
+  flags: ProposalFlag[];
+  /** Parallel to proposal.provenance — null when the item has no source_span. */
+  sourceContexts: (SourceContext | null)[];
 }
 
 function formatTimestamp(value: string | null): string {
@@ -131,6 +144,120 @@ function Diff({ item }: { item: ReviewProposal["preview"][number] }) {
             {item.after ?? "File removed"}
           </pre>
         </div>
+      )}
+    </div>
+  );
+}
+
+const SPAN_FAILURE_STATUSES = new Set([
+  "span_stale",
+  "span_out_of_range",
+  "span_does_not_reslice",
+  "record_missing",
+]);
+
+function SourceContextView({ context }: { context: SourceContext }) {
+  if (SPAN_FAILURE_STATUSES.has(context.status)) {
+    return (
+      <div
+        role="alert"
+        className="mt-2 rounded border border-[#F87171]/50 bg-[#0E1512] p-3"
+      >
+        <p className="font-mono text-[11px] uppercase tracking-wider text-[#F87171]">
+          {context.label}
+        </p>
+        {context.detail && (
+          <p className="mt-1 font-mono text-[10px] leading-relaxed text-[#F87171]/80">
+            {context.detail}
+          </p>
+        )}
+      </div>
+    );
+  }
+  return (
+    <div className="mt-2 rounded border border-[#243329] bg-[#0E1512] p-3">
+      <p className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
+        {context.label}
+      </p>
+      <p className="mt-2 whitespace-pre-wrap text-xs leading-relaxed text-[#8CA495]">
+        {context.before}
+        <mark className="rounded-sm bg-[#34D399]/25 px-0.5 text-[#E6EFE8]">
+          {context.span}
+        </mark>
+        {context.after}
+      </p>
+    </div>
+  );
+}
+
+function FlagBanner({
+  flag,
+  pattern,
+}: {
+  flag: ProposalFlag;
+  pattern?: string;
+}) {
+  return (
+    <div
+      role="status"
+      className="rounded-md border border-[#E4B54E]/40 bg-[#1A2620] p-3"
+    >
+      <p className="font-mono text-[11px] uppercase tracking-widest text-[#E4B54E]">
+        Warning · {flag.kind.replaceAll("_", " ")}
+      </p>
+      <p className="mt-1 text-xs leading-relaxed text-[#E6EFE8]">{flag.summary}</p>
+      {flag.highlight && (
+        <p className="mt-2 text-xs leading-relaxed text-[#8CA495]">
+          Unsupported clause:{" "}
+          <mark className="rounded-sm bg-[#E4B54E]/25 px-0.5 text-[#E6EFE8]">
+            {flag.highlight}
+          </mark>
+        </p>
+      )}
+      {flag.compareRecord && (
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <div className="rounded border border-[#243329] bg-[#0E1512] p-2">
+            <p className="mb-1 font-mono text-[9px] uppercase text-[#7C93A8]">
+              Existing · {flag.compareRecord.id}
+            </p>
+            <p className="text-xs font-medium text-[#E6EFE8]">{flag.compareRecord.term}</p>
+            <p className="mt-1 text-xs leading-relaxed text-[#8CA495]">
+              {flag.compareRecord.pattern ?? flag.compareRecord.description_as_reported}
+            </p>
+            <p className="mt-1 font-mono text-[10px] text-[#E4B54E]">
+              similarity {Math.round(flag.compareRecord.score * 100)}%
+            </p>
+          </div>
+          <div className="rounded border border-[#E4B54E]/30 bg-[#0E1512] p-2">
+            <p className="mb-1 font-mono text-[9px] uppercase text-[#E4B54E]">
+              This proposal
+            </p>
+            <p className="text-xs leading-relaxed text-[#8CA495]">
+              {pattern ?? flag.detail}
+            </p>
+          </div>
+        </div>
+      )}
+      {flag.anchorEffect && (
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <div className="rounded border border-[#243329] bg-[#0E1512] p-2">
+            <p className="mb-1 font-mono text-[9px] uppercase text-[#7C93A8]">
+              Anchor effect · {flag.anchorEffect.id}
+            </p>
+            <p className="text-xs leading-relaxed text-[#8CA495]">{flag.anchorEffect.fact}</p>
+          </div>
+          <div className="rounded border border-[#E4B54E]/30 bg-[#0E1512] p-2">
+            <p className="mb-1 font-mono text-[9px] uppercase text-[#E4B54E]">
+              Pattern claiming derivation
+            </p>
+            <p className="text-xs leading-relaxed text-[#8CA495]">
+              {pattern ?? flag.detail}
+            </p>
+          </div>
+        </div>
+      )}
+      {!flag.highlight && !flag.compareRecord && !flag.anchorEffect && (
+        <p className="mt-1 text-xs leading-relaxed text-[#8CA495]">{flag.detail}</p>
       )}
     </div>
   );
@@ -250,20 +377,27 @@ function ProposalCard({
   writeEnabled,
   selected,
   onSelected,
+  focused,
+  onFocusCard,
+  cardRef,
 }: {
   item: ReviewProposal;
   writeEnabled: boolean;
   selected: boolean;
   onSelected: (selected: boolean) => void;
+  focused: boolean;
+  onFocusCard: () => void;
+  cardRef: (node: HTMLElement | null) => void;
 }) {
   const { proposal, path } = item;
+  const originalPayload = JSON.stringify(proposal.payload, null, 2);
   const [note, setNote] = useState("");
-  const [payload, setPayload] = useState(() =>
-    JSON.stringify(proposal.payload, null, 2),
-  );
+  const [payload, setPayload] = useState(() => originalPayload);
   const [message, setMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const noteRef = useRef<HTMLInputElement>(null);
+  const editDetailsRef = useRef<HTMLDetailsElement>(null);
   const actionable = isActionableProposal(proposal);
   const unscoredAxes =
     proposal.type === "dossier"
@@ -276,6 +410,12 @@ function ProposalCard({
     proposal.provenance.length > 0 &&
     !item.previewError &&
     unscoredAxes.length === 0;
+  const payloadChanged = payload.trim() !== originalPayload.trim();
+  const readyToNarrow =
+    readyToApprove && payloadChanged && note.trim().length > 0;
+  const readyToReject = actionable && writeEnabled && note.trim().length > 0;
+  const patternText =
+    proposal.type === "realization" ? proposal.payload.pattern : undefined;
 
   function run(action: () => Promise<ReviewActionResult>): void {
     setMessage(null);
@@ -288,8 +428,41 @@ function ProposalCard({
     });
   }
 
+  function accept(): void {
+    if (!readyToApprove || !writeEnabled || isPending) return;
+    run(() => approveProposalAction(path, note));
+  }
+
+  function narrow(): void {
+    if (!readyToNarrow || !writeEnabled || isPending) {
+      if (editDetailsRef.current) editDetailsRef.current.open = true;
+      noteRef.current?.focus();
+      return;
+    }
+    run(() => editThenApproveProposalAction(path, payload, note));
+  }
+
+  function reject(): void {
+    if (!readyToReject || isPending) {
+      noteRef.current?.focus();
+      return;
+    }
+    run(() => rejectProposalAction(path, note));
+  }
+
   return (
-    <article className="rounded-lg border border-[#243329] bg-[#151F1A] p-5">
+    <article
+      ref={cardRef}
+      tabIndex={0}
+      data-review-path={path}
+      onFocus={onFocusCard}
+      onClick={onFocusCard}
+      className={`rounded-lg border bg-[#151F1A] p-5 outline-none ${
+        focused
+          ? "border-[#34D399]/60 ring-1 ring-[#34D399]/30"
+          : "border-[#243329]"
+      }`}
+    >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="flex items-center gap-3">
@@ -311,9 +484,16 @@ function ProposalCard({
             {proposal.operation === "enrich" ? "Enrich" : "Create"} · Target {proposal.target}
           </h2>
         </div>
-        <span className="rounded-full border border-[#243329] px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider text-[#34D399]">
-          {PROPOSAL_STATUS_META[proposal.status].label}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          {item.flags.length > 0 && (
+            <span className="rounded-full border border-[#E4B54E]/50 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider text-[#E4B54E]">
+              {item.flags.length} flag{item.flags.length === 1 ? "" : "s"}
+            </span>
+          )}
+          <span className="rounded-full border border-[#243329] px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider text-[#34D399]">
+            {PROPOSAL_STATUS_META[proposal.status].label}
+          </span>
+        </div>
       </div>
 
       <dl className="mt-4 grid gap-2 text-xs text-[#8CA495] sm:grid-cols-3">
@@ -336,48 +516,70 @@ function ProposalCard({
           Check the sources
         </h3>
         <ul className="mt-2 space-y-2">
-          {proposal.provenance.map((source) => (
-            <li
-              key={`${source.corpus_record_id}:${source.quote_or_locus}`}
-              className="rounded-md border border-[#243329] bg-[#1A2620] p-3 text-xs leading-relaxed text-[#8CA495]"
-            >
-              <Link
-                href={`/corpus/${source.mechanism_id}/${source.corpus_record_id}`}
-                className="text-[#E6EFE8] hover:text-[#34D399]"
+          {proposal.provenance.map((source, index) => {
+            const context = item.sourceContexts[index] ?? null;
+            return (
+              <li
+                key={`${source.corpus_record_id}:${source.quote_or_locus}:${index}`}
+                className="rounded-md border border-[#243329] bg-[#1A2620] p-3 text-xs leading-relaxed text-[#8CA495]"
               >
-                {source.title} →
-              </Link>
-              {"doi" in source && source.doi && (
-                <a
-                  href={`https://doi.org/${source.doi}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="ml-2 text-[#34D399] hover:underline"
+                <Link
+                  href={`/corpus/${source.mechanism_id}/${source.corpus_record_id}`}
+                  className="text-[#E6EFE8] hover:text-[#34D399]"
                 >
-                  DOI ↗
-                </a>
-              )}
-              <br />
-              <span className="font-mono text-[11px] text-[#7C93A8]">
-                {source.mechanism_id} · {source.corpus_record_id}
-                {"corpus_kind" in source && source.corpus_kind === "realization"
-                  ? ` · interface · ${source.source_id}${
-                      source.contributed_by ? ` · ${source.contributed_by}` : ""
-                    }`
-                  : "corpus_kind" in source && source.corpus_kind === "inference"
-                    ? ` · inferred from effect ${source.effect_id}`
-                    : " · literature"}
-              </span>
-              {"corpus_kind" in source && source.corpus_kind === "inference" ? (
-                <p className="mt-1 font-mono text-[11px] uppercase tracking-wider text-[#E4B54E]">
-                  {source.span_absent_reason}
-                </p>
-              ) : null}
-              <p className="mt-1">{source.quote_or_locus}</p>
-            </li>
-          ))}
+                  {source.title} →
+                </Link>
+                {"doi" in source && source.doi && (
+                  <a
+                    href={`https://doi.org/${source.doi}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="ml-2 text-[#34D399] hover:underline"
+                  >
+                    DOI ↗
+                  </a>
+                )}
+                <br />
+                <span className="font-mono text-[11px] text-[#7C93A8]">
+                  {source.mechanism_id} · {source.corpus_record_id}
+                  {"corpus_kind" in source && source.corpus_kind === "realization"
+                    ? ` · interface · ${source.source_id}${
+                        source.contributed_by ? ` · ${source.contributed_by}` : ""
+                      }`
+                    : "corpus_kind" in source && source.corpus_kind === "inference"
+                      ? ` · inferred from effect ${source.effect_id}`
+                      : " · literature"}
+                </span>
+                {"corpus_kind" in source && source.corpus_kind === "inference" ? (
+                  <p className="mt-1 font-mono text-[11px] uppercase tracking-wider text-[#E4B54E]">
+                    {source.span_absent_reason}
+                  </p>
+                ) : null}
+                {context ? (
+                  <SourceContextView context={context} />
+                ) : (
+                  <p className="mt-1">{source.quote_or_locus}</p>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
+
+      {item.flags.length > 0 && (
+        <section className="mt-4 space-y-2">
+          <h3 className="font-mono text-[11px] uppercase tracking-widest text-[#E4B54E]">
+            Triage flags — warnings only, verdict stays yours
+          </h3>
+          {item.flags.map((flag) => (
+            <FlagBanner
+              key={`${flag.kind}:${flag.summary}`}
+              flag={flag}
+              pattern={patternText}
+            />
+          ))}
+        </section>
+      )}
 
       <section className="mt-4 rounded-md border border-[#243329] bg-[#1A2620] p-4">
         <h3 className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8]">
@@ -454,7 +656,7 @@ function ProposalCard({
         </p>
       )}
 
-      <details className="mt-4">
+      <details ref={editDetailsRef} className="mt-4">
         <summary className="cursor-pointer font-mono text-[11px] uppercase tracking-widest text-[#7C93A8]">
           Edit the full proposal
         </summary>
@@ -473,41 +675,50 @@ function ProposalCard({
         <>
           <label className="mt-3 block">
             <span className="font-mono text-[11px] uppercase tracking-widest text-[#7C93A8]">
-              decision note / rejection reason
+              reason — required for narrow and reject
             </span>
             <input
+              ref={noteRef}
               value={note}
               onChange={(event) => setNote(event.target.value)}
               disabled={isPending || !writeEnabled}
+              data-review-reason={path}
               className="mt-2 w-full rounded-md border border-[#243329] bg-[#0E1512] px-3 py-2 text-sm text-[#E6EFE8] outline-none focus:border-[#34D399]/60"
             />
           </label>
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               type="button"
+              data-review-accept={path}
               disabled={isPending || !writeEnabled || !readyToApprove}
-              onClick={() => run(() => approveProposalAction(path, note))}
+              onClick={accept}
               className="rounded-md bg-[#34D399] px-3 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-[#0E1512] disabled:opacity-50"
             >
-              Approve
+              Accept <span className="opacity-60">A</span>
             </button>
             <button
               type="button"
-              disabled={isPending || !writeEnabled || !readyToApprove}
-              onClick={() => run(() => editThenApproveProposalAction(path, payload, note))}
+              data-review-narrow={path}
+              disabled={isPending || !writeEnabled || !readyToNarrow}
+              onClick={narrow}
               className="rounded-md border border-[#E4B54E]/50 px-3 py-2 font-mono text-xs uppercase tracking-wider text-[#E4B54E] disabled:opacity-50"
             >
-              Approve edited version
+              Narrow <span className="opacity-60">N</span>
             </button>
             <button
               type="button"
-              disabled={isPending || !writeEnabled || note.trim().length === 0}
-              onClick={() => run(() => rejectProposalAction(path, note))}
+              data-review-reject={path}
+              disabled={isPending || !writeEnabled || !readyToReject}
+              onClick={reject}
               className="rounded-md border border-[#F87171]/50 px-3 py-2 font-mono text-xs uppercase tracking-wider text-[#F87171] disabled:opacity-50"
             >
-              Reject
+              Reject <span className="opacity-60">R</span>
             </button>
           </div>
+          <p className="mt-2 font-mono text-[10px] text-[#7C93A8]">
+            Narrow needs an edited payload and a reason. Reject needs a reason.
+            Flags never block Accept.
+          </p>
         </>
       ) : proposal.status === "held_low_confidence" ? (
         <p className="mt-4 text-xs text-[#E4B54E]">
@@ -719,6 +930,17 @@ function OwnerObservationForm({
   );
 }
 
+function isTypingTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  const tag = target.tagName;
+  return (
+    tag === "INPUT" ||
+    tag === "TEXTAREA" ||
+    tag === "SELECT" ||
+    target.isContentEditable
+  );
+}
+
 export default function ReviewClient({
   proposals,
   writeEnabled,
@@ -733,19 +955,119 @@ export default function ReviewClient({
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [batchReason, setBatchReason] = useState("");
   const [batchMessage, setBatchMessage] = useState<string | null>(null);
+  const [showShortcuts, setShowShortcuts] = useState(false);
+  const [focusedPath, setFocusedPath] = useState<string | null>(
+    () => proposals[0]?.path ?? null,
+  );
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const held = proposals.filter(
-    (item) => item.proposal.status === "held_low_confidence",
+  const cardNodes = useRef(new Map<string, HTMLElement>());
+
+  const held = useMemo(
+    () =>
+      proposals.filter(
+        (item) => item.proposal.status === "held_low_confidence",
+      ),
+    [proposals],
   );
-  const primary = proposals.filter(
-    (item) => item.proposal.status !== "held_low_confidence",
+  const primary = useMemo(
+    () =>
+      proposals.filter(
+        (item) => item.proposal.status !== "held_low_confidence",
+      ),
+    [proposals],
+  );
+  const navigable = useMemo(() => [...primary, ...held], [primary, held]);
+  const navigablePaths = useMemo(
+    () => navigable.map((item) => item.path).join("\0"),
+    [navigable],
   );
   const groups = new Map<string, ReviewProposal[]>();
   for (const item of primary) {
     const key = `${item.proposal.type}::${item.proposal.target}`;
     groups.set(key, [...(groups.get(key) ?? []), item]);
   }
+
+  const focusPath = useCallback((path: string) => {
+    setFocusedPath(path);
+    const node = cardNodes.current.get(path);
+    node?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    node?.focus({ preventScroll: true });
+  }, []);
+
+  useEffect(() => {
+    const paths = navigablePaths.split("\0").filter(Boolean);
+    if (focusedPath && paths.includes(focusedPath)) return;
+    setFocusedPath(paths[0] ?? null);
+  }, [focusedPath, navigablePaths]);
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent): void {
+      if (isTypingTarget(event.target)) return;
+      const key = event.key;
+      if (key === "?" || (event.shiftKey && key === "/")) {
+        event.preventDefault();
+        setShowShortcuts((value) => !value);
+        return;
+      }
+      if (navigable.length === 0) return;
+      const index = Math.max(
+        0,
+        navigable.findIndex((item) => item.path === focusedPath),
+      );
+      if (key === "j" || key === "J" || key === "ArrowDown") {
+        event.preventDefault();
+        focusPath(navigable[Math.min(navigable.length - 1, index + 1)].path);
+        return;
+      }
+      if (key === "k" || key === "K" || key === "ArrowUp") {
+        event.preventDefault();
+        focusPath(navigable[Math.max(0, index - 1)].path);
+        return;
+      }
+      const path = focusedPath ?? navigable[0].path;
+      if (key === "a" || key === "A") {
+        event.preventDefault();
+        document
+          .querySelector<HTMLButtonElement>(`[data-review-accept="${path}"]`)
+          ?.click();
+        return;
+      }
+      if (key === "n" || key === "N") {
+        event.preventDefault();
+        const narrow = document.querySelector<HTMLButtonElement>(
+          `[data-review-narrow="${path}"]`,
+        );
+        if (narrow && !narrow.disabled) {
+          narrow.click();
+        } else {
+          const details = document
+            .querySelector(`[data-review-path="${path}"]`)
+            ?.querySelector("details");
+          if (details) details.open = true;
+          document
+            .querySelector<HTMLInputElement>(`[data-review-reason="${path}"]`)
+            ?.focus();
+        }
+        return;
+      }
+      if (key === "r" || key === "R") {
+        event.preventDefault();
+        const reject = document.querySelector<HTMLButtonElement>(
+          `[data-review-reject="${path}"]`,
+        );
+        if (reject && !reject.disabled) {
+          reject.click();
+        } else {
+          document
+            .querySelector<HTMLInputElement>(`[data-review-reason="${path}"]`)
+            ?.focus();
+        }
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [focusedPath, focusPath, navigable]);
 
   function runBatch(action: "approve" | "reject"): void {
     setBatchMessage(null);
@@ -772,8 +1094,68 @@ export default function ReviewClient({
     });
   }
 
+  function renderCard(item: ReviewProposal): ReactElement {
+    return (
+      <ProposalCard
+        key={item.path}
+        item={item}
+        writeEnabled={writeEnabled}
+        selected={selected.has(item.path)}
+        onSelected={(checked) => {
+          const next = new Set(selected);
+          if (checked) next.add(item.path);
+          else next.delete(item.path);
+          setSelected(next);
+        }}
+        focused={focusedPath === item.path}
+        onFocusCard={() => setFocusedPath(item.path)}
+        cardRef={(node) => {
+          if (node) cardNodes.current.set(item.path, node);
+          else cardNodes.current.delete(item.path);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="mt-6 space-y-8">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="font-mono text-[10px] uppercase tracking-wider text-[#7C93A8]">
+          Shortcuts: J/K navigate · A accept · N narrow · R reject · ? legend
+        </p>
+        <button
+          type="button"
+          onClick={() => setShowShortcuts((value) => !value)}
+          className="font-mono text-[10px] uppercase tracking-wider text-[#34D399] hover:underline"
+        >
+          {showShortcuts ? "Hide legend" : "Show legend"}
+        </button>
+      </div>
+      {showShortcuts && (
+        <div className="rounded-lg border border-[#243329] bg-[#151F1A] p-4 font-mono text-xs text-[#8CA495]">
+          <ul className="space-y-1">
+            <li>
+              <span className="text-[#E6EFE8]">J / ↓</span> — next proposal
+            </li>
+            <li>
+              <span className="text-[#E6EFE8]">K / ↑</span> — previous proposal
+            </li>
+            <li>
+              <span className="text-[#E6EFE8]">A</span> — accept focused proposal
+            </li>
+            <li>
+              <span className="text-[#E6EFE8]">N</span> — narrow (edit + reason required)
+            </li>
+            <li>
+              <span className="text-[#E6EFE8]">R</span> — reject (reason required)
+            </li>
+            <li>
+              <span className="text-[#E6EFE8]">?</span> — toggle this legend
+            </li>
+          </ul>
+        </div>
+      )}
+
       <OwnerObservationForm
         writeEnabled={writeEnabled}
         mechanisms={mechanisms}
@@ -805,22 +1187,7 @@ export default function ReviewClient({
               Select group
             </button>
           </div>
-          <div className="space-y-4">
-            {items.map((item) => (
-              <ProposalCard
-                key={item.path}
-                item={item}
-                writeEnabled={writeEnabled}
-                selected={selected.has(item.path)}
-                onSelected={(checked) => {
-                  const next = new Set(selected);
-                  if (checked) next.add(item.path);
-                  else next.delete(item.path);
-                  setSelected(next);
-                }}
-              />
-            ))}
-          </div>
+          <div className="space-y-4">{items.map(renderCard)}</div>
         </section>
       ))}
 
@@ -833,17 +1200,7 @@ export default function ReviewClient({
             Collapsed by default. These grounded items did not clear the configured
             confidence floor or added no material enrichment.
           </p>
-          <div className="mt-4 space-y-4">
-            {held.map((item) => (
-              <ProposalCard
-                key={item.path}
-                item={item}
-                writeEnabled={writeEnabled}
-                selected={false}
-                onSelected={() => undefined}
-              />
-            ))}
-          </div>
+          <div className="mt-4 space-y-4">{held.map(renderCard)}</div>
         </details>
       )}
 
@@ -864,7 +1221,7 @@ export default function ReviewClient({
               onClick={() => runBatch("approve")}
               className="rounded-md bg-[#34D399] px-3 py-2 font-mono text-xs font-semibold uppercase text-[#0E1512] disabled:opacity-50"
             >
-              Approve selected
+              Accept selected
             </button>
             <button
               type="button"

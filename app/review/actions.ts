@@ -123,6 +123,13 @@ export async function editThenApproveProposalAction(
   payloadJson: string,
   note?: string,
 ): Promise<ReviewActionResult> {
+  const reason = note?.trim();
+  if (!reason) {
+    return {
+      ok: false,
+      error: "A non-empty reason is required to narrow a proposal.",
+    };
+  }
   let editedPayload: unknown;
   try {
     editedPayload = JSON.parse(payloadJson) as unknown;
@@ -136,7 +143,7 @@ export async function editThenApproveProposalAction(
     proposalPath,
     action: "edit_approve",
     editedPayload,
-    reason: note?.trim() || undefined,
+    reason,
   });
 }
 

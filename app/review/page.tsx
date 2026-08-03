@@ -8,6 +8,8 @@ import {
   PROPOSAL_TYPES,
   type RepositorySnapshot,
 } from "@/lib/proposals";
+import { computeProposalFlags } from "@/lib/review-flags";
+import { buildSourceContext } from "@/lib/source-context";
 import type { Proposal, ProposalType } from "@/lib/types";
 import { loadFullMechanisms, loadSources } from "@/lib/data";
 import ReviewClient, { type ReviewProposal } from "./review-client";
@@ -42,6 +44,16 @@ function localProposalPaths(): string[] {
   });
 }
 
+function attachReviewAids(proposal: Proposal): Pick<
+  ReviewProposal,
+  "flags" | "sourceContexts"
+> {
+  return {
+    flags: computeProposalFlags(proposal),
+    sourceContexts: proposal.provenance.map((item) => buildSourceContext(item)),
+  };
+}
+
 async function enrich(
   snapshot: RepositorySnapshot,
   paths: string[],
@@ -51,11 +63,12 @@ async function enrich(
       const text = await snapshot.read(path);
       if (!text) throw new Error(`Proposal disappeared while loading: ${path}`);
       const proposal = JSON.parse(text) as Proposal;
+      const aids = attachReviewAids(proposal);
       if (
         !isActionableProposal(proposal) &&
         !(proposal.status === "held_low_confidence" && proposal.operation === "enrich")
       ) {
-        return { path, proposal, preview: [] };
+        return { path, proposal, preview: [], ...aids };
       }
       try {
         const preview = await prepareProposalPreview(snapshot, path);
@@ -67,6 +80,7 @@ async function enrich(
             before: mutation.expectedContent,
             after: mutation.content,
           })),
+          ...aids,
         };
       } catch (previewError) {
         return {
@@ -75,6 +89,7 @@ async function enrich(
           preview: [],
           previewError:
             previewError instanceof Error ? previewError.message : String(previewError),
+          ...aids,
         };
       }
     }),
@@ -183,6 +198,7 @@ export default async function ReviewPage({
       (left, right) =>
         Number(isActionableProposal(right.proposal)) -
           Number(isActionableProposal(left.proposal)) ||
+        Number(right.flags.length > 0) - Number(left.flags.length > 0) ||
         left.proposal.type.localeCompare(right.proposal.type) ||
         left.proposal.target.localeCompare(right.proposal.target) ||
         right.proposal.proposed_at.localeCompare(left.proposal.proposed_at),
