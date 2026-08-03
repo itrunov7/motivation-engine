@@ -1,7 +1,123 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-03T13:39:41.821Z",
+  "updated_at": "2026-08-03T13:40:56.067Z",
   "runs": [
+    {
+      "run_id": "2026-08-03T13:40:30.012Z",
+      "dispatch_id": "effects-wide-IF-18",
+      "github_run_id": 30819007515,
+      "mode": "effects",
+      "scope": "IF-18",
+      "candidates": 12,
+      "cheap": {
+        "candidates": 6,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 6
+      },
+      "synthesis": {
+        "into_synthesis": 6,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 6
+      },
+      "strong": {
+        "candidates": 6,
+        "proposed": 5,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "IF-18:cheap:01",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "IF-18:cheap:02",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "IF-18:cheap:03",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "IF-18:cheap:04",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "IF-18:cheap:05",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "IF-18:cheap:06",
+          "mechanism_id": "IF-18",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "IF-18:strong:02",
+          "mechanism_id": "IF-18",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-if-18-information-scent-in-visual-search-b504f81df5ea",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "IF-18:strong:06",
+          "mechanism_id": "IF-18",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-if-18-boundary-vector-cells-1073125f3ec0"
+        },
+        {
+          "candidate_id": "IF-18:strong:05",
+          "mechanism_id": "IF-18",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-if-18-gps-based-secret-key-establishment-6aa7416c17b9"
+        },
+        {
+          "candidate_id": "IF-18:strong:03",
+          "mechanism_id": "IF-18",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-if-18-language-scent-13dd90826c94"
+        },
+        {
+          "candidate_id": "IF-18:strong:01",
+          "mechanism_id": "IF-18",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-if-18-lateral-reading-d3edcfeb09ec"
+        },
+        {
+          "candidate_id": "IF-18:strong:04",
+          "mechanism_id": "IF-18",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "effect-if-18-information-scent-sequential-decisio-27ffcacdf5bc"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-03T13:38:36.944Z",
       "dispatch_id": "effects-wide-MM-15",
@@ -3069,157 +3185,6 @@
           "pass": "strong",
           "fate": "proposed",
           "proposal_id": "effect-re-10-reciprocity-in-socially-bonded-pairs-a5278ca60a04"
-        }
-      ]
-    },
-    {
-      "run_id": "2026-08-03T10:39:21.808Z",
-      "dispatch_id": null,
-      "github_run_id": 30806106326,
-      "mode": "effects",
-      "scope": "LA-01",
-      "candidates": 17,
-      "cheap": {
-        "candidates": 9,
-        "dropped_ungrounded": 1,
-        "synthesis_batch_failed": 0,
-        "into_synthesis": 8
-      },
-      "synthesis": {
-        "into_synthesis": 8,
-        "consolidated": 0,
-        "expanded": 0,
-        "candidates_strong": 8
-      },
-      "strong": {
-        "candidates": 8,
-        "proposed": 5,
-        "proposed_enrich": 0,
-        "merged_into_pending": 3,
-        "held_low_confidence": 0,
-        "failed_validation": 0,
-        "dropped_ungrounded": 0,
-        "dropped_volume_cap": 0,
-        "dropped_draft_cap": 0
-      },
-      "balanced": true,
-      "reconstruction": {
-        "status": "recorded"
-      },
-      "candidates_detail": [
-        {
-          "candidate_id": "LA-01:cheap:01",
-          "mechanism_id": "LA-01",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "LA-01:cheap:02",
-          "mechanism_id": "LA-01",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "LA-01:cheap:03",
-          "mechanism_id": "LA-01",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "LA-01:cheap:04",
-          "mechanism_id": "LA-01",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "LA-01:cheap:05",
-          "mechanism_id": "LA-01",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "LA-01:strong:03",
-          "mechanism_id": "LA-01",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-la-01-endowment-effect-7981e8c02cee",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "LA-01:strong:04",
-          "mechanism_id": "LA-01",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-la-01-endowment-effect-7981e8c02cee",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "LA-01:strong:05",
-          "mechanism_id": "LA-01",
-          "pass": "strong",
-          "fate": "merged_into_pending",
-          "proposal_id": "effect-la-01-endowment-effect-7981e8c02cee",
-          "attribution": "recorded"
-        },
-        {
-          "candidate_id": "LA-01:strong:01",
-          "mechanism_id": "LA-01",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-la-01-endowment-effect-7981e8c02cee"
-        },
-        {
-          "candidate_id": "LA-01:strong:02",
-          "mechanism_id": "LA-01",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-la-01-myopic-loss-aversion-bf422dde143f"
-        },
-        {
-          "candidate_id": "LA-01:cheap:06",
-          "mechanism_id": "LA-01",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "LA-01:cheap:07",
-          "mechanism_id": "LA-01",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "LA-01:cheap:08",
-          "mechanism_id": "LA-01",
-          "pass": "cheap",
-          "fate": "into_synthesis"
-        },
-        {
-          "candidate_id": "LA-01:cheap:09",
-          "mechanism_id": "LA-01",
-          "pass": "cheap",
-          "fate": "dropped_ungrounded",
-          "reason": "quote_not_in_source"
-        },
-        {
-          "candidate_id": "LA-01:strong:08",
-          "mechanism_id": "LA-01",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-la-01-loss-aversion-in-internet-gaming-dis-33dad5eb6074"
-        },
-        {
-          "candidate_id": "LA-01:strong:06",
-          "mechanism_id": "LA-01",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-la-01-loss-aversion-in-noninstrumental-inf-c12d84c08482"
-        },
-        {
-          "candidate_id": "LA-01:strong:07",
-          "mechanism_id": "LA-01",
-          "pass": "strong",
-          "fate": "proposed",
-          "proposal_id": "effect-la-01-loss-aversion-in-airline-revenue-f18f8a1d516d"
         }
       ]
     }

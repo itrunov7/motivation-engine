@@ -1,0 +1,56 @@
+{
+  "id": "effect-if-18-lateral-reading-d3edcfeb09ec",
+  "type": "effect",
+  "target": "IF-18",
+  "payload": {
+    "id": "lateral-reading",
+    "mechanism_id": "IF-18",
+    "name": "Lateral Reading",
+    "fact": "Lateral reading, defined as consulting multiple external sources, significantly improves the accuracy of detecting health-related misinformation compared to vertical reading.",
+    "grade": "A",
+    "source": [
+      "10.1145/3774904.3792927"
+    ],
+    "boundary": "Health-related misinformation detection",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "IF-18",
+        "corpus_record_id": "cr_266b83e5dcf944a5377fbf8d",
+        "doi": "10.1145/3774904.3792927",
+        "title": "Fact-Checking Strategies in Web: Lateral Navigation in the Browser Boosts Health Misinformation Detection Even Under Confirmation Bias",
+        "quote_or_locus": "we find that lateral reading significantly improves accuracy (β = 0.09, 95% CI [0.079, 0.181], p = 0.001), while vertical reading has no effect (β = -0.01, p = 0.332",
+        "source_span": {
+          "start": 965,
+          "end": 1130,
+          "source_text_sha256": "a4a5c72b660545efaaff86f6d7152e4a9ef40cc1d3e60c06d465b0b37c808c14"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "IF-18",
+      "corpus_record_id": "cr_266b83e5dcf944a5377fbf8d",
+      "doi": "10.1145/3774904.3792927",
+      "title": "Fact-Checking Strategies in Web: Lateral Navigation in the Browser Boosts Health Misinformation Detection Even Under Confirmation Bias",
+      "quote_or_locus": "we find that lateral reading significantly improves accuracy (β = 0.09, 95% CI [0.079, 0.181], p = 0.001), while vertical reading has no effect (β = -0.01, p = 0.332",
+      "source_span": {
+        "start": 965,
+        "end": 1130,
+        "source_text_sha256": "a4a5c72b660545efaaff86f6d7152e4a9ef40cc1d3e60c06d465b0b37c808c14"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.9,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-30819007515",
+  "proposed_at": "2026-08-03T13:40:30.012Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}
