@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-08-03T19:24:43.151Z",
+  "generated_at": "2026-08-04T02:02:19.918Z",
   "entries": [
     {
       "source_id": "wayback-cdx",
-      "checked_at": "2026-08-03T19:24:24.142Z",
-      "status": "down",
-      "latency_ms": 15004,
-      "note": "GET /cdx/search/cdx limit=1 — timeout after 15s"
+      "checked_at": "2026-08-04T02:02:02.872Z",
+      "status": "ok",
+      "latency_ms": 12408,
+      "note": "GET /cdx/search/cdx limit=1 — HTTP 200"
     },
     {
       "source_id": "openalex",
-      "checked_at": "2026-08-03T19:24:40.148Z",
+      "checked_at": "2026-08-04T02:02:16.283Z",
       "status": "ok",
-      "latency_ms": 657,
+      "latency_ms": 631,
       "note": "GET /works search=motivation per-page=1 — HTTP 200"
     },
     {
       "source_id": "semantic-scholar",
-      "checked_at": "2026-08-03T19:24:41.811Z",
-      "status": "degraded",
-      "latency_ms": 71,
-      "note": "GET /graph/v1/paper/search limit=1 (keyed) — HTTP 429 (throttled)"
+      "checked_at": "2026-08-04T02:02:17.915Z",
+      "status": "ok",
+      "latency_ms": 716,
+      "note": "GET /graph/v1/paper/search limit=1 (keyed) — HTTP 200"
     },
     {
       "source_id": "pubmed-europepmc",
-      "checked_at": "2026-08-03T19:24:42.884Z",
+      "checked_at": "2026-08-04T02:02:19.632Z",
       "status": "ok",
-      "latency_ms": 265,
+      "latency_ms": 284,
       "note": "GET esearch.fcgi db=pubmed retmax=1 — HTTP 200"
     },
     {
       "source_id": "app-store-reviews",
-      "checked_at": "2026-08-03T19:24:43.151Z",
+      "checked_at": "2026-08-04T02:02:19.917Z",
       "status": "unknown",
       "latency_ms": null,
       "note": "no probe — host not in the D-011 whitelist (a probe arrives with this source's connector)"
     },
     {
       "source_id": "ventora-telemetry",
-      "checked_at": "2026-08-03T19:24:43.151Z",
+      "checked_at": "2026-08-04T02:02:19.917Z",
       "status": "n_a",
       "latency_ms": null,
       "note": "internal source — no external endpoint by design"
     },
     {
       "source_id": "sec-edgar",
-      "checked_at": "2026-08-03T19:24:43.151Z",
+      "checked_at": "2026-08-04T02:02:19.917Z",
       "status": "unknown",
       "latency_ms": null,
       "note": "no probe — host not in the D-011 whitelist (a probe arrives with this source's connector)"
     },
     {
       "source_id": "google-patents",
-      "checked_at": "2026-08-03T19:24:43.151Z",
+      "checked_at": "2026-08-04T02:02:19.917Z",
       "status": "unknown",
       "latency_ms": null,
       "note": "no probe — host not in the D-011 whitelist (a probe arrives with this source's connector)"
