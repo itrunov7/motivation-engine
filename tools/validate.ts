@@ -41,6 +41,7 @@ import addFormats from "ajv-formats";
 import { parse as parseYaml, parseAllDocuments } from "yaml";
 import {
   EVIDENCE_CATEGORIES,
+  PROBE_RUN_MODE,
   RUN_HISTORY_LIMIT,
   type Manifest,
   type ManifestCost,
@@ -1841,9 +1842,34 @@ function main(): void {
           ...(manifest?.run_history ?? []),
         ];
         const seen = new Set<string>();
+        let probeRuns = 0;
         for (const run of manifestRuns) {
           if (seen.has(run.timestamp)) continue;
           seen.add(run.timestamp);
+          // A probe (D-164) spends against the caps but produces no candidates,
+          // so it has no ledger entry to balance — and must not acquire one. The
+          // exemption is deliberately narrow: it holds only while the entry
+          // keeps claiming nothing an extraction run claims. A probe that
+          // reported records or files, or that turned up in the ledger, would be
+          // an extraction run wearing a probe's label, and fails here.
+          if (run.params?.mode === PROBE_RUN_MODE) {
+            probeRuns += 1;
+            if (byRunId.has(run.timestamp)) {
+              fail(
+                PATHS.candidateLedger,
+                `probe run ${run.timestamp} has a candidate-ledger entry — a probe produces no candidates, so that entry is fabricated accounting (D-164)`,
+              );
+              ok = false;
+            }
+            if (run.records_fetched !== 0 || run.files_written !== 0) {
+              fail(
+                PATHS.extractionManifest,
+                `probe run ${run.timestamp} reports records_fetched=${run.records_fetched} files_written=${run.files_written} — a probe reads proposals and writes none, so it is exempt from the ledger only while both are 0 (D-164)`,
+              );
+              ok = false;
+            }
+            continue;
+          }
           const entry = byRunId.get(run.timestamp);
           if (!entry) {
             fail(
@@ -1872,6 +1898,15 @@ function main(): void {
               `${count("recorded")} recorded, ${count("reconstructed")} reconstructed, ` +
               `${count("partial")} partly reconstructed, ${count("unreconstructable")} declared unreconstructable, D-132)`,
           );
+          // Counted out loud: a probe entry is exempt from the ledger, so the
+          // only way to see how many manifest runs the check above skipped is
+          // to say so. An unstated exemption is an unread one.
+          if (probeRuns > 0) {
+            console.log(
+              `    · ${probeRuns} probe run(s) in the manifest carry spend but no candidates — ` +
+                "exempt from the ledger requirement by D-164, counted against the monthly cap like any run",
+            );
+          }
         }
       }
     } else if (!existsSync(PATHS.candidateLedger)) {

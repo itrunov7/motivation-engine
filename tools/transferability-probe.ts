@@ -11,21 +11,28 @@
  * number D-162 quotes was produced outside this repository for exactly that
  * reason, and none of them can be reproduced from it.
  *
- * WHAT IT DOES NOT DO. It writes nothing. It does not tag, hold, approve,
- * reject, or edit any proposal; it produces no manifest entry, no ledger entry,
- * no checkpoint, no reader coverage. Its output is stdout. A verdict it prints
- * is a MEASUREMENT of the filter, not a decision about a claim — under D-131
- * that distinction is the whole reason to keep it read-only: the numbers are
- * for a human to read before anything is committed against them.
+ * WHAT IT DOES NOT DO. It does not tag, hold, approve, reject, or edit any
+ * proposal; it produces no ledger entry, no checkpoint, no reader coverage. Its
+ * output is stdout. A verdict it prints is a MEASUREMENT of the filter, not a
+ * decision about a claim — under D-131 that distinction is the whole reason to
+ * keep it read-only: the numbers are for a human to read before anything is
+ * committed against them.
  *
- * SPEND. Real, small, and reported. This follows the contract
- * tools/openrouter-preflight.ts already set (D-107): the cost is printed rather
- * than silently absorbed, and it is NOT written to the ledger, because a probe
- * produces no proposals and a spend record with no candidate behind it would
- * corrupt the very accounting it is trying to respect. The per-run and monthly
- * token caps still bind — they are enforced inside judgeVariableViaModel, which
- * this calls unmodified, so the probe cannot spend past a limit the pipeline
- * would have stopped at.
+ * The one exception, added by D-164 and off by default, is `record-spend`: it
+ * appends this run's MEASURED cost to corpora/extraction/manifest.json and
+ * writes nothing else. It never touches last_run — a probe is not the last
+ * extraction, and the showcase reads last_run to say what extraction did.
+ *
+ * SPEND. Real, small, reported, and — with record-spend — recorded. The cost is
+ * never silently absorbed. It is NOT written to the candidate ledger, because a
+ * probe produces no proposals and a ledger entry with no candidate behind it
+ * would corrupt the very accounting it is trying to respect (D-107). It IS
+ * written to the extraction manifest when record-spend is passed (D-164): the
+ * monthly cap is derived from committed manifests and reads nothing else, so a
+ * probe whose spend never lands there is spend the cap cannot see. The per-run
+ * and monthly token caps still bind — they are enforced inside
+ * judgeVariableViaModel, which this calls unmodified, so the probe cannot spend
+ * past a limit the pipeline would have stopped at.
  *
  * MODEL. Whatever corpora/_ops/extraction.json configures as the STRONG tier —
  * the model the pipeline would actually call. It is not pinned here and must not
@@ -41,11 +48,19 @@
  *   id=       a single proposal id.
  *   limit=    stop after N proposals — a bound on spend, stated in the output.
  *   dry-run   print the prompts and the cost estimate, make no calls at all.
+ *   record-spend  append this run's measured cost to the extraction manifest
+ *                 (D-164). Ignored under dry-run, which spends nothing.
  */
 
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ExtractionOpsConfig, Proposal } from "../lib/types";
+import type {
+  CorpusManifest,
+  CorpusManifestRun,
+  CorpusRunStatus,
+  ExtractionOpsConfig,
+  Proposal,
+} from "../lib/types";
 import { TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS } from "../lib/types";
 import type { TransferabilityVerdictUnavailableReason } from "../lib/types";
 import {
@@ -58,15 +73,20 @@ import {
 import { PROPOSAL_TYPES } from "../lib/proposals";
 import { loadExtractionOpsConfigFromDisk, validateExtractionOpsConfig } from "../lib/ops";
 import {
+  buildExtractionManifestCost,
   configuredTier,
   estimateTokens,
   judgeVariableViaModel,
+  mergeExtractionRunHistory,
   type Usage,
 } from "./extract";
+import { PROBE_RUN_MODE } from "./connectors/types";
 
 const ROOT = join(__dirname, "..");
 /** Mirrors the cap judgeVariableViaModel applies to its own answer. */
 const MAX_ANSWER_TOKENS = 200;
+/** The manifest whose run_history the monthly cap is computed from. */
+const MANIFEST_FILE = join(ROOT, "corpora", "extraction", "manifest.json");
 
 function option(name: string): string | undefined {
   const prefix = `${name}=`;
@@ -129,7 +149,7 @@ function loadConfig(): ExtractionOpsConfig {
   return config;
 }
 
-function select(): LoadedProposal[] {
+function select(): { selected: LoadedProposal[]; truncatedBy: number } {
   const target = option("target");
   const status = option("status") ?? "pending";
   const id = option("id");
@@ -149,16 +169,141 @@ function select(): LoadedProposal[] {
       `NOTE: limit=${limit} — ${matched.length - limit} of ${matched.length} matching ` +
         "proposals were NOT judged and are absent from every count below.\n",
     );
-    return matched.slice(0, limit);
+    return { selected: matched.slice(0, limit), truncatedBy: matched.length - limit };
   }
-  return matched;
+  return { selected: matched, truncatedBy: 0 };
+}
+
+/** Everything the manifest entry reports about what this probe measured. */
+interface ProbeOutcome {
+  status: CorpusRunStatus;
+  target: string;
+  statusFilter: string;
+  selected: number;
+  judged: number;
+  transferable: number;
+  refused: number;
+  escalated: number;
+  unavailable: Record<string, number>;
+  truncatedBy: number;
+  error?: string;
+}
+
+/**
+ * Append this run's MEASURED cost to corpora/extraction/manifest.json (D-164).
+ *
+ * Writes exactly one run_history entry and nothing else. `last_run` is
+ * deliberately left as it was: lib/ops.ts reads last_run to describe what
+ * extraction last did, and a probe that overwrote it would make the showcase
+ * report a measurement as a production pass — a hardcoded-progress defect
+ * arrived at by a different route.
+ *
+ * Idempotent per run, on the same identity extraction uses (D-099): the entry
+ * is keyed by startedAt, so re-writing replaces this run's entry rather than
+ * double-counting its spend.
+ */
+function recordProbeSpend(args: {
+  startedAt: Date;
+  config: ExtractionOpsConfig;
+  usage: Usage;
+  outcome: ProbeOutcome;
+}): boolean {
+  if (!existsSync(MANIFEST_FILE)) {
+    // A probe must never author the extraction manifest — that file is the
+    // record of what extraction did, and a probe has done none of it.
+    console.log(
+      "\nSPEND NOT RECORDED: corpora/extraction/manifest.json does not exist, and a " +
+        "probe does not create it. The cost above is in this log only.",
+    );
+    return false;
+  }
+  const { outcome } = args;
+  const durationS =
+    Math.round(((Date.now() - args.startedAt.getTime()) / 1000) * 100) / 100;
+  const unavailableTotal = Object.values(outcome.unavailable).reduce((a, b) => a + b, 0);
+  const run: CorpusManifestRun = {
+    timestamp: args.startedAt.toISOString(),
+    status: outcome.status,
+    // Every value a string: the manifest schema types params that way, and the
+    // counts are the same ones printed above, not a second derivation of them.
+    params: {
+      mode: PROBE_RUN_MODE,
+      ruleset_version: String(TRANSFERABILITY_RULESET_VERSION_V2),
+      target: outcome.target,
+      proposal_status: outcome.statusFilter,
+      selected: String(outcome.selected),
+      judged: String(outcome.judged),
+      transferable: String(outcome.transferable),
+      refused: String(outcome.refused),
+      escalated_by_warning_pair: String(outcome.escalated),
+      verdict_unavailable: String(unavailableTotal),
+      ...(unavailableTotal > 0
+        ? {
+            verdict_unavailable_reasons: TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS.filter(
+              (reason) => (outcome.unavailable[reason] ?? 0) > 0,
+            )
+              .map((reason) => `${reason}=${outcome.unavailable[reason]}`)
+              .join(" "),
+          }
+        : {}),
+      ...(outcome.truncatedBy > 0 ? { not_judged_by_limit: String(outcome.truncatedBy) } : {}),
+    },
+    // A probe reads proposals, not corpus records, and writes no file. Both
+    // zeros are facts about a probe, not placeholders for uncounted work.
+    records_fetched: 0,
+    files_written: 0,
+    duration_s: durationS,
+    ...(outcome.error ? { error: oneLine(outcome.error, 200) } : {}),
+    ...(unavailableTotal > 0 || outcome.truncatedBy > 0
+      ? {
+          warnings: {
+            ...(unavailableTotal > 0 ? { verdict_unavailable: true } : {}),
+            ...(outcome.truncatedBy > 0 ? { capped: true } : {}),
+          },
+        }
+      : {}),
+    dispatch_id: process.env.OPS_DISPATCH_ID ?? null,
+    github_run_id: process.env.GITHUB_RUN_ID ? Number(process.env.GITHUB_RUN_ID) : null,
+    cost: buildExtractionManifestCost(args.config, args.usage, durationS),
+  };
+
+  const manifest = JSON.parse(readFileSync(MANIFEST_FILE, "utf8")) as CorpusManifest;
+  const previous = manifest.run_history ?? [];
+  const history = mergeExtractionRunHistory(previous, run);
+  writeFileSync(
+    MANIFEST_FILE,
+    `${JSON.stringify({ ...manifest, run_history: history }, null, 2)}\n`,
+  );
+
+  console.log(
+    `\nSpend recorded in corpora/extraction/manifest.json (D-164): run ${run.timestamp}, ` +
+      `dispatch_id ${run.dispatch_id ?? "none"}, $${run.cost?.estimated_usd.toFixed(6)}. ` +
+      "It counts against the monthly cap like any other run. last_run is untouched.",
+  );
+
+  // The history is capped, so writing an entry can push an older one out — and
+  // the monthly rollup sums nothing but this array, so an evicted run's spend
+  // silently leaves the cap's view. Stated, never absorbed: silent loss is the
+  // defect this project has hit four times.
+  const kept = new Set(history.map((entry) => entry.timestamp));
+  for (const evicted of previous.filter((entry) => !kept.has(entry.timestamp))) {
+    console.log(
+      `EVICTED by the ${history.length}-entry history cap: run ${evicted.timestamp} ` +
+        `($${(evicted.cost?.estimated_usd ?? 0).toFixed(6)}, ` +
+        `${((evicted.cost?.tokens_in ?? 0) + (evicted.cost?.tokens_out ?? 0)).toLocaleString()} tokens). ` +
+        "Its spend is no longer visible to the monthly cap. Owner decision, not a probe decision.",
+    );
+  }
+  return true;
 }
 
 async function probe(): Promise<void> {
+  const startedAt = new Date();
   const config = loadConfig();
   const tier = configuredTier(config, "strong");
-  const selected = select();
+  const { selected, truncatedBy } = select();
   const dryRun = flag("dry-run");
+  const recordSpend = flag("record-spend");
 
   console.log(
     `Transferability probe — ruleset v${TRANSFERABILITY_RULESET_VERSION_V2}, ` +
@@ -194,6 +339,12 @@ async function probe(): Promise<void> {
         `≤$${estimatedUsd.toFixed(4)} at the configured ${tier.model_id} prices.`,
     );
     console.log("Read-only: nothing was written, held, or decided.");
+    if (recordSpend) {
+      // Nothing was spent, so there is nothing to record. Said out loud, because
+      // a silent skip here would leave "recorded nothing" and "spent nothing"
+      // looking the same in the workflow log.
+      console.log("record-spend ignored: a dry run spends nothing, so it records nothing.");
+    }
     return;
   }
 
@@ -215,43 +366,56 @@ async function probe(): Promise<void> {
   let escalated = 0;
   const unavailable: Record<string, number> = {};
 
-  for (const { path, proposal } of selected) {
-    const claim = transferabilityClaimOfProposal(proposal)!;
-    const outcome = await judgeVariableViaModel(context, claim);
+  // A pass that dies half way has still spent what it spent, and the monthly
+  // cap only ever sees what a manifest records (D-099). The failure is captured
+  // here so the summary prints and the spend lands, then rethrown below — the
+  // run still fails, it just fails with its accounting written.
+  let failure: Error | undefined;
+  try {
+    for (const { path, proposal } of selected) {
+      const claim = transferabilityClaimOfProposal(proposal)!;
+      const outcome = await judgeVariableViaModel(context, claim);
 
-    console.log(`${proposal.id}  [${proposal.status}]`);
-    if (!outcome.ok) {
-      unavailable[outcome.reason] = (unavailable[outcome.reason] ?? 0) + 1;
-      console.log(`  verdict : VERDICT UNAVAILABLE (${outcome.reason})`);
-      if (outcome.detail) console.log(`  detail  : ${oneLine(outcome.detail, 200)}`);
-      console.log("  lever   : —  (nothing judged this claim)");
+      console.log(`${proposal.id}  [${proposal.status}]`);
+      if (!outcome.ok) {
+        unavailable[outcome.reason] = (unavailable[outcome.reason] ?? 0) + 1;
+        console.log(`  verdict : VERDICT UNAVAILABLE (${outcome.reason})`);
+        if (outcome.detail) console.log(`  detail  : ${oneLine(outcome.detail, 200)}`);
+        console.log("  lever   : —  (nothing judged this claim)");
+        console.log(`  fact    : ${oneLine(claim.fact)}`);
+        console.log(`  file    : ${path}\n`);
+        continue;
+      }
+
+      const verdict = judgeTransferabilityV2(claim, outcome.judgement);
+      if (verdict.transferable) transferable += 1;
+      else refused += 1;
+      if (verdict.escalated_by_warning_pair) escalated += 1;
+
+      const variable = verdict.checks.find((check) => check.check === "variable");
+      console.log(`  verdict : ${describeTransferability(verdict)}`);
+      console.log(`  lever   : ${outcome.judgement.lever ?? "none identified"}`);
+      console.log(`  reason  : ${oneLine(variable?.reason ?? outcome.judgement.reason, 300)}`);
       console.log(`  fact    : ${oneLine(claim.fact)}`);
+      // The three deterministic checks are printed too: without them a refusal by
+      // SUBJECT or POPULATION reads as a VARIABLE refusal, and the whole point of
+      // v2 was to find out which check was doing the refusing.
+      console.log(
+        `  checks  : ${verdict.checks.map((check) => `${check.check}=${check.outcome}`).join(" ")}`,
+      );
+      for (const check of verdict.checks) {
+        if (check.outcome === "pass") continue;
+        const marker = check.outcome === "fail" ? "✗" : "!";
+        console.log(`  ${marker} ${check.check.padEnd(10)} ${check.reason}`);
+      }
       console.log(`  file    : ${path}\n`);
-      continue;
     }
-
-    const verdict = judgeTransferabilityV2(claim, outcome.judgement);
-    if (verdict.transferable) transferable += 1;
-    else refused += 1;
-    if (verdict.escalated_by_warning_pair) escalated += 1;
-
-    const variable = verdict.checks.find((check) => check.check === "variable");
-    console.log(`  verdict : ${describeTransferability(verdict)}`);
-    console.log(`  lever   : ${outcome.judgement.lever ?? "none identified"}`);
-    console.log(`  reason  : ${oneLine(variable?.reason ?? outcome.judgement.reason, 300)}`);
-    console.log(`  fact    : ${oneLine(claim.fact)}`);
-    // The three deterministic checks are printed too: without them a refusal by
-    // SUBJECT or POPULATION reads as a VARIABLE refusal, and the whole point of
-    // v2 was to find out which check was doing the refusing.
+  } catch (error) {
+    failure = error instanceof Error ? error : new Error(String(error));
     console.log(
-      `  checks  : ${verdict.checks.map((check) => `${check.check}=${check.outcome}`).join(" ")}`,
+      `\nPROBE FAILED after ${usage.byTier.strong.calls} call(s): ${failure.message}`,
     );
-    for (const check of verdict.checks) {
-      if (check.outcome === "pass") continue;
-      const marker = check.outcome === "fail" ? "✗" : "!";
-      console.log(`  ${marker} ${check.check.padEnd(10)} ${check.reason}`);
-    }
-    console.log(`  file    : ${path}\n`);
+    console.log("Everything below is a PARTIAL pass, not a measurement of the queue.\n");
   }
 
   const unavailableTotal = Object.values(unavailable).reduce((a, b) => a + b, 0);
@@ -288,10 +452,50 @@ async function probe(): Promise<void> {
       `on ${tier.model_id}.`,
   );
   console.log(
-    "Not written to corpora/extraction/ledger.json or the manifest: a probe produces " +
-      "no proposals, so it has no candidate to attribute spend to (D-107 precedent).",
+    "Not written to corpora/extraction/ledger.json: a probe produces no proposals, so " +
+      "it has no candidate to attribute spend to (D-107 precedent).",
   );
-  console.log("Read-only: nothing above was written, tagged, held, or decided.");
+  console.log(
+    "Read-only where it matters: nothing above was tagged, held, approved, rejected, " +
+      "or written to any proposal, and no reader coverage was consumed.",
+  );
+
+  if (recordSpend) {
+    const recorded = recordProbeSpend({
+      startedAt,
+      config,
+      usage,
+      outcome: {
+        // A pass that threw is "failed" whatever its counters say; a pass that
+        // admitted a claim with no verdict, or judged less than it selected, did
+        // less than it was asked to and is "partial". Only a complete pass is a
+        // success, because only a complete pass measures the queue.
+        status: failure
+          ? "failed"
+          : unavailableTotal > 0 || truncatedBy > 0 || judged < selected.length
+            ? "partial"
+            : "success",
+        target: option("target") ?? "all",
+        statusFilter: option("status") ?? "pending",
+        selected: selected.length,
+        judged,
+        transferable,
+        refused,
+        escalated,
+        unavailable,
+        truncatedBy,
+        error: failure?.message,
+      },
+    });
+    if (!recorded) process.exitCode = 1;
+  } else {
+    console.log(
+      "Spend NOT recorded in the manifest: record-spend was not passed, so the monthly " +
+        "cap cannot see the cost above (D-164).",
+    );
+  }
+
+  if (failure) throw failure;
 }
 
 if (require.main === module) {

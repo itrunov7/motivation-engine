@@ -26,6 +26,7 @@ import type {
 } from "../lib/types";
 import { TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS } from "../lib/types";
 import { judgeVariableViaModel, type Usage } from "./extract";
+import { PROBE_RUN_MODE } from "./connectors/types";
 import {
   buildVariablePrompt,
   describeTransferability,
@@ -746,8 +747,10 @@ test("the probe cannot write: its read-only claim is checked, not just stated", 
   // source: any write primitive appearing in it fails this test, and whoever
   // added it has to either remove it or change this contract deliberately.
   const source = readFileSync(join(ROOT, "tools/transferability-probe.ts"), "utf8");
+  // D-164 opened exactly ONE write: the extraction manifest, so the monthly cap
+  // can see what the probe spent. Everything else stays shut, and the opening is
+  // pinned as narrowly as it was granted.
   const writePrimitives = [
-    "writeFileSync",
     "appendFileSync",
     "mkdirSync",
     "rmSync",
@@ -761,9 +764,55 @@ test("the probe cannot write: its read-only claim is checked, not just stated", 
       `transferability-probe.ts must not write — found ${primitive}`,
     );
   }
+  // The one permitted primitive, used once, and only on the manifest. A second
+  // writeFileSync — or a first one pointed anywhere else — is a new write
+  // capability and has to be argued for, not inherited from this one.
+  const writes = source.match(/writeFileSync\(/g) ?? [];
+  assert.equal(writes.length, 1, "the probe writes exactly one file");
+  assert.match(
+    source,
+    /writeFileSync\(\s*MANIFEST_FILE,/,
+    "the probe's only write must target the extraction manifest",
+  );
+  assert.match(
+    source,
+    /const MANIFEST_FILE = join\(ROOT, "corpora", "extraction", "manifest\.json"\)/,
+    "MANIFEST_FILE must be the extraction manifest and nothing else",
+  );
+  // Off by default: the write happens only when the caller asks for it, so a
+  // local probe stays the read-only measurement it has always been.
+  assert.match(
+    source,
+    /const recordSpend = flag\("record-spend"\)/,
+    "the manifest write must be gated behind an explicit flag",
+  );
+  // last_run is what the showcase reads to say what extraction last did. A probe
+  // is not an extraction, so it must never appear there.
+  assert.ok(
+    !/last_run:\s/.test(source),
+    "the probe must never write last_run — it is not the last extraction",
+  );
   // And it must not reach the approval projector or the ledger either.
   assert.ok(!source.includes("candidateLedger"), "the probe must not touch the candidate ledger");
   assert.ok(!source.includes("persistLedger"), "the probe must not persist a ledger entry");
+});
+
+test("a probe entry is marked, so the ledger exemption it gets cannot spread", () => {
+  // The exemption in tools/validate.ts is keyed on this exact mode string
+  // (D-164). If the writer and the validator ever disagree about it, the probe's
+  // entry stops being exempt and starts failing the D-132 ledger requirement —
+  // or, worse, some other run silently acquires the exemption.
+  const probe = readFileSync(join(ROOT, "tools/transferability-probe.ts"), "utf8");
+  const validate = readFileSync(join(ROOT, "tools/validate.ts"), "utf8");
+  assert.equal(PROBE_RUN_MODE, "transferability_probe");
+  assert.match(probe, /mode: PROBE_RUN_MODE/, "the probe must mark its entry with the shared constant");
+  assert.match(
+    validate,
+    /run\.params\?\.mode === PROBE_RUN_MODE/,
+    "validate must key the exemption on the same shared constant",
+  );
+  // The exemption is not a free pass: both zero-claims are enforced there.
+  assert.match(validate, /records_fetched !== 0 \|\| run\.files_written !== 0/);
 });
 
 test("the probe measures the configured strong tier, never a model of its own choosing", () => {

@@ -1,0 +1,125 @@
+# Transferability probe — dispatch only, never scheduled, never on push.
+#
+# Runs tools/transferability-probe.ts against proposals that already exist and
+# prints what the ruleset v2 VARIABLE judgement decided about each one. It
+# proposes nothing, tags nothing, holds nothing, approves nothing, and consumes
+# no reader coverage; the probe's own guarantees are inherited unchanged,
+# because this workflow calls it unmodified.
+#
+# It exists so the key never has to leave the repo secret (D-164). The probe
+# spends real money on the configured STRONG tier, so this is dispatch-only by
+# construction: no cron, no push trigger, no reusable-workflow call. A probe
+# that could fire on its own would be a scheduled spend nobody approved.
+#
+# The full report is written to the job log AND to the run summary, so it is
+# read in the browser with nothing downloaded. The measured cost is committed to
+# the extraction manifest, where the monthly cap can see it.
+name: transferability-probe
+
+run-name: >-
+  probe ${{ inputs.mechanism || 'all mechanisms' }} — ${{ inputs.proposal_status }}${{ inputs.dry_run && ' (dry-run)' || '' }}${{ inputs.dispatch_id != '' && format(' [{0}]', inputs.dispatch_id) || '' }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      mechanism:
+        description: "Mechanism id to probe (proposal.target), e.g. LA-01. Empty = every mechanism"
+        required: false
+        type: string
+        default: ""
+      proposal_status:
+        description: "Proposal status to select; 'any' ignores status"
+        required: false
+        type: string
+        default: pending
+      limit:
+        description: "Stop after N proposals — a bound on spend, stated in the report. Empty = no bound"
+        required: false
+        type: string
+        default: ""
+      dry_run:
+        description: "Print the prompts and the cost ESTIMATE without calling the model"
+        required: true
+        type: boolean
+        default: false
+      dispatch_id:
+        description: "Correlation id recorded on the manifest entry this run writes (D-108)"
+        required: false
+        type: string
+        default: ""
+
+# Shares extraction's group on purpose: a probe and an extraction run both write
+# corpora/extraction/manifest.json and both spend against the same monthly cap.
+# Serialising them is what keeps the second one from landing on a stale manifest.
+concurrency:
+  group: extraction
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    env:
+      # Absent on a dry run: no key is needed to print prompts, and a job that
+      # cannot reach the model cannot spend by accident. Written in this
+      # direction deliberately — `dry_run && '' || secret` would hand the key
+      # back on every dry run, because '' is falsy in a GitHub expression.
+      OPENROUTER_API_KEY: ${{ inputs.dry_run != true && secrets.OPENROUTER_API_KEY || '' }}
+      # Recorded on the manifest entry, not inferred from the run name (D-108).
+      OPS_DISPATCH_ID: ${{ inputs.dispatch_id || github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # The report goes to the job log (stdout, live) and to the run summary
+      # (same bytes, rendered on the run page). pipefail keeps a failed probe a
+      # failed step — `tee` must not launder a non-zero exit into a green run.
+      - name: Probe transferability and print the full report
+        id: probe
+        run: |
+          set -o pipefail
+          {
+            echo '## Transferability probe report'
+            echo
+            echo '```text'
+          } >> "$GITHUB_STEP_SUMMARY"
+          npm run --silent transferability-probe -- \
+            ${{ inputs.mechanism != '' && format('target={0}', inputs.mechanism) || '' }} \
+            status=${{ inputs.proposal_status }} \
+            ${{ inputs.limit != '' && format('limit={0}', inputs.limit) || '' }} \
+            ${{ inputs.dry_run == true && 'dry-run' || 'record-spend' }} \
+            2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      # Runs whether or not the probe succeeded: a probe that died half way has
+      # still spent what it spent, and the monthly cap only ever sees what a
+      # committed manifest records (D-099). The probe writes its accounting
+      # before it rethrows, so this step has something to commit either way.
+      #
+      # Scoped to the manifest alone. The probe writes nothing else, and this
+      # step must not become a path by which a probe run commits anything to
+      # proposals/.
+      - name: Commit the probe's measured spend
+        if: always() && inputs.dry_run != true
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain corpora/extraction/manifest.json)" ]; then
+            echo "No manifest change — the probe recorded no spend."
+            exit 0
+          fi
+          if ! npm run validate; then
+            echo "::error::the probe's manifest entry failed validation — not committed; \
+            its spend is visible in this log only."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add corpora/extraction/manifest.json
+          git commit -m "data: record transferability probe spend for ${{ inputs.mechanism || 'all mechanisms' }}"
+          git push
