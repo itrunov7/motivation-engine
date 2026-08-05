@@ -231,6 +231,24 @@ export interface Manifest {
 /** run_history cap — the manifest keeps the last N runs. */
 export const RUN_HISTORY_LIMIT = 20;
 
+/**
+ * `params.mode` marking a manifest run entry as a read-only PROBE (D-164).
+ *
+ * A probe spends against the same monthly caps as an extraction run, so its
+ * cost belongs in run_history — the monthly rollup reads nothing else, and
+ * spend that is not written there is spend the cap can never see (D-099's
+ * reasoning, applied to a pass that produces no proposals).
+ *
+ * It is marked rather than disguised because a probe differs from an
+ * extraction run in exactly one checkable way: it has NO candidates, so it has
+ * no candidate-ledger entry to balance against (D-132). tools/validate.ts
+ * exempts entries carrying this mode from that requirement, and only those.
+ * The alternative — writing a zero-candidate ledger entry so a probe looked
+ * like an extraction run — would have bought the pass by fabricating the
+ * accounting the check exists to read.
+ */
+export const PROBE_RUN_MODE = "transferability_probe";
+
 // ---------- Ops config contract (/corpora/_ops, D-024) ----------
 //
 // Writer mirrors of the reader contract in lib/types.ts (lib/ never imports
