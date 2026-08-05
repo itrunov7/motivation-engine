@@ -32,8 +32,12 @@ import {
 } from "../lib/ops";
 import { EXTRACTION_RUN_ID_PREFIX } from "../lib/proposal-meta";
 import {
-  judgeTransferability,
+  buildVariablePrompt,
+  judgeTransferabilityV2,
+  parseVariableJudgement,
   transferabilityClaimOfProposal,
+  TRANSFERABILITY_RULESET_VERSION_V2,
+  type TransferabilityClaim,
 } from "../lib/transferability";
 import {
   evidenceSourceText,
@@ -54,6 +58,7 @@ import {
   isSpanRole,
   PARAMETER_EVIDENCE_BASIS_NONE,
   SPAN_ROLES,
+  TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS,
 } from "../lib/types";
 import type {
   ArtifactType,
@@ -96,7 +101,9 @@ import type {
   SeedStub,
   SegmentsFile,
   SpanRole,
+  TransferabilityVerdictUnavailableReason,
   UngroundedDropReason,
+  VariableJudgement,
 } from "../lib/types";
 import {
   anchorCitations,
@@ -845,6 +852,18 @@ export interface ExtractionStats {
    * nothing here a product can act on".
    */
   held_non_transferable: number;
+  /**
+   * Admitted WITHOUT a transferability verdict because the v2 VARIABLE check
+   * could not produce one (D-162 fails open). NOT a candidate fate — the
+   * candidate still gets its real fate (proposed / merged_into_pending / …), so
+   * the D-132 conservation equation is untouched and still balances. That is
+   * exactly why this counter has to exist separately: the ledger balancing is
+   * what made the loss invisible in the first place. Conservation proves no
+   * candidate vanished; it says nothing about whether anyone judged it.
+   */
+  verdict_unavailable: number;
+  /** The same total, split by cause — a cap-driven run and an outage look identical without it. */
+  verdict_unavailable_by_reason: Record<TransferabilityVerdictUnavailableReason, number>;
   dropped_volume_cap: number;
   dropped_volume_cap_high_confidence: number;
   /**
@@ -1055,6 +1074,13 @@ export function extractionSummaryParams(
     failed_validation: String(stats.failed_validation),
     held_low_confidence: String(stats.held_low_confidence),
     held_non_transferable: String(stats.held_non_transferable),
+    verdict_unavailable: String(stats.verdict_unavailable),
+    // Written even when zero, and split by cause: "the filter refused nothing"
+    // and "the filter never ran" are different runs, and the manifest is where
+    // that distinction has to survive the run that produced it.
+    verdict_unavailable_by_reason: TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS.map(
+      (reason) => `${reason}=${stats.verdict_unavailable_by_reason[reason]}`,
+    ).join(" "),
     dropped_volume_cap: String(stats.dropped_volume_cap),
     dropped_volume_cap_high_confidence: String(
       stats.dropped_volume_cap_high_confidence,
@@ -1802,11 +1828,11 @@ function bytes(value: string): number {
  * handful of records. Both the planner (estimateSelected) and the runtime
  * guard (callOpenRouter) use this so the plan and the live cap agree.
  */
-function estimateTokens(value: string): number {
+export function estimateTokens(value: string): number {
   return Math.ceil(bytes(value) / 4);
 }
 
-function configuredTier(
+export function configuredTier(
   config: ExtractionOpsConfig,
   tierName: "cheap" | "strong",
 ): ExtractionModelTierConfig & {
@@ -2172,6 +2198,137 @@ async function callOpenRouter(
     );
   }
   return parsed.items;
+}
+
+/**
+ * The VARIABLE check, as a model judgement (ruleset v2, D-162).
+ *
+ * It reads only the claim — fact, boundary, source title — and answers whether a
+ * product surface could act on the mechanism, returning a named lever or null.
+ * It replaces the v1 word list, which could match only cognitive-load vocabulary
+ * and refused most of the persuasion registry (SP-08, LA-01, ID-12 all predicted
+ * near-zero). SUBJECT, DIRECTION and POPULATION stay deterministic; only this
+ * check moved to a model, and the lever it names is frozen into the verdict so
+ * the whole thing stays auditable offline (replayTransferability audits v2, it
+ * does not re-call the model).
+ *
+ * Routes to the STRONG tier on purpose. The cheap tier (gpt-4o-mini class) was
+ * measured to reintroduce false refusals of a different kind — it reads an
+ * abstractly phrased "X is a persuasion principle…" as a definition and refuses
+ * it — so the capability, not the approach, is what clears the registry.
+ *
+ * FAILS OPEN, AND SAYS SO. On a missing model id, a blown token cap, a transport
+ * error, or a malformed answer the caller admits the claim WITHOUT a verdict
+ * rather than refusing it. A model outage must never silently bury a grounded
+ * claim; the safe direction is toward review, not away from it.
+ *
+ * But it returns a NAMED failure rather than a bare null, because the first
+ * version of this returned null and the caller expressed that as an absent
+ * `transferability` field — which is also what a pre-D-160 proposal and a
+ * non-effect proposal look like. An unjudged item was indistinguishable from a
+ * judged one, and nothing counted it. Every exit below therefore carries the
+ * reason it took, and the caller stamps it onto the proposal and counts it.
+ */
+type VariableOutcome =
+  | { ok: true; judgement: VariableJudgement }
+  | {
+      ok: false;
+      reason: TransferabilityVerdictUnavailableReason;
+      detail?: string;
+    };
+
+function variableUnavailable(
+  reason: TransferabilityVerdictUnavailableReason,
+  detail?: string,
+): VariableOutcome {
+  return detail === undefined ? { ok: false, reason } : { ok: false, reason, detail };
+}
+
+export async function judgeVariableViaModel(
+  context: RunContext,
+  claim: TransferabilityClaim,
+): Promise<VariableOutcome> {
+  const tier = configuredTier(context.config, "strong");
+  if (!tier.model_id) return variableUnavailable("no_model_id");
+  const prompt = buildVariablePrompt(claim);
+  const maxTokens = Math.min(200, tier.max_tokens_per_call);
+  const inputUpper = estimateTokens(prompt);
+  const projected =
+    context.usage.input + context.usage.output + inputUpper + maxTokens;
+  if (projected > context.config.limits.per_run_tokens) {
+    return variableUnavailable(
+      "per_run_token_cap",
+      `projected ${projected} > per_run_tokens ${context.config.limits.per_run_tokens}`,
+    );
+  }
+  if (monthTokenUsage() + projected > context.config.limits.monthly_tokens) {
+    return variableUnavailable(
+      "monthly_token_cap",
+      `projected month total would exceed monthly_tokens ${context.config.limits.monthly_tokens}`,
+    );
+  }
+
+  try {
+    let response: Response | undefined;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      response = await context.fetcher(OPENROUTER_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY ?? ""}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://github.com/ventora/motivation-engine",
+          "X-Title": "Motivation Engine transferability VARIABLE",
+        },
+        body: JSON.stringify({
+          model: tier.model_id,
+          messages: [{ role: "user", content: prompt }],
+          ...openRouterSamplingOptions(tier.supports),
+          max_tokens: maxTokens,
+        }),
+      });
+      if (response.ok) break;
+      if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 2) {
+        return variableUnavailable(
+          "transport_error",
+          `OpenRouter ${response.status} model=${tier.model_id} tier=strong after ${attempt + 1} attempt(s)`,
+        );
+      }
+      await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** attempt));
+    }
+    if (!response?.ok) {
+      return variableUnavailable("transport_error", "OpenRouter request failed");
+    }
+    const body = (await response.json()) as OpenRouterResponse;
+    const usageInput = body.usage?.prompt_tokens;
+    const usageOutput = body.usage?.completion_tokens;
+    // Count spend against the monthly cap even on a malformed answer — the tokens
+    // were spent (rule 12d). A response that omits usage is left uncounted rather
+    // than guessed.
+    if (Number.isInteger(usageInput) && Number.isInteger(usageOutput)) {
+      context.usage.input += usageInput!;
+      context.usage.output += usageOutput!;
+      context.usage.calls += 1;
+      context.usage.byTier.strong.input += usageInput!;
+      context.usage.byTier.strong.output += usageOutput!;
+      context.usage.byTier.strong.calls += 1;
+    }
+    const content = body.choices?.[0]?.message?.content;
+    if (typeof content !== "string") {
+      return variableUnavailable("malformed_answer", "response carried no text content");
+    }
+    const judgement = parseVariableJudgement(content);
+    // The raw answer is deliberately NOT carried into `detail`. A malformed
+    // model answer is not evidence, and a proposal is not the place to store it.
+    if (!judgement) {
+      return variableUnavailable("malformed_answer", "answer was not a parseable judgement");
+    }
+    return { ok: true, judgement };
+  } catch (error: unknown) {
+    return variableUnavailable(
+      "transport_error",
+      error instanceof Error ? error.message : String(error),
+    );
+  }
 }
 
 const normalizeText = normalizeQualityText;
@@ -3606,6 +3763,10 @@ export async function runExtraction(args: {
     proposed_enrich: 0,
     held_low_confidence: 0,
     held_non_transferable: 0,
+    verdict_unavailable: 0,
+    verdict_unavailable_by_reason: Object.fromEntries(
+      TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS.map((reason) => [reason, 0]),
+    ) as Record<TransferabilityVerdictUnavailableReason, number>,
     dropped_volume_cap: 0,
     dropped_volume_cap_high_confidence: 0,
     dropped_draft_cap: 0,
@@ -4184,12 +4345,48 @@ export async function runExtraction(args: {
         // whole difference between this gate and the relevance skip, which
         // removes a record from consideration with no diagnostic at all.
         const claim = transferabilityClaimOfProposal(proposal);
-        const verdict = claim ? judgeTransferability(claim) : null;
+        // D-162 — VARIABLE is a model judgement (see judgeVariableViaModel), fed
+        // into the v2 verdict alongside the three deterministic checks. It fails
+        // open: model unreachable, cap spent or malformed answer admits the
+        // claim WITHOUT a verdict rather than refusing it.
+        //
+        // The two "no verdict" cases are NOT the same thing and must not produce
+        // the same record:
+        //   claim === null  — not an effect proposal. The pass does not apply.
+        //                     Nothing failed; nothing to mark, nothing to count.
+        //   outcome.ok false — the pass applied and could not answer. Marked with
+        //                     its reason and counted, because an unjudged item
+        //                     that looks judged is how a filter reports success
+        //                     while doing nothing.
+        const variableOutcome = claim ? await judgeVariableViaModel(context, claim) : null;
+        const verdict =
+          claim && variableOutcome?.ok
+            ? judgeTransferabilityV2(claim, variableOutcome.judgement)
+            : null;
         // Recorded on admitted claims too: a gate that files only its refusals
         // cannot be audited for what it let through.
-        const judged = verdict
-          ? ({ ...proposal, transferability: verdict } as Proposal)
-          : proposal;
+        let judged: Proposal;
+        if (verdict) {
+          judged = { ...proposal, transferability: verdict } as Proposal;
+        } else if (variableOutcome && !variableOutcome.ok) {
+          judged = {
+            ...proposal,
+            verdict_unavailable: {
+              ruleset_version: TRANSFERABILITY_RULESET_VERSION_V2,
+              reason: variableOutcome.reason,
+              ...(variableOutcome.detail === undefined
+                ? {}
+                : { detail: variableOutcome.detail }),
+            },
+          } as Proposal;
+          stats.verdict_unavailable += 1;
+          stats.verdict_unavailable_by_reason[variableOutcome.reason] += 1;
+          console.warn(
+            `[extract] transferability verdict unavailable (${variableOutcome.reason}) for ${proposal.id} — admitted unjudged`,
+          );
+        } else {
+          judged = proposal;
+        }
         if (verdict && !verdict.transferable) {
           const heldProposal = {
             ...judged,
@@ -4463,6 +4660,7 @@ export async function runExtraction(args: {
     failed_validation: stats.failed_validation,
     held_low_confidence: stats.held_low_confidence,
     held_non_transferable: stats.held_non_transferable,
+    verdict_unavailable: stats.verdict_unavailable,
     dropped_volume_cap: stats.dropped_volume_cap,
     dropped_volume_cap_high_confidence:
       stats.dropped_volume_cap_high_confidence,
@@ -4544,8 +4742,18 @@ export async function runExtraction(args: {
         `re-check offline with: npm run replay-grounding -- replay ${rejections.path()}`,
     );
   }
+  // The transferability outcomes were previously absent from this line entirely
+  // — they travelled only in the structured summary, so the operator's one-line
+  // view of a run could not show that the filter had refused anything, let alone
+  // that it had failed to run. Both counts are printed, and the unavailable one
+  // names its causes so a cap-exhausted run is not read as a clean one.
+  const unavailableBreakdown = TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS.filter(
+    (reason) => stats.verdict_unavailable_by_reason[reason] > 0,
+  )
+    .map((reason) => `${reason} ${stats.verdict_unavailable_by_reason[reason]}`)
+    .join(", ");
   reportExtractProgress(
-    `${runIncomplete ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_eligible} available / ${stats.records_selected} kept by the planner / ${stats.records_dropped_truncation} dropped to fit the ${args.config.limits.per_run_tokens}-token cap · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates (cheap ${stats.candidates_cheap} / strong ${stats.candidates_strong}) · ${stats.dropped_ungrounded} dropped ungrounded (cheap ${stats.dropped_ungrounded_cheap} / strong ${stats.dropped_ungrounded_strong})${ungroundedBreakdown ? ` (${ungroundedBreakdown})` : ""} · ${stats.failed_validation} failed validation · ${stats.records_remaining} remaining`,
+    `${runIncomplete ? "slice completed" : "completed"} — ${stats.proposed + stats.merged} proposals · ${stats.records_eligible} available / ${stats.records_selected} kept by the planner / ${stats.records_dropped_truncation} dropped to fit the ${args.config.limits.per_run_tokens}-token cap · ${stats.records_processed}/${stats.records_relevant} relevant read · ${stats.candidates} candidates (cheap ${stats.candidates_cheap} / strong ${stats.candidates_strong}) · ${stats.dropped_ungrounded} dropped ungrounded (cheap ${stats.dropped_ungrounded_cheap} / strong ${stats.dropped_ungrounded_strong})${ungroundedBreakdown ? ` (${ungroundedBreakdown})` : ""} · ${stats.failed_validation} failed validation · ${stats.held_non_transferable} held non-transferable · ${stats.verdict_unavailable} admitted unjudged${unavailableBreakdown ? ` (${unavailableBreakdown})` : ""} · ${stats.records_remaining} remaining`,
     runIncomplete ? "partial" : "success",
     true,
     summary,

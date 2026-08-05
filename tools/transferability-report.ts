@@ -30,7 +30,7 @@ import {
   describeTransferability,
   judgeTransferability,
   transferabilityClaimOfProposal,
-  transferabilityDrift,
+  replayTransferability,
   TRANSFERABILITY_RULESET_VERSION,
 } from "../lib/transferability";
 import { PROPOSAL_TYPES } from "../lib/proposals";
@@ -118,7 +118,7 @@ function report(): void {
 function replay(): void {
   const stored = loadProposals().filter(({ proposal }) => proposal.transferability);
   console.log(
-    `Replaying ${stored.length} stored verdict(s) against ruleset v${TRANSFERABILITY_RULESET_VERSION}.`,
+    `Replaying ${stored.length} stored verdict(s) against the ruleset each was stamped under.`,
   );
   let drifted = 0;
   for (const { path, proposal } of stored) {
@@ -128,9 +128,9 @@ function replay(): void {
       drifted += 1;
       continue;
     }
-    const drift = transferabilityDrift(
+    const drift = replayTransferability(
       proposal.transferability!,
-      judgeTransferability(claim),
+      claim,
     );
     if (drift) {
       console.log(`  ✗ ${path}: ${drift}`);

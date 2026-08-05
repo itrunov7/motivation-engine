@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "defaultMode": "dontAsk",
+    "allow": [
+      "Bash",
+      "Read",
+      "Grep",
+      "Glob",
+      "Edit",
+      "Write",
+      "MultiEdit",
+      "NotebookEdit"
+    ],
+    "ask": [
+      "Bash(gh workflow run extract:*)",
+      "Bash(gh workflow run harvest:*)",
+      "Bash(gh workflow run connectors:*)",
+      "Bash(gh workflow run maturation:*)",
+      "Bash(gh run rerun:*)",
+      "Bash(npm run openrouter-preflight:*)",
+      "Bash(npx tsx tools/openrouter-preflight.ts:*)",
+      "Bash(tsx tools/openrouter-preflight.ts:*)",
+      "Bash(git branch -d:*)",
+      "Bash(git branch -D:*)",
+      "Bash(git branch --delete:*)",
+      "RemoteTrigger",
+      "CronCreate"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard.cjs\""
+          }
+        ]
+      }
+    ]
+  }
+}

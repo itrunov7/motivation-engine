@@ -16,6 +16,7 @@ import {
   sha256Hex,
   spanErrors,
 } from "../lib/proposal-quality";
+import { TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS } from "../lib/types";
 import type {
   CandidateLedgerRun,
   CorpusManifestRun,
@@ -233,6 +234,10 @@ function statsFixture(overrides: Partial<ExtractionStats> = {}): ExtractionStats
     proposed_enrich: 0,
     held_low_confidence: 0,
     held_non_transferable: 0,
+    verdict_unavailable: 0,
+    verdict_unavailable_by_reason: Object.fromEntries(
+      TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS.map((reason) => [reason, 0]),
+    ) as ExtractionStats["verdict_unavailable_by_reason"],
     dropped_volume_cap: 0,
     dropped_volume_cap_high_confidence: 0,
     dropped_draft_cap: 0,
@@ -2090,6 +2095,14 @@ test("run summary exposes every quality-gate and cap outcome", () => {
         failed_validation: 1,
         held_low_confidence: 2,
         held_non_transferable: 3,
+        verdict_unavailable: 2,
+        verdict_unavailable_by_reason: {
+          no_model_id: 0,
+          per_run_token_cap: 1,
+          monthly_token_cap: 0,
+          transport_error: 1,
+          malformed_answer: 0,
+        },
         dropped_volume_cap: 4,
         dropped_volume_cap_high_confidence: 1,
         records_eligible: 200,
@@ -2110,6 +2123,13 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       failed_validation: "1",
       held_low_confidence: "2",
       held_non_transferable: "3",
+      // D-163. Both written unconditionally, and the split written even when
+      // every reason is zero: "the filter refused nothing" and "the filter
+      // never got an answer" are different runs, and the manifest is the only
+      // place that distinction survives the process that produced it.
+      verdict_unavailable: "2",
+      verdict_unavailable_by_reason:
+        "no_model_id=0 per_run_token_cap=1 monthly_token_cap=0 transport_error=1 malformed_answer=0",
       dropped_volume_cap: "4",
       dropped_volume_cap_high_confidence: "1",
       records_eligible: "200",

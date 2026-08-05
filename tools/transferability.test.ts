@@ -19,12 +19,24 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 import assert from "node:assert/strict";
-import type { Proposal } from "../lib/types";
+import type {
+  ExtractionOpsConfig,
+  Proposal,
+  VariableJudgement,
+} from "../lib/types";
+import { TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS } from "../lib/types";
+import { judgeVariableViaModel, type Usage } from "./extract";
 import {
+  buildVariablePrompt,
   describeTransferability,
   judgeTransferability,
+  judgeTransferabilityV2,
+  parseVariableJudgement,
+  replayTransferability,
   transferabilityClaimOfProposal,
+  variableCheckFromJudgement,
   TRANSFERABILITY_RULESET_VERSION,
+  TRANSFERABILITY_RULESET_VERSION_V2,
 } from "../lib/transferability";
 
 const ROOT = join(__dirname, "..");
@@ -124,7 +136,15 @@ const OWNER_VERDICTS: readonly {
  * at the top of this file. Narrow is the point: two named records with recorded,
  * decision-grounded reasons, not a rate to chase. If a future extraction run holds
  * either of them, that is acceptable — a hold is reversible, and this test keeps
- * the false refusal visible until the lexicon can name what it is missing.
+ * the false refusal visible until the filter names the lever it is missing.
+ *
+ * Since D-162 VARIABLE is a model judgement, so this cannot be checked by calling
+ * the judge offline — the offline path is v1, which will always refuse these two.
+ * The green signal is therefore the STORED v2 verdict a real strong-tier run
+ * writes onto the proposal: transferable, with the VARIABLE check naming a lever.
+ * Until such a run exists the test is red because there is no verdict to read;
+ * once it does, the fixture dissolves; and if a run ever refuses them, the stored
+ * verdict is red and the false refusal is visible again — exactly as intended.
  */
 const DOCUMENTED_FALSE_REFUSALS: readonly {
   id: string;
@@ -225,22 +245,47 @@ test("the ruleset agrees with the owner's CL-14 verdicts at a rate it reports ra
   assert.equal(agreed + disagreements.length, total);
 });
 
-test("documented false refusals must be transferable — a refusal here is a filter bug, not an exemption", () => {
+test("documented false refusals must be named transferable by the production filter — a refusal here is a filter bug, not an exemption", () => {
   for (const row of DOCUMENTED_FALSE_REFUSALS) {
-    const claim = transferabilityClaimOfProposal(loadProposal(row.id));
+    const proposal = loadProposal(row.id);
+    const claim = transferabilityClaimOfProposal(proposal);
     assert.ok(claim, `${row.id} must be a judgeable effect claim`);
-    const verdict = judgeTransferability(claim);
-    assert.equal(
-      verdict.transferable,
-      true,
+    const stored = proposal.transferability;
+    const guidance =
       `\n${row.id} is a documented false refusal.\n` +
-        `  why it should transfer: ${row.why}\n` +
-        `  the lever the lexicon is missing: ${row.missing_lever}\n` +
-        `  ruleset v${TRANSFERABILITY_RULESET_VERSION} says: ${describeTransferability(verdict)}\n` +
-        verdict.checks
+      `  why it should transfer: ${row.why}\n` +
+      `  the lever the filter must name: ${row.missing_lever}\n` +
+      `  Fix the filter (v${TRANSFERABILITY_RULESET_VERSION_V2} model VARIABLE / its prompt) so it names this lever.` +
+      ` Do NOT add this id to an exemption list.`;
+
+    // No verdict yet means the v1 word list held it and no v2 run has judged it.
+    // Red on purpose: the model VARIABLE must run in a dispatched extraction and
+    // write a verdict. Offline this can never go green, and it must not — a green
+    // fixture with no evidence behind it would be the exemption we refuse to add.
+    assert.ok(
+      stored,
+      `${row.id} carries no transferability verdict — ruleset v1 could not name` +
+        ` its lever and no v${TRANSFERABILITY_RULESET_VERSION_V2} run has judged it yet.` +
+        guidance,
+    );
+    assert.equal(
+      stored!.transferable,
+      true,
+      `${row.id} was judged NOT transferable and held.\n` +
+        `  the filter says: ${describeTransferability(stored!)}\n` +
+        stored!.checks
           .map((check) => `      ${check.outcome.padEnd(4)} ${check.check.padEnd(10)} ${check.reason}`)
           .join("\n") +
-        `\n  Fix the filter so it names this lever. Do NOT add this id to an exemption list.`,
+        guidance,
+    );
+    const variable = stored!.checks.find((check) => check.check === "variable");
+    assert.ok(
+      variable &&
+        typeof variable.identified_lever === "string" &&
+        variable.identified_lever.trim().length > 0,
+      `${row.id} was admitted but its VARIABLE check named no lever, so the` +
+        ` reasoning is not auditable.` +
+        guidance,
     );
   }
 });
@@ -329,5 +374,407 @@ test("one warning alone never refuses, and a variable or direction failure alway
   assert.equal(
     noDirection.checks.find((check) => check.check === "direction")?.outcome,
     "fail",
+  );
+});
+
+// ---------- ruleset v2: the model-backed VARIABLE (D-162) ----------
+
+test("v2 feeds the model VARIABLE into the same scoring, keeping SUBJECT/DIRECTION/POPULATION deterministic", () => {
+  const claim = transferabilityClaimOfProposal(loadProposal(OWNER_VERDICTS[0].id));
+  assert.ok(claim);
+  const lever = "count of other users who did X";
+  const verdict = judgeTransferabilityV2(claim, {
+    transferable: true,
+    lever,
+    reason: "a social count can be shown on any surface",
+  });
+  assert.equal(verdict.ruleset_version, TRANSFERABILITY_RULESET_VERSION_V2);
+  assert.equal(verdict.checks.length, 4);
+  const variable = verdict.checks.find((check) => check.check === "variable");
+  assert.equal(variable?.outcome, "pass");
+  assert.equal(variable?.identified_lever, lever);
+  // The three deterministic checks must match what v1 computes for the same claim:
+  // v2 changed only VARIABLE.
+  const v1 = judgeTransferability(claim);
+  for (const name of ["subject", "direction", "population"] as const) {
+    assert.equal(
+      verdict.checks.find((c) => c.check === name)?.outcome,
+      v1.checks.find((c) => c.check === name)?.outcome,
+      `${name} must be unchanged between v1 and v2`,
+    );
+  }
+});
+
+test("a non-transferable model judgement refuses on VARIABLE and carries no lever", () => {
+  const claim = transferabilityClaimOfProposal(loadProposal(OWNER_VERDICTS[0].id));
+  assert.ok(claim);
+  const verdict = judgeTransferabilityV2(claim, {
+    transferable: false,
+    lever: null,
+    reason: "a bare definition with nothing to show, hide, or time",
+  });
+  const variable = verdict.checks.find((check) => check.check === "variable");
+  assert.equal(variable?.outcome, "fail");
+  assert.equal(variable?.identified_lever, null);
+  assert.equal(verdict.transferable, false);
+});
+
+test("variableCheckFromJudgement records the lever verbatim so the verdict is auditable", () => {
+  const pass = variableCheckFromJudgement({
+    transferable: true,
+    lever: "countdown timer",
+    reason: "urgency shown as a timer",
+  });
+  assert.equal(pass.outcome, "pass");
+  assert.equal(pass.identified_lever, "countdown timer");
+  assert.match(pass.reason, /countdown timer/);
+});
+
+test("parseVariableJudgement accepts clean answers, strips prose and fences, and rejects incoherent ones", () => {
+  const clean = parseVariableJudgement(
+    '{"transferable": true, "lever": "stock counter", "reason": "count shown on the surface"}',
+  );
+  assert.deepEqual(clean, {
+    transferable: true,
+    lever: "stock counter",
+    reason: "count shown on the surface",
+  });
+
+  const fenced = parseVariableJudgement(
+    'Sure! ```json\n{"transferable": false, "lever": null, "reason": "a market statistic"}\n``` done',
+  );
+  assert.deepEqual(fenced, {
+    transferable: false,
+    lever: null,
+    reason: "a market statistic",
+  });
+
+  // A non-transferable verdict must never carry a lever, even if the model sends one.
+  const strippedLever = parseVariableJudgement(
+    '{"transferable": false, "lever": "should not be here", "reason": "no mechanism"}',
+  );
+  assert.equal(strippedLever?.lever, null);
+
+  // Incoherent: transferable with no lever, or an empty/absent reason, or garbage.
+  assert.equal(
+    parseVariableJudgement('{"transferable": true, "lever": null, "reason": "x"}'),
+    null,
+  );
+  assert.equal(
+    parseVariableJudgement('{"transferable": true, "lever": "x", "reason": ""}'),
+    null,
+  );
+  assert.equal(parseVariableJudgement("not json at all"), null);
+});
+
+test("replayTransferability audits a v2 verdict offline instead of re-calling the model, and catches tampering", () => {
+  const claim = transferabilityClaimOfProposal(loadProposal(OWNER_VERDICTS[0].id));
+  assert.ok(claim);
+  const judgement: VariableJudgement = {
+    transferable: true,
+    lever: "count of other users who did X",
+    reason: "a social count can be shown on any surface",
+  };
+  const stored = judgeTransferabilityV2(claim, judgement);
+
+  // A faithful stored verdict replays clean without any model call.
+  assert.equal(replayTransferability(stored, claim), null);
+
+  // Flipping the verdict against its own checks is caught by the scoring audit.
+  assert.ok(
+    replayTransferability({ ...stored, transferable: false }, claim),
+    "a verdict that disagrees with its own checks must not replay",
+  );
+
+  // Dropping the lever on a passing VARIABLE breaks auditability and is caught.
+  const noLever = {
+    ...stored,
+    checks: stored.checks.map((check) =>
+      check.check === "variable" ? { ...check, identified_lever: null } : check,
+    ),
+  };
+  assert.ok(
+    replayTransferability(noLever, claim),
+    "a passing VARIABLE with no lever must not replay",
+  );
+
+  // Corrupting a deterministic check (which v2 DOES recompute) is caught.
+  const brokenSubject = {
+    ...stored,
+    checks: stored.checks.map((check) =>
+      check.check === "subject" ? { ...check, outcome: "fail" as const } : check,
+    ),
+  };
+  assert.ok(
+    replayTransferability(brokenSubject, claim),
+    "drift in a deterministic check must still fail loud under v2",
+  );
+});
+
+test("buildVariablePrompt reads only the claim's three fields and asks for a lever or null", () => {
+  const prompt = buildVariablePrompt({
+    fact: "Scarcity cues increase impulse buying.",
+    boundary: "E-commerce checkout.",
+    source_title: "Scarcity and impulse buying",
+  });
+  assert.match(prompt, /fact: Scarcity cues increase impulse buying\./);
+  assert.match(prompt, /boundary: E-commerce checkout\./);
+  assert.match(prompt, /source_title: Scarcity and impulse buying/);
+  assert.match(prompt, /lever/i);
+  // It must not smuggle anything beyond the three judgeable fields.
+  assert.doesNotMatch(prompt, /confidence|grade|corpus_record_id|doi/i);
+});
+
+/**
+ * The fail-open path, which had no test at all (D-162 follow-up).
+ *
+ * `judgeVariableViaModel` used to return a bare null on all five of its failure
+ * exits, and the caller expressed that as an ABSENT `transferability` field —
+ * indistinguishable from a pre-D-160 proposal and from a non-effect proposal,
+ * and counted nowhere. These tests pin each exit to its named reason, because
+ * the counter is only worth having if the reasons are right: "the month's cap
+ * is spent" and "the model is down" produce the same total and demand opposite
+ * responses.
+ *
+ * Every case runs on a stub fetcher. Nothing here touches the network.
+ */
+
+const PROBE_CLAIM = {
+  fact: "Framing an outcome as a loss increases the effort spent avoiding it.",
+  boundary: "Consumer checkout flows.",
+  source_title: "Loss aversion in choice",
+};
+
+function probeConfig(overrides: Record<string, unknown> = {}): ExtractionOpsConfig {
+  return {
+    version: "test",
+    prices_verified_on: "2026-08-05",
+    tiers: {
+      cheap: {
+        model_id: "test/cheap",
+        response_format: "json_schema",
+        input_usd_per_token: 0,
+        output_usd_per_token: 0,
+        max_tokens_per_call: 1000,
+        supports: { temperature: true, structured_outputs: true },
+      },
+      strong: {
+        model_id: "test/strong",
+        response_format: "json_schema",
+        input_usd_per_token: 0,
+        output_usd_per_token: 0,
+        max_tokens_per_call: 1000,
+        supports: { temperature: false, structured_outputs: true },
+      },
+    },
+    limits: {
+      per_run_tokens: 500000,
+      monthly_tokens: 3000000,
+      records_per_batch: 25,
+      confidence_floor: 0.5,
+      duplicate_similarity: 0.78,
+      max_proposals_per_mechanism: null,
+    },
+    ...overrides,
+  } as ExtractionOpsConfig;
+}
+
+function emptyUsage(): Usage {
+  return {
+    input: 0,
+    output: 0,
+    calls: 0,
+    byTier: {
+      cheap: { input: 0, output: 0, calls: 0 },
+      strong: { input: 0, output: 0, calls: 0 },
+    },
+  };
+}
+
+/** A stub fetcher returning a fixed body/status, counting the calls it received. */
+function stubFetcher(
+  responses: { status: number; body: unknown }[],
+): { fetcher: typeof fetch; calls: () => number } {
+  let index = 0;
+  return {
+    calls: () => index,
+    fetcher: (async () => {
+      const next = responses[Math.min(index, responses.length - 1)];
+      index += 1;
+      return {
+        ok: next.status >= 200 && next.status < 300,
+        status: next.status,
+        json: async () => next.body,
+        text: async () => JSON.stringify(next.body),
+      } as unknown as Response;
+    }) as unknown as typeof fetch,
+  };
+}
+
+function answer(content: string): { status: number; body: unknown } {
+  return {
+    status: 200,
+    body: {
+      choices: [{ message: { content } }],
+      usage: { prompt_tokens: 120, completion_tokens: 30 },
+    },
+  };
+}
+
+test("a judged claim returns ok with the model's judgement, and charges its tokens", async () => {
+  const stub = stubFetcher([
+    answer('{"transferable": true, "lever": "countdown timer", "reason": "a timer is an interface element"}'),
+  ]);
+  const usage = emptyUsage();
+  const outcome = await judgeVariableViaModel(
+    { config: probeConfig(), usage, fetcher: stub.fetcher },
+    PROBE_CLAIM,
+  );
+  assert.equal(outcome.ok, true);
+  assert.equal(outcome.ok && outcome.judgement.lever, "countdown timer");
+  assert.equal(usage.byTier.strong.calls, 1, "a successful call must be charged");
+  assert.equal(usage.input, 120);
+  assert.equal(usage.output, 30);
+});
+
+test("each fail-open exit returns its own named reason rather than a bare null", async () => {
+  // no_model_id — the check could not be asked at all.
+  const noModel = await judgeVariableViaModel(
+    {
+      config: probeConfig({
+        tiers: {
+          ...probeConfig().tiers,
+          strong: { ...probeConfig().tiers.strong, model_id: "" },
+        },
+      }),
+      usage: emptyUsage(),
+      fetcher: stubFetcher([answer("{}")]).fetcher,
+    },
+    PROBE_CLAIM,
+  );
+  assert.equal(noModel.ok, false);
+  assert.equal(!noModel.ok && noModel.reason, "no_model_id");
+
+  // per_run_token_cap — the run's own budget is spent.
+  const spent = emptyUsage();
+  spent.input = 499_900;
+  const capped = await judgeVariableViaModel(
+    { config: probeConfig(), usage: spent, fetcher: stubFetcher([answer("{}")]).fetcher },
+    PROBE_CLAIM,
+  );
+  assert.equal(capped.ok, false);
+  assert.equal(!capped.ok && capped.reason, "per_run_token_cap");
+
+  // transport_error — a non-retryable status.
+  const dead = await judgeVariableViaModel(
+    {
+      config: probeConfig(),
+      usage: emptyUsage(),
+      fetcher: stubFetcher([{ status: 404, body: { error: "no endpoints found" } }]).fetcher,
+    },
+    PROBE_CLAIM,
+  );
+  assert.equal(dead.ok, false);
+  assert.equal(!dead.ok && dead.reason, "transport_error");
+
+  // malformed_answer — the model replied, and the reply was not a judgement.
+  const garbage = await judgeVariableViaModel(
+    {
+      config: probeConfig(),
+      usage: emptyUsage(),
+      fetcher: stubFetcher([answer("I am not going to answer that.")]).fetcher,
+    },
+    PROBE_CLAIM,
+  );
+  assert.equal(garbage.ok, false);
+  assert.equal(!garbage.ok && garbage.reason, "malformed_answer");
+});
+
+test("a retryable status is retried three times before it is called a transport error", async () => {
+  const stub = stubFetcher([
+    { status: 429, body: {} },
+    { status: 429, body: {} },
+    { status: 429, body: {} },
+  ]);
+  const outcome = await judgeVariableViaModel(
+    { config: probeConfig(), usage: emptyUsage(), fetcher: stub.fetcher },
+    PROBE_CLAIM,
+  );
+  assert.equal(outcome.ok, false);
+  assert.equal(!outcome.ok && outcome.reason, "transport_error");
+  assert.equal(stub.calls(), 3, "429 must be retried, not abandoned on the first response");
+});
+
+test("a malformed answer still charges the tokens it burned — failing open is not free", async () => {
+  const usage = emptyUsage();
+  await judgeVariableViaModel(
+    {
+      config: probeConfig(),
+      usage,
+      fetcher: stubFetcher([answer("not a judgement")]).fetcher,
+    },
+    PROBE_CLAIM,
+  );
+  assert.equal(usage.byTier.strong.calls, 1);
+  assert.equal(usage.input, 120, "spend is real whether or not the answer was usable");
+});
+
+test("every reason a fail-open can produce is a declared reason", async () => {
+  // The counter and the schema enum are only trustworthy if the producer cannot
+  // invent a reason outside the list. Checked against the exported tuple rather
+  // than a copy of it, so adding a reason to one and not the other fails here.
+  const produced = ["no_model_id", "per_run_token_cap", "transport_error", "malformed_answer"];
+  for (const reason of produced) {
+    assert.ok(
+      (TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS as readonly string[]).includes(reason),
+      `${reason} is produced by judgeVariableViaModel but is not a declared reason`,
+    );
+  }
+  // monthly_token_cap is declared and reachable only against a real manifest,
+  // so it is asserted as declared rather than exercised here.
+  assert.ok(
+    (TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS as readonly string[]).includes(
+      "monthly_token_cap",
+    ),
+  );
+});
+
+test("the probe cannot write: its read-only claim is checked, not just stated", () => {
+  // tools/transferability-report.ts has declared "no writes" in a comment since
+  // it was written, and a comment is not a constraint. The probe spends real
+  // money against real proposals, so its contract is asserted here against the
+  // source: any write primitive appearing in it fails this test, and whoever
+  // added it has to either remove it or change this contract deliberately.
+  const source = readFileSync(join(ROOT, "tools/transferability-probe.ts"), "utf8");
+  const writePrimitives = [
+    "writeFileSync",
+    "appendFileSync",
+    "mkdirSync",
+    "rmSync",
+    "unlinkSync",
+    "renameSync",
+    "createWriteStream",
+  ];
+  for (const primitive of writePrimitives) {
+    assert.ok(
+      !source.includes(primitive),
+      `transferability-probe.ts must not write — found ${primitive}`,
+    );
+  }
+  // And it must not reach the approval projector or the ledger either.
+  assert.ok(!source.includes("candidateLedger"), "the probe must not touch the candidate ledger");
+  assert.ok(!source.includes("persistLedger"), "the probe must not persist a ledger entry");
+});
+
+test("the probe measures the configured strong tier, never a model of its own choosing", () => {
+  // D-162's figures came from a model the pipeline is not configured to call.
+  // A probe that pinned its own model id would reproduce exactly that error, so
+  // the model must come from configuredTier and nowhere else.
+  const source = readFileSync(join(ROOT, "tools/transferability-probe.ts"), "utf8");
+  assert.match(source, /configuredTier\(config, "strong"\)/);
+  assert.doesNotMatch(
+    source,
+    /model_id\s*[:=]\s*["'`]/,
+    "the probe must not hardcode a model id",
   );
 });

@@ -1,8 +1,13 @@
-# Data — not code. Exclude from Cursor indexing and agent context.
+# Bulk data — not code. Exclude from Cursor indexing and agent context.
 # When a task needs a number from these, run a committed script; never read
 # records into context.
+#
+# Scoped to the record trees only. corpora/_ops/ is CONFIGURATION — model tiers,
+# token limits, budget caps — and excluding it cost an agent the ability to name
+# the model it was about to spend against. Configuration is read directly.
 
-corpora/
+corpora/evidence/
+corpora/extraction/
 analysis/
 
 # Generated artifact directories (projections; never hand-edit)

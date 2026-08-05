@@ -551,6 +551,37 @@ export interface TransferabilityCheckResult {
    * what make an offline replay reviewable rather than merely reproducible.
    */
   reason: string;
+  /**
+   * The interface lever the check identified, when it identified one. Written by
+   * the model-backed VARIABLE check in ruleset v2 (D-162): the product surface
+   * this claim could act on — "count of other users who did X", "countdown
+   * timer", "ask a small request before the larger one". Null when the check
+   * found no lever, and absent for the deterministic v1 checks that name their
+   * finding inside `reason` instead. This is the field that makes a v2 verdict
+   * AUDITABLE offline even though its VARIABLE outcome cannot be RECOMPUTED
+   * without the model that produced it.
+   */
+  identified_lever?: string | null;
+}
+
+/**
+ * The model-backed VARIABLE judgement (ruleset v2, D-162). Produced by a cheap
+ * model reading only the claim (fact, boundary, source title) and answering one
+ * question: does this name something a product surface can show, hide, reorder,
+ * count, time, or reword? It replaces the v1 word list, which could only match
+ * cognitive-load vocabulary and refused most of the persuasion registry.
+ *
+ * The pipeline stores the judgement inside the check result so the verdict stays
+ * auditable and re-derivable offline from the proposal file — the one property a
+ * naked model call would have destroyed.
+ */
+export interface VariableJudgement {
+  /** Whether a nameable interface lever exists for this claim. */
+  transferable: boolean;
+  /** The lever, in a short phrase, or null when none was found. */
+  lever: string | null;
+  /** The model's one-line reason, carried verbatim into the check. */
+  reason: string;
 }
 
 export interface TransferabilityVerdict {
@@ -565,6 +596,53 @@ export interface TransferabilityVerdict {
    * the scoring the owner did not specify outright.
    */
   escalated_by_warning_pair: boolean;
+}
+
+/**
+ * Why ruleset v2 produced no verdict at all.
+ *
+ * The v2 VARIABLE check fails open — a model outage must never silently bury a
+ * grounded claim — but "fails open" was implemented as an absent
+ * `transferability` field, which is ALSO what a pre-D-160 proposal and a
+ * non-effect proposal look like. Three states, one representation, and no
+ * counter on any of them: an unjudged item was indistinguishable from a judged
+ * one. That is the defect class that hid 30-of-30 for a month.
+ *
+ * So the claim is still admitted, and the failure is now named. Order matters
+ * only for reading; these are checked in the order the call encounters them.
+ */
+export const TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS = [
+  /** No model_id configured for the strong tier — the check could not be asked. */
+  "no_model_id",
+  /** The run's own token cap would have been crossed by this call. */
+  "per_run_token_cap",
+  /** The month's token cap would have been crossed by this call. */
+  "monthly_token_cap",
+  /** Non-retryable HTTP, three exhausted retries, or a thrown request. */
+  "transport_error",
+  /** The model answered, and the answer was not a judgement we could parse. */
+  "malformed_answer",
+] as const;
+
+export type TransferabilityVerdictUnavailableReason =
+  (typeof TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS)[number];
+
+/**
+ * Stamped on a proposal admitted WITHOUT a verdict, in place of the verdict.
+ * Mutually exclusive with `transferability` — a proposal carries one or the
+ * other, never both, and `held_non_transferable` can carry only a verdict
+ * (you cannot refuse a claim you never judged). Enforced in
+ * proposal.schema.json and re-checked by tools/validate.ts.
+ */
+export interface TransferabilityVerdictUnavailable {
+  /** The ruleset that was being applied when it could not produce a verdict. */
+  ruleset_version: number;
+  reason: TransferabilityVerdictUnavailableReason;
+  /**
+   * Optional specifics — an HTTP status, the cap that would have been crossed.
+   * Never the model's raw output: a malformed answer is not evidence.
+   */
+  detail?: string;
 }
 
 // ---------- Universal proposal store (/proposals, D-076) ----------
@@ -679,6 +757,18 @@ export interface ProposalEnvelope<TType extends ProposalType, TPayload> {
    * the same substitution `span_role` was introduced to prevent.
    */
   transferability?: TransferabilityVerdict;
+  /**
+   * Present exactly when the transferability pass ran and could not reach a
+   * verdict (D-162 fail-open). The claim was still admitted to review; this
+   * records that nobody judged it, so an unjudged proposal is never mistaken
+   * for one the filter passed. Mutually exclusive with `transferability`.
+   *
+   * Its absence is NOT a claim that a verdict exists: proposals written before
+   * the pass existed, and non-effect proposals the pass does not apply to,
+   * carry neither field. Only the presence of one of the two fields is
+   * evidence of anything.
+   */
+  verdict_unavailable?: TransferabilityVerdictUnavailable;
   decided_by: string | null;
   /** ISO timestamp, or null before a decision. */
   decided_at: string | null;
@@ -1498,6 +1588,15 @@ export interface RunProgressSummary {
    * the pass existed read as "not measured" rather than as a measured zero.
    */
   held_non_transferable?: number;
+  /**
+   * Admitted WITHOUT a verdict because the v2 VARIABLE check could not produce
+   * one (D-162 fail-open). Reported alongside the held count on purpose: the
+   * two answer different questions — one is "the filter refused N", the other
+   * is "the filter never ran on N". A run that fails open on everything looks
+   * identical to a clean run without this number. Optional so runs recorded
+   * before it existed read as "not measured", not as a measured zero.
+   */
+  verdict_unavailable?: number;
   dropped_volume_cap: number;
   dropped_volume_cap_high_confidence: number;
   candidates: number;

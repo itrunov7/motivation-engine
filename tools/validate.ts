@@ -81,9 +81,8 @@ import {
   checkLedgerDetail,
 } from "../lib/candidate-ledger";
 import {
-  judgeTransferability,
+  replayTransferability,
   transferabilityClaimOfProposal,
-  transferabilityDrift,
 } from "../lib/transferability";
 import type {
   BenchmarkFile,
@@ -1219,6 +1218,15 @@ function checkArtifactProvenanceSpans(
 function main(): void {
   console.log("Motivation Engine validator\n");
   const spanTally = emptySpanTally();
+  // D-162. Judgeable claims split three ways: judged (a stored verdict),
+  // admitted unjudged (a stored reason there is none), and untouched (neither,
+  // because the pass has not run on them). The third is the honest state of the
+  // existing queue and is not a violation — but it is stated every run, because
+  // "the filter is on" and "the filter has judged nothing" have looked identical
+  // from the outside for the whole life of this feature.
+  const unjudgedAdmitted: string[] = [];
+  const judgedClaims: string[] = [];
+  const untouchedClaims: string[] = [];
 
   // 1. Compile the mechanism schema (full + seed sub-schema).
   const mechanismSchema = readJson(PATHS.mechanismSchema);
@@ -2900,7 +2908,7 @@ function main(): void {
               fail(file, "carries a transferability verdict but is not a judgeable claim");
               ok = false;
             } else {
-              const drift = transferabilityDrift(storedVerdict, judgeTransferability(claim));
+              const drift = replayTransferability(storedVerdict, claim);
               if (drift) {
                 fail(file, `stored transferability verdict no longer replays: ${drift}`);
                 ok = false;
@@ -2914,6 +2922,38 @@ function main(): void {
           if (proposal.status === "held_non_transferable" && !storedVerdict) {
             fail(file, "held_non_transferable proposal must carry the verdict that held it");
             ok = false;
+          }
+          // D-162 fail-open. The pass admits a claim it could not judge, and
+          // says so. What is checked here is coherence, not presence: an ABSENT
+          // marker is not a defect, because proposals written before the pass
+          // existed and proposals the pass does not apply to legitimately carry
+          // neither field. Requiring a verdict on every effect proposal would
+          // fail the build on the whole existing queue and teach nothing.
+          const unavailable = (proposal as unknown as Proposal).verdict_unavailable;
+          if (unavailable) {
+            if (storedVerdict) {
+              fail(
+                file,
+                "carries both a transferability verdict and a reason none was available",
+              );
+              ok = false;
+            }
+            if (!transferabilityClaimOfProposal(proposal as unknown as Proposal)) {
+              fail(
+                file,
+                "records an unavailable transferability verdict but is not a judgeable claim",
+              );
+              ok = false;
+            }
+            if (proposal.status === "held_non_transferable") {
+              fail(file, "held as not transferable while recording that it was never judged");
+              ok = false;
+            }
+            unjudgedAdmitted.push(file);
+          }
+          if (transferabilityClaimOfProposal(proposal as unknown as Proposal)) {
+            if (storedVerdict) judgedClaims.push(file);
+            else if (!unavailable) untouchedClaims.push(file);
           }
           if (
             (proposal.type === "effect" || proposal.type === "realization") &&
@@ -3254,6 +3294,33 @@ function main(): void {
     if (spanTally.rolelessFiles.size > 0) {
       console.log(
         `  roleless (legacy, valid): ${Array.from(spanTally.rolelessFiles).sort().join(", ")}`,
+      );
+    }
+  }
+
+  // D-162. Stated every run for the same reason the span and role tallies are:
+  // a pass that is "enabled" but has judged nothing is indistinguishable from a
+  // pass that judged everything favourably, unless the untouched remainder is
+  // counted out loud. None of these three numbers is a violation.
+  console.log("\nTransferability (D-160/D-162):");
+  const claimTotal = judgedClaims.length + unjudgedAdmitted.length + untouchedClaims.length;
+  if (claimTotal === 0) {
+    console.log("  · no judgeable claims in the proposal queue");
+  } else {
+    console.log(
+      `  ${judgedClaims.length} of ${claimTotal} judgeable claim${claimTotal === 1 ? "" : "s"} carry a stored verdict; ` +
+        `${unjudgedAdmitted.length} were admitted unjudged (verdict_unavailable); ` +
+        `${untouchedClaims.length} the pass has never run on.`,
+    );
+    if (unjudgedAdmitted.length > 0) {
+      console.log(
+        `  admitted unjudged: ${unjudgedAdmitted.sort().join(", ")}`,
+      );
+    }
+    if (judgedClaims.length === 0) {
+      console.log(
+        "  · no verdict has ever been stored, at any ruleset version — the filter's " +
+          "output has not been observed in this repository.",
       );
     }
   }

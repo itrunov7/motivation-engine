@@ -154,6 +154,13 @@ function main(): void {
   const dropReasons: Record<string, number> = {};
   const unbalanced: string[] = [];
   const missingLedger: string[] = [];
+  // D-162, summed across the batch. Kept out of `totals` because the per-reason
+  // split arrives as a "reason=n reason=n" param string rather than a number,
+  // and because a run that predates the counter must read as "not measured"
+  // rather than as a measured zero — which `bump` into a numeric map cannot say.
+  const unavailableByReason: Record<string, number> = {};
+  let unavailableTotal = 0;
+  let unavailableMeasuredRuns = 0;
   let usd = 0;
   let tokensIn = 0;
   let tokensOut = 0;
@@ -205,6 +212,14 @@ function main(): void {
       draft_cap: num(params, "dropped_draft_cap"),
     };
     for (const [key, value] of Object.entries(cells)) bump(totals, key, value);
+    if (params.verdict_unavailable !== undefined) {
+      unavailableMeasuredRuns += 1;
+      unavailableTotal += num(params, "verdict_unavailable");
+      for (const pair of (params.verdict_unavailable_by_reason ?? "").split(/\s+/)) {
+        const [reason, count] = pair.split("=");
+        if (reason && count) bump(unavailableByReason, reason, Number(count) || 0);
+      }
+    }
     usd += run.cost?.estimated_usd ?? 0;
     tokensIn += run.cost?.tokens_in ?? 0;
     tokensOut += run.cost?.tokens_out ?? 0;
@@ -357,6 +372,38 @@ function main(): void {
   for (const line of unbalanced) console.log(`  BROKEN ${line}`);
   if (missingLedger.length > 0) {
     console.log(`  absent for: ${missingLedger.join(", ")}`);
+  }
+
+  // ---------- transferability verdicts not reached (D-162) ----------
+  // Deliberately OUTSIDE the equations above, and printed here so the adjacency
+  // is unmissable. A fail-open admission is not a candidate fate: the candidate
+  // still counts as proposed / merged / enriched, so E4 balances exactly as it
+  // would have if every claim had been judged. Conservation proves nothing was
+  // lost; it cannot prove anything was judged. This number is the difference,
+  // and its absence is what let an unjudged proposal pass for a judged one.
+  const unavailableBreakdown = Object.entries(unavailableByReason)
+    .filter(([, count]) => count > 0)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([reason, count]) => `${reason} ${count}`)
+    .join(", ");
+  console.log("\nTRANSFERABILITY VERDICTS NOT REACHED (D-162) — diagnostic, outside E1–E4");
+  if (unavailableMeasuredRuns === 0) {
+    console.log(
+      `  · not measured — none of the ${runs.length} run${runs.length === 1 ? "" : "s"} in this ` +
+        "batch carries the counter, which is NOT the same as a measured zero",
+    );
+  } else {
+    console.log(
+      `  ${unavailableTotal} proposal${unavailableTotal === 1 ? "" : "s"} admitted WITHOUT a verdict, ` +
+        `over ${unavailableMeasuredRuns} of ${runs.length} run${runs.length === 1 ? "" : "s"} that measured it` +
+        (unavailableBreakdown ? `  (${unavailableBreakdown})` : ""),
+    );
+    if (unavailableTotal > 0) {
+      console.log(
+        "  These are in the queue and look exactly like judged proposals to any " +
+          "reader that checks only status. Review them as unfiltered.",
+      );
+    }
   }
 
   // ---------- span_role distribution ----------

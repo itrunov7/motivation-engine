@@ -27,6 +27,7 @@ import {
   type TransferabilityCheck,
   type TransferabilityCheckResult,
   type TransferabilityVerdict,
+  type VariableJudgement,
 } from "./types";
 
 /**
@@ -34,8 +35,16 @@ import {
  * verdict is only interpretable next to the rules that produced it, and
  * "the lexicon quietly grew a word" is precisely the drift this number exists
  * to make visible.
+ *
+ * v1 (D-160): all four checks deterministic; VARIABLE is a word list.
+ * v2 (D-162): VARIABLE is a cheap model judgement returning a named lever;
+ *             SUBJECT, DIRECTION and POPULATION stay the same deterministic
+ *             checks. v1 is kept, not deleted — old verdicts still replay
+ *             against it, and it remains the offline path for the three checks
+ *             that never needed a model.
  */
 export const TRANSFERABILITY_RULESET_VERSION = 1;
+export const TRANSFERABILITY_RULESET_VERSION_V2 = 2;
 
 export interface TransferabilityClaim {
   /** The claim itself. */
@@ -663,6 +672,22 @@ function judgePopulation(contextText: string): TransferabilityCheckResult {
  * flagged as `escalated_by_warning_pair` so this rule's effect can always be
  * measured separately from the rest.
  */
+/**
+ * The scoring, shared by every ruleset version so it can never drift between
+ * them. Given the four check outcomes it returns the verdict fields: any `fail`
+ * refuses; absent a fail, two or more `warn`s refuse and are flagged as the
+ * escalation the owner did not specify outright.
+ */
+function scoreChecks(checks: TransferabilityCheckResult[]): {
+  transferable: boolean;
+  escalated_by_warning_pair: boolean;
+} {
+  const refused = checks.some((result) => result.outcome === "fail");
+  const warnings = checks.filter((result) => result.outcome === "warn");
+  const escalated = !refused && warnings.length >= 2;
+  return { transferable: !refused && !escalated, escalated_by_warning_pair: escalated };
+}
+
 export function judgeTransferability(
   claim: TransferabilityClaim,
 ): TransferabilityVerdict {
@@ -679,15 +704,137 @@ export function judgeTransferability(
   };
   const checks = TRANSFERABILITY_CHECKS.map((check) => results[check]);
 
-  const refused = checks.some((result) => result.outcome === "fail");
-  const warnings = checks.filter((result) => result.outcome === "warn");
-  const escalated = !refused && warnings.length >= 2;
-
   return {
     ruleset_version: TRANSFERABILITY_RULESET_VERSION,
-    transferable: !refused && !escalated,
+    ...scoreChecks(checks),
     checks,
-    escalated_by_warning_pair: escalated,
+  };
+}
+
+/**
+ * The three checks that never needed a model. Shared by v1 (via judgeSubject
+ * etc. above) and v2, which recomputes exactly these offline while trusting the
+ * stored VARIABLE lever it cannot re-derive.
+ */
+function judgeDeterministicChecks(claim: TransferabilityClaim): {
+  subject: TransferabilityCheckResult;
+  direction: TransferabilityCheckResult;
+  population: TransferabilityCheckResult;
+} {
+  const claimText = normalise(`${claim.fact} ${claim.boundary}`);
+  const contextText = normalise(
+    `${claim.fact} ${claim.boundary} ${claim.source_title}`,
+  );
+  return {
+    subject: judgeSubject(contextText),
+    direction: judgeDirection(claimText),
+    population: judgePopulation(contextText),
+  };
+}
+
+/** The prompt the v2 VARIABLE model reads. Pure, so the exact text a stored
+ * verdict was produced under stays inspectable and versioned in git alongside
+ * the ruleset number. It asks one question and demands a named lever or null. */
+export function buildVariablePrompt(claim: TransferabilityClaim): string {
+  return [
+    "You are the VARIABLE check of a transferability filter for a consumer-product",
+    "motivation knowledge base. You read a research finding as three fields: fact,",
+    "boundary, source_title. Answer ONE question: could a digital product surface",
+    "(a screen, UI element, message, notification, or flow) act on the MECHANISM",
+    "this finding describes by SHOWING, HIDING, REORDERING, COUNTING, TIMING, or",
+    "REWORDING something? Map the underlying construct to the nearest concrete",
+    "interface lever even when the finding is phrased abstractly as a 'principle',",
+    "'effect', or 'technique', and even when its study setting is a classroom,",
+    "clinic, market, or lab — the setting does not disqualify a mechanism a product",
+    "could use.",
+    "",
+    "Return transferable=true and a lever of 8 words or fewer when such a lever",
+    "exists (examples: 'count of other users who did X', 'countdown timer',",
+    "'ask a small request before the larger one', 'progress bar toward a goal').",
+    "Return transferable=false and lever=null ONLY when no product surface could",
+    "act on it: a bare definition with no actionable mechanism, a population,",
+    "finance, or market statistic, a chemistry/biology/clinical result, a historical",
+    "or literary analysis, or a purely internal state with no surface control.",
+    "Judge whether a lever EXISTS, not whether the study proves it works.",
+    "",
+    "Output STRICT JSON only, no prose:",
+    '{"transferable": true, "lever": "…", "reason": "20 words max"}',
+    "",
+    `fact: ${claim.fact}`,
+    `boundary: ${claim.boundary}`,
+    `source_title: ${claim.source_title}`,
+  ].join("\n");
+}
+
+/**
+ * Parse the model's VARIABLE answer defensively. Anything that is not a clean,
+ * on-contract object is treated as "no judgement" (null), so a malformed model
+ * response can never be mistaken for a confident verdict — the caller fails
+ * open on null rather than inventing a lever.
+ */
+export function parseVariableJudgement(raw: unknown): VariableJudgement | null {
+  let value: unknown = raw;
+  if (typeof raw === "string") {
+    const match = raw.match(/\{[\s\S]*\}/);
+    if (!match) return null;
+    try {
+      value = JSON.parse(match[0]);
+    } catch {
+      return null;
+    }
+  }
+  if (typeof value !== "object" || value === null) return null;
+  const record = value as Record<string, unknown>;
+  if (typeof record.transferable !== "boolean") return null;
+  if (typeof record.reason !== "string" || record.reason.trim().length === 0) {
+    return null;
+  }
+  const lever =
+    typeof record.lever === "string" && record.lever.trim().length > 0
+      ? record.lever.trim()
+      : null;
+  // A transferable verdict with no lever is incoherent — the whole point is the
+  // named lever — and a non-transferable verdict must not carry one.
+  if (record.transferable && !lever) return null;
+  return { transferable: record.transferable, lever: record.transferable ? lever : null, reason: record.reason.trim() };
+}
+
+/** The VARIABLE check result built from a model judgement (v2). */
+export function variableCheckFromJudgement(
+  judgement: VariableJudgement,
+): TransferabilityCheckResult {
+  return {
+    check: "variable",
+    outcome: judgement.transferable ? "pass" : "fail",
+    reason: judgement.transferable
+      ? `names a manipulable variable: ${judgement.lever} — ${judgement.reason}`
+      : `names nothing an interface can change — ${judgement.reason}`,
+    identified_lever: judgement.lever,
+  };
+}
+
+/**
+ * The v2 verdict: SUBJECT, DIRECTION and POPULATION recomputed deterministically,
+ * VARIABLE taken from the model judgement, scored by the same shared rule and
+ * stamped ruleset v2. Pure given the judgement, so the whole verdict is
+ * re-derivable offline from (claim + stored lever) without another model call.
+ */
+export function judgeTransferabilityV2(
+  claim: TransferabilityClaim,
+  variable: VariableJudgement,
+): TransferabilityVerdict {
+  const deterministic = judgeDeterministicChecks(claim);
+  const results: Record<TransferabilityCheck, TransferabilityCheckResult> = {
+    subject: deterministic.subject,
+    variable: variableCheckFromJudgement(variable),
+    direction: deterministic.direction,
+    population: deterministic.population,
+  };
+  const checks = TRANSFERABILITY_CHECKS.map((check) => results[check]);
+  return {
+    ruleset_version: TRANSFERABILITY_RULESET_VERSION_V2,
+    ...scoreChecks(checks),
+    checks,
   };
 }
 
@@ -756,6 +903,93 @@ export function transferabilityDrift(
   });
   if (changed.length > 0) {
     return `same verdict, different reasoning: ${changed.map((result) => `${result.check}=${result.outcome}`).join(", ")}`;
+  }
+  return null;
+}
+
+/**
+ * Replay a stored verdict against today's rules, dispatching by ruleset version.
+ * This is the single entry point validate.ts and the replay tool call, so the
+ * "how do we re-check a stored verdict" decision lives in one place.
+ *
+ * v1 recomputes all four checks and demands an exact match — the D-160 contract.
+ *
+ * v2 CANNOT recompute VARIABLE offline: it was a model call, and re-running the
+ * model would be non-deterministic, cost money, and defeat the point of storing
+ * the lever. So v2 is AUDITED, not recomputed (D-162):
+ *   - SUBJECT, DIRECTION and POPULATION are deterministic and ARE recomputed and
+ *     compared exactly, so drift in the three rule-based checks still fails loud;
+ *   - VARIABLE is audited structurally — it must be pass or fail, carry a
+ *     non-empty reason, and carry a non-null identified_lever exactly when it
+ *     passed;
+ *   - the scoring is recomputed from the stored checks and must match the stored
+ *     transferable / escalation, so a tampered verdict body cannot survive.
+ * What this deliberately does not catch is the model changing its mind about a
+ * lever. That is not drift in the rules; it is a new judgement, and it only
+ * enters the store through a fresh extraction run that stamps its own verdict.
+ */
+export function replayTransferability(
+  stored: TransferabilityVerdict,
+  claim: TransferabilityClaim,
+): string | null {
+  if (stored.ruleset_version === TRANSFERABILITY_RULESET_VERSION) {
+    return transferabilityDrift(stored, judgeTransferability(claim));
+  }
+  if (stored.ruleset_version === TRANSFERABILITY_RULESET_VERSION_V2) {
+    return auditTransferabilityV2(stored, claim);
+  }
+  return `stored under unrecognised ruleset v${stored.ruleset_version}`;
+}
+
+function findCheck(
+  verdict: Pick<TransferabilityVerdict, "checks">,
+  check: TransferabilityCheck,
+): TransferabilityCheckResult | undefined {
+  return verdict.checks.find((result) => result.check === check);
+}
+
+function auditTransferabilityV2(
+  stored: TransferabilityVerdict,
+  claim: TransferabilityClaim,
+): string | null {
+  if (stored.checks.length !== TRANSFERABILITY_CHECKS.length) {
+    return `expected ${TRANSFERABILITY_CHECKS.length} checks, stored ${stored.checks.length}`;
+  }
+  const deterministic = judgeDeterministicChecks(claim);
+  for (const check of ["subject", "direction", "population"] as const) {
+    const before = findCheck(stored, check);
+    const now = deterministic[check];
+    if (!before) return `${check} check missing from stored verdict`;
+    if (before.outcome !== now.outcome) {
+      return `${check} drifted: stored ${before.outcome}, replayed ${now.outcome}`;
+    }
+    if (before.reason !== now.reason) {
+      return `${check} reasoning drifted under the current rules`;
+    }
+  }
+  const variable = findCheck(stored, "variable");
+  if (!variable) return "variable check missing from stored verdict";
+  if (variable.outcome !== "pass" && variable.outcome !== "fail") {
+    return `variable outcome must be pass or fail, stored ${variable.outcome}`;
+  }
+  if (typeof variable.reason !== "string" || variable.reason.trim().length === 0) {
+    return "variable check carries no reason";
+  }
+  const leverPresent =
+    typeof variable.identified_lever === "string" &&
+    variable.identified_lever.trim().length > 0;
+  if (variable.outcome === "pass" && !leverPresent) {
+    return "variable passed but named no lever";
+  }
+  if (variable.outcome === "fail" && leverPresent) {
+    return "variable failed yet carries a lever";
+  }
+  const score = scoreChecks(stored.checks);
+  if (score.transferable !== stored.transferable) {
+    return `stored transferable=${stored.transferable} disagrees with its own checks`;
+  }
+  if (score.escalated_by_warning_pair !== stored.escalated_by_warning_pair) {
+    return "stored escalation flag disagrees with its own checks";
   }
   return null;
 }

@@ -74,6 +74,7 @@
       ]
     },
     "transferability": { "$ref": "#/$defs/transferabilityVerdict" },
+    "verdict_unavailable": { "$ref": "#/$defs/transferabilityVerdictUnavailable" },
     "decided_by": {
       "type": ["string", "null"],
       "minLength": 1
@@ -132,10 +133,11 @@
               }
             },
             "else": {
-              "description": "A transferability hold states the verdict that produced it. A held record with no stored reasoning is the irreversible-filter-without-diagnostics failure the hold exists to avoid.",
+              "description": "A transferability hold states the verdict that produced it. A held record with no stored reasoning is the irreversible-filter-without-diagnostics failure the hold exists to avoid. It can never carry verdict_unavailable: a claim nobody judged cannot have been refused.",
               "properties": {
                 "hold_reason": { "const": "not_transferable" },
-                "transferability": { "$ref": "#/$defs/transferabilityVerdict" }
+                "transferability": { "$ref": "#/$defs/transferabilityVerdict" },
+                "verdict_unavailable": false
               },
               "required": ["transferability"]
             }
@@ -144,6 +146,12 @@
       },
       "else": {
         "properties": { "hold_reason": { "type": "null" } }
+      }
+    },
+    {
+      "description": "A proposal carries a verdict or a reason there is none — never both. The two say incompatible things about the same pass, and a record asserting both is a bug in whatever wrote it, not a state to interpret.",
+      "dependentSchemas": {
+        "transferability": { "properties": { "verdict_unavailable": false } }
       }
     },
     {
@@ -158,6 +166,14 @@
           }
         }
       }
+    },
+    {
+      "description": "The transferability pass only ever judges effect proposals (transferabilityClaimOfProposal returns null for every other type), so a non-effect proposal claiming its verdict was unavailable is recording a failure that could not have happened.",
+      "if": {
+        "properties": { "type": { "not": { "const": "effect" } } },
+        "required": ["type"]
+      },
+      "then": { "properties": { "verdict_unavailable": false } }
     },
     {
       "if": {
@@ -268,7 +284,12 @@
                 "type": "string",
                 "enum": ["pass", "warn", "fail"]
               },
-              "reason": { "type": "string", "minLength": 1 }
+              "reason": { "type": "string", "minLength": 1 },
+              "identified_lever": {
+                "description": "The interface lever the check named, when it named one (ruleset v2 VARIABLE, D-162): the product surface this claim can act on. A non-empty string when variable passed, null when it found none, and absent for the deterministic v1 checks. This field is what keeps a v2 verdict auditable offline even though its VARIABLE outcome cannot be recomputed without the model that produced it.",
+                "type": ["string", "null"],
+                "minLength": 1
+              }
             },
             "required": ["check", "outcome", "reason"],
             "additionalProperties": false
@@ -281,6 +302,35 @@
         "escalated_by_warning_pair",
         "checks"
       ],
+      "additionalProperties": false
+    },
+    "transferabilityVerdictUnavailable": {
+      "description": "Present exactly when the transferability pass ran on this claim and could not reach a verdict (D-162 fails open). The claim was admitted to review anyway — a model outage must never silently bury a grounded claim — and this records that nobody judged it. It exists because the first fail-open expressed itself as an ABSENT transferability field, which is also what a pre-D-160 proposal and a non-effect proposal look like: an unjudged item was indistinguishable from a judged one and nothing counted it. Mutually exclusive with transferability. Its own absence proves nothing, since records the pass never touched carry neither field.",
+      "type": "object",
+      "properties": {
+        "ruleset_version": {
+          "description": "The ruleset being applied when it could not produce a verdict.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "reason": {
+          "description": "Which failure occurred. Split by cause because a run that exhausted its token cap and a run whose model was unreachable produce the same count and demand different responses.",
+          "type": "string",
+          "enum": [
+            "no_model_id",
+            "per_run_token_cap",
+            "monthly_token_cap",
+            "transport_error",
+            "malformed_answer"
+          ]
+        },
+        "detail": {
+          "description": "Optional specifics — an HTTP status, the cap that would have been crossed. Never the model's raw output: a malformed answer is not evidence, and a proposal is not where it belongs.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": ["ruleset_version", "reason"],
       "additionalProperties": false
     },
     "provenanceItem": {
