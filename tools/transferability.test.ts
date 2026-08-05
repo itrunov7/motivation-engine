@@ -99,6 +99,52 @@ const OWNER_VERDICTS: readonly {
   },
 ];
 
+/**
+ * Documented false refusals (owner, 5 August 2026). These are the one thing this
+ * file otherwise refuses to do — asserted agreement — and they are asserted on
+ * purpose: any ruleset that refuses either of them fails this suite.
+ *
+ * They are NOT an exemption list. Nothing here waves a record past the filter or
+ * teaches the filter to recognise these two ids. They are a standing bug report
+ * with a failing test attached. When this goes red the required action is to
+ * REPAIR THE FILTER so it names the lever it is currently blind to — never to add
+ * the record to an allowlist. An allowlist grows forever and buries the defect; a
+ * fixture forces the repair and dissolves the moment the filter is right.
+ *
+ * Why these two are false refusals rather than owner taste:
+ *  - Expertise reversal (cl-14-002) already carries an APPROVED realization — the
+ *    expertise-based guidance toggle, edited and accepted under D-118/D-119.
+ *    Refusing the effect as "names nothing an interface can change" contradicts a
+ *    decision already in the log: the interface built on it is in the registry.
+ *  - Dialogue versus single-speaker TTS is a MODALITY decision — how many voices
+ *    carry the lesson — which is exactly the lever class VARIABLE claims to cover
+ *    and which its cognitive-load-derived lexicon happens to have no word for.
+ *
+ * This is a deliberate, narrow exception to the "never assert agreement" contract
+ * at the top of this file. Narrow is the point: two named records with recorded,
+ * decision-grounded reasons, not a rate to chase. If a future extraction run holds
+ * either of them, that is acceptable — a hold is reversible, and this test keeps
+ * the false refusal visible until the lexicon can name what it is missing.
+ */
+const DOCUMENTED_FALSE_REFUSALS: readonly {
+  id: string;
+  why: string;
+  missing_lever: string;
+}[] = [
+  {
+    id: "effect-cl-14-expertise-reversal-effect-72a394e20f30",
+    why: "an approved realization (expertise-based guidance toggle, D-119) is built on this effect; refusing it as non-actionable contradicts a decision already in the log",
+    missing_lever:
+      "expertise-conditioned guidance — showing or withdrawing worked steps by the learner's prior familiarity",
+  },
+  {
+    id: "effect-cl-14-dialogue-based-tts-lesson-format-6344b7e060e8",
+    why: "dialogue versus single-speaker is a modality choice the VARIABLE lexicon has no term for",
+    missing_lever:
+      "speaker configuration — a single narrating voice versus a dialogue between two",
+  },
+];
+
 function loadProposal(id: string): Proposal {
   return JSON.parse(
     readFileSync(join(ROOT, "proposals", "effect", `${id}.json`), "utf8"),
@@ -177,6 +223,26 @@ test("the ruleset agrees with the owner's CL-14 verdicts at a rate it reports ra
 
   // Asserted: the measurement ran over every row. NOT asserted: that it agreed.
   assert.equal(agreed + disagreements.length, total);
+});
+
+test("documented false refusals must be transferable — a refusal here is a filter bug, not an exemption", () => {
+  for (const row of DOCUMENTED_FALSE_REFUSALS) {
+    const claim = transferabilityClaimOfProposal(loadProposal(row.id));
+    assert.ok(claim, `${row.id} must be a judgeable effect claim`);
+    const verdict = judgeTransferability(claim);
+    assert.equal(
+      verdict.transferable,
+      true,
+      `\n${row.id} is a documented false refusal.\n` +
+        `  why it should transfer: ${row.why}\n` +
+        `  the lever the lexicon is missing: ${row.missing_lever}\n` +
+        `  ruleset v${TRANSFERABILITY_RULESET_VERSION} says: ${describeTransferability(verdict)}\n` +
+        verdict.checks
+          .map((check) => `      ${check.outcome.padEnd(4)} ${check.check.padEnd(10)} ${check.reason}`)
+          .join("\n") +
+        `\n  Fix the filter so it names this lever. Do NOT add this id to an exemption list.`,
+    );
+  }
 });
 
 test("every check states a reason, whatever it decides", () => {
