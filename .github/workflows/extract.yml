@@ -133,6 +133,7 @@ jobs:
       # force-pushed to the ops-progress ref every ~2 min so /ops shows batches
       # drafted and running token spend while extraction is in flight.
       - name: Extract grounded proposals
+        id: extract
         run: >-
           npx tsx tools/progress-publisher.ts
           npm run extract --
@@ -158,10 +159,18 @@ jobs:
             echo "No extraction accounting to record — the run spent nothing."
             exit 0
           fi
-          # A failed run's partial proposals must never reach the queue, and
-          # must not ride along in this commit either.
-          git checkout -- proposals 2>/dev/null || true
-          git clean -fd proposals
+          # A FAILED run's partial proposals must never reach the queue, and must
+          # not ride along in this commit either (rule 8). Gated on the extract
+          # step's own outcome, because this step runs on always(): discarding
+          # unconditionally destroyed the proposals of a SUCCESSFUL run before
+          # the commit step below could see them. Run 31107545446 wrote 5
+          # held_low_confidence proposals and committed none of them for exactly
+          # that reason (D-173).
+          if [ "${{ steps.extract.outcome }}" != "success" ]; then
+            echo "Extraction did not succeed — discarding its partial proposals."
+            git checkout -- proposals 2>/dev/null || true
+            git clean -fd proposals
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add corpora/extraction
