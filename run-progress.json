@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "github_run_id": 31108569730,
+  "github_run_attempt": 1,
+  "dispatch_id": "cl14-fix4-yield",
+  "started_at": "2026-08-06T13:59:52.501Z",
+  "updated_at": "2026-08-06T14:02:03.476Z",
+  "kind": "extraction",
+  "target": "effect cl-14-01",
+  "phase": "completed — 7 proposals · 427 available / 406 kept by the planner / 0 dropped to fit the 500000-token cap · 406/406 relevant read · 40 candidates (cheap 32 / strong 8) · 5 dropped ungrounded (cheap 5 / strong 0) (doi_unresolved=2 quote_not_in_source=2 span_role_not_finding=1) · 0 failed validation · 0 held non-transferable · 0 admitted unjudged · 0 remaining",
+  "finished": true,
+  "status": "success",
+  "progress": {
+    "unit": "batches",
+    "done": 17,
+    "total": 17
+  },
+  "records": 406,
+  "spend": {
+    "api_calls": 19,
+    "tokens_in": 326860,
+    "tokens_out": 16481,
+    "estimated_usd": 0.193773
+  },
+  "caps": {
+    "per_run_calls": null,
+    "per_run_tokens": 500000,
+    "monthly_calls": null,
+    "monthly_usd": null
+  },
+  "note": null,
+  "summary": {
+    "proposed": 7,
+    "merged": 0,
+    "dropped_ungrounded": 5,
+    "failed_validation": 0,
+    "held_low_confidence": 1,
+    "held_non_transferable": 0,
+    "verdict_unavailable": 0,
+    "dropped_volume_cap": 0,
+    "dropped_volume_cap_high_confidence": 0,
+    "candidates": 40,
+    "records_eligible": 427,
+    "records_relevant": 406,
+    "records_processed": 406,
+    "records_skipped_irrelevant": 21,
+    "records_remaining": 0,
+    "records_selected": 406,
+    "records_dropped_truncation": 0,
+    "dropped_ungrounded_reasons": {
+      "span_role_not_finding": 1,
+      "doi_unresolved": 2,
+      "quote_not_in_source": 2
+    },
+    "candidates_cheap": 32,
+    "candidates_strong": 8,
+    "dropped_ungrounded_cheap": 5,
+    "dropped_ungrounded_strong": 0,
+    "dropped_ungrounded_reasons_cheap": {
+      "span_role_not_finding": 1,
+      "doi_unresolved": 2,
+      "quote_not_in_source": 2
+    }
+  }
+}
