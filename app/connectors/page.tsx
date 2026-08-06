@@ -559,7 +559,8 @@ function MonthlyRollupPanel({ rollup }: { rollup: MonthlyRollup }) {
         </span>
         run_history is capped at the last {RUN_HISTORY_LIMIT} runs per
         connector, so the rollup covers retained runs only — on a high-volume
-        month older runs age out of the window.
+        month older runs age out of the window. Exception: the extraction
+        manifest is append-only (D-166) and never ages out.
       </p>
     </section>
   );

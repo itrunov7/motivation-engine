@@ -3603,23 +3603,26 @@ export function buildExtractionManifestRun(args: {
   };
 }
 
-/** Newest-first run entries kept in the extraction manifest. */
-const RUN_HISTORY_LIMIT = 20;
-
 /**
  * Put `run` at the head of the history, replacing any earlier entry for the
  * SAME run (D-099). Accounting is persisted repeatedly while a run is in
  * flight, and each write must supersede the previous snapshot of that run
  * rather than adding a duplicate that would double-count its spend.
+ *
+ * Append-only otherwise (D-166): this used to slice to the newest 20 entries,
+ * which silently evicted older ones from the monthly rollup's view — the
+ * safety cap in D-165's own probe runs computed against incomplete data
+ * without saying so beyond a per-run stdout line nobody was reading. history
+ * now only ever grows or replaces-by-timestamp; nothing here drops a measured
+ * cost. Kept in lockstep with tools/candidate-ledger.ts's mergeLedgerRuns,
+ * whose entries validate.ts requires one-for-one for every non-probe run in
+ * this history (D-132) — the two must both be append-only or neither can be.
  */
 export function mergeExtractionRunHistory(
   previous: readonly CorpusManifestRun[],
   run: CorpusManifestRun,
 ): CorpusManifestRun[] {
-  return [
-    run,
-    ...previous.filter((entry) => entry.timestamp !== run.timestamp),
-  ].slice(0, RUN_HISTORY_LIMIT);
+  return [run, ...previous.filter((entry) => entry.timestamp !== run.timestamp)];
 }
 
 /**

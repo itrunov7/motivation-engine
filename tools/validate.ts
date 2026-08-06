@@ -42,7 +42,6 @@ import { parse as parseYaml, parseAllDocuments } from "yaml";
 import {
   EVIDENCE_CATEGORIES,
   PROBE_RUN_MODE,
-  RUN_HISTORY_LIMIT,
   type Manifest,
   type ManifestCost,
   type ManifestModelCost,
@@ -655,9 +654,13 @@ const corpusManifestProperties = {
   connector_version: { type: "string", pattern: "^\\d+\\.\\d+\\.\\d+$" },
   last_run: manifestRunSchema,
   run_history: {
+    // No maxItems (D-166): the extraction manifest is now append-only and
+    // legitimately grows past what other connectors' writer still caps at
+    // RUN_HISTORY_LIMIT. A shared upper bound would have to be wrong for one
+    // side or the other, so the schema states only what is actually true of
+    // every manifest — at least one run — and leaves growth to the writer.
     type: "array",
     minItems: 1,
-    maxItems: RUN_HISTORY_LIMIT,
     items: manifestRunSchema,
   },
   data_files: {

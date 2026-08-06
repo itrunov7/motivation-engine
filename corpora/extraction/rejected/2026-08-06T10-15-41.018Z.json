@@ -1,0 +1,716 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-06T10:15:41.018Z",
+  "dispatch_id": "cl14-real-run-1",
+  "github_run_id": 31092507605,
+  "mode": "realizations",
+  "written_at": "2026-08-06T10:17:48.935Z",
+  "rejected": [
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "ui-pattern-yellow-capture-black-read",
+        "term": "Chromatic Attentional Optimization",
+        "description_as_reported": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Set the background color of the {initial_capture_element} to yellow to maximize user attention, and transition the background color of the {sustained_reading_element} to black once the user has spent {reading_duration_threshold} seconds on the page.",
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "landing_hero",
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "premise_contradicted_downstream",
+      "detail": "span_role=finding asserted for a span the same source later reverses: marker reverse matched \"reversed\" in \"Notably, task difficulty reversed the effect of information load: Increasing set size prolonged reaction times under low difficulty but shortened them under high difficulty by 35 ms, suggesting context‐dependent strategy switching.\", sharing difficulty, high, load, task, under with the quote (D-129) — record cr_e971892bae8bac6d54cb3b09",
+      "corpus_record_id": "cr_e971892bae8bac6d54cb3b09",
+      "item": {
+        "id": "color-saliency-load-adaptation",
+        "term": "Color Saliency Load Adaptation",
+        "description_as_reported": "Results showed cognitive load moderated color saliency: large color differences (Δ E * ₀₀ ≥ 72.69) became more beneficial under high task difficulty. Target hue further modulated saliency under high load: Red and green targets facilitated the fastest searches, whereas blue and purple incurred a 50‐ to 60‐ms cost.",
+        "pattern": "Increase the color contrast of critical interface elements to {high_contrast_threshold} when the user is engaged in a high-load task, and prioritize red or green hues for primary action buttons over blue or purple hues.",
+        "source_domain": "digital interface design",
+        "artifact_context": [
+          "dashboard_widget",
+          "onboarding"
+        ],
+        "confidence": 0.75,
+        "citations": [
+          {
+            "record_id": "cr_e971892bae8bac6d54cb3b09",
+            "quote_or_locus": "Results showed cognitive load moderated color saliency: large color differences (Δ E * ₀₀ ≥ 72.69) became more beneficial under high task difficulty. Target hue further modulated saliency under high load: Red and green targets facilitated the fastest searches, whereas blue and purple incurred a 50‐ to 60‐ms cost.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_e971892bae8bac6d54cb3b09",
+          "quote_or_locus": "Results showed cognitive load moderated color saliency: large color differences (Δ E * ₀₀ ≥ 72.69) became more beneficial under high task difficulty. Target hue further modulated saliency under high load: Red and green targets facilitated the fastest searches, whereas blue and purple incurred a 50‐ to 60‐ms cost.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "Results showed cognitive load moderated color saliency: large color differences (Δ E * ₀₀ ≥ 72.69) became more beneficial under high task difficulty. Target hue further modulated saliency under high load: Red and green targets facilitated the fastest searches, whereas blue and purple incurred a 50‐ to 60‐ms cost.",
+        "quote_normalized": "results showed cognitive load moderated color saliency large color differences e 00 72 69 became more beneficial under high task difficulty target hue further modulated saliency under high load red and green targets facilitated the fastest searches whereas blue and purple incurred a 50 to 60 ms cost",
+        "source_raw": "Effects of Cognitive Load and Color Saliency Interaction on Children's Visual Search in Digital Interfaces\nABSTRACT Visual complexity in digital learning interfaces can enhance engagement but also impose cognitive load and compromise color saliency. This study investigates how cognitive load modulates color saliency in guiding children's visual search. Using a visual search paradigm, color saliency was manipulated through color difference (Δ E * ₀₀ ) between targets and distractors, and cognitive load was manipulated through task difficulty (simple detection vs. localization) and amount of information (set sizes: 6–21). Results showed cognitive load moderated color saliency: large color differences (Δ E * ₀₀ ≥ 72.69) became more beneficial under high task difficulty. Target hue further modulated saliency under high load: Red and green targets facilitated the fastest searches, whereas blue and purple incurred a 50‐ to 60‐ms cost. Notably, task difficulty reversed the effect of information load: Increasing set size prolonged reaction times under low difficulty but shortened them under high difficulty by 35 ms, suggesting context‐dependent strategy switching. These findings suggest that color saliency dynamically interacts with cognitive load, offering three preliminary design implications. First, high‐load tasks may benefit from high‐contrast color combinations (e.g., red‐green, Δ E * ₀₀ &gt; 70). Second, critical information may favor red or green hues over blue or purple. Third, information density should be calibrated to task demands rather than minimized indiscriminately.",
+        "source_normalized": "effects of cognitive load and color saliency interaction on children s visual search in digital interfaces abstract visual complexity in digital learning interfaces can enhance engagement but also impose cognitive load and compromise color saliency this study investigates how cognitive load modulates color saliency in guiding children s visual search using a visual search paradigm color saliency was manipulated through color difference e 00 between targets and distractors and cognitive load was manipulated through task difficulty simple detection vs localization and amount of information set sizes 6 21 results showed cognitive load moderated color saliency large color differences e 00 72 69 became more beneficial under high task difficulty target hue further modulated saliency under high load red and green targets facilitated the fastest searches whereas blue and purple incurred a 50 to 60 ms cost notably task difficulty reversed the effect of information load increasing set size prolonged reaction times under low difficulty but shortened them under high difficulty by 35 ms suggesting context dependent strategy switching these findings suggest that color saliency dynamically interacts with cognitive load offering three preliminary design implications first high load tasks may benefit from high contrast color combinations e g red green e 00 gt 70 second critical information may favor red or green hues over blue or purple third information density should be calibrated to task demands rather than minimized indiscriminately"
+      },
+      "corpus_side": {
+        "doi": "10.1002/jsid.70094",
+        "title": "Effects of Cognitive Load and Color Saliency Interaction on Children's Visual Search in Digital Interfaces"
+      }
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "chromatic-asymmetry-ui-pattern",
+        "term": "Chromatic Attention Optimization",
+        "description_as_reported": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Set the background color to {yellow_hex} for high-priority call-to-action elements to drive initial engagement, and transition the background to {black_hex} for long-form content areas to support sustained reading.",
+        "source_domain": "visual attention",
+        "artifact_context": [
+          "landing_hero",
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "ui-pattern-attentional-capture-optimization",
+        "term": "Chromatic Attentional Priming",
+        "description_as_reported": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Set the background color of the {initial_capture_surface} to yellow to facilitate rapid user attention, and transition the background color of the {sustained_reading_surface} to black once the user has engaged with the content for {sustained_engagement_duration} seconds.",
+        "source_domain": "visual attention",
+        "artifact_context": [
+          "landing_hero",
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "chromatic-asymmetry-in-visual-attention-ui-pattern",
+        "term": "Background-Adaptive Reading Mode",
+        "description_as_reported": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Switch the interface background color to {yellow_hex} when the user is in a discovery or scanning phase, and transition to {black_hex} once the user has engaged in sustained reading for {duration_threshold} minutes.",
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "dashboard_widget",
+          "onboarding"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "visual-attention-background-optimization",
+        "term": "Background-Contrast-Optimization",
+        "description_as_reported": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Set the background color to {yellow_hex} during the initial onboarding phase to maximize user attention, then transition the interface to {black_hex} once the user reaches the core content to support sustained reading.",
+        "source_domain": "visual attention",
+        "artifact_context": [
+          "onboarding",
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "chromatic-asymmetry-in-visual-attention-ui-pattern",
+        "term": "Chromatic Background Adaptation",
+        "description_as_reported": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Set the background color to {yellow_hex} during the initial {capture_phase_duration} of a task to optimize attentional capture, then transition the background to {black_hex} once the user begins sustained reading.",
+        "source_domain": "visual attention",
+        "artifact_context": [
+          "onboarding",
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "ui-pattern-chromatic-attention-optimization",
+        "term": "Chromatic Attention Optimization",
+        "description_as_reported": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Switch the interface background color from {initial_capture_color} to {sustained_reading_color} once the user has engaged with the content for {engagement_duration_threshold} seconds.",
+        "source_domain": "visual attention",
+        "artifact_context": [
+          "onboarding",
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "chromatic-asymmetry-ui-pattern",
+        "term": "Background-Adaptive Reading Mode",
+        "description_as_reported": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Toggle the interface background color to {yellow_hex} when the user is in a discovery or scanning phase, and switch to {black_hex} once the user enters a sustained reading session.",
+        "source_domain": "visual attention",
+        "artifact_context": [
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "chromatic-asymmetry-ui-pattern",
+        "term": "Chromatic Attentional Priming",
+        "description_as_reported": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Set the background color of the {onboarding_screen} to yellow to facilitate rapid initial attentional capture, and transition the background color of the {reading_interface} to black once the user has engaged with the content for {sustained_reading_duration} seconds to optimize reading efficiency.",
+        "source_domain": "visual attention",
+        "artifact_context": [
+          "onboarding",
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "chromatic-asymmetry-ui-pattern",
+        "term": "Chromatic Background Adaptation",
+        "description_as_reported": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Set the background color to {yellow_hex} during the initial {capture_phase_duration} to maximize attention, then transition to {black_hex} once the user enters the {sustained_reading_mode} to improve efficiency.",
+        "source_domain": "visual attention",
+        "artifact_context": [
+          "onboarding",
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "chromatic-asymmetry-in-visual-attention-ui-pattern",
+        "term": "Chromatic Attention Optimization",
+        "description_as_reported": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Set the background color to {yellow_hex} for high-priority call-to-action elements to maximize initial capture, and transition the background to {black_hex} for long-form content areas to support sustained reading.",
+        "source_domain": "visual attention",
+        "artifact_context": [
+          "landing_hero",
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "chromatic-asymmetry-in-visual-attention",
+        "term": "High-Contrast Initial Capture",
+        "description_as_reported": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Set the background color of the {onboarding_flow} to yellow to maximize initial user attention, then transition the background to black once the user reaches the {sustained_reading_threshold} to optimize reading efficiency.",
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "onboarding",
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "chromatic-asymmetry-ui-pattern",
+        "term": "Background-Adaptive Reading Mode",
+        "description_as_reported": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Set the interface background to {yellow_hex} during the initial discovery phase to maximize attentional capture, then transition the background to {black_hex} once the user has engaged in {sustained_reading_duration} of continuous reading to optimize efficiency.",
+        "source_domain": "visual attention",
+        "artifact_context": [
+          "onboarding",
+          "landing_hero"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "There is a systematic dissociation between preattentive capture and sustained processing based on background color: yellow backgrounds optimize rapid initial attentional capture, while black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "strong",
+      "reason": "proposal_not_built",
+      "detail": "provenance grounded but the proposal builder refused the item",
+      "corpus_record_id": "cr_255962234b8c859afa51401c",
+      "item": {
+        "id": null,
+        "term": "Urgency Alert Background Flash",
+        "description_as_reported": "Yellow backgrounds enabled the fastest initial attentional capture (0.65 s), while black backgrounds produced the slowest detection (1.75 s).",
+        "pattern": "When {urgency_trigger} occurs, change the background color of {alert_element} to {alert_color} to facilitate rapid attentional capture.",
+        "source_domain": "human–computer interaction, interface design, and cognitive ergonomics",
+        "artifact_context": [
+          "dashboard_widget",
+          "retention_push"
+        ],
+        "confidence": 0.55,
+        "provenance_refs": [
+          "p1"
+        ]
+      },
+      "provenance": null,
+      "cheap_origin": [
+        {
+          "item": {
+            "id": "chromatic-asymmetry-ui-pattern",
+            "term": "Context-Aware Background Switching",
+            "description_as_reported": "Yellow backgrounds enabled the fastest initial attentional capture (0.65 s), while black backgrounds produced the slowest detection (1.75 s). However, this pattern reversed during sustained processing: black backgrounds enabled the shortest total viewing time (0.88 s) through efficient information sampling",
+            "pattern": "Set the background color to {alert_color} when the user enters a high-urgency state to facilitate rapid capture, and transition to {reading_color} once the user has spent {sustained_threshold} seconds on the page to optimize sustained reading efficiency.",
+            "source_domain": "human–computer interaction, interface design, and cognitive ergonomics",
+            "artifact_context": [
+              "dashboard_widget",
+              "onboarding"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_255962234b8c859afa51401c",
+                "quote_or_locus": "Yellow backgrounds enabled the fastest initial attentional capture (0.65 s), while black backgrounds produced the slowest detection (1.75 s). However, this pattern reversed during sustained processing: black backgrounds enabled the shortest total viewing time (0.88 s) through efficient information sampling",
+                "start": 1279,
+                "end": 1586,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p1"
+          ]
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "strong",
+      "reason": "proposal_not_built",
+      "detail": "provenance grounded but the proposal builder refused the item",
+      "corpus_record_id": "cr_255962234b8c859afa51401c",
+      "item": {
+        "id": null,
+        "term": "Reading-Duration Background Shift",
+        "description_as_reported": "This pattern reversed during sustained processing: black backgrounds enabled the shortest total viewing time (0.88 s) through efficient information sampling.",
+        "pattern": "Once the user has spent {sustained_threshold} on {reading_element}, switch its background color to {reading_color} to support sustained reading efficiency.",
+        "source_domain": "human–computer interaction, interface design, and cognitive ergonomics",
+        "artifact_context": [
+          "dashboard_widget",
+          "onboarding"
+        ],
+        "confidence": 0.5,
+        "provenance_refs": [
+          "p1"
+        ]
+      },
+      "provenance": null,
+      "cheap_origin": [
+        {
+          "item": {
+            "id": "chromatic-asymmetry-ui-pattern",
+            "term": "Context-Aware Background Switching",
+            "description_as_reported": "Yellow backgrounds enabled the fastest initial attentional capture (0.65 s), while black backgrounds produced the slowest detection (1.75 s). However, this pattern reversed during sustained processing: black backgrounds enabled the shortest total viewing time (0.88 s) through efficient information sampling",
+            "pattern": "Set the background color to {alert_color} when the user enters a high-urgency state to facilitate rapid capture, and transition to {reading_color} once the user has spent {sustained_threshold} seconds on the page to optimize sustained reading efficiency.",
+            "source_domain": "human–computer interaction, interface design, and cognitive ergonomics",
+            "artifact_context": [
+              "dashboard_widget",
+              "onboarding"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_255962234b8c859afa51401c",
+                "quote_or_locus": "Yellow backgrounds enabled the fastest initial attentional capture (0.65 s), while black backgrounds produced the slowest detection (1.75 s). However, this pattern reversed during sustained processing: black backgrounds enabled the shortest total viewing time (0.88 s) through efficient information sampling",
+                "start": 1279,
+                "end": 1586,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p1"
+          ]
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "strong",
+      "reason": "proposal_not_built",
+      "detail": "provenance grounded but the proposal builder refused the item",
+      "corpus_record_id": "cr_255962234b8c859afa51401c",
+      "item": {
+        "id": null,
+        "term": "Two-Stage Onboarding Color Transition",
+        "description_as_reported": "Yellow backgrounds enabled the fastest initial attentional capture (0.65 s), while black backgrounds enabled the shortest total viewing time (0.88 s) through efficient information sampling.",
+        "pattern": "Display {onboarding_element} with a {alert_color} background at first appearance to capture attention, then transition it to a {reading_color} background after {sustained_threshold} to support sustained reading of the onboarding content.",
+        "source_domain": "human–computer interaction, interface design, and cognitive ergonomics",
+        "artifact_context": [
+          "onboarding"
+        ],
+        "confidence": 0.45,
+        "provenance_refs": [
+          "p1"
+        ]
+      },
+      "provenance": null,
+      "cheap_origin": [
+        {
+          "item": {
+            "id": "chromatic-asymmetry-ui-pattern",
+            "term": "Context-Aware Background Switching",
+            "description_as_reported": "Yellow backgrounds enabled the fastest initial attentional capture (0.65 s), while black backgrounds produced the slowest detection (1.75 s). However, this pattern reversed during sustained processing: black backgrounds enabled the shortest total viewing time (0.88 s) through efficient information sampling",
+            "pattern": "Set the background color to {alert_color} when the user enters a high-urgency state to facilitate rapid capture, and transition to {reading_color} once the user has spent {sustained_threshold} seconds on the page to optimize sustained reading efficiency.",
+            "source_domain": "human–computer interaction, interface design, and cognitive ergonomics",
+            "artifact_context": [
+              "dashboard_widget",
+              "onboarding"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_255962234b8c859afa51401c",
+                "quote_or_locus": "Yellow backgrounds enabled the fastest initial attentional capture (0.65 s), while black backgrounds produced the slowest detection (1.75 s). However, this pattern reversed during sustained processing: black backgrounds enabled the shortest total viewing time (0.88 s) through efficient information sampling",
+                "start": 1279,
+                "end": 1586,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p1"
+          ]
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "visual-background-optimization-for-reading",
+        "term": "Visual Background Optimization",
+        "description_as_reported": "black backgrounds optimize sustained reading efficiency.",
+        "pattern": "Set the background color of long-form reading interfaces to {background_color_hex} when the user has been active for more than {duration_threshold} {time_unit}.",
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "dashboard_widget"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "black backgrounds optimize sustained reading efficiency.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "black backgrounds optimize sustained reading efficiency.",
+          "span_role": "finding"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "unknown_record_id",
+      "detail": "cited chromatic-asymmetry-in-visual-attention, absent from the corpus slice",
+      "corpus_record_id": "chromatic-asymmetry-in-visual-attention",
+      "item": {
+        "id": "preattentive-capture-optimization",
+        "term": "Preattentive Capture Optimization",
+        "description_as_reported": "yellow backgrounds optimize rapid initial attentional capture",
+        "pattern": "Apply a {background_color_hex} background to call-to-action elements until the user has interacted with the element {interaction_threshold} {interaction_unit}.",
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "landing_hero"
+        ],
+        "confidence": 0.4,
+        "citations": [
+          {
+            "record_id": "chromatic-asymmetry-in-visual-attention",
+            "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "chromatic-asymmetry-in-visual-attention",
+          "quote_or_locus": "yellow backgrounds optimize rapid initial attentional capture",
+          "span_role": "finding"
+        }
+      ]
+    }
+  ]
+}

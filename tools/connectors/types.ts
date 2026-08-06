@@ -223,12 +223,21 @@ export interface Manifest {
   source_ids: string[];
   connector_version: string;
   last_run: StoredManifestRun;
-  /** Newest first, capped at 20 entries. */
+  /**
+   * Newest first, capped at 20 entries by the shared writer
+   * (tools/connectors/lib/manifest.ts). The extraction manifest is the one
+   * exception: its own writer (tools/extract.ts) is append-only (D-166) and
+   * does not use this cap, because the cap was silently evicting spend the
+   * monthly cost rollup could no longer see.
+   */
   run_history: StoredManifestRun[];
   data_files: ManifestDataFile[];
 }
 
-/** run_history cap — the manifest keeps the last N runs. */
+/**
+ * run_history cap — the shared connector writer keeps the last N runs.
+ * NOT applied by the extraction manifest's writer since D-166 (see above).
+ */
 export const RUN_HISTORY_LIMIT = 20;
 
 /**

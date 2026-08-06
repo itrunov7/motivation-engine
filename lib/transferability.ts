@@ -42,9 +42,22 @@ import {
  *             checks. v1 is kept, not deleted — old verdicts still replay
  *             against it, and it remains the offline path for the three checks
  *             that never needed a model.
+ * v3 (D-165): the named lever decides, alone. VARIABLE finding no lever is the
+ *             only refusal left; SUBJECT, DIRECTION and POPULATION still run,
+ *             still state reasons, and are recorded as confidence MODIFIERS
+ *             that never refuse. Measured cause: of ten LA-01 refusals under
+ *             v2, eight were made by SUBJECT or DIRECTION on claims whose lever
+ *             VARIABLE had already named — SUBJECT was filtering on where the
+ *             study ran ("public budgeting decisions", "rural villagers",
+ *             "salaried employees in India") rather than on whether the lever
+ *             applies, and DIRECTION refused definitions whose direction is in
+ *             their name (house money, hyperopic loss aversion, gain/loss
+ *             framing). The two correct refusals were both VARIABLE returning
+ *             no lever, which is the check doing its job.
  */
 export const TRANSFERABILITY_RULESET_VERSION = 1;
 export const TRANSFERABILITY_RULESET_VERSION_V2 = 2;
+export const TRANSFERABILITY_RULESET_VERSION_V3 = 3;
 
 export interface TransferabilityClaim {
   /** The claim itself. */
@@ -839,6 +852,55 @@ export function judgeTransferabilityV2(
 }
 
 /**
+ * The v3 scoring: the lever decides, alone.
+ *
+ * Kept separate from `scoreChecks` rather than parameterising it, because the
+ * combination rule is exactly what changed and a shared function with a version
+ * branch inside would make the two rules look like one rule with an option.
+ * Every non-VARIABLE check that did not pass is returned as a modifier — the
+ * flag survives on an admitted verdict instead of disappearing with the refusal
+ * it used to cause.
+ */
+function scoreChecksV3(checks: TransferabilityCheckResult[]): {
+  transferable: boolean;
+  modifiers_flagged: TransferabilityCheck[];
+} {
+  const variable = checks.find((result) => result.check === "variable");
+  const modifiers_flagged = checks
+    .filter((result) => result.check !== "variable" && result.outcome !== "pass")
+    .map((result) => result.check);
+  return { transferable: variable?.outcome === "pass", modifiers_flagged };
+}
+
+/**
+ * The v3 verdict: same four checks computed exactly as v2 computes them, scored
+ * so that only VARIABLE can refuse. `escalated_by_warning_pair` is always false
+ * — there is no escalation path left to describe — and the warnings it used to
+ * summarise are carried by `modifiers_flagged` instead.
+ */
+export function judgeTransferabilityV3(
+  claim: TransferabilityClaim,
+  variable: VariableJudgement,
+): TransferabilityVerdict {
+  const deterministic = judgeDeterministicChecks(claim);
+  const results: Record<TransferabilityCheck, TransferabilityCheckResult> = {
+    subject: deterministic.subject,
+    variable: variableCheckFromJudgement(variable),
+    direction: deterministic.direction,
+    population: deterministic.population,
+  };
+  const checks = TRANSFERABILITY_CHECKS.map((check) => results[check]);
+  const { transferable, modifiers_flagged } = scoreChecksV3(checks);
+  return {
+    ruleset_version: TRANSFERABILITY_RULESET_VERSION_V3,
+    transferable,
+    checks,
+    escalated_by_warning_pair: false,
+    modifiers_flagged,
+  };
+}
+
+/**
  * The claim a proposal makes, in the three fields the rules read — or null when
  * the rules do not apply to it.
  *
@@ -869,6 +931,19 @@ export function transferabilityClaimOfProposal(
 
 /** One-line summary for reports and commit messages. */
 export function describeTransferability(verdict: TransferabilityVerdict): string {
+  // v3 reads differently on purpose: a flagged modifier is part of an ADMITTED
+  // verdict, so a summary that said only "transferable" would drop the one thing
+  // v3 added. And its single refusal path is named, so a reader never has to
+  // infer which check refused.
+  if (verdict.ruleset_version === TRANSFERABILITY_RULESET_VERSION_V3) {
+    const modifiers = verdict.modifiers_flagged ?? [];
+    if (verdict.transferable) {
+      return modifiers.length > 0
+        ? `transferable (modifiers: ${modifiers.join(", ")})`
+        : "transferable";
+    }
+    return "not transferable — VARIABLE named no lever an interface can act on";
+  }
   if (verdict.transferable) return "transferable";
   const refusals = verdict.checks
     .filter((result) => result.outcome === "fail")
