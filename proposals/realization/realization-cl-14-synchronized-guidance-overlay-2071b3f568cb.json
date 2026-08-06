@@ -1,0 +1,89 @@
+{
+  "id": "realization-cl-14-synchronized-guidance-overlay-2071b3f568cb",
+  "type": "realization",
+  "target": "CL-14",
+  "payload": {
+    "id": "synchronized-guidance-overlay",
+    "mechanism_id": "CL-14",
+    "term": "Synchronized Guidance Overlay",
+    "description_as_reported": "qualitative micro-analysis demonstrated that synchronized visual and auditory cues successfully reduced extraneous cognitive load. This cognitive optimization enabled the children to transition from silent peer mimicry to autonomous sentence construction and coherent narrative expression.",
+    "artifact_context": [
+      "onboarding"
+    ],
+    "effect_refs": [
+      "cl-14-01"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "multimodal language stimulation",
+      "application_domain": "product UI"
+    },
+    "pattern": "Present instructional guidance as a synchronized visual-and-audio overlay directly on the primary interface element once the user has engaged with the content for {engagement_duration} seconds, rather than as a separate help panel.",
+    "parameters": [
+      {
+        "name": "engagement_duration",
+        "value": 5,
+        "unit": "seconds",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_fa0536aa21c4e52f622faa39",
+        "doi": "10.58418/ijeqqr.v5i1.207",
+        "title": "Multimodal Language Stimulation: Integrating Digital Media into Early Childhood Morning Meeting Routines",
+        "quote_or_locus": "qualitative micro-analysis demonstrated that synchronized visual and auditory cues successfully reduced extraneous cognitive load. This cognitive optimization enabled the children to transition from silent peer mimicry to autonomous sentence construction and coherent narrative expression",
+        "source_span": {
+          "start": 1347,
+          "end": 1635,
+          "source_text_sha256": "d7bad18fb3909b573cb8d5177eae157ce9db229b6b51baa5a138f73f613c2f53"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+        "effect_id": "cl-14-01",
+        "title": "Cognitive load and the imagination effect",
+        "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.55
+  },
+  "provenance": [
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_fa0536aa21c4e52f622faa39",
+      "doi": "10.58418/ijeqqr.v5i1.207",
+      "title": "Multimodal Language Stimulation: Integrating Digital Media into Early Childhood Morning Meeting Routines",
+      "quote_or_locus": "qualitative micro-analysis demonstrated that synchronized visual and auditory cues successfully reduced extraneous cognitive load. This cognitive optimization enabled the children to transition from silent peer mimicry to autonomous sentence construction and coherent narrative expression",
+      "source_span": {
+        "start": 1347,
+        "end": 1635,
+        "source_text_sha256": "d7bad18fb3909b573cb8d5177eae157ce9db229b6b51baa5a138f73f613c2f53"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+      "effect_id": "cl-14-01",
+      "title": "Cognitive load and the imagination effect",
+      "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.55,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31108569730",
+  "proposed_at": "2026-08-06T13:59:47.983Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

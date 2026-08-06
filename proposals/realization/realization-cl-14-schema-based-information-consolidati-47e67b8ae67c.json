@@ -1,0 +1,89 @@
+{
+  "id": "realization-cl-14-schema-based-information-consolidati-47e67b8ae67c",
+  "type": "realization",
+  "target": "CL-14",
+  "payload": {
+    "id": "schema-based-information-consolidation",
+    "mechanism_id": "CL-14",
+    "term": "Schema-Based Information Consolidation",
+    "description_as_reported": "Schema-based instruction was associated with increased diagnostic performance on written questions (64 ± 22 % vs 44 ± 25 % p < 0.001) and reduced intrinsic cognitive load",
+    "artifact_context": [
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "cl-14-01"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "medical education",
+      "application_domain": "product UI"
+    },
+    "pattern": "Present complex information using a structured schema template once the user has navigated through {content_depth} levels of nested data to prevent cognitive overload.",
+    "parameters": [
+      {
+        "name": "content_depth",
+        "value": 2,
+        "unit": "levels",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_c358d46c4cc7fbad0fb653d3",
+        "doi": "10.1007/s40037-015-0225-5",
+        "title": "Do research findings on schema-based instruction translate to the classroom?",
+        "quote_or_locus": "Schema-based instruction was associated with increased diagnostic performance on written questions (64 ± 22 % vs 44 ± 25 % p < 0.001) and reduced intrinsic cognitive load",
+        "source_span": {
+          "start": 932,
+          "end": 1102,
+          "source_text_sha256": "cc7c6c041d2ab369c1aa83cb50e2eef1364327398bf8b9d5e1bdaf73fa9bbf97"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+        "effect_id": "cl-14-01",
+        "title": "Cognitive load and the imagination effect",
+        "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.7
+  },
+  "provenance": [
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_c358d46c4cc7fbad0fb653d3",
+      "doi": "10.1007/s40037-015-0225-5",
+      "title": "Do research findings on schema-based instruction translate to the classroom?",
+      "quote_or_locus": "Schema-based instruction was associated with increased diagnostic performance on written questions (64 ± 22 % vs 44 ± 25 % p < 0.001) and reduced intrinsic cognitive load",
+      "source_span": {
+        "start": 932,
+        "end": 1102,
+        "source_text_sha256": "cc7c6c041d2ab369c1aa83cb50e2eef1364327398bf8b9d5e1bdaf73fa9bbf97"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+      "effect_id": "cl-14-01",
+      "title": "Cognitive load and the imagination effect",
+      "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.7,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31108569730",
+  "proposed_at": "2026-08-06T13:59:47.983Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

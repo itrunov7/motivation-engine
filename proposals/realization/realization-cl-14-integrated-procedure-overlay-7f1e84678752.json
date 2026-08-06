@@ -1,0 +1,116 @@
+{
+  "id": "realization-cl-14-integrated-procedure-overlay-7f1e84678752",
+  "type": "realization",
+  "target": "CL-14",
+  "payload": {
+    "id": "integrated-procedure-overlay",
+    "mechanism_id": "CL-14",
+    "term": "Integrated Procedure Overlay",
+    "description_as_reported": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+    "artifact_context": [
+      "onboarding",
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "cl-14-01"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "multimedia instructional design",
+      "application_domain": "product UI"
+    },
+    "pattern": "Display the {procedure_steps} as a single integrated overlay on the primary task interface, rather than across multiple tabs or windows, once the user has initiated the first of the {procedure_steps} steps.",
+    "parameters": [
+      {
+        "name": "procedure_steps",
+        "value": 3,
+        "unit": "steps",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_8a3d18ee88b7197ffe679f15",
+        "doi": "10.3389/fresc.2025.1655454",
+        "title": "Use of emerging technologies in rehabilitation education and practice",
+        "quote_or_locus": "VR addresses these limitations by offering three-dimensional visualization, interactivity, and experiential learning, fostering critical thinking and deeper cognitive engagement",
+        "source_span": {
+          "start": 591,
+          "end": 768,
+          "source_text_sha256": "7723bce1f6c10decfe84501c0be0c50437b7b3c523fc57a9babce8e8aca224f3"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_c393fa4d351daa970d068930",
+        "doi": "10.1186/1748-5908-7-114",
+        "title": "Building theories of knowledge translation interventions: Use the entire menu of constructs",
+        "quote_or_locus": "Using audit and feedback as an example KT intervention strategy, we describe a variety of constructs (two modes of reasoning, cognitive dissonance, feed forward, desirable difficulties and cognitive load, communities of practice, and adaptive expertise) from cognitive and educational psychology that make concrete suggestions about ways to improve this class of intervention",
+        "source_span": {
+          "start": 1207,
+          "end": 1582,
+          "source_text_sha256": "13c0200aba0cf3f1c38509fd5433ae7594a81f8ba7de16e8c7b5bbbe659a5cf9"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+        "effect_id": "cl-14-01",
+        "title": "Cognitive load and the imagination effect",
+        "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.6
+  },
+  "provenance": [
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_8a3d18ee88b7197ffe679f15",
+      "doi": "10.3389/fresc.2025.1655454",
+      "title": "Use of emerging technologies in rehabilitation education and practice",
+      "quote_or_locus": "VR addresses these limitations by offering three-dimensional visualization, interactivity, and experiential learning, fostering critical thinking and deeper cognitive engagement",
+      "source_span": {
+        "start": 591,
+        "end": 768,
+        "source_text_sha256": "7723bce1f6c10decfe84501c0be0c50437b7b3c523fc57a9babce8e8aca224f3"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_c393fa4d351daa970d068930",
+      "doi": "10.1186/1748-5908-7-114",
+      "title": "Building theories of knowledge translation interventions: Use the entire menu of constructs",
+      "quote_or_locus": "Using audit and feedback as an example KT intervention strategy, we describe a variety of constructs (two modes of reasoning, cognitive dissonance, feed forward, desirable difficulties and cognitive load, communities of practice, and adaptive expertise) from cognitive and educational psychology that make concrete suggestions about ways to improve this class of intervention",
+      "source_span": {
+        "start": 1207,
+        "end": 1582,
+        "source_text_sha256": "13c0200aba0cf3f1c38509fd5433ae7594a81f8ba7de16e8c7b5bbbe659a5cf9"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+      "effect_id": "cl-14-01",
+      "title": "Cognitive load and the imagination effect",
+      "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.6,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31108569730",
+  "proposed_at": "2026-08-06T13:59:47.983Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

@@ -1,0 +1,89 @@
+{
+  "id": "realization-cl-14-explicit-conclusion-prompting-d864891abfc0",
+  "type": "realization",
+  "target": "CL-14",
+  "payload": {
+    "id": "explicit-conclusion-prompting",
+    "mechanism_id": "CL-14",
+    "term": "Explicit Conclusion Prompting",
+    "description_as_reported": "The results show that, when cognitive load is high, consumers exhibit a stronger preference for ads with explicit (vs. implicit) conclusions.",
+    "artifact_context": [
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "cl-14-01"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "sustainability advertising",
+      "application_domain": "product UI"
+    },
+    "pattern": "Display an explicit summary or conclusion block when the user has performed {interaction_count} complex actions within a single session to reduce cognitive load.",
+    "parameters": [
+      {
+        "name": "interaction_count",
+        "value": 3,
+        "unit": "actions",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_ff093954ceb031a6500e17af",
+        "doi": "10.1002/mar.70198",
+        "title": "Leveraging Explicit Conclusions to Manage Cognitive Load in Social Media Advertising",
+        "quote_or_locus": "The results show that, when cognitive load is high, consumers exhibit a stronger preference for ads with explicit (vs. implicit) conclusions",
+        "source_span": {
+          "start": 677,
+          "end": 817,
+          "source_text_sha256": "925850659bef17ebde3eca65a7f243bdfea5c0dca8f9db15c5bd490b0ba5080c"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+        "effect_id": "cl-14-01",
+        "title": "Cognitive load and the imagination effect",
+        "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.6
+  },
+  "provenance": [
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_ff093954ceb031a6500e17af",
+      "doi": "10.1002/mar.70198",
+      "title": "Leveraging Explicit Conclusions to Manage Cognitive Load in Social Media Advertising",
+      "quote_or_locus": "The results show that, when cognitive load is high, consumers exhibit a stronger preference for ads with explicit (vs. implicit) conclusions",
+      "source_span": {
+        "start": 677,
+        "end": 817,
+        "source_text_sha256": "925850659bef17ebde3eca65a7f243bdfea5c0dca8f9db15c5bd490b0ba5080c"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+      "effect_id": "cl-14-01",
+      "title": "Cognitive load and the imagination effect",
+      "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.6,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31108569730",
+  "proposed_at": "2026-08-06T13:59:47.983Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}
