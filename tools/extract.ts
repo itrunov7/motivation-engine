@@ -128,7 +128,27 @@ const READER_COVERAGE_FILE = join(EXTRACTION_DIR, "coverage.json");
 const QUOTE_FILE = join(ROOT, "quote.json");
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const ABSTRACT_LIMIT = 6000;
-const CHEAP_OUTPUT_RESERVE = 6000;
+/**
+ * The API `max_tokens` ceiling for a cheap call. A CEILING, not a prediction:
+ * it exists so a model cannot run away, and lowering it would truncate a
+ * response mid-JSON — a real failure mode, not a theoretical one.
+ *
+ * Never use it to estimate. That conflation is what D-174 separates:
+ * `output_reserved` fed the truncation comparison as though 6,000 were the
+ * expected output, so 20.2% of the per-run cap was reserved against tokens no
+ * run has ever produced.
+ */
+export const CHEAP_OUTPUT_RESERVE = 6000;
+/**
+ * What a cheap call actually emits, for ESTIMATION only (D-174).
+ *
+ * Measured: 433 tokens per call on run 31104524768 (7,358 over 17 calls) and
+ * 264 on run 31092507605. Set at 1,500 — a 3.5x margin over the highest
+ * measurement, and still 4x below the ceiling above. Deliberately generous:
+ * an estimate that runs slightly high costs a few records of slice width, while
+ * one that runs low lets a plan exceed the cap it was built to respect.
+ */
+export const CHEAP_OUTPUT_EXPECTED = 1500;
 const STRONG_OUTPUT_RESERVE = 10000;
 
 export const EXTRACTION_MODES = [
@@ -190,7 +210,21 @@ export interface ExtractionQuote {
   mode: ExtractionMode;
   scope: { kind: ScopeKind; id: string; mechanism_ids: string[] };
   calls: { cheap: number; strong: number; total: number };
-  tokens: { input_upper_bound: number; output_reserved: number; total_upper_bound: number };
+  tokens: {
+    /**
+     * Split by tier (D-174) because the two are priced at rates 8x apart, and
+     * summing them before pricing forced a single rate on both. The split is
+     * exactly computable — each term already came from its own expression — so
+     * no weighting heuristic is involved.
+     */
+    input_cheap: number;
+    input_strong: number;
+    input_upper_bound: number;
+    output_reserved_cheap: number;
+    output_reserved_strong: number;
+    output_reserved: number;
+    total_upper_bound: number;
+  };
   records: {
     eligible_total: number;
     already_completed: number;
@@ -1930,7 +1964,7 @@ interface PlannedMechanism {
 interface ExtractionPlan {
   mechanisms: PlannedMechanism[];
   calls: { cheap: number; strong: number; total: number };
-  tokens: { input_upper_bound: number; output_reserved: number; total_upper_bound: number };
+  tokens: ExtractionQuote["tokens"];
   records: ExtractionQuote["records"];
   capped: boolean;
 }
@@ -1953,8 +1987,15 @@ function estimateSelected(
   const strong = configuredTier(config, "strong");
   let cheapCalls = 0;
   let strongCalls = 0;
-  let inputUpper = 0;
-  let outputReserved = 0;
+  // Two accumulators, not one (D-174). These were always two separate
+  // expressions summed into a single variable, and that sum is what forced
+  // buildQuote to pick one price for both.
+  let cheapInput = 0;
+  let strongInput = 0;
+  let cheapOutput = 0;
+  let strongOutput = 0;
+  // Estimation uses what a cheap call EMITS, never the max_tokens ceiling.
+  const cheapOutputEstimate = Math.min(CHEAP_OUTPUT_EXPECTED, cheap.max_tokens_per_call);
   for (const [mechanismId, selected] of Array.from(selectedByMechanism.entries())) {
     if (selected.length === 0) continue;
     const mechanismBatches = batches(
@@ -1963,19 +2004,22 @@ function estimateSelected(
     );
     for (const batch of mechanismBatches) {
       cheapCalls += 1;
-      inputUpper += estimateTokens(cheapPrompt(mode, mechanismId, batch, anchor));
-      outputReserved += Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call);
+      cheapInput += estimateTokens(cheapPrompt(mode, mechanismId, batch, anchor));
+      cheapOutput += cheapOutputEstimate;
     }
     strongCalls += 1;
-    // The strong call's input is the synthesized cheap output; reserve at most
-    // the sum of the cheap output reserves (token units), capped by the strong
-    // tier's own per-call ceiling.
-    inputUpper += Math.min(
-      mechanismBatches.length * Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call),
+    // The strong call's input IS the synthesized cheap output, so it is
+    // estimated from the same expected figure — using the ceiling here made the
+    // term saturate at the strong tier's per-call limit from six batches up,
+    // pinning it to a constant regardless of how much was actually synthesized.
+    strongInput += Math.min(
+      mechanismBatches.length * cheapOutputEstimate,
       strong.max_tokens_per_call,
     );
-    outputReserved += Math.min(STRONG_OUTPUT_RESERVE, strong.max_tokens_per_call);
+    strongOutput += Math.min(STRONG_OUTPUT_RESERVE, strong.max_tokens_per_call);
   }
+  const inputUpper = cheapInput + strongInput;
+  const outputReserved = cheapOutput + strongOutput;
   return {
     calls: {
       cheap: cheapCalls,
@@ -1983,7 +2027,11 @@ function estimateSelected(
       total: cheapCalls + strongCalls,
     },
     tokens: {
+      input_cheap: cheapInput,
+      input_strong: strongInput,
       input_upper_bound: inputUpper,
+      output_reserved_cheap: cheapOutput,
+      output_reserved_strong: strongOutput,
       output_reserved: outputReserved,
       total_upper_bound: inputUpper + outputReserved,
     },
@@ -2104,17 +2152,23 @@ export function buildQuote(
   if (priceState === "unconfigured") reasons.push("model pricing verification date is missing");
   const plan = buildExtractionPlan(mode, scope, config, coverage);
   const { cheap: cheapCalls, strong: strongCalls } = plan.calls;
-  const inputUpper = plan.tokens.input_upper_bound;
-  const outputReserved = plan.tokens.output_reserved;
   const totalUpper = plan.tokens.total_upper_bound;
+  // Every term is priced at ITS OWN tier's rate (D-174). This line used to read
+  // `inputUpper * Math.max(cheap.input_usd_per_token, strong.input_usd_per_token)`,
+  // charging the strong rate — 8x the cheap one — for every estimated input
+  // token, while 92% of the estimate and 97-99% of the measured reality is
+  // cheap-tier input. The output terms were already per-tier; only input
+  // collapsed.
+  //
+  // The old form also re-derived "the dearer tier" from the price table at
+  // runtime, so it would have silently flipped had cheap ever become the more
+  // expensive input. Pricing each term against the tier that will actually be
+  // billed for it removes that coupling entirely.
   const estimatedUsd =
-    inputUpper * Math.max(cheap.input_usd_per_token, strong.input_usd_per_token) +
-    cheapCalls *
-      Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call) *
-      cheap.output_usd_per_token +
-    strongCalls *
-      Math.min(STRONG_OUTPUT_RESERVE, strong.max_tokens_per_call) *
-      strong.output_usd_per_token;
+    plan.tokens.input_cheap * cheap.input_usd_per_token +
+    plan.tokens.input_strong * strong.input_usd_per_token +
+    plan.tokens.output_reserved_cheap * cheap.output_usd_per_token +
+    plan.tokens.output_reserved_strong * strong.output_usd_per_token;
   const budget = computeBudgetSnapshot(now);
   if (plan.records.remaining > 0 && plan.records.selected === 0) {
     reasons.push(
@@ -2149,11 +2203,9 @@ export function buildQuote(
       strong: strongCalls,
       total: cheapCalls + strongCalls,
     },
-    tokens: {
-      input_upper_bound: inputUpper,
-      output_reserved: outputReserved,
-      total_upper_bound: totalUpper,
-    },
+    // Passed through from the plan rather than rebuilt, so the quote reports
+    // the same split the estimator priced and the truncation loop compared.
+    tokens: plan.tokens,
     records: plan.records,
     capped: plan.capped,
     resumable: plan.capped,

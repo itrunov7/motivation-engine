@@ -31,6 +31,8 @@ import type {
   RealizationDerivation,
 } from "../lib/types";
 import {
+  CHEAP_OUTPUT_EXPECTED,
+  CHEAP_OUTPUT_RESERVE,
   EXTRACTION_MODES,
   OPENROUTER_SYSTEM_PROMPT,
   OpenRouterOutputValidationError,
@@ -272,6 +274,77 @@ test("resolves mechanism, pack, and segment scopes deterministically", () => {
   assert.throws(
     () => resolveScope({ mechanism: "CL-14", pack: "entry" }),
     /exactly one scope/,
+  );
+});
+
+test("every quoted token is priced at its own tier's rate (D-174)", () => {
+  const quote = buildQuote(
+    "effects",
+    resolveScope({ mechanism: "CL-14" }),
+    configured,
+    new Date("2026-07-21T10:00:00.000Z"),
+    null,
+  );
+  // Prices are nullable on the config type (an unpriced tier is a real state,
+  // reported as price_state "unconfigured"). This test is about the arithmetic,
+  // so it asserts them present rather than defaulting them to zero — a zero
+  // would make every comparison below trivially true.
+  const price = (tier: { input_usd_per_token: number | null; output_usd_per_token: number | null }) => {
+    assert(tier.input_usd_per_token !== null && tier.output_usd_per_token !== null);
+    return { input: tier.input_usd_per_token, output: tier.output_usd_per_token };
+  };
+  const cheap = price(configured.tiers.cheap);
+  const strong = price(configured.tiers.strong);
+
+  // The split must account for the whole, or a term is being priced twice or
+  // not at all.
+  assert.equal(
+    quote.tokens.input_cheap + quote.tokens.input_strong,
+    quote.tokens.input_upper_bound,
+  );
+  assert.equal(
+    quote.tokens.output_reserved_cheap + quote.tokens.output_reserved_strong,
+    quote.tokens.output_reserved,
+  );
+  assert(quote.tokens.input_cheap > 0);
+  assert(quote.tokens.input_strong > 0);
+
+  const expected =
+    quote.tokens.input_cheap * cheap.input +
+    quote.tokens.input_strong * strong.input +
+    quote.tokens.output_reserved_cheap * cheap.output +
+    quote.tokens.output_reserved_strong * strong.output;
+  assert.equal(quote.estimated_usd, Math.round(expected * 1e8) / 1e8);
+
+  // The defect this replaces, stated as arithmetic: charging the dearer input
+  // rate for every token. It must now be strictly more expensive than the real
+  // answer, so a regression to Math.max cannot pass this test.
+  const collapsed =
+    quote.tokens.input_upper_bound *
+      Math.max(cheap.input, strong.input) +
+    quote.tokens.output_reserved_cheap * cheap.output +
+    quote.tokens.output_reserved_strong * strong.output;
+  assert(
+    collapsed > quote.estimated_usd,
+    "the old Math.max form must overstate; if it does not, the fixture prices no longer differ by tier",
+  );
+});
+
+test("the max_tokens ceiling and the output estimate are different numbers (D-174)", () => {
+  // They were one constant, and that is what reserved 20% of the per-run cap
+  // against output no run has produced. Keeping them apart is the fix; this
+  // test is what stops a future edit from quietly re-fusing them.
+  assert.notEqual(CHEAP_OUTPUT_EXPECTED, CHEAP_OUTPUT_RESERVE);
+  assert(
+    CHEAP_OUTPUT_EXPECTED < CHEAP_OUTPUT_RESERVE,
+    "the estimate must sit below the ceiling — a plan may not budget for more than the API will return",
+  );
+  // Measured cheap output was 433 tokens/call (run 31104524768) and 264
+  // (run 31092507605). The estimate keeps a real margin over both rather than
+  // being tuned to the observation.
+  assert(
+    CHEAP_OUTPUT_EXPECTED >= 433 * 2,
+    "the estimate must keep margin over the highest measured output, not track it",
   );
 });
 
