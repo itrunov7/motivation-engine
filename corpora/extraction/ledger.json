@@ -1,7 +1,299 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-06T13:47:54.776Z",
+  "updated_at": "2026-08-06T14:02:03.473Z",
   "runs": [
+    {
+      "run_id": "2026-08-06T13:59:47.983Z",
+      "dispatch_id": "cl14-fix4-yield",
+      "github_run_id": 31108569730,
+      "mode": "realizations",
+      "scope": "cl-14-01",
+      "candidates": 40,
+      "cheap": {
+        "candidates": 32,
+        "dropped_ungrounded": 5,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 27
+      },
+      "synthesis": {
+        "into_synthesis": 27,
+        "consolidated": 19,
+        "expanded": 0,
+        "candidates_strong": 8,
+        "folds": 2
+      },
+      "strong": {
+        "candidates": 8,
+        "proposed": 7,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 1,
+        "held_non_transferable": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "CL-14:cheap:01",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:02",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:03",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:04",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:05",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:06",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:07",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:08",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:09",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:10",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:11",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:12",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:13",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:14",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "span_role_not_finding"
+        },
+        {
+          "candidate_id": "CL-14:cheap:15",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:16",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:17",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:18",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "doi_unresolved"
+        },
+        {
+          "candidate_id": "CL-14:cheap:19",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:20",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:21",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "doi_unresolved"
+        },
+        {
+          "candidate_id": "CL-14:cheap:22",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:23",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "CL-14:cheap:24",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:25",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:26",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:27",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:28",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "CL-14:cheap:29",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:strong:05",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "held_low_confidence",
+          "proposal_id": "realization-cl-14-mental-simulation-prompt-236c782ddd00"
+        },
+        {
+          "candidate_id": "CL-14:strong:02",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-cl-14-unified-information-container-bded2cecb576"
+        },
+        {
+          "candidate_id": "CL-14:strong:03",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-cl-14-integrated-procedure-overlay-7f1e84678752"
+        },
+        {
+          "candidate_id": "CL-14:strong:04",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-cl-14-synchronized-guidance-overlay-2071b3f568cb"
+        },
+        {
+          "candidate_id": "CL-14:strong:01",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-cl-14-unified-diagram-overlay-d66974f92714"
+        },
+        {
+          "candidate_id": "CL-14:cheap:30",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:31",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:cheap:32",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:strong:07",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-cl-14-schema-based-information-consolidati-47e67b8ae67c"
+        },
+        {
+          "candidate_id": "CL-14:strong:06",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-cl-14-explicit-conclusion-prompting-d864891abfc0"
+        },
+        {
+          "candidate_id": "CL-14:strong:08",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-cl-14-integrated-task-presentation-a1760110a64f"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-06T13:47:10.234Z",
       "dispatch_id": "cl14-fix4-attrib",
