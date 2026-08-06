@@ -20,6 +20,7 @@ import { TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS } from "../lib/types";
 import type {
   CandidateLedgerRun,
   CorpusManifestRun,
+  Effect,
   EvidenceCorpusFile,
   EvidenceCorpusRecord,
   ExtractionOpsConfig,
@@ -31,6 +32,7 @@ import type {
 import {
   OPENROUTER_SYSTEM_PROMPT,
   OpenRouterOutputValidationError,
+  anchorBlock,
   buildExtractionManifestRun,
   buildExtractionPlan,
   buildExtractionManifestCost,
@@ -914,6 +916,75 @@ test("every grounding refusal names its own reason", () => {
   // value the check actually compared (D-104).
   assert.equal(doiOutcome.ok === false && doiOutcome.corpus_record_id, doiless.record_id);
   assert.equal(doiOutcome.ok === false && doiOutcome.corpus_side?.doi, null);
+});
+
+test("citing the anchoring effect is its own refusal, not an unknown record (D-167)", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract);
+  const exact = record.abstract.slice(0, 80);
+  const anchorEffectId = "chromatic-asymmetry-in-visual-attention";
+
+  // The run that exposed this: 15 of 19 cheap candidates cited the anchor id,
+  // and every one was filed as unknown_record_id — a prompt-shape defect hidden
+  // inside the bucket for hallucinated ids.
+  const cited = groundingOutcome(
+    { citations: [cite(anchorEffectId, exact)] },
+    file,
+    { anchorEffectId },
+  );
+  assert.equal(cited.ok, false);
+  assert.equal(cited.ok === false && cited.reason, "anchor_cited_as_record");
+  assert.equal(cited.ok === false && cited.corpus_record_id, anchorEffectId);
+  assert(cited.ok === false && cited.detail.includes(anchorEffectId));
+
+  // The two reasons stay distinguishable: a genuinely invented id keeps landing
+  // on unknown_record_id even while the anchor check is armed. If this ever
+  // collapsed into one reason the fix for each would become unmeasurable.
+  const invented = groundingOutcome(
+    { citations: [cite("cr_000000000000000000000000", exact)] },
+    file,
+    { anchorEffectId },
+  );
+  assert.equal(invented.ok === false && invented.reason, "unknown_record_id");
+
+  // Without an anchor the check cannot fire, so an unanchored run and a replay
+  // both report exactly what they reported before this reason existed.
+  const unanchored = groundingOutcome(
+    { citations: [cite(anchorEffectId, exact)] },
+    file,
+  );
+  assert.equal(unanchored.ok === false && unanchored.reason, "unknown_record_id");
+});
+
+test("the anchor block offers no id a model could cite (D-167)", () => {
+  const effectId = "chromatic-asymmetry-in-visual-attention";
+  const block = anchorBlock({
+    effect: {
+      id: effectId,
+      mechanism_id: "CL-14",
+      name: "Chromatic Asymmetry in Visual Attention",
+      fact: "Yellow backgrounds optimize rapid initial attentional capture.",
+      boundary: "Standardized reading tasks with white text.",
+      grade: "C+",
+    } as unknown as Effect,
+    keywords: [],
+    citedRecordIds: new Set<string>(),
+  });
+
+  // Structural, not advisory: the id is absent from the prompt entirely, so
+  // citing it is not something the model can be tempted into. Same shape as the
+  // synthesis-projection tests — the safest instruction is the one that has no
+  // subject to act on.
+  assert(!block.includes(effectId));
+  assert(!/"id"\s*:/.test(block));
+  // The wording it is anchored on must still be present, or the run loses the
+  // thing that tells it which material is on topic.
+  assert(block.includes("Chromatic Asymmetry in Visual Attention"));
+  assert(block.includes("Yellow backgrounds optimize rapid initial attentional capture."));
+  // And the prohibition must be stated where the anchor is introduced.
+  assert(block.includes("NOT A SOURCE"));
+  assert(block.toLowerCase().includes("citations"));
 });
 
 test("an anchored citation stores a span that re-slices to its own quote", () => {

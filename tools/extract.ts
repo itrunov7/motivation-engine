@@ -1636,6 +1636,15 @@ function provenanceInstruction(
       : "a supplied title or abstract";
   return [
     `Every item must include citations [{record_id,quote_or_locus,span_role}] using only supplied records.`,
+    // The prohibition belongs HERE, next to the demand it qualifies, not only in
+    // the anchor block further down the prompt (D-167). The anchor is the most
+    // quotable text in the context — it states the conclusion in one sentence —
+    // so the rule against citing it has to sit where the citation rule is read.
+    ...(anchor
+      ? [
+          "The claim you are extending is NOT a supplied record: it has no record_id and quoting it grounds nothing. A citation that names it, or that quotes its text, is refused. Ground every item in a record from SUPPLIED RECORDS instead — if no supplied record supports an item, omit the item rather than citing the claim back at itself.",
+        ]
+      : []),
     `quote_or_locus must be an exact span from ${locus}.`,
     "span_role states what the span is DOING in the source it was cut from, and is checked against the text:",
     "- background: what the literature, a theory, or prior work says. Includes anything the source is restating rather than testing, and anything it introduces in order to motivate its own question.",
@@ -1655,12 +1664,24 @@ function provenanceInstruction(
  * material is on-topic, and the synthesis pass composes the final patterns and
  * would otherwise be transferring from candidates alone.
  */
-function anchorBlock(anchor: EffectAnchor): string {
+export function anchorBlock(anchor: EffectAnchor): string {
   const { effect } = anchor;
   return [
-    "EFFECT (the fixed anchor; treat its wording as given, do not restate it as a finding):",
+    "──────────────────────────────────────────",
+    "THE CLAIM YOU ARE EXTENDING — NOT A SOURCE",
+    "──────────────────────────────────────────",
+    "This is an already-approved conclusion, supplied so you know which material",
+    "is on-topic. It is NOT one of the supplied records. It has no record_id, it",
+    "cannot be quoted, and it must NEVER appear in citations — every citation must",
+    "name a record from the SUPPLIED RECORDS section and quote that record's own",
+    "text. Treat the wording below as given; do not restate it as a finding.",
     JSON.stringify({
-      id: effect.id,
+      // No id. The anchor's identifier is deliberately withheld: a model that
+      // can see the id will cite it, and the run that exposed this (D-167) lost
+      // 15 of 19 cheap candidates to exactly that. Nothing downstream needs it
+      // here — effect_refs is written server-side in toProposal from the scope's
+      // own basis, on the same reasoning as D-104: a model-authored link to an
+      // artifact is provenance the model does not get to write.
       name: effect.name,
       fact: effect.fact,
       boundary: effect.boundary,
@@ -2491,9 +2512,22 @@ export function groundingOutcome(
      * defect the replay exists to re-examine.
      */
     requireSpanRole?: boolean;
+    /**
+     * The id of the effect this run is anchored on, when it has one (D-167).
+     * Supplied so the gate can tell "the model cited the claim it was asked to
+     * extend" apart from "the model cited an id that does not exist" — the two
+     * look identical to a map lookup and have entirely different fixes.
+     *
+     * Absent for unanchored runs and for tools/replay-grounding.ts, which
+     * replays candidates recorded before this distinction existed and must keep
+     * reporting the reason they were actually refused for — the same reasoning
+     * that makes `requireSpanRole` optional.
+     */
+    anchorEffectId?: string | null;
   } = {},
 ): GroundingOutcome {
   const checkRoles = options.requireSpanRole !== false;
+  const anchorEffectId = options.anchorEffectId ?? null;
   if (!Array.isArray(item.citations) || item.citations.length === 0) {
     return {
       ok: false,
@@ -2521,6 +2555,19 @@ export function groundingOutcome(
         detail: "citation missing a record_id or a non-empty quote_or_locus",
         corpus_record_id:
           typeof citation?.record_id === "string" ? citation.record_id : null,
+      };
+    }
+    // Checked BEFORE the map lookup, because the anchor id is never in the
+    // record map and would otherwise land on unknown_record_id — folding a
+    // prompt-shape defect into the bucket for hallucinated ids and hiding it
+    // (D-167). The anchor is the most quotable text in the context, so this is
+    // a failure mode that recurs whenever the prompt lets it.
+    if (anchorEffectId && citation.record_id === anchorEffectId) {
+      return {
+        ok: false,
+        reason: "anchor_cited_as_record",
+        detail: `cited the anchoring effect ${citation.record_id} as a corpus record; the claim being extended is not evidence for extending it`,
+        corpus_record_id: citation.record_id,
       };
     }
     const record = records.get(citation.record_id);
@@ -4117,7 +4164,9 @@ export async function runExtraction(args: {
       const groundedCheapIds: string[] = [];
       for (const item of candidates) {
         const candidateId = candidateLedger.id(mechanismId, "cheap");
-        const grounding = groundingOutcome(item, corpus);
+        const grounding = groundingOutcome(item, corpus, {
+          anchorEffectId: anchor?.effect.id ?? null,
+        });
         if (!grounding.ok) {
           dropUngrounded(mechanismId, "cheap", grounding, item, candidateId);
           continue;
@@ -4293,7 +4342,10 @@ export async function runExtraction(args: {
         // requireSpans: this outcome's provenance is what reaches the proposal,
         // so from here on a citation without a re-sliceable span is refused
         // rather than written (D-110).
-        const grounding = groundingOutcome(item, corpus, { requireSpans: true });
+        const grounding = groundingOutcome(item, corpus, {
+          requireSpans: true,
+          anchorEffectId: anchor?.effect.id ?? null,
+        });
         if (!grounding.ok) {
           dropUngrounded(
             mechanismId,

@@ -1659,6 +1659,14 @@ export const UNGROUNDED_DROP_REASONS = [
   "malformed_citation",
   /** A cited record_id is not in the corpus slice the model was shown. */
   "unknown_record_id",
+  /**
+   * The citation names the anchoring EFFECT instead of a corpus record (D-167).
+   * Distinct from unknown_record_id on purpose: that one means the model
+   * invented or misremembered an id, this one means it treated the claim it was
+   * asked to extend as the evidence for extending it. The two have different
+   * fixes, so a single counter for both hides which is happening.
+   */
+  "anchor_cited_as_record",
   /** The quote is not a normalized substring of title + abstract/observation. */
   "quote_not_in_source",
   /** Evidence provenance in a realization corpus, or the reverse. */
