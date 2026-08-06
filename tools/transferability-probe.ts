@@ -47,6 +47,10 @@
  *   status=   proposal status, default pending.
  *   id=       a single proposal id.
  *   limit=    stop after N proposals — a bound on spend, stated in the output.
+ *   ruleset=  2 (default) or 3. The scoring applied to the SAME model answer:
+ *             under v3 only VARIABLE can refuse and the other three checks are
+ *             recorded as modifiers (D-165). One model call either way — the
+ *             rulesets differ in how the answer is scored, not in what is asked.
  *   dry-run   print the prompts and the cost estimate, make no calls at all.
  *   record-spend  append this run's measured cost to the extraction manifest
  *                 (D-164). Ignored under dry-run, which spends nothing.
@@ -67,8 +71,10 @@ import {
   buildVariablePrompt,
   describeTransferability,
   judgeTransferabilityV2,
+  judgeTransferabilityV3,
   transferabilityClaimOfProposal,
   TRANSFERABILITY_RULESET_VERSION_V2,
+  TRANSFERABILITY_RULESET_VERSION_V3,
 } from "../lib/transferability";
 import { PROPOSAL_TYPES } from "../lib/proposals";
 import { loadExtractionOpsConfigFromDisk, validateExtractionOpsConfig } from "../lib/ops";
@@ -95,6 +101,28 @@ function option(name: string): string | undefined {
 
 function flag(name: string): boolean {
   return process.argv.includes(name) || process.argv.includes(`--${name}`);
+}
+
+/**
+ * Which scoring to apply. Unknown values throw rather than falling back: a probe
+ * that silently measured v2 when asked for v3 would report numbers under a name
+ * they do not belong to, which is the one thing a measurement must never do.
+ */
+function selectedRuleset(): number {
+  const raw = option("ruleset");
+  if (raw === undefined) return TRANSFERABILITY_RULESET_VERSION_V2;
+  const normalised = raw.trim().toLowerCase().replace(/^v/, "");
+  if (normalised === String(TRANSFERABILITY_RULESET_VERSION_V2)) {
+    return TRANSFERABILITY_RULESET_VERSION_V2;
+  }
+  if (normalised === String(TRANSFERABILITY_RULESET_VERSION_V3)) {
+    return TRANSFERABILITY_RULESET_VERSION_V3;
+  }
+  throw new Error(
+    `ruleset=${raw} is not a ruleset this probe can apply. ` +
+      `Use ${TRANSFERABILITY_RULESET_VERSION_V2} or ${TRANSFERABILITY_RULESET_VERSION_V3}. ` +
+      "v1 is the offline word list and is run by transferability-report, not by a probe.",
+  );
 }
 
 interface LoadedProposal {
@@ -177,6 +205,8 @@ function select(): { selected: LoadedProposal[]; truncatedBy: number } {
 /** Everything the manifest entry reports about what this probe measured. */
 interface ProbeOutcome {
   status: CorpusRunStatus;
+  /** The scoring this run applied — stamped so spend names the rules it bought. */
+  rulesetVersion: number;
   target: string;
   statusFilter: string;
   selected: number;
@@ -228,7 +258,7 @@ function recordProbeSpend(args: {
     // counts are the same ones printed above, not a second derivation of them.
     params: {
       mode: PROBE_RUN_MODE,
-      ruleset_version: String(TRANSFERABILITY_RULESET_VERSION_V2),
+      ruleset_version: String(outcome.rulesetVersion),
       target: outcome.target,
       proposal_status: outcome.statusFilter,
       selected: String(outcome.selected),
@@ -304,9 +334,10 @@ async function probe(): Promise<void> {
   const { selected, truncatedBy } = select();
   const dryRun = flag("dry-run");
   const recordSpend = flag("record-spend");
+  const rulesetVersion = selectedRuleset();
 
   console.log(
-    `Transferability probe — ruleset v${TRANSFERABILITY_RULESET_VERSION_V2}, ` +
+    `Transferability probe — ruleset v${rulesetVersion}, ` +
       `${selected.length} judgeable proposal(s)` +
       `${option("target") ? ` in ${option("target")}` : ""}` +
       ` with status ${option("status") ?? "pending"}.`,
@@ -365,6 +396,7 @@ async function probe(): Promise<void> {
   let refused = 0;
   let escalated = 0;
   const unavailable: Record<string, number> = {};
+  const modifierCounts: Record<string, number> = {};
 
   // A pass that dies half way has still spent what it spent, and the monthly
   // cap only ever sees what a manifest records (D-099). The failure is captured
@@ -374,7 +406,18 @@ async function probe(): Promise<void> {
   try {
     for (const { path, proposal } of selected) {
       const claim = transferabilityClaimOfProposal(proposal)!;
+      // Snapshot before and after so the cost printed under a proposal is that
+      // proposal's own, measured from its response — not the run total divided
+      // by the number of calls, which would be an average wearing a fact's face.
+      const before = { ...usage.byTier.strong };
       const outcome = await judgeVariableViaModel(context, claim);
+      const callInput = usage.byTier.strong.input - before.input;
+      const callOutput = usage.byTier.strong.output - before.output;
+      const callUsd =
+        callInput * tier.input_usd_per_token + callOutput * tier.output_usd_per_token;
+      const callCost =
+        `$${callUsd.toFixed(6)} (${callInput.toLocaleString()} in / ` +
+        `${callOutput.toLocaleString()} out)`;
 
       console.log(`${proposal.id}  [${proposal.status}]`);
       if (!outcome.ok) {
@@ -383,14 +426,21 @@ async function probe(): Promise<void> {
         if (outcome.detail) console.log(`  detail  : ${oneLine(outcome.detail, 200)}`);
         console.log("  lever   : —  (nothing judged this claim)");
         console.log(`  fact    : ${oneLine(claim.fact)}`);
+        console.log(`  cost    : ${callCost}`);
         console.log(`  file    : ${path}\n`);
         continue;
       }
 
-      const verdict = judgeTransferabilityV2(claim, outcome.judgement);
+      const verdict =
+        rulesetVersion === TRANSFERABILITY_RULESET_VERSION_V3
+          ? judgeTransferabilityV3(claim, outcome.judgement)
+          : judgeTransferabilityV2(claim, outcome.judgement);
       if (verdict.transferable) transferable += 1;
       else refused += 1;
       if (verdict.escalated_by_warning_pair) escalated += 1;
+      for (const modifier of verdict.modifiers_flagged ?? []) {
+        modifierCounts[modifier] = (modifierCounts[modifier] ?? 0) + 1;
+      }
 
       const variable = verdict.checks.find((check) => check.check === "variable");
       console.log(`  verdict : ${describeTransferability(verdict)}`);
@@ -403,11 +453,21 @@ async function probe(): Promise<void> {
       console.log(
         `  checks  : ${verdict.checks.map((check) => `${check.check}=${check.outcome}`).join(" ")}`,
       );
+      if (rulesetVersion === TRANSFERABILITY_RULESET_VERSION_V3) {
+        const modifiers = verdict.modifiers_flagged ?? [];
+        console.log(`  modifiers: ${modifiers.length > 0 ? modifiers.join(", ") : "none"}`);
+      }
       for (const check of verdict.checks) {
         if (check.outcome === "pass") continue;
-        const marker = check.outcome === "fail" ? "✗" : "!";
-        console.log(`  ${marker} ${check.check.padEnd(10)} ${check.reason}`);
+        // Under v3 only VARIABLE can refuse, so only VARIABLE earns the refusal
+        // marker. A ✗ next to SUBJECT would contradict the verdict printed two
+        // lines above it.
+        const refuses =
+          check.outcome === "fail" &&
+          (rulesetVersion !== TRANSFERABILITY_RULESET_VERSION_V3 || check.check === "variable");
+        console.log(`  ${refuses ? "✗" : "!"} ${check.check.padEnd(10)} ${check.reason}`);
       }
+      console.log(`  cost    : ${callCost}`);
       console.log(`  file    : ${path}\n`);
     }
   } catch (error) {
@@ -426,9 +486,27 @@ async function probe(): Promise<void> {
 
   console.log("—".repeat(72));
   console.log(
-    `${transferable} of ${judged} judged claim(s) transferable; ${refused} refused, ` +
-      `of which ${escalated} turned on the subject+population warning pair.`,
+    rulesetVersion === TRANSFERABILITY_RULESET_VERSION_V3
+      ? `${transferable} of ${judged} judged claim(s) transferable; ${refused} refused, ` +
+          "every one of them by VARIABLE naming no lever — the only refusal v3 has."
+      : `${transferable} of ${judged} judged claim(s) transferable; ${refused} refused, ` +
+          `of which ${escalated} turned on the subject+population warning pair.`,
   );
+  if (rulesetVersion === TRANSFERABILITY_RULESET_VERSION_V3) {
+    // The modifiers are the point of v3: they are what SUBJECT, DIRECTION and
+    // POPULATION now do instead of refusing, so a run that never printed their
+    // total would hide whether they still flag anything at all.
+    const flaggedTotal = Object.values(modifierCounts).reduce((a, b) => a + b, 0);
+    console.log(
+      `${flaggedTotal} modifier flag(s) recorded across ${judged} verdict(s)` +
+        (flaggedTotal > 0
+          ? `  (${Object.entries(modifierCounts)
+              .map(([check, count]) => `${check} ${count}`)
+              .join(", ")})` +
+            " — recorded on the verdict, never a refusal."
+          : "."),
+    );
+  }
   // Printed even at zero. A probe that reported nothing when nothing failed
   // would leave "the filter judged everything" and "the filter judged nothing"
   // looking the same, which is the defect this counter was added to end.
@@ -475,6 +553,7 @@ async function probe(): Promise<void> {
           : unavailableTotal > 0 || truncatedBy > 0 || judged < selected.length
             ? "partial"
             : "success",
+        rulesetVersion,
         target: option("target") ?? "all",
         statusFilter: option("status") ?? "pending",
         selected: selected.length,

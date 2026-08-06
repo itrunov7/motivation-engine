@@ -596,6 +596,17 @@ export interface TransferabilityVerdict {
    * the scoring the owner did not specify outright.
    */
   escalated_by_warning_pair: boolean;
+  /**
+   * The non-VARIABLE checks that flagged, under ruleset v3 (D-165). In v3 these
+   * are confidence modifiers rather than refusals: SUBJECT, DIRECTION and
+   * POPULATION still run and still state their reasons, but only VARIABLE can
+   * refuse. Recorded so a flag stays visible on an admitted claim — the reason
+   * v3 exists is that these three were refusing claims whose lever VARIABLE had
+   * already named, and a modifier that vanished on admission would hide the very
+   * signal that motivated the change. Absent on v1 and v2 verdicts, where these
+   * checks could refuse and `escalated_by_warning_pair` describes the scoring.
+   */
+  modifiers_flagged?: TransferabilityCheck[];
 }
 
 /**
