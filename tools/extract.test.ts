@@ -28,8 +28,10 @@ import type {
   Proposal,
   ReaderCoverageFile,
   RealizationCorpusFile,
+  RealizationDerivation,
 } from "../lib/types";
 import {
+  EXTRACTION_MODES,
   OPENROUTER_SYSTEM_PROMPT,
   OpenRouterOutputValidationError,
   anchorBlock,
@@ -55,6 +57,8 @@ import {
   recordUngroundedDrop,
   resolveScope,
   settleResponseBatch,
+  synthesisInstruction,
+  taskInstruction,
   toProposal,
   type DraftItem,
   type ExtractionMode,
@@ -1328,14 +1332,175 @@ interface SchemaNode {
 }
 
 /** The per-item schema the model is held to for one mode and stage. */
-function itemSchema(mode: ExtractionMode, stage: "extract" | "synthesize"): SchemaNode {
-  const format = openRouterResponseFormat(mode, stage) as unknown as {
+function itemSchema(
+  mode: ExtractionMode,
+  stage: "extract" | "synthesize",
+  // Widened for D-171. That this argument was missing is itself the evidence:
+  // the inferred realizations shape had never been schema-tested, which is how
+  // it came to demand a field it forbade.
+  derivation: RealizationDerivation = "reported",
+): SchemaNode {
+  const format = openRouterResponseFormat(mode, stage, derivation) as unknown as {
     json_schema: { schema: SchemaNode };
   };
   const items = format.json_schema.schema.properties.items.items;
   assert(items);
   return items;
 }
+
+/**
+ * Strip every bracketed group — (…), {…}, […] — repeatedly, so nested groups
+ * collapse too. Field lists carry annotations inside brackets (`grade (A+..C-)`,
+ * `preconditions [{predicate,reason}]`) whose contents are vocabularies and
+ * sub-objects, not top-level field names.
+ */
+function stripBracketedGroups(text: string): string {
+  let out = text;
+  let previous = "";
+  while (out !== previous) {
+    previous = out;
+    out = out.replace(/\([^()]*\)|\{[^{}]*\}|\[[^[\]]*\]/g, " ");
+  }
+  return out;
+}
+
+/**
+ * The fields a prompt tells the model to emit (D-171).
+ *
+ * Three conventions are in use, and the parser must tell them apart rather than
+ * matching loosely — the prompts also contain bullet lists and comma lists that
+ * are VALUES (span_role vocabulary, section= names, dossier axis keys), and a
+ * loose match would silently absorb the very mismatch this exists to catch.
+ */
+function promptFields(prompt: string): Set<string> {
+  const fields = new Set<string>();
+  const add = (candidate: string): void => {
+    const name = candidate.trim().replace(/[.,;]+$/, "");
+    if (/^[a-z][a-z0-9_]*$/.test(name)) fields.add(name);
+  };
+
+  // Convention B — "- field: prose" bullets. Scoped to the block after
+  // "Fields per item:" on purpose: provenanceInstruction emits five bullets of
+  // its own (background/hypothesis/method/finding/limitation) into the SAME
+  // string, and those are span_role values inside a citation, not item fields.
+  const bulletBlock = prompt.split("Fields per item:")[1];
+  if (bulletBlock !== undefined) {
+    for (const line of bulletBlock.split("\n")) {
+      if (!line.startsWith("- ")) continue;
+      // The provenance bullet is "- citations." with no colon, so splitting on
+      // ":" alone would drop it.
+      add(stripBracketedGroups(line.slice(2)).split(":")[0]);
+    }
+    return fields;
+  }
+
+  // Conventions C and D — "Item fields:" then a semicolon-separated paragraph,
+  // which is one line: on the NEXT line for mechanism, inline for dossier.
+  // Bounded to that line so the trailing "HARD RULE:" prose is not read as
+  // fields. Split on ";" ONLY — the commas inside these lists separate the keys
+  // of a sub-object (dossier's five score axes), which are not top-level fields.
+  const itemFields = prompt.lastIndexOf("Item fields:");
+  if (itemFields !== -1) {
+    const rest = prompt.slice(itemFields + "Item fields:".length);
+    const line = rest.split("\n").find((candidate) => candidate.trim().length > 0) ?? "";
+    for (const segment of stripBracketedGroups(line).split(";")) {
+      add(segment.trim().split(/\s+/)[0] ?? "");
+    }
+    return fields;
+  }
+
+  // Convention A — inline "Fields: a, b (note), c." The list ends at the first
+  // sentence stop; the synthesize variants append instructions after it
+  // ("merge true duplicates, carry forward every ref…"), and reading those as a
+  // comma list would invent fields called "carry" and "remove".
+  const inline = prompt.lastIndexOf("Fields:");
+  if (inline !== -1) {
+    const list = stripBracketedGroups(prompt.slice(inline + "Fields:".length));
+    for (const segment of list.split(".")[0]!.split(",")) {
+      add(segment.trim().split(/\s+/)[0] ?? "");
+    }
+  }
+  return fields;
+}
+
+test("every field a prompt demands exists in the wire schema (D-171)", () => {
+  // The direction that matters: a field the prompt requires and the schema
+  // omits is IMPOSSIBLE to obey, because strictObject sets
+  // additionalProperties:false. That is not a model failing to comply — it is
+  // the pipeline refusing compliance, and then dropping the candidate for the
+  // absence it caused.
+  //
+  // Measured cost of not having this test: mode=realizations effect-anchored
+  // extraction demanded `parameters` (D-115) from a schema that forbade it, so
+  // every pattern carrying a {placeholder} was refused at proposal_not_built.
+  // Three runs, 88 candidates, zero proposals.
+  const anchor = {
+    effect: {
+      id: "cl-14-002",
+      mechanism_id: "CL-14",
+      name: "Expertise reversal effect",
+      fact: "Techniques that help early learners may not help advanced ones.",
+      boundary: "Instructional design",
+      grade: "C+",
+    } as unknown as Effect,
+    keywords: [],
+    citedRecordIds: new Set<string>(),
+  };
+
+  // Derivation is only consulted when mode === "realizations", so iterating it
+  // for the other five modes would compare the same schema twice and report a
+  // wider matrix than was actually checked.
+  const rows: {
+    mode: ExtractionMode;
+    stage: "extract" | "synthesize";
+    derivation: RealizationDerivation;
+    anchored: boolean;
+  }[] = [];
+  for (const mode of EXTRACTION_MODES) {
+    for (const stage of ["extract", "synthesize"] as const) {
+      if (mode === "realizations") {
+        rows.push({ mode, stage, derivation: "reported", anchored: false });
+        rows.push({ mode, stage, derivation: "inferred", anchored: true });
+      } else {
+        rows.push({ mode, stage, derivation: "reported", anchored: false });
+      }
+    }
+  }
+  assert.equal(rows.length, 14);
+
+  const missing: string[] = [];
+  for (const row of rows) {
+    // The coupling nothing in the source enforces: the schema takes
+    // `derivation` and the prompt takes `anchor`, and they are only held
+    // together at two call sites in runExtraction. Pairing them by hand here is
+    // the point — an unpaired invariant is what let D-171 through.
+    const prompt =
+      row.stage === "synthesize"
+        ? synthesisInstruction(row.mode, "CL-14", row.anchored ? anchor : null)
+        : taskInstruction(row.mode, "CL-14", "extract", row.anchored ? anchor : null);
+    const declared = itemSchema(row.mode, row.stage, row.derivation);
+    const demanded = promptFields(prompt);
+
+    // A row whose field list the parser could not find is a parser bug, not a
+    // pass. Silence here would recreate the blindness being fixed.
+    assert(
+      demanded.size > 0,
+      `no field list parsed for ${row.mode}/${row.stage}/${row.derivation}`,
+    );
+
+    for (const field of Array.from(demanded)) {
+      if (!(field in declared.properties)) {
+        missing.push(`${row.mode}/${row.stage}/${row.derivation}: prompt demands "${field}"`);
+      }
+    }
+  }
+
+  assert.deepEqual(
+    missing,
+    [],
+    `the prompt demands fields the schema forbids:\n  ${missing.join("\n  ")}`,
+  );
+});
 
 test("a parameter the model does not advertise is never sent", () => {
   // D-107. require_parameters:true routes only to a provider honouring every
@@ -1392,6 +1557,17 @@ test("the synthesis schema has no field a model could put a quote in", () => {
   // D-104 in schema form. The extraction stage may emit citations; the synthesis
   // stage may emit refs and nothing else, so there is no field for a quote or a
   // record id to arrive in.
+  // The inferred realizations shape is included explicitly. It was absent from
+  // every schema test until D-171 — itemSchema had no derivation argument — and
+  // that blind spot is exactly where the unsatisfiable schema survived.
+  const inferredExtract = itemSchema("realizations", "extract", "inferred");
+  assert("citations" in inferredExtract.properties);
+  assert.equal("provenance_refs" in inferredExtract.properties, false);
+  const inferredSynthesize = itemSchema("realizations", "synthesize", "inferred");
+  assert.equal("citations" in inferredSynthesize.properties, false);
+  assert("provenance_refs" in inferredSynthesize.properties);
+  assert.equal(inferredSynthesize.additionalProperties, false);
+
   for (const mode of ["effects", "realizations", "interactions", "dissent"] as const) {
     const extract = itemSchema(mode, "extract");
     assert("citations" in extract.properties);

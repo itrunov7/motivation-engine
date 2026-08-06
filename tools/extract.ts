@@ -456,10 +456,32 @@ function extractionItemSchema(
       return commonItem(
         derivation === "inferred"
           ? {
-              id: { type: ["string", "null"] },
+              // No `id`. strictObject makes every declared property required,
+              // and the inferred prompt never names one — but more to the point
+              // a model-authored id is discarded downstream (the id comes from
+              // the term), after a run labelled two different patterns "p1".
+              // Asking for what nobody reads is how the anchor id got cited.
               term: { type: "string" },
               description_as_reported: { type: "string" },
               pattern: { type: "string" },
+              // D-115's other half, and without it the first half is
+              // unsatisfiable: the prompt forbids a bare number in `pattern` and
+              // requires each {placeholder} be declared here, but this property
+              // did not exist and additionalProperties is false — so a compliant
+              // answer was impossible and every pattern carrying a placeholder
+              // was refused at proposal_not_built (D-171).
+              //
+              // `evidence_basis` is deliberately absent: it is one literal,
+              // code-filled by patternParameters, because letting a model write
+              // it would let a model claim its own guess was measured.
+              parameters: {
+                type: "array",
+                items: strictObject({
+                  name: { type: "string" },
+                  value: { type: "number" },
+                  unit: { type: "string" },
+                }),
+              },
               source_domain: { type: "string" },
               artifact_context: stringArraySchema,
             }
@@ -1457,7 +1479,7 @@ export function recordRelevanceTier(
  * coverage would mean a schema key per effect; the limit is stated here instead
  * of being discovered later.
  */
-interface EffectAnchor {
+export interface EffectAnchor {
   effect: Effect;
   keywords: readonly string[];
   /** Records the effect itself cites: read first, always. */
@@ -1710,7 +1732,12 @@ function inferredRealizationInstruction(
     "- term: a short name for the pattern.",
     "- description_as_reported: what the cited source states, in the source's own domain vocabulary. Do not describe a product interface here, and do not generalise beyond the quote.",
     "- pattern: the product-UI directive transferred from it, in the imperative. This is your inference, not the source's claim. NEVER write a number in this text, as a digit or as a word — no source measured a threshold for a product interface, and a number in prose reads as if one had. Write {snake_case_name} instead and declare it in parameters.",
-    "- parameters: one entry per {name} the pattern references, as {name, value (your suggested default), unit (what the number counts, in words), evidence_basis: \"none — default heuristic\"}. Every parameter must be referenced by the pattern and every placeholder must be declared.",
+    // evidence_basis is NOT asked for (D-115): it is a single literal the code
+    // fills in, because a model that may write it is a model that may claim its
+    // own guess was measured. Asking for a field the code overwrites also put
+    // the prompt out of step with the wire schema, which is the class of defect
+    // D-171 closed.
+    "- parameters: one entry per {name} the pattern references, as {name, value (your suggested default), unit (what the number counts, in words)}. Every parameter must be referenced by the pattern and every placeholder must be declared.",
     "- source_domain: the field the cited evidence was measured in, as the records themselves describe it (for example \"medical education\" or \"multimedia instructional design\"). Never write a product or software domain here.",
     `- artifact_context: where the pattern applies, from this vocabulary where one fits: ${ARTIFACT_TYPES.join("|")}.`,
     "- confidence: your confidence in the TRANSFER holding in a product interface, not in the effect being real. No source measured this pattern in a product, so a value above 0.8 is not credible.",
@@ -1719,7 +1746,7 @@ function inferredRealizationInstruction(
   ].join("\n");
 }
 
-function taskInstruction(
+export function taskInstruction(
   mode: ExtractionMode,
   mechanismId: string,
   stage: ExtractionStage = "extract",
@@ -1745,7 +1772,7 @@ function taskInstruction(
   }
 }
 
-function synthesisInstruction(
+export function synthesisInstruction(
   mode: ExtractionMode,
   mechanismId: string,
   anchor: EffectAnchor | null = null,
