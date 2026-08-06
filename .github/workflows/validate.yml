@@ -28,6 +28,7 @@ jobs:
       - run: npm run test:span-role
       - run: npm run test:provenance
       - run: npm run test:extract
+      - run: npm run test:rejected
       - run: npm run test:evidence
       - run: npm run test:analyzer
       - run: npm run test:gaps
