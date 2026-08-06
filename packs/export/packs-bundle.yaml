@@ -180,6 +180,14 @@ realizations:
     effect_id: cl-14-002
     term: Expertise-based guidance toggle
     description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    derivation: inferred
+    domain_transfer: { source_domain: educational psychology, application_domain: product UI }
+    pattern: Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.
+    parameters:
+      - name: core_task_completions_before_exploration
+        value: 3
+        unit: completions of the core task
+        evidence_basis: none — default heuristic
     artifact_context: ["onboarding", "dashboard_widget"]
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
@@ -621,19 +629,19 @@ effects:
 # ─────────────────────────────────────────────
 realizations:
 
-  - id: language-learning-landing-hero
-    mechanism_id: ZE-07
-    term: Language-learning landing hero
-    description_as_reported: The archived landing interface identifies Duolingo as a free language-learning product and names the supported languages.
-    artifact_context: ["landing_hero"]
-    confidence: 0.55
-    source_record_ids: [rr_d6d2a2a98095047fc3acc42a]
-
   - id: expertise-based-guidance-toggle
     mechanism_id: CL-14
     effect_id: cl-14-002
     term: Expertise-based guidance toggle
     description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    derivation: inferred
+    domain_transfer: { source_domain: educational psychology, application_domain: product UI }
+    pattern: Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.
+    parameters:
+      - name: core_task_completions_before_exploration
+        value: 3
+        unit: completions of the core task
+        evidence_basis: none — default heuristic
     artifact_context: ["onboarding", "dashboard_widget"]
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
@@ -1088,6 +1096,14 @@ realizations:
     effect_id: cl-14-002
     term: Expertise-based guidance toggle
     description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    derivation: inferred
+    domain_transfer: { source_domain: educational psychology, application_domain: product UI }
+    pattern: Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.
+    parameters:
+      - name: core_task_completions_before_exploration
+        value: 3
+        unit: completions of the core task
+        evidence_basis: none — default heuristic
     artifact_context: ["onboarding", "dashboard_widget"]
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
@@ -1511,6 +1527,14 @@ realizations:
     effect_id: cl-14-002
     term: Expertise-based guidance toggle
     description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    derivation: inferred
+    domain_transfer: { source_domain: educational psychology, application_domain: product UI }
+    pattern: Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.
+    parameters:
+      - name: core_task_completions_before_exploration
+        value: 3
+        unit: completions of the core task
+        evidence_basis: none — default heuristic
     artifact_context: ["onboarding", "dashboard_widget"]
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
@@ -2006,19 +2030,19 @@ effects:
 # ─────────────────────────────────────────────
 realizations:
 
-  - id: language-learning-landing-hero
-    mechanism_id: ZE-07
-    term: Language-learning landing hero
-    description_as_reported: The archived landing interface identifies Duolingo as a free language-learning product and names the supported languages.
-    artifact_context: ["landing_hero"]
-    confidence: 0.55
-    source_record_ids: [rr_d6d2a2a98095047fc3acc42a]
-
   - id: expertise-based-guidance-toggle
     mechanism_id: CL-14
     effect_id: cl-14-002
     term: Expertise-based guidance toggle
     description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    derivation: inferred
+    domain_transfer: { source_domain: educational psychology, application_domain: product UI }
+    pattern: Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.
+    parameters:
+      - name: core_task_completions_before_exploration
+        value: 3
+        unit: completions of the core task
+        evidence_basis: none — default heuristic
     artifact_context: ["onboarding", "dashboard_widget"]
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
@@ -2499,19 +2523,19 @@ effects:
 # ─────────────────────────────────────────────
 realizations:
 
-  - id: language-learning-landing-hero
-    mechanism_id: ZE-07
-    term: Language-learning landing hero
-    description_as_reported: The archived landing interface identifies Duolingo as a free language-learning product and names the supported languages.
-    artifact_context: ["landing_hero"]
-    confidence: 0.55
-    source_record_ids: [rr_d6d2a2a98095047fc3acc42a]
-
   - id: expertise-based-guidance-toggle
     mechanism_id: CL-14
     effect_id: cl-14-002
     term: Expertise-based guidance toggle
     description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    derivation: inferred
+    domain_transfer: { source_domain: educational psychology, application_domain: product UI }
+    pattern: Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.
+    parameters:
+      - name: core_task_completions_before_exploration
+        value: 3
+        unit: completions of the core task
+        evidence_basis: none — default heuristic
     artifact_context: ["onboarding", "dashboard_widget"]
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
@@ -3040,6 +3064,14 @@ realizations:
     effect_id: cl-14-002
     term: Expertise-based guidance toggle
     description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    derivation: inferred
+    domain_transfer: { source_domain: educational psychology, application_domain: product UI }
+    pattern: Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.
+    parameters:
+      - name: core_task_completions_before_exploration
+        value: 3
+        unit: completions of the core task
+        evidence_basis: none — default heuristic
     artifact_context: ["onboarding", "dashboard_widget"]
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
@@ -3559,6 +3591,14 @@ realizations:
     effect_id: cl-14-002
     term: Expertise-based guidance toggle
     description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    derivation: inferred
+    domain_transfer: { source_domain: educational psychology, application_domain: product UI }
+    pattern: Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.
+    parameters:
+      - name: core_task_completions_before_exploration
+        value: 3
+        unit: completions of the core task
+        evidence_basis: none — default heuristic
     artifact_context: ["onboarding", "dashboard_widget"]
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
@@ -4047,19 +4087,19 @@ effects:
 # ─────────────────────────────────────────────
 realizations:
 
-  - id: language-learning-landing-hero
-    mechanism_id: ZE-07
-    term: Language-learning landing hero
-    description_as_reported: The archived landing interface identifies Duolingo as a free language-learning product and names the supported languages.
-    artifact_context: ["landing_hero"]
-    confidence: 0.55
-    source_record_ids: [rr_d6d2a2a98095047fc3acc42a]
-
   - id: expertise-based-guidance-toggle
     mechanism_id: CL-14
     effect_id: cl-14-002
     term: Expertise-based guidance toggle
     description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    derivation: inferred
+    domain_transfer: { source_domain: educational psychology, application_domain: product UI }
+    pattern: Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.
+    parameters:
+      - name: core_task_completions_before_exploration
+        value: 3
+        unit: completions of the core task
+        evidence_basis: none — default heuristic
     artifact_context: ["onboarding", "dashboard_widget"]
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
@@ -4535,6 +4575,14 @@ realizations:
     effect_id: cl-14-002
     term: Expertise-based guidance toggle
     description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    derivation: inferred
+    domain_transfer: { source_domain: educational psychology, application_domain: product UI }
+    pattern: Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.
+    parameters:
+      - name: core_task_completions_before_exploration
+        value: 3
+        unit: completions of the core task
+        evidence_basis: none — default heuristic
     artifact_context: ["onboarding", "dashboard_widget"]
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
@@ -4941,6 +4989,14 @@ realizations:
     effect_id: cl-14-002
     term: Expertise-based guidance toggle
     description_as_reported: "Students with no previous domain familiarity with databases were found to substantially benefit from worked examples in comparison to exploration. However, if students had previous familiarity with the database domain, the type of practice made no significant difference to their learning, because the exploration students were able to draw on existing, well-developed domain schemas to guide their exploration. The reported result for experienced learners is an absence of difference, not a decline: this study observed guidance ceasing to pay for itself, and did not observe it interfering with learning."
+    derivation: inferred
+    domain_transfer: { source_domain: educational psychology, application_domain: product UI }
+    pattern: Replace the step-by-step guided walkthrough overlay in the dashboard with an open-ended exploration mode (no highlighted steps, no forced sequence) once a user has completed the core task at least {core_task_completions_before_exploration} times.
+    parameters:
+      - name: core_task_completions_before_exploration
+        value: 3
+        unit: completions of the core task
+        evidence_basis: none — default heuristic
     artifact_context: ["onboarding", "dashboard_widget"]
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]

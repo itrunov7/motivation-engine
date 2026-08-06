@@ -43,9 +43,9 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:44:50.921Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "owner",
+  "decided_at": "2026-08-06T00:00:00.000Z",
+  "decision_note": "Reversed on 2026-08-06 (D-175). The payload describes a page title, not a realization: its corpus record rr_d6d2a2a98095047fc3acc42a holds a 99-character observation — the 2015 Duolingo capture was JS-rendered, so tag-stripping in realization-wayback yielded essentially the <title>, and this quote is 82 of those 99 characters. It names no trigger, no interface change and nothing ZE-07 is about. The defect is the connector's 40-character floor accepting a page title as interface evidence, not this proposal, which reports its source faithfully. Never approved. Restates the same 99-character string under a different payload id, so pendingRecordPaths would not have flagged it as targeting the same file — approving it would have created a second artifact saying the same thing."
 }

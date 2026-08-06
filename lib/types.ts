@@ -2204,14 +2204,29 @@ export interface PackEffect {
   realization_ids: string[];
 }
 
-/** LAYER 3 — one concrete realization projected from mechanism.implementations. */
-/** Source-grounded, descriptive evidence palette entry. */
+/**
+ * LAYER 3 — one realization projected from /realizations/{mechanism}/{id}.json.
+ * (It is NOT projected from mechanism.implementations; that wording predates the
+ * current layer numbering, where implementations are their own section.)
+ *
+ * Carries the transferred pattern and its declared parameters, not only the
+ * description (D-175). The projection used to stop at `description_as_reported`,
+ * which left the generator the source's sentence and none of the transfer built
+ * from it — while the implementations section shipped twenty hand-authored
+ * directives with no provenance at all. A machine pattern carrying a corpus
+ * record, a named parameter and `derivation` is the better-evidenced of the two.
+ */
 export interface PackRealization {
   id: string;
   mechanism_id: string;
   effect_id?: string;
   term: string;
   description_as_reported: string;
+  /** Absent on a "reported" realization, which transfers nothing. */
+  derivation?: RealizationDerivation;
+  domain_transfer?: RealizationDomainTransfer;
+  pattern?: string;
+  parameters?: RealizationParameter[];
   artifact_context: string[];
   confidence: number;
   source_record_ids: string[];

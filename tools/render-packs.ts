@@ -28,9 +28,11 @@
  * authored record.
  *
  * Two self-checks run before writing: every emitted file must parse back as
- * YAML, and non-L3 knowledge prose (outside comments) may not carry
- * instruction-voice tokens (you / your / should / prefer). L3 intentionally
- * preserves the owner-authored generation directives and copy formulas.
+ * YAML, and knowledge prose (outside comments) may not carry instruction-voice
+ * tokens (you / your / should / prefer). The directive sections — LAYER 3
+ * realizations and the implementations that follow them — are exempt: a
+ * realization `pattern` and an authored `generation_directive` are both
+ * imperative by construction (D-175).
  *
  * Stale pack-*.yaml files whose element no longer exists are removed;
  * pack-map.yaml and README.md are never touched.
@@ -284,7 +286,7 @@ function implementationsFor(mechanisms: Mechanism[]): PackImplementation[] {
   );
 }
 
-function realizationsFor(
+export function realizationsFor(
   mechanisms: Mechanism[],
   realizationsByMechanism: Map<string, Realization[]>,
 ): PackRealization[] {
@@ -300,6 +302,22 @@ function realizationsFor(
         : { effect_id: realization.effect_refs[0] }),
       term: realization.term,
       description_as_reported: realization.description_as_reported,
+      // The transfer itself (D-175). Each is spread conditionally, using the
+      // same idiom as effect_id above, because all four are optional on the
+      // record: a "reported" realization transfers nothing and declares none of
+      // them. Emitting `derivation: undefined` would be worse than omitting it —
+      // parseYaml reads that back as the STRING "undefined", so the pack's
+      // re-parse self-check would not catch it.
+      ...(realization.derivation === undefined
+        ? {}
+        : { derivation: realization.derivation }),
+      ...(realization.domain_transfer === undefined
+        ? {}
+        : { domain_transfer: realization.domain_transfer }),
+      ...(realization.pattern === undefined ? {} : { pattern: realization.pattern }),
+      ...(realization.parameters === undefined
+        ? {}
+        : { parameters: realization.parameters }),
       artifact_context: realization.artifact_context,
       confidence: realization.confidence,
       source_record_ids: realization.provenance.map((item) => item.corpus_record_id),
@@ -513,7 +531,7 @@ function renderEffect(effect: PackEffect): string[] {
   ];
 }
 
-function renderRealization(realization: PackRealization): string[] {
+export function renderRealization(realization: PackRealization): string[] {
   const lines = [
     `  - id: ${realization.id}`,
     `    mechanism_id: ${realization.mechanism_id}`,
@@ -524,6 +542,43 @@ function renderRealization(realization: PackRealization): string[] {
   lines.push(
     `    term: ${scalar(realization.term)}`,
     `    description_as_reported: ${scalar(realization.description_as_reported)}`,
+  );
+  // The transferred half (D-175), each guarded because a "reported" realization
+  // declares none of them. Order mirrors the record: what the source said, then
+  // the transfer, then where it applies.
+  if (realization.derivation !== undefined) {
+    lines.push(`    derivation: ${realization.derivation}`);
+  }
+  if (realization.domain_transfer !== undefined) {
+    // A flow map: the pair reads as the one transfer it describes, and both
+    // values go through scalar() so a domain naming a colon or a brace cannot
+    // break the document.
+    lines.push(
+      `    domain_transfer: { source_domain: ${scalar(realization.domain_transfer.source_domain)}, ` +
+        `application_domain: ${scalar(realization.domain_transfer.application_domain)} }`,
+    );
+  }
+  if (realization.pattern !== undefined) {
+    // scalar() quotes only when YAML requires it, which matters here: a pattern
+    // may open with a {placeholder}, and a bare leading brace would parse as a
+    // flow mapping rather than as text.
+    lines.push(`    pattern: ${scalar(realization.pattern)}`);
+  }
+  if (realization.parameters !== undefined && realization.parameters.length > 0) {
+    // A block sequence, because each parameter is a record. The declared default
+    // and its unit travel with the placeholder they explain — the pattern text
+    // shows only `{name}`, so without these the number is unreadable (D-115).
+    lines.push("    parameters:");
+    for (const parameter of realization.parameters) {
+      lines.push(
+        `      - name: ${parameter.name}`,
+        `        value: ${parameter.value}`,
+        `        unit: ${scalar(parameter.unit)}`,
+        `        evidence_basis: ${scalar(parameter.evidence_basis)}`,
+      );
+    }
+  }
+  lines.push(
     `    artifact_context: ${scalarFlow(realization.artifact_context)}`,
     `    confidence: ${realization.confidence}`,
     `    source_record_ids: ${flow(realization.source_record_ids)}`,
@@ -728,14 +783,29 @@ function renderDatasheet(sheet: PackDatasheet): string {
 
 // ---------- self-checks ----------
 
+/**
+ * Instruction voice is forbidden in KNOWLEDGE prose and expected in directives.
+ *
+ * The exempt window opens at `realizations:` and closes at `interactions:`,
+ * covering LAYER 3 and the implementations section between them. It used to open
+ * at `implementations:`, which left realizations scanned — harmless while L3 was
+ * description-only, and wrong the moment it began carrying `pattern` (D-175). A
+ * pattern is a directive by construction: it names the element, the trigger and
+ * what changes. Warning on it would fire on correct output, and a check that
+ * cries wolf is a check nobody reads.
+ *
+ * Mechanisms, effects, boundaries and the wiring notes stay scanned, which is
+ * the part that matters — those are the claims, and a claim written in the
+ * second person has stopped being evidence.
+ */
 function voiceViolations(text: string): string[] {
   const violations: string[] = [];
-  let inImplementations = false;
+  let inDirectiveSection = false;
   for (const line of text.split("\n")) {
-    if (line === "implementations:") inImplementations = true;
-    if (line === "interactions:") inImplementations = false;
+    if (line === "realizations:") inDirectiveSection = true;
+    if (line === "interactions:") inDirectiveSection = false;
     if (
-      !inImplementations &&
+      !inDirectiveSection &&
       !line.trimStart().startsWith("#") &&
       VOICE_TOKENS.test(line)
     ) {
@@ -982,4 +1052,10 @@ function main(): void {
   );
 }
 
-main();
+// Guarded so the projection can be imported and unit-tested without running the
+// renderer (D-175). Importing this module used to render and WRITE every pack,
+// which is why realizationsFor had no test — and why the dropped fields went
+// unnoticed. Matches tools/extract.ts.
+if (require.main === module) {
+  main();
+}
