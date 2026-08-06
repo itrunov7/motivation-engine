@@ -3,80 +3,140 @@
   "source_ids": [],
   "connector_version": "1.1.0",
   "last_run": {
-    "timestamp": "2026-08-06T13:08:51.559Z",
-    "status": "partial",
+    "timestamp": "2026-08-06T13:47:10.234Z",
+    "status": "success",
     "params": {
       "mode": "realizations",
       "effect": "tracing-and-pointing",
-      "candidates": "34",
-      "records_processed": "406",
-      "records_skipped_irrelevant": "21",
+      "candidates": "6",
+      "records_processed": "12",
+      "records_skipped_irrelevant": "0",
       "proposed": "0",
       "merged": "0",
-      "dropped_ungrounded": "7",
-      "failed_validation": "1",
-      "held_low_confidence": "0",
+      "dropped_ungrounded": "0",
+      "failed_validation": "0",
+      "held_low_confidence": "5",
       "held_non_transferable": "0",
       "verdict_unavailable": "0",
       "verdict_unavailable_by_reason": "no_model_id=0 per_run_token_cap=0 monthly_token_cap=0 transport_error=0 malformed_answer=0",
       "dropped_volume_cap": "0",
       "dropped_volume_cap_high_confidence": "0",
       "records_eligible": "427",
-      "records_relevant": "406",
-      "records_remaining": "12",
-      "records_selected": "406",
+      "records_relevant": "12",
+      "records_remaining": "0",
+      "records_selected": "12",
       "records_dropped_truncation": "0",
-      "candidates_cheap": "30",
-      "candidates_strong": "4",
-      "dropped_ungrounded_cheap": "3",
-      "dropped_ungrounded_strong": "4",
+      "candidates_cheap": "1",
+      "candidates_strong": "5",
+      "dropped_ungrounded_cheap": "0",
+      "dropped_ungrounded_strong": "0",
       "merged_into_pending": "0",
       "proposed_enrich": "0",
       "dropped_draft_cap": "0",
-      "into_synthesis": "27",
+      "into_synthesis": "1",
       "cheap_synthesis_failed": "0",
-      "consolidated_by_synthesis": "23",
-      "expanded_by_synthesis": "0",
-      "dropped_ungrounded_reasons": "proposal_not_built=4 doi_unresolved=1 premise_contradicted_downstream=1 span_role_not_finding=1",
-      "dropped_ungrounded_reasons_cheap": "doi_unresolved=1 premise_contradicted_downstream=1 span_role_not_finding=1",
-      "dropped_ungrounded_reasons_strong": "proposal_not_built=4"
+      "consolidated_by_synthesis": "0",
+      "expanded_by_synthesis": "4"
     },
-    "records_fetched": 427,
-    "files_written": 0,
-    "duration_s": 149.33,
-    "dispatch_id": "cl14-refix-run-1",
-    "github_run_id": 31104524768,
-    "warnings": {
-      "ungrounded_dropped": true,
-      "validation_failed": true
-    },
+    "records_fetched": 12,
+    "files_written": 5,
+    "duration_s": 44.54,
+    "dispatch_id": "cl14-fix4-attrib",
+    "github_run_id": 31107545446,
     "cost": {
-      "api_calls": 19,
-      "duration_s": 149.33,
-      "tokens_in": 311657,
-      "tokens_out": 17127,
-      "estimated_usd": 0.20310525,
+      "api_calls": 2,
+      "duration_s": 44.54,
+      "tokens_in": 17524,
+      "tokens_out": 3013,
+      "estimated_usd": 0.03527475,
       "models": [
         {
           "tier": "cheap",
           "model_id": "google/gemini-3.1-flash-lite",
-          "api_calls": 17,
-          "tokens_in": 302249,
-          "tokens_out": 7358,
-          "estimated_usd": 0.08659925
+          "api_calls": 1,
+          "tokens_in": 15407,
+          "tokens_out": 346,
+          "estimated_usd": 0.00437075
         },
         {
           "tier": "strong",
           "model_id": "anthropic/claude-sonnet-5",
-          "api_calls": 2,
-          "tokens_in": 9408,
-          "tokens_out": 9769,
-          "estimated_usd": 0.116506
+          "api_calls": 1,
+          "tokens_in": 2117,
+          "tokens_out": 2667,
+          "estimated_usd": 0.030904
         }
       ]
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-06T13:47:10.234Z",
+      "status": "success",
+      "params": {
+        "mode": "realizations",
+        "effect": "tracing-and-pointing",
+        "candidates": "6",
+        "records_processed": "12",
+        "records_skipped_irrelevant": "0",
+        "proposed": "0",
+        "merged": "0",
+        "dropped_ungrounded": "0",
+        "failed_validation": "0",
+        "held_low_confidence": "5",
+        "held_non_transferable": "0",
+        "verdict_unavailable": "0",
+        "verdict_unavailable_by_reason": "no_model_id=0 per_run_token_cap=0 monthly_token_cap=0 transport_error=0 malformed_answer=0",
+        "dropped_volume_cap": "0",
+        "dropped_volume_cap_high_confidence": "0",
+        "records_eligible": "427",
+        "records_relevant": "12",
+        "records_remaining": "0",
+        "records_selected": "12",
+        "records_dropped_truncation": "0",
+        "candidates_cheap": "1",
+        "candidates_strong": "5",
+        "dropped_ungrounded_cheap": "0",
+        "dropped_ungrounded_strong": "0",
+        "merged_into_pending": "0",
+        "proposed_enrich": "0",
+        "dropped_draft_cap": "0",
+        "into_synthesis": "1",
+        "cheap_synthesis_failed": "0",
+        "consolidated_by_synthesis": "0",
+        "expanded_by_synthesis": "4"
+      },
+      "records_fetched": 12,
+      "files_written": 5,
+      "duration_s": 44.54,
+      "dispatch_id": "cl14-fix4-attrib",
+      "github_run_id": 31107545446,
+      "cost": {
+        "api_calls": 2,
+        "duration_s": 44.54,
+        "tokens_in": 17524,
+        "tokens_out": 3013,
+        "estimated_usd": 0.03527475,
+        "models": [
+          {
+            "tier": "cheap",
+            "model_id": "google/gemini-3.1-flash-lite",
+            "api_calls": 1,
+            "tokens_in": 15407,
+            "tokens_out": 346,
+            "estimated_usd": 0.00437075
+          },
+          {
+            "tier": "strong",
+            "model_id": "anthropic/claude-sonnet-5",
+            "api_calls": 1,
+            "tokens_in": 2117,
+            "tokens_out": 2667,
+            "estimated_usd": 0.030904
+          }
+        ]
+      }
+    },
     {
       "timestamp": "2026-08-06T13:08:51.559Z",
       "status": "partial",
@@ -1505,7 +1565,7 @@
     {
       "path": "coverage.json",
       "records": 3090,
-      "bytes": 338756
+      "bytes": 339344
     }
   ]
 }

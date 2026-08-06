@@ -1,7 +1,87 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-06T13:11:20.890Z",
+  "updated_at": "2026-08-06T13:47:54.776Z",
   "runs": [
+    {
+      "run_id": "2026-08-06T13:47:10.234Z",
+      "dispatch_id": "cl14-fix4-attrib",
+      "github_run_id": 31107545446,
+      "mode": "realizations",
+      "scope": "tracing-and-pointing",
+      "candidates": 6,
+      "cheap": {
+        "candidates": 1,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 1
+      },
+      "synthesis": {
+        "into_synthesis": 1,
+        "consolidated": 0,
+        "expanded": 4,
+        "candidates_strong": 5,
+        "folds": 1
+      },
+      "strong": {
+        "candidates": 5,
+        "proposed": 0,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 5,
+        "held_non_transferable": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "CL-14:cheap:01",
+          "mechanism_id": "CL-14",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "CL-14:strong:01",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "held_low_confidence",
+          "proposal_id": "realization-cl-14-interactive-tracing-overlay-05048572bd05"
+        },
+        {
+          "candidate_id": "CL-14:strong:02",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "held_low_confidence",
+          "proposal_id": "realization-cl-14-guided-field-pointer-af072252c8da"
+        },
+        {
+          "candidate_id": "CL-14:strong:03",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "held_low_confidence",
+          "proposal_id": "realization-cl-14-pricing-table-trace-line-2b881b7152bf"
+        },
+        {
+          "candidate_id": "CL-14:strong:04",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "held_low_confidence",
+          "proposal_id": "realization-cl-14-retention-email-pointer-animation-eeded01d7260"
+        },
+        {
+          "candidate_id": "CL-14:strong:05",
+          "mechanism_id": "CL-14",
+          "pass": "strong",
+          "fate": "held_low_confidence",
+          "proposal_id": "realization-cl-14-dashboard-widget-trace-highlight-af1808418de1"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-06T13:08:51.559Z",
       "dispatch_id": "cl14-refix-run-1",
