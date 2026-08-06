@@ -139,49 +139,84 @@ jobs:
           run
           mode=${{ inputs.mode }}
           ${{ inputs.scope_kind }}=${{ inputs.scope_id }}
-      - name: Validate generated proposals and manifest
-        run: npm run validate
-      - name: Commit proposals and extraction accounting
-        id: commit
-        run: |
-          if [ -n "$(git status --porcelain proposals corpora/extraction)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add proposals corpora/extraction
-            git commit -m "data: extract ${{ inputs.mode }} for ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
-            git push
-          else
-            echo "No novel grounded proposals — nothing to commit."
-          fi
-
-      # ---------- Spend is recorded even when the run fails (D-099) ----------
-      # The monthly cap is derived from committed corpus manifests, so a run
-      # that called models and then died would spend budget the cap can never
-      # see. tools/extract.ts persists accounting after each batch; this step
-      # commits it when the steps above did not run.
+      # ---------- Accounting lands FIRST, unconditionally (D-099/D-168) -------
+      # This step used to sit AFTER `npm run validate`, and so did its own
+      # fallback — which then re-ran the same failing validate. A broken ledger
+      # therefore blocked both commit paths, and run 31095467232's spend was
+      # lost: real money the monthly cap (derived from committed manifests) can
+      # never see. The two questions are now separated in the order that
+      # matters: "is the money recorded" is answered before "was the run sound".
       #
-      # Scoped to corpora/extraction ONLY. `proposals` stays fail-closed: a
-      # failed run's partial proposals must never reach the queue (rule 8).
-      - name: Commit extraction accounting even on failure
-        if: always() && steps.commit.outcome != 'success'
+      # Scoped to corpora/extraction ONLY, and it runs on `always()` so a failed
+      # extraction still records what it burned. `proposals` is deliberately not
+      # here — it stays fail-closed behind validation below (rule 8).
+      - name: Record extraction spend before anything can block it
+        if: always()
         run: |
           set -euo pipefail
           if [ -z "$(git status --porcelain corpora/extraction)" ]; then
             echo "No extraction accounting to record — the run spent nothing."
             exit 0
           fi
-          # Discard the failed run's partial proposals before validating, so
-          # this step can never commit an unreviewable proposal and validation
-          # judges only the accounting we are about to land.
+          # A failed run's partial proposals must never reach the queue, and
+          # must not ride along in this commit either.
           git checkout -- proposals 2>/dev/null || true
           git clean -fd proposals
-          if ! npm run validate; then
-            echo "::error::extraction accounting failed validation — not committed; \
-            the run's spend is visible in the Actions log only."
-            exit 1
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add corpora/extraction
-          git commit -m "data: record extraction spend for a failed ${{ inputs.mode }} run on ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
-          git push
+          git commit -m "data: record extraction spend for ${{ inputs.mode }} on ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
+          # Another run in this concurrency group may have pushed meanwhile;
+          # rebase rather than fail, because losing the race must not lose the
+          # spend record.
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Validate generated proposals and manifest
+        run: npm run validate
+
+      # Proposals commit only once validation has passed. A ledger recorded as
+      # `broken` no longer fails validate (D-168) — it is reported — so a broken
+      # run can still land its proposals if they are otherwise valid, while the
+      # job below still goes red so the breakage is impossible to miss.
+      - name: Commit reviewed proposals
+        if: success()
+        run: |
+          set -euo pipefail
+          if [ -n "$(git status --porcelain proposals corpora/extraction)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add proposals corpora/extraction
+            git commit -m "data: extract ${{ inputs.mode }} for ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          else
+            echo "No novel grounded proposals — nothing to commit."
+          fi
+
+      # ---------- A broken ledger fails the job, after the spend is safe ------
+      # D-132: an unbalanced run cannot say what it did, so every number it
+      # reports is unsound and the run must not read as green. This runs last,
+      # so the accounting is already committed by the time the job goes red.
+      - name: Fail the job if the ledger did not balance
+        if: always()
+        run: |
+          set -euo pipefail
+          if node -e '
+            const { readFileSync } = require("node:fs");
+            const m = JSON.parse(readFileSync("corpora/extraction/manifest.json", "utf8"));
+            const runs = [...(m.last_run ? [m.last_run] : []), ...(m.run_history ?? [])];
+            const mine = runs.filter((r) => r.github_run_id === Number(process.env.GITHUB_RUN_ID));
+            const broken = mine.filter((r) => r.status === "broken");
+            if (broken.length > 0) {
+              console.error(`ledger did not balance for ${broken.length} run entry/entries`);
+              process.exit(1);
+            }
+          '; then
+            echo "Candidate ledger balanced."
+          else
+            echo "::error::candidate ledger did not balance — the run is BROKEN (D-132). \
+            Its spend IS committed and its manifest entry says broken; the funnel numbers \
+            it reports are not trustworthy. Diagnose before reading its yield."
+            exit 1
+          fi

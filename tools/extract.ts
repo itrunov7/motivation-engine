@@ -4020,6 +4020,35 @@ export async function runExtraction(args: {
     }
   };
 
+  /**
+   * Print what the run actually spent, to stdout, once, whatever happens next
+   * (D-168).
+   *
+   * Until now the spend existed in exactly two places: manifest.json and the
+   * ops-progress heartbeat. The terminal console.log prints `stats`, which
+   * carries records and candidates but no tokens, calls or USD. So when run
+   * 31095467232's accounting commit was blocked, extract.yml's error message —
+   * "the run's spend is visible in the Actions log only" — was false. The log
+   * had never contained it, and the figure is now unrecoverable.
+   *
+   * Printed BEFORE any commit step can be reached, so the Actions log is a real
+   * fallback rather than a claimed one. Guarded because both the failure path
+   * and the terminal path call it and a run must not report two spends.
+   */
+  let spendReported = false;
+  const reportMeasuredSpend = (outcome: string): void => {
+    if (spendReported) return;
+    spendReported = true;
+    const usd = computeUsd(args.config, context.usage);
+    console.log(
+      `[extract] SPEND, MEASURED from the responses (${outcome}): ` +
+        `${context.usage.calls} call(s), ` +
+        `${context.usage.input.toLocaleString()} tokens in / ` +
+        `${context.usage.output.toLocaleString()} out, $${usd.toFixed(6)}. ` +
+        `This line is the fallback record if the accounting commit does not land.`,
+    );
+  };
+
   const draftContextBase = isDraftMode(args.mode)
     ? {
         seeds: seedStubs(),
@@ -4647,6 +4676,9 @@ export async function runExtraction(args: {
       // Whatever ended the run, the tokens it already burned are real. Record
       // them before the error propagates (D-099) so the monthly cap sees them.
       persistAccounting("failed");
+      // And print them, because the file this just wrote may never be committed
+      // — which is exactly what happened to run 31095467232 (D-168).
+      reportMeasuredSpend("run failed");
       throw error;
     }
     stats.records_remaining = currentPlan.records.remaining;
@@ -4756,6 +4788,7 @@ export async function runExtraction(args: {
       summary,
     );
     persistAccounting("failed");
+    reportMeasuredSpend("all response batches failed validation");
     throw new Error(
       `Every OpenRouter response batch failed validation (${responseBatchesAttempted}/${responseBatchesAttempted})`,
     );
@@ -4813,6 +4846,7 @@ export async function runExtraction(args: {
     true,
     summary,
   );
+  reportMeasuredSpend(runIncomplete ? "slice completed" : "completed");
   return { proposals, stats, usage: context.usage };
 }
 

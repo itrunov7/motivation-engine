@@ -1811,12 +1811,48 @@ function main(): void {
         const byRunId = new Map(
           (ledger.runs ?? []).map((run) => [run.run_id, run]),
         );
+        // Read the manifest BEFORE judging the ledger, because whether an
+        // unbalanced run is an error depends on whether the run owned up to it
+        // (D-168). Until now these two checks contradicted each other: this loop
+        // hard-failed on any violation, while the check below REQUIRED an
+        // unbalanced run to be labelled "broken" — so the only state that
+        // satisfied the second was one the first had already rejected, and
+        // "broken" could never survive validation. The status existed in the
+        // type and in 0 of 22 committed runs.
+        //
+        // That contradiction is what lost run 31095467232's spend: its ledger
+        // did not balance, validate failed, and BOTH commit paths in extract.yml
+        // were gated behind that same validate.
+        const manifestForStatus = existsSync(PATHS.extractionManifest)
+          ? (readJson(PATHS.extractionManifest) as CorpusManifest | undefined)
+          : undefined;
+        const brokenRunIds = new Set(
+          [
+            ...(manifestForStatus?.last_run ? [manifestForStatus.last_run] : []),
+            ...(manifestForStatus?.run_history ?? []),
+          ]
+            .filter((run) => run.status === "broken")
+            .map((run) => run.timestamp),
+        );
         for (const run of ledger.runs ?? []) {
           const violations = [
             ...checkLedgerBalance(run),
             ...checkLedgerDetail(run),
           ];
+          // A run its own manifest entry calls "broken" is REPORTED, not failed.
+          // The point of D-132's broken status is to file an unsound run
+          // honestly rather than to make it uncommittable — an unsound run whose
+          // accounting cannot land is a run whose spend the monthly cap never
+          // sees. An unbalanced run NOT labelled broken still fails hard below:
+          // the concession is to the admission, never to the imbalance.
+          const admitted = brokenRunIds.has(run.run_id);
           for (const violation of violations) {
+            if (admitted) {
+              console.warn(
+                `  ! ${rel(PATHS.candidateLedger)}: ${run.run_id}: ${violation} — run is recorded as broken (D-132/D-168)`,
+              );
+              continue;
+            }
             fail(PATHS.candidateLedger, `${run.run_id}: ${violation}`);
             ok = false;
           }
@@ -1896,8 +1932,16 @@ function main(): void {
             (ledger.runs ?? []).filter(
               (run) => run.reconstruction.status === status,
             ).length;
+          // Never say "N runs balance" when some of them do not. A broken run
+          // that passes because it admitted to being broken is still a broken
+          // run, and a summary that folds it into the balanced count is the
+          // hardcoded-progress failure the honesty rule exists to prevent.
+          const brokenCount = (ledger.runs ?? []).filter((run) =>
+            brokenRunIds.has(run.run_id),
+          ).length;
           console.log(
-            `  ✓ ${rel(PATHS.candidateLedger)} valid (${ledger.runs.length} runs balance; ` +
+            `  ✓ ${rel(PATHS.candidateLedger)} valid (${ledger.runs.length - brokenCount} of ${ledger.runs.length} runs balance` +
+              `${brokenCount > 0 ? `, ${brokenCount} recorded broken` : ""}; ` +
               `${count("recorded")} recorded, ${count("reconstructed")} reconstructed, ` +
               `${count("partial")} partly reconstructed, ${count("unreconstructable")} declared unreconstructable, D-132)`,
           );

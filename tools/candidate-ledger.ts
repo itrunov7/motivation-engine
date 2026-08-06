@@ -84,6 +84,13 @@ export class CandidateLedger {
   private readonly ordinals = new Map<string, number>();
   private consolidated = 0;
   private expanded = 0;
+  /**
+   * One per synthesis call. Recorded because `consolidated` and `expanded` are
+   * sums over folds, and the check that reads them cannot tell an error from an
+   * ordinary multi-mechanism run without knowing how many folds produced them
+   * (D-168).
+   */
+  private folds = 0;
 
   /**
    * Identify a candidate without storing what it said. Ordinal within its
@@ -115,6 +122,7 @@ export class CandidateLedger {
 
   /** One mechanism's cheap-to-strong fold, accumulated as it happens. */
   recordSynthesisFold(cheapIn: number, strongOut: number): void {
+    this.folds += 1;
     if (cheapIn > strongOut) this.consolidated += cheapIn - strongOut;
     else this.expanded += strongOut - cheapIn;
   }
@@ -174,6 +182,7 @@ export class CandidateLedger {
         consolidated: this.consolidated,
         expanded: this.expanded,
         candidates_strong: strong.candidates,
+        folds: this.folds,
       },
       strong,
       balanced: true,

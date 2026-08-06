@@ -1851,6 +1851,15 @@ export interface CandidateLedgerSynthesisStage {
   consolidated: number;
   expanded: number;
   candidates_strong: number;
+  /**
+   * How many cheap-to-strong folds this run performed — one per synthesis call,
+   * so one per mechanism per slice (D-168). `consolidated` and `expanded` are
+   * run-level SUMS over these folds, which is why "both non-zero" says nothing
+   * about a multi-fold run: one mechanism folding 4 -> 1 and another folding
+   * 1 -> 3 is ordinary. Optional because runs recorded before D-168 do not
+   * carry it, and a missing count must not be read as a fold count of zero.
+   */
+  folds?: number;
 }
 
 /** Strong-pass totals; the fates here partition candidates_strong. */

@@ -2728,3 +2728,96 @@ test("the ledger builder counts the fates it is told and derives nothing", () =>
   assert.equal(afterFailure.cheap?.into_synthesis, 1);
 });
 
+test("a run that consolidates in one mechanism and expands in another balances (D-168)", () => {
+  // The case that broke run 31095467232 and cost it its spend record. Two
+  // mechanisms, opposite folds: A takes 2 cheap candidates to 1 composed,
+  // B takes 1 to 2. Run-level consolidated=1 AND expanded=1, while E3
+  // (into_synthesis + expanded == consolidated + candidates_strong) is exact:
+  // 3 + 1 == 1 + 3.
+  const ledger = new CandidateLedger();
+  const foldA = ["A-1", "A-2"].map(() => {
+    const id = ledger.id("CL-14", "cheap");
+    ledger.record({
+      candidate_id: id,
+      mechanism_id: "CL-14",
+      pass: "cheap",
+      fate: "into_synthesis",
+    });
+    return id;
+  });
+  const foldB = [ledger.id("MM-15", "cheap")];
+  ledger.record({
+    candidate_id: foldB[0],
+    mechanism_id: "MM-15",
+    pass: "cheap",
+    fate: "into_synthesis",
+  });
+  ledger.recordSynthesisFold(foldA.length, 1); // 2 -> 1, consolidates
+  ledger.recordSynthesisFold(foldB.length, 2); // 1 -> 2, expands
+
+  for (const [mechanismId, count] of [
+    ["CL-14", 1],
+    ["MM-15", 2],
+  ] as const) {
+    for (let index = 0; index < count; index += 1) {
+      ledger.record({
+        candidate_id: ledger.id(mechanismId, "strong"),
+        mechanism_id: mechanismId,
+        pass: "strong",
+        fate: "proposed",
+        proposal_id: `effect-${mechanismId.toLowerCase()}-${index}`,
+      });
+    }
+  }
+
+  const built = ledger.build({
+    runId: "2026-08-06T11:00:16.322Z",
+    dispatchId: "cl14-real-run-2",
+    githubRunId: 31095467232,
+    mode: "realizations",
+    scope: "tracing-and-pointing",
+  });
+
+  assert.equal(built.synthesis?.consolidated, 1);
+  assert.equal(built.synthesis?.expanded, 1);
+  assert.equal(built.synthesis?.folds, 2);
+  // Both non-zero, two folds, and it BALANCES. Before D-168 this exact shape
+  // was reported as a violation, npm run validate failed, and both commit paths
+  // in extract.yml were gated behind that validate.
+  assert.deepEqual(checkLedgerBalance(built), []);
+  assert.equal(built.balanced, true);
+});
+
+test("one fold cannot both consolidate and expand, and the check still says so (D-168)", () => {
+  // Gating the check on the fold count must not defang it. A single-fold run
+  // whose totals claim both directions is arithmetically impossible, so it is
+  // still a violation — the concession is to multi-fold runs only.
+  const singleFold = ledgerFixture({
+    synthesis: {
+      into_synthesis: 2,
+      consolidated: 1,
+      expanded: 1,
+      candidates_strong: 2,
+      folds: 1,
+    },
+  });
+  const violations = checkLedgerBalance(singleFold);
+  assert(
+    violations.some((violation) => violation.includes("a single fold can only do one of the two")),
+    `expected the single-fold violation, got: ${violations.join(" | ")}`,
+  );
+
+  // A run recorded before D-168 carries no fold count. It is not judged by this
+  // check at all — asserting it folded once would invent a measurement nobody
+  // took, which is how a heuristic becomes a false verdict on old data.
+  const legacy: CandidateLedgerRun = {
+    ...singleFold,
+    synthesis: { ...singleFold.synthesis!, folds: undefined },
+  };
+  assert(
+    !checkLedgerBalance(legacy).some((violation) =>
+      violation.includes("a single fold can only do one of the two"),
+    ),
+  );
+});
+
