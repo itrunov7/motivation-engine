@@ -81,8 +81,10 @@ function saturationSummary(
 }
 
 /**
- * Recent runs across every corpus manifest, newest first. Each manifest keeps
- * its last 20 runs (RUN_HISTORY_LIMIT); we merge and take the newest `limit`.
+ * Recent runs across every corpus manifest, newest first. Most manifests keep
+ * only their last 20 runs (RUN_HISTORY_LIMIT); the extraction manifest is
+ * append-only (D-166) and can carry more. Either way we merge everything
+ * available and take the newest `limit` — a display cut, not a storage one.
  */
 export function readRecentRuns(limit = 12): LiveRecentRun[] {
   const runs: LiveRecentRun[] = [];

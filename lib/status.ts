@@ -331,6 +331,13 @@ export function loadCorpusManifests(): CorpusEntry[] {
  * run_history cap, mirrored from tools/connectors/types.ts RUN_HISTORY_LIMIT
  * (lib/ never imports from tools/, D-020). Used only for the honest cockpit
  * caveat that the rollup sees retained runs only.
+ *
+ * NOT true of the extraction manifest since D-166: its run_history and its
+ * paired candidate ledger are append-only, exactly because this cap was
+ * silently evicting spend the monthly rollup could no longer see. The cap
+ * below still applies to every other connector's manifest — extraction's
+ * writer (tools/extract.ts mergeExtractionRunHistory) is the one exception,
+ * and the cockpit caveat says so rather than implying it universally.
  */
 export const RUN_HISTORY_LIMIT = 20;
 
@@ -371,7 +378,8 @@ function runMonthKey(run: CorpusManifestRun): string | null {
  * Rolls up run_history across all corpus manifests into per-connector and
  * total figures for the current UTC calendar month (D-022). The rollup only
  * sees runs still retained in run_history (capped at RUN_HISTORY_LIMIT per
- * connector) — the cockpit states this caveat honestly.
+ * connector, except extraction, which is append-only as of D-166) — the
+ * cockpit states this caveat honestly.
  */
 export function computeMonthlyRollup(
   manifests: CorpusEntry[],

@@ -27,9 +27,6 @@ import type {
 const ROOT = join(__dirname, "..");
 export const LEDGER_FILE = join(ROOT, "corpora", "extraction", "ledger.json");
 
-/** Matched to the manifest's run_history window so the two stay in step. */
-const LEDGER_RUN_LIMIT = 20;
-
 export function readCandidateLedger(
   path: string = LEDGER_FILE,
 ): CandidateLedgerFile {
@@ -44,15 +41,19 @@ export function readCandidateLedger(
  * Same idempotency contract as mergeExtractionRunHistory (D-099): accounting is
  * written repeatedly while a run is in flight and each write supersedes the
  * last rather than stacking a second entry for the same run.
+ *
+ * Append-only otherwise (D-166), and this file said why it must match: "matched
+ * to the manifest's run_history window so the two stay in step." That window
+ * is no longer capped, so a ledger that still evicted at 20 would drift out of
+ * step with it — every manifest run past the ledger's window would fail
+ * validate's "no candidate-ledger entry" check (D-132) despite being a run
+ * that genuinely balanced.
  */
 export function mergeLedgerRuns(
   previous: readonly CandidateLedgerRun[],
   run: CandidateLedgerRun,
 ): CandidateLedgerRun[] {
-  return [
-    run,
-    ...previous.filter((entry) => entry.run_id !== run.run_id),
-  ].slice(0, LEDGER_RUN_LIMIT);
+  return [run, ...previous.filter((entry) => entry.run_id !== run.run_id)];
 }
 
 export function writeCandidateLedger(
