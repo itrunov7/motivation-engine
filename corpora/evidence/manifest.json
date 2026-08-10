@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-10T08:33:19.725Z",
+    "timestamp": "2026-08-10T08:34:24.291Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 764,
     "files_written": 1,
-    "duration_s": 37.19,
+    "duration_s": 34.77,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 39,
-      "duration_s": 37.19,
+      "api_calls": 38,
+      "duration_s": 34.77,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-10T08:34:24.291Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 764,
+      "files_written": 1,
+      "duration_s": 34.77,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 38,
+        "duration_s": 34.77,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-10T08:33:19.725Z",
       "status": "success",
@@ -441,28 +462,6 @@
       "cost": {
         "api_calls": 1,
         "duration_s": 0.14,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-03T10:36:30.773Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "CO-19",
-        "terms": "competence need satisfaction self-determination b2b enterprise;perceived competence technology use b2b enterprise;self-efficacy interface use b2b enterprise"
-      },
-      "records_fetched": 52,
-      "files_written": 0,
-      "duration_s": 67.01,
-      "error": "upstream API quota requires a later continuation; logical run CO-19-msd3gmuv checkpointed at query 44/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 55,
-        "duration_s": 67.01,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
