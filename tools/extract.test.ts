@@ -2422,6 +2422,7 @@ test("run summary exposes every quality-gate and cap outcome", () => {
           monthly_token_cap: 0,
           transport_error: 1,
           malformed_answer: 0,
+          answer_truncated: 0,
         },
         dropped_volume_cap: 4,
         dropped_volume_cap_high_confidence: 1,
@@ -2449,7 +2450,7 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       // place that distinction survives the process that produced it.
       verdict_unavailable: "2",
       verdict_unavailable_by_reason:
-        "no_model_id=0 per_run_token_cap=1 monthly_token_cap=0 transport_error=1 malformed_answer=0",
+        "no_model_id=0 per_run_token_cap=1 monthly_token_cap=0 transport_error=1 malformed_answer=0 answer_truncated=0",
       dropped_volume_cap: "4",
       dropped_volume_cap_high_confidence: "1",
       records_eligible: "200",

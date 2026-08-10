@@ -1013,6 +1013,9 @@ export function replayTransferability(
   if (stored.ruleset_version === TRANSFERABILITY_RULESET_VERSION_V2) {
     return auditTransferabilityV2(stored, claim);
   }
+  if (stored.ruleset_version === TRANSFERABILITY_RULESET_VERSION_V3) {
+    return auditTransferabilityV3(stored, claim);
+  }
   return `stored under unrecognised ruleset v${stored.ruleset_version}`;
 }
 
@@ -1023,7 +1026,22 @@ function findCheck(
   return verdict.checks.find((result) => result.check === check);
 }
 
-function auditTransferabilityV2(
+/**
+ * The part of the audit v2 and v3 share: the three deterministic checks are
+ * recomputed and compared exactly, and VARIABLE — which cannot be recomputed
+ * without the model that produced it — is audited structurally.
+ *
+ * Shared because D-165 made v3's SUBJECT/DIRECTION/POPULATION computation
+ * byte-identical to v2's on purpose (both call judgeDeterministicChecks), so
+ * that the two rulesets differ in scoring alone. Auditing them from one function
+ * is that guarantee expressed in code: if the two ever drifted apart, this would
+ * stop compiling rather than quietly start checking two different things.
+ *
+ * What it deliberately does NOT verify is the scoring — that is the part that
+ * differs, and each ruleset's own audit applies its own rule to the stored
+ * checks so a tampered verdict body cannot survive.
+ */
+function auditSharedStructure(
   stored: TransferabilityVerdict,
   claim: TransferabilityClaim,
 ): string | null {
@@ -1059,6 +1077,59 @@ function auditTransferabilityV2(
   if (variable.outcome === "fail" && leverPresent) {
     return "variable failed yet carries a lever";
   }
+  return null;
+}
+
+/**
+ * The v3 audit: shared structure, then v3's own scoring rule.
+ *
+ * Every claim v3 makes about itself is re-derived from its own stored checks —
+ * that the lever alone decided it, that no escalation happened, and that the
+ * modifiers recorded are exactly the non-VARIABLE checks that did not pass. A
+ * verdict edited to admit a claim VARIABLE refused, or to drop a modifier that
+ * would have flagged it, fails here rather than passing as history.
+ */
+function auditTransferabilityV3(
+  stored: TransferabilityVerdict,
+  claim: TransferabilityClaim,
+): string | null {
+  const structural = auditSharedStructure(stored, claim);
+  if (structural) return structural;
+
+  const score = scoreChecksV3(stored.checks);
+  if (score.transferable !== stored.transferable) {
+    return `stored transferable=${stored.transferable} disagrees with its own checks`;
+  }
+  // Not merely "should be false" — under v3 there is no scoring path that can
+  // set it, so a true here means the verdict was written by something other than
+  // scoreChecksV3.
+  if (stored.escalated_by_warning_pair) {
+    return "escalated_by_warning_pair is true on a v3 verdict, which has no escalation path";
+  }
+  const storedModifiers = stored.modifiers_flagged;
+  if (!Array.isArray(storedModifiers)) {
+    return "v3 verdict carries no modifiers_flagged";
+  }
+  const expected = score.modifiers_flagged;
+  const sameSet =
+    storedModifiers.length === expected.length &&
+    expected.every((check) => storedModifiers.includes(check));
+  if (!sameSet) {
+    return (
+      `modifiers_flagged disagrees with its own checks: stored [${storedModifiers.join(", ")}], ` +
+      `replayed [${expected.join(", ")}]`
+    );
+  }
+  return null;
+}
+
+function auditTransferabilityV2(
+  stored: TransferabilityVerdict,
+  claim: TransferabilityClaim,
+): string | null {
+  const structural = auditSharedStructure(stored, claim);
+  if (structural) return structural;
+
   const score = scoreChecks(stored.checks);
   if (score.transferable !== stored.transferable) {
     return `stored transferable=${stored.transferable} disagrees with its own checks`;

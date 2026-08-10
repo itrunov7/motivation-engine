@@ -14,19 +14,48 @@
  * itself: `npm run extraction-report -- effects-wide-` reads exactly the runs
  * dispatched with that prefix and nothing else.
  *
- * Two distributions are reported that no single-mechanism run could establish:
- * span_role outcomes across every candidate, and triage flags across every
- * resulting proposal. The second is bounded by what the flags can see —
- * computeProposalFlags raises OVERREACH for effect proposals, while DUPLICATE
- * and WEAK ANCHOR are realization-only checks (D-147), so an effects-only batch
- * reports those two as zero BY CONSTRUCTION and the report says so rather than
- * presenting three measured zeros.
+ * Three distributions are reported that no single-mechanism run could establish:
+ * span_role outcomes across every candidate, triage flags across every
+ * resulting proposal, and the transferable share per mechanism. The triage one
+ * is bounded by what the flags can see — computeProposalFlags raises OVERREACH
+ * for effect proposals, while DUPLICATE and WEAK ANCHOR are realization-only
+ * checks (D-147), so an effects-only batch reports those two as zero BY
+ * CONSTRUCTION and the report says so rather than presenting three measured
+ * zeros.
+ *
+ * TRANSFERABLE SHARE PER MECHANISM. The claim that motivated this section — ten
+ * of eighteen mechanisms predict zero transferable proposals under ruleset v1 —
+ * was an estimate produced outside this repository, and D-162 says so in the
+ * decision itself: no committed script emitted it. This section is that script.
+ * It recomputes v1 offline by calling judgeTransferability, the same function
+ * the filter uses, over stored proposals; it makes no model call and spends
+ * nothing.
+ *
+ * Two populations are printed side by side because they answer different
+ * questions and conflating them would be the easiest mistake to make here:
+ * `batch` is the proposals this batch produced, `queue` is every proposal
+ * targeting that mechanism whatever produced it. A batch that read nothing has
+ * an empty batch column and a full queue column, and that is the honest shape
+ * of a resumed sweep rather than a gap.
+ *
+ * What this section CANNOT report is the v2 reading. Ruleset v2 is what extract
+ * actually calls, and it is the only ruleset that emits identified_lever — but
+ * it needs a model call per claim, and the probe that makes them
+ * (tools/transferability-probe.ts) does not persist its verdicts onto
+ * proposals. So `held_nt` and `unavail` below, read from the manifest, are the
+ * only v2 evidence a committed artifact carries, and a mechanism whose runs
+ * predate the v2 gate reports them as absent rather than as zero.
  */
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { checkLedgerBalance, checkLedgerDetail } from "../lib/candidate-ledger";
 import { computeProposalFlags, type FlagKind } from "../lib/review-flags";
+import {
+  TRANSFERABILITY_RULESET_VERSION,
+  judgeTransferability,
+  transferabilityClaimOfProposal,
+} from "../lib/transferability";
 import type {
   CandidateLedgerFile,
   CandidateLedgerRun,
@@ -143,6 +172,11 @@ function main(): void {
       pad("enrich", 7),
       pad("merged", 7),
       pad("held", 5),
+      // D-160 records held_non_transferable in the manifest and this table read
+      // only held_low_confidence, so every proposal the transferability filter
+      // refused was invisible in the one view that claims to account for the
+      // funnel. A refusal is a fate; it belongs in the column that shows fates.
+      pad("held_nt", 8),
       pad("ungr", 5),
       pad("vcap", 5),
       pad("ledger", 10),
@@ -161,6 +195,11 @@ function main(): void {
   const unavailableByReason: Record<string, number> = {};
   let unavailableTotal = 0;
   let unavailableMeasuredRuns = 0;
+  /** Runs whose params carry held_non_transferable at all — see the "-" above. */
+  let heldNtMeasuredRuns = 0;
+  const heldNtByMech: Record<string, number> = {};
+  const unavailByMech: Record<string, number> = {};
+  const mechsInBatch: string[] = [];
   let usd = 0;
   let tokensIn = 0;
   let tokensOut = 0;
@@ -197,6 +236,7 @@ function main(): void {
       enrich: num(params, "proposed_enrich"),
       merged: num(params, "merged_into_pending"),
       held: num(params, "held_low_confidence"),
+      held_nt: num(params, "held_non_transferable"),
       ungr: num(params, "dropped_ungrounded"),
       vcap: num(params, "dropped_volume_cap"),
       // Carried for the aggregate equations below, not for the table.
@@ -212,8 +252,14 @@ function main(): void {
       draft_cap: num(params, "dropped_draft_cap"),
     };
     for (const [key, value] of Object.entries(cells)) bump(totals, key, value);
+    if (!mechsInBatch.includes(mech)) mechsInBatch.push(mech);
+    if (params.held_non_transferable !== undefined) {
+      heldNtMeasuredRuns += 1;
+      bump(heldNtByMech, mech, cells.held_nt);
+    }
     if (params.verdict_unavailable !== undefined) {
       unavailableMeasuredRuns += 1;
+      bump(unavailByMech, mech, num(params, "verdict_unavailable"));
       unavailableTotal += num(params, "verdict_unavailable");
       for (const pair of (params.verdict_unavailable_by_reason ?? "").split(/\s+/)) {
         const [reason, count] = pair.split("=");
@@ -238,6 +284,10 @@ function main(): void {
         pad(cells.enrich, 7),
         pad(cells.merged, 7),
         pad(cells.held, 5),
+        // "-" not 0 when the run predates the counter: a run that could not
+        // have refused anything must not read as a run that refused nothing.
+        // The same distinction the verdict_unavailable block below insists on.
+        pad(params.held_non_transferable === undefined ? "-" : cells.held_nt, 8),
         pad(cells.ungr, 5),
         pad(cells.vcap, 5),
         pad(ledgerCell, 10),
@@ -246,7 +296,7 @@ function main(): void {
     );
   }
 
-  console.log("-".repeat(96));
+  console.log("-".repeat(104));
   console.log(
     [
       pad("TOTAL", 16),
@@ -259,6 +309,7 @@ function main(): void {
       pad(totals.enrich ?? 0, 7),
       pad(totals.merged ?? 0, 7),
       pad(totals.held ?? 0, 5),
+      pad(heldNtMeasuredRuns === 0 ? "-" : (totals.held_nt ?? 0), 8),
       pad(totals.ungr ?? 0, 5),
       pad(totals.vcap ?? 0, 5),
       pad("", 10),
@@ -406,6 +457,91 @@ function main(): void {
     }
   }
 
+  // ---------- transferable share per mechanism ----------
+  // Deliberately placed against the block above: that one says how often the
+  // filter did not reach a verdict, this one says what the verdicts were. Read
+  // apart, either can be mistaken for the whole picture.
+  const runIds = new Set(
+    runs
+      .map((run) => run.github_run_id)
+      .filter((id): id is number => typeof id === "number")
+      .map((id) => `extraction:github-actions-${id}`),
+  );
+  const allProposals = listProposals();
+  const batchProposals = allProposals.filter(({ proposal }) =>
+    runIds.has(proposal.proposed_by ?? ""),
+  );
+
+  /** v1, recomputed offline by the filter's own function. No model, no spend. */
+  function v1Share(items: { proposal: Proposal }[]): {
+    transferable: number;
+    judgeable: number;
+  } {
+    let transferable = 0;
+    let judgeable = 0;
+    for (const { proposal } of items) {
+      const claim = transferabilityClaimOfProposal(proposal);
+      if (!claim) continue;
+      judgeable += 1;
+      if (judgeTransferability(claim).transferable) transferable += 1;
+    }
+    return { transferable, judgeable };
+  }
+
+  const share = (s: { transferable: number; judgeable: number }): string =>
+    s.judgeable === 0
+      ? "-"
+      : `${s.transferable}/${s.judgeable} (${Math.round((s.transferable / s.judgeable) * 100)}%)`;
+
+  console.log(
+    `\nTRANSFERABLE SHARE PER MECHANISM — ruleset v${TRANSFERABILITY_RULESET_VERSION}, ` +
+      "recomputed offline (D-160/D-162)",
+  );
+  console.log(
+    `  ${pad("mech", 7)}${pad("batch v1", 14)}${pad("queue v1", 14)}${pad("held_nt", 9)}unavail`,
+  );
+  let batchAll = { transferable: 0, judgeable: 0 };
+  let queueAll = { transferable: 0, judgeable: 0 };
+  const zeroMechs: string[] = [];
+  for (const mech of mechsInBatch) {
+    const inBatch = batchProposals.filter(({ proposal }) => proposal.target === mech);
+    const inQueue = allProposals.filter(({ proposal }) => proposal.target === mech);
+    const b = v1Share(inBatch);
+    const q = v1Share(inQueue);
+    batchAll = {
+      transferable: batchAll.transferable + b.transferable,
+      judgeable: batchAll.judgeable + b.judgeable,
+    };
+    queueAll = {
+      transferable: queueAll.transferable + q.transferable,
+      judgeable: queueAll.judgeable + q.judgeable,
+    };
+    if (q.judgeable > 0 && q.transferable === 0) zeroMechs.push(mech);
+    console.log(
+      `  ${pad(mech, 7)}${pad(share(b), 14)}${pad(share(q), 14)}` +
+        `${pad(heldNtByMech[mech] ?? "-", 9)}${unavailByMech[mech] ?? "-"}`,
+    );
+  }
+  console.log(
+    `  ${pad("ALL", 7)}${pad(share(batchAll), 14)}${pad(share(queueAll), 14)}` +
+      `${pad(heldNtMeasuredRuns === 0 ? "-" : (totals.held_nt ?? 0), 9)}` +
+      `${unavailableMeasuredRuns === 0 ? "-" : unavailableTotal}`,
+  );
+  console.log(
+    `  batch = proposals this batch produced; queue = every proposal targeting the ` +
+      `mechanism.\n  held_nt / unavail are v2, read from the manifest; "-" means the run ` +
+      "never recorded the\n  counter, which is not a measured zero.",
+  );
+  if (zeroMechs.length > 0) {
+    console.log(
+      `  ${zeroMechs.length} of ${mechsInBatch.length} mechanisms in this batch admit ZERO ` +
+        `under v1: ${zeroMechs.join(", ")}.\n  A zero here is a reading of the lexicon, not ` +
+        "of the corpus: v1 VARIABLE refuses whenever no\n  word from its seven groups appears, " +
+        "so a mechanism whose vocabulary it does not carry\n  cannot score above zero however " +
+        "transferable its findings are (D-162).",
+    );
+  }
+
   // ---------- span_role distribution ----------
   console.log("\nSPAN_ROLE OUTCOMES ACROSS ALL CANDIDATES (D-129)");
   const rejectedRoleTotals: Record<string, number> = {};
@@ -456,15 +592,6 @@ function main(): void {
 
   // ---------- triage flags ----------
   console.log("\nTRIAGE FLAGS ACROSS RESULTING PROPOSALS (D-138/D-139)");
-  const runIds = new Set(
-    runs
-      .map((run) => run.github_run_id)
-      .filter((id): id is number => typeof id === "number")
-      .map((id) => `extraction:github-actions-${id}`),
-  );
-  const batchProposals = listProposals().filter(({ proposal }) =>
-    runIds.has(proposal.proposed_by ?? ""),
-  );
   const flagCounts: Record<FlagKind, number> = {
     overreach: 0,
     duplicate: 0,

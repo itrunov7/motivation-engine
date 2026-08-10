@@ -33,10 +33,10 @@ import {
 import { EXTRACTION_RUN_ID_PREFIX } from "../lib/proposal-meta";
 import {
   buildVariablePrompt,
-  judgeTransferabilityV2,
+  judgeTransferabilityV3,
   parseVariableJudgement,
   transferabilityClaimOfProposal,
-  TRANSFERABILITY_RULESET_VERSION_V2,
+  TRANSFERABILITY_RULESET_VERSION_V3,
   type TransferabilityClaim,
 } from "../lib/transferability";
 import {
@@ -1199,7 +1199,14 @@ export interface Usage {
 }
 
 interface OpenRouterResponse {
-  choices?: { message?: { content?: string } }[];
+  /**
+   * `finish_reason` is read only to tell a TRUNCATED answer from a malformed
+   * one. "length" means the model was still writing when it hit our max_tokens
+   * ceiling, which is our sizing decision failing, not the model failing the
+   * format — opposite causes, opposite fixes, and indistinguishable while they
+   * shared one reason code.
+   */
+  choices?: { message?: { content?: string }; finish_reason?: string }[];
   usage?: { prompt_tokens?: number; completion_tokens?: number };
 }
 
@@ -2413,14 +2420,29 @@ export async function judgeVariableViaModel(
       context.usage.byTier.strong.calls += 1;
     }
     const content = body.choices?.[0]?.message?.content;
+    // Reported by the API when generation stopped at max_tokens rather than at
+    // the model's own end of answer.
+    const truncated = body.choices?.[0]?.finish_reason === "length";
     if (typeof content !== "string") {
-      return variableUnavailable("malformed_answer", "response carried no text content");
+      return truncated
+        ? variableUnavailable("answer_truncated", `cut at the ${maxTokens}-token ceiling before any content`)
+        : variableUnavailable("malformed_answer", "response carried no text content");
     }
     const judgement = parseVariableJudgement(content);
     // The raw answer is deliberately NOT carried into `detail`. A malformed
     // model answer is not evidence, and a proposal is not the place to store it.
+    //
+    // Order matters: a truncated answer is ALSO unparseable, so asking "was it
+    // cut off" before "was it malformed" is what keeps the ceiling's own
+    // failures out of the malformed count. The first wide probe recorded 7 of
+    // its 11 unjudged sitting at exactly this ceiling, all filed as malformed.
     if (!judgement) {
-      return variableUnavailable("malformed_answer", "answer was not a parseable judgement");
+      return truncated
+        ? variableUnavailable(
+            "answer_truncated",
+            `answer cut at the ${maxTokens}-token ceiling before it could be parsed`,
+          )
+        : variableUnavailable("malformed_answer", "answer was not a parseable judgement");
     }
     return { ok: true, judgement };
   } catch (error: unknown) {
@@ -4509,9 +4531,20 @@ export async function runExtraction(args: {
         // removes a record from consideration with no diagnostic at all.
         const claim = transferabilityClaimOfProposal(proposal);
         // D-162 — VARIABLE is a model judgement (see judgeVariableViaModel), fed
-        // into the v2 verdict alongside the three deterministic checks. It fails
-        // open: model unreachable, cap spent or malformed answer admits the
-        // claim WITHOUT a verdict rather than refusing it.
+        // into the verdict alongside the three deterministic checks. It fails
+        // open: model unreachable, cap spent, truncated or malformed answer
+        // admits the claim WITHOUT a verdict rather than refusing it.
+        //
+        // The verdict is scored under RULESET v3: the named lever decides, and
+        // SUBJECT, DIRECTION and POPULATION are recorded as modifiers rather
+        // than refusals. v3 was built by D-165 and left unwired pending the
+        // measurement that would justify adopting it; the wide probe supplied
+        // it, over 185 judged claims rather than the 10 D-165 reasoned from.
+        // VARIABLE named a lever on 185 of 185, and 105 of the 135 refusals were
+        // made against claims whose lever it had already named — DIRECTION 102
+        // and SUBJECT 79, against VARIABLE's own 30. The three deterministic
+        // checks still run and still state their reasons; they have lost only
+        // the power to refuse.
         //
         // The two "no verdict" cases are NOT the same thing and must not produce
         // the same record:
@@ -4524,7 +4557,7 @@ export async function runExtraction(args: {
         const variableOutcome = claim ? await judgeVariableViaModel(context, claim) : null;
         const verdict =
           claim && variableOutcome?.ok
-            ? judgeTransferabilityV2(claim, variableOutcome.judgement)
+            ? judgeTransferabilityV3(claim, variableOutcome.judgement)
             : null;
         // Recorded on admitted claims too: a gate that files only its refusals
         // cannot be audited for what it let through.
@@ -4535,7 +4568,7 @@ export async function runExtraction(args: {
           judged = {
             ...proposal,
             verdict_unavailable: {
-              ruleset_version: TRANSFERABILITY_RULESET_VERSION_V2,
+              ruleset_version: TRANSFERABILITY_RULESET_VERSION_V3,
               reason: variableOutcome.reason,
               ...(variableOutcome.detail === undefined
                 ? {}

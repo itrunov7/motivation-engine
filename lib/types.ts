@@ -633,6 +633,21 @@ export const TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS = [
   "transport_error",
   /** The model answered, and the answer was not a judgement we could parse. */
   "malformed_answer",
+  /**
+   * The model was still writing when it hit the call's max_tokens ceiling, so
+   * the JSON arrived cut off mid-value.
+   *
+   * Split out of `malformed_answer` because the two have opposite fixes and were
+   * indistinguishable while they shared a code. A malformed answer is the model
+   * failing to follow the format; a truncated one is the model following it and
+   * being cut off by a ceiling WE set — the first wide probe recorded 11
+   * unjudged as `malformed_answer`, of which 7 were sitting at exactly the
+   * 200-token ceiling, four of them on one mechanism. That reads as a corpus
+   * problem until the codes are separated, at which point it reads as a sizing
+   * one. The ceiling is deliberately NOT changed here: naming the failure is
+   * what makes changing it measurable.
+   */
+  "answer_truncated",
 ] as const;
 
 export type TransferabilityVerdictUnavailableReason =
