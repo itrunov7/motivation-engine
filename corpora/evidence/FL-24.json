@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-10T10:03:02.756Z",
+  "fetched_at": "2026-08-10T10:05:09.366Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -245,8 +245,8 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 0
     },
     {
       "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
@@ -421,12 +421,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 44
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
@@ -524,8 +524,8 @@
       {
         "angle": "application",
         "queries": 6,
-        "returned": 25,
-        "unique_records": 25
+        "returned": 0,
+        "unique_records": 0
       },
       {
         "angle": "critique",
@@ -562,16 +562,16 @@
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 76,
-        "unique_records": 76
+        "returned": 51,
+        "unique_records": 51
       }
     ],
-    "recent_records": 64,
+    "recent_records": 44,
     "recency_rate": 0.8,
     "novelty": {
       "previous_corpus_records": 833,
-      "unique_records": 80,
-      "already_in_corpus": 80,
+      "unique_records": 55,
+      "already_in_corpus": 55,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -764,6 +764,18 @@
       },
       {
         "query_index": 16,
+        "query_id": "search:relevance:semantic-scholar:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 833
+      },
+      {
+        "query_index": 17,
         "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "recency",
         "kind": "search",
@@ -775,7 +787,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 17,
+        "query_index": 18,
         "query_id": "search:citation:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "citation",
         "kind": "search",
@@ -787,7 +799,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 18,
+        "query_index": 19,
         "query_id": "search:relevance:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "relevance",
         "kind": "search",
@@ -799,7 +811,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 19,
+        "query_index": 20,
         "query_id": "search:recency:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "recency",
         "kind": "search",
@@ -811,7 +823,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 20,
+        "query_index": 21,
         "query_id": "search:citation:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "citation",
         "kind": "search",
@@ -823,7 +835,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 21,
+        "query_index": 22,
         "query_id": "search:relevance:semantic-scholar:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -835,7 +847,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 22,
+        "query_index": 23,
         "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -847,7 +859,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 23,
+        "query_index": 24,
         "query_id": "search:citation:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -859,7 +871,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 24,
+        "query_index": 25,
         "query_id": "search:relevance:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -871,7 +883,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 25,
+        "query_index": 26,
         "query_id": "search:recency:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -883,24 +895,12 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 26,
+        "query_index": 27,
         "query_id": "search:citation:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
         "returned": 8,
         "unique_returned": 3,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 833
-      },
-      {
-        "query_index": 27,
-        "query_id": "search:relevance:semantic-scholar:application:p1:flow state digital environments b2b enterprise applied intervention",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -957,12 +957,12 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 5739,
+      "estimate": 5664,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 13,
       "total_search_queries": 30,
-      "summed_upstream_results": 5811,
-      "observed_sample_multiplicity": 1.0125
+      "summed_upstream_results": 5767,
+      "observed_sample_multiplicity": 1.0182
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
