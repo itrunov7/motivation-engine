@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-10T08:35:26.393Z",
+    "timestamp": "2026-08-10T08:36:32.900Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 764,
     "files_written": 1,
-    "duration_s": 35.07,
+    "duration_s": 35.15,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 38,
-      "duration_s": 35.07,
+      "duration_s": 35.15,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-10T08:36:32.900Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 764,
+      "files_written": 1,
+      "duration_s": 35.15,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 38,
+        "duration_s": 35.15,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-10T08:35:26.393Z",
       "status": "success",
@@ -433,28 +454,6 @@
       "files_written": 0,
       "duration_s": 0.13,
       "error": "upstream API quota requires a later continuation; logical run FB-21-msd3i3h2 checkpointed at query 1/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 1,
-        "duration_s": 0.13,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-03T10:37:38.511Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "ER-22",
-        "terms": "error recovery user interface b2b enterprise;undo reversibility interaction design b2b enterprise;error message comprehension usability b2b enterprise"
-      },
-      "records_fetched": 0,
-      "files_written": 0,
-      "duration_s": 0.13,
-      "error": "upstream API quota requires a later continuation; logical run ER-22-msd3i34h checkpointed at query 1/630",
       "warnings": {
         "resume_required": true
       },
