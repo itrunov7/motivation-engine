@@ -71,6 +71,48 @@
   },
   "run_history": [
     {
+      "timestamp": "2026-08-10T11:49:48.987Z",
+      "status": "partial",
+      "params": {
+        "mode": "transferability_probe",
+        "ruleset_version": "3",
+        "target": "all",
+        "proposal_status": "pending",
+        "selected": "196",
+        "judged": "185",
+        "transferable": "155",
+        "refused": "30",
+        "escalated_by_warning_pair": "0",
+        "verdict_unavailable": "11",
+        "verdict_unavailable_reasons": "malformed_answer=11"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 738.65,
+      "warnings": {
+        "verdict_unavailable": true
+      },
+      "dispatch_id": "transfer-v3-wide",
+      "github_run_id": 31385187808,
+      "cost": {
+        "api_calls": 194,
+        "duration_s": 738.65,
+        "tokens_in": 118775,
+        "tokens_out": 14680,
+        "estimated_usd": 0.38435,
+        "models": [
+          {
+            "tier": "strong",
+            "model_id": "anthropic/claude-sonnet-5",
+            "api_calls": 194,
+            "tokens_in": 118775,
+            "tokens_out": 14680,
+            "estimated_usd": 0.38435
+          }
+        ]
+      }
+    },
+    {
       "timestamp": "2026-08-10T08:50:23.076Z",
       "status": "partial",
       "params": {
