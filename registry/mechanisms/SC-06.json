@@ -8,66 +8,169 @@
   "parent": "S1",
   "lifecycle_status": "incubating",
   "dossier_ref": "dossiers/SC-06.json",
-  "provenance": { "proposed_by": "owner", "date": "2026-07-15" },
-  "evidence_terms": ["scarcity effect consumer", "scarcity persuasion compliance", "commodity scarcity value", "limited quantity limited time promotion", "psychological reactance scarcity", "scarcity replication"],
+  "provenance": {
+    "proposed_by": "owner",
+    "date": "2026-07-15"
+  },
+  "evidence_terms": [
+    "scarcity effect consumer",
+    "scarcity persuasion compliance",
+    "commodity scarcity value",
+    "limited quantity limited time promotion",
+    "psychological reactance scarcity",
+    "scarcity replication"
+  ],
   "pinned_evidence": [
-    { "doi": "10.1002/mar.4220080204", "title": "Scarcity effects on value: A quantitative review of the commodity theory literature", "reason": "foundational review/meta — Lynn 1991" },
-    { "doi": "10.1037/0022-3514.32.5.906", "title": "Effects of supply and demand on ratings of object value", "reason": "foundational — Worchel, Lee & Adewole scarcity/cookie study" }
+    {
+      "doi": "10.1002/mar.4220080204",
+      "title": "Scarcity effects on value: A quantitative review of the commodity theory literature",
+      "reason": "foundational review/meta — Lynn 1991"
+    },
+    {
+      "doi": "10.1037/0022-3514.32.5.906",
+      "title": "Effects of supply and demand on ratings of object value",
+      "reason": "foundational — Worchel, Lee & Adewole scarcity/cookie study"
+    }
   ],
   "evidence": {
     "grade": "B",
     "basis": "Scarcity raises perceived value and can increase compliance/desirability (Worchel, Lee & Adewole 1975; Lynn 1991 quantitative review of commodity theory). Effect is real but moderated heavily by type (limited-quantity vs limited-time), perceived cause of scarcity, and context; not a strong universal.",
     "effect_size_note": "Limited-quantity scarcity (especially demand-caused, 'others want it too') tends to be more effective than limited-time or supply-caused; effects are moderate and context-dependent, weaker and more variable than loss aversion or framing.",
-    "caveats": ["type_dependent_quantity_vs_time", "backfires_if_perceived_as_manipulation", "weaker_and_more_variable_than_core_mechanisms"]
+    "caveats": [
+      "type_dependent_quantity_vs_time",
+      "backfires_if_perceived_as_manipulation",
+      "weaker_and_more_variable_than_core_mechanisms"
+    ]
   },
   "prior_weight": 0.65,
   "mechanism_summary_for_context": "Limited availability raises perceived value and urgency — but only when the scarcity is real and credible. 'Only 2 left', 'ends tonight', 'limited spots' work because scarce things read as more valuable and because opportunity loss (a hybrid with LA-01) motivates action. This is the most abused mechanism in e-commerce; fake scarcity is both the most common dark pattern and increasingly illegal. Use only with genuine limits.",
   "applicability": {
-    "funnel_stages": ["conversion"],
-    "excluded_stages": ["cold_acquisition", "onboarding", "retention"],
-    "artifact_types": ["paywall", "checkout", "pricing_page", "landing_hero"],
+    "funnel_stages": [
+      "conversion"
+    ],
+    "excluded_stages": [
+      "cold_acquisition",
+      "onboarding",
+      "retention"
+    ],
+    "artifact_types": [
+      "paywall",
+      "checkout",
+      "pricing_page",
+      "landing_hero"
+    ],
     "preconditions": [
-      { "predicate": "product.has_genuine_limit == true", "reason": "scarcity may only be applied where a real limit exists — real limited quantity, real deadline, real capacity; never fabricated" }
+      {
+        "predicate": "product.has_genuine_limit == true",
+        "reason": "scarcity may only be applied where a real limit exists — real limited quantity, real deadline, real capacity; never fabricated"
+      }
     ],
     "culture_note": "Scarcity responsiveness is broadly present but manipulation-sensitivity varies; credibility of the limit is what matters, an L3 surface parameter"
   },
   "implementations": [
     {
       "id": "SC-06-real-limited-quantity",
-      "artifact_types": ["checkout", "paywall", "landing_hero"],
-      "product_requirements": ["has_genuine_quantity_limit"],
+      "artifact_types": [
+        "checkout",
+        "paywall",
+        "landing_hero"
+      ],
+      "product_requirements": [
+        "has_genuine_quantity_limit"
+      ],
       "generation_directive": "Surface a genuine quantity limit truthfully ('2 slots left this week' when there really are 2). Demand-framed scarcity ('others are booking') is stronger than bare supply, but only state it when true. Never invent counts, never use fake live counters. If there is no real limit, do not apply this mechanism.",
-      "copy_formulas": ["{n} left", "{n} spots remaining this {period}"],
-      "metrics": ["cvr", "time_to_purchase"],
+      "copy_formulas": [
+        "{n} left",
+        "{n} spots remaining this {period}"
+      ],
+      "metrics": [
+        "cvr",
+        "time_to_purchase"
+      ],
       "observed_effects": []
     },
     {
       "id": "SC-06-real-deadline",
-      "artifact_types": ["paywall", "pricing_page"],
-      "product_requirements": ["has_genuine_deadline"],
+      "artifact_types": [
+        "paywall",
+        "pricing_page"
+      ],
+      "product_requirements": [
+        "has_genuine_deadline"
+      ],
       "generation_directive": "Communicate a real deadline for a real offer ('this price ends {date}' when it genuinely does). The deadline must be true and not silently reset on reload. Pairs with LA-01 as loss-of-opportunity. Fake countdown timers are forbidden and illegal in many jurisdictions.",
-      "copy_formulas": ["Offer ends {date}", "{time} left at this price"],
-      "metrics": ["cvr", "conversion_before_deadline"],
+      "copy_formulas": [
+        "Offer ends {date}",
+        "{time} left at this price"
+      ],
+      "metrics": [
+        "cvr",
+        "conversion_before_deadline"
+      ],
       "observed_effects": []
     }
   ],
   "constraints": {
     "hard_rules": [
-      { "id": "genuine_scarcity_only", "rule": "Scarcity claims (counts, deadlines, capacity) must be literally true at the moment shown; fabricated scarcity is forbidden", "severity": "block" },
-      { "id": "no_fake_timers", "rule": "No countdown timers that reset on reload, no fake 'X people viewing', no invented low-stock counts", "severity": "block" },
-      { "id": "no_manufactured_limits", "rule": "Do not artificially restrict availability solely to manufacture urgency where no real constraint exists", "severity": "block" }
+      {
+        "id": "genuine_scarcity_only",
+        "rule": "Scarcity claims (counts, deadlines, capacity) must be literally true at the moment shown; fabricated scarcity is forbidden",
+        "severity": "block"
+      },
+      {
+        "id": "no_fake_timers",
+        "rule": "No countdown timers that reset on reload, no fake 'X people viewing', no invented low-stock counts",
+        "severity": "block"
+      },
+      {
+        "id": "no_manufactured_limits",
+        "rule": "Do not artificially restrict availability solely to manufacture urgency where no real constraint exists",
+        "severity": "block"
+      }
     ],
-    "compliance_refs": ["EU_DSA_dark_patterns", "eu_ucpd_false_urgency", "ftc_act_deceptive", "asa_misleading_scarcity"],
+    "compliance_refs": [
+      "EU_DSA_dark_patterns",
+      "eu_ucpd_false_urgency",
+      "ftc_act_deceptive",
+      "asa_misleading_scarcity"
+    ],
     "boundary_test": "Is the limit real and verifiable — or manufactured to pressure the user with false urgency?"
   },
   "relations": [
-    { "type": "hybrid_with", "target": "LA-01", "note": "Scarcity operates partly as loss-of-opportunity — the fear of missing out is loss aversion applied to an opportunity" },
-    { "type": "adjacent", "target": "SP-08", "note": "Demand-caused scarcity ('others want it') overlaps social proof, but scarcity's driver is limited availability, not others' behavior per se" }
+    {
+      "type": "hybrid_with",
+      "target": "LA-01",
+      "note": "Scarcity operates partly as loss-of-opportunity — the fear of missing out is loss aversion applied to an opportunity"
+    },
+    {
+      "type": "adjacent",
+      "target": "SP-08",
+      "note": "Demand-caused scarcity ('others want it') overlaps social proof, but scarcity's driver is limited availability, not others' behavior per se"
+    }
   ],
-  "telemetry": { "tag_format": "me:SC-06:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "telemetry": {
+    "tag_format": "me:SC-06:{implementation_id}",
+    "amplitude_event_property": "mechanism_tags"
+  },
   "reference_examples": [
-    { "product": "Booking.com (as cautionary + legit)", "what": "'Only 1 room left' — effective when true; the same pattern faced EU regulatory action when not genuine, making it the canonical real-vs-fake scarcity example" },
-    { "product": "Limited product drops (sneakers, event tickets)", "what": "Genuine limited quantity creates real scarcity value without fabrication" },
-    { "product": "Real enrollment/cohort caps", "what": "Course cohorts with true seat limits — scarcity that is structurally real" }
+    {
+      "product": "Booking.com (as cautionary + legit)",
+      "what": "'Only 1 room left' — effective when true; the same pattern faced EU regulatory action when not genuine, making it the canonical real-vs-fake scarcity example"
+    },
+    {
+      "product": "Limited product drops (sneakers, event tickets)",
+      "what": "Genuine limited quantity creates real scarcity value without fabrication"
+    },
+    {
+      "product": "Real enrollment/cohort caps",
+      "what": "Course cohorts with true seat limits — scarcity that is structurally real"
+    }
+  ],
+  "effect_refs": [
+    "sc-06-02",
+    "sc-06-03",
+    "sc-06-04",
+    "sc-06-05",
+    "scarcity-wellbeing-deterioration"
   ]
 }
