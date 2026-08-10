@@ -1,0 +1,56 @@
+{
+  "id": "la-01-04",
+  "mechanism_id": "LA-01",
+  "name": "Myopic Loss Aversion",
+  "fact": "Myopic loss aversion is the combination of loss aversion and frequent evaluation of investment portfolios, which leads to more conservative risk-taking.",
+  "grade": "B",
+  "source": [
+    "10.1162/003355397555217",
+    "10.1162/003355397555226",
+    "10.2307/2118511"
+  ],
+  "boundary": "Investment decision-making",
+  "realization_ids": [],
+  "provenance": [
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_10685871ab12b88cfdd604f1",
+      "doi": "10.1162/003355397555217",
+      "title": "An Experiment on Risk Taking and Evaluation Periods",
+      "quote_or_locus": "Results from this study show that the more frequently returns are evaluated, the more risk averse investors will be. The results are in line with the behavioral hypothesis of “myopic loss aversion,” which assumes that people are myopic in evaluating outcomes over time, and are more sensitive to losses than to gains",
+      "source_span": {
+        "start": 153,
+        "end": 469,
+        "source_text_sha256": "1a6b1f3196f6d27b3c060ba06a922229a8d75ec4737a88be8c074e85f0f299bb"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_75334bef0434f6747fb12847",
+      "doi": "10.2307/2118511",
+      "title": "Myopic Loss Aversion and the Equity Premium Puzzle",
+      "quote_or_locus": "We dub this combination “myopic loss aversion.” Using simulations, we find that the size of the equity premium is consistent with the previously estimated parameters of prospect theory if investors evaluate their portfolios annually",
+      "source_span": {
+        "start": 466,
+        "end": 698,
+        "source_text_sha256": "a4dd9fe8fe5a47ef31f321a5861d8d44ff5aa5d79ddb2a3ef96c423b5ab48b78"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_cf28e680606a9cd5502c78b3",
+      "doi": "10.1162/003355397555226",
+      "title": "The Effect of Myopia and Loss Aversion on Risk Taking: An Experimental Test",
+      "quote_or_locus": "The investors who got the most frequent feedback (and thus the most information) took the least risk and earned the least money",
+      "source_span": {
+        "start": 588,
+        "end": 715,
+        "source_text_sha256": "6311e934c0c7a1e87dea484593049d0585c34287f751ab92a441380400b8180d"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 3 independent source(s), original model-asserted grade A -> capped to B."
+}

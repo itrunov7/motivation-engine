@@ -3,11 +3,11 @@
   "type": "effect",
   "target": "SC-06",
   "payload": {
-    "id": "sc-06-02",
+    "id": "sc-06-05",
     "mechanism_id": "SC-06",
     "name": "Limited-Time Scarcity (LTS)",
     "fact": "Limited-time promotion activates loss aversion and heuristic decision-making through time pressure, leading consumers to accelerate purchases.",
-    "grade": "A-",
+    "grade": "B-",
     "source": [
       "10.1080/02642069.2023.2185231",
       "10.54097/3wp35028"
@@ -41,7 +41,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 2 independent source(s), original model-asserted grade A- -> capped to B-."
   },
   "provenance": [
     {
@@ -75,11 +76,11 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:40:10.210Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.720Z",
+  "decision_note": "Approved under mechanical grade cap: 2 source(s), A- -> B-. Renamed payload.id from sc-06-02 to sc-06-05: another approved proposal in this batch already claims effects/SC-06/sc-06-02.json.",
   "transferability": {
     "ruleset_version": 3,
     "transferable": true,

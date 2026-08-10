@@ -1231,6 +1231,321 @@
       "area": "architecture",
       "title": "Ruleset v3 becomes the shipping transferability ruleset; the three steps D-165 withheld are taken",
       "body": "Adopts ruleset v3 as the ruleset the extraction path applies, and takes the three steps D-165 named and withheld. D-165 withheld them for a stated reason — \"deliberately not taken in advance of the measurement that would justify it (D-131: an estimate never authorizes a commit)\" — so this entry exists to record that the measurement arrived and what it said.\n\nMEASURED BASIS. A probe over every mechanism's pending queue, ruleset v2, the configured strong tier (anthropic/claude-sonnet-5), 195 calls, $0.382846, recorded in corpora/extraction/manifest.json under dispatch_id transfer-v2-wide. 196 proposals selected, 185 judged, 11 admitted without a verdict. Of the 185: 50 transferable (27%). VARIABLE NAMED A LEVER ON 185 OF 185 — it never once failed to find one. 105 of the 135 refusals (78%) were made against claims whose lever VARIABLE had already named. Refusals by check: DIRECTION 102, SUBJECT 79, VARIABLE 30. This is D-165's LA-01 reading at 18.5 times the sample, and it reproduces rather than contradicts it: LA-01 measured 1 of 10 again.\n\nWHAT THE 30 VARIABLE REFUSALS WERE, because a filter that refuses nothing is not a filter. Medieval-literature rhetoric, molecular biology (FANCJ-mediated G4 resolution), cryptographic key generation from GPS, robotic motion planning, medical-imaging segmentation benchmarks, market-herding statistics, clinical epidemiology (CMMRD cancer incidence), neuroimaging analysis methods. VARIABLE is discriminating on domain, which is the job D-162 gave it. The two refusals D-165 called correct on LA-01 — internet gaming disorder, overconfidence bias — are both in this set again.\n\nTHE MEASURED EFFECT OF THE RULE CHANGE, scored offline from the same stored answers so the scoring change is isolated from the model's run-to-run variance: v2 50/185 (27%), v3 155/185 (84%), +105. Re-scoring those answers under v2 reproduces the run's own footer exactly (50/185, direction 102 / subject 79 / variable 30, 11 unjudged), which is what makes the v3 number a reading of the rule rather than of the parser. Per mechanism, every mechanism that admitted zero under both v1 and v2 recovers: ID-12 0 to 9/9, RE-10 0 to 6/6, SP-08 0 to 12/14, CG-05 0 to 7/9, EN-03 0 to 4/5. No mechanism admits zero under v3.\n\nTHE CHANGE, in three parts that must land together because any one alone fails validation. (a) tools/extract.ts calls judgeTransferabilityV3 and stamps verdict_unavailable with ruleset v3. (b) proposal.schema.json declares modifiers_flagged (array of subject|direction|population, not required, variable excluded by construction since the only check that can refuse can never be a modifier) — without it a stored v3 verdict fails npm run validate against additionalProperties:false, and validate is the step gating the proposals commit. (c) lib/transferability.ts gains auditTransferabilityV3, dispatched from replayTransferability — without it every stored v3 verdict returns \"stored under unrecognised ruleset v3\" and fails the build forever. The v2 and v3 audits now share auditSharedStructure, which is D-165's guarantee that the two rulesets differ in scoring alone expressed in code rather than in a comment.\n\nv1 AND v2 ARE KEPT, unchanged, for the reason D-162 and D-165 both gave: a stored verdict is only interpretable next to the rules that produced it.\n\nMEASURED, NOT TUNED. The frozen OWNER_VERDICTS table in tools/transferability.test.ts is untouched and still prints its agreement rate rather than asserting it. No lexicon was edited. v3 was adopted on a measurement of the queue, not on agreement with any past verdict.\n\nWHAT THIS DOES NOT DO, stated so the next reader does not overread it. It does not re-judge anything currently pending: the effects slice is exhausted for all 17 non-CL-14 mechanisms (already_completed equals eligible_total in every pre-flight quote), so extraction has no candidates left to judge and v3 governs future corpus additions only. The 196 pending proposals keep their absent-or-v2 verdicts. The two pinned regression fixtures stay red for the reason D-165 gave — both were refused by VARIABLE itself, the one check v3 leaves sovereign, and the fixture test reads a STORED verdict that only a dispatched extraction run writes. escalated_by_warning_pair is always false under v3 and the audit rejects a true one, since no scoring path can set it."
+    },
+    {
+      "id": "D-177",
+      "date": "2026-08-10",
+      "title": "Proposal effect-la-01-endowment-effect-7981e8c02cee rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-la-01-endowment-effect-7981e8c02cee for LA-01. No authoritative artifact was changed. Reason: MIS_ANCHORED — this claim belongs to EN-03 (endowment effect), already covered by the approved effect-en-03-endowment-effect-b5ef6d9f7ef8. LA-01 is loss aversion, not the endowment effect itself.",
+      "area": "data"
+    },
+    {
+      "id": "D-178",
+      "date": "2026-08-10",
+      "title": "Proposal effect-la-01-house-money-effect-647040cc7265 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-la-01-house-money-effect-647040cc7265 for LA-01. No authoritative artifact was changed. Reason: MIS_ANCHORED — this claim belongs to FR-11 (framing), already covered by the approved effect-fr-11-house-money-effect-c943e3dfb632 (same finding, same source). LA-01 is loss aversion, not the house-money framing effect.",
+      "area": "data"
+    },
+    {
+      "id": "D-179",
+      "date": "2026-08-10",
+      "title": "Proposal effect-la-01-herding-behavior-d2074fecaff3 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-la-01-herding-behavior-d2074fecaff3 for LA-01. No authoritative artifact was changed. Reason: MIS_ANCHORED — herding behavior is SP-08 (social proof), not LA-01 (loss aversion). Not decided as an SP-08 claim here; re-file under SP-08 if pursued.",
+      "area": "data"
+    },
+    {
+      "id": "D-180",
+      "date": "2026-08-10",
+      "title": "Proposal effect-fr-11-endowment-effect-1a69d498b221 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-fr-11-endowment-effect-1a69d498b221 for FR-11. No authoritative artifact was changed. Reason: MIS_ANCHORED — this claim belongs to EN-03 (endowment effect), already covered by the approved effect-en-03-endowment-effect-b5ef6d9f7ef8. FR-11 is framing and anchoring, not the endowment effect itself.",
+      "area": "data"
+    },
+    {
+      "id": "D-181",
+      "date": "2026-08-10",
+      "title": "Proposal effect-la-01-anchoring-effect-dca84c85e08a rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-la-01-anchoring-effect-dca84c85e08a for LA-01. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — public participatory budgeting is a specific civic/institutional setting (local Chinese contexts); the finding does not establish the anchoring lever survives leaving that setting for a general product context.",
+      "area": "data"
+    },
+    {
+      "id": "D-182",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-06-arousal-as-a-mediator-of-scarcity-ef-f1d6bfb5ebff rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-06-arousal-as-a-mediator-of-scarcity-ef-f1d6bfb5ebff for SC-06. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — this is a claim about an internal mediating psychological state (arousal), not an independently actionable effect; its lever (countdown timer, limited-stock indicator) duplicates the already-approved scarcity-cue effects without adding a distinct mechanism a product can act on.",
+      "area": "data"
+    },
+    {
+      "id": "D-183",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-06-scarcity-marketing-effect-on-consume-40bd938ebc17 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-06-scarcity-marketing-effect-on-consume-40bd938ebc17 for SC-06. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — tied to one specific collectible-toy phenomenon (Pop Mart blind boxes, the 'Anik-Anik' trend); too domain-specific to support as a general scarcity effect.",
+      "area": "data"
+    },
+    {
+      "id": "D-184",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-06-situational-scarcity-and-online-impu-bcef984cbc74 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-06-situational-scarcity-and-online-impu-bcef984cbc74 for SC-06. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — duplicates the core scarcity-cue-to-impulse-buying claim already covered by the approved limited-quantity and limited-time-scarcity effects, framed narrowly to Chinese online shoppers in social commerce with no distinct lever.",
+      "area": "data"
+    },
+    {
+      "id": "D-185",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-06-staged-scarcity-design-cd9193199162 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-06-staged-scarcity-design-cd9193199162 for SC-06. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to K-pop marketing techniques, and its mechanism ('anxiety premium', 'anticipated deficit effect') is speculative rather than an established, transferable behavioral finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-186",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-06-scarcity-induced-impulse-buying-72175b48b45a rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-06-scarcity-induced-impulse-buying-72175b48b45a for SC-06. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — duplicates the core scarcity-cue-to-impulse-buying claim already covered by the approved limited-quantity and limited-time-scarcity effects, with no distinct lever of its own.",
+      "area": "data"
+    },
+    {
+      "id": "D-187",
+      "date": "2026-08-10",
+      "title": "Proposal effect-fr-11-anchoring-effect-in-art-auctions-171c28ee6757 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-fr-11-anchoring-effect-in-art-auctions-171c28ee6757 for FR-11. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — framed as a principle specific to the beauty services industry ('used in the beauty services industry to construct an impression of value'); reads as reverse-engineered from one industry case rather than a general anchoring finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-188",
+      "date": "2026-08-10",
+      "title": "Proposal effect-fr-11-price-quality-heuristic-da3c5dfc199c rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-fr-11-price-quality-heuristic-da3c5dfc199c for FR-11. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — framed as a principle specific to the beauty services industry ('used in the beauty services industry to construct an impression of value'); reads as reverse-engineered from one industry case rather than a general price-quality finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-189",
+      "date": "2026-08-10",
+      "title": "Proposal effect-fr-11-attribute-framing-effect-da44d4e115c4 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-fr-11-attribute-framing-effect-da44d4e115c4 for FR-11. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to tourism advertising and travel-intention outcomes; no basis shown that the framing lever survives leaving that domain.",
+      "area": "data"
+    },
+    {
+      "id": "D-190",
+      "date": "2026-08-10",
+      "title": "Proposal effect-fr-11-attribute-framing-in-ipos-36027fe02297 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-fr-11-attribute-framing-in-ipos-36027fe02297 for FR-11. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to the German IPO market and a specific investor-sophistication class (unsophisticated retail investors); a specialist financial-market population, not a general product audience.",
+      "area": "data"
+    },
+    {
+      "id": "D-191",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-herding-behavior-in-esg-investing-d24b2116a32a rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sp-08-herding-behavior-in-esg-investing-d24b2116a32a for SP-08. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — U.S. stock market ESG segment; specialist financial-market behavior, not general consumer social proof.",
+      "area": "data"
+    },
+    {
+      "id": "D-192",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-herding-behavior-in-fast-fashion-pur-a44d2dd260c5 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sp-08-herding-behavior-in-fast-fashion-pur-a44d2dd260c5 for SP-08. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to teenagers buying fast fashion; no distinct lever beyond the already-approved descriptive/injunctive norm and herd-adoption effects.",
+      "area": "data"
+    },
+    {
+      "id": "D-193",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-herding-behavior-in-live-streaming-c-3734b777bf6c rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sp-08-herding-behavior-in-live-streaming-c-3734b777bf6c for SP-08. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a timing/analytics correlation ('interactive peaks precede purchase peaks by 1-3 minutes'), not a controlled behavioral effect; narrow to live-streaming commerce.",
+      "area": "data"
+    },
+    {
+      "id": "D-194",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-group-cohesion-d8c443088d4e rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sp-08-group-cohesion-d8c443088d4e for SP-08. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a team-coordination/production finding from weak-link coordination games; mechanism fit to SP-08 (social proof) is doubtful, and the setting is a narrow experimental game.",
+      "area": "data"
+    },
+    {
+      "id": "D-195",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-irrational-food-hoarding-8190ca65f29f rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sp-08-irrational-food-hoarding-8190ca65f29f for SP-08. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — panic buying among urban Chinese consumers during COVID-19; tied to a specific crisis period and country, not a stable general product-usable effect.",
+      "area": "data"
+    },
+    {
+      "id": "D-196",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-rational-food-hoarding-c2e813ee8ad5 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sp-08-rational-food-hoarding-c2e813ee8ad5 for SP-08. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — food-hoarding behavior among urban Chinese consumers during COVID-19; tied to a specific crisis period and country, not a stable general product-usable effect.",
+      "area": "data"
+    },
+    {
+      "id": "D-197",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-determinants-of-information-usefulne-c531c2581ec2 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sp-08-determinants-of-information-usefulne-c531c2581ec2 for SP-08. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — about review-quality perception (argument quality, source credibility) from one book-review-site dataset; a credibility-heuristic finding, not a social-proof/herding effect, and narrow to that dataset.",
+      "area": "data"
+    },
+    {
+      "id": "D-198",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-06-scarcity-principle-845cba89d27e rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-06-scarcity-principle-845cba89d27e for SC-06. No authoritative artifact was changed. Reason: DOMAIN_CONTAMINATION — the cited source, \"Persuading large language models to comply with objectionable requests\", is a paper about LLM jailbreak susceptibility to classic persuasion principles (including scarcity), not about human consumer behavior. It passed SC-06 relevance selection on vocabulary overlap alone: the deterministic keyword filter (recordRelevanceTier, tools/extract.ts) matched on the words \"persuasion\"/\"compliance\"/\"scarcity\" appearing in the abstract's methodology description, with zero regard for who or what the study measured (D-161: the relevance pre-filter reports zero skips on 19 of 20 runs — it is not functioning as a working gate). Second domain-contamination case after Memory Drift (D-158): both are the same failure mode — a keyword-only filter cannot tell a human-subjects study from an AI-systems study that happens to use the same vocabulary.",
+      "area": "data"
+    },
+    {
+      "id": "D-199",
+      "date": "2026-08-10",
+      "title": "Batch rejected 11 proposals",
+      "body": "claude (delegated by owner) completed one atomic batch. Outcomes: effect-st-09-attenuation-of-battery-induced-varie-6f1d33590797: rejected; effect-st-09-conspicuous-consumption-e598e2311eff: rejected; effect-st-09-conspicuous-omni-signaling-d3c2ac1ac978: rejected; effect-st-09-drivers-of-battery-induced-variety-s-8ebbe24623b2: rejected; effect-st-09-income-inequality-and-status-consump-b122175c1243: rejected; effect-st-09-luxury-product-signaling-for-relatio-f17a7e0d35cd: rejected; effect-st-09-luxury-product-signaling-of-partner--ee981a766767: rejected; effect-st-09-luxury-product-signaling-to-deter-fe-7caa24cddd19: rejected; effect-st-09-red-sneakers-effect-f201bc066ced: rejected; effect-st-09-smartphone-battery-depletion-effect--fe41faf2f91c: rejected; effect-st-09-testosterone-induced-preference-for--1fce95d09d2b: rejected. No authoritative artifact was changed. Shared reason: NOT_TRANSFERABLE — rejected as a batch because the corpus concentration, not any one claim, is the finding: 3 of these 11 proposals cite the SAME single source (10.1002/cb.70189, smartphone battery depletion) and 3 more cite ANOTHER single source (10.1086/673256, luxury handbag signaling) — 6 of 11 are near-duplicate readings of two papers. This is a corpus coverage defect, not a per-claim transferability judgment; logged separately that ST-09 needs re-harvest, not further review, before its next batch.",
+      "area": "data"
+    },
+    {
+      "id": "D-200",
+      "date": "2026-08-10",
+      "title": "Proposal effect-la-01-hyperopic-loss-aversion-cf269a9a9e0a approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-la-01-hyperopic-loss-aversion-cf269a9a9e0a for LA-01. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 2 source(s), A- -> B-.",
+      "area": "data"
+    },
+    {
+      "id": "D-201",
+      "date": "2026-08-10",
+      "title": "Proposal effect-la-01-loss-aversion-in-airline-revenue-f18f8a1d516d approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-la-01-loss-aversion-in-airline-revenue-f18f8a1d516d for LA-01. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A- -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-202",
+      "date": "2026-08-10",
+      "title": "Proposal effect-la-01-loss-aversion-in-noninstrumental-inf-c12d84c08482 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-la-01-loss-aversion-in-noninstrumental-inf-c12d84c08482 for LA-01. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-203",
+      "date": "2026-08-10",
+      "title": "Proposal effect-la-01-myopic-loss-aversion-bf422dde143f approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-la-01-myopic-loss-aversion-bf422dde143f for LA-01. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 3 source(s), A -> B. Renamed payload.id from la-01-02 to la-01-04: another approved proposal in this batch already claims effects/LA-01/la-01-02.json.",
+      "area": "data"
+    },
+    {
+      "id": "D-204",
+      "date": "2026-08-10",
+      "title": "Proposal effect-en-03-endowment-effect-b5ef6d9f7ef8 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-en-03-endowment-effect-b5ef6d9f7ef8 for EN-03. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing the general defining clause \"is the tendency for individuals to value an object more highly once they own it compared to when they do not\" — the cited span assumes the term and reports persistence under market learning, it does not establish the definition.",
+      "area": "data"
+    },
+    {
+      "id": "D-205",
+      "date": "2026-08-10",
+      "title": "Proposal effect-en-03-mere-ownership-effect-1b0db8298502 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-en-03-mere-ownership-effect-1b0db8298502 for EN-03. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 3 source(s), A- -> B.",
+      "area": "data"
+    },
+    {
+      "id": "D-206",
+      "date": "2026-08-10",
+      "title": "Proposal effect-en-03-mere-touch-effect-4b1b2b74178a approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-en-03-mere-touch-effect-4b1b2b74178a for EN-03. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B+ -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-207",
+      "date": "2026-08-10",
+      "title": "Proposal effect-en-03-ownership-based-attentional-bias-788b3488100d approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-en-03-ownership-based-attentional-bias-788b3488100d for EN-03. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. Renamed payload.id from en-03-02 to en-03-04: another approved proposal in this batch already claims effects/EN-03/en-03-02.json.",
+      "area": "data"
+    },
+    {
+      "id": "D-208",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-06-limited-quantity-scarcity-1f8c2f407a9c approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sc-06-limited-quantity-scarcity-1f8c2f407a9c for SC-06. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A- -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-209",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-06-limited-time-scarcity-lts-93f9b5deee75 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sc-06-limited-time-scarcity-lts-93f9b5deee75 for SC-06. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 2 source(s), A- -> B-. Renamed payload.id from sc-06-02 to sc-06-05: another approved proposal in this batch already claims effects/SC-06/sc-06-02.json.",
+      "area": "data"
+    },
+    {
+      "id": "D-210",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-06-scarcity-induced-aggression-eda3dfb8c806 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sc-06-scarcity-induced-aggression-eda3dfb8c806 for SC-06. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A- -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-211",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-06-negative-impact-of-scarcity-communic-ce9e9148eb92 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sc-06-negative-impact-of-scarcity-communic-ce9e9148eb92 for SC-06. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-212",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-06-scarcity-induced-arousal-polarizatio-785954351ce2 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sc-06-scarcity-induced-arousal-polarizatio-785954351ce2 for SC-06. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A- -> C+. OVERREACH: narrowed fact to what the cited span supports, removing the causal mechanism clause \"by inducing arousal that polarizes evaluations\" — the cited span never mentions arousal; it reports the liking-gap and choice-share finding only.",
+      "area": "data"
+    },
+    {
+      "id": "D-213",
+      "date": "2026-08-10",
+      "title": "Proposal effect-fr-11-anchoring-and-adjustment-f564460ca14f approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-fr-11-anchoring-and-adjustment-f564460ca14f for FR-11. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing the specific \"initial judgments based on an anchor... adjust from that point\" framing — the cited span describes general dual-process inference (fast nonconscious judgment, then slow deliberate adjustment), not a numeric-anchor-specific claim; replaced with the span's own language.",
+      "area": "data"
+    },
+    {
+      "id": "D-214",
+      "date": "2026-08-10",
+      "title": "Proposal effect-fr-11-heuristic-vetoing-7ff1f71008ef approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-fr-11-heuristic-vetoing-7ff1f71008ef for FR-11. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. Renamed payload.id from fr-11-01 to fr-11-06: another approved proposal in this batch already claims effects/FR-11/fr-11-01.json.",
+      "area": "data"
+    },
+    {
+      "id": "D-215",
+      "date": "2026-08-10",
+      "title": "Proposal effect-fr-11-break-even-effect-97dbed9dd083 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-fr-11-break-even-effect-97dbed9dd083 for FR-11. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-216",
+      "date": "2026-08-10",
+      "title": "Proposal effect-fr-11-house-money-effect-c943e3dfb632 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-fr-11-house-money-effect-c943e3dfb632 for FR-11. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-217",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-descriptive-norm-backfire-5a37c20b9117 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sp-08-descriptive-norm-backfire-5a37c20b9117 for SP-08. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-218",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-descriptive-norm-reactance-a2dfc8a2db46 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sp-08-descriptive-norm-reactance-a2dfc8a2db46 for SP-08. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-219",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-descriptive-norms-f21b43b5f401 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sp-08-descriptive-norms-f21b43b5f401 for SP-08. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B+ -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-220",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-injunctive-norms-1446a701450a approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sp-08-injunctive-norms-1446a701450a for SP-08. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B+ -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-221",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sp-08-herd-behavior-in-online-review-adopt-5f1c94dee618 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sp-08-herd-behavior-in-online-review-adopt-5f1c94dee618 for SP-08. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B+ -> C+.",
+      "area": "data"
     }
   ]
 }

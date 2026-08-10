@@ -6,8 +6,8 @@
     "id": "en-03-01",
     "mechanism_id": "EN-03",
     "name": "Endowment Effect",
-    "fact": "The endowment effect is the tendency for individuals to value an object more highly once they own it compared to when they do not.",
-    "grade": "A",
+    "fact": "The endowment effect persists even in market settings with repeated opportunities to learn (rather than being eliminated by market experience).",
+    "grade": "C+",
     "source": [
       "10.1086/261737"
     ],
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A -> capped to C+."
   },
   "provenance": [
     {
@@ -48,24 +49,24 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:38:01.060Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.676Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing the general defining clause \"is the tendency for individuals to value an object more highly once they own it compared to when they do not\" — the cited span assumes the term and reports persistence under market learning, it does not establish the definition.",
   "transferability": {
     "ruleset_version": 3,
     "transferable": true,
     "checks": [
       {
         "check": "subject",
-        "outcome": "warn",
-        "reason": "people (individuals) but no artifact and no named setting — the subject is a person in the abstract"
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
       },
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: frame item as already owned before purchase decision — names a manipulable variable: frame item as already owned before purchase decision — Ownership framing triggers endowment effect; UI can show item as user's own pre-purchase.",
+        "reason": "names a manipulable variable: frame item as already owned before purchase decision — names a manipulable variable: frame item as already owned before purchase decision — names a manipulable variable: frame item as already owned before purchase decision — Ownership framing triggers endowment effect; UI can show item as user's own pre-purchase.",
         "identified_lever": "frame item as already owned before purchase decision"
       },
       {
