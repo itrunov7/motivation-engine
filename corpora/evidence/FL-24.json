@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-10T10:05:09.366Z",
+  "fetched_at": "2026-08-10T10:08:24.889Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -61,12 +61,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 610
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
@@ -151,12 +151,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 1
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
@@ -170,7 +170,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": 0
     },
     {
@@ -333,10 +333,10 @@
       "requested": 25,
       "returned": 25,
       "unique_returned": 25,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 5146
+      "records_added": 14,
+      "novelty_rate": 0.56,
+      "rolling_novelty_rate": 0.056,
+      "upstream_total_results": 953
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
@@ -350,7 +350,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.056,
       "upstream_total_results": 8
     },
     {
@@ -365,7 +365,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.056,
       "upstream_total_results": 8
     },
     {
@@ -380,7 +380,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.056,
       "upstream_total_results": 8
     },
     {
@@ -395,7 +395,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.056,
       "upstream_total_results": 8
     },
     {
@@ -410,7 +410,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.056,
       "upstream_total_results": 8
     },
     {
@@ -425,8 +425,8 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "rolling_novelty_rate": 0.056,
+      "upstream_total_results": 0
     },
     {
       "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
@@ -440,7 +440,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.056,
       "upstream_total_results": 0
     },
     {
@@ -455,7 +455,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.056,
       "upstream_total_results": 0
     },
     {
@@ -464,6 +464,21 @@
       "angle": "critique",
       "term": "flow state digital environments b2b enterprise critique criticism",
       "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.056,
+      "upstream_total_results": 0
+    },
+    {
+      "query_id": "search:recency:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+      "api": "openalex",
+      "angle": "critique",
+      "term": "flow state digital environments b2b enterprise critique criticism",
+      "bucket": "recency",
       "kind": "search",
       "requested": 25,
       "returned": 0,
@@ -504,8 +519,8 @@
     "foundational": 32,
     "meta-analysis": 22,
     "replication": 95,
-    "dissent": 150,
-    "recent": 497
+    "dissent": 151,
+    "recent": 510
   },
   "diversity_report": {
     "viewpoint_spread": [
@@ -518,8 +533,8 @@
       {
         "angle": "recent",
         "queries": 6,
-        "returned": 53,
-        "unique_records": 29
+        "returned": 28,
+        "unique_records": 4
       },
       {
         "angle": "application",
@@ -529,9 +544,9 @@
       },
       {
         "angle": "critique",
-        "queries": 4,
-        "returned": 1,
-        "unique_records": 1
+        "queries": 5,
+        "returned": 0,
+        "unique_records": 0
       },
       {
         "angle": "replication",
@@ -555,32 +570,32 @@
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 26,
+        "queries": 27,
         "returned": 50,
         "unique_records": 4
       },
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 51,
-        "unique_records": 51
+        "returned": 25,
+        "unique_records": 25
       }
     ],
-    "recent_records": 44,
-    "recency_rate": 0.8,
+    "recent_records": 27,
+    "recency_rate": 0.931,
     "novelty": {
       "previous_corpus_records": 833,
-      "unique_records": 55,
-      "already_in_corpus": 55,
-      "new_records": 0,
-      "novelty_rate": 0,
-      "low_novelty": true,
+      "unique_records": 29,
+      "already_in_corpus": 15,
+      "new_records": 14,
+      "novelty_rate": 0.4828,
+      "low_novelty": false,
       "known_share_threshold": 0.8
     }
   },
   "saturation_report": {
     "queries_issued": 30,
-    "records_added": 0,
+    "records_added": 14,
     "novelty_curve": [
       {
         "query_index": 1,
@@ -620,18 +635,6 @@
       },
       {
         "query_index": 4,
-        "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance b2b enterprise",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 833
-      },
-      {
-        "query_index": 5,
         "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -643,7 +646,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 6,
+        "query_index": 5,
         "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -655,7 +658,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 7,
+        "query_index": 6,
         "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "relevance",
         "kind": "search",
@@ -667,7 +670,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 8,
+        "query_index": 7,
         "query_id": "search:recency:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -679,7 +682,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 9,
+        "query_index": 8,
         "query_id": "search:citation:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "citation",
         "kind": "search",
@@ -691,19 +694,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 10,
-        "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 833
-      },
-      {
-        "query_index": 11,
+        "query_index": 9,
         "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "recency",
         "kind": "search",
@@ -711,11 +702,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
+        "rolling_novelty_rate": null,
         "cumulative_records": 833
       },
       {
-        "query_index": 12,
+        "query_index": 10,
         "query_id": "search:citation:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "citation",
         "kind": "search",
@@ -727,7 +718,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 13,
+        "query_index": 11,
         "query_id": "search:relevance:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "relevance",
         "kind": "search",
@@ -739,7 +730,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 14,
+        "query_index": 12,
         "query_id": "search:recency:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "recency",
         "kind": "search",
@@ -751,7 +742,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 15,
+        "query_index": 13,
         "query_id": "search:citation:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "citation",
         "kind": "search",
@@ -763,7 +754,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 16,
+        "query_index": 14,
         "query_id": "search:relevance:semantic-scholar:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "relevance",
         "kind": "search",
@@ -775,7 +766,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 17,
+        "query_index": 15,
         "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "recency",
         "kind": "search",
@@ -787,7 +778,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 18,
+        "query_index": 16,
         "query_id": "search:citation:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "citation",
         "kind": "search",
@@ -799,7 +790,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 19,
+        "query_index": 17,
         "query_id": "search:relevance:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "relevance",
         "kind": "search",
@@ -811,7 +802,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 20,
+        "query_index": 18,
         "query_id": "search:recency:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "recency",
         "kind": "search",
@@ -823,7 +814,7 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 21,
+        "query_index": 19,
         "query_id": "search:citation:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "citation",
         "kind": "search",
@@ -835,19 +826,19 @@
         "cumulative_records": 833
       },
       {
-        "query_index": 22,
+        "query_index": 20,
         "query_id": "search:relevance:semantic-scholar:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
         "returned": 25,
         "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 833
+        "records_added": 14,
+        "novelty_rate": 0.56,
+        "rolling_novelty_rate": 0.056,
+        "cumulative_records": 847
       },
       {
-        "query_index": 23,
+        "query_index": 21,
         "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -855,11 +846,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 833
+        "rolling_novelty_rate": 0.056,
+        "cumulative_records": 847
       },
       {
-        "query_index": 24,
+        "query_index": 22,
         "query_id": "search:citation:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -867,11 +858,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 833
+        "rolling_novelty_rate": 0.056,
+        "cumulative_records": 847
       },
       {
-        "query_index": 25,
+        "query_index": 23,
         "query_id": "search:relevance:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -879,11 +870,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 833
+        "rolling_novelty_rate": 0.056,
+        "cumulative_records": 847
       },
       {
-        "query_index": 26,
+        "query_index": 24,
         "query_id": "search:recency:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -891,11 +882,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 833
+        "rolling_novelty_rate": 0.056,
+        "cumulative_records": 847
       },
       {
-        "query_index": 27,
+        "query_index": 25,
         "query_id": "search:citation:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -903,11 +894,23 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 833
+        "rolling_novelty_rate": 0.056,
+        "cumulative_records": 847
       },
       {
-        "query_index": 28,
+        "query_index": 26,
+        "query_id": "search:relevance:semantic-scholar:application:p1:flow state digital environments b2b enterprise applied intervention",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.056,
+        "cumulative_records": 847
+      },
+      {
+        "query_index": 27,
         "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -915,11 +918,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 833
+        "rolling_novelty_rate": 0.056,
+        "cumulative_records": 847
       },
       {
-        "query_index": 29,
+        "query_index": 28,
         "query_id": "search:citation:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "citation",
         "kind": "search",
@@ -927,11 +930,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 833
+        "rolling_novelty_rate": 0.056,
+        "cumulative_records": 847
       },
       {
-        "query_index": 30,
+        "query_index": 29,
         "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
         "bucket": "relevance",
         "kind": "search",
@@ -939,8 +942,20 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
+        "rolling_novelty_rate": 0.056,
+        "cumulative_records": 847
+      },
+      {
+        "query_index": 30,
+        "query_id": "search:recency:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+        "bucket": "recency",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 833
+        "cumulative_records": 847
       }
     ],
     "window_queries": 10,
@@ -948,7 +963,7 @@
     "minimum_queries": 30,
     "retrieval_counts": {
       "relevance": 11,
-      "recency": 10,
+      "recency": 11,
       "citation": 10
     },
     "topical_candidates": 25,
@@ -957,12 +972,12 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 5664,
+      "estimate": 931,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 13,
+      "measured_queries": 12,
       "total_search_queries": 30,
-      "summed_upstream_results": 5767,
-      "observed_sample_multiplicity": 1.0182
+      "summed_upstream_results": 963,
+      "observed_sample_multiplicity": 1.0345
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -6796,6 +6811,31 @@
       "record_id": "cr_e861e0ca8054ab3215fe34d3"
     },
     {
+      "title": "Technology empowerment: Digital transformation and enterprise ESG performance—Evidence from China’s manufacturing sector",
+      "authors": [
+        "Xianyun Wu",
+        "Longjiang Li",
+        "Dekuan Liu",
+        "Qian Li"
+      ],
+      "year": 2024,
+      "venue": "PLoS ONE",
+      "doi": "10.1371/journal.pone.0302029",
+      "citations": 29,
+      "abstract": "In light of the long-term constraints posed by the \"dual carbon\" objective, can digital technology emerge as a transformative solution for enterprises to embark on a sustainable development trajectory? The existing body of research has yet to reach a consensus. In order to shed further light on the intricate relationship between digital transformation and ESG performance of enterprises, this study empirically examines the mechanisms and boundaries through which digital transformation influences ESG performance, based on observational data from A-share manufacturing listed companies in Shanghai Stock Exchange and Shenzhen Stock Exchange spanning from 2011 to 2021. The findings demonstrate that digital transformation exerts a significant positive impact on the ESG performance of manufacturing enterprises. Mechanism analysis reveals that the enabling effect of digital transformation primarily enhances company transparency, thereby fostering continuous improvements in ESG performance among manufacturing enterprises. The performance expectation gap will give rise to the phenomenon of \"stop-loss in time\" and impede the promotional impact of digital transformation. Further investigation into industrial characteristics and industry competition intensity indicates that state-owned enterprises and those operating within highly competitive environments experience more pronounced effects of digital transformation on their ESG performance. This study expands the mechanism and boundary of digital transformation on ESG performance of manufacturing enterprises, and provides a new perspective for manufacturing enterprises to realize the collaborative transformation of digital and green.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_e7d2c53042e495b6ca3578f4"
+    },
+    {
       "title": "The catheterization laboratory and interventional vascular suite of the future: Anticipating innovations in design and function",
       "authors": [
         "Lloyd W. Klein",
@@ -7063,6 +7103,32 @@
         "application"
       ],
       "record_id": "cr_f8182b6adbcd7cc62063541b"
+    },
+    {
+      "title": "Enterprise digitalization, employee digital literacy and R&D cooperation: the moderating role of organizational inertia",
+      "authors": [
+        "Hui Lei",
+        "Shi Yuan Tang",
+        "Yuxin Zhao",
+        "Shou Chen"
+      ],
+      "year": 2023,
+      "venue": "Chinese Management Studies",
+      "doi": "10.1108/cms-10-2021-0456",
+      "citations": 26,
+      "abstract": "\nPurpose\nThis study aims to explore the effect of digitalization on the promotion of enterprise R&D cooperation, and it analyzes the microimpact mechanism and boundary conditions of enterprise digitalization on enterprise R&D cooperation.\n\n\nDesign/methodology/approach\nBased on survey data sourced from the World Bank Enterprise Surveys of the business environment of Chinese enterprises in 2012, this study applies multiple regression methods to test theoretical hypotheses.\n\n\nFindings\nEnterprise digitalization positively affects the breadth and intensity of enterprise R&D cooperation. Employees’ digital literacy plays an intermediary role between enterprise digitalization and enterprise R&D cooperation. The subordinate attributes of enterprises weaken the positive relationship between enterprise digitalization and the breadth and intensity of enterprise R&D cooperation. The shareholding of state-owned enterprises reinforces the positive relationship between digitalization and the intensity of enterprise R&D cooperation. However, such shareholding shows no significant regulatory effect on digitalization and the breadth of enterprise R&D cooperation.\n\n\nOriginality/value\nFocusing on the digital transformation of the enterprise, this study discusses its impact mechanism on enterprise R&D cooperation, including the impact on the intensity and breadth of R&D cooperation. The study further examines the regulatory effect of organizational inertia on enterprise digital and R&D cooperation from two aspects: resource rigidity and routine rigidity. It emphasizes the significance of the digital literacy of employees in enterprise digitalization and discusses the micromechanism of enterprise digitalization and enterprise R&D cooperation.\n",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_9cb0a733fffe1a03fd9429d1"
     },
     {
       "title": "The Eighth Global Conference on Health Promotion: Health in All Policies: From Rhetoric to Action",
@@ -9848,6 +9914,31 @@
       "record_id": "cr_49244f4bfd926c4725e500d9"
     },
     {
+      "title": "Digital Transformation and Enterprise Innovation Capability: From the Perspectives of Enterprise Cooperative Culture and Innovative Culture",
+      "authors": [
+        "Tao Liu",
+        "Jiaxuan Leng",
+        "Shun Zhu",
+        "Rong Fu"
+      ],
+      "year": 2025,
+      "venue": "Journal of Theoretical and Applied Electronic Commerce Research",
+      "doi": "10.3390/jtaer20020136",
+      "citations": 8,
+      "abstract": "Enterprise digital transformation has emerged as a key strategy for enhancing innovation capacity in the age of the digital economy. This article aims to analyze the influence mechanism of digital transformation on corporate innovation and evaluate the mediating function of corporate innovation and cooperative cultures between digital transformation and corporate innovation capability. This work builds a panel data model based on data from Chinese A-share listed businesses from 2012 to 2021, empirically analyzes it using the Tobit model and the fixed effects model with instrumental variables technique, and uses the mediation effect test to uncover the course of action. According to the report, digital transformation significantly enhances creativity capability; second, corporate collaborative and innovation cultures mediate the relationship between digital transformation and innovation outcomes, and cultural capital becomes a crucial link; and third, the influence of digital transformation on corporate innovation capability is greater in state-owned enterprises, non-monopoly industries, and high-tech industries. According to the study, businesses should work to realize the dual-wheel drive of “technological investment + cultural cultivation” and establish an open and collaborative innovation ecosystem, while the government should intensify the development of digital infrastructure, enhance the supporting system, encourage cultural construction and talent supply, and create an environment that supports the synergistic development of digitization and innovation.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_481a8b562b30173a53c557d5"
+    },
+    {
       "title": "Effect of adjusting the challenge–skill balance for occupational therapy: study protocol for a randomised controlled trial",
       "authors": [
         "Ippei Yoshida",
@@ -10164,6 +10255,29 @@
       ]
     },
     {
+      "title": "Smart Campus Development: Trends in Building a Digital-Based Academic Culture in Cyber Learning Environments",
+      "authors": [
+        "A. Fitri",
+        "U. Hasanah"
+      ],
+      "year": 2024,
+      "venue": "International Journal of Science, Technology &amp; Management",
+      "doi": "10.46729/ijstm.v5i2.1078",
+      "citations": 7,
+      "abstract": "This research aims to formulate the design, roadmap, implementation and impact of smart campus development in higher education in building a digital-based academic culture. This research uses qualitative field research methods with a multi-site study design and flow analysis techniques. The findings of this research show that the smart campus development strategy has a special character in higher education. Smart campus development system design requires data center infrastructure, internet, and building management through Enterprise Architecture (EA) Analysis, Jason with Token (JWT), LemonLDA, and according to user interplace and user experience needs. The smart campus road map was built in a long-term plan towards smart people by relying on sustainable leadership through leadership policies. Smart campus implementation includes smart boards, multi-device gadgets, and campus domain e-mail ownership. The output of smart campus development has an impact on changing mindsets towards smart thinking and ease of serving the academic needs of both national and international students; accountability, transparency, certainty of academic processes and promotions; and compliance with the system.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_a520a4c5999be2c9b9197537"
+    },
+    {
       "title": "The new wave of 'hybrid' work: An opportunity to revise assumptions and build theory",
       "authors": [
         "Efpraxia D. Zamani",
@@ -10243,6 +10357,30 @@
       "record_id": "cr_55040900d6679d6567fbb2c5"
     },
     {
+      "title": "B2B Digital Marketing and ROI Measurement: Challenges and Opportunities in the Business-to-Business Industry for MSMEs in Indonesia",
+      "authors": [
+        "Eri Mardiani",
+        "E. Utami",
+        "Muhammad Umer Farooq Mujahid"
+      ],
+      "year": 2023,
+      "venue": "West Science Interdisciplinary Studies",
+      "doi": "10.58812/wsis.v1i09.249",
+      "citations": 6,
+      "abstract": "In order to maintain growth and competitiveness in the modern business environment, digital marketing must be strategically integrated, especially for Micro, Small, and Medium-Sized Enterprises (MSMEs) that conduct business-to-business (B2B) transactions. This study looks into the potential and difficulties that come with B2B digital marketing as well as how to measure return on investment (ROI) for MSMEs in Indonesia. Surveys and in-depth interviews were used in a mixed-methods approach to collect both quantitative and qualitative data. The results show that MSMEs have widely adopted digital marketing tactics, with social media and content marketing being the most popular. There are still issues like tight budgets, hard ROI calculations, and fierce market competition. The report makes actionable suggestions, such as group marketing campaigns, the creation of uniform ROI measurements, and a focus on innovation via emerging technologies and niche targeting. The insights provide practitioners, policymakers, and industry stakeholders with practical advice for improving the knowledge of the dynamics in B2B digital marketing for MSMEs in Indonesia.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_50e02e3922cf6f8c58439e28"
+    },
+    {
       "title": "Building Resilient Enterprise Risk Programs through Integrated Digital Governance Models",
       "authors": [
         "Joshua Oluwagbenga Ajayi",
@@ -10266,6 +10404,7 @@
       ],
       "source_api": "semantic-scholar",
       "search_angles": [
+        "canon",
         "replication"
       ],
       "record_id": "cr_baee397b7293c2c3dcde07bf"
@@ -11514,6 +11653,28 @@
         "application"
       ],
       "record_id": "cr_58ea7476d0f149d4b46cd687"
+    },
+    {
+      "title": "Digital Government, New Quality Productive Forces and High-quality Development of State-owned Enterprises: Evidence from Listed Companies in China",
+      "authors": [
+        "Liyu Yao"
+      ],
+      "year": 2024,
+      "venue": "Advances in Economics and Management Research",
+      "doi": "10.56028/aemr.10.1.293.2024",
+      "citations": 3,
+      "abstract": "The establishment of digital government aligns closely with enterprises' need for open and transparent data, providing new opportunities for technological revolution and industrial transformation of state-owned enterprises. This research confirms the positive impact of digital government on the high-quality development of state-owned enterprises, based on reliable data from A-share listed state-owned enterprises. And the more advanced the level of high-quality productive forces is, the more prominent their link becomes. The depletion of major shareholders, investment in enterprise innovation, and the business environment act as intermediaries. The study suggests that state-owned enterprises should leverage information transparency opportunities through digital government initiatives. This entails improving corporate governance practices and utilizing information strengths to increase investments in innovative research, to promote high-quality development.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_e48589dffc3fee187d81184c"
     },
     {
       "title": "Evaluation through Regimes of Engagement and Grammars of Commonality",
@@ -13644,6 +13805,28 @@
       "record_id": "cr_bea3583b11184e6176fa5aeb"
     },
     {
+      "title": "Relationship Marketing Management of a Small Industrial Enterprise in B2B Market in The Context of Digital Economy",
+      "authors": [
+        "N. Izakova",
+        "L. Kapustina",
+        "I. Vozmilov"
+      ],
+      "year": 2019,
+      "venue": "Proceedings of the 2nd International Scientific conference on New Industrialization: Global, national, regional dimension (SICNI 2018)",
+      "doi": "10.2991/sicni-18.2019.71",
+      "citations": 1,
+      "abstract": "— In the article the prospects for the transformation of marketing technologies for managing small businesses into the conditions of a new industrial revolution are analyzed and methodical approach to assessing the effectiveness and degree of achievement of the relationship marketing goals is proposed. The problems and features of marketing of small industrial enterprises in the B2B market are highlighted. The conclusion is made about the relevance of the use of relationship marketing for small industrial enterprises in the B2B market. Four groups of values of industrial customers are identified: economic, technological, social and strategic ones. The 4R Ettenberg relationship marketing management model is specified: Relationship, Retrenchment, Relevance, Reward, on the basis of which a methodology might be developed for assessing the effectiveness of relationship marketing management of a small industrial enterprise in the B2B market, which was tested by Adeplast LLC, a manufacturer of a wide range of profile-molded products from polyvinyl chloride. The conclusion is made about the transformation of marketing technologies for managing small and medium-sized businesses in the direction of digitalization and activation of the marketing of B2B industrial enterprises in the Internet environment.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_8fc872e16d2fb2bea8ffba29"
+    },
+    {
       "title": "Scholarly research and user‐centred policy design",
       "authors": [
         "Jonathon Hutchinson",
@@ -14864,6 +15047,29 @@
       "record_id": "cr_159484e845d39020797890f8"
     },
     {
+      "title": "An Assessment of the Efficiency and Selection of Enterprise Digital Marketing Development Strategy",
+      "authors": [
+        "N. Shpak",
+        "I. Hrabovych"
+      ],
+      "year": 2025,
+      "venue": "Business Inform",
+      "doi": "10.32983/2222-4459-2025-10-466-476",
+      "citations": 0,
+      "abstract": "The current conditions of business digital transformation require a systematic approach to assessing the effectiveness of digital marketing, as traditional metrics no longer reflect the real impact of marketing tools on enterprise performance. The increasing role of digital communication channels necessitates the development of comprehensive analytical methods that integrate financial, economic, technical, consumer, and market aspects to ensure a well-founded choice of the enterprise’s development strategy. This article explores scientific and methodological approaches to evaluating the effectiveness of enterprise digital marketing and selecting its development strategy in the context of economic digital transformation. The necessity of moving from fragmented performance measurement methods based on isolated metrics to comprehensive integrated models that consider the multidimensional nature of the digital environment has been substantiated. A method for assessing the effectiveness and selecting a strategy for the development of an enterprise’s digital marketing has been proposed, which is based on calculating the coordinates of the center of gravity of the strategic quadrangle within a four-quadrant matrix. The coordinates are determined based on the values of the integral performance indices for each of the four directions: financial, techno-economic, customer, and market. This approach allows not only for a quantitative assessment of the current state of digital marketing but also for visualizing the strategic position of the enterprise in the multidimensional space of indicators. The developed method enables an enterprise to make a well-founded choice among four digital marketing development strategies: a financial-economic expansion strategy (quadrant I), a market adaptation strategy (quadrant II), a customer engagement and interaction strategy (quadrant III), or a branding and positioning strategy (quadrant IV). The practical implementation of the proposed method will help enhance the efficiency of managing digital marketing processes, optimize the allocation of resources across communication channels, and establish sustainable competitive advantages.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_203b786b480b9653bbb7f46d"
+    },
+    {
       "title": "An Intelligent Educational Model Based on Artificial Intelligence Designed to Analyze Learning Patterns and Support Educational Decision-Making in Digital Environments",
       "authors": [
         "Dalya Amro"
@@ -15058,6 +15264,29 @@
         "W2042314632"
       ],
       "record_id": "cr_aa53efb6dd5fd1fc55b37698"
+    },
+    {
+      "title": "Assessing the digital management maturity level at an enterprise",
+      "authors": [
+        "O. Bulavko",
+        "S. P. Parshakov"
+      ],
+      "year": 2026,
+      "venue": "Vestnik of Samara State University of Economics",
+      "doi": "10.46554/1993-0453-2026-5-259-110-118",
+      "citations": 0,
+      "abstract": "The relevance of this study is driven by the rapid development of digital technologies, which are changing the principles of management and the organization of enterprise business activities. Digital management is becoming a key factor in the development of organizations in the context of the transition to a digital economy, which aligns with the priorities of Russian state policy as well. However, the problem of assessing the level of digital management maturity at enterprises remains insufficiently addressed. The aim of this study is to develop and test an approach to assessing the level of digital management maturity at an enterprise. A combination of methods was used in the study. At the theoretical and methodological stage, the definition of digital management was formulated and its key components were identified based on the literature review. In the process of approach development, the multi-level maturity assessment model was created using a scoring system (from 1 to 5 points for each indicator). At the pilot phase, the model was applied to assess 12 small and medium-sized oil and gas enterprises in the Samara Region using the interview data, documentation analysis, and expert assessments (June – October 2025). The scientific novelty lies in the development of a comprehensive model for assessing the maturity of digital management at an enterprise, structured around five components (management characteristics, data management, digital environment, process organization, and management quality) and describing five sequential maturity levels. The testing of the model revealed most of the studied enterprises are at the second level – \"partial digitalization.\" These enterprises are characterized by fragmented use of digital tools, the absence of a unified enterprise management information system, and the prevalence of manual data collection and an ad hoc approach to management decision-making. The key weaknesses identified include a high degree of dependence of business processes on the human factor and the lack of developed data analytics. The developed approach not only allows for the diagnosis of the current state of digital management at an enterprise but identifies specific areas for its development, serving as a roadmap for the transition to data-driven management as well.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_16454c938a0a18625deeee6e"
     },
     {
       "title": "Automatically exploring learning experience, interaction pattern, challenge-skill balance, and their relationships in online learning",
@@ -16270,6 +16499,28 @@
       "record_id": "cr_b637b41beca0ef06cb851e14"
     },
     {
+      "title": "DEVELOPMENT OF INTELLECTUAL CAPITAL THROUGH DIGITAL MENTORING AS AN ELEMENT OF ANTI-CRISIS MANAGEMENT OF AN ENTERPRISE IN THE CONDITIONS OF LABOUR MIGRATION",
+      "authors": [
+        "N. Zachosova"
+      ],
+      "year": 2026,
+      "venue": "Proceedings of Scientific Works of Cherkasy State Technological University Series Economic Sciences",
+      "doi": "10.24025/2306-4420.79(2).2026.358318",
+      "citations": 0,
+      "abstract": "The article substantiates the problem of forming intellectual capital of enterprises that are in a state of crisis and are unable to obtain human resources from external sources due to the consequences of labor migration on the Ukrainian labor market. The directions of the influence of mentoring on the development of various types of intellectual capital are summarized. It is substantiated that in the HR management system, digital mentoring is a conditionally free means of developing the intellectual capital of an enterprise, increasing the level of organizational flexibility of a business, which helps to avoid the emergence of crisis phenomena or their spread and minimize personnel risks, especially during the active use of elements of remote employment, labour migration, which forces companies to recruit personnel in remote regions, and the instability of the external environment provoked by the realities of wartime. The possibilities of the influence of digital mentoring on the development of intellectual capital and the state of the anti-crisis management system of the enterprise are specified, namely such types as mentoring to increase the level of digital literacy, mentoring to develop analytical, critical and creative thinking, mentoring to develop digital security skills, mentoring to create comfort during remote and hybrid employment, mentoring to preserve digital knowledge, digital mentoring to develop entrepreneurial skills, mentoring to develop digital leadership. It is assumed that digital mentoring has the following consequences for the functioning of the enterprise's anti-crisis management system: accelerating the pace of digital business transformation, reducing the level of digital risks, increasing the quality of anti-crisis management decisions, timely diagnosis of \"red flags\" and crisis signals from the business, reducing the likelihood of digital incidents and information losses during the unfolding of the crisis, ensuring the continuity of financial and economic processes during the crisis, preserving and consistently transferring professional knowledge and reducing dependence on the decisions of key employees, developing resilience scenarios and increasing the adaptability of the enterprise at the time of the crisis, increasing the efficiency of anti-crisis teams and the speed of making anti-crisis decisions and implementing anti-crisis measures.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_ceca449decd9c35199c8fe03"
+    },
+    {
       "title": "DGAR: A Unified Domain Generalization Framework for RF-Based Human Activity Recognition",
       "authors": [
         "Junshuo Liu",
@@ -16534,6 +16785,28 @@
       "record_id": "cr_4286ce438072cbd9fd87f849"
     },
     {
+      "title": "DIGITAL SOVEREIGNTY IN THE CLOUD AND INTERNATIONAL LAW: Towards a Balance between State Autonomy and Transnational Cyber Governance",
+      "authors": [
+        "Danilo Vicente García Cáceres"
+      ],
+      "year": 2025,
+      "venue": "Latin American Journal of European Studies",
+      "doi": "10.51799/2763-8685v5n2004",
+      "citations": 0,
+      "abstract": "This paper examines the intricate relationship between digital sovereignty, cloud computing, and international law, emphasizing how states seek to maintain autonomy and regulatory control in a globally interconnected digital environment. Digital sovereignty is conceptualized as encompassing legal authority, technological independence, and strategic governance over data and infrastructure. Within this framework, cloud computing emerges as both an essential driver of digital transformation and a vector of vulnerability, as reliance on global Cloud Service Providers (CSPs) redistributes jurisdictional and operational control. The study analyzes the shared responsibility model governing cloud security, highlighting the differentiated accountability between providers and users under IaaS, PaaS, and SaaS architectures. It explores how hybrid and multi-cloud environments heighten exposure to cyber risks, including cybercrime, espionage, and hacktivism, while challenging traditional notions of attribution and liability. Particular attention is given to the dual use nature of cloud infrastructure, as commercial services are increasingly exploited for offensive cyber operations, data exfiltration, and command and control activities by both non-state and state-sponsored actors. These practices complicate the application of international legal principles of sovereignty, due diligence, and state responsibility. Finally, the paper situates these dynamics within the broader debate on cloud sovereignty, contrasting the extraterritorial reach of instruments such as the U.S. CLOUD Act with the General Data Protection Regulation (GDPR) of the European Union. It argues that achieving a balance between transnational data flows and sovereign control requires robust international norms that reconcile technological interdependence with legal accountability in the digital age.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_51e0ad6d0ddd81a25312c053"
+    },
+    {
       "title": "Digital transformation of business processes as a factor in the innovative development of enterprises",
       "authors": [
         "R. Voloshyn",
@@ -16557,6 +16830,30 @@
       "record_id": "cr_8ce183752bb4ad7267b0aa2c"
     },
     {
+      "title": "Digital Twin-Enabled Automated Well Management and Flow Advisory for Underground Gas Storage (UGS) Systems",
+      "authors": [
+        "U. Gogoi",
+        "A. Ravoof",
+        "K. Sankara"
+      ],
+      "year": 2025,
+      "venue": "SPE Annual Caspian Technical Conference and Exhibition",
+      "doi": "10.2118/230335-ms",
+      "citations": 0,
+      "abstract": "\n This study introduces a digital well management system capable of automated model calibration and flow assurance risk detection in production and injection gas wells for an underground gas storage (UGS) facility. Both Steady-state and transient-state well models leverage the latest measured data and reservoir simulation output for executing automated workflows that ensure model accuracy and continuous surveillance of flow instabilities in the system. The resulting set of outputs is integrated with interactive dashboards for user action, facilitating safe and cost efficient UGS operations.\n Data from digital field instrumentation is integrated into an SQL-based production data management system (PDMS), initiating automated workflows for well management. A valid well model that accurately mimics field conditions serves as the backbone for operational planning. The tailored workflows provide useful input to the UGS management, including: Autocalibration: By adjusting pre-defined parameters like choke discharge coefficient, friction factor, U-multiplier and productivity index to meet tolerance thresholds. This ensures realistic well performance analysis and bottleneck identification.Well Surveillance: Risk detection through pressure-temperature profile simulations, e.g., overpressure, sanding, hydrate, erosion, and liquid loading risk.Sensitivity Study: On-demand what-if scenario analysis of the impact of parameters like pressure, flowrate, and water-gas ratio (WGR) on well performance and stability.Bottomhole Pressure (BHP) Calculation: On-demand estimation of BHP based on user-defined measured data.Model Parameter Update: On-demand update of key calibration parameters or flow coefficients into the well model.Flow Digital Twin Advisors: Real-time monitoring of pressure, temperature, liquid volumes, pigging operations and leaks, addressing challenges of visibility, liquid accumulation, pigging inefficiencies and delayed leak detection, thereby enhancing operational efficiency and system reliability in UGS networks.\n This solution revolutionizes traditional analysis and field management methods with a model-based approach, delivering instant insights through interactive dashboards. Automation drastically reduces response analysis time, significantly accelerating decision-making processes. Predictive techniques for risk detection help operators anticipate and mitigate issues, reducing operational risks, and downtime. Consequently, stakeholders can respond quickly to market demands, thereby enhancing overall organizational effectiveness. This systematic approach thus enhances success, safety, efficiency, and productivity in the realm of UGS operations.\n This solution offers tailored workflows for UGS systems, facilitating multidisciplinary collaboration within a unified environment. The solution is enabled through the integration of domain technologies and the utilization of Web APIs to enable workflow results visualization and user interactions. The well models accurately mirror alternating production and injection operations in a digital environment, reflecting real-world dynamics. This approach marks a significant shift from the traditional reliance on user experience, to empowering users with streamlined processes and informed decision-making, thus enabling a smarter, more intelligent system, ensuring that UGS operations function more safely, efficiently, and optimally.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_ac4ae8bdf776c1e51578297f"
+    },
+    {
       "title": "Discover Kuala Lumpur with a KL Elegant Travel Companion Lady",
       "authors": [
         "Malaylifestylehub"
@@ -16578,6 +16875,29 @@
         "recent"
       ],
       "record_id": "cr_e9aa9466a89a4b79703fa514"
+    },
+    {
+      "title": "Driving Value and Improving Efficiency: Digital Fuel Measurement as a Strategic Enabler in State-Owned Logistics — a Case Study of Limosin at Elnusa Petrofin",
+      "authors": [
+        "Dyah Ayu Sekar Melati",
+        "N. Windasari"
+      ],
+      "year": 2026,
+      "venue": "Eduvest - Journal Of Universal Studies",
+      "doi": "10.59188/eduvest.v6i3.52458",
+      "citations": 0,
+      "abstract": "This study examines the digital transformation of fuel logistics within Indonesian state-owned enterprises (SOEs), focusing on the implementation of LIMOSIN (Liquid Monitoring System) at Elnusa Petrofin. Despite global advances in IoT-enabled measurement systems, Indonesian fuel distribution continues to rely on manual dipstick measurement, handwritten logs, and fragmented reconciliation processes. Using a qualitative case study approach supported by the Technology Acceptance Model (TAM), Resource-Based View (RBV), VRIO, and Cost-Benefit Analysis (CBA), this research analyzed the operational, behavioral, and strategic implications of adopting digital fuel measurement systems. Findings reveal that LIMOSIN significantly improves accuracy, transparency, and traceability but faces adoption barriers due to low perceived ease of use, limited system integration, and institutional constraints typical of SOEs. Strategically, LIMOSIN positions Elnusa Petrofin toward greater client trust and differentiation in B2B logistics. The study contributes theoretical and managerial insights into digital adoption within emerging market SOEs and provides recommendations to strengthen readiness and strategic alignment.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_aa8ba6da3f5acdd6be379e18"
     },
     {
       "title": "ECONOMIC SECURITY OF THE ENTERPRISE ON THE BASIS OF ADAPTATION TO THE CHALLENGES OF THE DIGITAL ENVIRONMENT",
@@ -21126,6 +21446,30 @@
         "replication"
       ],
       "record_id": "cr_df941450d7f0b1ec9ef8fa91"
+    },
+    {
+      "title": "Utilizing Machine Learning to Predict Flow State from Gameplay Interaction Data",
+      "authors": [
+        "Hsuan-Min Wang",
+        "Kuan-Chun Hong",
+        "Chuen-Tsai Sun"
+      ],
+      "year": 2023,
+      "venue": "IEEE Games Entertainment Media Conference",
+      "doi": "10.1109/gem59776.2023.10390248",
+      "citations": 0,
+      "abstract": "Flow, a profound psychological state associated with optimal experiences, serves as a pivotal gauge of engagement across various contexts. Traditionally evaluated through methods like surveys, interviews, and sampling surveys for qualitative analysis, these approaches aimed to decipher participants' experiences and perceptions. However, these methods are time-intensive and prone to memory and expressive limitations. In response, contemporary research increasingly leans towards physiological indicators for assessing flow. Utilizing physiological signals to detect flow reduces narrative inaccuracies and minimizes sensitivity to participants' subjective awareness, albeit demanding significant time, human resources, and specialized equipment. To surmount these challenges, this study introduces an innovative methodology for efficiently predicting flow states. utilizing gameplay and interaction data as inputs for machine learning models. By employing a real-time strategy game as the experimental environment, participants' gameplay recordings and interaction records are collected and paired with the Flow Short Scale questionnaire to establish a predictive model for flow state. The results demonstrate the success of this approach, achieving a significant prediction accuracy ($MAE =0.0623$) and highlighting a strong correlation between objective gameplay records and subjective flow experiences. This streamlined methodology offers a promising avenue for quantifying and predicting flow state, contributing to a deeper understanding of engagement dynamics in digital environments.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_f5d224d247e6a5929fa8dbab"
     },
     {
       "title": "VENDING TECHNOLOGIES AS A FACTOR OF DIGITAL BUSINESS COMPETITIVENESS",
