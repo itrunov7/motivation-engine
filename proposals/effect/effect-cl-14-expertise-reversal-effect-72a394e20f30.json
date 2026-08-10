@@ -80,5 +80,36 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (instructional, education, medical, learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show/hide guidance based on user skill level — names a manipulable variable: show/hide guidance based on user skill level — Product can adapt scaffolding or hints depending on detected user expertise level.",
+        "identified_lever": "show/hide guidance based on user skill level"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (facilitate)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

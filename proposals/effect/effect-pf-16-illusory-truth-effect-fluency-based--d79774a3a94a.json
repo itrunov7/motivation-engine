@@ -159,5 +159,36 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: repeat statement/message multiple times across sessions — names a manipulable variable: repeat statement/message multiple times across sessions — Repetition of statements/messages is a surface control that increases perceived truthfulness via fluency.",
+        "identified_lever": "repeat statement/message multiple times across sessions"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (increased)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

@@ -52,5 +52,37 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "people (users) but no artifact and no named setting — the subject is a person in the abstract"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: reduce visual salience of banner-like elements — names a manipulable variable: reduce visual salience of banner-like elements — Product can hide or de-emphasize salient stimuli users try to avoid attending to.",
+        "identified_lever": "reduce visual salience of banner-like elements"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

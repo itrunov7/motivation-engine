@@ -106,5 +106,36 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "people (users) but no artifact and no named setting — the subject is a person in the abstract"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: limited-time scarcity notification pushed at right moment — names a manipulable variable: limited-time scarcity notification pushed at right moment — Mobile just-in-time scarcity messaging is a UI timing/wording lever.",
+        "identified_lever": "limited-time scarcity notification pushed at right moment"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (more effective)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

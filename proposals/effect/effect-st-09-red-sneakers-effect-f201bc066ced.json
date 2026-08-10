@@ -78,5 +78,38 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show deliberate nonconforming choice against clear norm baseline — names a manipulable variable: show deliberate nonconforming choice against clear norm baseline — UI can signal intentional deviation from norms to boost perceived status/competence.",
+        "identified_lever": "show deliberate nonconforming choice against clear norm baseline"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "warn",
+        "reason": "depends on domain expertise the general product user lacks (professional)"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction",
+      "population"
+    ]
+  }
 }

@@ -48,15 +48,14 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-31371637456",
   "proposed_at": "2026-08-10T08:47:59.051Z",
-  "status": "held_non_transferable",
-  "hold_reason": "not_transferable",
+  "status": "pending",
+  "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
   "decision_note": null,
   "transferability": {
-    "ruleset_version": 2,
-    "transferable": false,
-    "escalated_by_warning_pair": false,
+    "ruleset_version": 3,
+    "transferable": true,
     "checks": [
       {
         "check": "subject",
@@ -66,7 +65,7 @@
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: show option more frequently than alternatives — Repetition frequency biases valuation; UI can control exposure counts to options.",
+        "reason": "names a manipulable variable: show option more frequently than alternatives — names a manipulable variable: show option more frequently than alternatives — Repetition frequency biases valuation; UI can control exposure counts to options.",
         "identified_lever": "show option more frequently than alternatives"
       },
       {
@@ -79,6 +78,11 @@
         "outcome": "pass",
         "reason": "no specialist population named — the claim does not require expertise to apply"
       }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
     ]
   }
 }

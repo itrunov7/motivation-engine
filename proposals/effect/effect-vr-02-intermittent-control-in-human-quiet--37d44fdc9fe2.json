@@ -52,5 +52,36 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": false,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "fail",
+        "reason": "names nothing an interface can change — names nothing an interface can change — Describes internal neuromotor control dynamics, not a mechanism a digital interface surface could show, hide, or time.",
+        "identified_lever": null
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (than)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

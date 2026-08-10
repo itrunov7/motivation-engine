@@ -106,5 +106,36 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: frequency of portfolio performance update display — names a manipulable variable: frequency of portfolio performance update display — Controls evaluation period, reducing displayed feedback frequency lowers perceived loss frequency.",
+        "identified_lever": "frequency of portfolio performance update display"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (leads to)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

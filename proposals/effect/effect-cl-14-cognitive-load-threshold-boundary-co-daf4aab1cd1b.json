@@ -52,5 +52,36 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: shorten or hide emotional scaffolding text on hard tasks — names a manipulable variable: shorten or hide emotional scaffolding text on hard tasks — UI can reword/hide verbose emotional messaging based on difficulty to reduce cognitive load.",
+        "identified_lever": "shorten or hide emotional scaffolding text on hard tasks"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (exceed, than)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

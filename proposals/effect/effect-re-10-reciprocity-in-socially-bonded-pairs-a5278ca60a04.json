@@ -52,5 +52,36 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "pass",
+        "reason": "a person interacting with an artifact (form)"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show past reciprocal contributions between paired users — names a manipulable variable: show past reciprocal contributions between paired users — Surfacing delayed, unenforced mutual history can encourage continued reciprocal helping behavior.",
+        "identified_lever": "show past reciprocal contributions between paired users"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "direction"
+    ]
+  }
 }

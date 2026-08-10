@@ -48,15 +48,14 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-31371227436",
   "proposed_at": "2026-08-10T08:42:31.860Z",
-  "status": "held_non_transferable",
-  "hold_reason": "not_transferable",
+  "status": "pending",
+  "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
   "decision_note": null,
   "transferability": {
-    "ruleset_version": 2,
-    "transferable": false,
-    "escalated_by_warning_pair": false,
+    "ruleset_version": 3,
+    "transferable": true,
     "checks": [
       {
         "check": "subject",
@@ -66,7 +65,7 @@
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: limited stock or time-left scarcity message — Scarcity cues can be displayed via countdown timers or low-stock indicators on product pages.",
+        "reason": "names a manipulable variable: limited stock or time-left scarcity message — names a manipulable variable: limited stock or time-left scarcity message — Scarcity cues can be displayed via countdown timers or low-stock indicators on product pages.",
         "identified_lever": "limited stock or time-left scarcity message"
       },
       {
@@ -79,6 +78,11 @@
         "outcome": "pass",
         "reason": "no specialist population named — the claim does not require expertise to apply"
       }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
     ]
   }
 }

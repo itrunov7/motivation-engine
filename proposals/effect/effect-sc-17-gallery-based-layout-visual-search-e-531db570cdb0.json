@@ -52,5 +52,36 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "pass",
+        "reason": "a person interacting with an artifact (interfaces, menu, layout)"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: size-based gallery menu layout instead of grid — names a manipulable variable: size-based gallery menu layout instead of grid — Menu layout structure and item size hierarchy are directly controllable UI display choices.",
+        "identified_lever": "size-based gallery menu layout instead of grid"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "describes rather than directs (characterized by) — a definition states nothing to move"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "direction"
+    ]
+  }
 }

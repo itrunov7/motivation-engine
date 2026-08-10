@@ -52,5 +52,36 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (instructional, learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: font/text disfluency toggled by content complexity level — names a manipulable variable: font/text disfluency toggled by content complexity level — Product can vary text fluency (font style) based on content interactivity to optimize learning.",
+        "identified_lever": "font/text disfluency toggled by content complexity level"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (leads to)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

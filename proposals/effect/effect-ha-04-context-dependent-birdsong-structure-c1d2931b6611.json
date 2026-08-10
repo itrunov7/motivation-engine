@@ -54,9 +54,8 @@
   "decided_at": null,
   "decision_note": null,
   "transferability": {
-    "ruleset_version": 2,
+    "ruleset_version": 3,
     "transferable": false,
-    "escalated_by_warning_pair": false,
     "checks": [
       {
         "check": "subject",
@@ -66,7 +65,7 @@
       {
         "check": "variable",
         "outcome": "fail",
-        "reason": "names nothing an interface can change — Bird behavioral/ecological study; no digital interface mechanism or analogous UI construct applies.",
+        "reason": "names nothing an interface can change — names nothing an interface can change — Bird behavioral/ecological study; no digital interface mechanism or analogous UI construct applies.",
         "identified_lever": null
       },
       {
@@ -79,6 +78,10 @@
         "outcome": "pass",
         "reason": "no specialist population named — the claim does not require expertise to apply"
       }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
     ]
   }
 }

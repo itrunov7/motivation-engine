@@ -106,5 +106,36 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (pedagogical, instructional, learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: highlight key info with visual cues — names a manipulable variable: highlight key info with visual cues — Signaling maps directly to UI emphasis: color, bold, or arrows highlighting essential content.",
+        "identified_lever": "highlight key info with visual cues"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (improve)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

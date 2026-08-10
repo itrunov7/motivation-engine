@@ -52,5 +52,34 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "pass",
+        "reason": "a person interacting with an artifact (form)"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: reword or hide native-ad disclosure cues — names a manipulable variable: reword or hide native-ad disclosure cues — UI can adjust ad cue visibility/wording to influence heuristic scanning and recognition of ads.",
+        "identified_lever": "reword or hide native-ad disclosure cues"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (reduced)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": []
+  }
 }

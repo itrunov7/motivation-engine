@@ -52,5 +52,34 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "pass",
+        "reason": "a person interacting with an artifact (interfaces, menu, layout)"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: place key items in upper-right quadrant — names a manipulable variable: place key items in upper-right quadrant — Menu item placement/position is a controllable UI layout lever.",
+        "identified_lever": "place key items in upper-right quadrant"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (reduced)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": []
+  }
 }

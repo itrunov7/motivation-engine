@@ -78,5 +78,36 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "people (participants) but no artifact and no named setting — the subject is a person in the abstract"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: simplify visuals/text to increase processing ease — names a manipulable variable: simplify visuals/text to increase processing ease — Fluency can be manipulated via clear fonts, imagery, and layout to nudge approach responses.",
+        "identified_lever": "simplify visuals/text to increase processing ease"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (facilitates)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }
