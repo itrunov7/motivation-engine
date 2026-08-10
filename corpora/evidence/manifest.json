@@ -6,25 +6,52 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-03T10:45:53.716Z",
+    "timestamp": "2026-08-10T06:12:46.591Z",
     "status": "partial",
     "params": {
-      "mechanism": "RR-25",
-      "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      "mechanism": "FL-24",
+      "terms": ""
     },
-    "records_fetched": 71,
+    "records_fetched": 685,
     "files_written": 1,
-    "duration_s": 43.63,
-    "error": "search openalex canon \"recognition versus recall memory b2b enterprise\": api.openalex.org upstream cooldown is 48141s; checkpoint and resume later",
+    "duration_s": 172.62,
+    "error": "search semantic-scholar recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar critique \"flow experience challenge skill balance critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar boundary \"flow experience challenge skill balance boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar canon \"flow state digital environments\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar replication \"flow state digital environments replication\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar recent \"optimal experience engagement\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar boundary \"optimal experience engagement boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar application \"difficulty adaptation user engagement applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "warnings": {
+      "s2_throttled": true,
+      "capped": true
+    },
     "cost": {
-      "api_calls": 46,
-      "duration_s": 43.63,
+      "api_calls": 150,
+      "duration_s": 172.62,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-10T06:12:46.591Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 685,
+      "files_written": 1,
+      "duration_s": 172.62,
+      "error": "search semantic-scholar recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar critique \"flow experience challenge skill balance critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar boundary \"flow experience challenge skill balance boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar canon \"flow state digital environments\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar replication \"flow state digital environments replication\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar recent \"optimal experience engagement\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar boundary \"optimal experience engagement boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar application \"difficulty adaptation user engagement applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true,
+        "capped": true
+      },
+      "cost": {
+        "api_calls": 150,
+        "duration_s": 172.62,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-03T10:45:53.716Z",
       "status": "partial",
@@ -429,27 +456,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-03T08:44:50.224Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14",
-        "terms": ""
-      },
-      "records_fetched": 511,
-      "files_written": 1,
-      "duration_s": 47.37,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.37,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -523,6 +529,18 @@
         "replication": 18,
         "dissent": 36,
         "recent": 32
+      }
+    },
+    {
+      "path": "FL-24.json",
+      "records": 685,
+      "bytes": 7174778,
+      "categories": {
+        "foundational": 32,
+        "meta-analysis": 22,
+        "replication": 93,
+        "dissent": 142,
+        "recent": 384
       }
     },
     {
