@@ -6,27 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-10T09:11:10.317Z",
-    "status": "success",
+    "timestamp": "2026-08-10T09:13:50.296Z",
+    "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
     },
-    "records_fetched": 764,
+    "records_fetched": 802,
     "files_written": 1,
-    "duration_s": 117.02,
+    "duration_s": 1882.85,
+    "error": "search openalex canon \"flow experience challenge skill balance b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex application \"flow experience challenge skill balance b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search semantic-scholar critique \"flow experience challenge skill balance b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search openalex replication \"flow experience challenge skill balance b2b enterprise replication\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex replication \"flow experience challenge skill balance b2b enterprise replication\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex replication \"flow experience challenge skill balance b2b enterprise replication\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search semantic-scholar boundary \"flow experience challenge skill balance b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search openalex boundary \"flow experience challenge skill balance b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex recent \"flow state digital environments b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex recent \"flow state digital environments b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex recent \"flow state digital environments b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex critique \"flow state digital environments b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex replication \"flow state digital environments b2b enterprise replication\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex replication \"flow state digital environments b2b enterprise replication\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex boundary \"flow state digital environments b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex canon \"optimal experience engagement b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex recent \"optimal experience engagement b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
     "warnings": {
-      "low_novelty": true
+      "s2_throttled": true
     },
     "cost": {
-      "api_calls": 42,
-      "duration_s": 117.02,
+      "api_calls": 130,
+      "duration_s": 1882.85,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-10T09:13:50.296Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 802,
+      "files_written": 1,
+      "duration_s": 1882.85,
+      "error": "search openalex canon \"flow experience challenge skill balance b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex application \"flow experience challenge skill balance b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search semantic-scholar critique \"flow experience challenge skill balance b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search openalex replication \"flow experience challenge skill balance b2b enterprise replication\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex replication \"flow experience challenge skill balance b2b enterprise replication\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex replication \"flow experience challenge skill balance b2b enterprise replication\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search semantic-scholar boundary \"flow experience challenge skill balance b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search openalex boundary \"flow experience challenge skill balance b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex recent \"flow state digital environments b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex recent \"flow state digital environments b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex recent \"flow state digital environments b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex critique \"flow state digital environments b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex replication \"flow state digital environments b2b enterprise replication\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex replication \"flow state digital environments b2b enterprise replication\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex boundary \"flow state digital environments b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex canon \"optimal experience engagement b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex recent \"optimal experience engagement b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
+      "warnings": {
+        "s2_throttled": true
+      },
+      "cost": {
+        "api_calls": 130,
+        "duration_s": 1882.85,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-10T09:11:10.317Z",
       "status": "success",
@@ -444,27 +467,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-10T08:38:58.029Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 764,
-      "files_written": 1,
-      "duration_s": 42.78,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 41,
-        "duration_s": 42.78,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -542,14 +544,14 @@
     },
     {
       "path": "FL-24.json",
-      "records": 764,
-      "bytes": 7379677,
+      "records": 802,
+      "bytes": 7505925,
       "categories": {
         "foundational": 32,
         "meta-analysis": 22,
         "replication": 95,
-        "dissent": 147,
-        "recent": 457
+        "dissent": 150,
+        "recent": 477
       }
     },
     {
