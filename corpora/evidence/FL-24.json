@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-10T09:50:02.920Z",
+  "fetched_at": "2026-08-10T09:52:12.479Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -61,12 +61,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 550
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
@@ -151,12 +151,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 1,
+      "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "upstream_total_results": 1
     },
     {
       "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
@@ -333,10 +333,10 @@
       "requested": 25,
       "returned": 25,
       "unique_returned": 25,
-      "records_added": 21,
-      "novelty_rate": 0.84,
-      "rolling_novelty_rate": 0.084,
-      "upstream_total_results": 131
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 5146
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
@@ -350,7 +350,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.084,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": 8
     },
     {
@@ -365,7 +365,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.084,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": 8
     },
     {
@@ -380,7 +380,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.084,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": 8
     },
     {
@@ -395,7 +395,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.084,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": 8
     },
     {
@@ -410,7 +410,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.084,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": 8
     },
     {
@@ -421,12 +421,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 24,
-      "unique_returned": 24,
-      "records_added": 10,
-      "novelty_rate": 0.4167,
-      "rolling_novelty_rate": 0.1257,
-      "upstream_total_results": 24
+      "returned": 25,
+      "unique_returned": 25,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 44
     },
     {
       "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
@@ -440,7 +440,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.1257,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": 0
     },
     {
@@ -455,7 +455,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.1257,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": 0
     },
     {
@@ -470,22 +470,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.1257,
-      "upstream_total_results": 0
-    },
-    {
-      "query_id": "search:recency:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
-      "api": "openalex",
-      "angle": "critique",
-      "term": "flow state digital environments b2b enterprise critique criticism",
-      "bucket": "recency",
-      "kind": "search",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0.0417,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": 0
     }
   ],
@@ -533,20 +518,20 @@
       {
         "angle": "recent",
         "queries": 6,
-        "returned": 53,
-        "unique_records": 29
+        "returned": 28,
+        "unique_records": 4
       },
       {
         "angle": "application",
         "queries": 6,
-        "returned": 24,
-        "unique_records": 24
+        "returned": 25,
+        "unique_records": 25
       },
       {
         "angle": "critique",
-        "queries": 5,
-        "returned": 0,
-        "unique_records": 0
+        "queries": 4,
+        "returned": 1,
+        "unique_records": 1
       },
       {
         "angle": "replication",
@@ -570,32 +555,32 @@
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 27,
+        "queries": 26,
         "returned": 50,
         "unique_records": 4
       },
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 74,
-        "unique_records": 74
+        "returned": 51,
+        "unique_records": 51
       }
     ],
-    "recent_records": 53,
-    "recency_rate": 0.6795,
+    "recent_records": 48,
+    "recency_rate": 0.8727,
     "novelty": {
-      "previous_corpus_records": 802,
-      "unique_records": 78,
-      "already_in_corpus": 47,
-      "new_records": 31,
-      "novelty_rate": 0.3974,
-      "low_novelty": false,
+      "previous_corpus_records": 833,
+      "unique_records": 55,
+      "already_in_corpus": 55,
+      "new_records": 0,
+      "novelty_rate": 0,
+      "low_novelty": true,
       "known_share_threshold": 0.8
     }
   },
   "saturation_report": {
-    "queries_issued": 31,
-    "records_added": 31,
+    "queries_issued": 30,
+    "records_added": 0,
     "novelty_curve": [
       {
         "query_index": 1,
@@ -607,7 +592,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 2,
@@ -619,7 +604,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 3,
@@ -631,22 +616,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 4,
-        "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance b2b enterprise",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 802
-      },
-      {
-        "query_index": 5,
         "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -655,10 +628,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
-        "query_index": 6,
+        "query_index": 5,
         "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -667,10 +640,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
-        "query_index": 7,
+        "query_index": 6,
         "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "relevance",
         "kind": "search",
@@ -679,10 +652,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
-        "query_index": 8,
+        "query_index": 7,
         "query_id": "search:recency:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -691,10 +664,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
-        "query_index": 9,
+        "query_index": 8,
         "query_id": "search:citation:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "citation",
         "kind": "search",
@@ -703,7 +676,19 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 802
+        "cumulative_records": 833
+      },
+      {
+        "query_index": 9,
+        "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 833
       },
       {
         "query_index": 10,
@@ -715,7 +700,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 11,
@@ -727,7 +712,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 12,
@@ -739,7 +724,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 13,
@@ -751,7 +736,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 14,
@@ -763,7 +748,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 15,
@@ -775,7 +760,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 16,
@@ -787,7 +772,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 17,
@@ -799,7 +784,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 18,
@@ -811,7 +796,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 19,
@@ -823,7 +808,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 20,
@@ -835,7 +820,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "cumulative_records": 833
       },
       {
         "query_index": 21,
@@ -844,10 +829,10 @@
         "kind": "search",
         "returned": 25,
         "unique_returned": 25,
-        "records_added": 21,
-        "novelty_rate": 0.84,
-        "rolling_novelty_rate": 0.084,
-        "cumulative_records": 823
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 833
       },
       {
         "query_index": 22,
@@ -858,8 +843,8 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.084,
-        "cumulative_records": 823
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 833
       },
       {
         "query_index": 23,
@@ -870,8 +855,8 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.084,
-        "cumulative_records": 823
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 833
       },
       {
         "query_index": 24,
@@ -882,8 +867,8 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.084,
-        "cumulative_records": 823
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 833
       },
       {
         "query_index": 25,
@@ -894,8 +879,8 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.084,
-        "cumulative_records": 823
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 833
       },
       {
         "query_index": 26,
@@ -906,19 +891,19 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.084,
-        "cumulative_records": 823
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 833
       },
       {
         "query_index": 27,
         "query_id": "search:relevance:semantic-scholar:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "relevance",
         "kind": "search",
-        "returned": 24,
-        "unique_returned": 24,
-        "records_added": 10,
-        "novelty_rate": 0.4167,
-        "rolling_novelty_rate": 0.1257,
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
         "cumulative_records": 833
       },
       {
@@ -930,7 +915,7 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.1257,
+        "rolling_novelty_rate": 0,
         "cumulative_records": 833
       },
       {
@@ -942,7 +927,7 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.1257,
+        "rolling_novelty_rate": 0,
         "cumulative_records": 833
       },
       {
@@ -954,19 +939,7 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.1257,
-        "cumulative_records": 833
-      },
-      {
-        "query_index": 31,
-        "query_id": "search:recency:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
-        "bucket": "recency",
-        "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0.0417,
+        "rolling_novelty_rate": 0,
         "cumulative_records": 833
       }
     ],
@@ -975,7 +948,7 @@
     "minimum_queries": 30,
     "retrieval_counts": {
       "relevance": 11,
-      "recency": 11,
+      "recency": 10,
       "citation": 10
     },
     "topical_candidates": 25,
@@ -984,12 +957,12 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 833,
+      "estimate": 5108,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 13,
-      "total_search_queries": 31,
-      "summed_upstream_results": 715,
-      "observed_sample_multiplicity": 1.0128
+      "total_search_queries": 30,
+      "summed_upstream_results": 5201,
+      "observed_sample_multiplicity": 1.0182
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
