@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-10T08:40:58.075Z",
+  "fetched_at": "2026-08-10T08:42:09.319Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -331,12 +331,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 5146
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
@@ -457,6 +457,21 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": 0
+    },
+    {
+      "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+      "api": "openalex",
+      "angle": "critique",
+      "term": "flow state digital environments b2b enterprise critique criticism",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 0
     }
   ],
   "coverage_report": {
@@ -497,8 +512,8 @@
       {
         "angle": "canon",
         "queries": 6,
-        "returned": 47,
-        "unique_records": 29
+        "returned": 22,
+        "unique_records": 4
       },
       {
         "angle": "recent",
@@ -514,7 +529,7 @@
       },
       {
         "angle": "critique",
-        "queries": 3,
+        "queries": 4,
         "returned": 1,
         "unique_records": 1
       },
@@ -540,23 +555,23 @@
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 25,
+        "queries": 26,
         "returned": 50,
         "unique_records": 4
       },
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 76,
-        "unique_records": 76
+        "returned": 51,
+        "unique_records": 51
       }
     ],
-    "recent_records": 64,
-    "recency_rate": 0.8,
+    "recent_records": 39,
+    "recency_rate": 0.7091,
     "novelty": {
       "previous_corpus_records": 764,
-      "unique_records": 80,
-      "already_in_corpus": 80,
+      "unique_records": 55,
+      "already_in_corpus": 55,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -821,18 +836,6 @@
       },
       {
         "query_index": 22,
-        "query_id": "search:relevance:semantic-scholar:canon:p1:flow state digital environments b2b enterprise",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 764
-      },
-      {
-        "query_index": 23,
         "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -844,7 +847,7 @@
         "cumulative_records": 764
       },
       {
-        "query_index": 24,
+        "query_index": 23,
         "query_id": "search:citation:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -856,7 +859,7 @@
         "cumulative_records": 764
       },
       {
-        "query_index": 25,
+        "query_index": 24,
         "query_id": "search:relevance:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -868,7 +871,7 @@
         "cumulative_records": 764
       },
       {
-        "query_index": 26,
+        "query_index": 25,
         "query_id": "search:recency:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -880,7 +883,7 @@
         "cumulative_records": 764
       },
       {
-        "query_index": 27,
+        "query_index": 26,
         "query_id": "search:citation:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -892,7 +895,7 @@
         "cumulative_records": 764
       },
       {
-        "query_index": 28,
+        "query_index": 27,
         "query_id": "search:relevance:semantic-scholar:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "relevance",
         "kind": "search",
@@ -904,7 +907,7 @@
         "cumulative_records": 764
       },
       {
-        "query_index": 29,
+        "query_index": 28,
         "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -916,9 +919,21 @@
         "cumulative_records": 764
       },
       {
-        "query_index": 30,
+        "query_index": 29,
         "query_id": "search:citation:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "citation",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 764
+      },
+      {
+        "query_index": 30,
+        "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+        "bucket": "relevance",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
@@ -932,7 +947,7 @@
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 10,
+      "relevance": 11,
       "recency": 10,
       "citation": 10
     },
@@ -942,12 +957,12 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 5739,
+      "estimate": 764,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 13,
       "total_search_queries": 30,
-      "summed_upstream_results": 5811,
-      "observed_sample_multiplicity": 1.0125
+      "summed_upstream_results": 665,
+      "observed_sample_multiplicity": 1.0182
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
