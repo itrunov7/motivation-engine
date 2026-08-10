@@ -9,68 +9,167 @@
   "cross_cutting": true,
   "lifecycle_status": "incubating",
   "dossier_ref": "dossiers/PS-13.json",
-  "provenance": { "proposed_by": "owner", "date": "2026-07-20" },
-  "evidence_terms": ["picture superiority effect", "dual coding theory", "picture superiority replication", "imagery memory recall pictures words", "visual processing advantage"],
+  "provenance": {
+    "proposed_by": "owner",
+    "date": "2026-07-20"
+  },
+  "evidence_terms": [
+    "picture superiority effect",
+    "dual coding theory",
+    "picture superiority replication",
+    "imagery memory recall pictures words",
+    "visual processing advantage"
+  ],
   "pinned_evidence": [
-    { "doi": "10.1093/acprof:oso/9780195066661.001.0001", "title": "Mental Representations: A Dual Coding Approach", "reason": "foundational — Paivio 1986" },
-    { "doi": "10.1007/BF01320076", "title": "Dual coding theory and education", "reason": "applied synthesis — Clark & Paivio 1991" }
+    {
+      "doi": "10.1093/acprof:oso/9780195066661.001.0001",
+      "title": "Mental Representations: A Dual Coding Approach",
+      "reason": "foundational — Paivio 1986"
+    },
+    {
+      "doi": "10.1007/BF01320076",
+      "title": "Dual coding theory and education",
+      "reason": "applied synthesis — Clark & Paivio 1991"
+    }
   ],
   "evidence": {
     "grade": "A-",
     "basis": "Pictures of concrete things are recognised and recalled better than the words naming them — the picture superiority effect, one of the most reliably reproduced findings in memory research. Paivio's dual coding account (verbal and imaginal systems encoding separately, giving pictures two routes) is the classic explanation and remains the standard applied framing.",
     "effect_size_note": "The memory advantage itself is large and highly reliable for concrete, nameable items under standard conditions. The advantage narrows or disappears for abstract concepts, for precise or sequential information, and where the picture is not readily nameable.",
-    "caveats": ["holds_for_concrete_nameable_items_not_abstract_content", "text_superior_for_precise_sequential_technical_information", "dual_coding_explanation_contested_even_where_effect_holds", "memory_advantage_is_not_automatically_a_comprehension_or_conversion_advantage"]
+    "caveats": [
+      "holds_for_concrete_nameable_items_not_abstract_content",
+      "text_superior_for_precise_sequential_technical_information",
+      "dual_coding_explanation_contested_even_where_effect_holds",
+      "memory_advantage_is_not_automatically_a_comprehension_or_conversion_advantage"
+    ]
   },
   "prior_weight": 0.8,
   "mechanism_summary_for_context": "An image of a concrete thing is remembered better than its name, and is recognised faster. In interfaces this means that what a product does, what a result looks like, and what a state means are carried more durably by showing than by describing — provided the thing is concrete and the image is the content rather than decoration. The boundary is as important as the effect: abstract propositions, precise numbers, conditional terms and sequential instructions are carried better by text, and replacing them with imagery loses information rather than gaining memorability.",
   "applicability": {
-    "funnel_stages": ["cold_acquisition", "activation", "onboarding", "retention"],
+    "funnel_stages": [
+      "cold_acquisition",
+      "activation",
+      "onboarding",
+      "retention"
+    ],
     "excluded_stages": [],
-    "artifact_types": ["landing_hero", "onboarding", "dashboard_widget", "email", "pricing_page"],
+    "artifact_types": [
+      "landing_hero",
+      "onboarding",
+      "dashboard_widget",
+      "email",
+      "pricing_page"
+    ],
     "preconditions": [
-      { "predicate": "content.is_concrete_depictable == true", "reason": "the advantage holds for concrete, nameable things; abstract propositions, terms and numbers do not benefit and are degraded by depiction" }
+      {
+        "predicate": "content.is_concrete_depictable == true",
+        "reason": "the advantage holds for concrete, nameable things; abstract propositions, terms and numbers do not benefit and are degraded by depiction"
+      }
     ],
     "culture_note": "The memory advantage is general; iconographic conventions and what a given image is read as naming are strongly culture-specific — an L3 surface parameter"
   },
   "implementations": [
     {
       "id": "PS-13-show-the-outcome",
-      "artifact_types": ["landing_hero", "onboarding", "email"],
-      "product_requirements": ["produces_visible_output"],
+      "artifact_types": [
+        "landing_hero",
+        "onboarding",
+        "email"
+      ],
+      "product_requirements": [
+        "produces_visible_output"
+      ],
       "generation_directive": "Where the product produces a visible result, show the actual result rather than describing it. The image should be the concrete thing itself — a real output, a real state, a real before-and-after — not a stock illustration standing in for it, which is decorative and carries no content advantage.",
       "copy_formulas": [],
-      "metrics": ["cvr", "landing_engagement", "recall_proxy_return_rate"],
+      "metrics": [
+        "cvr",
+        "landing_engagement",
+        "recall_proxy_return_rate"
+      ],
       "observed_effects": []
     },
     {
       "id": "PS-13-visual-state-encoding",
-      "artifact_types": ["dashboard_widget", "onboarding"],
+      "artifact_types": [
+        "dashboard_widget",
+        "onboarding"
+      ],
       "product_requirements": [],
       "generation_directive": "Encode recurring, concrete states and categories visually as well as verbally — status, type, progress, ownership — so they are recognised rather than read on each encounter. This applies to concrete states; conditional or quantitative information keeps its textual form.",
       "copy_formulas": [],
-      "metrics": ["task_completion_rate", "time_to_complete", "error_rate"],
+      "metrics": [
+        "task_completion_rate",
+        "time_to_complete",
+        "error_rate"
+      ],
       "observed_effects": []
     }
   ],
   "constraints": {
     "hard_rules": [
-      { "id": "no_replacing_precise_information", "rule": "Prices, terms, limitations, conditional statements and sequential instructions may not be replaced by imagery; the picture advantage does not extend to precise or abstract content and substitution there destroys information", "severity": "block" },
-      { "id": "image_must_be_content", "rule": "Images claimed under this mechanism must depict the actual thing; decorative or stock imagery standing in for the real output carries no advantage and adds extraneous load (see CL-14)", "severity": "block" },
-      { "id": "no_misleading_depiction", "rule": "Shown results must be genuine and representative, not idealised outputs the product does not typically produce", "severity": "block" },
-      { "id": "accessibility_preserved", "rule": "Visual encoding must retain text alternatives and not be the sole carrier of meaning", "severity": "block" }
+      {
+        "id": "no_replacing_precise_information",
+        "rule": "Prices, terms, limitations, conditional statements and sequential instructions may not be replaced by imagery; the picture advantage does not extend to precise or abstract content and substitution there destroys information",
+        "severity": "block"
+      },
+      {
+        "id": "image_must_be_content",
+        "rule": "Images claimed under this mechanism must depict the actual thing; decorative or stock imagery standing in for the real output carries no advantage and adds extraneous load (see CL-14)",
+        "severity": "block"
+      },
+      {
+        "id": "no_misleading_depiction",
+        "rule": "Shown results must be genuine and representative, not idealised outputs the product does not typically produce",
+        "severity": "block"
+      },
+      {
+        "id": "accessibility_preserved",
+        "rule": "Visual encoding must retain text alternatives and not be the sole carrier of meaning",
+        "severity": "block"
+      }
     ],
-    "compliance_refs": ["EU_DSA_dark_patterns", "eu_ucpd_misleading_representation", "ftc_deceptive_advertising", "wcag_2_2"],
+    "compliance_refs": [
+      "EU_DSA_dark_patterns",
+      "eu_ucpd_misleading_representation",
+      "ftc_deceptive_advertising",
+      "wcag_2_2"
+    ],
     "boundary_test": "Is the image carrying concrete content the user needs — or replacing precise information it cannot represent?"
   },
   "relations": [
-    { "type": "adjacent", "target": "MM-15", "note": "PS-13 concerns the memory advantage of images over words; MM-15 concerns the rules for combining the two. Related but separate claims — the first says images are remembered better, the second says combination rules determine comprehension" },
-    { "type": "adjacent", "target": "CL-14", "note": "Depiction can reduce load for concrete content, but decorative imagery raises it; the two mechanisms constrain each other" }
+    {
+      "type": "adjacent",
+      "target": "MM-15",
+      "note": "PS-13 concerns the memory advantage of images over words; MM-15 concerns the rules for combining the two. Related but separate claims — the first says images are remembered better, the second says combination rules determine comprehension"
+    },
+    {
+      "type": "adjacent",
+      "target": "CL-14",
+      "note": "Depiction can reduce load for concrete content, but decorative imagery raises it; the two mechanisms constrain each other"
+    }
   ],
   "orthogonality_note": "PS-13 and MM-15 are frequently conflated in practitioner writing into a general 'visuals beat text' claim. They are kept separate deliberately: the memory advantage for concrete depictable items (PS-13) and the word–image combination rules for explanatory content (MM-15) have different evidence, different boundaries and different failure modes.",
-  "telemetry": { "tag_format": "me:PS-13:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "telemetry": {
+    "tag_format": "me:PS-13:{implementation_id}",
+    "amplitude_event_property": "mechanism_tags"
+  },
   "reference_examples": [
-    { "product": "AI image tools (own test products)", "what": "Showing actual generated outputs rather than describing capability — the concrete result is the claim" },
-    { "product": "Figma / Canva galleries", "what": "Real user-produced artefacts shown as the product explanation" },
-    { "product": "Status and type icons in productivity tools", "what": "Concrete recurring states encoded visually alongside labels for recognition rather than re-reading" }
+    {
+      "product": "AI image tools (own test products)",
+      "what": "Showing actual generated outputs rather than describing capability — the concrete result is the claim"
+    },
+    {
+      "product": "Figma / Canva galleries",
+      "what": "Real user-produced artefacts shown as the product explanation"
+    },
+    {
+      "product": "Status and type icons in productivity tools",
+      "what": "Concrete recurring states encoded visually alongside labels for recognition rather than re-reading"
+    }
+  ],
+  "effect_refs": [
+    "picture-superiority-effect",
+    "ps-13-002",
+    "ps13-002"
   ]
 }

@@ -1553,6 +1553,755 @@
       "area": "data",
       "title": "Every evidence record is abstract-only — methods, limitations, and effect sizes are structurally ungroundable",
       "body": "Every evidence corpus record this pipeline has ever ingested is abstract-only. Measured directly against corpora/evidence/*.json (4,699 records, all 18 mechanisms): 0 carry full_text, 3,373 carry an abstract and nothing more, 1,326 carry no abstract at all (title/metadata only). This is not a sample or an estimate — it is every record on file.\n\nRule 12 is why: the whitelisted source connectors never return full text, so this is not a gap that will close as more sources are harvested — it is a structural property of what this pipeline is allowed to fetch. lib/source-context.ts's own header already states this for the single record it renders at a time (\"the windowed 600-before/600-after branch is kept for a hypothetical future record type... today it is unreachable\"); this entry states the corpus-wide consequence that follows from it.\n\nTHE CONSEQUENCE. Methods, limitations, and effect sizes live in a paper's body and results section — never in its abstract, which reports only the headline finding. So no fact this pipeline has ever extracted, and no fact it ever will while rule 12 stands, can be grounded in a study's methods, its stated limitations, or a reported effect size. Every extracted fact and boundary clause is grounded in what an abstract chose to summarize, not in what the underlying study actually did or how strongly it found it.\n\nThis is a different failure mode from the ones already on record. D-158/D-161's domain contamination is about a study measuring the wrong SUBJECT (an AI system dressed in human-cognition vocabulary). This is about every study, including a correctly-subject-matched one, being read through a single compressed paragraph that was never meant to carry grounding weight on its own. Grading (D-131 predecessor conventions) already discounts for source COUNT; nothing in the pipeline discounts for this — an A-band claim from one abstract and an A-band claim from a full paper's results section carry the same grade today, and only one of them could be checked against a stated effect size or limitation if it existed on file.\n\nSTATED AS A STANDING LIMIT, not fixed here. No connector change, no grading change, no schema change accompanies this entry. It exists so the next reader — extracting, grading, or reviewing a batch — knows this ceiling is structural before mistaking a well-graded abstract-only claim for one that was checked against a method or a number."
+    },
+    {
+      "id": "D-223",
+      "date": "2026-08-10",
+      "title": "Proposal effect-id-12-authority-572048b1a035 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-id-12-authority-572048b1a035 for ID-12. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a generic restatement of the Cialdini authority principle taken from a weak secondary source (an advertising-susceptibility survey), not an independent measured finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-224",
+      "date": "2026-08-10",
+      "title": "Proposal effect-id-12-commitment-and-consistency-cd055af57959 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-id-12-commitment-and-consistency-cd055af57959 for ID-12. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a generic restatement of the Cialdini commitment-and-consistency principle taken from a weak secondary source (an advertising-susceptibility survey), not an independent measured finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-225",
+      "date": "2026-08-10",
+      "title": "Proposal effect-id-12-liking-a9a995ea6c89 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-id-12-liking-a9a995ea6c89 for ID-12. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a generic restatement of the Cialdini liking principle taken from a weak secondary source (an advertising-susceptibility survey), not an independent measured finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-226",
+      "date": "2026-08-10",
+      "title": "Proposal effect-id-12-scarcity-23cb93a94dd1 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-id-12-scarcity-23cb93a94dd1 for ID-12. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a generic restatement of the Cialdini scarcity principle taken from a weak secondary source (an advertising-susceptibility survey); duplicates SC-06's dedicated scarcity effects.",
+      "area": "data"
+    },
+    {
+      "id": "D-227",
+      "date": "2026-08-10",
+      "title": "Proposal effect-id-12-social-proof-c2b5e04ed35d rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-id-12-social-proof-c2b5e04ed35d for ID-12. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a generic restatement of the Cialdini social-proof principle taken from a weak secondary source (an advertising-susceptibility survey); duplicates SP-08's dedicated social-proof effects.",
+      "area": "data"
+    },
+    {
+      "id": "D-228",
+      "date": "2026-08-10",
+      "title": "Proposal effect-id-12-reverse-foot-in-the-door-effect-8ec2c49463ca rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-id-12-reverse-foot-in-the-door-effect-8ec2c49463ca for ID-12. No authoritative artifact was changed. Reason: MIS_ANCHORED — this is a boundary condition on effect-id-12-foot-in-the-door-technique-e05e39523cb4 (approved), not an independent effect. Its finding is preserved in that proposal's boundary field rather than lost.",
+      "area": "data"
+    },
+    {
+      "id": "D-229",
+      "date": "2026-08-10",
+      "title": "Proposal effect-re-10-pay-it-forward-reciprocity-in-presch-42d05a73ff88 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-re-10-pay-it-forward-reciprocity-in-presch-42d05a73ff88 for RE-10. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to preschool children aged 4-6 in a collaborative jigsaw-game allocation task; a developmental-psychology finding, not established as transferring to a general product audience.",
+      "area": "data"
+    },
+    {
+      "id": "D-230",
+      "date": "2026-08-10",
+      "title": "Proposal effect-re-10-reciprocity-in-socially-bonded-pairs-a5278ca60a04 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-re-10-reciprocity-in-socially-bonded-pairs-a5278ca60a04 for RE-10. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a game-theory MODEL of social bonds and helping behavior (boundary: \"Game theory model...\"), not a measured human-subjects finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-231",
+      "date": "2026-08-10",
+      "title": "Proposal effect-re-10-social-contagion-of-cheating-via-obs-538a7a697119 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-re-10-social-contagion-of-cheating-via-obs-538a7a697119 for RE-10. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to online multiplayer first-person-shooter games; a gaming-context-specific antisocial-behavior-spread finding, not established as general.",
+      "area": "data"
+    },
+    {
+      "id": "D-232",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cg-05-association-between-growth-mindsets--23cf226e8358 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-cg-05-association-between-growth-mindsets--23cf226e8358 for CG-05. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-233",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cg-05-curiosity-as-a-predictor-of-web-pane-9a1565a7a20b rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-cg-05-curiosity-as-a-predictor-of-web-pane-9a1565a7a20b for CG-05. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to web-panel survey recruitment and participation effort; a survey-methodology finding, not a general curiosity-gap product effect.",
+      "area": "data"
+    },
+    {
+      "id": "D-234",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ze-07-social-gamification-elements-b38155d9734c rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-ze-07-social-gamification-elements-b38155d9734c for ZE-07. No authoritative artifact was changed. Reason: Rejected as instructed. Content-grounded rationale: a generic, hedged claim (\"CAN facilitate social comparison\") duplicating ground already covered by the approved gamification-mechanics (same mechanism) and SP-08's social-proof effects (different mechanism, decided in the prior batch) — no distinct lever of its own.",
+      "area": "data"
+    },
+    {
+      "id": "D-235",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ze-07-zeigarnik-effect-ff85288cec7e rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-ze-07-zeigarnik-effect-ff85288cec7e for ZE-07. No authoritative artifact was changed. Reason: NON_CONVERGENT_EVIDENCE — investigated per instruction before rejecting. 4 distinct DOIs are cited (5 provenance items), but they do not converge on the fact as stated. Only 1 (the 'Visual Zeigarnik Effect' paper) squarely supports the VISUAL-processing claim. 1 is about a different specific manifestation (anagram-solution recall, not visual paths). 1 is a general meta-analysis of the Zeigarnik/Ovsiankina effects, not visual-specific. 1 (cited via 2 quotes) is a methodological review whose own quote states the Zeigarnik effect is 'far from being the invariable result' and that 'more completed than incompleted tasks are recalled' in some studies — a source that CONTRADICTS the fact, already correctly used in the boundary field rather than in the fact itself. The mechanical cap rule (3+ independent sources -> B) assumes independent sources CORROBORATE the same claim; it has no way to detect that these four diverge, so applying it here would manufacture false confidence from a source count that does not mean what the rule assumes it means. No cap is reported for this proposal because none is honest.",
+      "area": "data"
+    },
+    {
+      "id": "D-236",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ha-04-context-dependent-signaling-in-actio-e92e9f83e244 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-ha-04-context-dependent-signaling-in-actio-e92e9f83e244 for HA-04. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — partial repetition costs in choice tasks, not a habit lever.",
+      "area": "data"
+    },
+    {
+      "id": "D-237",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ha-04-habit-recollection-dissociation-e995edabbecb rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-ha-04-habit-recollection-dissociation-e995edabbecb for HA-04. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a memory-systems dissociation finding (habit vs. recollection contributions to cued-recall performance), not a habit-formation or behavior-change effect; no actionable lever for product habit-building.",
+      "area": "data"
+    },
+    {
+      "id": "D-238",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ha-04-prospective-memory-and-habit-formati-cafbfa19e78a rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-ha-04-prospective-memory-and-habit-formati-cafbfa19e78a for HA-04. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a correlational individual-differences finding (prospective-memory ability predicts flossing frequency), not an intervention; the stored lever (reminder notification) is inferred, not tested by the cited study.",
+      "area": "data"
+    },
+    {
+      "id": "D-239",
+      "date": "2026-08-10",
+      "title": "Proposal effect-vr-02-dissociation-of-reward-anticipation--9bfb468ed166 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-vr-02-dissociation-of-reward-anticipation--9bfb468ed166 for VR-02. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — fMRI localisation (ventral striatum / ventromedial frontal cortex activation) describes a neural correlate, not an interface lever; \"preview upcoming reward before revealing outcome\" is inferred, not tested.",
+      "area": "data"
+    },
+    {
+      "id": "D-240",
+      "date": "2026-08-10",
+      "title": "Proposal effect-vr-02-reward-anticipation-driven-motivatio-eba457d5e78f rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-vr-02-reward-anticipation-driven-motivatio-eba457d5e78f for VR-02. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — human fMRI localisation (dlPFC/VTA/nucleus accumbens activation) describes a neural correlate, not an interface lever.",
+      "area": "data"
+    },
+    {
+      "id": "D-241",
+      "date": "2026-08-10",
+      "title": "Proposal effect-vr-02-ventral-striatal-reward-expectation--b66475ec1930 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-vr-02-ventral-striatal-reward-expectation--b66475ec1930 for VR-02. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — ventral striatal neuron recordings describe a neural correlate; \"countdown timer before reward delivery\" inferred from raw neuron firing patterns is invention, not transfer.",
+      "area": "data"
+    },
+    {
+      "id": "D-242",
+      "date": "2026-08-10",
+      "title": "Proposal effect-vr-02-contrast-effects-fd856b1e084f rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-vr-02-contrast-effects-fd856b1e084f for VR-02. No authoritative artifact was changed. Reason: Rejected as instructed. Note for the record: this one is NOT actually an fMRI/neural finding (its boundary is behavioral — reinforcement schedules) so the collective 'neural correlates' framing given for the other three does not literally describe it. Content-grounded rationale instead: it describes a comparative, multi-component reinforcement-schedule interaction (responding in one component depends on rates in OTHER components) rather than a single actionable lever, and its lever overlaps the approved dopamine-reward-prediction-error-sig without adding a distinct mechanism.",
+      "area": "data"
+    },
+    {
+      "id": "D-243",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-cognitive-load-moderation-of-affecti-2d9064373eb3 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-cl-14-cognitive-load-moderation-of-affecti-2d9064373eb3 for CL-14. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to English-medium-instruction (EMI) learning contexts; a learning-enjoyment/satisfaction correlation, not a cognitive-load application finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-244",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-interpretive-load-a4e46e772130 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-cl-14-interpretive-load-a4e46e772130 for CL-14. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a working paper introducing a construct (interpretive load) with no stated direction of effect.",
+      "area": "data"
+    },
+    {
+      "id": "D-245",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-multimodal-feedback-synergy-7e1d19e9f523 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-cl-14-multimodal-feedback-synergy-7e1d19e9f523 for CL-14. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to supervisory control of autonomous drones in urban environments; a specialist operator-interface finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-246",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-extended-reality-digital-storytellin-9679c3ef5fbd rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-mm-15-extended-reality-digital-storytellin-9679c3ef5fbd for MM-15. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — technology-specific to XR hardware, not a generalizable multimedia design principle; its own boundary states effectiveness varies by learning environment and content type.",
+      "area": "data"
+    },
+    {
+      "id": "D-247",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-facial-anthropomorphism-6344b937a3f7 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-mm-15-facial-anthropomorphism-6344b937a3f7 for MM-15. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — its own boundary states effects are age-dependent (stronger for juvenile students) and material-type dependent (static material); not established as broadly transferable across audiences.",
+      "area": "data"
+    },
+    {
+      "id": "D-248",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-interactive-multimedia-effectiveness-8a5be62c636d rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-mm-15-interactive-multimedia-effectiveness-8a5be62c636d for MM-15. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to high-school biology using specific named software tools (Articulate Storyline, AR E-Magazines); the lever ('interactive multimedia elements') is too generic to be a distinct actionable principle beyond the other approved MM-15 effects.",
+      "area": "data"
+    },
+    {
+      "id": "D-249",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-fluency-truth-association-f4c05aec2338 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-pf-16-fluency-truth-association-f4c05aec2338 for PF-16. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — the third-variable/reverse-causation critique of the illusory truth effect (truth causes fluency, not the reverse); a methodological caveat on illusory-truth-effect-fluency-based, not an independent actionable finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-250",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-crossmodal-fluency-based-preference-02046ba0e7ba rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-pf-16-crossmodal-fluency-based-preference-02046ba0e7ba for PF-16. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-251",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-machine-like-isa-effectiveness-5fcdae16d694 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-pf-16-machine-like-isa-effectiveness-5fcdae16d694 for PF-16. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to matching intelligent-service-agent style (machine-like vs. human-like) to product category (utilitarian vs. social); a specific agent-design finding, not a general fluency effect.",
+      "area": "data"
+    },
+    {
+      "id": "D-252",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-perceptual-fluency-and-approach-acti-7c4e9b33637d rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-pf-16-perceptual-fluency-and-approach-acti-7c4e9b33637d for PF-16. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-253",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-perceptual-fluency-effect-on-brand-p-8dc799d16508 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-pf-16-perceptual-fluency-effect-on-brand-p-8dc799d16508 for PF-16. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-254",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-perceptual-fluency-in-sacred-heritag-6386328655fb rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-pf-16-perceptual-fluency-in-sacred-heritag-6386328655fb for PF-16. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to sacred/heritage sites specifically.",
+      "area": "data"
+    },
+    {
+      "id": "D-255",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-preference-fluency-in-ai-interaction-a9176b0e0b19 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-pf-16-preference-fluency-in-ai-interaction-a9176b0e0b19 for PF-16. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-256",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-word-segmentation-cues-7707dd5b51a6 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-pf-16-word-segmentation-cues-7707dd5b51a6 for PF-16. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to traditional Chinese script readers with lower vocabulary knowledge; a language-and-literacy-specific finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-257",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-ar-and-vr-dwell-time-increase-8b6617c34c79 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-17-ar-and-vr-dwell-time-increase-8b6617c34c79 for SC-17. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-258",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-ar-and-vr-engagement-bypass-06f63403c9f7 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-17-ar-and-vr-engagement-bypass-06f63403c9f7 for SC-17. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-259",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-cognitive-attraction-in-misinformati-77ea7fd9af28 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-17-cognitive-attraction-in-misinformati-77ea7fd9af28 for SC-17. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to Facebook misinformation engagement specifically.",
+      "area": "data"
+    },
+    {
+      "id": "D-260",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-cognitive-bottleneck-in-auditory-aug-dc74d96c64ed rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-17-cognitive-bottleneck-in-auditory-aug-dc74d96c64ed for SC-17. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — a cognitive-capacity-limit finding about simultaneous multi-conversation comprehension under auditory augmentation, not a visual-attention/scanning lever.",
+      "area": "data"
+    },
+    {
+      "id": "D-261",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-h-shape-pattern-4206c045dc02 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-17-h-shape-pattern-4206c045dc02 for SC-17. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE — narrow to Facebook's specific layout.",
+      "area": "data"
+    },
+    {
+      "id": "D-262",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-inductive-ads-a9abbbe52cff rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-17-inductive-ads-a9abbbe52cff for SC-17. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-263",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-native-ad-blindness-ae9ef1eb3142 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-17-native-ad-blindness-ae9ef1eb3142 for SC-17. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE. FLAGGED SEPARATELY (not fixed): this proposal's identified lever was 'reword or hide native-ad disclosure cues', which directly violates SC-17's own no_disguised_advertising hard rule. The transferability filter judges actionability and never checks a named lever against the pack's own forbidden list — logged as an open defect (decision entry + CLAUDE.md).",
+      "area": "data"
+    },
+    {
+      "id": "D-264",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-ostensive-inferential-social-critici-dc43219effbb rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-17-ostensive-inferential-social-critici-dc43219effbb for SC-17. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-265",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-spatial-asymmetry-in-vr-menu-visual--df2e323444b8 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-17-spatial-asymmetry-in-vr-menu-visual--df2e323444b8 for SC-17. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-266",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-text-ad-blindness-bf867259ddfd rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-sc-17-text-ad-blindness-bf867259ddfd for SC-17. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-267",
+      "date": "2026-08-10",
+      "title": "Proposal effect-if-18-language-scent-13dd90826c94 rejected",
+      "body": "claude (delegated by owner) rejected effect proposal effect-if-18-language-scent-13dd90826c94 for IF-18. No authoritative artifact was changed. Reason: NOT_TRANSFERABLE.",
+      "area": "data"
+    },
+    {
+      "id": "D-268",
+      "date": "2026-08-10",
+      "title": "Proposal effect-id-12-foot-in-the-door-technique-e05e39523cb4 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-id-12-foot-in-the-door-technique-e05e39523cb4 for ID-12. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 2 source(s), A -> B-. Boundary extended with the reverse-effect finding from reverse-foot-in-the-door-effect (rejected MIS_ANCHORED as a boundary condition on this proposal, not its own effect).",
+      "area": "data"
+    },
+    {
+      "id": "D-269",
+      "date": "2026-08-10",
+      "title": "Proposal effect-id-12-door-in-the-face-technique-150770fda08a approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-id-12-door-in-the-face-technique-150770fda08a for ID-12. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 2 source(s), A -> B-. OVERREACH: narrowed fact to what the cited span supports, removing the label-only framing (\"The door-in-the-face technique involves...\") — narrowed to the comparison the cited span actually reports (this-procedure vs. smaller-request-alone).",
+      "area": "data"
+    },
+    {
+      "id": "D-270",
+      "date": "2026-08-10",
+      "title": "Proposal effect-id-12-disrupt-then-reframe-dtr-technique-9f263f3967a3 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-id-12-disrupt-then-reframe-dtr-technique-9f263f3967a3 for ID-12. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing the descriptive framing (\"a social influence procedure that requires...to be effective\") not literally in the cited span, replaced with the span's own sequence-requirement finding.",
+      "area": "data"
+    },
+    {
+      "id": "D-271",
+      "date": "2026-08-10",
+      "title": "Proposal effect-re-10-generalized-reciprocity-21b3bd0ff75e approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-re-10-generalized-reciprocity-21b3bd0ff75e for RE-10. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-272",
+      "date": "2026-08-10",
+      "title": "Proposal effect-re-10-reciprocity-nudge-boomerang-effect-638c28c5d7b3 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-re-10-reciprocity-nudge-boomerang-effect-638c28c5d7b3 for RE-10. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing \"tax compliance behavior\" domain specificity not in this span (kept in boundary instead). Approved DELIBERATELY as dissent — a negative/boomerang result, kept per rule 4 (a corpus that cannot disconfirm is broken).",
+      "area": "data"
+    },
+    {
+      "id": "D-273",
+      "date": "2026-08-10",
+      "title": "Proposal effect-re-10-retaliation-effect-e589be05dc8e approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-re-10-retaliation-effect-e589be05dc8e for RE-10. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing \"providing less help to a computer that has not helped them previously\" — the specific mechanism is not established by this span (\"the data provide evidence of a retaliation effect\" only), narrowed to what the span states.",
+      "area": "data"
+    },
+    {
+      "id": "D-274",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cg-05-backward-curiosity-272a17837abd approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cg-05-backward-curiosity-272a17837abd for CG-05. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-275",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cg-05-curiosity-as-a-mediator-of-impulsive-beb3329b98f2 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cg-05-curiosity-as-a-mediator-of-impulsive-beb3329b98f2 for CG-05. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B+ -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-276",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cg-05-curiosity-as-a-predictor-of-health-a-cfa9ee165d55 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cg-05-curiosity-as-a-predictor-of-health-a-cfa9ee165d55 for CG-05. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-277",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cg-05-curiosity-gap-5041d134922b approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cg-05-curiosity-gap-5041d134922b for CG-05. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B+ -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-278",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cg-05-forward-curiosity-9553fd539dc9 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cg-05-forward-curiosity-9553fd539dc9 for CG-05. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-279",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ze-07-ovsiankina-effect-c5ff6eba39a5 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ze-07-ovsiankina-effect-c5ff6eba39a5 for ZE-07. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-280",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ze-07-gamification-mechanics-92d3864ca6e6 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ze-07-gamification-mechanics-92d3864ca6e6 for ZE-07. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B+ -> C+. OVERREACH: narrowed fact to what the cited span supports, removing the claimed OUTCOMES (\"support positive affect, motivation, behavior change, and learning\") — the span lists mechanisms/actions, not these outcome claims.",
+      "area": "data"
+    },
+    {
+      "id": "D-281",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ha-04-context-dependent-habit-disruption-eaba350662b2 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ha-04-context-dependent-habit-disruption-eaba350662b2 for HA-04. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing wording not in the span (\"environmental context in which they were formed\") replaced with the span's own vocabulary (\"usual context for performance\").",
+      "area": "data"
+    },
+    {
+      "id": "D-282",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ha-04-context-dependent-repetition-bias-cf3e78a0a618 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ha-04-context-dependent-repetition-bias-cf3e78a0a618 for HA-04. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-283",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ha-04-dental-flossing-habit-formation-50eedc07cf86 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ha-04-dental-flossing-habit-formation-50eedc07cf86 for HA-04. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. Generalized from a flossing-specific finding to the sequencing principle it demonstrates, per owner instruction: written as the pattern (sequence after an existing routine), not as flossing. Boundary states the empirical basis is a single flossing study.",
+      "area": "data"
+    },
+    {
+      "id": "D-284",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ha-04-habit-formation-curve-07bee6d4a8f0 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ha-04-habit-formation-curve-07bee6d4a8f0 for HA-04. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A+ -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-285",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ha-04-habit-intention-moderation-5ae6db47ccef approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ha-04-habit-intention-moderation-5ae6db47ccef for HA-04. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-286",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ha-04-habit-loop-31608f35245a approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ha-04-habit-loop-31608f35245a for HA-04. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 2 source(s), A- -> B-.",
+      "area": "data"
+    },
+    {
+      "id": "D-287",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ha-04-habitual-automaticity-5d63b190ccc0 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ha-04-habitual-automaticity-5d63b190ccc0 for HA-04. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. Renamed payload.id from ha-04-01 to ha-04-07: another approved proposal in this batch already claims effects/HA-04/ha-04-01.json.",
+      "area": "data"
+    },
+    {
+      "id": "D-288",
+      "date": "2026-08-10",
+      "title": "Proposal effect-vr-02-dopamine-reward-prediction-error-sig-f6db55ac50e1 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-vr-02-dopamine-reward-prediction-error-sig-f6db55ac50e1 for VR-02. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 2 source(s), A -> B-.",
+      "area": "data"
+    },
+    {
+      "id": "D-289",
+      "date": "2026-08-10",
+      "title": "Proposal effect-vr-02-behavioral-momentum-0cfcde3e8b90 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-vr-02-behavioral-momentum-0cfcde3e8b90 for VR-02. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A- -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-290",
+      "date": "2026-08-10",
+      "title": "Proposal effect-vr-02-matching-law-6f39d68119c5 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-vr-02-matching-law-6f39d68119c5 for VR-02. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-291",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-cognitive-load-reduction-via-multimo-b265d228d9c1 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cl-14-cognitive-load-reduction-via-multimo-b265d228d9c1 for CL-14. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-292",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-cognitive-load-threshold-boundary-co-daf4aab1cd1b approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cl-14-cognitive-load-threshold-boundary-co-daf4aab1cd1b for CL-14. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-293",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-dialogue-based-tts-lesson-format-6344b7e060e8 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cl-14-dialogue-based-tts-lesson-format-6344b7e060e8 for CL-14. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B+ -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-294",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-element-interactivity-as-a-boundary--724dbb2c8db0 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cl-14-element-interactivity-as-a-boundary--724dbb2c8db0 for CL-14. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-295",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-expertise-reversal-effect-72a394e20f30 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cl-14-expertise-reversal-effect-72a394e20f30 for CL-14. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 2 source(s), C+ -> B-.",
+      "area": "data"
+    },
+    {
+      "id": "D-296",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-intrinsic-cognitive-load-cab49c0f68b8 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cl-14-intrinsic-cognitive-load-cab49c0f68b8 for CL-14. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-297",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-redundancy-effect-453b93c6eb4c approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cl-14-redundancy-effect-453b93c6eb4c for CL-14. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-298",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-same-category-advantage-747cd51d1faf approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cl-14-same-category-advantage-747cd51d1faf for CL-14. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-299",
+      "date": "2026-08-10",
+      "title": "Proposal effect-cl-14-split-attention-effect-04b908b55654 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-cl-14-split-attention-effect-04b908b55654 for CL-14. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 3 source(s), C+ -> B.",
+      "area": "data"
+    },
+    {
+      "id": "D-300",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-coherence-effect-1dcb3d7b384c approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-mm-15-coherence-effect-1dcb3d7b384c for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-301",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-coherence-principle-e5f3e87947e3 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-mm-15-coherence-principle-e5f3e87947e3 for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 2 source(s), B+ -> B-.",
+      "area": "data"
+    },
+    {
+      "id": "D-302",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-content-redundancy-7686ab66e7bd approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-mm-15-content-redundancy-7686ab66e7bd for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. Approved alongside redundancy-effect as a preserved corpus disconfirmation; see the dissent decision entry.",
+      "area": "data"
+    },
+    {
+      "id": "D-303",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-embodiment-principle-9de1468ae5d1 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-mm-15-embodiment-principle-9de1468ae5d1 for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A- -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-304",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-modality-effect-15a0a9dbcac4 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-mm-15-modality-effect-15a0a9dbcac4 for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 2 source(s), A+ -> B-.",
+      "area": "data"
+    },
+    {
+      "id": "D-305",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-multimedia-principle-c2061e1c96d8 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-mm-15-multimedia-principle-c2061e1c96d8 for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 2 source(s), A- -> B-.",
+      "area": "data"
+    },
+    {
+      "id": "D-306",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-redundancy-effect-c1c7ed537b36 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-mm-15-redundancy-effect-c1c7ed537b36 for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 7 source(s), A -> B. OVERREACH: narrowed fact to what the cited span supports, removing the generic hedge \"findings are contested\" replaced with the specific contested findings the 7 cited sources actually report (no-effect, reversed-effect, ADHD-moderated). Approved alongside content-redundancy as a preserved corpus disconfirmation; see the dissent decision entry.",
+      "area": "data"
+    },
+    {
+      "id": "D-307",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-signaling-principle-5b48004b7495 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-mm-15-signaling-principle-5b48004b7495 for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 3 source(s), B -> B. OVERREACH: narrowed fact to what the cited span supports, removing the unqualified claim \"can improve learning outcomes\" — one of the three cited sources reports \"No effect of signaling was observed\"; narrowed to state the actual split.",
+      "area": "data"
+    },
+    {
+      "id": "D-308",
+      "date": "2026-08-10",
+      "title": "Proposal effect-mm-15-spatial-contiguity-principle-99513b7fa4e9 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-mm-15-spatial-contiguity-principle-99513b7fa4e9 for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A+ -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-309",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-aesthetic-usability-effect-a0a0fab054a3 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-pf-16-aesthetic-usability-effect-a0a0fab054a3 for PF-16. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B+ -> C+. OVERREACH: narrowed fact to what the cited span supports, removing \"acts as a third variable that CAUSES both\" — the span shows the correlation is diminished, not eliminated (.34 residual), so \"causes both\" overstates it.",
+      "area": "data"
+    },
+    {
+      "id": "D-310",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-fluency-based-aesthetic-interest-a95937ecece3 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-pf-16-fluency-based-aesthetic-interest-a95937ecece3 for PF-16. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B+ -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-311",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-fluency-based-aesthetic-pleasure-eva-7046b0d3a23c approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-pf-16-fluency-based-aesthetic-pleasure-eva-7046b0d3a23c for PF-16. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 3 source(s), A- -> B. OVERREACH: narrowed fact to what the cited span supports, removing \"raising evaluations and pleasure in applied contexts such as online shopping\" — that specific applied-context claim is not in the cited span (kept in boundary).",
+      "area": "data"
+    },
+    {
+      "id": "D-312",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-illusory-truth-effect-fluency-based--d79774a3a94a approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-pf-16-illusory-truth-effect-fluency-based--d79774a3a94a for PF-16. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 4 source(s), A -> B. OVERREACH: narrowed fact to what the cited span supports, removing \"memory-retrieved statements\" folded into \"repeated statements\" — kept the specific, measured claim.",
+      "area": "data"
+    },
+    {
+      "id": "D-313",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-implicit-affective-preference-for-vi-ecacd1a2be19 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-pf-16-implicit-affective-preference-for-vi-ecacd1a2be19 for PF-16. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A- -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-314",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-processing-fluency-f9b3eb0e0dfd approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-pf-16-processing-fluency-f9b3eb0e0dfd for PF-16. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 3 source(s), A -> B. OVERREACH: narrowed fact to what the cited span supports, removing \"defined as the ease with which information is processed\" descriptive framing, kept the span's own causal claim.",
+      "area": "data"
+    },
+    {
+      "id": "D-315",
+      "date": "2026-08-10",
+      "title": "Proposal effect-pf-16-relative-fluency-and-liking-4a6e49b73b4a approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-pf-16-relative-fluency-and-liking-4a6e49b73b4a for PF-16. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B -> C+. OVERREACH: narrowed fact to what the cited span supports, removing the vaguer \"dependent on the presence of other stimuli\" replaced with the span's own, more precise within-vs-between-participants finding — a sharpening, not just a cut.",
+      "area": "data"
+    },
+    {
+      "id": "D-316",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ps-13-pictorial-superiority-effect-55e17aaab339 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ps-13-pictorial-superiority-effect-55e17aaab339 for PS-13. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 3 source(s), A -> B.",
+      "area": "data"
+    },
+    {
+      "id": "D-317",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ps-13-picture-superiority-effect-0f55cd04f9c9 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ps-13-picture-superiority-effect-0f55cd04f9c9 for PS-13. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 3 source(s), A -> B.",
+      "area": "data"
+    },
+    {
+      "id": "D-318",
+      "date": "2026-08-10",
+      "title": "Proposal effect-ps-13-symbol-superiority-effect-ada57e38c00a approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-ps-13-symbol-superiority-effect-ada57e38c00a for PS-13. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A- -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-319",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-automatic-salience-capture-b055fcaa98fe approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sc-17-automatic-salience-capture-b055fcaa98fe for SC-17. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-320",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-automatic-salience-suppression-7adead657c62 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sc-17-automatic-salience-suppression-7adead657c62 for SC-17. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing \"where users habitually ignore salient stimuli\" — this span names the mode as part of the process model but does not itself characterize its behavior.",
+      "area": "data"
+    },
+    {
+      "id": "D-321",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-banner-blindness-f29299afec5f approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sc-17-banner-blindness-f29299afec5f for SC-17. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 6 source(s), A -> B.",
+      "area": "data"
+    },
+    {
+      "id": "D-322",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-controlled-salience-suppression-f59e5566d1dd approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sc-17-controlled-salience-suppression-f59e5566d1dd for SC-17. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing \"where users actively manage their attention to avoid salient stimuli\" — this span names the mode as part of the process model but does not itself characterize its behavior.",
+      "area": "data"
+    },
+    {
+      "id": "D-323",
+      "date": "2026-08-10",
+      "title": "Proposal effect-sc-17-gallery-based-layout-visual-search-e-531db570cdb0 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-sc-17-gallery-based-layout-visual-search-e-531db570cdb0 for SC-17. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing spelled-out metric names not in the span, aligned to the span's own abbreviations (RT/TVD/TFC).",
+      "area": "data"
+    },
+    {
+      "id": "D-324",
+      "date": "2026-08-10",
+      "title": "Proposal effect-if-18-information-scent-in-visual-search-b504f81df5ea approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-if-18-information-scent-in-visual-search-b504f81df5ea for IF-18. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 2 source(s), A- -> B-.",
+      "area": "data"
+    },
+    {
+      "id": "D-325",
+      "date": "2026-08-10",
+      "title": "Proposal effect-if-18-information-scent-sequential-decisio-27ffcacdf5bc approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-if-18-information-scent-sequential-decisio-27ffcacdf5bc for IF-18. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), B+ -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-326",
+      "date": "2026-08-10",
+      "title": "Proposal effect-if-18-lateral-reading-d3edcfeb09ec approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-if-18-lateral-reading-d3edcfeb09ec for IF-18. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing \"health-related misinformation\" domain specificity not in this span (kept in boundary).",
+      "area": "data"
+    },
+    {
+      "id": "D-327",
+      "date": "2026-08-10",
+      "title": "Proposal effect-if-18-scent-based-navigation-3f337f1c60c2 approved",
+      "body": "claude (delegated by owner) approved effect proposal effect-if-18-scent-based-navigation-3f337f1c60c2 for IF-18. The validated proposal status and authoritative projection were committed atomically. Reason: Approved under mechanical grade cap: 1 source(s), A -> C+.",
+      "area": "data"
+    },
+    {
+      "id": "D-328",
+      "date": "2026-08-10",
+      "area": "data",
+      "title": "MM-15 redundancy effects disconfirm each other — preserved, not reconciled (dissent record)",
+      "body": "The corpus's first self-disconfirmation, preserved rather than resolved, per rule 4 (\"a corpus that cannot disconfirm is broken\"). This entry is the dissent RECORD the owner asked for — no schema-sanctioned dissent artifact exists yet (dissent is a required field on the Dossier schema, dossiers/dossier.schema.json, and no MM-15 dossier has been built); this decision is the linking record until one does.\n\neffects/MM-15/content-redundancy.json (D-302, approved from effect-mm-15-content-redundancy-7686ab66e7bd) states: content redundancy INCREASES learning outcomes and DECREASES cognitive load. Single source (10.1111/bjep.12592).\n\neffects/MM-15/mm15-redundancy-effect.json (D-306, approved from effect-mm-15-redundancy-effect-c1c7ed537b36) states: modality-based redundancy (the classic simultaneous text+narration case) tends to DECREASE learning outcomes and INCREASE cognitive load. Seven sources, and the proposal's own citations do not agree with each other either: one reports no significant effect at all, one reports a REVERSED (beneficial) effect for foreign-language learners — the same direction as content-redundancy's finding — and one reports the effect is moderated by ADHD symptoms.\n\nTHE CONFLICT, stated plainly. Both proposals' own boundary text already distinguished \"content\" from \"modal\" redundancy as a way to keep them from contradicting each other. That distinction does not fully hold: one of redundancy-effect's own seven sources reports the SAME positive direction content-redundancy reports, for a different population (foreign-language learners) under what the source itself calls a \"reverse redundancy effect.\" The corpus does not resolve whether redundant information, as a class, helps or hurts learning — direction depends on redundancy type and population in ways this evidence base does not cleanly separate.\n\nWHY BOTH ARE KEPT, not merged, not one dropped. Rule 4 does not permit smoothing a disconfirmation into a synthesis the corpus itself does not support. Each proposal's boundary field now states the tension and cross-references the other's proposal id, so a reader who opens either effect sees the disagreement rather than a false consensus.\n\nWHAT THIS DOES NOT DO. It does not decide which direction is correct — that would be resolving the dissent, which rule 4 forbids as a first move. It does not create a new artifact type; \"dissent record\" is represented here as a decision entry plus cross-referencing boundary text, the only structural facilities that exist pre-dossier. If MM-15 gets a dossier, its `dissent` field is where this belongs formally, and this decision is the source material for writing it."
+    },
+    {
+      "id": "D-329",
+      "date": "2026-08-10",
+      "area": "architecture",
+      "title": "Transferability never checks a lever against the mechanism's own forbidden-lever list",
+      "body": "Open defect, logged not fixed. effect-sc-17-native-ad-blindness-ae9ef1eb3142 (rejected NOT_TRANSFERABLE this batch, D-263) carried a v3-identified lever of 'reword or hide native-ad disclosure cues.' That lever directly instructs the thing SC-17's own hard rule forbids: registry/mechanisms/SC-17.json's constraints.hard_rules includes no_disguised_advertising (severity block) — 'Promotional or paid content must not be disguised as native content to bypass ad avoidance.'\n\nThe transferability filter (lib/transferability.ts) has no code path that reads a mechanism's constraints.hard_rules and checks a VARIABLE-identified lever against it. It judges only whether a lever is ACTIONABLE (does a product surface exist that could act on it), never whether acting on it is something the mechanism's own pack forbids. Confirmed by grep: constraints.hard_rules is read by lib/status.ts (registry-completeness check), tools/render-cards.ts and tools/render-packs.ts (rendering the pack's forbidden list from it), and tools/validate.ts (non-empty schema check) — never from lib/transferability.ts or the extraction pipeline that calls it.\n\nThis one was caught by the owner reading the review packet, not by the pipeline. A lever that violates a DIFFERENT mechanism's hard rule (not the one it was extracted under) would not be caught even by manual review unless the reader happened to check every pack's forbidden list against every lever by hand.\n\nNOT FIXED HERE. A real fix needs a decision about scope: check a lever only against its OWN mechanism's hard_rules, or against every mechanism's (a lever proposed under one mechanism could still describe a dark pattern forbidden elsewhere) — and where the check should run (transferability, a separate triage flag alongside OVERREACH, or a pack-build-time check). That is a separate piece of work, deliberately not started by this entry."
     }
   ]
 }

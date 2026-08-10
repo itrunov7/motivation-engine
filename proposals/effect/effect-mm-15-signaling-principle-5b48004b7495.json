@@ -6,7 +6,7 @@
     "id": "signaling-principle",
     "mechanism_id": "MM-15",
     "name": "Signaling Principle",
-    "fact": "The signaling principle, which involves using cues to highlight essential information, can improve learning outcomes, though its effectiveness may vary depending on the instructional context and learner characteristics.",
+    "fact": "The effect of the signaling principle (using cues to highlight essential information) on learning outcomes is contested: one study found no significant effect of signaling, while another found the strongest cue type (an embodied pedagogical agent) outperformed other cue groups.",
     "grade": "B",
     "source": [
       "10.17576/apjitm-2021-1002-05",
@@ -55,7 +55,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 3 independent source(s), original model-asserted grade B -> capped to B."
   },
   "provenance": [
     {
@@ -102,11 +103,11 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30818854515",
   "proposed_at": "2026-08-03T13:38:36.944Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.743Z",
+  "decision_note": "Approved under mechanical grade cap: 3 source(s), B -> B. OVERREACH: narrowed fact to what the cited span supports, removing the unqualified claim \"can improve learning outcomes\" — one of the three cited sources reports \"No effect of signaling was observed\"; narrowed to state the actual split.",
   "transferability": {
     "ruleset_version": 3,
     "transferable": true,
@@ -114,18 +115,18 @@
       {
         "check": "subject",
         "outcome": "warn",
-        "reason": "a person inside a specific institutional setting (pedagogical, instructional, learning) — transferable only if the finding survives leaving it"
+        "reason": "a person inside a specific institutional setting (pedagogical, learning) — transferable only if the finding survives leaving it"
       },
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: highlight key info with visual cues — names a manipulable variable: highlight key info with visual cues — Signaling maps directly to UI emphasis: color, bold, or arrows highlighting essential content.",
+        "reason": "names a manipulable variable: highlight key info with visual cues — names a manipulable variable: highlight key info with visual cues — names a manipulable variable: highlight key info with visual cues — Signaling maps directly to UI emphasis: color, bold, or arrows highlighting essential content.",
         "identified_lever": "highlight key info with visual cues"
       },
       {
         "check": "direction",
         "outcome": "pass",
-        "reason": "states a direction (improve)"
+        "reason": "states a direction (outperformed)"
       },
       {
         "check": "population",

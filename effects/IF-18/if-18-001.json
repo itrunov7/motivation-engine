@@ -1,0 +1,28 @@
+{
+  "id": "if-18-001",
+  "mechanism_id": "IF-18",
+  "name": "Scent-Based Navigation",
+  "fact": "The SNIF-ACT 2.0 model, which utilizes information scent and a Bayesian satisficing model, provided better fits to human navigation data than the SNIF-ACT 1.0 model and a position-based model.",
+  "grade": "C+",
+  "source": [
+    "10.1080/07370020701638806"
+  ],
+  "boundary": "Web navigation behavior",
+  "realization_ids": [],
+  "provenance": [
+    {
+      "mechanism_id": "IF-18",
+      "corpus_record_id": "cr_34cfecb424b70f6fd0c13369",
+      "doi": "10.1080/07370020701638806",
+      "title": "SNIF-ACT: A Cognitive Model of User Navigation on the World Wide Web",
+      "quote_or_locus": "Monte Carlo simulations of the model showed that SNIF-ACT 2.0 provided better fits to human data than SNIF-ACT 1.0 and a Position model that used position of links on a Web page to decide which link to select",
+      "source_span": {
+        "start": 1803,
+        "end": 2011,
+        "source_text_sha256": "33de0dd1b914b1304ff8bfd2b91ee2161df2329301271ed83d3b988642dd7c49"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A -> capped to C+."
+}

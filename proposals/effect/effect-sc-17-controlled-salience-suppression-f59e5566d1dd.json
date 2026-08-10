@@ -6,8 +6,8 @@
     "id": "sc-17-02",
     "mechanism_id": "SC-17",
     "name": "Controlled salience suppression",
-    "fact": "Controlled salience suppression is a banner processing mode where users actively manage their attention to avoid salient stimuli.",
-    "grade": "A",
+    "fact": "Controlled salience suppression is one of three banner processing modes identified in a process model of how banner processing evolves from an evolutionary perspective (alongside automatic salience capture and automatic salience suppression).",
+    "grade": "C+",
     "source": [
       "10.17705/1jais.00324"
     ],
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A -> capped to C+."
   },
   "provenance": [
     {
@@ -48,24 +49,24 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:44:35.264Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.926Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing \"where users actively manage their attention to avoid salient stimuli\" — this span names the mode as part of the process model but does not itself characterize its behavior.",
   "transferability": {
     "ruleset_version": 3,
     "transferable": true,
     "checks": [
       {
         "check": "subject",
-        "outcome": "warn",
-        "reason": "people (users) but no artifact and no named setting — the subject is a person in the abstract"
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
       },
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: reduce visual salience of banner-like elements — names a manipulable variable: reduce visual salience of banner-like elements — Product can hide or de-emphasize salient stimuli users try to avoid attending to.",
+        "reason": "names a manipulable variable: reduce visual salience of banner-like elements — names a manipulable variable: reduce visual salience of banner-like elements — names a manipulable variable: reduce visual salience of banner-like elements — Product can hide or de-emphasize salient stimuli users try to avoid attending to.",
         "identified_lever": "reduce visual salience of banner-like elements"
       },
       {

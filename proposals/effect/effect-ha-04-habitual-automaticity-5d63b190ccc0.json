@@ -3,11 +3,11 @@
   "type": "effect",
   "target": "HA-04",
   "payload": {
-    "id": "ha-04-01",
+    "id": "ha-04-07",
     "mechanism_id": "HA-04",
     "name": "Habitual automaticity",
     "fact": "When behavior is habitual, behavioral responses are activated automatically.",
-    "grade": "A",
+    "grade": "C+",
     "source": [
       "10.1037/0022-3514.78.1.53"
     ],
@@ -40,7 +40,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A -> capped to C+."
   },
   "provenance": [
     {
@@ -74,11 +75,11 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:38:46.972Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.487Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A -> C+. Renamed payload.id from ha-04-01 to ha-04-07: another approved proposal in this batch already claims effects/HA-04/ha-04-01.json.",
   "transferability": {
     "ruleset_version": 3,
     "transferable": true,

@@ -6,8 +6,8 @@
     "id": "gallery-based-layout-visual-search-efficiency",
     "mechanism_id": "SC-17",
     "name": "Gallery-based layout visual search efficiency",
-    "fact": "A gallery-based layout, characterized by a size-based visual hierarchy, supports more efficient visual search in VR menu interfaces compared to a grid-based layout, as evidenced by shorter reaction times, reduced total visit duration, and lower total fixation counts.",
-    "grade": "A",
+    "fact": "A gallery-based layout supported more efficient visual search than a grid-based layout, reflected in shorter reaction times (RT), reduced overall total visit duration (TVD), and lower overall total fixation count (TFC).",
+    "grade": "C+",
     "source": [
       "10.3390/s26123652"
     ],
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A -> capped to C+."
   },
   "provenance": [
     {
@@ -48,11 +49,11 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30818373159",
   "proposed_at": "2026-08-03T13:32:20.847Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.936Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing spelled-out metric names not in the span, aligned to the span's own abbreviations (RT/TVD/TFC).",
   "transferability": {
     "ruleset_version": 3,
     "transferable": true,
@@ -65,13 +66,13 @@
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: size-based gallery menu layout instead of grid — names a manipulable variable: size-based gallery menu layout instead of grid — Menu layout structure and item size hierarchy are directly controllable UI display choices.",
+        "reason": "names a manipulable variable: size-based gallery menu layout instead of grid — names a manipulable variable: size-based gallery menu layout instead of grid — names a manipulable variable: size-based gallery menu layout instead of grid — Menu layout structure and item size hierarchy are directly controllable UI display choices.",
         "identified_lever": "size-based gallery menu layout instead of grid"
       },
       {
         "check": "direction",
-        "outcome": "fail",
-        "reason": "describes rather than directs (characterized by) — a definition states nothing to move"
+        "outcome": "pass",
+        "reason": "states a direction (reduced, lower, than)"
       },
       {
         "check": "population",
@@ -80,8 +81,6 @@
       }
     ],
     "escalated_by_warning_pair": false,
-    "modifiers_flagged": [
-      "direction"
-    ]
+    "modifiers_flagged": []
   }
 }

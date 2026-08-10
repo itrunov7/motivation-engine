@@ -6,8 +6,8 @@
     "id": "id-12-001",
     "mechanism_id": "ID-12",
     "name": "Disrupt-then-reframe (DTR) technique",
-    "fact": "The disrupt-then-reframe (DTR) technique is a social influence procedure that requires both a small disruption and a direct reframing in that specific sequence to be effective.",
-    "grade": "A",
+    "fact": "Both the disruption and the reframing are required, in that specific sequence, for the disrupt-then-reframe technique to increase compliance.",
+    "grade": "C+",
     "source": [
       "10.1037/0022-3514.76.2.192"
     ],
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A -> capped to C+."
   },
   "provenance": [
     {
@@ -48,11 +49,11 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30819387214",
   "proposed_at": "2026-08-03T13:45:18.004Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.349Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing the descriptive framing (\"a social influence procedure that requires...to be effective\") not literally in the cited span, replaced with the span's own sequence-requirement finding.",
   "transferability": {
     "ruleset_version": 3,
     "transferable": true,
@@ -65,13 +66,13 @@
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: unusual phrasing/interruption then reframed pitch, in sequence — names a manipulable variable: unusual phrasing/interruption then reframed pitch, in sequence — UI can present odd framing then quick reframed message to disrupt resistance.",
+        "reason": "names a manipulable variable: unusual phrasing/interruption then reframed pitch, in sequence — names a manipulable variable: unusual phrasing/interruption then reframed pitch, in sequence — names a manipulable variable: unusual phrasing/interruption then reframed pitch, in sequence — UI can present odd framing then quick reframed message to disrupt resistance.",
         "identified_lever": "unusual phrasing/interruption then reframed pitch, in sequence"
       },
       {
         "check": "direction",
-        "outcome": "fail",
-        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+        "outcome": "pass",
+        "reason": "states a direction (increase)"
       },
       {
         "check": "population",
@@ -81,8 +82,7 @@
     ],
     "escalated_by_warning_pair": false,
     "modifiers_flagged": [
-      "subject",
-      "direction"
+      "subject"
     ]
   }
 }

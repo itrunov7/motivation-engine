@@ -6,8 +6,8 @@
     "id": "id-12-02",
     "mechanism_id": "ID-12",
     "name": "Door-in-the-face technique",
-    "fact": "The door-in-the-face technique involves making an extreme request that is refused, followed by a smaller request, which increases compliance with the smaller request compared to asking for it alone.",
-    "grade": "A",
+    "fact": "Making a large request that is refused, before a smaller request, produces more compliance with the smaller request than asking for the smaller request alone.",
+    "grade": "B-",
     "source": [
       "10.1037/h0076284",
       "10.1177/002224378602300206"
@@ -41,7 +41,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 2 independent source(s), original model-asserted grade A -> capped to B-."
   },
   "provenance": [
     {
@@ -75,11 +76,11 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:39:08.996Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.340Z",
+  "decision_note": "Approved under mechanical grade cap: 2 source(s), A -> B-. OVERREACH: narrowed fact to what the cited span supports, removing the label-only framing (\"The door-in-the-face technique involves...\") — narrowed to the comparison the cited span actually reports (this-procedure vs. smaller-request-alone).",
   "transferability": {
     "ruleset_version": 3,
     "transferable": true,
@@ -92,13 +93,13 @@
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: ask a large request before the smaller one — names a manipulable variable: ask a large request before the smaller one — UI can sequence an extreme ask before the real smaller request to boost compliance.",
+        "reason": "names a manipulable variable: ask a large request before the smaller one — names a manipulable variable: ask a large request before the smaller one — names a manipulable variable: ask a large request before the smaller one — UI can sequence an extreme ask before the real smaller request to boost compliance.",
         "identified_lever": "ask a large request before the smaller one"
       },
       {
         "check": "direction",
         "outcome": "pass",
-        "reason": "states a direction (increases)"
+        "reason": "states a direction (than)"
       },
       {
         "check": "population",

@@ -8,66 +8,163 @@
   "parent": "S4",
   "lifecycle_status": "incubating",
   "dossier_ref": "dossiers/RE-10.json",
-  "provenance": { "proposed_by": "owner", "date": "2026-07-15" },
-  "evidence_terms": ["reciprocity norm compliance", "reciprocity persuasion gift", "rule of reciprocation", "reciprocity replication", "pay it forward reciprocity behavior"],
+  "provenance": {
+    "proposed_by": "owner",
+    "date": "2026-07-15"
+  },
+  "evidence_terms": [
+    "reciprocity norm compliance",
+    "reciprocity persuasion gift",
+    "rule of reciprocation",
+    "reciprocity replication",
+    "pay it forward reciprocity behavior"
+  ],
   "pinned_evidence": [
-    { "doi": "10.2307/2092623", "title": "The Norm of Reciprocity: A Preliminary Statement", "reason": "foundational — Gouldner" },
-    { "doi": "10.1037/0022-3514.31.2.206", "title": "Reciprocal concessions procedure for inducing compliance: The door-in-the-face technique", "reason": "reciprocity in compliance — Cialdini et al." }
+    {
+      "doi": "10.2307/2092623",
+      "title": "The Norm of Reciprocity: A Preliminary Statement",
+      "reason": "foundational — Gouldner"
+    },
+    {
+      "doi": "10.1037/0022-3514.31.2.206",
+      "title": "Reciprocal concessions procedure for inducing compliance: The door-in-the-face technique",
+      "reason": "reciprocity in compliance — Cialdini et al."
+    }
   ],
   "evidence": {
     "grade": "B+",
     "basis": "The reciprocity norm — a felt obligation to return benefits received — is a broadly documented social rule (Gouldner 1960) and underlies compliance techniques like door-in-the-face (Cialdini). Field experiments (gift-exchange) show reciprocal behavior reliably.",
     "effect_size_note": "Reciprocity effects are real and cross-culturally present, but the magnitude in commercial contexts depends on the gift feeling genuine and unconditional; transparent quid-pro-quo weakens it.",
-    "caveats": ["gift_must_feel_genuine_not_transactional", "effect_weakens_if_perceived_as_manipulation", "obligation_can_feel_coercive_if_overused"]
+    "caveats": [
+      "gift_must_feel_genuine_not_transactional",
+      "effect_weakens_if_perceived_as_manipulation",
+      "obligation_can_feel_coercive_if_overused"
+    ]
   },
   "prior_weight": 0.7,
   "mechanism_summary_for_context": "Receiving something creates a felt obligation to give back. Deliver genuine value first — a useful free tool, real help, an unexpected upgrade — and users are more inclined to reciprocate with attention, signup, or purchase. The value given must be genuine and useful on its own; reciprocity engineered as a transparent transaction ('we gave you X so now you owe us') backfires. Ventora's lead-magnet funnels are reciprocity in action.",
   "applicability": {
-    "funnel_stages": ["cold_acquisition", "activation", "conversion"],
-    "excluded_stages": ["retention"],
-    "artifact_types": ["landing_hero", "onboarding", "paywall", "email"],
+    "funnel_stages": [
+      "cold_acquisition",
+      "activation",
+      "conversion"
+    ],
+    "excluded_stages": [
+      "retention"
+    ],
+    "artifact_types": [
+      "landing_hero",
+      "onboarding",
+      "paywall",
+      "email"
+    ],
     "preconditions": [
-      { "predicate": "product.can_give_genuine_value_first == true", "reason": "requires real value delivered before the ask; not applicable where nothing genuine is given first" }
+      {
+        "predicate": "product.can_give_genuine_value_first == true",
+        "reason": "requires real value delivered before the ask; not applicable where nothing genuine is given first"
+      }
     ],
     "culture_note": "Reciprocity is a near-universal social norm; its strength and the acceptable form of gifts vary culturally; an L3 surface parameter"
   },
   "implementations": [
     {
       "id": "RE-10-value-first",
-      "artifact_types": ["landing_hero", "onboarding"],
-      "product_requirements": ["can_deliver_free_value"],
+      "artifact_types": [
+        "landing_hero",
+        "onboarding"
+      ],
+      "product_requirements": [
+        "can_deliver_free_value"
+      ],
       "generation_directive": "Deliver genuine, useful value before asking for anything — a real free result, tool, or insight the user keeps regardless. The gift must stand on its own as useful; the ask follows naturally, not as an explicit price for the gift. Ventora's free Idea Check report is the pattern.",
-      "copy_formulas": ["Here's your free {deliverable}", "Yours to keep — {value}"],
-      "metrics": ["signup_rate", "cvr", "activation_rate"],
+      "copy_formulas": [
+        "Here's your free {deliverable}",
+        "Yours to keep — {value}"
+      ],
+      "metrics": [
+        "signup_rate",
+        "cvr",
+        "activation_rate"
+      ],
       "observed_effects": []
     },
     {
       "id": "RE-10-unexpected-upgrade",
-      "artifact_types": ["onboarding", "email"],
+      "artifact_types": [
+        "onboarding",
+        "email"
+      ],
       "product_requirements": [],
       "generation_directive": "Give an unexpected, genuine benefit (a surprise upgrade, extra credits, a bonus) without demanding return. Unconditional giving reciprocates more strongly than conditional. Never frame it as a debt to be repaid.",
-      "copy_formulas": ["A gift for you — {benefit}", "We added {bonus}, on us"],
-      "metrics": ["retention_lift", "conversion_after_gift"],
+      "copy_formulas": [
+        "A gift for you — {benefit}",
+        "We added {bonus}, on us"
+      ],
+      "metrics": [
+        "retention_lift",
+        "conversion_after_gift"
+      ],
       "observed_effects": []
     }
   ],
   "constraints": {
     "hard_rules": [
-      { "id": "genuine_gift", "rule": "The value given must be genuinely useful on its own; hollow 'gifts' engineered solely to create obligation are forbidden", "severity": "block" },
-      { "id": "no_coercive_obligation", "rule": "Do not frame the gift as a debt or pressure repayment; reciprocity must remain a free response, not a manufactured obligation", "severity": "block" },
-      { "id": "no_unwanted_gifts_as_leverage", "rule": "Do not use unsolicited 'gifts' (e.g. forced trials that auto-bill) as reciprocity leverage", "severity": "block" }
+      {
+        "id": "genuine_gift",
+        "rule": "The value given must be genuinely useful on its own; hollow 'gifts' engineered solely to create obligation are forbidden",
+        "severity": "block"
+      },
+      {
+        "id": "no_coercive_obligation",
+        "rule": "Do not frame the gift as a debt or pressure repayment; reciprocity must remain a free response, not a manufactured obligation",
+        "severity": "block"
+      },
+      {
+        "id": "no_unwanted_gifts_as_leverage",
+        "rule": "Do not use unsolicited 'gifts' (e.g. forced trials that auto-bill) as reciprocity leverage",
+        "severity": "block"
+      }
     ],
-    "compliance_refs": ["EU_DSA_dark_patterns", "ftc_negative_option", "eu_ucpd_inertia_selling"],
+    "compliance_refs": [
+      "EU_DSA_dark_patterns",
+      "ftc_negative_option",
+      "eu_ucpd_inertia_selling"
+    ],
     "boundary_test": "Is the value given genuinely useful and freely given — or a hollow gift engineered to manufacture obligation?"
   },
   "relations": [
-    { "type": "adjacent", "target": "EN-03", "note": "A received gift can become 'owned' (endowment); distinct — reciprocity is obligation-to-return, endowment is valuation-of-owned" },
-    { "type": "adjacent", "target": "SP-08", "note": "Both are social-norm mechanisms but differ: reciprocity is exchange obligation, social proof is others-as-evidence" }
+    {
+      "type": "adjacent",
+      "target": "EN-03",
+      "note": "A received gift can become 'owned' (endowment); distinct — reciprocity is obligation-to-return, endowment is valuation-of-owned"
+    },
+    {
+      "type": "adjacent",
+      "target": "SP-08",
+      "note": "Both are social-norm mechanisms but differ: reciprocity is exchange obligation, social proof is others-as-evidence"
+    }
   ],
-  "telemetry": { "tag_format": "me:RE-10:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "telemetry": {
+    "tag_format": "me:RE-10:{implementation_id}",
+    "amplitude_event_property": "mechanism_tags"
+  },
   "reference_examples": [
-    { "product": "Free tools / lead magnets (HubSpot, Ventora Idea Check)", "what": "Genuine free value delivered first creates reciprocity toward signup/purchase — the canonical value-first pattern" },
-    { "product": "Costco / sampling", "what": "Free sample creates mild reciprocal obligation to consider buying — classic in-person reciprocity" },
-    { "product": "Surprise account upgrades", "what": "Unexpected unconditional benefit reciprocates as loyalty and goodwill" }
+    {
+      "product": "Free tools / lead magnets (HubSpot, Ventora Idea Check)",
+      "what": "Genuine free value delivered first creates reciprocity toward signup/purchase — the canonical value-first pattern"
+    },
+    {
+      "product": "Costco / sampling",
+      "what": "Free sample creates mild reciprocal obligation to consider buying — classic in-person reciprocity"
+    },
+    {
+      "product": "Surprise account upgrades",
+      "what": "Unexpected unconditional benefit reciprocates as loyalty and goodwill"
+    }
+  ],
+  "effect_refs": [
+    "re-10-01",
+    "re-10-02",
+    "re-10-03"
   ]
 }

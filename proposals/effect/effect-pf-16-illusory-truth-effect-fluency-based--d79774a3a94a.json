@@ -6,15 +6,15 @@
     "id": "illusory-truth-effect-fluency-based-truth-perception",
     "mechanism_id": "PF-16",
     "name": "Illusory Truth Effect (Fluency-Based Truth Perception)",
-    "fact": "Repeated or memory-retrieved statements are experienced as more fluent and familiar, leading to increased perceived truthfulness/validity compared to novel statements.",
-    "grade": "A",
+    "fact": "Repeated statements are experienced as more familiar and are rated as more true than novel statements; the effect is logarithmic, with diminishing truth-rating increases from additional repetitions.",
+    "grade": "B",
     "source": [
       "10.1037/a0021323",
       "10.1177/1088868309352251",
       "10.1186/s41235-021-00301-5",
       "10.1186/s41235-025-00628-3"
     ],
-    "boundary": "Demonstrated with trivia statements, rumors, and factual statements using direct repetition and indirect polling methods; effect is logarithmic with diminishing returns for additional repetitions.",
+    "boundary": "Demonstrated with trivia statements, rumors, and factual statements using direct repetition and indirect polling methods; effect is logarithmic with diminishing returns for additional repetitions. ELIMINATED when respondents are instructed to adopt an accuracy focus at encoding — under that condition, new and repeated statements are judged equally true.",
     "realization_ids": [],
     "provenance": [
       {
@@ -82,7 +82,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 4 independent source(s), original model-asserted grade A -> capped to B."
   },
   "provenance": [
     {
@@ -155,30 +156,30 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:43:12.101Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.788Z",
+  "decision_note": "Approved under mechanical grade cap: 4 source(s), A -> B. OVERREACH: narrowed fact to what the cited span supports, removing \"memory-retrieved statements\" folded into \"repeated statements\" — kept the specific, measured claim.",
   "transferability": {
     "ruleset_version": 3,
     "transferable": true,
     "checks": [
       {
         "check": "subject",
-        "outcome": "fail",
-        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+        "outcome": "warn",
+        "reason": "people (respondents) but no artifact and no named setting — the subject is a person in the abstract"
       },
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: repeat statement/message multiple times across sessions — names a manipulable variable: repeat statement/message multiple times across sessions — Repetition of statements/messages is a surface control that increases perceived truthfulness via fluency.",
+        "reason": "names a manipulable variable: repeat statement/message multiple times across sessions — names a manipulable variable: repeat statement/message multiple times across sessions — names a manipulable variable: repeat statement/message multiple times across sessions — Repetition of statements/messages is a surface control that increases perceived truthfulness via fluency.",
         "identified_lever": "repeat statement/message multiple times across sessions"
       },
       {
         "check": "direction",
         "outcome": "pass",
-        "reason": "states a direction (increased)"
+        "reason": "states a direction (increases, than)"
       },
       {
         "check": "population",

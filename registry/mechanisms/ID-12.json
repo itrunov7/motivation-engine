@@ -8,66 +8,160 @@
   "parent": "S5",
   "lifecycle_status": "incubating",
   "dossier_ref": "dossiers/ID-12.json",
-  "provenance": { "proposed_by": "owner", "date": "2026-07-15" },
-  "evidence_terms": ["commitment and consistency persuasion", "self-perception theory behavior", "foot in the door compliance", "identity-based motivation", "commitment consistency replication"],
+  "provenance": {
+    "proposed_by": "owner",
+    "date": "2026-07-15"
+  },
+  "evidence_terms": [
+    "commitment and consistency persuasion",
+    "self-perception theory behavior",
+    "foot in the door compliance",
+    "identity-based motivation",
+    "commitment consistency replication"
+  ],
   "pinned_evidence": [
-    { "doi": "10.1037/h0023552", "title": "Compliance without pressure: The foot-in-the-door technique", "reason": "foundational — Freedman & Fraser" },
-    { "doi": "10.1086/651257", "title": "Identity-Based Motivation: Implications for Action-Readiness...", "reason": "identity as motivational driver — Oyserman" }
+    {
+      "doi": "10.1037/h0023552",
+      "title": "Compliance without pressure: The foot-in-the-door technique",
+      "reason": "foundational — Freedman & Fraser"
+    },
+    {
+      "doi": "10.1086/651257",
+      "title": "Identity-Based Motivation: Implications for Action-Readiness...",
+      "reason": "identity as motivational driver — Oyserman"
+    }
   ],
   "evidence": {
     "grade": "B+",
     "basis": "People are motivated to act consistently with their self-image and prior commitments (self-perception theory, Bem; foot-in-the-door, Freedman & Fraser 1966). Identity-based motivation (Oyserman) shows people act in line with salient identities.",
     "effect_size_note": "Consistency and identity effects are real; foot-in-the-door is a classic but with moderate and somewhat variable replication. Identity-based motivation is well-supported when the identity is genuinely salient and self-relevant.",
-    "caveats": ["foot_in_the_door_replication_moderate", "identity_must_be_genuinely_self_relevant", "backfires_if_manipulation_of_self_image_is_detected"]
+    "caveats": [
+      "foot_in_the_door_replication_moderate",
+      "identity_must_be_genuinely_self_relevant",
+      "backfires_if_manipulation_of_self_image_is_detected"
+    ]
   },
   "prior_weight": 0.7,
   "mechanism_summary_for_context": "People strive to act consistently with who they believe they are and what they've already committed to. Two levers: invite a small genuine commitment or self-definition early (a stated goal, a chosen identity, a small first action) and later actions align with it; and make a relevant identity salient ('you're a builder') so behavior follows the identity. The identity and commitments must be genuine and user-chosen, not imposed or manipulated.",
   "applicability": {
-    "funnel_stages": ["activation", "onboarding", "retention"],
-    "excluded_stages": ["cold_acquisition"],
-    "artifact_types": ["onboarding", "dashboard_widget", "email"],
+    "funnel_stages": [
+      "activation",
+      "onboarding",
+      "retention"
+    ],
+    "excluded_stages": [
+      "cold_acquisition"
+    ],
+    "artifact_types": [
+      "onboarding",
+      "dashboard_widget",
+      "email"
+    ],
     "preconditions": [
-      { "predicate": "product.can_elicit_genuine_commitment_or_identity == true", "reason": "requires a real self-chosen goal, identity, or commitment; not applicable where none is genuinely elicited" }
+      {
+        "predicate": "product.can_elicit_genuine_commitment_or_identity == true",
+        "reason": "requires a real self-chosen goal, identity, or commitment; not applicable where none is genuinely elicited"
+      }
     ],
     "culture_note": "Consistency motivation is broadly present but its strength (individualist consistency pressure vs collectivist context-sensitivity) varies; an L3 surface parameter"
   },
   "implementations": [
     {
       "id": "ID-12-goal-commitment",
-      "artifact_types": ["onboarding"],
+      "artifact_types": [
+        "onboarding"
+      ],
       "product_requirements": [],
       "generation_directive": "Have the user state a genuine goal or self-definition early ('What do you want to build?', 'I'm here to {goal}'). The stated commitment, freely chosen, anchors later behavior toward consistency. Reflect it back later ('You said you wanted to {goal} — here's your next step'). Never put words in the user's mouth or manufacture commitments they didn't make.",
-      "copy_formulas": ["I want to {goal}", "You're building {thing} — let's continue"],
-      "metrics": ["onboarding_completion", "d7_retention", "goal_progress"],
+      "copy_formulas": [
+        "I want to {goal}",
+        "You're building {thing} — let's continue"
+      ],
+      "metrics": [
+        "onboarding_completion",
+        "d7_retention",
+        "goal_progress"
+      ],
       "observed_effects": []
     },
     {
       "id": "ID-12-identity-salience",
-      "artifact_types": ["dashboard_widget", "email"],
+      "artifact_types": [
+        "dashboard_widget",
+        "email"
+      ],
       "product_requirements": [],
       "generation_directive": "Make a genuine, self-relevant identity salient in a way that supports the user's own goals ('You're a founder', 'You're a creator') where it truly reflects them. Identity framing motivates aligned action. Do not impose identities the user hasn't embraced or use identity to manipulate against their interest.",
-      "copy_formulas": ["As a {identity}, you'll want {relevant_action}", "Built by founders like you"],
-      "metrics": ["engagement_depth", "feature_adoption", "retention"],
+      "copy_formulas": [
+        "As a {identity}, you'll want {relevant_action}",
+        "Built by founders like you"
+      ],
+      "metrics": [
+        "engagement_depth",
+        "feature_adoption",
+        "retention"
+      ],
       "observed_effects": []
     }
   ],
   "constraints": {
     "hard_rules": [
-      { "id": "genuine_commitment_only", "rule": "Commitments and stated goals must be genuinely made by the user; fabricating or implying commitments the user did not make is forbidden", "severity": "block" },
-      { "id": "no_imposed_identity", "rule": "Do not impose or manipulate identities the user hasn't embraced, or weaponize self-image against the user's interest", "severity": "block" },
-      { "id": "no_consistency_trap", "rule": "Do not use prior small commitments to escalate into significantly larger unwanted ones (manipulative foot-in-the-door); escalation must be reasonable and user-serving", "severity": "block" }
+      {
+        "id": "genuine_commitment_only",
+        "rule": "Commitments and stated goals must be genuinely made by the user; fabricating or implying commitments the user did not make is forbidden",
+        "severity": "block"
+      },
+      {
+        "id": "no_imposed_identity",
+        "rule": "Do not impose or manipulate identities the user hasn't embraced, or weaponize self-image against the user's interest",
+        "severity": "block"
+      },
+      {
+        "id": "no_consistency_trap",
+        "rule": "Do not use prior small commitments to escalate into significantly larger unwanted ones (manipulative foot-in-the-door); escalation must be reasonable and user-serving",
+        "severity": "block"
+      }
     ],
-    "compliance_refs": ["EU_DSA_dark_patterns", "apple_asrg_3.1", "ftc_deceptive"],
+    "compliance_refs": [
+      "EU_DSA_dark_patterns",
+      "apple_asrg_3.1",
+      "ftc_deceptive"
+    ],
     "boundary_test": "Is this reinforcing a goal or identity the user genuinely chose — or manufacturing commitment and manipulating self-image?"
   },
   "relations": [
-    { "type": "adjacent", "target": "EN-03", "note": "'Mine' (endowment) shades into 'part of who I am' (identity); distinct drivers — ownership valuation vs self-consistency" },
-    { "type": "adjacent", "target": "ZE-07", "note": "A stated goal creates a progress target; distinct — ID-12 is self-consistency, ZE-07 is goal-gradient progress" }
+    {
+      "type": "adjacent",
+      "target": "EN-03",
+      "note": "'Mine' (endowment) shades into 'part of who I am' (identity); distinct drivers — ownership valuation vs self-consistency"
+    },
+    {
+      "type": "adjacent",
+      "target": "ZE-07",
+      "note": "A stated goal creates a progress target; distinct — ID-12 is self-consistency, ZE-07 is goal-gradient progress"
+    }
   ],
-  "telemetry": { "tag_format": "me:ID-12:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "telemetry": {
+    "tag_format": "me:ID-12:{implementation_id}",
+    "amplitude_event_property": "mechanism_tags"
+  },
   "reference_examples": [
-    { "product": "Duolingo onboarding goal-setting", "what": "User states a learning goal and daily commitment up front; later nudges reference that self-chosen commitment" },
-    { "product": "Fitness apps ('I am a runner')", "what": "Identity-based framing motivates behavior consistent with the embraced identity" },
-    { "product": "Ventora onboarding ('What do you want to build?')", "what": "Eliciting a genuine goal early anchors the build journey to the user's stated intent" }
+    {
+      "product": "Duolingo onboarding goal-setting",
+      "what": "User states a learning goal and daily commitment up front; later nudges reference that self-chosen commitment"
+    },
+    {
+      "product": "Fitness apps ('I am a runner')",
+      "what": "Identity-based framing motivates behavior consistent with the embraced identity"
+    },
+    {
+      "product": "Ventora onboarding ('What do you want to build?')",
+      "what": "Eliciting a genuine goal early anchors the build journey to the user's stated intent"
+    }
+  ],
+  "effect_refs": [
+    "id-12-001",
+    "id-12-01",
+    "id-12-02"
   ]
 }

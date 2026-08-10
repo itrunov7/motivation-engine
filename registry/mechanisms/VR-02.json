@@ -8,12 +8,19 @@
   "parent": "S2",
   "lifecycle_status": "incubating",
   "dossier_ref": "dossiers/VR-02.json",
-  "provenance": { "proposed_by": "owner", "date": "2026-07-15" },
+  "provenance": {
+    "proposed_by": "owner",
+    "date": "2026-07-15"
+  },
   "evidence": {
     "grade": "A",
     "basis": "Variable-ratio schedules produce the highest, most persistent response rates (Skinner). Neural basis: dopamine reward-prediction-error (Schultz, Dayan & Montague 1997) — unpredictable reward drives the strongest dopamine signal.",
     "effect_size_note": "Robust and mechanistic; magnitude in product contexts depends on reward salience and unpredictability. The effect is strongest when the reward is both variable and meaningful.",
-    "caveats": ["reward_must_be_genuinely_valued", "unpredictability_can_frustrate_if_reward_never_arrives", "highest_abuse_potential_of_the_core_set"]
+    "caveats": [
+      "reward_must_be_genuinely_valued",
+      "unpredictability_can_frustrate_if_reward_never_arrives",
+      "highest_abuse_potential_of_the_core_set"
+    ]
   },
   "evidence_terms": [
     "variable ratio reinforcement",
@@ -38,52 +45,135 @@
   "prior_weight": 0.85,
   "mechanism_summary_for_context": "Unpredictable rewards drive engagement far more strongly than predictable ones — the brain's dopamine system responds to the *surprise* of reward, not just the reward. A fixed reward ('every 10th action earns X') is weaker than a variable one ('some actions earn a surprise'). This is the engine behind feeds, discovery, streak bonuses, and 'what will I get' moments. It is also the mechanism closest to addictive design — apply with the strongest guardrails in the set.",
   "applicability": {
-    "funnel_stages": ["activation", "retention"],
-    "excluded_stages": ["conversion", "cold_acquisition"],
-    "artifact_types": ["dashboard_widget", "onboarding", "retention_push", "landing_hero"],
+    "funnel_stages": [
+      "activation",
+      "retention"
+    ],
+    "excluded_stages": [
+      "conversion",
+      "cold_acquisition"
+    ],
+    "artifact_types": [
+      "dashboard_widget",
+      "onboarding",
+      "retention_push",
+      "landing_hero"
+    ],
     "preconditions": [
-      { "predicate": "product.has_repeatable_reward_moment == true", "reason": "requires a recurring action that can deliver a genuine, variable reward (discovery, result, unlock); not applicable to one-shot flows" }
+      {
+        "predicate": "product.has_repeatable_reward_moment == true",
+        "reason": "requires a recurring action that can deliver a genuine, variable reward (discovery, result, unlock); not applicable to one-shot flows"
+      }
     ],
     "culture_note": "The dopamine mechanism is universal; the framing and pacing of surprise (how often, how loud) is an L3 surface parameter"
   },
   "implementations": [
     {
       "id": "VR-02-variable-discovery",
-      "artifact_types": ["dashboard_widget", "landing_hero"],
-      "product_requirements": ["has_content_or_results_feed"],
+      "artifact_types": [
+        "dashboard_widget",
+        "landing_hero"
+      ],
+      "product_requirements": [
+        "has_content_or_results_feed"
+      ],
       "generation_directive": "When the product surfaces results, recommendations, or content, introduce genuine variability in what appears each visit so returning yields discovery, not repetition. The reward (new, relevant content) must be real — variability of junk is frustration, not delight.",
-      "copy_formulas": ["See what's new for you", "Fresh {items} today"],
-      "metrics": ["d7_retention", "sessions_per_week", "return_rate_without_push"],
+      "copy_formulas": [
+        "See what's new for you",
+        "Fresh {items} today"
+      ],
+      "metrics": [
+        "d7_retention",
+        "sessions_per_week",
+        "return_rate_without_push"
+      ],
       "observed_effects": []
     },
     {
       "id": "VR-02-surprise-reward",
-      "artifact_types": ["onboarding", "dashboard_widget"],
-      "product_requirements": ["has_reward_system"],
+      "artifact_types": [
+        "onboarding",
+        "dashboard_widget"
+      ],
+      "product_requirements": [
+        "has_reward_system"
+      ],
       "generation_directive": "Where the product grants rewards (credits, unlocks, bonuses), make a portion variable and occasional rather than fully predictable — an unexpected bonus after a completed action. Never make core value contingent on the variable reward; it augments, it does not gate.",
-      "copy_formulas": ["You earned a surprise bonus", "Something extra for you"],
-      "metrics": ["activation_rate", "d7_retention"],
+      "copy_formulas": [
+        "You earned a surprise bonus",
+        "Something extra for you"
+      ],
+      "metrics": [
+        "activation_rate",
+        "d7_retention"
+      ],
       "observed_effects": []
     }
   ],
   "constraints": {
     "hard_rules": [
-      { "id": "genuine_reward_only", "rule": "The variable reward must deliver real user value; variability that dispenses junk, empty pulls, or manufactured near-misses is forbidden", "severity": "block" },
-      { "id": "no_gambling_mechanics", "rule": "No loot-box / paid-random-reward / near-miss / loss-disguised-as-win patterns; no monetary or paid-currency randomized rewards", "severity": "block" },
-      { "id": "no_compulsion_loops", "rule": "Do not engineer intermittent reward to maximize time-on-app against the user's interest; core functionality must never require chasing the variable reward", "severity": "block" },
-      { "id": "vulnerable_users", "rule": "Do not deploy variable-reward intensification toward users showing compulsive-use signals; no escalation of unpredictability to re-hook lapsing users", "severity": "block" }
+      {
+        "id": "genuine_reward_only",
+        "rule": "The variable reward must deliver real user value; variability that dispenses junk, empty pulls, or manufactured near-misses is forbidden",
+        "severity": "block"
+      },
+      {
+        "id": "no_gambling_mechanics",
+        "rule": "No loot-box / paid-random-reward / near-miss / loss-disguised-as-win patterns; no monetary or paid-currency randomized rewards",
+        "severity": "block"
+      },
+      {
+        "id": "no_compulsion_loops",
+        "rule": "Do not engineer intermittent reward to maximize time-on-app against the user's interest; core functionality must never require chasing the variable reward",
+        "severity": "block"
+      },
+      {
+        "id": "vulnerable_users",
+        "rule": "Do not deploy variable-reward intensification toward users showing compulsive-use signals; no escalation of unpredictability to re-hook lapsing users",
+        "severity": "block"
+      }
     ],
-    "compliance_refs": ["EU_DSA_dark_patterns", "apple_asrg_3.1.1_loot_box", "google_play_real_money_gambling", "esrb_loot_box_disclosure"],
+    "compliance_refs": [
+      "EU_DSA_dark_patterns",
+      "apple_asrg_3.1.1_loot_box",
+      "google_play_real_money_gambling",
+      "esrb_loot_box_disclosure"
+    ],
     "boundary_test": "Does the surprise add real value the user is glad to receive — or is it engineered to keep them pulling a lever against their own interest?"
   },
   "relations": [
-    { "type": "adjacent", "target": "CG-05", "note": "Curiosity gap often co-occurs (not knowing what the reward is), but is a distinct driver: information gap vs reward unpredictability" },
-    { "type": "adjacent", "target": "HA-04", "note": "Variable reward is the reward component that makes habit loops (HA-04) sticky; HA-04 is the full loop, VR-02 is one part" }
+    {
+      "type": "adjacent",
+      "target": "CG-05",
+      "note": "Curiosity gap often co-occurs (not knowing what the reward is), but is a distinct driver: information gap vs reward unpredictability"
+    },
+    {
+      "type": "adjacent",
+      "target": "HA-04",
+      "note": "Variable reward is the reward component that makes habit loops (HA-04) sticky; HA-04 is the full loop, VR-02 is one part"
+    }
   ],
-  "telemetry": { "tag_format": "me:VR-02:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "telemetry": {
+    "tag_format": "me:VR-02:{implementation_id}",
+    "amplitude_event_property": "mechanism_tags"
+  },
   "reference_examples": [
-    { "product": "Social feeds (Instagram, TikTok)", "what": "Pull-to-refresh delivers a variable set of content — the canonical variable-reward interface; also the canonical cautionary example for the guardrails" },
-    { "product": "Spotify Discover Weekly", "what": "Variable, genuinely-valuable discovery on a predictable cadence — variability of real value, not manufactured suspense" },
-    { "product": "Duolingo chests / surprise bonuses", "what": "Occasional unexpected rewards after lessons augment a habit without gating core learning" }
+    {
+      "product": "Social feeds (Instagram, TikTok)",
+      "what": "Pull-to-refresh delivers a variable set of content — the canonical variable-reward interface; also the canonical cautionary example for the guardrails"
+    },
+    {
+      "product": "Spotify Discover Weekly",
+      "what": "Variable, genuinely-valuable discovery on a predictable cadence — variability of real value, not manufactured suspense"
+    },
+    {
+      "product": "Duolingo chests / surprise bonuses",
+      "what": "Occasional unexpected rewards after lessons augment a habit without gating core learning"
+    }
+  ],
+  "effect_refs": [
+    "dopamine-reward-prediction-error-signal",
+    "vr-02-01",
+    "vr-02-02"
   ]
 }

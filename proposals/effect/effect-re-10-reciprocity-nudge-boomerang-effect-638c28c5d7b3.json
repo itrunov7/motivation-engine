@@ -6,8 +6,8 @@
     "id": "re-10-03",
     "mechanism_id": "RE-10",
     "name": "Reciprocity Nudge Boomerang Effect",
-    "fact": "Reciprocity-based nudge messages can produce a negative (boomerang) effect on tax compliance behavior compared to control conditions.",
-    "grade": "A",
+    "fact": "A reciprocity-based nudge message produced a negative (boomerang) effect on compliance, compared with control conditions.",
+    "grade": "C+",
     "source": [
       "10.1080/10291954.2025.2596453"
     ],
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A -> capped to C+."
   },
   "provenance": [
     {
@@ -48,11 +49,11 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:39:51.940Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.363Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing \"tax compliance behavior\" domain specificity not in this span (kept in boundary instead). Approved DELIBERATELY as dissent — a negative/boomerang result, kept per rule 4 (a corpus that cannot disconfirm is broken).",
   "transferability": {
     "ruleset_version": 3,
     "transferable": true,
@@ -65,7 +66,7 @@
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: reciprocity-framed reminder message wording — names a manipulable variable: reciprocity-framed reminder message wording — Message framing invoking reciprocity is a rewordable notification/message a product can show.",
+        "reason": "names a manipulable variable: reciprocity-framed reminder message wording — names a manipulable variable: reciprocity-framed reminder message wording — names a manipulable variable: reciprocity-framed reminder message wording — Message framing invoking reciprocity is a rewordable notification/message a product can show.",
         "identified_lever": "reciprocity-framed reminder message wording"
       },
       {

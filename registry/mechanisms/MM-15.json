@@ -9,85 +9,212 @@
   "cross_cutting": true,
   "lifecycle_status": "incubating",
   "dossier_ref": "dossiers/MM-15.json",
-  "provenance": { "proposed_by": "owner", "date": "2026-07-20" },
-  "evidence_terms": ["multimedia learning principles", "coherence principle multimedia", "signaling principle multimedia learning", "redundancy effect multimedia", "multimedia learning meta-analysis"],
+  "provenance": {
+    "proposed_by": "owner",
+    "date": "2026-07-20"
+  },
+  "evidence_terms": [
+    "multimedia learning principles",
+    "coherence principle multimedia",
+    "signaling principle multimedia learning",
+    "redundancy effect multimedia",
+    "multimedia learning meta-analysis"
+  ],
   "pinned_evidence": [
-    { "doi": "10.1207/S15326985EP3801_6", "title": "Nine Ways to Reduce Cognitive Load in Multimedia Learning", "reason": "foundational — Mayer & Moreno 2003" },
-    { "doi": "10.1017/CBO9781139547369", "title": "The Cambridge Handbook of Multimedia Learning", "reason": "authoritative synthesis — Mayer" }
+    {
+      "doi": "10.1207/S15326985EP3801_6",
+      "title": "Nine Ways to Reduce Cognitive Load in Multimedia Learning",
+      "reason": "foundational — Mayer & Moreno 2003"
+    },
+    {
+      "doi": "10.1017/CBO9781139547369",
+      "title": "The Cambridge Handbook of Multimedia Learning",
+      "reason": "authoritative synthesis — Mayer"
+    }
   ],
   "evidence": {
     "grade": "A",
     "basis": "Three decades of controlled experiments on how words and images should be combined. Established principles with the strongest support: multimedia (words plus relevant images beat words alone), coherence (removing interesting-but-extraneous material improves understanding — Mayer, Heiser & Lonn 2001), signalling (cueing the essential improves outcomes — Richter, Scheiter & Eitel meta-analysis), spatial and temporal contiguity (Ginns meta-analysis), and redundancy (duplicating identical content across channels harms rather than helps).",
     "effect_size_note": "Coherence, signalling and contiguity effects replicate across many studies with small-to-moderate effect sizes; the multimedia principle is robust for explanatory content. Animation-versus-static comparisons are mixed and modest, indicating richer media is not automatically better.",
-    "caveats": ["evidence_base_is_learning_outcomes_not_conversion", "expertise_reversal_applies", "redundancy_effect_has_boundary_conditions", "richer_media_not_automatically_better"]
+    "caveats": [
+      "evidence_base_is_learning_outcomes_not_conversion",
+      "expertise_reversal_applies",
+      "redundancy_effect_has_boundary_conditions",
+      "richer_media_not_automatically_better"
+    ]
   },
   "prior_weight": 0.85,
   "mechanism_summary_for_context": "How words and images are combined determines whether anything is understood. The findings are specific rather than a general preference for visuals: relevant images alongside words outperform words alone; adding interesting but non-essential material measurably reduces understanding (coherence); cueing what matters improves it (signalling); related words and images must be adjacent in space and time, not separated (contiguity); and presenting the same content twice in two channels degrades rather than reinforces it (redundancy). Notably, richer is not better — animation does not reliably beat static images, and adding immersive richness can increase engagement while reducing comprehension.",
   "applicability": {
-    "funnel_stages": ["cold_acquisition", "activation", "onboarding", "conversion", "retention"],
+    "funnel_stages": [
+      "cold_acquisition",
+      "activation",
+      "onboarding",
+      "conversion",
+      "retention"
+    ],
     "excluded_stages": [],
-    "artifact_types": ["landing_hero", "onboarding", "paywall", "pricing_page", "dashboard_widget", "email"],
+    "artifact_types": [
+      "landing_hero",
+      "onboarding",
+      "paywall",
+      "pricing_page",
+      "dashboard_widget",
+      "email"
+    ],
     "preconditions": [
-      { "predicate": "artifact.conveys_explanatory_content == true", "reason": "the principles govern the combination of words and images to explain something; a purely transactional control with no explanatory content has little for them to act on" }
+      {
+        "predicate": "artifact.conveys_explanatory_content == true",
+        "reason": "the principles govern the combination of words and images to explain something; a purely transactional control with no explanatory content has little for them to act on"
+      }
     ],
     "culture_note": "The processing constraints are general; iconography, reading direction and visual conventions are culturally specific — L3 surface parameters"
   },
   "implementations": [
     {
       "id": "MM-15-multimedia-substitution",
-      "artifact_types": ["landing_hero", "onboarding", "pricing_page", "email"],
+      "artifact_types": [
+        "landing_hero",
+        "onboarding",
+        "pricing_page",
+        "email"
+      ],
       "product_requirements": [],
       "generation_directive": "Where the content explains how something works, what a product does, or what a result looks like, present it as relevant image or demonstration together with concise words rather than as prose alone. The image must carry the explanatory content, not decorate it — decorative imagery adds load without adding understanding (see coherence).",
       "copy_formulas": [],
-      "metrics": ["comprehension_proxy_task_completion", "cvr", "landing_engagement"],
+      "metrics": [
+        "comprehension_proxy_task_completion",
+        "cvr",
+        "landing_engagement"
+      ],
       "observed_effects": []
     },
     {
       "id": "MM-15-coherence-pruning",
-      "artifact_types": ["landing_hero", "paywall", "pricing_page", "email", "onboarding"],
+      "artifact_types": [
+        "landing_hero",
+        "paywall",
+        "pricing_page",
+        "email",
+        "onboarding"
+      ],
       "product_requirements": [],
       "generation_directive": "Remove material that is interesting but not essential to the point being made — tangential detail, decorative media, atmospheric copy. The coherence finding is counterintuitive and specific: adding engaging extras measurably reduces understanding of the core message, even when the extras are enjoyed.",
       "copy_formulas": [],
-      "metrics": ["cvr", "task_completion_rate", "comprehension_proxy_task_completion"],
+      "metrics": [
+        "cvr",
+        "task_completion_rate",
+        "comprehension_proxy_task_completion"
+      ],
       "observed_effects": []
     },
     {
       "id": "MM-15-signaling",
-      "artifact_types": ["landing_hero", "dashboard_widget", "pricing_page", "onboarding"],
+      "artifact_types": [
+        "landing_hero",
+        "dashboard_widget",
+        "pricing_page",
+        "onboarding"
+      ],
       "product_requirements": [],
       "generation_directive": "Cue what matters: visual emphasis, hierarchy and structural markers that direct attention to the essential element and the relationship between elements. Signalling improves outcomes without adding content — it tells the reader where capacity should go.",
       "copy_formulas": [],
-      "metrics": ["cvr", "attention_to_primary_action", "task_completion_rate"],
+      "metrics": [
+        "cvr",
+        "attention_to_primary_action",
+        "task_completion_rate"
+      ],
       "observed_effects": []
     },
     {
       "id": "MM-15-contiguity-and-redundancy",
-      "artifact_types": ["onboarding", "dashboard_widget", "checkout", "pricing_page"],
+      "artifact_types": [
+        "onboarding",
+        "dashboard_widget",
+        "checkout",
+        "pricing_page"
+      ],
       "product_requirements": [],
       "generation_directive": "Place words next to the image or control they describe, and present them at the same time — not in separate regions or sequential screens. Conversely, do not present identical content simultaneously in two forms (identical caption duplicating narration, text repeating verbatim what the image already states); duplication competes for the same capacity rather than reinforcing.",
       "copy_formulas": [],
-      "metrics": ["error_rate", "time_to_complete", "task_completion_rate"],
+      "metrics": [
+        "error_rate",
+        "time_to_complete",
+        "task_completion_rate"
+      ],
       "observed_effects": []
     }
   ],
   "constraints": {
     "hard_rules": [
-      { "id": "no_explanatory_omission", "rule": "Replacing text with imagery may not remove information the user needs to decide — price, terms, limitations and consequences must remain explicit and legible, not implied by a picture", "severity": "block" },
-      { "id": "no_misleading_visual", "rule": "Images used to explain must accurately represent the product or result; illustrative visuals that overstate what the product does are deceptive regardless of medium", "severity": "block" },
-      { "id": "accessibility_preserved", "rule": "Visual-first presentation must retain text alternatives and semantic structure; comprehension gains for some users may not remove access for others", "severity": "block" }
+      {
+        "id": "no_explanatory_omission",
+        "rule": "Replacing text with imagery may not remove information the user needs to decide — price, terms, limitations and consequences must remain explicit and legible, not implied by a picture",
+        "severity": "block"
+      },
+      {
+        "id": "no_misleading_visual",
+        "rule": "Images used to explain must accurately represent the product or result; illustrative visuals that overstate what the product does are deceptive regardless of medium",
+        "severity": "block"
+      },
+      {
+        "id": "accessibility_preserved",
+        "rule": "Visual-first presentation must retain text alternatives and semantic structure; comprehension gains for some users may not remove access for others",
+        "severity": "block"
+      }
     ],
-    "compliance_refs": ["EU_DSA_dark_patterns", "eu_ucpd_material_information", "wcag_2_2", "ftc_deceptive_advertising"],
+    "compliance_refs": [
+      "EU_DSA_dark_patterns",
+      "eu_ucpd_material_information",
+      "wcag_2_2",
+      "ftc_deceptive_advertising"
+    ],
     "boundary_test": "Does the visual carry the explanation more clearly than words would — or is it decoration that displaced information the user needed?"
   },
   "relations": [
-    { "type": "enabled_by", "target": "CL-14", "note": "The principles are largely applied cognitive-load management; CL-14 states the capacity constraint, MM-15 specifies word–image handling under it" },
-    { "type": "adjacent", "target": "PS-13", "note": "Picture superiority concerns memory advantage of images over words; MM-15 concerns how the two are combined. Related but distinct claims — PS-13 says images are remembered better, MM-15 says combination rules determine comprehension" },
-    { "type": "adjacent", "target": "PF-16", "note": "Coherent, signalled presentation tends to raise processing fluency; distinct — comprehension versus subjective ease" }
+    {
+      "type": "enabled_by",
+      "target": "CL-14",
+      "note": "The principles are largely applied cognitive-load management; CL-14 states the capacity constraint, MM-15 specifies word–image handling under it"
+    },
+    {
+      "type": "adjacent",
+      "target": "PS-13",
+      "note": "Picture superiority concerns memory advantage of images over words; MM-15 concerns how the two are combined. Related but distinct claims — PS-13 says images are remembered better, MM-15 says combination rules determine comprehension"
+    },
+    {
+      "type": "adjacent",
+      "target": "PF-16",
+      "note": "Coherent, signalled presentation tends to raise processing fluency; distinct — comprehension versus subjective ease"
+    }
   ],
-  "telemetry": { "tag_format": "me:MM-15:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "telemetry": {
+    "tag_format": "me:MM-15:{implementation_id}",
+    "amplitude_event_property": "mechanism_tags"
+  },
   "reference_examples": [
-    { "product": "Stripe documentation", "what": "Code and explanation placed side by side at the same moment (contiguity), with signalled structure — explanation adjacent to the thing explained rather than separated" },
-    { "product": "Apple feature pages", "what": "Product demonstrated visually with concise adjacent copy; the image carries the explanation rather than decorating it" },
-    { "product": "Duolingo lesson screens", "what": "Signalled single-focus screens with image and prompt together, sparse of tangential material — coherence and contiguity in a consumer context" }
+    {
+      "product": "Stripe documentation",
+      "what": "Code and explanation placed side by side at the same moment (contiguity), with signalled structure — explanation adjacent to the thing explained rather than separated"
+    },
+    {
+      "product": "Apple feature pages",
+      "what": "Product demonstrated visually with concise adjacent copy; the image carries the explanation rather than decorating it"
+    },
+    {
+      "product": "Duolingo lesson screens",
+      "what": "Signalled single-focus screens with image and prompt together, sparse of tangential material — coherence and contiguity in a consumer context"
+    }
+  ],
+  "effect_refs": [
+    "content-redundancy",
+    "mm15-coherence-effect",
+    "mm15-coherence-principle",
+    "mm15-embodiment-principle",
+    "mm15-modality-effect",
+    "mm15-redundancy-effect",
+    "mm15-spatial-contiguity",
+    "multimedia-principle",
+    "signaling-principle"
   ]
 }

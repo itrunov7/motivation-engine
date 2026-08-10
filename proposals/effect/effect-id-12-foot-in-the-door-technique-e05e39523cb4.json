@@ -7,12 +7,12 @@
     "mechanism_id": "ID-12",
     "name": "Foot-in-the-door technique",
     "fact": "The foot-in-the-door technique involves obtaining compliance with a small request to increase the likelihood of compliance with a subsequent, larger request.",
-    "grade": "A",
+    "grade": "B-",
     "source": [
       "10.1037/h0076284",
       "10.1177/002224378602300206"
     ],
-    "boundary": "Social compliance procedures",
+    "boundary": "Social compliance procedures. REVERSED for individuals with low preference for consistency (PFC): when their prior helpfulness is made salient, low-PFC individuals show a reverse foot-in-the-door effect instead (giving LESS after a small prior compliance). See effect-id-12-reverse-foot-in-the-door-effect-8ec2c49463ca (rejected MIS_ANCHORED) — its finding is preserved here as a boundary condition rather than as its own effect.",
     "realization_ids": [],
     "provenance": [
       {
@@ -41,7 +41,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 2 independent source(s), original model-asserted grade A -> capped to B-."
   },
   "provenance": [
     {
@@ -75,30 +76,30 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:39:08.996Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.329Z",
+  "decision_note": "Approved under mechanical grade cap: 2 source(s), A -> B-. Boundary extended with the reverse-effect finding from reverse-foot-in-the-door-effect (rejected MIS_ANCHORED as a boundary condition on this proposal, not its own effect).",
   "transferability": {
     "ruleset_version": 3,
     "transferable": true,
     "checks": [
       {
         "check": "subject",
-        "outcome": "fail",
-        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+        "outcome": "warn",
+        "reason": "people (individuals) but no artifact and no named setting — the subject is a person in the abstract"
       },
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: ask a small request before the larger one — names a manipulable variable: ask a small request before the larger one — Classic foot-in-the-door mechanism directly maps to sequencing UI requests small-to-large.",
+        "reason": "names a manipulable variable: ask a small request before the larger one — names a manipulable variable: ask a small request before the larger one — names a manipulable variable: ask a small request before the larger one — Classic foot-in-the-door mechanism directly maps to sequencing UI requests small-to-large.",
         "identified_lever": "ask a small request before the larger one"
       },
       {
         "check": "direction",
         "outcome": "pass",
-        "reason": "states a direction (increase)"
+        "reason": "states a direction (increase, than)"
       },
       {
         "check": "population",

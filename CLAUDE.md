@@ -100,3 +100,7 @@ change rather than assuming it.
   `min(trigger, action)` misses same-action/different-trigger duplicates.
 - Transferability filter v1: VARIABLE is a lexicon, not a judgement. Ten of eighteen
   mechanisms predict zero transferable proposals under it.
+- Transferability never checks a VARIABLE-identified lever against the mechanism's own
+  `constraints.hard_rules` forbidden list. Caught by owner review, not the pipeline: SC-17's
+  `native-ad-blindness` proposal named a lever ("reword or hide native-ad disclosure cues")
+  that directly violates SC-17's own `no_disguised_advertising` hard rule (D-329).
