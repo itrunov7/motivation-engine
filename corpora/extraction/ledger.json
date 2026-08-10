@@ -1,7 +1,88 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-10T08:43:04.425Z",
+  "updated_at": "2026-08-10T08:48:18.888Z",
   "runs": [
+    {
+      "run_id": "2026-08-10T08:47:59.051Z",
+      "dispatch_id": "effects-full-HA-04",
+      "github_run_id": 31371637456,
+      "mode": "effects",
+      "scope": "HA-04",
+      "candidates": 6,
+      "cheap": {
+        "candidates": 3,
+        "dropped_ungrounded": 0,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 3
+      },
+      "synthesis": {
+        "into_synthesis": 3,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 3,
+        "folds": 1
+      },
+      "strong": {
+        "candidates": 3,
+        "proposed": 0,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "held_non_transferable": 3,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "HA-04:cheap:01",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:02",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:cheap:03",
+          "mechanism_id": "HA-04",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "HA-04:strong:01",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "held_non_transferable",
+          "proposal_id": "effect-ha-04-context-dependent-repetition-bias-cf3e78a0a618",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "HA-04:strong:02",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "held_non_transferable",
+          "proposal_id": "effect-ha-04-context-dependent-birdsong-structure-c1d2931b6611",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "HA-04:strong:03",
+          "mechanism_id": "HA-04",
+          "pass": "strong",
+          "fate": "held_non_transferable",
+          "proposal_id": "effect-ha-04-context-dependent-signaling-in-actio-e92e9f83e244",
+          "attribution": "recorded"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-10T08:42:31.860Z",
       "dispatch_id": "effects-full-SC-06",
