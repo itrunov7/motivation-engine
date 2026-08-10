@@ -1,7 +1,109 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-06T14:02:03.473Z",
+  "updated_at": "2026-08-10T08:43:04.425Z",
   "runs": [
+    {
+      "run_id": "2026-08-10T08:42:31.860Z",
+      "dispatch_id": "effects-full-SC-06",
+      "github_run_id": 31371227436,
+      "mode": "effects",
+      "scope": "SC-06",
+      "candidates": 9,
+      "cheap": {
+        "candidates": 5,
+        "dropped_ungrounded": 1,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 4
+      },
+      "synthesis": {
+        "into_synthesis": 4,
+        "consolidated": 0,
+        "expanded": 0,
+        "candidates_strong": 4,
+        "folds": 1
+      },
+      "strong": {
+        "candidates": 4,
+        "proposed": 0,
+        "proposed_enrich": 0,
+        "merged_into_pending": 1,
+        "held_low_confidence": 0,
+        "held_non_transferable": 3,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "SC-06:cheap:01",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-06:cheap:02",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-06:cheap:03",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-06:cheap:04",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "doi_unresolved"
+        },
+        {
+          "candidate_id": "SC-06:cheap:05",
+          "mechanism_id": "SC-06",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "SC-06:strong:01",
+          "mechanism_id": "SC-06",
+          "pass": "strong",
+          "fate": "merged_into_pending",
+          "proposal_id": "effect-sc-06-limited-time-scarcity-lts-93f9b5deee75",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "SC-06:strong:02",
+          "mechanism_id": "SC-06",
+          "pass": "strong",
+          "fate": "held_non_transferable",
+          "proposal_id": "effect-sc-06-limited-quantity-scarcity-1f8c2f407a9c",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "SC-06:strong:03",
+          "mechanism_id": "SC-06",
+          "pass": "strong",
+          "fate": "held_non_transferable",
+          "proposal_id": "effect-sc-06-staged-scarcity-design-cd9193199162",
+          "attribution": "recorded"
+        },
+        {
+          "candidate_id": "SC-06:strong:04",
+          "mechanism_id": "SC-06",
+          "pass": "strong",
+          "fate": "held_non_transferable",
+          "proposal_id": "effect-sc-06-situational-scarcity-and-online-impu-bcef984cbc74",
+          "attribution": "recorded"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-06T13:59:47.983Z",
       "dispatch_id": "cl14-fix4-yield",

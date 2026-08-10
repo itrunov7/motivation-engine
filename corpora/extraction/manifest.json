@@ -3,78 +3,150 @@
   "source_ids": [],
   "connector_version": "1.1.0",
   "last_run": {
-    "timestamp": "2026-08-06T13:59:47.983Z",
+    "timestamp": "2026-08-10T08:42:31.860Z",
     "status": "success",
     "params": {
-      "mode": "realizations",
-      "effect": "cl-14-01",
-      "candidates": "40",
-      "records_processed": "406",
-      "records_skipped_irrelevant": "21",
-      "proposed": "7",
-      "merged": "0",
-      "dropped_ungrounded": "5",
+      "mode": "effects",
+      "mechanism": "SC-06",
+      "candidates": "9",
+      "records_processed": "50",
+      "records_skipped_irrelevant": "0",
+      "proposed": "0",
+      "merged": "1",
+      "dropped_ungrounded": "1",
       "failed_validation": "0",
-      "held_low_confidence": "1",
-      "held_non_transferable": "0",
+      "held_low_confidence": "0",
+      "held_non_transferable": "3",
       "verdict_unavailable": "0",
       "verdict_unavailable_by_reason": "no_model_id=0 per_run_token_cap=0 monthly_token_cap=0 transport_error=0 malformed_answer=0",
       "dropped_volume_cap": "0",
       "dropped_volume_cap_high_confidence": "0",
-      "records_eligible": "427",
-      "records_relevant": "406",
+      "records_eligible": "166",
+      "records_relevant": "50",
       "records_remaining": "0",
-      "records_selected": "406",
+      "records_selected": "50",
       "records_dropped_truncation": "0",
-      "candidates_cheap": "32",
-      "candidates_strong": "8",
-      "dropped_ungrounded_cheap": "5",
+      "candidates_cheap": "5",
+      "candidates_strong": "4",
+      "dropped_ungrounded_cheap": "1",
       "dropped_ungrounded_strong": "0",
-      "merged_into_pending": "0",
+      "merged_into_pending": "1",
       "proposed_enrich": "0",
       "dropped_draft_cap": "0",
-      "into_synthesis": "27",
+      "into_synthesis": "4",
       "cheap_synthesis_failed": "0",
-      "consolidated_by_synthesis": "19",
+      "consolidated_by_synthesis": "0",
       "expanded_by_synthesis": "0",
-      "dropped_ungrounded_reasons": "doi_unresolved=2 quote_not_in_source=2 span_role_not_finding=1",
-      "dropped_ungrounded_reasons_cheap": "doi_unresolved=2 quote_not_in_source=2 span_role_not_finding=1"
+      "dropped_ungrounded_reasons": "doi_unresolved=1",
+      "dropped_ungrounded_reasons_cheap": "doi_unresolved=1"
     },
-    "records_fetched": 427,
-    "files_written": 8,
-    "duration_s": 135.49,
-    "dispatch_id": "cl14-fix4-yield",
-    "github_run_id": 31108569730,
+    "records_fetched": 50,
+    "files_written": 4,
+    "duration_s": 32.57,
+    "dispatch_id": "effects-full-SC-06",
+    "github_run_id": 31371227436,
     "warnings": {
       "ungrounded_dropped": true
     },
     "cost": {
-      "api_calls": 19,
-      "duration_s": 135.49,
-      "tokens_in": 326860,
-      "tokens_out": 16481,
-      "estimated_usd": 0.193773,
+      "api_calls": 7,
+      "duration_s": 32.57,
+      "tokens_in": 36608,
+      "tokens_out": 1935,
+      "estimated_usd": 0.0291235,
       "models": [
         {
           "tier": "cheap",
           "model_id": "google/gemini-3.1-flash-lite",
-          "api_calls": 17,
-          "tokens_in": 316952,
-          "tokens_out": 8246,
-          "estimated_usd": 0.091607
+          "api_calls": 2,
+          "tokens_in": 32984,
+          "tokens_out": 673,
+          "estimated_usd": 0.0092555
         },
         {
           "tier": "strong",
           "model_id": "anthropic/claude-sonnet-5",
-          "api_calls": 2,
-          "tokens_in": 9908,
-          "tokens_out": 8235,
-          "estimated_usd": 0.102166
+          "api_calls": 5,
+          "tokens_in": 3624,
+          "tokens_out": 1262,
+          "estimated_usd": 0.019868
         }
       ]
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-10T08:42:31.860Z",
+      "status": "success",
+      "params": {
+        "mode": "effects",
+        "mechanism": "SC-06",
+        "candidates": "9",
+        "records_processed": "50",
+        "records_skipped_irrelevant": "0",
+        "proposed": "0",
+        "merged": "1",
+        "dropped_ungrounded": "1",
+        "failed_validation": "0",
+        "held_low_confidence": "0",
+        "held_non_transferable": "3",
+        "verdict_unavailable": "0",
+        "verdict_unavailable_by_reason": "no_model_id=0 per_run_token_cap=0 monthly_token_cap=0 transport_error=0 malformed_answer=0",
+        "dropped_volume_cap": "0",
+        "dropped_volume_cap_high_confidence": "0",
+        "records_eligible": "166",
+        "records_relevant": "50",
+        "records_remaining": "0",
+        "records_selected": "50",
+        "records_dropped_truncation": "0",
+        "candidates_cheap": "5",
+        "candidates_strong": "4",
+        "dropped_ungrounded_cheap": "1",
+        "dropped_ungrounded_strong": "0",
+        "merged_into_pending": "1",
+        "proposed_enrich": "0",
+        "dropped_draft_cap": "0",
+        "into_synthesis": "4",
+        "cheap_synthesis_failed": "0",
+        "consolidated_by_synthesis": "0",
+        "expanded_by_synthesis": "0",
+        "dropped_ungrounded_reasons": "doi_unresolved=1",
+        "dropped_ungrounded_reasons_cheap": "doi_unresolved=1"
+      },
+      "records_fetched": 50,
+      "files_written": 4,
+      "duration_s": 32.57,
+      "dispatch_id": "effects-full-SC-06",
+      "github_run_id": 31371227436,
+      "warnings": {
+        "ungrounded_dropped": true
+      },
+      "cost": {
+        "api_calls": 7,
+        "duration_s": 32.57,
+        "tokens_in": 36608,
+        "tokens_out": 1935,
+        "estimated_usd": 0.0291235,
+        "models": [
+          {
+            "tier": "cheap",
+            "model_id": "google/gemini-3.1-flash-lite",
+            "api_calls": 2,
+            "tokens_in": 32984,
+            "tokens_out": 673,
+            "estimated_usd": 0.0092555
+          },
+          {
+            "tier": "strong",
+            "model_id": "anthropic/claude-sonnet-5",
+            "api_calls": 5,
+            "tokens_in": 3624,
+            "tokens_out": 1262,
+            "estimated_usd": 0.019868
+          }
+        ]
+      }
+    },
     {
       "timestamp": "2026-08-06T13:59:47.983Z",
       "status": "success",
@@ -1641,8 +1713,8 @@
   "data_files": [
     {
       "path": "coverage.json",
-      "records": 3090,
-      "bytes": 360500
+      "records": 3140,
+      "bytes": 364800
     }
   ]
 }
