@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-10T08:34:24.291Z",
+    "timestamp": "2026-08-10T08:35:26.393Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 764,
     "files_written": 1,
-    "duration_s": 34.77,
+    "duration_s": 35.07,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 38,
-      "duration_s": 34.77,
+      "duration_s": 35.07,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-10T08:35:26.393Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 764,
+      "files_written": 1,
+      "duration_s": 35.07,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 38,
+        "duration_s": 35.07,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-10T08:34:24.291Z",
       "status": "success",
@@ -440,28 +461,6 @@
       "cost": {
         "api_calls": 1,
         "duration_s": 0.13,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-03T10:37:38.059Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "DE-23",
-        "terms": "default effect decision making b2b enterprise;default option organ donation policy b2b enterprise;effort reduction friction conversion b2b enterprise"
-      },
-      "records_fetched": 0,
-      "files_written": 0,
-      "duration_s": 0.14,
-      "error": "upstream API quota requires a later continuation; logical run DE-23-msd3i2rw checkpointed at query 1/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 1,
-        "duration_s": 0.14,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
