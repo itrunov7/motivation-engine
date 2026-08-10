@@ -6,12 +6,13 @@
     "id": "sc-06-02",
     "mechanism_id": "SC-06",
     "name": "Limited-Time Scarcity (LTS)",
-    "fact": "Time scarcity increases impulsive buying and perceived urgency.",
+    "fact": "Limited-time promotion activates loss aversion and heuristic decisions through time pressure, causing consumers to accelerate purchases.",
     "grade": "A-",
     "source": [
-      "10.1080/02642069.2023.2185231"
+      "10.1080/02642069.2023.2185231",
+      "10.54097/3wp35028"
     ],
-    "boundary": "Live-streaming e-commerce",
+    "boundary": "Digital economy promotional methods",
     "realization_ids": [],
     "provenance": [
       {
@@ -24,6 +25,19 @@
           "start": 542,
           "end": 633,
           "source_text_sha256": "8ccb00b92597f19c8a747ffe540a54862a3880acb441f8e3658dfc3a097405a4"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_c8b954378f01f675fed70897",
+        "doi": "10.54097/3wp35028",
+        "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+        "quote_or_locus": "limited-time promotion activates loss aversion and heuristic decisions through time pressure, causing consumers to accelerate purchases",
+        "source_span": {
+          "start": 581,
+          "end": 716,
+          "source_text_sha256": "f824c8b01be7b619b529c759cc195503c7817a1b95875d756aaac30405030729"
         },
         "span_role": "finding"
       }
@@ -42,9 +56,22 @@
         "source_text_sha256": "8ccb00b92597f19c8a747ffe540a54862a3880acb441f8e3658dfc3a097405a4"
       },
       "span_role": "finding"
+    },
+    {
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_c8b954378f01f675fed70897",
+      "doi": "10.54097/3wp35028",
+      "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+      "quote_or_locus": "limited-time promotion activates loss aversion and heuristic decisions through time pressure, causing consumers to accelerate purchases",
+      "source_span": {
+        "start": 581,
+        "end": 716,
+        "source_text_sha256": "f824c8b01be7b619b529c759cc195503c7817a1b95875d756aaac30405030729"
+      },
+      "span_role": "finding"
     }
   ],
-  "confidence": 0.9,
+  "confidence": 0.95,
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:40:10.210Z",

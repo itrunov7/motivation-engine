@@ -1,0 +1,84 @@
+{
+  "id": "effect-ha-04-context-dependent-repetition-bias-cf3e78a0a618",
+  "type": "effect",
+  "target": "HA-04",
+  "payload": {
+    "id": "ha-04-01",
+    "mechanism_id": "HA-04",
+    "name": "Context-dependent repetition bias",
+    "fact": "Higher within-context repetition of an option is associated with biased choices, including higher subjective valuation and lower uncertainty for repeated actions.",
+    "grade": "A",
+    "source": [
+      "10.1101/2024.10.09.617399"
+    ],
+    "boundary": "Value-based decision experiments",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "HA-04",
+        "corpus_record_id": "cr_2f0b6fcfe18d20fff25e41d8",
+        "doi": "10.1101/2024.10.09.617399",
+        "title": "Explaining decision biases through context-dependent repetition",
+        "quote_or_locus": "We found that higher within-context repetition of an option was associated with biased choices including higher subjective valuation and lower uncertainty for repeated actions",
+        "source_span": {
+          "start": 695,
+          "end": 870,
+          "source_text_sha256": "577d129b351660e4dc2230bd689b185155024bfad7b4ebe39560b2fa1004f252"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "HA-04",
+      "corpus_record_id": "cr_2f0b6fcfe18d20fff25e41d8",
+      "doi": "10.1101/2024.10.09.617399",
+      "title": "Explaining decision biases through context-dependent repetition",
+      "quote_or_locus": "We found that higher within-context repetition of an option was associated with biased choices including higher subjective valuation and lower uncertainty for repeated actions",
+      "source_span": {
+        "start": 695,
+        "end": 870,
+        "source_text_sha256": "577d129b351660e4dc2230bd689b185155024bfad7b4ebe39560b2fa1004f252"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.95,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31369735214",
+  "proposed_at": "2026-08-10T08:22:21.673Z",
+  "status": "held_non_transferable",
+  "hold_reason": "not_transferable",
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 2,
+    "transferable": false,
+    "escalated_by_warning_pair": false,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show option more frequently than alternatives — Repetition frequency of displayed options is directly controllable by UI ordering/display logic.",
+        "identified_lever": "show option more frequently than alternatives"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "describes rather than directs (is associated with) — a definition states nothing to move"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ]
+  }
+}

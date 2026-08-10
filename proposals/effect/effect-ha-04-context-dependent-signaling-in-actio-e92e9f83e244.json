@@ -1,0 +1,84 @@
+{
+  "id": "effect-ha-04-context-dependent-signaling-in-actio-e92e9f83e244",
+  "type": "effect",
+  "target": "HA-04",
+  "payload": {
+    "id": "ha-04-03",
+    "mechanism_id": "HA-04",
+    "name": "Context-dependent signaling in action control",
+    "fact": "Partial repetition costs in sequential two-choice tasks are modulated by display set size, suggesting that signaling heuristics incorporate context information to adapt response strategies.",
+    "grade": "B+",
+    "source": [
+      "10.1007/s00426-025-02145-w"
+    ],
+    "boundary": "Sequential two-choice tasks",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "HA-04",
+        "corpus_record_id": "cr_9a5a2374bb3d861d4c01d8b8",
+        "doi": "10.1007/s00426-025-02145-w",
+        "title": "Signaling as a context-dependent strategy in action control",
+        "quote_or_locus": "These results suggest that signaling incorporates context information to adapt the usage of stimulus information for response strategies in accordance with the environment",
+        "source_span": {
+          "start": 1122,
+          "end": 1293,
+          "source_text_sha256": "2dc8affbc7c8c6f2f7d26e42c12ff4adf023441d2212617d299165c152f97a8b"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "HA-04",
+      "corpus_record_id": "cr_9a5a2374bb3d861d4c01d8b8",
+      "doi": "10.1007/s00426-025-02145-w",
+      "title": "Signaling as a context-dependent strategy in action control",
+      "quote_or_locus": "These results suggest that signaling incorporates context information to adapt the usage of stimulus information for response strategies in accordance with the environment",
+      "source_span": {
+        "start": 1122,
+        "end": 1293,
+        "source_text_sha256": "2dc8affbc7c8c6f2f7d26e42c12ff4adf023441d2212617d299165c152f97a8b"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.9,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31369735214",
+  "proposed_at": "2026-08-10T08:22:21.673Z",
+  "status": "held_non_transferable",
+  "hold_reason": "not_transferable",
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 2,
+    "transferable": false,
+    "escalated_by_warning_pair": false,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "pass",
+        "reason": "a person interacting with an artifact (display)"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: vary number of on-screen response options shown — Display set size is a UI element controlling context that modulates response strategy adaptation.",
+        "identified_lever": "vary number of on-screen response options shown"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ]
+  }
+}

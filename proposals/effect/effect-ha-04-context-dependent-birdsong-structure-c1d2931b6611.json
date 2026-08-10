@@ -1,0 +1,84 @@
+{
+  "id": "effect-ha-04-context-dependent-birdsong-structure-c1d2931b6611",
+  "type": "effect",
+  "target": "HA-04",
+  "payload": {
+    "id": "ha-04-02",
+    "mechanism_id": "HA-04",
+    "name": "Context-dependent birdsong structure",
+    "fact": "Collared flycatchers exhibit context-dependent changes in song structure, specifically showing lower richness of short repeated sequences in the presence of an approaching female and higher richness of long repeated sequences during counter-singing.",
+    "grade": "A",
+    "source": [
+      "10.1016/j.anbehav.2024.11.004"
+    ],
+    "boundary": "Collared flycatcher (Ficedula albicollis) acoustic communication",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "HA-04",
+        "corpus_record_id": "cr_70bf4fc51c6e0c3ad0fa7710",
+        "doi": "10.1016/j.anbehav.2024.11.004",
+        "title": "Context-dependent organization of birdsong: experimental evidence from the collared flycatcher, Ficedula albicollis",
+        "quote_or_locus": "We found lower richness of short repeated sequences and a smaller repertoire size in the context of an approaching female compared to the solo context. Conversely, we found higher richness of long repeated sequences and songs with more syllables in counter-singing compared to the solo context",
+        "source_span": {
+          "start": 1019,
+          "end": 1312,
+          "source_text_sha256": "3e7ffc6afbd1da4336104ca5961832fe3cd1acae9fcfd228f8f873f72c731814"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "HA-04",
+      "corpus_record_id": "cr_70bf4fc51c6e0c3ad0fa7710",
+      "doi": "10.1016/j.anbehav.2024.11.004",
+      "title": "Context-dependent organization of birdsong: experimental evidence from the collared flycatcher, Ficedula albicollis",
+      "quote_or_locus": "We found lower richness of short repeated sequences and a smaller repertoire size in the context of an approaching female compared to the solo context. Conversely, we found higher richness of long repeated sequences and songs with more syllables in counter-singing compared to the solo context",
+      "source_span": {
+        "start": 1019,
+        "end": 1312,
+        "source_text_sha256": "3e7ffc6afbd1da4336104ca5961832fe3cd1acae9fcfd228f8f873f72c731814"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.95,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31369735214",
+  "proposed_at": "2026-08-10T08:22:21.673Z",
+  "status": "held_non_transferable",
+  "hold_reason": "not_transferable",
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 2,
+    "transferable": false,
+    "escalated_by_warning_pair": false,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "fail",
+        "reason": "names nothing an interface can change — Bird behavioral biology finding; no digital interface mechanism or user-facing lever applicable.",
+        "identified_lever": null
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (lower, higher)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ]
+  }
+}
