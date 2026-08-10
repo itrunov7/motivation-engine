@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-10T08:25:48.647Z",
+    "timestamp": "2026-08-10T08:27:11.131Z",
     "status": "partial",
     "params": {
       "mechanism": "FL-24",
@@ -14,20 +14,44 @@
     },
     "records_fetched": 746,
     "files_written": 1,
-    "duration_s": 52.55,
+    "duration_s": 46.19,
     "error": "search semantic-scholar application \"flow state digital environments b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
     "warnings": {
-      "s2_throttled": true
+      "s2_throttled": true,
+      "low_novelty": true
     },
     "cost": {
-      "api_calls": 46,
-      "duration_s": 52.55,
+      "api_calls": 42,
+      "duration_s": 46.19,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-10T08:27:11.131Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 746,
+      "files_written": 1,
+      "duration_s": 46.19,
+      "error": "search semantic-scholar application \"flow state digital environments b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true,
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 42,
+        "duration_s": 46.19,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-10T08:25:48.647Z",
       "status": "partial",
@@ -436,27 +460,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-03T08:49:31.251Z",
-      "status": "success",
-      "params": {
-        "mechanism": "CL-14",
-        "terms": ""
-      },
-      "records_fetched": 511,
-      "files_written": 1,
-      "duration_s": 47.34,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.34,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -535,7 +538,7 @@
     {
       "path": "FL-24.json",
       "records": 746,
-      "bytes": 7325271,
+      "bytes": 7323348,
       "categories": {
         "foundational": 32,
         "meta-analysis": 22,
