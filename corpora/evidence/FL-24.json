@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-10T09:47:21.173Z",
+  "fetched_at": "2026-08-10T09:50:02.920Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -66,7 +66,7 @@
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 583
+      "upstream_total_results": 550
     },
     {
       "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
@@ -151,12 +151,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 1
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
@@ -333,10 +333,10 @@
       "requested": 25,
       "returned": 25,
       "unique_returned": 25,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 5146
+      "records_added": 21,
+      "novelty_rate": 0.84,
+      "rolling_novelty_rate": 0.084,
+      "upstream_total_results": 131
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
@@ -350,7 +350,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.084,
       "upstream_total_results": 8
     },
     {
@@ -365,7 +365,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.084,
       "upstream_total_results": 8
     },
     {
@@ -380,7 +380,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.084,
       "upstream_total_results": 8
     },
     {
@@ -395,7 +395,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.084,
       "upstream_total_results": 8
     },
     {
@@ -410,7 +410,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.084,
       "upstream_total_results": 8
     },
     {
@@ -421,12 +421,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 44
+      "returned": 24,
+      "unique_returned": 24,
+      "records_added": 10,
+      "novelty_rate": 0.4167,
+      "rolling_novelty_rate": 0.1257,
+      "upstream_total_results": 24
     },
     {
       "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
@@ -440,7 +440,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.1257,
       "upstream_total_results": 0
     },
     {
@@ -455,7 +455,37 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.1257,
+      "upstream_total_results": 0
+    },
+    {
+      "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+      "api": "openalex",
+      "angle": "critique",
+      "term": "flow state digital environments b2b enterprise critique criticism",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.1257,
+      "upstream_total_results": 0
+    },
+    {
+      "query_id": "search:recency:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+      "api": "openalex",
+      "angle": "critique",
+      "term": "flow state digital environments b2b enterprise critique criticism",
+      "bucket": "recency",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.0417,
       "upstream_total_results": 0
     }
   ],
@@ -490,7 +520,7 @@
     "meta-analysis": 22,
     "replication": 95,
     "dissent": 150,
-    "recent": 477
+    "recent": 497
   },
   "diversity_report": {
     "viewpoint_spread": [
@@ -509,14 +539,14 @@
       {
         "angle": "application",
         "queries": 6,
-        "returned": 25,
-        "unique_records": 25
+        "returned": 24,
+        "unique_records": 24
       },
       {
         "angle": "critique",
-        "queries": 3,
-        "returned": 1,
-        "unique_records": 1
+        "queries": 5,
+        "returned": 0,
+        "unique_records": 0
       },
       {
         "angle": "replication",
@@ -540,32 +570,32 @@
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 25,
+        "queries": 27,
         "returned": 50,
         "unique_records": 4
       },
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 76,
-        "unique_records": 76
+        "returned": 74,
+        "unique_records": 74
       }
     ],
-    "recent_records": 64,
-    "recency_rate": 0.8,
+    "recent_records": 53,
+    "recency_rate": 0.6795,
     "novelty": {
       "previous_corpus_records": 802,
-      "unique_records": 80,
-      "already_in_corpus": 80,
-      "new_records": 0,
-      "novelty_rate": 0,
-      "low_novelty": true,
+      "unique_records": 78,
+      "already_in_corpus": 47,
+      "new_records": 31,
+      "novelty_rate": 0.3974,
+      "low_novelty": false,
       "known_share_threshold": 0.8
     }
   },
   "saturation_report": {
-    "queries_issued": 30,
-    "records_added": 0,
+    "queries_issued": 31,
+    "records_added": 31,
     "novelty_curve": [
       {
         "query_index": 1,
@@ -677,18 +707,6 @@
       },
       {
         "query_index": 10,
-        "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 802
-      },
-      {
-        "query_index": 11,
         "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "recency",
         "kind": "search",
@@ -700,7 +718,7 @@
         "cumulative_records": 802
       },
       {
-        "query_index": 12,
+        "query_index": 11,
         "query_id": "search:citation:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "citation",
         "kind": "search",
@@ -712,7 +730,7 @@
         "cumulative_records": 802
       },
       {
-        "query_index": 13,
+        "query_index": 12,
         "query_id": "search:relevance:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "relevance",
         "kind": "search",
@@ -724,7 +742,7 @@
         "cumulative_records": 802
       },
       {
-        "query_index": 14,
+        "query_index": 13,
         "query_id": "search:recency:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "recency",
         "kind": "search",
@@ -736,7 +754,7 @@
         "cumulative_records": 802
       },
       {
-        "query_index": 15,
+        "query_index": 14,
         "query_id": "search:citation:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "citation",
         "kind": "search",
@@ -748,7 +766,7 @@
         "cumulative_records": 802
       },
       {
-        "query_index": 16,
+        "query_index": 15,
         "query_id": "search:relevance:semantic-scholar:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "relevance",
         "kind": "search",
@@ -760,7 +778,7 @@
         "cumulative_records": 802
       },
       {
-        "query_index": 17,
+        "query_index": 16,
         "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "recency",
         "kind": "search",
@@ -772,7 +790,7 @@
         "cumulative_records": 802
       },
       {
-        "query_index": 18,
+        "query_index": 17,
         "query_id": "search:citation:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "citation",
         "kind": "search",
@@ -784,7 +802,7 @@
         "cumulative_records": 802
       },
       {
-        "query_index": 19,
+        "query_index": 18,
         "query_id": "search:relevance:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "relevance",
         "kind": "search",
@@ -796,7 +814,7 @@
         "cumulative_records": 802
       },
       {
-        "query_index": 20,
+        "query_index": 19,
         "query_id": "search:recency:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "recency",
         "kind": "search",
@@ -808,7 +826,7 @@
         "cumulative_records": 802
       },
       {
-        "query_index": 21,
+        "query_index": 20,
         "query_id": "search:citation:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "citation",
         "kind": "search",
@@ -820,19 +838,19 @@
         "cumulative_records": 802
       },
       {
-        "query_index": 22,
+        "query_index": 21,
         "query_id": "search:relevance:semantic-scholar:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
         "returned": 25,
         "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "records_added": 21,
+        "novelty_rate": 0.84,
+        "rolling_novelty_rate": 0.084,
+        "cumulative_records": 823
       },
       {
-        "query_index": 23,
+        "query_index": 22,
         "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -840,11 +858,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "rolling_novelty_rate": 0.084,
+        "cumulative_records": 823
       },
       {
-        "query_index": 24,
+        "query_index": 23,
         "query_id": "search:citation:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -852,11 +870,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "rolling_novelty_rate": 0.084,
+        "cumulative_records": 823
       },
       {
-        "query_index": 25,
+        "query_index": 24,
         "query_id": "search:relevance:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -864,11 +882,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "rolling_novelty_rate": 0.084,
+        "cumulative_records": 823
       },
       {
-        "query_index": 26,
+        "query_index": 25,
         "query_id": "search:recency:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -876,11 +894,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "rolling_novelty_rate": 0.084,
+        "cumulative_records": 823
       },
       {
-        "query_index": 27,
+        "query_index": 26,
         "query_id": "search:citation:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -888,23 +906,23 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "rolling_novelty_rate": 0.084,
+        "cumulative_records": 823
       },
       {
-        "query_index": 28,
+        "query_index": 27,
         "query_id": "search:relevance:semantic-scholar:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "relevance",
         "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "returned": 24,
+        "unique_returned": 24,
+        "records_added": 10,
+        "novelty_rate": 0.4167,
+        "rolling_novelty_rate": 0.1257,
+        "cumulative_records": 833
       },
       {
-        "query_index": 29,
+        "query_index": 28,
         "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -912,11 +930,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "rolling_novelty_rate": 0.1257,
+        "cumulative_records": 833
       },
       {
-        "query_index": 30,
+        "query_index": 29,
         "query_id": "search:citation:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "citation",
         "kind": "search",
@@ -924,16 +942,40 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 802
+        "rolling_novelty_rate": 0.1257,
+        "cumulative_records": 833
+      },
+      {
+        "query_index": 30,
+        "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.1257,
+        "cumulative_records": 833
+      },
+      {
+        "query_index": 31,
+        "query_id": "search:recency:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+        "bucket": "recency",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.0417,
+        "cumulative_records": 833
       }
     ],
     "window_queries": 10,
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 10,
-      "recency": 10,
+      "relevance": 11,
+      "recency": 11,
       "citation": 10
     },
     "topical_candidates": 25,
@@ -942,12 +984,12 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 5713,
+      "estimate": 833,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 13,
-      "total_search_queries": 30,
-      "summed_upstream_results": 5784,
-      "observed_sample_multiplicity": 1.0125
+      "total_search_queries": 31,
+      "summed_upstream_results": 715,
+      "observed_sample_multiplicity": 1.0128
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -4722,6 +4764,33 @@
       "record_id": "cr_1a39228be11d8b15ba8cb3d2"
     },
     {
+      "title": "Model-based approaches for interoperability of next generation enterprise information systems: state of the art and future challenges",
+      "authors": [
+        "G. Zacharewicz",
+        "S. Diallo",
+        "Y. Ducq",
+        "C. Agostinho",
+        "R. Jardim-Gonçalves",
+        "Hassan Bazoun",
+        "Zhongjie Wang",
+        "G. Doumeingts"
+      ],
+      "year": 2016,
+      "venue": "Information Systems and E-Business Management",
+      "doi": "10.1007/s10257-016-0317-8",
+      "citations": 65,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_de8997196628541be09febe0"
+    },
+    {
       "title": "Personalization in Long-Term Human-Robot Interaction",
       "authors": [
         "Bahar Irfan",
@@ -5293,6 +5362,29 @@
         "replication"
       ],
       "record_id": "cr_5eb781d8dfbf0aeaf7599d85"
+    },
+    {
+      "title": "Smart manufacturing in intelligent digital mesh: Integration of enterprise architecture and software product line engineering",
+      "authors": [
+        "M. Uysal",
+        "A. Mergen"
+      ],
+      "year": 2021,
+      "venue": "Journal of Industrial Information Integration",
+      "doi": "10.1016/j.jii.2021.100202",
+      "citations": 55,
+      "abstract": "Abstract Smart Manufacturing (SM) has substantial challenges, such as sharing data and integrating different systems or products into an intelligent, digital and interconnected manufacturing context. This situation naturally points to a contemporary paradigm, Intelligent Digital Mesh (IDM). Recent studies have presented the top ten state of the art technology trends called IDM, and they report forecasts about the technical developments for the future. However, the development of smart systems has been challenging, both for IDM and SM. Additionally, various sources of variability and complexities are inherent in these environments. One of them is the application of the development for SM. Except for the limited techniques; the review of literature cannot provide a comprehensive framework, which provides the integration of platform-, system- and enterprise-specific reusable solutions, while addressing the problems of mass customization and variability. Therefore, we conduct a two-phase mixed research, following the guidelines of the Design Science Research Method. The IDM, Enterprise Architecture (EA) and Software Product Line Engineering (SPLE) approaches are combined to produce a Smart Manufacturing Development Framework (SMDF). This study can be viewed as an attempt to enhance SM and information integration knowledge domains.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_7a80223c1be70d89247cec3d"
     },
     {
       "title": "The flow of digital labor",
@@ -6025,6 +6117,27 @@
         "replication"
       ],
       "record_id": "cr_332a838704d9899caf54c800"
+    },
+    {
+      "title": "Organisation of reverse logistics tasks in the construction industry",
+      "authors": [
+        "F. Schultmann",
+        "N. Sunke"
+      ],
+      "year": 2007,
+      "venue": null,
+      "doi": null,
+      "citations": 40,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_c26d88b122154f486ab1bcbc"
     },
     {
       "title": "The Blue LED Nobel Prize: Historical context, current scientific understanding, human benefit",
@@ -9355,6 +9468,29 @@
       "record_id": "cr_5f434e86c0acca9e79004b7a"
     },
     {
+      "title": "Machine learning and pattern recognition models in change detection",
+      "authors": [
+        "D. Bouchaffra",
+        "M. Cheriet",
+        "Pierre-Marc Jodoin",
+        "D. Beck"
+      ],
+      "year": 2015,
+      "venue": "Pattern Recognition",
+      "doi": "10.1016/j.patcog.2014.10.019",
+      "citations": 11,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_6c637b0de4ef6b738165c844"
+    },
+    {
       "title": "Objective Difficulty-Skill Balance Impacts Perceived Balance but Not Behaviour: A Test of Flow and Self-Determination Theory Predictions",
       "authors": [
         "Sebastian Deterding",
@@ -9609,6 +9745,28 @@
         "critique"
       ],
       "record_id": "cr_3ce82da00fb47a3f31c2e35d"
+    },
+    {
+      "title": "Materializing corporate futures: how the EU navigated the Metaverse hype",
+      "authors": [
+        "Michele Martini"
+      ],
+      "year": 2024,
+      "venue": "Information, Communication &amp; Society",
+      "doi": "10.1080/1369118x.2024.2428331",
+      "citations": 9,
+      "abstract": "ABSTRACT This paper investigates the European Union’s approach to regulating the Metaverse, a corporate-driven digital future introduced by Meta Platforms Inc. in 2021. Through its ‘Initiative on Virtual Worlds,’ the EU envisions a regulatory framework for a ‘third space’ where information, financial transactions, data, and digital identities can flow seamlessly on a global scale. This study reveals that the EU perceives massive corporate-owned datafication not as a challenge but as a strategic opportunity to secure a leading role in global standards-setting for digital environments, positioning itself more as an enabler than a critical challenger. Analyzing EU documents, particularly those framing Web 4.0 and virtual worlds, the findings illustrate (i) how the EU legitimizes the concept of an imagined Metaverse, (ii) how this regulatory process promotes a corporate-centered digital future while sidelining issues of sovereignty and environmental sustainability, and (iii) how interactions among state entities, tech corporations, and civil society reveal shifting power dynamics.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_960ae750e185b0df94c1647c"
     },
     {
       "title": "Modeling students’ flow experience through data logs in gamified educational systems",
@@ -9915,6 +10073,26 @@
       "record_id": "cr_5f42127307e389d9da33918f"
     },
     {
+      "title": "Aircraft Engine On-Line Diagnostics Through Dual-Channel Sensor Measurements : Development of an Enhanced System",
+      "authors": [
+        "Takahisa Kobayashi"
+      ],
+      "year": 2008,
+      "venue": null,
+      "doi": "10.1115/gt2008-50346",
+      "citations": 7,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_47ed0471e3c11adcbd142a95"
+    },
+    {
       "title": "Digital Transformation of Ukrainian Libraries: Current State and Prospects",
       "authors": [
         "Y. Horban",
@@ -10163,6 +10341,28 @@
         "recent"
       ],
       "record_id": "cr_b62768c20f51d25a0adfa97e"
+    },
+    {
+      "title": "Enterprise Digital Transformation and Accounting Information Transparency",
+      "authors": [
+        "Zexi Wang"
+      ],
+      "year": 2023,
+      "venue": "Highlights in Business, Economics and Management",
+      "doi": "10.54097/hbem.v9i.9247",
+      "citations": 6,
+      "abstract": "Based on the data of listed companies from 2010 to 2021, this paper discusses the impact of digital transformation of enterprises on accounting information transparency. The results show that digital transformation can improve the transparency of accounting information; The positive relationship between the two is more significant in the diversified business environment. The digital transformation of non-state-owned enterprises has a more significant effect on improving transparency. Digital transformation improves the transparency of accounting information, which in turn enables enterprises to reduce financing constraints and improve future growth prospects. The results of this study provide strong evidence that digital transformation has a positive impact on improving the transparency of accounting information, and can be used as a valuable reference to reduce the information asymmetry between companies and the capital market. The study of this paper provides evidence that digital transformation has positive significance to improve the transparency of accounting information and has reference value to reduce the information asymmetry between companies and the capital market.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_d94c3f41b6f967f26272abe5"
     },
     {
       "title": "Eyes on the prize: Linking pre‐service education to outcomes",
@@ -10634,6 +10834,33 @@
       "record_id": "cr_e655df702582ccbe4f37ff4f"
     },
     {
+      "title": "The effectiveness of case method in developing intrapreneurship among business students",
+      "authors": [
+        "K. Tambunan",
+        "Ali Fikri Hasibuan",
+        "R. Prayogo",
+        "F. Dongoran",
+        "D. Syah",
+        "G. Sagala"
+      ],
+      "year": 2024,
+      "venue": "Journal of Education and Learning (EduLearn)",
+      "doi": "10.11591/edulearn.v18i2.21161",
+      "citations": 5,
+      "abstract": "Intrapreneurship skill has considered as the alternative learning outcomes of entrepreneurship education. However, entrepreneurship teachers need a complex learning program to develop intrapreneurship among business students. At the same time, The Ministry of Education and Culture of The Republic of Indonesia recommends university teachers implement case methods to deliver complex learning environments and build critical skills among students.  Therefore, this study aims to i) examine the effect of micro small medium enterprise (MSME) cases on the intrapreneurship of business students, ii) investigate the influence of MSME cases on flow experience in entrepreneurship education and iii) investigate the effect of flow experience during entrepreneurship education on intrapreneurship skill.  We used field experiments on entrepreneurship and digital business student in business development courses.  The result indicates that the case method effectively developed student intrapreneurship skill and flow experience during the course positively impacting student intrapreneurship skill.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_54e6fd563f9033d44d06ad0c"
+    },
+    {
       "title": "Uncovering associations between users' behaviour and their flow experience",
       "authors": [
         "Wilk Oliveira",
@@ -10710,6 +10937,29 @@
         "canon"
       ],
       "record_id": "cr_80affceeaff0cedb5b3aac08"
+    },
+    {
+      "title": "Digital Campus as a tool for teaching English in the era of digital education",
+      "authors": [
+        "O. Brega",
+        "G. V. Kruglyakova"
+      ],
+      "year": 2024,
+      "venue": "The Education and science journal",
+      "doi": "10.17853/1994-5639-2024-1-171-201",
+      "citations": 4,
+      "abstract": "                Introduction. The digital transformation of higher education in Russia has caused the need to revise the approaches to language training of university graduates.                Aim. The present research aimed to model a Digital Campus with its services and functions as a tool for language training of students in the era of digital transformation of education.                Methodology and research methods. The strategic approach was employed as the leading methodological approach, which in the framework of this study is considered as a potential possibility to implement language education at the university using the “Digital Campus” as an important tool for digital transformation of universities. The research was conducted in three stages, involving 2–3 year students of Togliatti State University (113 participants) and school students of Togliatti (157 participants) from July 2022 to January 2023. Empirical research methods were used: analysis, comparison, generalisation, synthesis, modelling. Stage 1 – collection and analysis of the information presented on the websites of the universities in order to highlight the indicators of the digital development of universities. Stage 2 – a survey of schoolchildren to identify their attitude to university admission; a survey of students to determine their motivation to receive language training through digital tools. Stage 3 – modelling of a Digital Campus, its services and functions for students’ language training.                Results. The authors defined the Digital Campus as an environment based on information and educational digital resources and technologies, computer equipment, telecommunication technologies and software, organisational and methodological support, connecting participants in the learning process (teachers, applicants and students, graduates, enterprises/businesses) for distant educational activities and business operations in accordance with personalised request. The data available on universities’ websites were analysed and grouped into seven indicators. The most represented are the services: additional professional education, the use of interactive forms to work with applicants, online support of student and graduate career development, and the project office. Services for the implementation of personalised educational tracks and the digital footprints accumulation during the learning process were less prominent in the course of the research. The results of the survey were the following: there was a general readiness for “applicant – university” interaction through the online environment; a small percentage of divergence of schoolchildren and student opinion regarding their expectations to learn a foreign language online was observed. The Digital Campus and its functions were modelled. Each of the campus services – a student personal account (applicants/students), a teacher personal account, and an employer personal account (enterprises/businesses) – has its own interface and access to the following functional units: “Recruitment and Project System”, “Language Courses”, “Course Designer”, “Resource Management”, “E-Learning System”, “Courses Expertise Centre”. The environment creates unified information and educational space for student language training.                Scientific novelty. The approaches to understanding the digital transformation of higher education were systematised, and the indicators of higher education institutions use of digital solutions in the educational process were analytically presented. The article provides the authors’ definition of the Digital Campus. The theoretical significance of the article is in the outline and analytical presentation of existing approaches and trends in the digital transformation of higher education.                Practical significance. The Digital Campus is an important tool for the implementation of language training and, unlike the common university website, allows real-time interaction between all participants in the educational process: universities – students – enterprises/businesses. The prospects for the study may be aimed at the development of a Digital Campus for engineering students.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_5bb297c72921d5c9e4e9fbf3"
     },
     {
       "title": "Discussing methodological gaps in psychosocial intervention research for dementia: an opinion article from the INTERDEM Methodology Taskforce guided by the MRC framework",
@@ -10935,6 +11185,27 @@
         "replication"
       ],
       "record_id": "cr_86dd3bfe2d2035561fa979ce"
+    },
+    {
+      "title": "Planning and Balancing of Disassembly Systems",
+      "authors": [
+        "G. Zülch",
+        "Rainer Schwarz"
+      ],
+      "year": 2006,
+      "venue": "Advances in Production Management Systems",
+      "doi": "10.1007/978-0-387-77249-3_6",
+      "citations": 4,
+      "abstract": "Legislative changes triggered by the exhaustion of natural resources have increased the importance of disassembly as a form of recycling. The implementation of computer-supported procedures in recycling has become indispensable. Time management data was used to develop a tool for the economic planning of disassembly processes, allowing for load balancing of disassembly systems with division of work. 1 Motivation for Disassembly Planning The European Union has defined binding guidelines for the prevention and disposal of waste, which must be implemented by the member states into national legislation within a limited period of time. As a result, several new laws have been passed in Germany in the last few years requiring manufacturers and importers to take back the devices they produce at the end of their lifecycle and to re-integrate them into the material cycle. The expected increase in the return of used products will force manufacturers to optimize the disassembly of used products in order to re-integrate the involved raw materials into the production cycle as secondary raw materials or secondary products or to dispose of materials in an appropriate manner [1]. When recycling used products the objective is always to disassemble the reusable parts without damaging them. Thus, new approaches are necessary to solve impending organizational problems and a demand for new tools is at hand. In addition to their applications in the field of disassembly, these tools can also be beneficial in the service area, especially for the maintenance of products. The proportion of manual and (semi-)automated disassembly systems is also of substantial importance in the service area for the maintenance of products [2, 3]. In the future, the disassembly of used products will take on an even more industrial 50 Gert Zülch and Rainer Schwarz character, whereby the economical design and control of disassembly processes will be of primary importance. 2 Disassembly Planning Procedure with Load Balancing 2.1 Tasks of Disassembly Planning The objective of disassembly planning is to create an organizational, staff and techniques foundation for the ergonomic and economic separation of used products into their constituent parts. In addition to defining the disassembly tasks, the planning of a disassembly system comprises creating a suitable sequence and materials plan. This includes the structuring of used products, the creation of disassembly work plans, the definition of the separation procedures, the disassembly depth, the number of needed workplaces, the selection of equipment, the flow of materials system and many more(cf. [4], pp. 245-253). Disassembly is by no means a mere reversal of the assembly. In contrast to assembly, in which e.g. all parts are defined geometrically and are in the same qualitative state, disassembly must also take into consideration the fact that each used product has been subject to a diversity of influences throughout its lifecycle (corrosion, wear, deformation etc.) and is thus in a different state when it comes to recycling. Therefore, stochastic influences, which make planned disassembly sequences unpredictable, must be taken into account during the planning of disassembly processes (e.g. the selection of separation procedures) and the determination of disassembly operation times [1]. This lends great significance to time management evaluations (cf. [5], pp. 147-156]. 2.2 Scope of Investigations In the field of recycling, the application of computer-supported procedures has become an indispensable necessity. A computer-aided procedure supporting the planning of disassembly systems has been developed at the ifab-Institute of Human and Industrial Engineering at the University of Karlsruhe within the context of a project supported by the German Research Association (DFG Deutsche Forschungsgemeinschaft). The developed software tool TANJA (German abbreviation for \"Disassembly Planning with Object-oriented Load Balancing\") serves to support the planning of economically feasible disassembly processes while also taking the given organizational, personnel and technical conditions into account. During the development of the procedure, analyses and data gathering (concerning work organization, equipment, applied separation procedures, time data capturing etc.) were carried out in several disassembly enterprises. Time building blocks were created using registered data and MTM standard data for manual disassembly operations (e.g. remove screw connection, apply separation sander etc.) in order to determine the disassembly operation times. The workers’ specific, technical disassembly knowledge (work process knowledge) was documented through questioning Planning and Balancing of Disassembly Systems 51 (interviews) and video analyses and was implemented in a help system along with examples of good practice. 2.3 Characteristics of the Software Tool TANJA The software tool TANJA makes it possible to digitally represent operations and resources in a disassembly system, to develop various planning solutions and to compare these to each other. The primary objective during the development of this computer-supported planning tool was to provide disassembly enterprises with a practical assistance for the planning of disassembly systems. The procedure allows the user: to structure disassembly processes through disassembly precedence diagrams, to assign individual disassembly operations to decoupled work systems, to balance the load of the disassembly system based on a pre-determined cycle time or a given number of disassembly stations or workers, to carry out an ergonomic assessment of the physical stress to the workers resulting from manual activities, to digitally represent the planned disassembly system as well as to compare the developed planning solutions based on assessment criteria selected by the user and supported by the software tool. 2.4 Structural Design of TANJA The planning procedure TANJA was conceived for PC implementation. Microsoft Windows XP was chosen as the operating system and the object-oriented programming language Microsoft Visual Basic.net was selected as the development environment. This computer platform allows for a broad spectrum of implementation in industrial disassembly systems. In order to ensure easy use and acceptance, the procedure's functionalities were modelled after prevalent Microsoft Office Software packages (e.g. cut & copy, drag & drop, menu structure design etc.). In TANJA time building blocks developed according to MTM are used for the time management analysis of disassembly operations. For this, data material from earlier research work was taken and supplemented with data collected in disassembly enterprises [6, 7, and 8]. These time building blocks were then used to specify operation times for individual disassembly operations and to allocate them to individual work stations in disassembly systems with division of labour while also taking disassembly-specific influencing factors (corrosion, separation procedures etc.) into account. The load balancing to be carried out is dependent upon a predetermined cycle time or the number of work stations defined or available in the disassembly workshop. A further module was developed for the description of workplaces, the selection of equipment, buffers, conveyors, collection bins for disassembled parts etc. Further modules for the description of workplaces, the execution of worker stress analyses as well as a help system with examples of good practice were also implemented in TANJA. 52 Gert Zülch and Rainer Schwarz In order to plan a disassembly system, the individual disassembly tasks should be illustrated in an appropriate manner. Modelling, in particular as disassembly precedence diagrams, is particularly well suited for designing possible disassembly operations. In disassembly precedence diagrams nodes and arcs are used to describe the sequence restrictions between the individual disassembly operations in a sort of network. The nodes contain detailed descriptions of the disassembly operations, whereas the arcs define the predecessor-successor relationships between the individual disassembly operations. With regards to the disassembly of used products, in particular the availability of product data is a specific problem. From experience, disassembly enterprises rarely possess drawings or CAD-data with detailed information, regarding e.g. components, the type of connections between the individual components or about the materials used. The determination of the individual disassembly operations is thus usually carried out through test disassembly runs. The main steps in the structural planning of a disassembly system are in principle analogous to those in assembly planning [9]. Like in assembly planning, the planning of a disassembly system consists of several consecutive phases: determining the work process principle (e.g. line disassembly), allocating the individual disassembly operations to work systems (predisassembly, main and final disassembly) and by carrying out a load balancing. A module was developed for TANJA which can allocate the disassembly operations illustrated in a disassembly precedence diagram to individual disassembly work systems. The selection of these work systems is comparable to the definition of pre-, main and final disassemblies. The classification of the complete disassembly into independent work systems allows the individual disassembly operations to be decoupled, meaning they can be executed in part independently of one another. 2.5 Planning Disassembly Systems with Division of Labour Using the developed software tool TANJA the planning of disassembly systems is carried out in three main steps: Development of the disassembly precedence diagram for a specific product, load balancing of the whole disassembly system and configuration of the layout. The integration of the time study of the individual disassembly operat",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_90bbbc5c8764c0ac4b89d121"
     },
     {
       "title": "Post‐war Russian economic growth: not a riddle—a reply",
@@ -11292,6 +11563,30 @@
         "critique"
       ],
       "record_id": "cr_c18f40048b0cc1e83b206a4a"
+    },
+    {
+      "title": "Exploring Multiple Functionalities of Cyber-Physical Power System Within Digital Substation-Based Laboratory Environment",
+      "authors": [
+        "Le Nam Hai Pham",
+        "J. Riquelme-Dominguez",
+        "F. Gonzalez-Longatt"
+      ],
+      "year": 2025,
+      "venue": "IEEE Access",
+      "doi": "10.1109/access.2025.3563260",
+      "citations": 3,
+      "abstract": "The landscape of control centre technologies is dynamically adapting to the swift transformations in the physical world, specifically targeting wide-area monitoring, control, and protection in energy systems. In response to these changes, Cyber-Physical Power System (CPPS) has emerged as a promising solution to develop control centre technologies and is gaining significant attention from scholars and researchers with similar interests. However, the widespread adoption of CPPS technology faces several challenges, such as the need for methodologies to develop further CPPS or the detailed deployment of multiple functions within the CPPS framework. To address these challenges, a specialised CPPS testbed within a laboratory environment is presented in this study. In addition, this paper delves into various functions integrated into CPPS, involving critical aspects such as real-time monitoring, digital communication protocol, state estimation, outlier detection, optimal power flow and self-healing capabilities. By implementing a co-simulation platform based on two real-time simulators, Typhoon HIL, the physical and cyber layers can exchange data through Ethernet LAN within the laboratory environment through communication protocols, IEEE C37.118.1 and IEC 61850. This research lays the foundation for a deeper understanding of the potential applications of the CPPS testbed for future control centre technology as well as serves as a catalyst for further innovations, driving a paradigm toward smart, flexible energy infrastructure.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_18b48ea6c6eff5115a4a8c3f"
     },
     {
       "title": "Flow State: Humans Enabling AI Systems to Program Themselves",
@@ -11666,6 +11961,53 @@
       "record_id": "cr_3292c5c41eb714d96020413f"
     },
     {
+      "title": "Architecture and interfaces",
+      "authors": [
+        "K. Baek",
+        "M. Griessen",
+        "A. Bruno",
+        "P. Cattin"
+      ],
+      "year": 2014,
+      "venue": "International Journal of Computer Assisted Radiology and Surgery",
+      "doi": "10.1007/s11548-014-1038-4",
+      "citations": 2,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_3c9f7440691aa70bb90cbc45"
+    },
+    {
+      "title": "ASSESSMENT OF THE COMPETITIVENESS OF THE ENTERPRISE ON THE PRINCIPLES OF STRATEGIC MANAGEMENT IN THE CONDITIONS OF THE DIGITAL ECONOMY",
+      "authors": [
+        "S. Sazonova",
+        "D. Novykov",
+        "Tetiana Makarenko"
+      ],
+      "year": 2024,
+      "venue": "International Humanitarian University Herald. Economics and Management",
+      "doi": "10.32782/2413-2675/2024-59-14",
+      "citations": 2,
+      "abstract": "The article identifies the factors influencing the development of the digital economy, analyzes the state of digital technology implementation in strategic business management processes, and assesses the consequences for Ukraine. A system of measures to improve the competitiveness of enterprises in the digital environment is proposed. The article is dedicated to identifying the impact of the digital economy on the assessment of competitiveness based on the principles of strategic management, summarizing the advantages and challenges of the digitalization of the economy, and its impact on competition and the competitive environment of modern enterprises. It is determined that new information and digital technologies, which today include social networks, are rapidly penetrating not only social life but also all spheres of business and the economy, leading to qualitative structural changes in the strategic management of enterprises. As a result of these changes, a digital economy is developing, which differs from industrial and market economies not only by the more active use of information and digital technologies but also by new approaches to management and business process organization. In the context of the digital economy, information technologies become a significant resource for enterprises. The main obstacles to assessing competitiveness based on strategic management principles have been identified, including a lack of competent personnel and the high cost of technologies. The features of the digital economy are considered, factors influencing the effectiveness of digital innovation implementation are identified, the advantages and challenges of the digitalization of the economy are summarized, and its impact on competition and the competitive environment of domestic enterprises is determined. The article emphasizes the need for enterprises to adapt to the conditions of the digital economy through the implementation of new approaches to strategic management and the continuous improvement of information technologies. Furthermore, the research highlights that the integration of digital technologies into strategic management practices demands a shift in organizational culture and employee competencies. Enterprises must invest in training and development programs to equip their workforce with the necessary skills to navigate the digital landscape effectively.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_88ce41f72730c38eba88664f"
+    },
+    {
       "title": "Cognitive alignment in cardiovascular AI: designing predictive models that think with, not just for, clinicians",
       "authors": [
         "Jeena Joseph",
@@ -11851,6 +12193,28 @@
         "cross-domain"
       ],
       "record_id": "cr_7d36ede935d948116d15cc52"
+    },
+    {
+      "title": "Informatica Enterprise Data Integration Solutions",
+      "authors": [
+        "S. Pandurangan"
+      ],
+      "year": 2025,
+      "venue": "European Modern Studies Journal",
+      "doi": "10.59573/emsj.9(4).2025.59",
+      "citations": 2,
+      "abstract": "Modern enterprises confront unprecedented complexity in managing heterogeneous data environments that span cloud platforms, legacy systems, and contemporary applications. Informatica's comprehensive data integration platform, enhanced by the revolutionary CLAIRE AI engine, addresses these multifaceted challenges through sophisticated automation capabilities, intelligent metadata management, and advanced AI-driven processing technologies. CLAIRE (Cloud-Scale AI-Powered Data Management) serves as the artificial intelligence and metadata intelligence engine that powers Informatica's Intelligent Data Management Cloud (IDMC) platform, fundamentally transforming how organizations approach data discovery, integration, quality, governance, and analytics through machine learning automation. \nThe platform demonstrates exceptional proficiency in streamlining complex data workflows through CLAIRE's intelligent automation that eliminates manual intervention requirements while maintaining enterprise-grade reliability and consistency standards. AI-powered data discovery and cataloging capabilities enable organizations to automatically identify, classify, and understand data assets across diverse environments without traditional manual profiling efforts. Hybrid cloud architecture support, enhanced by CLAIRE's intelligent orchestration, enables organizations to implement flexible deployment strategies that accommodate both traditional infrastructure investments and modern cloud-native requirements, facilitating seamless digital transformation initiatives without disrupting existing operational continuity. \nAdvanced data quality assurance mechanisms, powered by CLAIRE's machine learning algorithms, ensure accuracy, completeness, and consistency across all integration stages through predictive quality monitoring and automated remediation suggestions. Real-time data integration capabilities, enhanced by AI-driven pattern recognition, enable immediate response to changing business conditions through streaming architectures that process continuous data flows with minimal latency while automatically optimizing performance based on historical patterns.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_b4cdb024200013c14c2b279d"
     },
     {
       "title": "Information technologies in environmental engineering : proceedings of the 4th International ICSC Symposium, Thessaloniki, Greece, May 28-29, 2009",
@@ -12646,6 +13010,30 @@
       "record_id": "cr_5e754ad8143bfaf3ea746531"
     },
     {
+      "title": "Digital transformation of Chinese logistics enterprises: Impact on financial performance",
+      "authors": [
+        "Ji Na",
+        "Badrul Hisham",
+        "Bin Kamaruddina"
+      ],
+      "year": 2024,
+      "venue": "Accounting and Corporate Management",
+      "doi": "10.23977/acccm.2024.060419",
+      "citations": 1,
+      "abstract": ": In the era of digital economy, digital transformation has become a necessary path for enterprises to adapt to the environment, seize opportunities, and achieve performance improvement. Based data from A-share logistics listed companies in the Shanghai and Shenzhen stock markets from 2017 to 2023, the study investigates the impact of digital transformation of Chinese logistics enterprises on financial performance and its underlying mechanisms. The empirical research has found a significant positive correlation relationship between digital transformation with financial performance, which still holds true after multiple practices and endogeneity tests. Mechanism analysis reveals that digital transformation improves the technological innovation capability of enterprises, achieve technological breakthroughs, and increase the profitability of enterprises that improves financial performance. Additionally, heterogeneity analysis shows that digital transformation has more significant effect on financial performance for the state-owned, larger scale logistics enterprises located in eastern region.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_ccc98ac021432e6f7b78b309"
+    },
+    {
       "title": "Digital Transformation of Engineering and Technical Workflow as a Factor of the Enterprise Economic Activity Optimization in Construction Industry",
       "authors": [
         "A. G. Savina",
@@ -13047,6 +13435,28 @@
         "replication"
       ],
       "record_id": "cr_b4a61a9c638a794474bc3f80"
+    },
+    {
+      "title": "INSTITUTIONAL TRENDS OF ENTREPRENEURSHIP DEVELOPMENT IN THE REPUBLIC OF BASHKORTOSTAN",
+      "authors": [
+        "E. M. Ishmukhametov",
+        "A. I. Khisaeva",
+        "R. R. Gaysina"
+      ],
+      "year": 2020,
+      "venue": null,
+      "doi": "10.17122/2541-8904-2020-2-32-92-100",
+      "citations": 1,
+      "abstract": "The article sets out the organizational and economic aspects of the development of the business sector of the Republic of Bashkortostan. In the context of the study region, the key problems in the system of state support for small and medium-sized businesses were identified, which together reflected: the underdevelopment of the system of public-private and municipal-private partnerships, the weakness of the political organization of events to support and develop the private entrepreneurial sector, the lag of the region’s administrative power mechanisms in the formation of an institutional business climate and, as a consequence, a decrease in the level of economic and production potential and the region. Based on the analysis of quantitative indicators of the state of small and medium-sized enterprises of the Republic of Bashkortostan, a conceptual model of the factors of the influence of the institutional environment on the level of development of the business sector has been formed, which allows to systematize the directions of growth and popularization of forms of small and mediumsized businesses in the Republic. According to this model, the most important vectors of state support for private business entities are: development of financing systems, subsidies and loans for investment PPP projects, applied developments and business projects for the development of small business forms; the formation of an effective partnership system between government and private sectors, which provides an opportunity for business structures to take part in transforming the region’s entrepreneurial infrastructure, in organizing financing, taxation, and investment projects for SMEs; development of the information sphere of entrepreneurship support through the creation of a digital government system and the use of relevant electronic-digital technologies; stimulating the formation of a high-quality competitive environment and the competitiveness of small businesses in the market economy of a region and a country. For each identified area, according to the developed model of the factors of the impact of institutional conditions, a series of measures were proposed that provide: the formation and improvement of the image of the business sector, the expansion of the powers of small and medium-sized businesses in the implementation of public-private projects and initiatives; normalization of investment flows that increase the profitability of small firms; the establishment of effective institutional foundations in the chain of relations «state – municipality – business – society».",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_693441e30f214529c142d296"
     },
     {
       "title": "Invest or Not to Invest … Not Always an Easy Question to Answer",
@@ -13474,6 +13884,28 @@
         "application"
       ],
       "record_id": "cr_439582bce39dbb3c9b3a108c"
+    },
+    {
+      "title": "UNRELIABILITY OF INFORMATION IN THE DIGITAL SPACE AS A CHALLENGE TO ARTIFICIAL INTELLIGENCE IN THE PROCESS OF RISK MANAGEMENT",
+      "authors": [
+        "V. Schuchmann"
+      ],
+      "year": 2025,
+      "venue": "INNOVATIVE ECONOMY",
+      "doi": "10.37332/2309-1533.2025.4.32",
+      "citations": 1,
+      "abstract": "Schuchmann V.А. UNRELIABILITY OF INFORMATION IN THE DIGITAL SPACE AS A CHALLENGE TO ARTIFICIAL INTELLIGENCE IN THE PROCESS OF RISK MANAGEMENT\nPurpose. The aim of the article is to investigate the impact of unreliable information and disinformation flows in the digital environment on the efficiency of using artificial intelligence in the enterprise risk management system, as well as to substantiate multi-level approaches to data verification in order to improve the quality of strategic management decisions.\nMethodology of research. A combination of general scientific and special methods was applied in the research process. System analysis was used to structure information threats; analysis and synthesis ‒ to establish the relationship between data quality and algorithmic errors; graphic modelling ‒ to display the logic of risk escalation; methods of generalization and classification ‒ to organize tools for reducing information risks.\nFindings. Key threats of the digital information environment affecting the reliability of decisions formed using artificial intelligence are identified. It is proved that these threats have an external nature related to the manipulation of information flows, and an internal one conditioned by the peculiarities of generative models' operation. It is substantiated that data distortion triggers a chain reaction of risks, which manifests in assessment errors at the operational level and leads to strategic miscalculations in the long-term development of the enterprise. A conceptual model of risk minimization is proposed, which involves a combination of preliminary data verification, interpretation of algorithm results, and mandatory expert assessment of management decisions.\nOriginality. The theoretical substantiation of ensuring information reliability in AI-based risk management systems has received further development. A multi-level classification of data verification methods according to their processing stages is proposed, and a model of the cascade transformation of information distortions into strategic losses of the enterprise is developed.\nPractical value. The research results can be used in the activities of enterprises to improve decision support systems, reduce financial losses from disinformation, and increase the resilience of strategic management in conditions of digital uncertainty.\nKey words: artificial intelligence, efficiency, digital economy, information unreliability, AI hallucinations, Explainable AI, strategic management, data verification.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_16bb85cb928b9cca025410f6"
     },
     {
       "title": "Value in the ‘valley of the shadow of death’—When the user is no longer the value arbiter",
@@ -14503,6 +14935,26 @@
       "record_id": "cr_d361beacd5b212703da4c730"
     },
     {
+      "title": "Ancillary Copyright and Liability of Intermediaries in the EU Directive Proposal on Copyright",
+      "authors": [
+        "G. Riccio"
+      ],
+      "year": 2018,
+      "venue": null,
+      "doi": "10.2139/ssrn.3149363",
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_31d383c951e71c749d9df9e3"
+    },
+    {
       "title": "Annual Meetings of the Michigan Academy, Central Michigan University, March 9, 2018",
       "authors": [],
       "year": 2018,
@@ -14797,6 +15249,33 @@
         "application"
       ],
       "record_id": "cr_c3f61fcbb09a80c5eebd56fd"
+    },
+    {
+      "title": "Business-to-Business relations in the online platform environment. FWC ENTR/300/PP/2013/FC-WIFO: Final report",
+      "authors": [
+        "P. D. Bas",
+        "O. Batura",
+        "A. Yagafarova",
+        "N. V. Gorp",
+        "R. Kesler",
+        "U. Laitenberger",
+        "Irene Bertschek",
+        "Eva Pichler"
+      ],
+      "year": 2017,
+      "venue": null,
+      "doi": "10.2873/713211",
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_07aec32c61c8cd5f8071727a"
     },
     {
       "title": "C. Norway",
@@ -15112,6 +15591,28 @@
         "replication"
       ],
       "record_id": "cr_872c8e78cbccf54bf639cead"
+    },
+    {
+      "title": "CONCEPTUAL ASPECTS OF FORMING THE NATIONAL DIGITAL ECONOMY",
+      "authors": [
+        "Serhii Yevstafiev"
+      ],
+      "year": 2025,
+      "venue": "International Humanitarian University Herald. Economics and Management",
+      "doi": "10.32782/2413-2675/2025-65-5",
+      "citations": 0,
+      "abstract": "The formation of a digital economy in Ukraine is an important process that has been actively developing in recent years. The digital economy is an important stage in the development of modern countries, and Ukraine is no exception. In recent years, significant progress has been observed in the digital transformation of the Ukrainian economy, which opens up new opportunities for enterprises, the state and citizens. At the same time, this process is accompanied by considerable challenges that require a comprehensive approach and active support from the state, business and civil society. To fully realize the potential, it is necessary to update the current sectoral legislation and continue investments in infrastructure, education, cybersecurity and the legal framework. The article examines the features of the process of formation and development of the digital economy of Ukraine. The key aspects on which the creation and development of the digital environment for the effective functioning of the economy in the conditions of digital transformation are based are considered. The main scientific and legislative approaches to defining the category of \"digital economy\" are analyzed. Based on the analysis, it was determined that the use of the term \"digital economy\" is more appropriate compared to the synonymous \"information economy\" and \"electronic economy\", etc. The legal framework for the digitalization of the economy of the European Union and Ukraine was considered, in particular, the Digital Decade Policy Program 2030 of the European Union approved by Decision (EU) 2022/2481 of the European Parliament and of the Council of December 14, 2022 was analyzed. It was established that the digital transformation of states is one of the main priorities of the European Union countries. The main problems and obstacles to the formation of a perfect model of the digital economy were characterized. As a result of the study, a number of measures were proposed to prevent and address the destructive impact of such factors, and the main areas of improvement of the process of integrating digital technologies into the national economy were identified, in particular, updating the legislation of Ukraine in the field of personal data protection and financial instruments in accordance with EU requirements and best international practices.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_f200c65279714fe00bf28d25"
     },
     {
       "title": "Configurational pathways to innovation-driven productivity: theoretical insights and managerial impact from Chinese state-owned industrial enterprises",
@@ -15509,6 +16010,26 @@
         "application"
       ],
       "record_id": "cr_4ca5dc4f8286c9bc96fa16e3"
+    },
+    {
+      "title": "Cyber Policy in China",
+      "authors": [
+        "S. Arsène"
+      ],
+      "year": 2015,
+      "venue": null,
+      "doi": null,
+      "citations": 0,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_45dd97f820bcabbd89b0347b"
     },
     {
       "title": "Data Resource Profile: Cheeloo Lifespan Electronic-health reseArch Data-library (Cheeloo LEAD)",
@@ -16040,6 +16561,29 @@
       "record_id": "cr_4286ce438072cbd9fd87f849"
     },
     {
+      "title": "Digital transformation of business processes as a factor in the innovative development of enterprises",
+      "authors": [
+        "R. Voloshyn",
+        "Y. Dutka"
+      ],
+      "year": 2026,
+      "venue": "Economic Analysis",
+      "doi": "10.35774/econa2026.01.160",
+      "citations": 0,
+      "abstract": "The article examines theoretical approaches to understanding the digital transformation of business processes as a factor in the innovative development of enterprises. The managerial and technological dimensions of digital transformation are characterized, defining the shift in the architecture of business processes in terms of their automation, acceleration, and integration into a unified digital environment. It is established that the impact of digital changes on the innovative development of enterprises is realized through a system of interrelated mechanisms, whose combined effect creates qualitatively new conditions for innovative activity. It is substantiated that digital transformation cannot be reduced to the technological upgrading of individual operations but implies a comprehensive reconfiguration of the organizational, operational, and managerial processes of an enterprise. A conceptual model is developed that reflects the indirect nature of the relationship between the digital transformation of an enterprise and its innovative development. Research Methods. The study employs a set of general scientific and specific methods, including: analysis and synthesis – to generalize scientific approaches to the interpretation of digital transformation and its impact on the innovative development of enterprises; the systemic approach – to identify the relationships between the digital transformation of business processes and the innovative activity of enterprises; abstraction and generalization – to systematize the mechanisms through which digital changes influence innovative development; conceptual modelling – to construct a model reflecting the sequence and logic of the impact of digital resources on the innovative development of an enterprise through the transformation of business processes. Results. The essence of digital transformation as a systemic managerial phenomenon encompassing all levels of entrepreneurial activity is revealed. The mechanisms of its impact on the innovative development of enterprises are systematized. A conceptual model is proposed that may serve as a basis for diagnosing the state of digital transformation of enterprises and identifying priorities for managerial changes aimed at strengthening innovative potential.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_8ce183752bb4ad7267b0aa2c"
+    },
+    {
       "title": "Discover Kuala Lumpur with a KL Elegant Travel Companion Lady",
       "authors": [
         "Malaylifestylehub"
@@ -16061,6 +16605,30 @@
         "recent"
       ],
       "record_id": "cr_e9aa9466a89a4b79703fa514"
+    },
+    {
+      "title": "ECONOMIC SECURITY OF THE ENTERPRISE ON THE BASIS OF ADAPTATION TO THE CHALLENGES OF THE DIGITAL ENVIRONMENT",
+      "authors": [
+        "O. Shchepka",
+        "S. Salo",
+        "Illya Savenchuk"
+      ],
+      "year": 2024,
+      "venue": "Bulletin of East European University of Economics and Management",
+      "doi": "10.58253/2078-1628-2024-1(31)-014",
+      "citations": 0,
+      "abstract": "The article reveals the essence of the process of digitalization of the Ukrainian economy in the conditions of growing threats from the external environment, which is connected with the formation of an open economic system and deep transformational ties in global economic relations. \nEconomic relations in the intellectual sphere, which are connected with the innovative activities of Ukrainian enterprises, are the object of attention of both international transatlantic companies and national structures, which are connected with the undermining of the competitiveness of the state and export-oriented enterprises, which ultimately leads to the limitation autonomy and independence of the state. \nUnder such conditions, the importance of economic security and the formation of significantly new systems for the protection of intellectual resources of Ukrainian enterprises and the limitation of the ability to influence the modern information, telecommunications and modern communication systems of the country's enterprises, which can become the object of information attacks on the production infrastructure and the creation of threats, are sharply increasing for its existence. \n\nKeywords: digitalization of economic enterprises, economic security of enterprises, spheres of economic security of enterprises, prediction and prevention of threats, protection against threats.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_721baa2bd100b7ff967cf26f"
     },
     {
       "title": "Ecosistemas del Aprendizaje Emocional-Digital: Personalización Educativa mediante Inteligencia Artificial y su Impacto en la Motivación Escolar",
@@ -16086,6 +16654,26 @@
         "application"
       ],
       "record_id": "cr_4f77301154bf7115218fc18e"
+    },
+    {
+      "title": "Edges of Multiplicity: A Discussion of the Contemporary Urban Edge",
+      "authors": [
+        "Nadia M. Anderson"
+      ],
+      "year": 2007,
+      "venue": null,
+      "doi": null,
+      "citations": 0,
+      "abstract": "At the beginning of the twenty-first century, we inhabit a world in which relationships between time and space have been turned upside down and we can no longer rely on traditional concepts of place to establish our identities. Buying a watch on ebay that is made in Denmark, sold in India, paid for with funds from a bank in New York, and then shipped to Chicago exemplifies the common contemporary condition in which we simultaneously inhabit several locations separated by thousands of miles. Time and space have been compressed and, as architects, we can choose to either react by nostalgically reasserting traditional ideas of boundary and place or by attempting to create new types that embrace and embody the qualities of our contemporary condition.1 This paper will present two examples of urban buildings that follow the latter route and explain how their strategies reveal a new definition of urban place. Disciplines Architecture Comments Published in Judith Bing and Catherine Veikos, eds., Fresh Air: 2007 ACSA Annual Meeting, Philadelphia, PA (Washington, DC: ACSA Press, 2007), 478-483. This conference proceeding is available at Iowa State University Digital Repository: http://lib.dr.iastate.edu/arch_conf/36 _______ FRESH AIR ______________________________________________________ Edges of Multiplicity: A Discussion of the Contemporary Urban Edge NADIA M. ANDERSON Iowa State University At the beginning of the twenty-first century, we inhabit a world in which relationships between time and space have been turned upside down and we can no longer rely on traditional concepts of place to establish our identities. Buying a watch on ebay that is made in Denmark, sold in India, paid for with funds from a bank in New York, and then shipped to Chicago exemplifies the common contemporary condition in which we simultaneously inhabit several locations separated by thousands of miles. Time and space have been compressed and, as architects, we can choose to either react by nostalgically reasserting traditional ideas of boundary and place or by attempting to create new types that embrace and embody the qualities of our contemporary condition. This paper will present two examples of urban buildings that follow the latter route and explain how their strategies reveal a new definition of urban place. The traditional idea of place has been defined, at least in the Western world, by the act of separating and bounding elements to create locations of distinct identity. Early animal pen fences, as described by Semper, represent some of the first articulations of civilization and primary architectural elements in that they use the enclosure or wall to separate a controlled area from the wild beyond. In addition to its literal use in protecting domesticated animals, such a fence also creates a precinct of civilized agricultural domestication that is opposed to the wilderness, is defined by the boundary of the fence, and establishes a place of control and ownership. This generates a hierarchy of privilege between interior and exterior in that the more limited the access through the enclosure, the greater the level of control and separation and thus the more privileged the position of the interior. This creates the traditional “place” that is defined by a clear boundary and controlled, coherent characteristics. This concept is rooted in the binary dualism inherent in Western architecture and revealed by the importance given to the geometry, form, and immutability of buildings in contrast to the fluid, changing conditions of nature and site. Pairings such as culture-nature and mannature exemplify this type of relationship and serve to separate human beings from other life and from the ecosystems of this planet by suggesting that humans have control over rather than participation in the life of the planet. This leads to the treatment of natural resources and systems as commodities to be exploited for the benefit of urban, industrial society and creates a social dynamic based on hierarchically organized categories. Until the mid-nineteenth century, building walls were typically solid, opaque, and often loadbearing. The materiality of these walls protected the interior from wind and rain, insulated against heat and cold, and provided protection from undesirables. In the nineteenth century, the development of the steel frame led to fundamental changes in building form and construction. Since walls were no longer primary structural elements, they could be lighter and more open. Modern architecture like that of the Bauhaus used large expanses of glass to create “a space of evenly distributed brightness,” suggesting a condition of complete equality and 478 _________________________________________EDGES OF MULTIPLICITY_________ interconnection made possible by industrialization and mechanization. It hoped to create conditions of health, hygiene, and universality not merely in terms of physical form but in terms of social reality as well. On a conceptual and phenomenological level, however, Modernism retained the binary structure of its predecessors. While large expanses of glass do allow greater visual access between interior and exterior, these expanses are typically sealed without openings and are universally applied to all facades of a building regardless of orientation. By prioritizing vision over other senses, Modernism treats nature and site as either a backdrop for the built form or as an object to be observed. In either case, the external world is passive and objectified. Technically speaking, curtain wall design has until recently been (and to a large extent in the U.S. continues to be) driven by the desire to separate the interior mechanically conditioned space from the exterior environment. By ignoring the variety of lighting and ventilation conditions created by orientation, the Modern building demands a mechanical system that must utilize great amounts of energy to maintain a uniform internal environment and thus relies heavily upon the exploitation of natural resources. A Continuing Education article in a recent issue of Architectural Record said that “(the building envelope’s) main function is to control all loadings due to separation of the two environments, the flow of mass and flow of energy.” 8 The Modern building thus maintains the hierarchy of the controlled, protected interior over the uncontrolled, dangerous, and exploitable exterior. As landscape architect Ann Spirn put it, “Most contemporary architecture, with its sealed windows, emphasis on façade, and ignorance of landscape divorces us both from the intimate processes of living and from nature, our fundamental habitat.” Fig. 1. Enterprise Center, Jacksonville, FL – a typical contemporary building with a typical enclosure system. During the last decades of the twentieth and beginning of the twenty-first centuries, increasing numbers of buildings are being designed with exterior walls that create ambiguous, hybrid conditions that redefine the wall as a connector rather than a separator and thus begin to break down the longstanding binary relationship between interior and exterior. A relatively early example of this type of building is the Cartier Foundation in Paris by Jean Nouvel. This building uses the materiality of glass and an integrated relationship between building and landscape to create new kinds of urban relationships. 479 _______ FRESH AIR ______________________________________________________ Fig. 2. View of the Cartier Foundation and neighbors along Boulevard Raspail. Located on an historic site on a typical midsized Parisian boulevard, the Cartier Foundation simultaneously respects and undermines the tradition of the urban street edge. The boundary between sidewalk and site interior, previously articulated by a typical masonry wall, is now defined by a six-story free-standing, frameless glass wall that is flush with the adjacent buildings. The placement of this wall maintains the continuity of the urban street edge created by the facades of the surrounding buildings while its materiality simultaneously undermines this boundary by allowing the spaces of the garden and the street to intermingle. The other primary building walls, parallel to the street edge, are also glass with minimal steel structure. The glass surfaces change constantly with the time of day, weather and season, and point-of-view of the observer, at times virtually opaque and reflective while at other times completely transparent, allowing views of the trees that inhabit the spaces between the walls. The layering of glass surfaces multiply the reflections, transparencies, and spatial interpenetrations that can be experienced from both the inside and outside of the building as well as between the building and the landscape. Fig. 3. Entrance to the Cartier Foundation on",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_4e1f5dd319caa9db9aba9400"
     },
     {
       "title": "Editorial: AECO industry human-centered transformation by innovation: enabling synergies between smart digital technologies and lean construction",
@@ -18374,6 +18962,28 @@
       "record_id": "cr_d05ce46a37c488b60660929b"
     },
     {
+      "title": "Multi-clients (AI) in the Corporate Environment",
+      "authors": [
+        "G. Andronchik"
+      ],
+      "year": 2025,
+      "venue": "Sovremennaya nauka i innovatsii",
+      "doi": "10.37493/2307-910x.2025.2.1",
+      "citations": 0,
+      "abstract": "The article addresses the implementation of Multi-client AI architectures in corporate environments. Against the backdrop of the rapid proliferation of artificial intelligence across organizational ecosystems, the discussed framework gains particular significance-primarily as a key enabler for scaling intelligent solutions without duplicating infrastructure. The relevance of the topic is driven by the growing demand for individualized AI services built upon a unified technological foundation, as well as the imperative for strict data isolation when serving multiple clients-both within a single enterprise and in B2B models. The aim of the study is to identify the structural characteristics of the multi-client approach in AI, its technological and organizational underpinnings, and the key challenges that hinder its sustainable deployment and operation. The analysis reveals conceptual discrepancies in how contemporary researchers interpret the management of cross-client contexts and evaluate multi-tenant AI platforms. Existing literature is predominantly focused either on superficial case studies or on narrow technical details, lacking systematic treatment of managerial dimensions. The novelty of the article lies in the proposed integrative conceptual framework that synthesizes principles of Parameter-Efficient Fine-Tuning (PEFT), Federated Learning, prompt engineering, and RetrievalAugmented Generation (RAG) architectures within the context of enterprise AI adoption. The study contributes to the existing body of knowledge by offering a structured overview of the challenges and opportunities associated with Multi-client AI. The presented material is intended to support professionals in digital transformation, AI platform architects, corporate IT executives, and researchers engaged in designing scalable AI solutions.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_f7ff1ce133195ef8bcceb185"
+    },
+    {
       "title": "My Authentic PCNSA Study Experience",
       "authors": [
         "Brown"
@@ -18627,6 +19237,29 @@
         "critique"
       ],
       "record_id": "cr_6ac71a1a3bebaef21b1aa67b"
+    },
+    {
+      "title": "PECULIARITIES OF ASSESSING THE LEVEL OF DIGITAL AND INFORMATION TECHNOLOGIES USING IN THE ENTERPRISE’S MARKETING ACTIVITIES",
+      "authors": [
+        "D. Diachkov",
+        "O. Pleskach"
+      ],
+      "year": 2024,
+      "venue": "Bulletin of East European University of Economics and Management",
+      "doi": "10.58253/2078-1628-2024-2(32)-018",
+      "citations": 0,
+      "abstract": "The article emphasizes the relevance and effectiveness of the digital and information technologies used in the enterprise’s marketing activities, which also necessitates substantiation of the choice, characterization, and grouping of indicators that reflect the level of marketing digitalization on the agricultural enterprise. Based on theoretical generalizations, groups of indicators that can serve as an indicator of the current level of marketing activities’ digitalization have been identified: a group that reflects the directions of general marketing activities’ digitalization, a group that reflects the direction of customer focus’ digitalization and a group that reflects the effectiveness of marketing digitalization and the use of its tools. In turn, the authors define groups of indicators proposed to be used to assess specific areas of marketing digitalization and in the future – to determine the integrated assessment of the level of an agricultural enterprise’s marketing digitalization. Thus, the article allocates a group of indicators of an enterprise marketing activities’ digitalization that characterize the overall level of digitalization, a group of indicators of enterprise marketing activities’ digitalization that will reflect the level of interaction with a client and a group of indicators that characterize the cost expression of enterprise marketing activities’ digitalization. To carry out a comprehensive assessment of the level of use of digital and information technologies in the marketing activities of an enterprise, the authors propose an algorithm, the phasing of which will allow agri-food business entities to obtain complete information on the effectiveness of their digital tools, optimize processes and increase the overall productivity of marketing activities. Such an approach will undoubtedly become an important tool for analyzing the effectiveness of the use of modern technologies in marketing processes and will also allow modern business entities not only to assess the current state of implementation of digital solutions but also to identify opportunities for improving efficiency, competitiveness, and customer focus.\n\nKeywords: digital environment, informatisation, evaluation methodology, agri-food enterprises, marketing performance indicators, digital tools, digitalisation of marketing activities.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_384036ba5747096272e02358"
     },
     {
       "title": "PENGARUH KONTEN PROMOSI DAN KUALITAS VISUAL TERHADAP ENGAGEMENT DAN BRAND AWARENESS POLITEKNIK TEMPO",
@@ -19602,6 +20235,28 @@
       "record_id": "cr_97de1a53fc5afd99ea96afb1"
     },
     {
+      "title": "THE CONCEPT OF “DIGITALIZATION OF STATE POWER” AS THE BASIS OF THE CONCEPT OF THE DIGITAL STATE",
+      "authors": [
+        "Nadzhafli Emin Nadzhafli Emin"
+      ],
+      "year": 2021,
+      "venue": "Actual problems of native jurisprudence",
+      "doi": "10.15421/392172",
+      "citations": 0,
+      "abstract": "The aim of the article is to develop a definitive basis for the concept of the digital state, the core of which is the concept of “digitalization of state power”, as well as the disclosure of its features. The article draws attention to the fact that the digitalization of state power means a component of digitalization of public relations, which has a natural, appropriate, regulatory nature, is aimed at the functioning of a special object (system of public authorities), provides integration of public authorities and information-communication technologies in order to create a qualitatively new, digital environment for the functioning of state power and its interaction with society, is manifested in the purposeful and comprehensive impact of information and communication technologies on the system of public authorities in order to transform its institutional, functional and regulatory components and achieve these parameters of a qualitatively new state, within which the implementation of state power is maximally synchronized with the will of society and is under its constant control. The main features of digitalization of state power are as follows: 1) proactive, orderly and purposeful nature; 2) innovative nature; 3) the presence of a special facility (system of public authorities and the order of their operation); 4) the presence of special entities – public authorities that initiate, implement and control the processes of digitalization; subjects of civil society that contribute to the initiation of digitalization, implementation of its models, analyze its course and results; international organizations that promote digitalization, provide the necessary recommendations and information and analytical assistance to public authorities, ensure the transmission of best practices in the digitalization of public authorities); 5) regulatory and legal nature; 6) permanent character; 7) security value for the functioning of the entire system of state power; 8) the transformative effect of information and communication technologies in the digitalization of state power; 9) the combination of traditional forms of government with new forms of e-government, which allow to ensure the full participation of the people in the exercise of public power, will make it permanent; 10) provision of most public services in electronic form; 11) fixation of new – digital human rights and digital responsibilities of the state, which correlate with each other; 12) procedural nature, which means that the digitalization of state power involves the following components: technological (technology implementation), regulatory (legislative support), transformational (change of institutions and functions of public authorities), social (public perception of these transformative innovations in public administration); 13) implementation of management processes in electronic form, their formalization, standardization and significant acceleration, minimization of paper media in the official document flow in accordance with the principle of paperless; 14) a high level of systematization of official data available to public authorities, keeping them up to date, minimizing the subjective factor in their use and disposal.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_91e9a6af001c3e6e3c92e213"
+    },
+    {
       "title": "The Critique of Crowds: Using Collective Criticism to Crowdsource Subjective Preferences",
       "authors": [
         "A. Medlar",
@@ -19769,6 +20424,48 @@
         "recent"
       ],
       "record_id": "cr_7867bfdc834f072dbe8979d4"
+    },
+    {
+      "title": "The Impact of Payment Risk Management on the Performance of Korean SME Exporters in the Digital Trade Environment: The Moderating Effect of Trading Partnership Orientation",
+      "authors": [],
+      "year": 2024,
+      "venue": "Korean Academy Of International Commerce",
+      "doi": "10.18104/kalc.2024.39.3.85",
+      "citations": 0,
+      "abstract": "Purpose: The purpose of this study is to analyze the relationship between payment risk management and the performance of SME exporters in the digital trade environment. \nResearch design, data, and methodology: In total, 1500 questionnaires were distributed, 200 questionnaires were returned, and 191 were utilized after excluding questionnaires with dishonest or inappropriate responses. Empirical analysis to derive the research results was conducted using the Smart PLS ver. 4.1 statistical package for structural equation modeling. \nResults: First, credit risk management, B2B trade receivables management, and strategic foreign exchange risk management were found to have a significant impact on payment risk management performance. Second, orientation toward building trade partnerships was found to positively moderate the relationship between payment risk management and payment risk management performance. \nConclusions: This study provides guidance on the factors that small and medium-sized enterprise exporters should adopt for managing payment risks, and it is expected to contribute to strengthening export competitiveness by providing practical measures.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_1c1a5f8db244d32ab0728448"
+    },
+    {
+      "title": "The Impact of State-Business Interaction in the Digital Environment on Socio-Economic Indicators of Regions",
+      "authors": [
+        "V. Alisultanov"
+      ],
+      "year": 2026,
+      "venue": "Russian Journal of Management",
+      "doi": "10.29039/2409-6024-2026-14-3-318-334",
+      "citations": 0,
+      "abstract": "This article examines the influence of digital interaction between the state and business on the socio-economic development of regions, using the subjects of the Central Federal District as a case study. The author substantiates the selection of factors of an administrative-managerial, economic, and technological nature. Based on the author’s methodology using the Digital Trust Index (DTI), the Digital Maturity Index, and indicators of small and medium-sized enterprise (SME) participation in public procurement, a correlation analysis was conducted. The results confirm a strong direct relationship between the level of digitalization of public-private interaction and key economic indicators such as gross regional product (GRP), quality of life, and the development of the IT sector. Regional differentiation is identified, and the need for a differentiated approach to the implementation of digital policy is substantiated.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_d91d7edc77d42dd046028f9c"
     },
     {
       "title": "The Impact of Telehealth Use Experience on Recruitment of Underserved Populations Into a Telehealth-Delivered Mindfulness-Based Trial for Patients With Chronic Low Back Pain: Cross-Sectional Survey",
@@ -20008,6 +20705,28 @@
         "application"
       ],
       "record_id": "cr_6b3cdede22552c350eaa7c67"
+    },
+    {
+      "title": "THE USE OF DIGITAL TECHNOLOGIES IN THE DEVELOPMENT OF A STRATEGY FOR THE PROMOTION OF SERVICES AT THE ENTERPRISE",
+      "authors": [
+        "О. Romaschenko"
+      ],
+      "year": 2023,
+      "venue": "Economy. Management. Business",
+      "doi": "10.31673/2415-8089.2023.121301",
+      "citations": 0,
+      "abstract": "The article is devoted to the problems of using digital means of dissemination of information to promote goods and services. The purpose of the article is to analyze the nature and specific features of Digital marketing in developing a comprehensive promotion strategy. The essence and importance of the means of promoting goods and services as a component of modern marketing, namely digital marketing, is substantiated. Its content is investigated taking into account the innovative directions of activity of the .digital entities - a combination of different tactics for promoting services and goods and interaction with clients in the digital environment. Digital-marketing works at all stages of customer interaction in B2B and B2C NF helps to promote the products and services of the enterprise in all digital channels: Internet, television, radio, smart gadgets and applications, SMS distributions. The basic Digital Marketing tools are analyzed, which is based on the formation of a modern digital technology marketing concept, namely SEO promotion, content marketing, SMM promotion, crowd-marketing, e-mail- mailing, contextual advertising. Every Digital-Marketing tool has its own peculiarities. In the complex, all tools allow you to interact with customers in different channels, help to remember and encourage users to perform the targeted action. The basic tools for promoting services, such as advertising, contextual advertising, banner advertising, native advertising, radio advertising, television advertising, mobile programs, offline advertising, are considered. The benefits of using Digital tools are considered. It is also to work with offline and online clients, to build personalized communication with users, to analyze the effectiveness of campaigns, to use different tools. So, digital-marketing is based on analytics, without which the maximum number of buyers cannot be attracted. In the process of the advertising campaign, it is also necessary to monitor its effectiveness in the event of poor results quickly make adjustments. Thus, digital-marketing is not only a one-time tool setting, but also constant development and scaling of the enterprise with digital channels.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_5bd6a390d2d4e9e313967480"
     },
     {
       "title": "The USMCA Review and the Mexican Economy: Between Renegotiation and Limbo",
@@ -20434,6 +21153,29 @@
         "replication"
       ],
       "record_id": "cr_df941450d7f0b1ec9ef8fa91"
+    },
+    {
+      "title": "VENDING TECHNOLOGIES AS A FACTOR OF DIGITAL BUSINESS COMPETITIVENESS",
+      "authors": [
+        "M. D. Samakaeva",
+        "O. P. Zvyagintseva"
+      ],
+      "year": 2025,
+      "venue": "EKONOMIKA I UPRAVLENIE: PROBLEMY, RESHENIYA",
+      "doi": "10.36871/ek.up.p.r.2025.04.03.007",
+      "citations": 0,
+      "abstract": "The article examines current business development trends using digital vending technologies, which are becoming the realities of modern life for Russian consumers and, in many ways, with appropriate support, may prove to be more effective than marketplaces, retail and retail chains. The vending market in Russia, according to the Ministry of Economic Development, amounted to $ 1.2 billion last year, that is, 1% of all retail sales and will continue to grow. For comparison, on average, there is one machine gun per 20 people in Amerika and in Europe, and one machine gun per 1,000 in Russia a man [13].\nTo support and develop them, the state must create all conditions, since they are the basis of economic growth, and solve the issues of personnel needs in the field of sales and services, positively affect economic results by increasing labor productivity, replacing sellers with specialized robots, digital software products. It can also help in solving the problems of personnel shortage that have formed in the Russian market. Modern enterprises strive to maximize business profits by reducing costs and implementing modern information vending technologies and processes. The digital environment and its transformation play an important role, which provides such beneficial opportunities for their implementation and development. Vending technologies, which appeared not only in foreign but also in Russian markets, remain promising and poorly studied in this regard, which determined the relevance of this study.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_2b5b187e9727038322b4e74e"
     },
     {
       "title": "Video games and “well-being”",
