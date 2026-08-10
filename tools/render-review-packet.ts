@@ -64,7 +64,13 @@ function capLine(payload: Effect): string {
   if (!cap) {
     return `**Mechanical cap:** none — ${sourceCount} independent sources with a meta-analysis/replication in the cited set (A band allowed)`;
   }
-  const moves = GRADE_ORDER.indexOf(cap) < GRADE_ORDER.indexOf(payload.grade);
+  // GRADE_ORDER runs best-to-worst (A+ = index 0), so the cap MOVES the grade
+  // only when the model's own grade is BETTER (a lower index) than the cap —
+  // i.e. the cap would pull it down. Inverted here once already (indexOf(cap)
+  // < indexOf(grade)), which silently reported almost every capped A/A-/B+/B
+  // proposal as "already at or below the cap" in the packet actually sent —
+  // the opposite of the one thing this field exists to expose.
+  const moves = GRADE_ORDER.indexOf(payload.grade) < GRADE_ORDER.indexOf(cap);
   return (
     `**Mechanical cap:** ${cap} (${sourceCount} independent source${sourceCount === 1 ? "" : "s"}) — ` +
     `model asserted ${payload.grade}${moves ? `, cap would LOWER it to ${cap}` : ", already at or below the cap"}`
