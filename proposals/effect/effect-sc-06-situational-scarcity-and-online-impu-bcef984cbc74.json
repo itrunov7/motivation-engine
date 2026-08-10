@@ -1,0 +1,84 @@
+{
+  "id": "effect-sc-06-situational-scarcity-and-online-impu-bcef984cbc74",
+  "type": "effect",
+  "target": "SC-06",
+  "payload": {
+    "id": "sc-06-02",
+    "mechanism_id": "SC-06",
+    "name": "Situational scarcity and online impulse buying",
+    "fact": "Situational scarcity positively influences online impulse buying among Chinese online shoppers in a social commerce environment.",
+    "grade": "A-",
+    "source": [
+      "10.3390/su10020352"
+    ],
+    "boundary": "Online shopping behavior in China",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_b52c6b606189bf3319712c8e",
+        "doi": "10.3390/su10020352",
+        "title": "Factors Affecting Online Impulse Buying: Evidence from Chinese Social Commerce Environment",
+        "quote_or_locus": "The results confirm that situational factors positively influence the online impulse buying among Chinese online shoppers in SC environment",
+        "source_span": {
+          "start": 593,
+          "end": 732,
+          "source_text_sha256": "1bae4880cf3a8d4a1ae8c8651a2b50dca03059ff844ce57e3cf652e42d8e91aa"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_b52c6b606189bf3319712c8e",
+      "doi": "10.3390/su10020352",
+      "title": "Factors Affecting Online Impulse Buying: Evidence from Chinese Social Commerce Environment",
+      "quote_or_locus": "The results confirm that situational factors positively influence the online impulse buying among Chinese online shoppers in SC environment",
+      "source_span": {
+        "start": 593,
+        "end": 732,
+        "source_text_sha256": "1bae4880cf3a8d4a1ae8c8651a2b50dca03059ff844ce57e3cf652e42d8e91aa"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.85,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31371227436",
+  "proposed_at": "2026-08-10T08:42:31.860Z",
+  "status": "held_non_transferable",
+  "hold_reason": "not_transferable",
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 2,
+    "transferable": false,
+    "escalated_by_warning_pair": false,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: limited stock or time-left scarcity message — Scarcity cues can be displayed via countdown timers or low-stock indicators on product pages.",
+        "identified_lever": "limited stock or time-left scarcity message"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ]
+  }
+}

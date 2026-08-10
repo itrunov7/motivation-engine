@@ -1,0 +1,84 @@
+{
+  "id": "effect-sc-06-staged-scarcity-design-cd9193199162",
+  "type": "effect",
+  "target": "SC-06",
+  "payload": {
+    "id": "sc-06-03",
+    "mechanism_id": "SC-06",
+    "name": "Staged scarcity design",
+    "fact": "Staged scarcity design creates an anxiety premium through dynamic supply control, associated with an anticipated deficit effect.",
+    "grade": "B+",
+    "source": [
+      "10.5220/0013843200004719"
+    ],
+    "boundary": "K-pop marketing techniques",
+    "realization_ids": [],
+    "provenance": [
+      {
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_c45dd8327c538f73acd9f227",
+        "doi": "10.5220/0013843200004719",
+        "title": "Neuropsychological Mechanisms in K-Pop Consumer Engagement: A Tripartite Analysis of Scarcity Tactics, Random Reward and Cultural Mixture",
+        "quote_or_locus": "Staged scarcity design, like the three-phase release of BLACKPINK's albums, creates an anxiety premium through dynamic supply control, which triggers the prefrontal cortex's (DLPFC) anticipated deficit effect",
+        "source_span": {
+          "start": 781,
+          "end": 989,
+          "source_text_sha256": "ac5980f97c0b8c1fcabfbfa5d2d14e0c210159d9c71e86b3d9602a987ad7485e"
+        },
+        "span_role": "finding"
+      }
+    ]
+  },
+  "provenance": [
+    {
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_c45dd8327c538f73acd9f227",
+      "doi": "10.5220/0013843200004719",
+      "title": "Neuropsychological Mechanisms in K-Pop Consumer Engagement: A Tripartite Analysis of Scarcity Tactics, Random Reward and Cultural Mixture",
+      "quote_or_locus": "Staged scarcity design, like the three-phase release of BLACKPINK's albums, creates an anxiety premium through dynamic supply control, which triggers the prefrontal cortex's (DLPFC) anticipated deficit effect",
+      "source_span": {
+        "start": 781,
+        "end": 989,
+        "source_text_sha256": "ac5980f97c0b8c1fcabfbfa5d2d14e0c210159d9c71e86b3d9602a987ad7485e"
+      },
+      "span_role": "finding"
+    }
+  ],
+  "confidence": 0.7,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31371227436",
+  "proposed_at": "2026-08-10T08:42:31.860Z",
+  "status": "held_non_transferable",
+  "hold_reason": "not_transferable",
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 2,
+    "transferable": false,
+    "escalated_by_warning_pair": false,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "people (consumer) but no artifact and no named setting — the subject is a person in the abstract"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show limited/dwindling stock count dynamically — Displaying decreasing supply availability drives anticipated deficit anxiety, a controllable UI element.",
+        "identified_lever": "show limited/dwindling stock count dynamically"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ]
+  }
+}
