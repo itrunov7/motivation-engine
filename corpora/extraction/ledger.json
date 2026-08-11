@@ -1,7 +1,158 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-10T08:48:18.888Z",
+  "updated_at": "2026-08-11T10:07:35.976Z",
   "runs": [
+    {
+      "run_id": "2026-08-11T10:06:23.420Z",
+      "dispatch_id": "realizations-probe-mm15-modality-effect",
+      "github_run_id": 31480689996,
+      "mode": "realizations",
+      "scope": "mm15-modality-effect",
+      "candidates": 18,
+      "cheap": {
+        "candidates": 15,
+        "dropped_ungrounded": 1,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 14
+      },
+      "synthesis": {
+        "into_synthesis": 14,
+        "consolidated": 11,
+        "expanded": 0,
+        "candidates_strong": 3,
+        "folds": 1
+      },
+      "strong": {
+        "candidates": 3,
+        "proposed": 3,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "held_non_transferable": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "MM-15:cheap:01",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:02",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:03",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:04",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:05",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:06",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:07",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:08",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:09",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:10",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:11",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:12",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:13",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "quote_not_in_source"
+        },
+        {
+          "candidate_id": "MM-15:cheap:14",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:cheap:15",
+          "mechanism_id": "MM-15",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "MM-15:strong:01",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-mm-15-narration-text-redundancy-toggle-2de2d1c9f995"
+        },
+        {
+          "candidate_id": "MM-15:strong:03",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-mm-15-synchronized-audio-visual-cue-highli-7ca37aec1f9b"
+        },
+        {
+          "candidate_id": "MM-15:strong:02",
+          "mechanism_id": "MM-15",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-mm-15-view-count-triggered-text-suppressio-d2ce43ae4a68"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-10T08:47:59.051Z",
       "dispatch_id": "effects-full-HA-04",
