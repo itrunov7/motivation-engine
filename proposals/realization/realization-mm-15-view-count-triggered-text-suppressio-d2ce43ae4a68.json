@@ -18,7 +18,7 @@
       "source_domain": "multimedia instructional design",
       "application_domain": "product UI"
     },
-    "pattern": "Offer a toggle that hides redundant text captions once the user has viewed the associated image {view_threshold} times, while keeping a manual re-enable option visible at all times.",
+    "pattern": "Offer a toggle that hides on-screen text which merely duplicates adjacent visual content once the user has viewed the associated image {view_threshold} times, excluding any text serving an accessibility function such as captions, subtitles, transcripts, alt text or screen-reader labels, and keeping a manual re-enable option visible at all times.",
     "parameters": [
       {
         "name": "view_threshold",
@@ -81,9 +81,9 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-31480689996",
   "proposed_at": "2026-08-11T10:06:23.420Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "owner",
+  "decided_at": "2026-08-11T11:09:05.101Z",
+  "decision_note": "Narrowed before approval: the original pattern hid 'redundant text captions', but captions are accessibility infrastructure, not redundancy. That directly violated MM-15's own hard rule accessibility_preserved (severity block) — 'comprehension gains for some users may not remove access for others' — and the pipeline raised no flag. Narrowed to on-screen text that merely duplicates adjacent visual content, with an explicit exclusion for any text serving an accessibility function."
 }

@@ -2309,6 +2309,83 @@
       "area": "operations",
       "title": "Monthly token cap raised for the bounded realizations wave; USD cap untouched (D-145 precedent)",
       "body": "TRIGGER: the bounded first realizations wave (twelve owner-picked effects, LA-01/EN-03/SC-06/SP-08/ID-12/CL-14/MM-15, plus a second CL-14/MM-15 redundancy-effect pair per D-328, thirteen slices total) quoted at a measured wave upper bound of 2,100,987 tokens against 678,043 remaining under limits.monthly_tokens (3,000,000 cap, 2,321,957 already used in August 2026) — 3.10x the headroom, overflowing by 1,422,944 tokens. Every one of the thirteen quotes individually reports allowed:true and capped:false, because buildQuote gates one run at a time; only the SUM exceeds the cap, which no single quote can see. RAISED HERE, following the D-145 distinction: limits.monthly_tokens in corpora/_ops/extraction.json is OPERATIONAL SIZING and may be raised for a scoped, estimated piece of work, so it moves 3,000,000 -> 4,500,000 (config version 1.3.0 -> 1.4.0), leaving headroom for the full thirteen-slice wave (2,100,987 upper bound) plus existing August usage (2,321,957) inside the new cap with margin (4,423,944 of 4,500,000, 76,056 remaining) even in the worst case where every slice spends its full upper bound rather than the measured actuals four prior realizations runs showed (historically 40-70% of the quoted upper bound). monthly_caps.usd in corpora/_ops/budget.json is UNCHANGED and stays the safety limit: $100 cap, $2.1018705 used, $97.8981295 remaining measured before this entry; the wave's summed estimated_usd is $2.2202, leaving the USD cap nowhere near threatened either before or after this raise, and it is not touched by this entry regardless. NOT A FULL DISPATCH: this entry authorizes the sizing headroom for the wave; it is not itself an approval to run all thirteen slices. The owner scoped an initial probe of three slices only (mm15-modality-effect, sc-06-02, la-01-04) rather than all thirteen, reasoning that D-170 (a zero-yield run permanently burns its effect anchor coverage) makes each slice a one-shot draw, and three of the four realizations runs ever dispatched (all anchored on CL-14 effects) produced zero proposals — so the fixes behind those zeros (D-167 anchor-citation, D-171 parameter-schema) are unverified on any anchor outside CL-14, and staking all thirteen coverages on the assumption they generalise was judged premature."
+    },
+    {
+      "id": "D-331",
+      "date": "2026-08-11",
+      "title": "Proposal realization-la-01-session-threshold-performance-reveal-6363d43123d7 rejected",
+      "body": "owner rejected realization proposal realization-la-01-session-threshold-performance-reveal-6363d43123d7 for LA-01. No authoritative artifact was changed. Reason: Withholding the user's own aggregated performance data behind a placeholder hides material information the user owns. Recorded plainly as an owner judgement rather than a cited breach: LA-01's no_data_hostage governs deletion-as-pressure and does not literally cover withholding-from-display, so this rejection rests on the plain reason and the rule only in spirit. Periodic Performance Digest achieves the same myopic-loss-aversion mechanism honestly and is approved in its place. Single-source basis (Evaluations of Single- and Repeated-Play Gambles), and nothing in that source concerns withholding a user's own data.",
+      "area": "data"
+    },
+    {
+      "id": "D-332",
+      "date": "2026-08-11",
+      "title": "Proposal realization-sc-06-repeated-view-scarcity-nudge-6b48668ff206 rejected",
+      "body": "owner rejected realization proposal realization-sc-06-repeated-view-scarcity-nudge-6b48668ff206 for SC-06. No authoritative artifact was changed. Reason: Repeated scarcity pressure aimed at a single item the user has viewed without purchasing. Its pattern instructs showing a limited-availability message 'where none was previously visible', which manufactures a scarcity signal rather than reporting a real one — against SC-06's own hard rules no_manufactured_limits and genuine_scarcity_only, both severity block. Its sole evidence item is a scam-warning persuasion study, so the transfer is wholly, not partly, grounded in fraud-persuasion research. The pipeline raised no flag on it (OVERREACH, DUPLICATE and WEAK ANCHOR all clean), which is the D-329 hard-rule gap recurring.",
+      "area": "data"
+    },
+    {
+      "id": "D-333",
+      "date": "2026-08-11",
+      "title": "Proposal realization-mm-15-view-count-triggered-text-suppressio-d2ce43ae4a68 approved",
+      "body": "owner approved realization proposal realization-mm-15-view-count-triggered-text-suppressio-d2ce43ae4a68 for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Narrowed before approval: the original pattern hid 'redundant text captions', but captions are accessibility infrastructure, not redundancy. That directly violated MM-15's own hard rule accessibility_preserved (severity block) — 'comprehension gains for some users may not remove access for others' — and the pipeline raised no flag. Narrowed to on-screen text that merely duplicates adjacent visual content, with an explicit exclusion for any text serving an accessibility function.",
+      "area": "data"
+    },
+    {
+      "id": "D-334",
+      "date": "2026-08-11",
+      "title": "Proposal realization-mm-15-narration-text-redundancy-toggle-2de2d1c9f995 approved",
+      "body": "owner approved realization proposal realization-mm-15-narration-text-redundancy-toggle-2de2d1c9f995 for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Narrowed before approval for consistency with the view-count decision: this pattern hid on-screen text by default whenever narration plays (default_hidden_state), which removes the text channel for deaf and hard-of-hearing users — the same MM-15 accessibility_preserved hazard (severity block), reached by a different route. Scoped to text duplicating the audio narration, with an explicit exclusion for any text serving an accessibility function. The existing auto-re-enable and user control were mitigations, not a substitute for the exclusion.",
+      "area": "data"
+    },
+    {
+      "id": "D-335",
+      "date": "2026-08-11",
+      "title": "Proposal realization-sc-06-low-stock-indicator-badge-9db5152d0edf approved",
+      "body": "owner approved realization proposal realization-sc-06-low-stock-indicator-badge-9db5152d0edf for SC-06. The validated proposal status and authoritative projection were committed atomically. Reason: Narrowed before approval, two changes. (a) Dropped the 'An analysis of advance fee fraud on the internet' citation (10.1108/13590790810841716): grounding a legitimate commerce pattern in fraud-tactics research is the wrong evidential basis. Verified non-load-bearing first — the Dual-path Psychological Mechanism item carries the core claim verbatim and is also the inference anchor's own source, so the pattern still grounds on the remaining three evidence items and no hold was needed. (b) Added the truthfulness clause: the displayed count must reflect true remaining inventory at the moment shown. The generator reads the realization and never reads the effect (D-112), so SC-06's genuine_scarcity_only and no_fake_timers had to be explicit in the pattern rather than implied.",
+      "area": "data"
+    },
+    {
+      "id": "D-336",
+      "date": "2026-08-11",
+      "title": "Proposal realization-la-01-bias-awareness-tooltip-062471b319b4 approved",
+      "body": "owner approved realization proposal realization-la-01-bias-awareness-tooltip-062471b319b4 for LA-01. The validated proposal status and authoritative projection were committed atomically. Reason: Approved as extracted. Anchor la-01-04 Myopic Loss Aversion carries capped grade B; the mechanical grade cap is discharged on the anchoring effect, since realization records carry no grade field (realization.schema.json is additionalProperties:false) and confidence is left exactly as the pipeline produced it. Educational disclosure rather than pressure; no LA-01 hard rule engaged.",
+      "area": "data"
+    },
+    {
+      "id": "D-337",
+      "date": "2026-08-11",
+      "title": "Proposal realization-la-01-periodic-performance-digest-2a93159ee222 approved",
+      "body": "owner approved realization proposal realization-la-01-periodic-performance-digest-2a93159ee222 for LA-01. The validated proposal status and authoritative projection were committed atomically. Reason: Approved as extracted. Anchor la-01-04 Myopic Loss Aversion, capped grade B; cap discharged upstream on the anchor, confidence unchanged. This is the honest expression of the myopic-loss-aversion mechanism — it reduces evaluation frequency without hiding anything the user owns, which is why session-threshold-performance-reveal was rejected in its favour (D-331). Three independent evidence items, the broadest basis in this batch.",
+      "area": "data"
+    },
+    {
+      "id": "D-338",
+      "date": "2026-08-11",
+      "title": "Proposal realization-mm-15-synchronized-audio-visual-cue-highli-7ca37aec1f9b approved",
+      "body": "owner approved realization proposal realization-mm-15-synchronized-audio-visual-cue-highli-7ca37aec1f9b for MM-15. The validated proposal status and authoritative projection were committed atomically. Reason: Approved as extracted. Anchor mm15-modality-effect, capped grade B-; cap discharged upstream on the anchor, confidence unchanged. Additive rather than subtractive — it offers an audio cue alongside a visual one and removes no channel, so MM-15's accessibility_preserved is not engaged, unlike the two toggles narrowed in D-333 and D-334. Its own text already frames the cue as an alternative rather than a guaranteed improvement.",
+      "area": "data"
+    },
+    {
+      "id": "D-339",
+      "date": "2026-08-11",
+      "title": "Proposal realization-sc-06-preferred-item-highlight-under-scarc-618174f2e92e approved",
+      "body": "owner approved realization proposal realization-sc-06-preferred-item-highlight-under-scarc-618174f2e92e for SC-06. The validated proposal status and authoritative projection were committed atomically. Reason: Approved as extracted. Anchor sc-06-02 Limited-quantity scarcity, capped grade C+; cap discharged upstream on the anchor, confidence unchanged. Reacts to real inventory falling below a threshold and highlights an item the user already prefers; it neither invents a limit nor applies repeated pressure, which is what separated it from repeated-view-scarcity-nudge (D-332).",
+      "area": "data"
+    },
+    {
+      "id": "D-340",
+      "date": "2026-08-11",
+      "title": "Proposal realization-sc-06-scarcity-indicator-fatigue-cutoff-ce8541ff8570 approved",
+      "body": "owner approved realization proposal realization-sc-06-scarcity-indicator-fatigue-cutoff-ce8541ff8570 for SC-06. The validated proposal status and authoritative projection were committed atomically. Reason: Approved as extracted. Anchor sc-06-02 Limited-quantity scarcity, capped grade C+; cap discharged upstream on the anchor, confidence unchanged. Notable as the only proposal in this batch that constrains the mechanism rather than amplifying it — it disables high-arousal scarcity indicators after repeated exposure in a session, which runs with SC-06's reactance boundary instead of against it.",
+      "area": "data"
+    },
+    {
+      "id": "D-341",
+      "date": "2026-08-11",
+      "title": "Proposal realization-sc-06-mobile-expiring-deal-push-notificati-595584917e88 approved",
+      "body": "owner approved realization proposal realization-sc-06-mobile-expiring-deal-push-notificati-595584917e88 for SC-06. The validated proposal status and authoritative projection were committed atomically. Reason: Approved as extracted. Anchor sc-06-02 Limited-quantity scarcity, capped grade C+; cap discharged upstream on the anchor, confidence unchanged. Reports a real expiry on an existing deal rather than manufacturing one, so genuine_scarcity_only is satisfied. Single-source basis, which the C+ anchor grade already reflects.",
+      "area": "data"
     }
   ]
 }

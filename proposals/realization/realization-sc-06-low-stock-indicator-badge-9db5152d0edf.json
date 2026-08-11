@@ -19,7 +19,7 @@
       "source_domain": "consumer psychology, persuasion research, and live-streaming shopping",
       "application_domain": "product UI"
     },
-    "pattern": "Display a remaining-stock counter or badge on the product card or page when inventory falls below {stock_threshold} units to trigger competitive anxiety and increase perceived value.",
+    "pattern": "Display a remaining-stock counter or badge on the product card or page when inventory falls below {stock_threshold} units, where the displayed count must reflect true remaining inventory at the moment it is shown, to trigger competitive anxiety and increase perceived value.",
     "parameters": [
       {
         "name": "stock_threshold",
@@ -52,19 +52,6 @@
           "start": 565,
           "end": 658,
           "source_text_sha256": "86d61b7b554b44d45eb9ee47fabb22957fddba16470d7e2a3f981e1be6283bd5"
-        },
-        "span_role": "finding"
-      },
-      {
-        "mechanism_id": "SC-06",
-        "corpus_record_id": "cr_a04bd54efb13a914b446b736",
-        "doi": "10.1108/13590790810841716",
-        "title": "An analysis of advance fee fraud on the internet",
-        "quote_or_locus": "Interpretive findings suggest that advance fee fraudsters employ specific methods that exploit the bounded rationality and automatic behaviour of victims. Methods include assertion of authority and expert power, mimicking and referencing persons/organisations, providing partial proof/legitimacy, reasoning, reciprocation, creating urgency, and implying scarcity",
-        "source_span": {
-          "start": 849,
-          "end": 1211,
-          "source_text_sha256": "384077ce6ebd0eed6cbef97c0acc8ef513a9cb3887f02ab12bd6f90587fe81c0"
         },
         "span_role": "finding"
       },
@@ -122,19 +109,6 @@
     },
     {
       "mechanism_id": "SC-06",
-      "corpus_record_id": "cr_a04bd54efb13a914b446b736",
-      "doi": "10.1108/13590790810841716",
-      "title": "An analysis of advance fee fraud on the internet",
-      "quote_or_locus": "Interpretive findings suggest that advance fee fraudsters employ specific methods that exploit the bounded rationality and automatic behaviour of victims. Methods include assertion of authority and expert power, mimicking and referencing persons/organisations, providing partial proof/legitimacy, reasoning, reciprocation, creating urgency, and implying scarcity",
-      "source_span": {
-        "start": 849,
-        "end": 1211,
-        "source_text_sha256": "384077ce6ebd0eed6cbef97c0acc8ef513a9cb3887f02ab12bd6f90587fe81c0"
-      },
-      "span_role": "finding"
-    },
-    {
-      "mechanism_id": "SC-06",
       "corpus_record_id": "cr_fa753175770242036cda961e",
       "doi": "10.1111/aphw.12382",
       "title": "Applying persuasive messages to reduce public outdoor smoking: A pseudo‐randomized controlled trial",
@@ -160,9 +134,9 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-31480976629",
   "proposed_at": "2026-08-11T10:10:07.944Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "owner",
+  "decided_at": "2026-08-11T11:10:11.950Z",
+  "decision_note": "Narrowed before approval, two changes. (a) Dropped the 'An analysis of advance fee fraud on the internet' citation (10.1108/13590790810841716): grounding a legitimate commerce pattern in fraud-tactics research is the wrong evidential basis. Verified non-load-bearing first — the Dual-path Psychological Mechanism item carries the core claim verbatim and is also the inference anchor's own source, so the pattern still grounds on the remaining three evidence items and no hold was needed. (b) Added the truthfulness clause: the displayed count must reflect true remaining inventory at the moment shown. The generator reads the realization and never reads the effect (D-112), so SC-06's genuine_scarcity_only and no_fake_timers had to be explicit in the pattern rather than implied."
 }

@@ -1,0 +1,51 @@
+{
+  "id": "bias-awareness-tooltip",
+  "mechanism_id": "LA-01",
+  "term": "Bias-Awareness Tooltip",
+  "description_as_reported": "higher financial literacy made investors more capable of identifying and overcoming biases. This insight enabled investors to make more logical and well-informed investment decisions.",
+  "artifact_context": [
+    "dashboard_widget"
+  ],
+  "effect_refs": [
+    "la-01-04"
+  ],
+  "derivation": "inferred",
+  "domain_transfer": {
+    "source_domain": "behavioral finance",
+    "application_domain": "product UI"
+  },
+  "pattern": "Trigger an educational tooltip that explains loss aversion and its effect on risk-taking whenever the displayed portfolio volatility metric exceeds {volatility_threshold} percent, replacing the bare number with the annotated explanation until dismissed.",
+  "parameters": [
+    {
+      "name": "volatility_threshold",
+      "value": 10,
+      "unit": "percent",
+      "evidence_basis": "none — default heuristic"
+    }
+  ],
+  "provenance": [
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_538688ffcc114a5fcc6be39e",
+      "doi": "10.17010/ijf/2025/v19i5/175045",
+      "title": "Financial Literacy as a Moderator in Behavioral Biases and Investor Decisions",
+      "quote_or_locus": "higher financial literacy made investors more capable of identifying and overcoming biases. This insight enabled investors to make more logical and well-informed investment decisions",
+      "source_span": {
+        "start": 1100,
+        "end": 1282,
+        "source_text_sha256": "1e487234e94c8d2a955e6ef86c3c49740c8b35901481b750aecd0dbf2e24db73"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_10685871ab12b88cfdd604f1",
+      "effect_id": "la-01-04",
+      "title": "An Experiment on Risk Taking and Evaluation Periods",
+      "quote_or_locus": "Myopic loss aversion is the combination of loss aversion and frequent evaluation of investment portfolios, which leads to more conservative risk-taking.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.6
+}

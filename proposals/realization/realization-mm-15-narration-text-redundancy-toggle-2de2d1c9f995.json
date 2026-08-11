@@ -19,7 +19,7 @@
       "source_domain": "multimedia learning",
       "application_domain": "product UI"
     },
-    "pattern": "Provide a user-controlled toggle that hides on-screen text whenever audio narration is playing, defaulting to {default_hidden_state}, and automatically re-enable the text after {audio_pause_duration} seconds of narration inactivity so users are never locked into a single modality.",
+    "pattern": "Provide a user-controlled toggle that hides on-screen text duplicating the audio narration whenever narration is playing, defaulting to {default_hidden_state}, excluding any text serving an accessibility function such as captions, subtitles, transcripts, alt text or screen-reader labels, and automatically re-enable the text after {audio_pause_duration} seconds of narration inactivity so users are never locked into a single modality.",
     "parameters": [
       {
         "name": "default_hidden_state",
@@ -114,9 +114,9 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-31480689996",
   "proposed_at": "2026-08-11T10:06:23.420Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "owner",
+  "decided_at": "2026-08-11T11:09:54.647Z",
+  "decision_note": "Narrowed before approval for consistency with the view-count decision: this pattern hid on-screen text by default whenever narration plays (default_hidden_state), which removes the text channel for deaf and hard-of-hearing users — the same MM-15 accessibility_preserved hazard (severity block), reached by a different route. Scoped to text duplicating the audio narration, with an explicit exclusion for any text serving an accessibility function. The existing auto-re-enable and user control were mitigations, not a substitute for the exclusion."
 }
