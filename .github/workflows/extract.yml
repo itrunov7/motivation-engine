@@ -120,6 +120,13 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Heal any previous run that lost its accounting commit (D-342) BEFORE the
+      # budget gate reads the manifest, so the cap is computed against every
+      # measured dollar rather than only the ones whose commit happened to land.
+      # A receipt is conflict-free but cap-invisible until it is folded back;
+      # this is the fold.
+      - name: Reconcile orphaned spend receipts
+        run: npx tsx tools/reconcile-spend.ts --apply
       # This estimate is deliberately a separate step before any process with
       # OPENROUTER_API_KEY can call a model (D-087).
       - name: Estimate cost and enforce budget gates before extraction
@@ -151,6 +158,13 @@ jobs:
       # Scoped to corpora/extraction ONLY, and it runs on `always()` so a failed
       # extraction still records what it burned. `proposals` is deliberately not
       # here — it stays fail-closed behind validation below (rule 8).
+      #
+      # D-342 then found the third position the blocker could hide in. D-168
+      # moved it off `npm run validate`; D-173 fixed the discard predicate but
+      # never touched the git tail — so the tail itself became the thing that
+      # could swallow a run's accounting. The commit is now split: the
+      # conflict-free receipt lands first and alone, the conflict-prone
+      # aggregates follow best-effort, and both retry.
       - name: Record extraction spend before anything can block it
         if: always()
         run: |
@@ -173,13 +187,63 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add corpora/extraction
-          git commit -m "data: record extraction spend for ${{ inputs.mode }} on ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
-          # Another run in this concurrency group may have pushed meanwhile;
-          # rebase rather than fail, because losing the race must not lose the
-          # spend record.
-          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+          # A rebase resolves a fast-forward race. It CANNOT resolve a content
+          # conflict, and coverage.json/ledger.json/manifest.json are whole-file
+          # rewrites that concurrent runs are guaranteed to conflict on. On
+          # 2026-08-11 three realizations runs raced, this step's rebase
+          # conflicted on all three files, `set -e` killed the step, and
+          # $0.070004 of measured spend reached no committed artifact (D-342).
+          # The comment that used to sit here claimed the rebase was the
+          # protection against exactly that race. It was not.
+          push_with_retry() {
+            local label="$1" attempt=1
+            while [ "$attempt" -le 3 ]; do
+              if git pull --rebase --autostash origin "${GITHUB_REF_NAME}" \
+                && git push origin "HEAD:${GITHUB_REF_NAME}"; then
+                echo "${label}: pushed on attempt ${attempt}"
+                return 0
+              fi
+              # Leave no rebase in progress for the next attempt or the next step.
+              git rebase --abort 2>/dev/null || true
+              echo "${label}: attempt ${attempt} did not land"
+              attempt=$((attempt + 1))
+              [ "$attempt" -le 3 ] && sleep $((attempt * 5))
+            done
+            return 1
+          }
+
+          # (1) THE RECEIPT FIRST. corpora/extraction/spend/<run-id>.json and
+          # rejected/<run-id>.json are one file per run, named for the run's own
+          # start timestamp, so no concurrent run can ever touch the same path
+          # and this commit always rebases cleanly. This is the durable record;
+          # everything below is a convenience.
+          if [ -n "$(git status --porcelain corpora/extraction/spend corpora/extraction/rejected)" ]; then
+            git add corpora/extraction/spend corpora/extraction/rejected
+            git commit -m "data: spend receipt for ${{ inputs.mode }} on ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
+            if ! push_with_retry "receipt"; then
+              echo "::error::the per-run spend receipt could not be pushed. The measured \
+              spend is in this log above (SPEND, MEASURED) and the run is UNRECONCILED: \
+              run tools/reconcile-spend.ts once the branch is writable."
+            fi
+          fi
+
+          # (2) THE AGGREGATES, BEST EFFORT. These are the files that conflict.
+          # A failure here is now survivable: the receipt is already committed,
+          # and the next run's reconcile step folds it into run_history so the
+          # monthly cap sees it.
+          if [ -n "$(git status --porcelain corpora/extraction)" ]; then
+            git add corpora/extraction
+            git commit -m "data: record extraction spend for ${{ inputs.mode }} on ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
+            if ! push_with_retry "aggregates"; then
+              echo "::warning::aggregate accounting (coverage/ledger/manifest) lost a \
+              write race and was not pushed. The spend receipt IS committed, so no money \
+              is invisible; the next run reconciles it (D-342)."
+              # Deliberately NOT `git reset --hard`: if the receipt push above also
+              # failed, its commit is still local-only and a reset would destroy
+              # the one artifact this whole step exists to protect.
+            fi
+          fi
 
       - name: Validate generated proposals and manifest
         run: npm run validate
@@ -197,8 +261,22 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add proposals corpora/extraction
             git commit -m "data: extract ${{ inputs.mode }} for ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
+            # Same rebase-conflict exposure as the accounting step above (D-342):
+            # this commit also carries the three whole-file aggregates, so a
+            # concurrent run makes the rebase fail rather than fast-forward.
+            attempt=1
+            until git pull --rebase --autostash origin "${GITHUB_REF_NAME}" \
+              && git push origin "HEAD:${GITHUB_REF_NAME}"; do
+              git rebase --abort 2>/dev/null || true
+              attempt=$((attempt + 1))
+              if [ "$attempt" -gt 3 ]; then
+                echo "::error::proposals could not be pushed after 3 attempts. They are \
+                valid and were produced by a successful run; re-run the commit against a \
+                quiet branch. Spend is unaffected — its receipt committed separately."
+                exit 1
+              fi
+              sleep $((attempt * 5))
+            done
           else
             echo "No novel grounded proposals — nothing to commit."
           fi

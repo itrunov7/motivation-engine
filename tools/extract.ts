@@ -117,6 +117,7 @@ import {
 } from "./rejected-candidates";
 import { CandidateLedger, writeCandidateLedger } from "./candidate-ledger";
 import { checkLedgerBalance } from "../lib/candidate-ledger";
+import { writeSpendRecord } from "./spend-record";
 
 const ROOT = join(__dirname, "..");
 const CORPUS_DIR = join(ROOT, "corpora", "evidence");
@@ -4100,6 +4101,40 @@ export async function runExtraction(args: {
     // The ledger is written before the manifest because the manifest's status
     // depends on whether it balances (D-132).
     const balanced = persistLedger();
+    // The conflict-free receipt is written BEFORE the three aggregates (D-342).
+    // coverage.json, ledger.json and manifest.json are whole-file rewrites that
+    // concurrent runs are guaranteed to conflict on; this path is unique per run
+    // and always rebases cleanly, so it survives a race the aggregates lose.
+    try {
+      writeSpendRecord({
+        schema_version: 1,
+        run_id: startedAt.toISOString(),
+        dispatch_id: process.env.OPS_DISPATCH_ID ?? null,
+        github_run_id: process.env.GITHUB_RUN_ID
+          ? Number(process.env.GITHUB_RUN_ID)
+          : null,
+        mode: args.mode,
+        scope_kind: args.scope.kind,
+        scope_id: args.scope.id,
+        written_at: new Date().toISOString(),
+        cost: buildExtractionManifestCost(
+          args.config,
+          context.usage,
+          (Date.now() - startedAt.getTime()) / 1000,
+        ),
+        balanced,
+        // An unbalanced run's stage counters are unsound by definition (D-132),
+        // so the receipt says so rather than letting a reconciler read them as
+        // fact.
+        stages_known: balanced,
+        records_fetched: stats.records_processed,
+        files_written: proposals.length + pendingWrites.size,
+      });
+    } catch (error) {
+      console.warn(
+        `[extract] could not persist spend record: ${(error as Error).message}`,
+      );
+    }
     try {
       writeManifest(
         args.mode,

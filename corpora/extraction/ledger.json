@@ -1,7 +1,24 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-11T10:13:50.526Z",
+  "updated_at": "2026-08-11T11:16:24.573Z",
   "runs": [
+    {
+      "run_id": "2026-08-11T10:08:13.201Z",
+      "dispatch_id": "realizations-probe-la-01-04",
+      "github_run_id": 31480702995,
+      "mode": "realizations",
+      "scope": "la-01-04",
+      "candidates": null,
+      "cheap": null,
+      "synthesis": null,
+      "strong": null,
+      "balanced": true,
+      "reconstruction": {
+        "status": "partial",
+        "reason": "spend rebuilt from the Actions log of GitHub run 31480702995 after this run lost its accounting commit to a rebase conflict and left no receipt of its own (D-342); candidate fates could not be established because the run's own ledger did not balance, and its rejected-candidates file was lost with the same commit"
+      },
+      "candidates_detail": []
+    },
     {
       "run_id": "2026-08-11T10:13:10.917Z",
       "dispatch_id": "realizations-probe-la-01-04-retry",

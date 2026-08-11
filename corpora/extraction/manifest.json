@@ -220,6 +220,28 @@
       }
     },
     {
+      "timestamp": "2026-08-11T10:08:13.201Z",
+      "status": "broken",
+      "params": {
+        "mode": "realizations",
+        "scope_kind": "effect",
+        "scope_id": "la-01-04",
+        "reconciled_from_receipt": "true"
+      },
+      "records_fetched": 119,
+      "files_written": 0,
+      "duration_s": 58.25,
+      "dispatch_id": "realizations-probe-la-01-04",
+      "github_run_id": 31480702995,
+      "cost": {
+        "api_calls": 6,
+        "duration_s": 58.25,
+        "tokens_in": 56432,
+        "tokens_out": 6878,
+        "estimated_usd": 0.070004
+      }
+    },
+    {
       "timestamp": "2026-08-11T10:06:23.420Z",
       "status": "success",
       "params": {
@@ -801,44 +823,6 @@
       }
     },
     {
-      "timestamp": "2026-08-06T09:03:13.251Z",
-      "status": "success",
-      "params": {
-        "mode": "transferability_probe",
-        "ruleset_version": "3",
-        "target": "ID-12",
-        "proposal_status": "pending",
-        "selected": "9",
-        "judged": "9",
-        "transferable": "9",
-        "refused": "0",
-        "escalated_by_warning_pair": "0",
-        "verdict_unavailable": "0"
-      },
-      "records_fetched": 0,
-      "files_written": 0,
-      "duration_s": 37.5,
-      "dispatch_id": "v3-probe-ID-12",
-      "github_run_id": 31087359329,
-      "cost": {
-        "api_calls": 9,
-        "duration_s": 37.5,
-        "tokens_in": 5329,
-        "tokens_out": 569,
-        "estimated_usd": 0.016348,
-        "models": [
-          {
-            "tier": "strong",
-            "model_id": "anthropic/claude-sonnet-5",
-            "api_calls": 9,
-            "tokens_in": 5329,
-            "tokens_out": 569,
-            "estimated_usd": 0.016348
-          }
-        ]
-      }
-    },
-    {
       "timestamp": "2026-08-06T09:05:32.921Z",
       "status": "partial",
       "params": {
@@ -876,6 +860,44 @@
             "tokens_in": 9971,
             "tokens_out": 978,
             "estimated_usd": 0.029722
+          }
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-08-06T09:03:13.251Z",
+      "status": "success",
+      "params": {
+        "mode": "transferability_probe",
+        "ruleset_version": "3",
+        "target": "ID-12",
+        "proposal_status": "pending",
+        "selected": "9",
+        "judged": "9",
+        "transferable": "9",
+        "refused": "0",
+        "escalated_by_warning_pair": "0",
+        "verdict_unavailable": "0"
+      },
+      "records_fetched": 0,
+      "files_written": 0,
+      "duration_s": 37.5,
+      "dispatch_id": "v3-probe-ID-12",
+      "github_run_id": 31087359329,
+      "cost": {
+        "api_calls": 9,
+        "duration_s": 37.5,
+        "tokens_in": 5329,
+        "tokens_out": 569,
+        "estimated_usd": 0.016348,
+        "models": [
+          {
+            "tier": "strong",
+            "model_id": "anthropic/claude-sonnet-5",
+            "api_calls": 9,
+            "tokens_in": 5329,
+            "tokens_out": 569,
+            "estimated_usd": 0.016348
           }
         ]
       }
