@@ -49,12 +49,24 @@ on:
         type: string
         default: ""
 
+# One extraction at a time. `cancel-in-progress: false` protects the RUNNING
+# job, but GitHub keeps only one PENDING entry per group — so a third dispatch
+# silently evicts a queued second, and the evicted run never starts a job, which
+# means no `if: always()` or `if: cancelled()` step inside it can ever fire. It
+# genuinely cannot report on itself; only an observer can (D-343). The "Report
+# any superseded dispatch" step below is that observer.
+#
+# The group key is deliberately NOT made unique per dispatch. That would stop
+# the cancellation, but it would let concurrent runs write the same three
+# aggregate files — trading a visible failure for the silent one D-342 fixed.
+# transferability-probe.yml shares this group on purpose (D-164).
 concurrency:
   group: extraction
   cancel-in-progress: false
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
   quote:
@@ -127,6 +139,12 @@ jobs:
       # this is the fold.
       - name: Reconcile orphaned spend receipts
         run: npx tsx tools/reconcile-spend.ts --apply
+      # A dispatch evicted from the concurrency queue never starts a job, so it
+      # cannot report on itself (D-343). This run reports it instead.
+      - name: Report any superseded dispatch
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npx tsx tools/report-superseded.ts --write
       # This estimate is deliberately a separate step before any process with
       # OPENROUTER_API_KEY can call a model (D-087).
       - name: Estimate cost and enforce budget gates before extraction
@@ -218,8 +236,10 @@ jobs:
           # start timestamp, so no concurrent run can ever touch the same path
           # and this commit always rebases cleanly. This is the durable record;
           # everything below is a convenience.
-          if [ -n "$(git status --porcelain corpora/extraction/spend corpora/extraction/rejected)" ]; then
-            git add corpora/extraction/spend corpora/extraction/rejected
+          # superseded/ rides along: it is the same one-file-per-run shape and is
+          # written by the observer step at the top of this job (D-343).
+          if [ -n "$(git status --porcelain corpora/extraction/spend corpora/extraction/rejected corpora/extraction/superseded)" ]; then
+            git add corpora/extraction/spend corpora/extraction/rejected corpora/extraction/superseded
             git commit -m "data: spend receipt for ${{ inputs.mode }} on ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
             if ! push_with_retry "receipt"; then
               echo "::error::the per-run spend receipt could not be pushed. The measured \
