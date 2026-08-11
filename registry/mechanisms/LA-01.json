@@ -184,6 +184,11 @@
         "severity": "block"
       },
       {
+        "id": "no_withholding_pressure",
+        "rule": "The user's own data, results, or created artifacts are never hidden, delayed, degraded or placed behind a threshold in order to create pressure to pay or act. Access to what the user made or earned is not a lever. This is distinct from no_data_hostage, which governs deletion.",
+        "severity": "block"
+      },
+      {
         "id": "panic_cap",
         "rule": "Loss-framed pushes ≤ 1/day, no anxiety escalation",
         "severity": "block"
@@ -199,7 +204,7 @@
       "apple_asrg_5.6",
       "google_play_deceptive_behavior"
     ],
-    "boundary_test": "If the user learned exactly how this works, would they shrug — or feel deceived?"
+    "boundary_test": "Is the user being shown less of their own work than they would be if we were not trying to convert them?"
   },
   "relations": [
     {
