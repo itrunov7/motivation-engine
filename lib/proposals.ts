@@ -575,6 +575,19 @@ async function projectRealization(
       );
     }
   }
+  // boundary_refs names effects to read the pattern AGAINST, not effects it
+  // embodies (D-348) — same existence rule as effect_refs above, since a
+  // caution pointing at nothing is worse than none, but no inference
+  // provenance is required: nothing here is claimed as evidence for the
+  // pattern.
+  for (const effectId of realization.boundary_refs ?? []) {
+    const effectPath = `effects/${realization.mechanism_id}/${effectId}.json`;
+    if ((await builder.read(effectPath)) === null) {
+      throw new ProposalValidationError(
+        `Realization boundary_refs entry does not exist: ${effectId}`,
+      );
+    }
+  }
   // A threshold in the pattern must be a declared, overridable parameter, not
   // prose (D-115). Enforced at approval rather than only in the validator,
   // because this is the boundary the number would cross to become knowledge.
@@ -613,10 +626,40 @@ async function projectRealization(
       `Enrichment target does not exist: ${realizationPath}`,
     );
   }
+  // Write the reverse link onto every effect this realization embodies
+  // (D-347). effect_refs already points realization -> effect; nothing wrote
+  // the other direction, so approval created a one-directional link while
+  // validateMechanismReferences (below) has always enforced the two-directional
+  // invariant — "Realization {id} must link back to effect {eid}" checks
+  // realization.effect_refs against effect.realization_ids, but nothing ever
+  // populated effect.realization_ids from an approval. Read here rather than
+  // reusing the existence-check loop above: that loop only confirmed presence
+  // and discarded the parsed record, and realization_ids must be updated on
+  // the record as approval leaves it, not as it was read before this decision.
+  const updatedEffects = new Map<string, Effect>();
+  for (const effectId of realization.effect_refs ?? []) {
+    const effectPath = `effects/${realization.mechanism_id}/${effectId}.json`;
+    const effect = parseJson<Effect>(effectPath, await requireText(builder, effectPath));
+    const realizationIds = Array.from(
+      new Set([...(effect.realization_ids ?? []), realization.id]),
+    ).sort();
+    updatedEffects.set(effectId, { ...effect, realization_ids: realizationIds });
+  }
   await builder.write(
     realizationPath,
     json(realization),
   );
+  for (const [effectId, nextEffect] of Array.from(updatedEffects)) {
+    await builder.write(
+      `effects/${realization.mechanism_id}/${effectId}.json`,
+      json(nextEffect),
+    );
+    assertSchema("projected effect", validators.effect, nextEffect);
+  }
+  if (updatedEffects.size > 0) {
+    const mechanism = await loadMechanism(builder, realization.mechanism_id);
+    await validateMechanismReferences(builder, mechanism);
+  }
 }
 
 async function projectInteraction(

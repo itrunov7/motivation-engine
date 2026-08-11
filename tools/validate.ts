@@ -2727,6 +2727,7 @@ function main(): void {
             id?: string;
             mechanism_id?: string;
             effect_refs?: unknown;
+            boundary_refs?: unknown;
             derivation?: unknown;
             pattern?: unknown;
             parameters?: unknown;
@@ -2735,6 +2736,14 @@ function main(): void {
           if (!checkPatternParameters(file, realization)) ok = false;
           const realizationEffectRefs = Array.isArray(realization.effect_refs)
             ? realization.effect_refs.filter(
+                (id): id is string => typeof id === "string",
+              )
+            : [];
+          // boundary_refs names effects to read the pattern AGAINST, not
+          // effects it embodies (D-348) — same existence requirement as
+          // effect_refs, no inference-provenance requirement.
+          const realizationBoundaryRefs = Array.isArray(realization.boundary_refs)
+            ? realization.boundary_refs.filter(
                 (id): id is string => typeof id === "string",
               )
             : [];
@@ -2785,6 +2794,18 @@ function main(): void {
                 "effect (corpus_kind=\"inference\") (D-112)",
             );
             ok = false;
+          }
+          for (const effectId of realizationBoundaryRefs) {
+            if (
+              typeof realization.mechanism_id === "string" &&
+              !effectsByKey.has(`${realization.mechanism_id}\u0000${effectId}`)
+            ) {
+              fail(
+                file,
+                `boundary_refs entry "${effectId}" has no effects/${realization.mechanism_id}/${effectId}.json`,
+              );
+              ok = false;
+            }
           }
           for (const effectId of realizationEffectRefs) {
             if (
@@ -2857,6 +2878,27 @@ function main(): void {
           fail(
             effect.file,
             `realization_id "${realizationId}" must link back with effect_refs containing "${effectId}"`,
+          );
+        }
+      }
+    }
+    // The block above walks effect.realization_ids and checks it against each
+    // realization's effect_refs — but an EMPTY realization_ids array has
+    // nothing to walk, so it silently passed when nothing had ever been
+    // written there at all (D-347). It caught an inconsistent link; it never
+    // caught a MISSING one. This is the other direction: for every realization
+    // that claims an effect, that effect must claim it back.
+    for (const [key, realization] of Array.from(realizationsByKey.entries())) {
+      const [mechanismId, realizationId] = key.split("\u0000");
+      for (const effectId of realization.effectRefs) {
+        const effect = effectsByKey.get(`${mechanismId}\u0000${effectId}`);
+        // Existence of effects/{mechanismId}/{effectId}.json is already
+        // checked where realizationEffectRefs is walked, above; only the
+        // back-link is this loop's concern.
+        if (effect && !effect.realizationIds.includes(realizationId)) {
+          fail(
+            realization.file,
+            `realization claims effects/${mechanismId}/${effectId}.json via effect_refs, but that effect's realization_ids does not list "${realizationId}" back (D-347)`,
           );
         }
       }
