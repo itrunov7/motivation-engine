@@ -1,0 +1,168 @@
+{
+  "id": "realization-sc-06-low-stock-indicator-badge-9db5152d0edf",
+  "type": "realization",
+  "target": "SC-06",
+  "payload": {
+    "id": "low-stock-indicator-badge",
+    "mechanism_id": "SC-06",
+    "term": "Low-Stock Indicator Badge",
+    "description_as_reported": "Limited-quantity promotions activate competitive anxiety and possessive desire due to scarcity of quantity, increasing perceived value; similar quantity-limit scarcity cues and stock-level counters are reported to boost social value identification, interactive control perception, and purchase intention across consumer psychology, persuasion, and live-streaming shopping literature.",
+    "artifact_context": [
+      "checkout",
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "sc-06-02"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "consumer psychology, persuasion research, and live-streaming shopping",
+      "application_domain": "product UI"
+    },
+    "pattern": "Display a remaining-stock counter or badge on the product card or page when inventory falls below {stock_threshold} units to trigger competitive anxiety and increase perceived value.",
+    "parameters": [
+      {
+        "name": "stock_threshold",
+        "value": 5,
+        "unit": "units remaining",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_c8b954378f01f675fed70897",
+        "doi": "10.54097/3wp35028",
+        "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+        "quote_or_locus": "limited-quantity promotion activates competitive anxiety and possessive desire due to the scarcity of quantity, increasing perceived value",
+        "source_span": {
+          "start": 718,
+          "end": 856,
+          "source_text_sha256": "f824c8b01be7b619b529c759cc195503c7817a1b95875d756aaac30405030729"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_69c6dbd9e0e24962f98be71f",
+        "doi": "10.3390/jtaer21020069",
+        "title": "When Time Meets Scarcity: Differentiated Effects of Promotional Restrictions on Consumer Value in Live Commerce",
+        "quote_or_locus": "QL promotions boost social value identification through the perception of interactive control",
+        "source_span": {
+          "start": 565,
+          "end": 658,
+          "source_text_sha256": "86d61b7b554b44d45eb9ee47fabb22957fddba16470d7e2a3f981e1be6283bd5"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_a04bd54efb13a914b446b736",
+        "doi": "10.1108/13590790810841716",
+        "title": "An analysis of advance fee fraud on the internet",
+        "quote_or_locus": "Interpretive findings suggest that advance fee fraudsters employ specific methods that exploit the bounded rationality and automatic behaviour of victims. Methods include assertion of authority and expert power, mimicking and referencing persons/organisations, providing partial proof/legitimacy, reasoning, reciprocation, creating urgency, and implying scarcity",
+        "source_span": {
+          "start": 849,
+          "end": 1211,
+          "source_text_sha256": "384077ce6ebd0eed6cbef97c0acc8ef513a9cb3887f02ab12bd6f90587fe81c0"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_fa753175770242036cda961e",
+        "doi": "10.1111/aphw.12382",
+        "title": "Applying persuasive messages to reduce public outdoor smoking: A pseudo‐randomized controlled trial",
+        "quote_or_locus": "Relative to a baseline and a control condition, interventions based on the principles of reciprocity, scarcity, and authority were most effective in reducing the number of observed smokers in front of the building entrance (41.5%, 45.7%, and 52.1% reduction rates, respectively",
+        "source_span": {
+          "start": 773,
+          "end": 1050,
+          "source_text_sha256": "82e85aa8a54331e5d3269b79202700c83a24f860c12b7a3f4d51c8fe9277703c"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_c8b954378f01f675fed70897",
+        "effect_id": "sc-06-02",
+        "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+        "quote_or_locus": "Limited-quantity promotion activates competitive anxiety and possessive desire due to scarcity of quantity, increasing perceived value.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.65
+  },
+  "provenance": [
+    {
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_c8b954378f01f675fed70897",
+      "doi": "10.54097/3wp35028",
+      "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+      "quote_or_locus": "limited-quantity promotion activates competitive anxiety and possessive desire due to the scarcity of quantity, increasing perceived value",
+      "source_span": {
+        "start": 718,
+        "end": 856,
+        "source_text_sha256": "f824c8b01be7b619b529c759cc195503c7817a1b95875d756aaac30405030729"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_69c6dbd9e0e24962f98be71f",
+      "doi": "10.3390/jtaer21020069",
+      "title": "When Time Meets Scarcity: Differentiated Effects of Promotional Restrictions on Consumer Value in Live Commerce",
+      "quote_or_locus": "QL promotions boost social value identification through the perception of interactive control",
+      "source_span": {
+        "start": 565,
+        "end": 658,
+        "source_text_sha256": "86d61b7b554b44d45eb9ee47fabb22957fddba16470d7e2a3f981e1be6283bd5"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_a04bd54efb13a914b446b736",
+      "doi": "10.1108/13590790810841716",
+      "title": "An analysis of advance fee fraud on the internet",
+      "quote_or_locus": "Interpretive findings suggest that advance fee fraudsters employ specific methods that exploit the bounded rationality and automatic behaviour of victims. Methods include assertion of authority and expert power, mimicking and referencing persons/organisations, providing partial proof/legitimacy, reasoning, reciprocation, creating urgency, and implying scarcity",
+      "source_span": {
+        "start": 849,
+        "end": 1211,
+        "source_text_sha256": "384077ce6ebd0eed6cbef97c0acc8ef513a9cb3887f02ab12bd6f90587fe81c0"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_fa753175770242036cda961e",
+      "doi": "10.1111/aphw.12382",
+      "title": "Applying persuasive messages to reduce public outdoor smoking: A pseudo‐randomized controlled trial",
+      "quote_or_locus": "Relative to a baseline and a control condition, interventions based on the principles of reciprocity, scarcity, and authority were most effective in reducing the number of observed smokers in front of the building entrance (41.5%, 45.7%, and 52.1% reduction rates, respectively",
+      "source_span": {
+        "start": 773,
+        "end": 1050,
+        "source_text_sha256": "82e85aa8a54331e5d3269b79202700c83a24f860c12b7a3f4d51c8fe9277703c"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_c8b954378f01f675fed70897",
+      "effect_id": "sc-06-02",
+      "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+      "quote_or_locus": "Limited-quantity promotion activates competitive anxiety and possessive desire due to scarcity of quantity, increasing perceived value.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.65,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31480976629",
+  "proposed_at": "2026-08-11T10:10:07.944Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}
