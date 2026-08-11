@@ -260,6 +260,12 @@ function buildImplementation(
   mechanismId: string,
   implementation: Implementation,
 ): PackImplementation {
+  // copy_formulas is not spread through (rule 1, D-346): packs are evidence
+  // with minimal assertion, and a pre-written string handed to every generator
+  // verbatim is the copyable example the constitution forbids. It remains on
+  // the registry record as owner reference — this function is the only seam
+  // between that record and what a generator reads, so omitting it here is
+  // where the rule is actually enforced.
   return {
     id: implementation.id,
     mechanism_id: mechanismId,
@@ -272,7 +278,6 @@ function buildImplementation(
     artifact_types: implementation.artifact_types,
     product_requirements: implementation.product_requirements,
     generation_directive: implementation.generation_directive,
-    copy_formulas: implementation.copy_formulas,
     metrics: implementation.metrics,
     observed_effects: implementation.observed_effects,
   };
@@ -602,7 +607,6 @@ function renderImplementation(implementation: PackImplementation): string[] {
     `    artifact_types: ${flow(implementation.artifact_types)}`,
     `    product_requirements: ${scalarFlow(implementation.product_requirements)}`,
     `    generation_directive: ${scalar(implementation.generation_directive)}`,
-    `    copy_formulas: ${scalarFlow(implementation.copy_formulas)}`,
     `    metrics: ${flow(implementation.metrics)}`,
     `    observed_effects: ${scalarFlow(implementation.observed_effects)}`,
     "",

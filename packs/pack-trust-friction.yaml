@@ -96,6 +96,87 @@ cross_cutting_perception:
 # ─────────────────────────────────────────────
 effects:
 
+  - id: cr-a81e36f3bb3c16c99f08abf3-1
+    mechanism_id: SP-08
+    name: Herd behavior in online review adoption
+    fact: "The adoption of online reviews is influenced by two herd factors: discounting own information and imitating others."
+    grade: C+
+    source: ["10.1002/asi.23602"]
+    boundary: Book review site data
+    realization_ids: []
+
+  - id: descriptive-norm-backfire
+    mechanism_id: SP-08
+    name: Descriptive Norm Backfire
+    fact: In hyper-polarized contexts, descriptive norm interventions can backfire, such as when Biden supporters increased their mask-wearing intentions after learning that most Trump supporters did not wear masks.
+    grade: C+
+    source: ["10.1093/pnasnexus/pgae303"]
+    boundary: Hyper-polarized contexts
+    realization_ids: []
+
+  - id: descriptive-norm-reactance
+    mechanism_id: SP-08
+    name: Descriptive Norm Reactance
+    fact: Descriptive norms can lead to norm reactance and backlash from male employers when they are informed that others have hired more women.
+    grade: C+
+    source: ["10.30636/jbpa.21.51"]
+    boundary: Hiring context involving gender distribution
+    realization_ids: []
+
+  - id: sp-08-01
+    mechanism_id: SP-08
+    name: Descriptive Norms
+    fact: Descriptive norms, which involve perceptions of what others actually do, influence compliance decisions powerfully.
+    grade: C+
+    source: ["10.1007/s11336-006-1560-6"]
+    boundary: Compliance with pro-environmental regulations and requests.
+    realization_ids: []
+
+  - id: sp-08-02
+    mechanism_id: SP-08
+    name: Injunctive Norms
+    fact: Injunctive norms, which involve perceptions of what others approve or disapprove, can act antagonistically to descriptive norms in a situation.
+    grade: C+
+    source: ["10.1037/0022-3514.58.6.1015"]
+    boundary: Social norms in public settings.
+    realization_ids: []
+
+  - id: fr-11-01
+    mechanism_id: FR-11
+    name: Anchoring and adjustment
+    fact: "The anchoring and adjustment heuristic describes the process by which the mind does virtually all of its inferential work: nonconscious systems produce fast, low-evidence judgments, which consciousness then slowly and deliberately adjusts."
+    grade: C+
+    source: ["10.1017/cbo9780511808098.011"]
+    boundary: Psychological decision-making and inferential processes
+    realization_ids: []
+
+  - id: fr-11-02
+    mechanism_id: FR-11
+    name: House money effect
+    fact: The house money effect is a phenomenon where individuals exhibit increased risk-seeking behavior following a prior gain.
+    grade: C+
+    source: ["10.1287/mnsc.36.6.643"]
+    boundary: Risky choice and prior outcomes
+    realization_ids: []
+
+  - id: fr-11-03
+    mechanism_id: FR-11
+    name: Break-even effect
+    fact: The break-even effect occurs when individuals, having experienced prior losses, find outcomes that offer a chance to break even particularly attractive.
+    grade: C+
+    source: ["10.1287/mnsc.36.6.643"]
+    boundary: Risky choice and prior outcomes
+    realization_ids: []
+
+  - id: fr-11-06
+    mechanism_id: FR-11
+    name: Heuristic Vetoing
+    fact: Heuristic information can be strong enough to override empirical sensory evidence during real-world decision making.
+    grade: C+
+    source: ["10.3389/fnins.2022.745269"]
+    boundary: Recognition of camouflaged objects by expert viewers.
+    realization_ids: []
+
   - id: chromatic-asymmetry-in-visual-attention
     mechanism_id: CL-14
     name: Chromatic Asymmetry in Visual Attention
@@ -108,19 +189,19 @@ effects:
   - id: cl-14-001
     mechanism_id: CL-14
     name: Split-attention effect
-    fact: The split-attention effect occurs when students must split their attention between multiple sources of information, which results in a heavy cognitive load.
-    grade: C+
-    source: ["10.1037/0022-0663.87.2.319"]
-    boundary: Instructional design and multimedia learning
+    fact: The split-attention effect occurs when learners must mentally integrate disparate sources of information, imposing an extraneous cognitive load that interferes with learning; spatially integrated learning materials reduce this effect compared to spatially separated materials.
+    grade: B
+    source: ["10.1037/0022-0663.87.2.319", "10.1037/a0021994", "10.2190/mg7x-4j8n-ckyr-p06t"]
+    boundary: Instructional design for computer-based training software and educational learning environments.
     realization_ids: []
 
   - id: cl-14-002
     mechanism_id: CL-14
     name: Expertise reversal effect
     fact: Instructional techniques that facilitate learning among early learners may not help and may even interfere with learning among more advanced learners.
-    grade: C+
-    source: ["10.3109/0142159x.2014.889290"]
-    boundary: Instructional design for varying levels of learner expertise
+    grade: B-
+    source: ["10.1080/00220979909598353", "10.3109/0142159x.2014.889290"]
+    boundary: Applies to reading comprehension tasks with vocabulary definitions; depends on learner expertise.
     realization_ids: [expertise-based-guidance-toggle]
 
   - id: cl-14-01
@@ -141,6 +222,69 @@ effects:
     boundary: Learner-paced, non-laboratory multimedia instruction
     realization_ids: []
 
+  - id: cognitive-load-reduction-via-multimodal-stimulation
+    mechanism_id: CL-14
+    name: Cognitive Load Reduction via Multimodal Stimulation
+    fact: The systematic integration of synchronized visual and auditory cues in digital media can reduce extraneous cognitive load in early childhood learners, facilitating a transition from passive mimicry to autonomous narrative expression.
+    grade: C+
+    source: ["10.58418/ijeqqr.v5i1.207"]
+    boundary: Early childhood education (ages 5-6) in resource-constrained environments.
+    realization_ids: []
+
+  - id: cognitive-load-threshold-boundary-condition
+    mechanism_id: CL-14
+    name: Cognitive Load Threshold Boundary Condition
+    fact: Under high task difficulty, verbose emotional scaffolding in AI systems can exceed a learner's working memory capacity, acting as an extraneous processing burden rather than affective support.
+    grade: C+
+    source: ["10.1111/bjet.70078"]
+    boundary: High task difficulty
+    realization_ids: []
+
+  - id: dialogue-based-tts-lesson-format
+    mechanism_id: CL-14
+    name: Dialogue-based TTS lesson format
+    fact: Dialogue-based TTS lessons improve student comprehension and cognitive engagement compared to single-speaker TTS lessons.
+    grade: C+
+    source: ["10.48550/arxiv.2607.12235"]
+    boundary: The study utilized a fixed-order design, and replication is required to generalize these findings.
+    realization_ids: []
+
+  - id: element-interactivity-as-a-boundary-condition-for-disfluency
+    mechanism_id: CL-14
+    name: Element Interactivity as a Boundary Condition for Disfluency
+    fact: "The effect of disfluent instructional material on learning is moderated by element interactivity: low interactivity leads to positive learning outcomes, while high interactivity leads to negative impacts on learning efficiency and extraneous load."
+    grade: C+
+    source: ["10.3389/feduc.2021.678798.s001"]
+    boundary: Instructional texts with varying element interactivity.
+    realization_ids: []
+
+  - id: intrinsic-cognitive-load
+    mechanism_id: CL-14
+    name: Intrinsic Cognitive Load
+    fact: Intrinsic cognitive load is determined by the inherent complexity of the material being learned, specifically the level of element interactivity within that material.
+    grade: C+
+    source: ["10.1207/s1532690xci1203_1"]
+    boundary: Cognitive Load Theory
+    realization_ids: []
+
+  - id: redundancy-effect
+    mechanism_id: CL-14
+    name: Redundancy effect
+    fact: The redundancy effect occurs when redundant material, if processed by learners, imposes an extraneous cognitive load that can hinder learning.
+    grade: C+
+    source: ["10.2190/mg7x-4j8n-ckyr-p06t"]
+    boundary: Instructional design for computer-based training software.
+    realization_ids: []
+
+  - id: same-category-advantage
+    mechanism_id: CL-14
+    name: Same-category advantage
+    fact: Categorical relationships among objects can expand the capacity of visual working memory by enabling the grouping of same-category objects.
+    grade: C+
+    source: ["10.3724/sp.j.1041.2021.01189"]
+    boundary: Visual working memory capacity
+    realization_ids: []
+
   - id: tracing-and-pointing
     mechanism_id: CL-14
     name: Tracing and pointing
@@ -148,6 +292,258 @@ effects:
     grade: C+
     source: ["10.1007/s10648-025-10005-7"]
     boundary: Native Chinese-speaking adult participants learning about the human circulatory system from paper-based materials.
+    realization_ids: []
+
+  - id: cr-50fb8b631ba31ace27d56d0b
+    mechanism_id: IF-18
+    name: Information Scent (Sequential Decision Model)
+    fact: Trial-and-error navigation behavior is explained by information scent when modeled as a sequential decision-making problem under memory constraints.
+    grade: C+
+    source: ["10.48550/arxiv.2603.11759"]
+    boundary: Information architecture navigation
+    realization_ids: []
+
+  - id: if-18-001
+    mechanism_id: IF-18
+    name: Scent-Based Navigation
+    fact: The SNIF-ACT 2.0 model, which utilizes information scent and a Bayesian satisficing model, provided better fits to human navigation data than the SNIF-ACT 1.0 model and a position-based model.
+    grade: C+
+    source: ["10.1080/07370020701638806"]
+    boundary: Web navigation behavior
+    realization_ids: []
+
+  - id: if-18-002
+    mechanism_id: IF-18
+    name: Information Scent in Visual Search
+    fact: Strong, unambiguous information scent cues guide users toward more linear and efficient navigation paths, while weak or conflicting cues lead to randomization and increased cognitive load.
+    grade: B-
+    source: ["10.1097/01.yco.0001175784.43302.d1", "10.1145/606658.606660"]
+    boundary: Visual search in hyperbolic tree browsers
+    realization_ids: []
+
+  - id: lateral-reading
+    mechanism_id: IF-18
+    name: Lateral Reading
+    fact: Lateral reading (consulting multiple external sources) significantly improves detection accuracy, while vertical reading has no effect.
+    grade: C+
+    source: ["10.1145/3774904.3792927"]
+    boundary: Health-related misinformation detection
+    realization_ids: []
+
+  - id: content-redundancy
+    mechanism_id: MM-15
+    name: Content Redundancy
+    fact: Content redundancy increases learning outcomes and decreases cognitive load.
+    grade: C+
+    source: ["10.1111/bjep.12592"]
+    boundary: "Distinguished from modal redundancy in multimedia learning materials. TENSION WITH effect-mm-15-redundancy-effect-c1c7ed537b36: that proposal's cited sources report a mixed, largely negative-direction finding for redundancy broadly (including one \"reverse redundancy effect\" result matching this proposal's positive direction, for foreign-language learners) — whether redundancy helps or hurts learning is NOT resolved by this corpus. Both proposals are kept as a preserved disconfirmation (rule 4), not reconciled."
+    realization_ids: []
+
+  - id: mm15-coherence-effect
+    mechanism_id: MM-15
+    name: Coherence Effect
+    fact: Adding interesting but irrelevant details to a multimedia presentation results in lower transfer performance.
+    grade: C+
+    source: ["10.1037/0022-0663.93.1.187"]
+    boundary: Applies to multimedia instructional messages.
+    realization_ids: []
+
+  - id: mm15-coherence-principle
+    mechanism_id: MM-15
+    name: Coherence Principle
+    fact: Learners perform better when extraneous information is excluded from multimedia lessons to minimize demands on cognitive resources.
+    grade: B-
+    source: ["10.1017/9781108894333.019", "10.14742/ajet.1223"]
+    boundary: In authentic learning settings, high learner interest may mitigate the negative effects of extraneous information.
+    realization_ids: []
+
+  - id: mm15-embodiment-principle
+    mechanism_id: MM-15
+    name: Embodiment Principle
+    fact: People learn better from onscreen multimedia lessons when a gesturing pedagogical agent is added to the screen.
+    grade: C+
+    source: ["10.1037/edu0000221"]
+    boundary: The effect is observed for transfer and retention, but adding a static agent does not improve performance.
+    realization_ids: []
+
+  - id: mm15-modality-effect
+    mechanism_id: MM-15
+    name: Modality Effect
+    fact: The modality effect, which suggests that pictures are best accompanied by audio explanations rather than text, has not been consistently replicated in computing education.
+    grade: B-
+    source: ["10.1037/0022-0663.91.2.358", "10.1145/3446871.3469747"]
+    boundary: Applies to multimedia instructional messages.
+    realization_ids: []
+
+  - id: mm15-redundancy-effect
+    mechanism_id: MM-15
+    name: Redundancy Effect
+    fact: Redundant information presented through multiple channels (e.g. simultaneous on-screen text and narration) tends to decrease learning outcomes and increase cognitive load, though several of the cited studies report no significant effect, a reversed (beneficial) effect for foreign-language learners, or effects that vary with individual differences such as ADHD symptoms.
+    grade: B
+    source: ["10.1037/0022-0663.93.1.187", "10.1080/01443410.2026.2678483", "10.1111/bjep.12592", "10.14527/edure.2024.06", "10.14742/apubs.2010.1995", "10.30564/jpr.v1i2.580", "10.64546/jaasep.315"]
+    boundary: "Applies to modality-based redundancy in multimedia learning materials, distinguished from content redundancy. TENSION WITH effect-mm-15-content-redundancy-7686ab66e7bd: that proposal reports content redundancy specifically INCREASES learning and DECREASES cognitive load — the opposite direction from this proposal's dominant finding (though one of this proposal's own 7 sources reports the same positive direction, for foreign-language learners). Both proposals are kept as a preserved disconfirmation (rule 4), not reconciled — see the dissent decision entry."
+    realization_ids: []
+
+  - id: mm15-spatial-contiguity
+    mechanism_id: MM-15
+    name: Spatial Contiguity Principle
+    fact: Students learn better when visual and verbal materials are physically close rather than far apart.
+    grade: C+
+    source: ["10.1037/0022-0663.91.2.358"]
+    boundary: Applies to multimedia instructional messages.
+    realization_ids: []
+
+  - id: multimedia-principle
+    mechanism_id: MM-15
+    name: Multimedia Principle
+    fact: The multimedia principle, which suggests that people learn better from words and pictures than from words alone, produces a small positive significant effect on learning outcomes and can be transferred to educational testing material.
+    grade: B-
+    source: ["10.70725/798356qwfmej", "10.1016/j.learninstruc.2020.101345"]
+    boundary: Effectiveness of multimedia-based instruction is moderated by instructional setting, with smaller effects observed in P-12 settings compared to higher education; applicable to educational testing materials as well as general multimedia learning contexts.
+    realization_ids: []
+
+  - id: signaling-principle
+    mechanism_id: MM-15
+    name: Signaling Principle
+    fact: "The effect of the signaling principle (using cues to highlight essential information) on learning outcomes is contested: one study found no significant effect of signaling, while another found the strongest cue type (an embodied pedagogical agent) outperformed other cue groups."
+    grade: B
+    source: ["10.17576/apjitm-2021-1002-05", "10.21125/edulearn.2017.1952", "10.1002/jcal.70263"]
+    boundary: The effect of signaling is not universally observed across all studies, with some research finding no significant impact on learning performance.
+    realization_ids: []
+
+  - id: fluency-based-aesthetic-interest
+    mechanism_id: PF-16
+    name: Fluency-Based Aesthetic Interest
+    fact: Disfluent stimuli can enhance aesthetic attractiveness through interest when processed in a controlled, effortful style that reduces disfluency over time.
+    grade: C+
+    source: ["10.3389/fpsyg.2017.00015"]
+    boundary: Occurs specifically when disfluent stimuli become more fluent through active processing efforts (disfluency reduction).
+    realization_ids: []
+
+  - id: fluency-based-aesthetic-pleasure-evaluation
+    mechanism_id: PF-16
+    name: Fluency-Based Aesthetic Pleasure/Evaluation
+    fact: Stimuli processed more fluently are evaluated as more aesthetically pleasing and liked more; a MANOVA confirmed the perceptual fluency effect on aesthetic evaluation and pleasure.
+    grade: B
+    source: ["10.1207/s15327957pspr0804_3", "10.1037/a0030115", "10.1108/17505931011092808"]
+    boundary: Mediated by a gut-level fluency experience; influenced by stimulus properties like symmetry, prototypicality, and contrast, and tested in an online shopping environment via visual information quality manipulation.
+    realization_ids: []
+
+  - id: illusory-truth-effect-fluency-based-truth-perception
+    mechanism_id: PF-16
+    name: Illusory Truth Effect (Fluency-Based Truth Perception)
+    fact: Repeated statements are experienced as more familiar and are rated as more true than novel statements; the effect is logarithmic, with diminishing truth-rating increases from additional repetitions.
+    grade: B
+    source: ["10.1037/a0021323", "10.1177/1088868309352251", "10.1186/s41235-021-00301-5", "10.1186/s41235-025-00628-3"]
+    boundary: Demonstrated with trivia statements, rumors, and factual statements using direct repetition and indirect polling methods; effect is logarithmic with diminishing returns for additional repetitions. ELIMINATED when respondents are instructed to adopt an accuracy focus at encoding — under that condition, new and repeated statements are judged equally true.
+    realization_ids: []
+
+  - id: pf-003a
+    mechanism_id: PF-16
+    name: Aesthetic-Usability Effect
+    fact: Controlling for processing fluency considerably diminishes (but does not eliminate) the correlation between aesthetics and usability judgments, indicating fluency is a contributing third variable.
+    grade: C+
+    source: ["10.1145/3544549.3585739"]
+    boundary: Controlling for fluency considerably diminishes the correlation between aesthetics and usability.
+    realization_ids: []
+
+  - id: pf-16-002
+    mechanism_id: PF-16
+    name: Implicit affective preference for visual symmetry
+    fact: Visual symmetry elicits an automatic affective response that is predicted by the speed at which patterns can be identified.
+    grade: C+
+    source: ["10.1037/a0026924"]
+    boundary: Implicit preferences were always predicted by the speed at which patterns could be identified.
+    realization_ids: []
+
+  - id: pf-16-004
+    mechanism_id: PF-16
+    name: Relative Fluency and Liking
+    fact: Liking ratings for fluent stimuli are affected by relative ease-of-processing only when that variation is manipulated WITHIN participants (comparing stimuli side by side), not when manipulated between different groups of participants.
+    grade: C+
+    source: ["10.1371/journal.pone.0135944"]
+    boundary: Felt fluency and certainty are affected by visual clarity regardless of whether the manipulation is within- or between-participants.
+    realization_ids: []
+
+  - id: pf16-001
+    mechanism_id: PF-16
+    name: Processing Fluency
+    fact: Efficient (fluent) processing can trigger positive affect, which can influence aesthetic preference judgments.
+    grade: B
+    source: ["10.1037/emo0000293", "10.1027/1618-3169/a000124", "10.1525/mp.2026.2452381"]
+    boundary: The effect of processing fluency on preference is distinct from perceptual similarity and can be observed in various domains including visual stimuli, music, and truth judgments.
+    realization_ids: []
+
+  - id: picture-superiority-effect
+    mechanism_id: PS-13
+    name: Picture Superiority Effect
+    fact: Pictures generally show a recognition advantage over their corresponding word stimuli or verbal labels.
+    grade: B
+    source: ["10.1037/0278-7393.2.5.523", "10.1111/bjdp.12280", "10.52522/ijngp.v6i1.4"]
+    boundary: The effect is robust in recall but not in recognition.
+    realization_ids: []
+
+  - id: ps-13-002
+    mechanism_id: PS-13
+    name: Pictorial Superiority Effect
+    fact: Pictures access semantic information more readily than name information, while words access articulatory information more rapidly than pictures.
+    grade: B
+    source: ["10.1037//0096-3445.109.4.373", "10.1037/0278-7393.2.5.523", "10.1086/209001"]
+    boundary: cognitive processing
+    realization_ids: []
+
+  - id: ps13-002
+    mechanism_id: PS-13
+    name: Symbol Superiority Effect
+    fact: Graphic symbols are better remembered than words, similar to the picture superiority effect.
+    grade: C+
+    source: ["10.1016/j.cognition.2023.105435"]
+    boundary: This effect applies to common graphic symbols and is attributed to dual coding and distinctiveness.
+    realization_ids: []
+
+  - id: gallery-based-layout-visual-search-efficiency
+    mechanism_id: SC-17
+    name: Gallery-based layout visual search efficiency
+    fact: A gallery-based layout supported more efficient visual search than a grid-based layout, reflected in shorter reaction times (RT), reduced overall total visit duration (TVD), and lower overall total fixation count (TFC).
+    grade: C+
+    source: ["10.3390/s26123652"]
+    boundary: Simulated VR menu interfaces using screen-based eye-tracking.
+    realization_ids: []
+
+  - id: sc-17-001
+    mechanism_id: SC-17
+    name: Banner Blindness
+    fact: Banner blindness is a phenomenon where users tend to disregard or ignore advertising banners while performing focused tasks (such as reading news) on web pages, often attributed to attentional filter adjustments and task type, with banners being noticed more frequently during low-target-detail tasks.
+    grade: B
+    source: ["10.1002/acp.1742", "10.1080/10447318.2013.847762", "10.1080/13506285.2023.2250528", "10.1108/sjme-11-2022-0236", "10.54359/ps.v19i106.2083", "10.5555/2007456.2007460"]
+    boundary: Observed during focused tasks and in online media/shopping websites; effect may not hold during free browsing; studies suggest it is not necessarily a perceptual load effect, and task type significantly affects ad visibility.
+    realization_ids: []
+
+  - id: sc-17-01
+    mechanism_id: SC-17
+    name: Automatic salience capture
+    fact: Automatic salience capture is one of three banner processing modes that evolve in online user behavior.
+    grade: C+
+    source: ["10.17705/1jais.00324"]
+    boundary: The model describes transitions between automatic salience capture, controlled salience suppression, and automatic salience suppression.
+    realization_ids: []
+
+  - id: sc-17-02
+    mechanism_id: SC-17
+    name: Controlled salience suppression
+    fact: Controlled salience suppression is one of three banner processing modes identified in a process model of how banner processing evolves from an evolutionary perspective (alongside automatic salience capture and automatic salience suppression).
+    grade: C+
+    source: ["10.17705/1jais.00324"]
+    boundary: This mode is part of a process model explaining how banner processing evolves from an evolutionary perspective.
+    realization_ids: []
+
+  - id: sc-17-03
+    mechanism_id: SC-17
+    name: Automatic salience suppression
+    fact: Automatic salience suppression is one of three banner processing modes identified in a process model of how banner processing evolves (alongside automatic salience capture and controlled salience suppression).
+    grade: C+
+    source: ["10.17705/1jais.00324"]
+    boundary: This mode is identified as a distinct stage in the evolution of banner processing.
     realization_ids: []
 
 # ─────────────────────────────────────────────
@@ -172,6 +568,69 @@ realizations:
     confidence: 0.6
     source_record_ids: [cr_7e6bcb42220d86126199d6e2, cr_f251c717810311c480c7234f]
 
+  - id: narration-text-redundancy-toggle
+    mechanism_id: MM-15
+    effect_id: mm15-modality-effect
+    term: Narration-Text Redundancy Toggle
+    description_as_reported: Eliminating such redundant information removes the requirement to coordinate multiple sources of information. Accordingly, instructional designs that eliminate redundant material can be superior to those that include redundancy. The redundancy group demonstrated elevated cognitive load, especially in the frontal and parietal regions, as seen by heightened theta, beta, and gamma wave activity. Conversely, the non-redundancy group exhibited enhanced processing efficiency with less cognitive strain.
+    derivation: inferred
+    domain_transfer: { source_domain: multimedia learning, application_domain: product UI }
+    pattern: Provide a user-controlled toggle that hides on-screen text duplicating the audio narration whenever narration is playing, defaulting to {default_hidden_state}, excluding any text serving an accessibility function such as captions, subtitles, transcripts, alt text or screen-reader labels, and automatically re-enable the text after {audio_pause_duration} seconds of narration inactivity so users are never locked into a single modality.
+    parameters:
+      - name: default_hidden_state
+        value: 1
+        unit: boolean
+        evidence_basis: none — default heuristic
+      - name: audio_pause_duration
+        value: 5
+        unit: seconds
+        evidence_basis: none — default heuristic
+    artifact_context: ["dashboard_widget", "onboarding"]
+    confidence: 0.55
+    source_record_ids: [cr_3b4035d25640cd954fd82a43, cr_8b5eba4ae96e52ac6efc97b4, cr_0485aaea69be8ac0f3c0300e]
+
+  - id: synchronized-audio-visual-cue-highlight
+    mechanism_id: MM-15
+    effect_id: mm15-modality-effect
+    term: Synchronized Audio-Visual Cue Highlight
+    description_as_reported: students spent more time attending to the relevant portion of the graphic and performed better on posttests if coordinated cues were added to the lesson (coordinated dual cues group), in which key elements were spoken with deeper intonation (auditory cue) at the same time the element turned red in the graphic (visual cue).
+    derivation: inferred
+    domain_transfer: { source_domain: multimedia instructional design, application_domain: product UI }
+    pattern: Highlight the active interface element with a {color_change} and play a {sound_effect} simultaneously when the user reaches the {interaction_threshold} of the instructional sequence, offering this as an alternative to text-only cueing rather than a guaranteed improvement.
+    parameters:
+      - name: color_change
+        value: 1
+        unit: visual_highlight_event
+        evidence_basis: none — default heuristic
+      - name: sound_effect
+        value: 1
+        unit: auditory_cue_event
+        evidence_basis: none — default heuristic
+      - name: interaction_threshold
+        value: 1
+        unit: instructional_step
+        evidence_basis: none — default heuristic
+    artifact_context: ["onboarding"]
+    confidence: 0.5
+    source_record_ids: [cr_8ba9259da1066e1a65a79d73, cr_0485aaea69be8ac0f3c0300e]
+
+  - id: view-count-triggered-text-suppression
+    mechanism_id: MM-15
+    effect_id: mm15-modality-effect
+    term: View-Count Triggered Text Suppression
+    description_as_reported: redundancy, involving the duplication of information via image and text, also develops a strong mental model of the meaning.
+    derivation: inferred
+    domain_transfer: { source_domain: multimedia instructional design, application_domain: product UI }
+    pattern: Offer a toggle that hides on-screen text which merely duplicates adjacent visual content once the user has viewed the associated image {view_threshold} times, excluding any text serving an accessibility function such as captions, subtitles, transcripts, alt text or screen-reader labels, and keeping a manual re-enable option visible at all times.
+    parameters:
+      - name: view_threshold
+        value: 3
+        unit: views
+        evidence_basis: none — default heuristic
+    artifact_context: ["dashboard_widget"]
+    confidence: 0.5
+    source_record_ids: [cr_c2aa2b555308c851aef3cb59, cr_0485aaea69be8ac0f3c0300e]
+
 # ─────────────────────────────────────────────
 # IMPLEMENTATIONS (product-authored generator directives)
 # ─────────────────────────────────────────────
@@ -182,7 +641,6 @@ implementations:
     artifact_types: [landing_hero, pricing_page]
     product_requirements: ["has_real_usage_data"]
     generation_directive: "Show genuine, specific social signals: real user counts, 'X businesses use this', real ratings. Specificity and truth beat vague grandiosity ('trusted by 12,400 founders' only if true). Prefer referents similar to the user where the data allows."
-    copy_formulas: ["Used by {n} {referent}", "{rating} from {n} reviews"]
     metrics: [cvr, trust_signal_engagement]
     observed_effects: []
 
@@ -191,7 +649,6 @@ implementations:
     artifact_types: [pricing_page, paywall]
     product_requirements: ["has_multiple_options"]
     generation_directive: Indicate what similar users chose ('most popular', 'chosen by {segment}') where genuinely true, to resolve choice uncertainty. The 'most popular' label must reflect real selection data, not a marketing preference.
-    copy_formulas: ["Most popular", "Most {segment} choose {option}"]
     metrics: [cvr, tier_selection_distribution]
     observed_effects: []
 
@@ -200,7 +657,6 @@ implementations:
     artifact_types: [pricing_page, paywall]
     product_requirements: ["has_multiple_tiers_or_reference_price"]
     generation_directive: "Present a higher-value reference point before the target option so it is judged favorably: a premium tier shown first, a genuine 'was' price, or a recommended plan highlighted as the anchor. The anchor must be real (a genuinely offered tier or a true prior price) — fabricated anchors and fake 'was' prices are forbidden."
-    copy_formulas: ["Most popular · {plan}", "{anchor_price} value for {target_price}"]
     metrics: [cvr, average_plan_value, tier_selection_distribution]
     observed_effects: []
 
@@ -209,7 +665,6 @@ implementations:
     artifact_types: [pricing_page, landing_hero, checkout]
     product_requirements: []
     generation_directive: "Frame the value in the terms that make it most salient and truthful — what the user gains, or (paired with LA-01) what they avoid losing. Attribute framing: present the positive attribute ('90% success' not '10% failure') where both are true. Never misrepresent — framing selects emphasis among true statements, it does not distort facts."
-    copy_formulas: ["{positive_attribute}", "Everything you get: {inclusions}"]
     metrics: [cvr, cvr_frame_a_vs_b]
     observed_effects: []
 
@@ -218,7 +673,6 @@ implementations:
     artifact_types: [landing_hero, paywall, checkout, pricing_page, dashboard_widget]
     product_requirements: []
     generation_directive: "Remove elements that do not serve the current decision or action: decorative content competing for attention, secondary explanations, redundant restatements, unnecessary choices. Every element retained should be justifiable as intrinsic to the task. Reducing extraneous load is not minimalism as taste — it is preserving capacity for the part that matters."
-    copy_formulas: []
     metrics: [task_completion_rate, time_to_complete, cvr, error_rate]
     observed_effects: []
 
@@ -227,7 +681,6 @@ implementations:
     artifact_types: [onboarding, checkout, landing_hero, email]
     product_requirements: []
     generation_directive: Split information and input demands into sequenced chunks rather than presenting the full set at once. Reveal detail progressively as it becomes relevant to the step at hand, keeping simultaneous elements few. Long unbroken text and multi-field forms presented in one block impose load that sequencing removes at no cost to completeness.
-    copy_formulas: []
     metrics: [onboarding_completion, form_completion_rate, drop_off_by_step]
     observed_effects: []
 
@@ -236,7 +689,6 @@ implementations:
     artifact_types: [onboarding, dashboard_widget, checkout, pricing_page]
     product_requirements: []
     generation_directive: Place related pieces of information together in space and time rather than requiring the user to hold one while searching for the other. Labels adjacent to what they label rather than in a legend; explanation beside the control rather than in a separate section; error message at the field, not summarized elsewhere. Splitting related information forces integration in working memory and measurably degrades performance.
-    copy_formulas: []
     metrics: [error_rate, task_completion_rate, time_to_complete]
     observed_effects: []
 
@@ -245,7 +697,6 @@ implementations:
     artifact_types: [landing_hero, dashboard_widget, pricing_page, onboarding, email]
     product_requirements: []
     generation_directive: Write labels, links and headings that state specifically what lies behind them, in the user's own vocabulary rather than internal or invented terms. Generic, clever or branded labels emit no scent and cause abandonment of paths the user actually wanted. The test is whether the label alone predicts the destination.
-    copy_formulas: []
     metrics: [navigation_success_rate, task_completion_rate, drop_off_by_step]
     observed_effects: []
 
@@ -254,7 +705,6 @@ implementations:
     artifact_types: [dashboard_widget, landing_hero, onboarding]
     product_requirements: []
     generation_directive: Provide cues that let a path be assessed without entering it — counts, previews, summaries, sample content. Reducing the cost of evaluating an option increases exploration of worthwhile paths; where assessment is expensive, users abandon rather than investigate.
-    copy_formulas: []
     metrics: [exploration_rate, task_completion_rate, time_to_first_value]
     observed_effects: []
 
@@ -263,7 +713,6 @@ implementations:
     artifact_types: [landing_hero, onboarding, pricing_page, email]
     product_requirements: []
     generation_directive: Where the content explains how something works, what a product does, or what a result looks like, present it as relevant image or demonstration together with concise words rather than as prose alone. The image must carry the explanatory content, not decorate it — decorative imagery adds load without adding understanding (see coherence).
-    copy_formulas: []
     metrics: [comprehension_proxy_task_completion, cvr, landing_engagement]
     observed_effects: []
 
@@ -272,7 +721,6 @@ implementations:
     artifact_types: [landing_hero, paywall, pricing_page, email, onboarding]
     product_requirements: []
     generation_directive: "Remove material that is interesting but not essential to the point being made — tangential detail, decorative media, atmospheric copy. The coherence finding is counterintuitive and specific: adding engaging extras measurably reduces understanding of the core message, even when the extras are enjoyed."
-    copy_formulas: []
     metrics: [cvr, task_completion_rate, comprehension_proxy_task_completion]
     observed_effects: []
 
@@ -281,7 +729,6 @@ implementations:
     artifact_types: [landing_hero, dashboard_widget, pricing_page, onboarding]
     product_requirements: []
     generation_directive: "Cue what matters: visual emphasis, hierarchy and structural markers that direct attention to the essential element and the relationship between elements. Signalling improves outcomes without adding content — it tells the reader where capacity should go."
-    copy_formulas: []
     metrics: [cvr, attention_to_primary_action, task_completion_rate]
     observed_effects: []
 
@@ -290,7 +737,6 @@ implementations:
     artifact_types: [onboarding, dashboard_widget, checkout, pricing_page]
     product_requirements: []
     generation_directive: Place words next to the image or control they describe, and present them at the same time — not in separate regions or sequential screens. Conversely, do not present identical content simultaneously in two forms (identical caption duplicating narration, text repeating verbatim what the image already states); duplication competes for the same capacity rather than reinforcing.
-    copy_formulas: []
     metrics: [error_rate, time_to_complete, task_completion_rate]
     observed_effects: []
 
@@ -299,7 +745,6 @@ implementations:
     artifact_types: [landing_hero, paywall, pricing_page, checkout, email]
     product_requirements: []
     generation_directive: "Make genuine content easy to process: legible contrast and type, plain concrete language over jargon and abstraction, short sentences for key claims, familiar structure. Difficulty of processing is read as a property of the offer, so unnecessary complexity in stating a true claim costs credibility."
-    copy_formulas: []
     metrics: [cvr, comprehension_proxy_task_completion, time_to_complete]
     observed_effects: []
 
@@ -308,7 +753,6 @@ implementations:
     artifact_types: [landing_hero, onboarding, checkout, dashboard_widget]
     product_requirements: []
     generation_directive: Use conventional structures where convention exists — expected placement of navigation, price, primary action, form order. Familiarity is a fluency source; novelty in structural elements imposes processing cost that is misread as difficulty with the product itself. Reserve novelty for content, not for load-bearing structure.
-    copy_formulas: []
     metrics: [task_completion_rate, error_rate, cvr]
     observed_effects: []
 
@@ -317,7 +761,6 @@ implementations:
     artifact_types: [landing_hero, onboarding, email]
     product_requirements: ["produces_visible_output"]
     generation_directive: Where the product produces a visible result, show the actual result rather than describing it. The image should be the concrete thing itself — a real output, a real state, a real before-and-after — not a stock illustration standing in for it, which is decorative and carries no content advantage.
-    copy_formulas: []
     metrics: [cvr, landing_engagement, recall_proxy_return_rate]
     observed_effects: []
 
@@ -326,7 +769,6 @@ implementations:
     artifact_types: [dashboard_widget, onboarding]
     product_requirements: []
     generation_directive: Encode recurring, concrete states and categories visually as well as verbally — status, type, progress, ownership — so they are recognised rather than read on each encounter. This applies to concrete states; conditional or quantitative information keeps its textual form.
-    copy_formulas: []
     metrics: [task_completion_rate, time_to_complete, error_rate]
     observed_effects: []
 
@@ -335,7 +777,6 @@ implementations:
     artifact_types: [landing_hero, paywall, pricing_page, dashboard_widget]
     product_requirements: []
     generation_directive: Give each view one visually dominant element carrying the primary message or action, with clear subordination of the rest. Competing elements of equal weight fragment the fast initial sample and leave no message received. Hierarchy is what a two-second glance resolves.
-    copy_formulas: []
     metrics: [cvr, attention_to_primary_action, bounce_rate]
     observed_effects: []
 
@@ -344,7 +785,6 @@ implementations:
     artifact_types: [landing_hero, email, pricing_page, dashboard_widget]
     product_requirements: []
     generation_directive: Place the informative part of headings, labels and first lines at the start, and make each stand alone. Scanning samples beginnings; meaning deferred to the end of a sentence or paragraph is not collected. Structure content so that reading only the headings still conveys the substance.
-    copy_formulas: []
     metrics: [landing_engagement, cvr, email_click_through]
     observed_effects: []
 
@@ -353,7 +793,6 @@ implementations:
     artifact_types: [landing_hero, dashboard_widget, email]
     product_requirements: []
     generation_directive: Do not style genuine, important content in the visual idiom of advertising — banner proportions, promotional badges, isolated boxed callouts in peripheral positions. Such content is skipped unread. Conversely, never disguise promotional content as native content to evade that avoidance (see hard rules).
-    copy_formulas: []
     metrics: [attention_to_primary_action, cvr]
     observed_effects: []
 

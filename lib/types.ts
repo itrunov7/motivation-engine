@@ -2247,7 +2247,15 @@ export interface PackRealization {
   source_record_ids: string[];
 }
 
-/** Product-authored directive projected from mechanism.implementations. */
+/**
+ * Product-authored directive projected from mechanism.implementations.
+ *
+ * copy_formulas is deliberately NOT projected here (rule 1, D-346): a pack is
+ * evidence with minimal assertion, and a pre-written string is a copyable
+ * example — the thing rule 1 names directly. The registry record
+ * (Implementation.copy_formulas) keeps every formula as owner reference; this
+ * type just never carries it past extraction into what a generator reads.
+ */
 export interface PackImplementation {
   id: string;
   mechanism_id: string;
@@ -2257,7 +2265,6 @@ export interface PackImplementation {
   artifact_types: ArtifactType[];
   product_requirements: string[];
   generation_directive: string;
-  copy_formulas: string[];
   metrics: string[];
   /** Measured telemetry outcomes, not ontology L2 effects. */
   observed_effects: string[];
