@@ -1,0 +1,89 @@
+{
+  "id": "realization-la-01-session-threshold-performance-reveal-6363d43123d7",
+  "type": "realization",
+  "target": "LA-01",
+  "payload": {
+    "id": "session-threshold-performance-reveal",
+    "mechanism_id": "LA-01",
+    "term": "Session-Threshold Performance Reveal",
+    "description_as_reported": "when risky prospects are represented as being repeatedly instantiated, choices and evaluations often change to conform more closely to the long-run perspective reflected in normative models.",
+    "artifact_context": [
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "la-01-04"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "operations research and management science",
+      "application_domain": "product UI"
+    },
+    "pattern": "Withhold the aggregated portfolio performance summary behind a placeholder until the user has completed {evaluation_threshold} usage sessions, then reveal the full multi-session summary.",
+    "parameters": [
+      {
+        "name": "evaluation_threshold",
+        "value": 5,
+        "unit": "sessions",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_b3fa1cbe10d04b4c8906be90",
+        "doi": "10.1002/9780470400531.eorms0670",
+        "title": "Evaluations of Single‐ and Repeated‐Play Gambles",
+        "quote_or_locus": "when risky prospects are represented as being repeatedly instantiated, choices and evaluations often change to conform more closely to the long‐run perspective reflected in normative models",
+        "source_span": {
+          "start": 226,
+          "end": 415,
+          "source_text_sha256": "2947957bceffb3e52e31bf999261478f06e4899867389dafb37357165572e1e1"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_10685871ab12b88cfdd604f1",
+        "effect_id": "la-01-04",
+        "title": "An Experiment on Risk Taking and Evaluation Periods",
+        "quote_or_locus": "Myopic loss aversion is the combination of loss aversion and frequent evaluation of investment portfolios, which leads to more conservative risk-taking.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.55
+  },
+  "provenance": [
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_b3fa1cbe10d04b4c8906be90",
+      "doi": "10.1002/9780470400531.eorms0670",
+      "title": "Evaluations of Single‐ and Repeated‐Play Gambles",
+      "quote_or_locus": "when risky prospects are represented as being repeatedly instantiated, choices and evaluations often change to conform more closely to the long‐run perspective reflected in normative models",
+      "source_span": {
+        "start": 226,
+        "end": 415,
+        "source_text_sha256": "2947957bceffb3e52e31bf999261478f06e4899867389dafb37357165572e1e1"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_10685871ab12b88cfdd604f1",
+      "effect_id": "la-01-04",
+      "title": "An Experiment on Risk Taking and Evaluation Periods",
+      "quote_or_locus": "Myopic loss aversion is the combination of loss aversion and frequent evaluation of investment portfolios, which leads to more conservative risk-taking.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.55,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31481202687",
+  "proposed_at": "2026-08-11T10:13:10.917Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}
