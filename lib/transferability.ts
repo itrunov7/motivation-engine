@@ -20,7 +20,7 @@
  *    A refusal produces a held proposal carrying this verdict; the record
  *    survives, and so does the reasoning that set it aside.
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { GENERIC_UI_TERMS } from "./review-flags";
@@ -1313,6 +1313,110 @@ function hardRulesOfPeers(mechanismId: string, root: string): PeerHardRule[] {
   return rules;
 }
 
+// --- Distinctiveness gate for single-token matches (D-365) ------------------
+//
+// MEASURED FIRST, D-364's report on 41 flags across the 28-proposal corpus: 26
+// were noise, and every noise flag traced to a single shared word — "users",
+// "never", "high", "displayed", "data", "must", "product", "full", "visible",
+// "options", "forced", "reflect" — coincidentally present in both texts with
+// no topical connection. A word that appears in many DIFFERENT hard rules
+// cannot discriminate which one a pattern actually collides with; a match on
+// it is closer to chance than to signal. A single-token match is now required
+// to be RARE — in the corpus of every hard rule in the registry, and in the
+// corpus of every inferred realization's pattern — before it may fire alone.
+// Multi-token matches are exempt, unchanged: D-364 found them reliable
+// (countdown/stock/timers, availability), and the owner's instruction was to
+// leave what already works alone.
+//
+// THE THRESHOLD, AND ITS HONEST LIMIT. Calibrated to the two rules the owner
+// named as non-negotiable survivors: genuine_scarcity_only's "scarcity" (1 of
+// 58 rules) and panic_cap's "loss" (3 of 58 rules, the rarer of "loss" and
+// "visual", both tied at 3). The rule-corpus ceiling is set at 3 rules
+// (~6% of 58) — loose enough to admit both, tight enough to exclude "users"
+// (4 rules) and "never" (8 rules) outright. It does NOT recover "high",
+// "displayed", "data", "full", "visible", "options" or "forced": every one of
+// those appears in exactly ONE hard rule, the same absolute rarity as
+// "scarcity" itself. No frequency statistic computed over a 58-rule, 28-
+// pattern corpus can separate a word that is rare because it is genuinely
+// specific (scarcity) from a word that is rare because the corpus is small
+// (high) — that distinction is about WORD SENSE, not frequency, and a
+// deterministic, no-model-call check has no way to ask it. This is reported
+// as a limit, not silently engineered around.
+//
+// The pattern-corpus leg exists for the same reason the instruction named it
+// — "or most patterns" — but is close to inert on the CURRENT corpus: SC-06's
+// own productive session means "scarcity" itself is the single most
+// pattern-frequent word among every candidate here (4 of 28 patterns, D-364),
+// higher than every named culprit. Any pattern-side ceiling tight enough to
+// exclude "high"/"displayed" (3 of 28 each) would also exclude "scarcity" —
+// so the ceiling is set loose (50%, literally "most" of the corpus) rather
+// than tuned to a number that happens to separate today's specific words,
+// which would be re-deriving the check from the answer key the owner warned
+// against the first time.
+export const HARD_RULE_COLLISION_RULE_RARITY_THRESHOLD = 0.06;
+export const HARD_RULE_COLLISION_PATTERN_RARITY_THRESHOLD = 0.5;
+
+let cachedRuleTokenFrequency: { root: string; total: number; freq: Map<string, number> } | null =
+  null;
+function ruleTokenFrequency(root: string): { total: number; freq: Map<string, number> } {
+  if (cachedRuleTokenFrequency?.root === root) return cachedRuleTokenFrequency;
+  const dir = join(root, "registry", "mechanisms");
+  const freq = new Map<string, number>();
+  let total = 0;
+  for (const file of readdirSync(dir).filter((name) => name.endsWith(".json"))) {
+    const mechanism = JSON.parse(readFileSync(join(dir, file), "utf8")) as Mechanism;
+    for (const rule of mechanism.constraints?.hard_rules ?? []) {
+      total += 1;
+      for (const token of Array.from(new Set(collisionTokens(rule.rule)))) {
+        freq.set(token, (freq.get(token) ?? 0) + 1);
+      }
+    }
+  }
+  cachedRuleTokenFrequency = { root, total, freq };
+  return cachedRuleTokenFrequency;
+}
+
+let cachedPatternTokenFrequency: { root: string; total: number; freq: Map<string, number> } | null =
+  null;
+function patternTokenFrequency(root: string): { total: number; freq: Map<string, number> } {
+  if (cachedPatternTokenFrequency?.root === root) return cachedPatternTokenFrequency;
+  const dir = join(root, "proposals", "realization");
+  const freq = new Map<string, number>();
+  let total = 0;
+  if (existsSync(dir)) {
+    for (const file of readdirSync(dir).filter((name) => name.endsWith(".json"))) {
+      let proposal: { payload?: { derivation?: string; pattern?: string } };
+      try {
+        proposal = JSON.parse(readFileSync(join(dir, file), "utf8"));
+      } catch {
+        continue;
+      }
+      const pattern = proposal.payload?.pattern;
+      if (proposal.payload?.derivation !== "inferred" || typeof pattern !== "string") continue;
+      total += 1;
+      for (const token of Array.from(
+        new Set(collisionTokens(pattern.replace(COLLISION_PLACEHOLDER_RE, " "))),
+      )) {
+        freq.set(token, (freq.get(token) ?? 0) + 1);
+      }
+    }
+  }
+  cachedPatternTokenFrequency = { root, total, freq };
+  return cachedPatternTokenFrequency;
+}
+
+/** Whether a single shared token is rare enough to fire alone (see above). */
+function isDistinctiveEnoughAlone(token: string, root: string): boolean {
+  const rules = ruleTokenFrequency(root);
+  const patterns = patternTokenFrequency(root);
+  const ruleShare = (rules.freq.get(token) ?? 0) / rules.total;
+  const patternShare = patterns.total === 0 ? 0 : (patterns.freq.get(token) ?? 0) / patterns.total;
+  return (
+    ruleShare <= HARD_RULE_COLLISION_RULE_RARITY_THRESHOLD &&
+    patternShare <= HARD_RULE_COLLISION_PATTERN_RARITY_THRESHOLD
+  );
+}
+
 /**
  * Warning-only. Never called from the approval or extraction path, and
  * nothing in lib/proposals.ts reads its output — the owner runs it (or a
@@ -1337,6 +1441,10 @@ export function judgeHardRuleCollisions(
     const matched = ruleTokens.filter((token) => patternTokens.has(token));
     const score = matched.length / ruleTokens.length;
     if (score < HARD_RULE_COLLISION_TOKEN_THRESHOLD) continue;
+    const distinctMatched = Array.from(new Set(matched));
+    if (distinctMatched.length === 1 && !isDistinctiveEnoughAlone(distinctMatched[0], root)) {
+      continue;
+    }
     let bestClause: string | null = null;
     let bestClauseScore = -1;
     for (const clause of clauses) {

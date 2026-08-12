@@ -19,9 +19,12 @@
  * that make it trustworthy regardless of recall.
  */
 import assert from "node:assert/strict";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 import {
+  HARD_RULE_COLLISION_PATTERN_RARITY_THRESHOLD,
+  HARD_RULE_COLLISION_RULE_RARITY_THRESHOLD,
   HARD_RULE_COLLISION_TOKEN_THRESHOLD,
   judgeHardRuleCollisions,
   peerMechanismIds,
@@ -160,4 +163,101 @@ test("misses high-involvement-loss-emphasis's true rule (panic_cap) entirely", (
     ),
   );
   assert.ok(!ids.includes("LA-01/panic_cap"), ids.join(", "));
+});
+
+// --- the distinctiveness gate (D-365) ---------------------------------------
+//
+// D-364 reported 41 flags across the 28-proposal corpus, 26 of them noise —
+// every noise flag driven by a single shared word ordinary enough to appear
+// in both texts by chance ("users", "never", "high", "displayed", "data",
+// "must", "product", "full", "visible", "options", "forced", "reflect"). The
+// gate below requires a single-token match to be rare in both the full
+// hard-rule corpus and the full pattern corpus before it may fire alone.
+
+test("HARD_RULE_COLLISION_RULE_RARITY_THRESHOLD and _PATTERN_RARITY_THRESHOLD are the documented values", () => {
+  assert.equal(HARD_RULE_COLLISION_RULE_RARITY_THRESHOLD, 0.06);
+  assert.equal(HARD_RULE_COLLISION_PATTERN_RARITY_THRESHOLD, 0.5);
+});
+
+test("a single-token match on \"users\" no longer fires alone (4 of 58 rules use it)", () => {
+  const ids = ruleIds(
+    flagsFor(
+      "VR-02",
+      "Show a confirmation banner to users once a task completes, with no repeated prompts.",
+    ),
+  );
+  assert.ok(!ids.includes("VR-02/vulnerable_users"), ids.join(", "));
+});
+
+test("a single-token match on \"never\" no longer fires alone (8 of 58 rules use it)", () => {
+  const ids = ruleIds(
+    flagsFor(
+      "LA-01",
+      "Keep the summary panel expanded so the total is never hidden from view.",
+    ),
+  );
+  assert.ok(!ids.includes("LA-01/no_data_hostage"), ids.join(", "));
+});
+
+test("a single-token match on \"scarcity\" still fires alone (1 of 58 rules use it — the reliable case)", () => {
+  const ids = ruleIds(
+    flagsFor(
+      "SC-06",
+      "Send a push notification when a limited-quantity deal is expiring soon to leverage scarcity messaging.",
+    ),
+  );
+  assert.ok(ids.includes("SC-06/genuine_scarcity_only"), ids.join(", "));
+});
+
+test("a single-token match on \"anxiety\" still fires alone (1 of 58 rules use it)", () => {
+  const ids = ruleIds(
+    flagsFor(
+      "SC-06",
+      "Display a remaining-stock counter to trigger anxiety and increase perceived value.",
+    ),
+  );
+  assert.ok(ids.includes("LA-01/panic_cap"), ids.join(", "));
+});
+
+test("a multi-token match still fires regardless of any single token's commonness", () => {
+  const ids = ruleIds(
+    flagsFor(
+      "SC-06",
+      "Disable high-arousal scarcity indicators such as countdown timers or stock counters after repeated exposure within a session.",
+    ),
+  );
+  assert.ok(ids.includes("SC-06/no_fake_timers"), ids.join(", "));
+});
+
+// --- acceptance criterion, pinned against the real corpus -------------------
+//
+// The owner's condition for the gate: genuine_scarcity_only must keep firing
+// 5 times and panic_cap 3 times across the 28-proposal corpus that D-364
+// measured. If a future change to either rarity threshold regresses either
+// count, this is the test that catches it — "if either drops, the threshold
+// is too tight" is not a one-time check, it is a standing invariant.
+test("genuine_scarcity_only fires 5/5 and panic_cap fires 3/3 across the real 28-proposal corpus", () => {
+  function walk(dir: string): string[] {
+    const out: string[] = [];
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry);
+      if (statSync(full).isDirectory()) out.push(...walk(full));
+      else if (entry.endsWith(".json")) out.push(full);
+    }
+    return out;
+  }
+  let genuineScarcityOnly = 0;
+  let panicCap = 0;
+  for (const path of walk(join(ROOT, "proposals/realization"))) {
+    const raw = JSON.parse(readFileSync(path, "utf8"));
+    if (raw.payload?.derivation !== "inferred" || !raw.payload?.pattern) continue;
+    for (const flag of judgeHardRuleCollisions(raw.payload, ROOT)) {
+      if (flag.mechanism_id === "SC-06" && flag.rule_id === "genuine_scarcity_only") {
+        genuineScarcityOnly += 1;
+      }
+      if (flag.mechanism_id === "LA-01" && flag.rule_id === "panic_cap") panicCap += 1;
+    }
+  }
+  assert.equal(genuineScarcityOnly, 5, "genuine_scarcity_only occurrence count");
+  assert.equal(panicCap, 3, "panic_cap occurrence count");
 });
