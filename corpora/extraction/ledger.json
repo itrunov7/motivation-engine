@@ -1,7 +1,135 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-11T11:16:24.573Z",
+  "updated_at": "2026-08-12T09:17:09.481Z",
   "runs": [
+    {
+      "run_id": "2026-08-12T09:16:07.787Z",
+      "dispatch_id": "domain-leak-d352",
+      "github_run_id": 31582096472,
+      "mode": "realizations",
+      "scope": "la-01-02",
+      "candidates": 14,
+      "cheap": {
+        "candidates": 10,
+        "dropped_ungrounded": 1,
+        "synthesis_batch_failed": 0,
+        "into_synthesis": 9
+      },
+      "synthesis": {
+        "into_synthesis": 9,
+        "consolidated": 5,
+        "expanded": 0,
+        "candidates_strong": 4,
+        "folds": 1
+      },
+      "strong": {
+        "candidates": 4,
+        "proposed": 4,
+        "proposed_enrich": 0,
+        "merged_into_pending": 0,
+        "held_low_confidence": 0,
+        "held_non_transferable": 0,
+        "failed_validation": 0,
+        "dropped_ungrounded": 0,
+        "dropped_volume_cap": 0,
+        "dropped_draft_cap": 0
+      },
+      "balanced": true,
+      "reconstruction": {
+        "status": "recorded"
+      },
+      "candidates_detail": [
+        {
+          "candidate_id": "LA-01:cheap:01",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:02",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:03",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:04",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:05",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:06",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "dropped_ungrounded",
+          "reason": "premise_contradicted_downstream"
+        },
+        {
+          "candidate_id": "LA-01:cheap:07",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:08",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:09",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:cheap:10",
+          "mechanism_id": "LA-01",
+          "pass": "cheap",
+          "fate": "into_synthesis"
+        },
+        {
+          "candidate_id": "LA-01:strong:03",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-la-01-reduced-update-frequency-for-risk-to-192798c7d1c2"
+        },
+        {
+          "candidate_id": "LA-01:strong:01",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-la-01-loss-first-framing-70a05bca8f2b"
+        },
+        {
+          "candidate_id": "LA-01:strong:02",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-la-01-high-involvement-loss-emphasis-6dc58bab8e50"
+        },
+        {
+          "candidate_id": "LA-01:strong:04",
+          "mechanism_id": "LA-01",
+          "pass": "strong",
+          "fate": "proposed",
+          "proposal_id": "realization-la-01-loss-framed-default-acceptance-c53f4c0b5945"
+        }
+      ]
+    },
     {
       "run_id": "2026-08-11T10:08:13.201Z",
       "dispatch_id": "realizations-probe-la-01-04",
