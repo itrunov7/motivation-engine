@@ -1,0 +1,122 @@
+{
+  "id": "realization-mm-15-narration-text-redundancy-toggle-2de2d1c9f995",
+  "type": "realization",
+  "target": "MM-15",
+  "payload": {
+    "id": "narration-text-redundancy-toggle",
+    "mechanism_id": "MM-15",
+    "term": "Narration-Text Redundancy Toggle",
+    "description_as_reported": "Eliminating such redundant information removes the requirement to coordinate multiple sources of information. Accordingly, instructional designs that eliminate redundant material can be superior to those that include redundancy. The redundancy group demonstrated elevated cognitive load, especially in the frontal and parietal regions, as seen by heightened theta, beta, and gamma wave activity. Conversely, the non-redundancy group exhibited enhanced processing efficiency with less cognitive strain.",
+    "artifact_context": [
+      "dashboard_widget",
+      "onboarding"
+    ],
+    "effect_refs": [
+      "mm15-modality-effect"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "multimedia learning",
+      "application_domain": "product UI"
+    },
+    "pattern": "Provide a user-controlled toggle that hides on-screen text duplicating the audio narration whenever narration is playing, defaulting to {default_hidden_state}, excluding any text serving an accessibility function such as captions, subtitles, transcripts, alt text or screen-reader labels, and automatically re-enable the text after {audio_pause_duration} seconds of narration inactivity so users are never locked into a single modality.",
+    "parameters": [
+      {
+        "name": "default_hidden_state",
+        "value": 1,
+        "unit": "boolean",
+        "evidence_basis": "none — default heuristic"
+      },
+      {
+        "name": "audio_pause_duration",
+        "value": 5,
+        "unit": "seconds",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "MM-15",
+        "corpus_record_id": "cr_3b4035d25640cd954fd82a43",
+        "doi": "10.1017/cbo9781139547369.013",
+        "title": "The Redundancy Principle in Multimedia Learning",
+        "quote_or_locus": "Eliminating such redundant information removes the requirement to coordinate multiple sources of information. Accordingly, instructional designs that eliminate redundant material can be superior to those that include redundancy",
+        "source_span": {
+          "start": 463,
+          "end": 690,
+          "source_text_sha256": "0743c95d4fcfc18af3a40861e223a78f44a48faad2e404dd2b349376267a0bdd"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "MM-15",
+        "corpus_record_id": "cr_8b5eba4ae96e52ac6efc97b4",
+        "doi": "10.14527/edure.2024.06",
+        "title": "Evaluation of redundancy effect in multimedia learning environment using EEG signals and eye-tracking",
+        "quote_or_locus": "The findings suggested that the redundancy group demonstrated elevated cognitive load, especially in the frontal and parietal regions, as seen by heightened theta, beta, and gamma wave activity. Conversely, the non-redundancy group exhibited enhanced processing efficiency with less cognitive strain",
+        "source_span": {
+          "start": 904,
+          "end": 1203,
+          "source_text_sha256": "9b007dee6a2488e9542b09fffb75cf4357786287aceaf7201b4062d5cece5db5"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "MM-15",
+        "corpus_record_id": "cr_0485aaea69be8ac0f3c0300e",
+        "effect_id": "mm15-modality-effect",
+        "title": "Cognitive principles of multimedia learning: The role of modality and contiguity.",
+        "quote_or_locus": "The modality effect, which suggests that pictures are best accompanied by audio explanations rather than text, has not been consistently replicated in computing education.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.55
+  },
+  "provenance": [
+    {
+      "mechanism_id": "MM-15",
+      "corpus_record_id": "cr_3b4035d25640cd954fd82a43",
+      "doi": "10.1017/cbo9781139547369.013",
+      "title": "The Redundancy Principle in Multimedia Learning",
+      "quote_or_locus": "Eliminating such redundant information removes the requirement to coordinate multiple sources of information. Accordingly, instructional designs that eliminate redundant material can be superior to those that include redundancy",
+      "source_span": {
+        "start": 463,
+        "end": 690,
+        "source_text_sha256": "0743c95d4fcfc18af3a40861e223a78f44a48faad2e404dd2b349376267a0bdd"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "MM-15",
+      "corpus_record_id": "cr_8b5eba4ae96e52ac6efc97b4",
+      "doi": "10.14527/edure.2024.06",
+      "title": "Evaluation of redundancy effect in multimedia learning environment using EEG signals and eye-tracking",
+      "quote_or_locus": "The findings suggested that the redundancy group demonstrated elevated cognitive load, especially in the frontal and parietal regions, as seen by heightened theta, beta, and gamma wave activity. Conversely, the non-redundancy group exhibited enhanced processing efficiency with less cognitive strain",
+      "source_span": {
+        "start": 904,
+        "end": 1203,
+        "source_text_sha256": "9b007dee6a2488e9542b09fffb75cf4357786287aceaf7201b4062d5cece5db5"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "MM-15",
+      "corpus_record_id": "cr_0485aaea69be8ac0f3c0300e",
+      "effect_id": "mm15-modality-effect",
+      "title": "Cognitive principles of multimedia learning: The role of modality and contiguity.",
+      "quote_or_locus": "The modality effect, which suggests that pictures are best accompanied by audio explanations rather than text, has not been consistently replicated in computing education.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.55,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31480689996",
+  "proposed_at": "2026-08-11T10:06:23.420Z",
+  "status": "approved",
+  "hold_reason": null,
+  "decided_by": "owner",
+  "decided_at": "2026-08-11T11:09:54.647Z",
+  "decision_note": "Narrowed before approval for consistency with the view-count decision: this pattern hid on-screen text by default whenever narration plays (default_hidden_state), which removes the text channel for deaf and hard-of-hearing users — the same MM-15 accessibility_preserved hazard (severity block), reached by a different route. Scoped to text duplicating the audio narration, with an explicit exclusion for any text serving an accessibility function. The existing auto-re-enable and user control were mitigations, not a substitute for the exclusion."
+}

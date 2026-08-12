@@ -298,8 +298,12 @@ export const REVERSAL_MARKERS: readonly ReversalMarker[] = [
 /**
  * Words too common to establish that two sentences are about the same thing.
  * Short tokens are dropped by length, so this only needs the frequent long ones.
+ *
+ * Exported for lib/review-flags.ts, whose PATTERN CARRIES ANCHOR DOMAIN check
+ * asks the same question of a different pair of texts: which shared words mean
+ * the two are about the same thing. A second copy of this list would drift.
  */
-const OVERLAP_STOPWORDS = new Set([
+export const OVERLAP_STOPWORDS = new Set([
   "also",
   "been",
   "both",

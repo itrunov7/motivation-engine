@@ -74,9 +74,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:43:12.101Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.239Z",
+  "decision_note": "NOT_TRANSFERABLE — the third-variable/reverse-causation critique of the illusory truth effect (truth causes fluency, not the reverse); a methodological caveat on illusory-truth-effect-fluency-based, not an independent actionable finding.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: reword claims in simple, clear phrasing — names a manipulable variable: reword claims in simple, clear phrasing — Processing fluency can be raised via simpler wording, formatting, or repeated exposure on screen.",
+        "identified_lever": "reword claims in simple, clear phrasing"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (than)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

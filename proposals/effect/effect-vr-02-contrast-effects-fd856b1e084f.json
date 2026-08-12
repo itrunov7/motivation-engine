@@ -48,9 +48,41 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30819649520",
   "proposed_at": "2026-08-03T13:48:52.603Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.208Z",
+  "decision_note": "Rejected as instructed. Note for the record: this one is NOT actually an fMRI/neural finding (its boundary is behavioral — reinforcement schedules) so the collective 'neural correlates' framing given for the other three does not literally describe it. Content-grounded rationale instead: it describes a comparative, multi-component reinforcement-schedule interaction (responding in one component depends on rates in OTHER components) rather than a single actionable lever, and its lever overlaps the approved dopamine-reward-prediction-error-sig without adding a distinct mechanism.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: vary reward/feedback rate across different app sections — names a manipulable variable: vary reward/feedback rate across different app sections — Contrast effect: relative reward rates across contexts shift engagement, controllable via reward timing/display.",
+        "identified_lever": "vary reward/feedback rate across different app sections"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "states a structural relation (is influenced by) but no direction — a path is not an instruction"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

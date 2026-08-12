@@ -7,7 +7,7 @@
     "mechanism_id": "EN-03",
     "name": "Mere Ownership Effect",
     "fact": "The mere ownership effect, where object preference changes following an ownership manipulation, is predicted by activity in the medial prefrontal cortex (MPFC).",
-    "grade": "A-",
+    "grade": "B",
     "source": [
       "10.1016/j.jesp.2020.104005",
       "10.1037/0022-3514.62.2.229",
@@ -68,7 +68,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 3 independent source(s), original model-asserted grade A- -> capped to B."
   },
   "provenance": [
     {
@@ -128,9 +129,41 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:38:01.060Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.684Z",
+  "decision_note": "Approved under mechanical grade cap: 3 source(s), A- -> B.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: label or frame item as 'yours' before choice — names a manipulable variable: label or frame item as 'yours' before choice — UI can invoke ownership framing to boost preference via mere ownership effect.",
+        "identified_lever": "label or frame item as 'yours' before choice"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

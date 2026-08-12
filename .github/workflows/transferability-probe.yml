@@ -104,6 +104,20 @@ jobs:
             2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
+      # The model's own answers, so a scoring comparison does not have to be
+      # hand-parsed out of this log. Uploaded rather than committed: it is one
+      # run's output against one queue at one moment. `always()` because a probe
+      # that died half way still asked the model everything it asked, and those
+      # answers are already paid for.
+      - name: Upload the captured model answers
+        if: always() && inputs.dry_run != true
+        uses: actions/upload-artifact@v4
+        with:
+          name: transferability-answers
+          path: transferability-answers.json
+          if-no-files-found: warn
+          retention-days: 14
+
       # Runs whether or not the probe succeeded: a probe that died half way has
       # still spent what it spent, and the monthly cap only ever sees what a
       # committed manifest records (D-099). The probe writes its accounting

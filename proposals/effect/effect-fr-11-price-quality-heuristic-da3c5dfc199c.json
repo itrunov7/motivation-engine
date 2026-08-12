@@ -48,9 +48,41 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30819868396",
   "proposed_at": "2026-08-03T13:51:28.839Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.581Z",
+  "decision_note": "NOT_TRANSFERABLE — framed as a principle specific to the beauty services industry ('used in the beauty services industry to construct an impression of value'); reads as reverse-engineered from one industry case rather than a general price-quality finding.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: displayed price level signaling quality — names a manipulable variable: displayed price level signaling quality — UI can show higher price to imply quality, shaping value perception.",
+        "identified_lever": "displayed price level signaling quality"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

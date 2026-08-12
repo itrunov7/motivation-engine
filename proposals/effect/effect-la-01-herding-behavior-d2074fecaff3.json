@@ -48,9 +48,41 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30819464753",
   "proposed_at": "2026-08-03T13:46:21.792Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.540Z",
+  "decision_note": "MIS_ANCHORED — herding behavior is SP-08 (social proof), not LA-01 (loss aversion). Not decided as an SP-08 claim here; re-file under SP-08 if pursued.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show count of other users' choices — names a manipulable variable: show count of other users' choices — Herding relies on visibility of others' actions; UI can display popularity or peer counts.",
+        "identified_lever": "show count of other users' choices"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

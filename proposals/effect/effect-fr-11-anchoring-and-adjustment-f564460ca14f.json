@@ -6,8 +6,8 @@
     "id": "fr-11-01",
     "mechanism_id": "FR-11",
     "name": "Anchoring and adjustment",
-    "fact": "The anchoring and adjustment heuristic describes a process where individuals make initial judgments based on an anchor and then adjust from that point, often serving as a fundamental mechanism for inferential work.",
-    "grade": "A",
+    "fact": "The anchoring and adjustment heuristic describes the process by which the mind does virtually all of its inferential work: nonconscious systems produce fast, low-evidence judgments, which consciousness then slowly and deliberately adjusts.",
+    "grade": "C+",
     "source": [
       "10.1017/cbo9780511808098.011"
     ],
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A -> capped to C+."
   },
   "provenance": [
     {
@@ -48,9 +49,41 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:38:25.744Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.754Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A -> C+. OVERREACH: narrowed fact to what the cited span supports, removing the specific \"initial judgments based on an anchor... adjust from that point\" framing — the cited span describes general dual-process inference (fast nonconscious judgment, then slow deliberate adjustment), not a numeric-anchor-specific claim; replaced with the span's own language.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show a high reference price/number first — names a manipulable variable: show a high reference price/number first — names a manipulable variable: show a high reference price/number first — Product can display an initial anchor value before user adjusts estimate or choice.",
+        "identified_lever": "show a high reference price/number first"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

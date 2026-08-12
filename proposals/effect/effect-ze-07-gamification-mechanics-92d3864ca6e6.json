@@ -6,8 +6,8 @@
     "id": "ze-07-01",
     "mechanism_id": "ZE-07",
     "name": "Gamification mechanics",
-    "fact": "Gamification mechanics can support positive affect, motivation, behavior change, and learning by illustrating goals, nudging users, providing immediate feedback, reinforcing performance, and simplifying content.",
-    "grade": "B+",
+    "fact": "Gamification mechanics can illustrate goals and their relevance, nudge users through guided paths, provide immediate feedback, reinforce good performance, and simplify content to manageable tasks.",
+    "grade": "C+",
     "source": [
       "10.1016/j.chb.2021.106963"
     ],
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade B+ -> capped to C+."
   },
   "provenance": [
     {
@@ -48,9 +49,41 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:41:42.705Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.429Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), B+ -> C+. OVERREACH: narrowed fact to what the cited span supports, removing the claimed OUTCOMES (\"support positive affect, motivation, behavior change, and learning\") — the span lists mechanisms/actions, not these outcome claims.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: progress bar with immediate feedback on actions — names a manipulable variable: progress bar with immediate feedback on actions — names a manipulable variable: progress bar with immediate feedback on actions — Gamification mechanics map directly to UI elements: goal display, feedback, progress tracking.",
+        "identified_lever": "progress bar with immediate feedback on actions"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

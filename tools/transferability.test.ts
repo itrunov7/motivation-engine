@@ -32,10 +32,12 @@ import {
   describeTransferability,
   judgeTransferability,
   judgeTransferabilityV2,
+  judgeTransferabilityV3,
   parseVariableJudgement,
   replayTransferability,
   transferabilityClaimOfProposal,
   variableCheckFromJudgement,
+  type TransferabilityClaim,
   TRANSFERABILITY_RULESET_VERSION,
   TRANSFERABILITY_RULESET_VERSION_V2,
 } from "../lib/transferability";
@@ -512,6 +514,79 @@ test("replayTransferability audits a v2 verdict offline instead of re-calling th
   );
 });
 
+test("replayTransferability audits a v3 verdict and catches tampering with its scoring or modifiers", () => {
+  const claim = transferabilityClaimOfProposal(loadProposal(OWNER_VERDICTS[0].id));
+  assert.ok(claim);
+  const judgement: VariableJudgement = {
+    transferable: true,
+    lever: "count of other users who did X",
+    reason: "a social count can be shown on any surface",
+  };
+  const stored = judgeTransferabilityV3(claim, judgement);
+
+  // The wiring this test exists to protect: before v3 was adopted,
+  // replayTransferability returned "stored under unrecognised ruleset v3" and
+  // tools/validate.ts turned that into a build failure, so any persisted v3
+  // verdict would have failed validation forever.
+  assert.equal(replayTransferability(stored, claim), null);
+
+  // Under v3 the lever alone decides, so a verdict claiming to be refused while
+  // VARIABLE passed disagrees with its own checks.
+  assert.ok(
+    replayTransferability({ ...stored, transferable: false }, claim),
+    "a v3 verdict that disagrees with its own VARIABLE check must not replay",
+  );
+
+  // v3 has no escalation path at all, so a true here means something other than
+  // scoreChecksV3 wrote the verdict.
+  assert.ok(
+    replayTransferability({ ...stored, escalated_by_warning_pair: true }, claim),
+    "a v3 verdict cannot have escalated by a warning pair",
+  );
+
+  // Dropping a modifier would hide exactly the signal v3 was created to keep
+  // visible on an admitted claim. Asserted on a claim that actually flags one:
+  // this is the shape v3 exists for — a lever named, the claim admitted, and
+  // the deterministic objections recorded instead of silently refusing it.
+  // Under v2 this same claim was refused; the modifiers are what is left of
+  // that refusal.
+  const flagging: TransferabilityClaim = {
+    fact:
+      "The unfinishedness of events is spontaneously extracted and prioritized " +
+      "in visual processing.",
+    boundary: "Replicability has been challenged.",
+    source_title: "A Visual Zeigarnik Effect",
+  };
+  const flagged = judgeTransferabilityV3(flagging, {
+    transferable: true,
+    lever: "show progress as an incomplete path",
+    reason: "a progress indicator can render a path as unfinished",
+  });
+  assert.ok(flagged.transferable, "a named lever admits the claim under v3");
+  assert.ok(
+    (flagged.modifiers_flagged ?? []).length > 0,
+    "this claim must flag at least one modifier or it cannot test them",
+  );
+  assert.equal(replayTransferability(flagged, flagging), null);
+  assert.ok(
+    replayTransferability({ ...flagged, modifiers_flagged: [] }, flagging),
+    "modifiers_flagged must match the checks that did not pass",
+  );
+
+  // The deterministic checks are still recomputed and compared exactly, as
+  // under v2 — v3 removed their power to refuse, not their auditability.
+  const brokenSubject = {
+    ...stored,
+    checks: stored.checks.map((check) =>
+      check.check === "subject" ? { ...check, outcome: "fail" as const } : check,
+    ),
+  };
+  assert.ok(
+    replayTransferability(brokenSubject, claim),
+    "drift in a deterministic check must still fail loud under v3",
+  );
+});
+
 test("buildVariablePrompt reads only the claim's three fields and asks for a lever or null", () => {
   const prompt = buildVariablePrompt({
     fact: "Scarcity cues increase impulse buying.",
@@ -764,20 +839,50 @@ test("the probe cannot write: its read-only claim is checked, not just stated", 
       `transferability-probe.ts must not write — found ${primitive}`,
     );
   }
-  // The one permitted primitive, used once, and only on the manifest. A second
-  // writeFileSync — or a first one pointed anywhere else — is a new write
-  // capability and has to be argued for, not inherited from this one.
+  // TWO permitted writes, each pinned to its own named constant. The second was
+  // opened deliberately, as this test requires: the probe captures the model's
+  // answers so a scoring comparison can be re-derived by running a committed
+  // script instead of hand-parsing an Actions log. A THIRD writeFileSync — or
+  // either of these pointed somewhere else — is a new capability and has to be
+  // argued for, not inherited from these.
   const writes = source.match(/writeFileSync\(/g) ?? [];
-  assert.equal(writes.length, 1, "the probe writes exactly one file");
+  assert.equal(writes.length, 2, "the probe writes exactly two files");
   assert.match(
     source,
     /writeFileSync\(\s*MANIFEST_FILE,/,
-    "the probe's only write must target the extraction manifest",
+    "the probe's spend write must target the extraction manifest",
   );
   assert.match(
     source,
     /const MANIFEST_FILE = join\(ROOT, "corpora", "extraction", "manifest\.json"\)/,
     "MANIFEST_FILE must be the extraction manifest and nothing else",
+  );
+  assert.match(
+    source,
+    /writeFileSync\(\s*ANSWERS_FILE,/,
+    "the probe's answers write must target the answers artifact",
+  );
+  assert.match(
+    source,
+    /const ANSWERS_FILE = join\(ROOT, "transferability-answers\.json"\)/,
+    "ANSWERS_FILE must be the run artifact at the repo root and nothing else",
+  );
+  // The guarantee that actually matters, and the one the probe's whole standing
+  // rests on: it does not touch the queue it is measuring. Neither destination
+  // may point into proposals/, whatever else changes about them.
+  for (const constant of ["MANIFEST_FILE", "ANSWERS_FILE"]) {
+    const declaration = source.match(new RegExp(`const ${constant} = [^;]+;`))?.[0] ?? "";
+    assert.ok(
+      !declaration.includes('"proposals"'),
+      `${constant} must never resolve inside proposals/`,
+    );
+  }
+  // A run artifact, not a corpus record. If it were ever committed, one run's
+  // snapshot would start reading as a source.
+  assert.match(
+    readFileSync(join(ROOT, ".gitignore"), "utf8"),
+    /^\/transferability-answers\.json$/m,
+    "the answers artifact must be gitignored",
   );
   // Off by default: the write happens only when the caller asks for it, so a
   // local probe stays the read-only measurement it has always been.

@@ -419,6 +419,15 @@ test("an inferred realization cannot be approved before the effect it transfers 
     assert.equal(record.domain_transfer.application_domain, "product UI");
     assert.match(record.pattern, /^Collapse the fixture panel/);
     assert.equal(record.parameters[0].evidence_basis, "none — default heuristic");
+
+    // D-347: effect_refs points realization -> effect; approval must also
+    // write the reverse link, or the two-directional invariant
+    // validateMechanismReferences enforces ("Realization {id} must link back
+    // to effect {eid}") would be checking a link nothing ever created.
+    const updatedEffect = JSON.parse(
+      await readFile(join(root, `effects/LA-01/${effectId}.json`), "utf8"),
+    ) as { realization_ids: string[] };
+    assert.deepEqual(updatedEffect.realization_ids, ["inferred-transfer"]);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

@@ -1,0 +1,90 @@
+{
+  "id": "realization-cl-14-integrated-task-presentation-a1760110a64f",
+  "type": "realization",
+  "target": "CL-14",
+  "payload": {
+    "id": "integrated-task-presentation",
+    "mechanism_id": "CL-14",
+    "term": "Integrated Task Presentation",
+    "description_as_reported": "Under favorable organizational conditions, technology increases efficiency, reduces cognitive load, and enables greater work flexibility, which promotes role enrichment and resource accumulation.",
+    "artifact_context": [
+      "onboarding",
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "cl-14-01"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "work-life balance in organizations",
+      "application_domain": "product UI"
+    },
+    "pattern": "Consolidate related task instructions and interactive elements into a single view once the user has performed {interaction_count} actions to prevent split-attention.",
+    "parameters": [
+      {
+        "name": "interaction_count",
+        "value": 3,
+        "unit": "actions",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_f5d02676e6d7ceb9f7654166",
+        "doi": "10.29119/1641-3466.2026.242.32",
+        "title": "The impact of artificial intelligence on work-life balance in organizations",
+        "quote_or_locus": "Under favorable organizational conditions, technology increases efficiency, reduces cognitive load, and enables greater work flexibility, which promotes role enrichment and resource accumulation",
+        "source_span": {
+          "start": 930,
+          "end": 1124,
+          "source_text_sha256": "c355cbf885e63a5e9423dcceb71788380e04813744a80e5f884db2296f5eecb0"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+        "effect_id": "cl-14-01",
+        "title": "Cognitive load and the imagination effect",
+        "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.6
+  },
+  "provenance": [
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_f5d02676e6d7ceb9f7654166",
+      "doi": "10.29119/1641-3466.2026.242.32",
+      "title": "The impact of artificial intelligence on work-life balance in organizations",
+      "quote_or_locus": "Under favorable organizational conditions, technology increases efficiency, reduces cognitive load, and enables greater work flexibility, which promotes role enrichment and resource accumulation",
+      "source_span": {
+        "start": 930,
+        "end": 1124,
+        "source_text_sha256": "c355cbf885e63a5e9423dcceb71788380e04813744a80e5f884db2296f5eecb0"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+      "effect_id": "cl-14-01",
+      "title": "Cognitive load and the imagination effect",
+      "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.6,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31108569730",
+  "proposed_at": "2026-08-06T13:59:47.983Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

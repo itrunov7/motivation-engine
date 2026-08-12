@@ -48,9 +48,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:38:25.744Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.544Z",
+  "decision_note": "MIS_ANCHORED — this claim belongs to EN-03 (endowment effect), already covered by the approved effect-en-03-endowment-effect-b5ef6d9f7ef8. FR-11 is framing and anchoring, not the endowment effect itself.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "people (consumer) but no artifact and no named setting — the subject is a person in the abstract"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show product as already yours (my cart/my item) — names a manipulable variable: show product as already yours (my cart/my item) — Perceived possession can be triggered via UI framing like ownership language or virtual try-on before purchase.",
+        "identified_lever": "show product as already yours (my cart/my item)"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (than)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

@@ -1,0 +1,2874 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-06T13:08:51.559Z",
+  "dispatch_id": "cl14-refix-run-1",
+  "github_run_id": 31104524768,
+  "mode": "realizations",
+  "written_at": "2026-08-06T13:11:20.881Z",
+  "rejected": [
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "span_role_not_finding",
+      "detail": "no citation carried span_role=finding, so the item rests on background, hypothesis, method or limitation spans alone — none of which report what a source observed (D-129)",
+      "corpus_record_id": "cr_835cf506c0e8ed0e0fe38ed1",
+      "item": {
+        "id": "pattern_001",
+        "term": "Interactive Hotspot Highlighting",
+        "description_as_reported": "The split-attention principle states that when designing instruction, including multimedia instruction, it is important to avoid formats that require learners to split their attention between, and mentally integrate, multiple sources of information. Instead, materials should be formatted so that disparate sources of information are physically and temporally integrated thus obviating the need for learners to engage in mental integration.",
+        "pattern": "Implement {hotspot_activation_delay} to trigger a visual highlight on the corresponding diagram element when a user hovers over a text label, ensuring the information is physically integrated.",
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "onboarding",
+          "dashboard_widget"
+        ],
+        "confidence": 0.75,
+        "citations": [
+          {
+            "record_id": "cr_835cf506c0e8ed0e0fe38ed1",
+            "quote_or_locus": "Instead, materials should be formatted so that disparate sources of information are physically and temporally integrated thus obviating the need for learners to engage in mental integration.",
+            "span_role": "background"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_835cf506c0e8ed0e0fe38ed1",
+          "quote_or_locus": "Instead, materials should be formatted so that disparate sources of information are physically and temporally integrated thus obviating the need for learners to engage in mental integration.",
+          "span_role": "background"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "premise_contradicted_downstream",
+      "detail": "span_role=finding asserted for a span the same source later reverses: marker opposite matched \"opposite\" in \"What is unclear from the superficially opposite conclusions of the two studies is whether the superiority of the multiple-views/active-control group in the second study derives from active learning, or whether students actually gained information from “wiggling” the views around the canonical presentations to detect the depths of the objects, while not losing the straight-on presentation.\", sharing canonical, conclusion, multiple, student, view with the quote (D-129) — record cr_313903e0aac9a910e0e6fa9e",
+      "corpus_record_id": "cr_313903e0aac9a910e0e6fa9e",
+      "item": {
+        "id": "pattern_001",
+        "term": "Guided Interaction Anchoring",
+        "description_as_reported": "When presented in a fixed sequence, multiple views had a small advantage over p/a views for high-spatial-ability students, but a disadvantage for low-ability students. This conclusion is consistent with the self-reports that, when presented with an oblique orientation, students mentally rotate back to the canonical form, with a consequent increase in cognitive load and reduction of performance.",
+        "pattern": "Display the primary interface element in a {canonical_orientation} state by default, and only allow the user to rotate or manipulate the view once they have engaged with the element for {engagement_duration} seconds.",
+        "source_domain": "medical education",
+        "artifact_context": [
+          "dashboard_widget"
+        ],
+        "confidence": 0.6,
+        "citations": [
+          {
+            "record_id": "cr_313903e0aac9a910e0e6fa9e",
+            "quote_or_locus": "When presented in a fixed sequence, multiple views had a small advantage over p/a views for high-spatial-ability students, but a disadvantage for low-ability students. This conclusion is consistent with the self-reports that, when presented with an oblique orientation, students mentally rotate back to the canonical form, with a consequent increase in cognitive load and reduction of performance.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_313903e0aac9a910e0e6fa9e",
+          "quote_or_locus": "When presented in a fixed sequence, multiple views had a small advantage over p/a views for high-spatial-ability students, but a disadvantage for low-ability students. This conclusion is consistent with the self-reports that, when presented with an oblique orientation, students mentally rotate back to the canonical form, with a consequent increase in cognitive load and reduction of performance.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "When presented in a fixed sequence, multiple views had a small advantage over p/a views for high-spatial-ability students, but a disadvantage for low-ability students. This conclusion is consistent with the self-reports that, when presented with an oblique orientation, students mentally rotate back to the canonical form, with a consequent increase in cognitive load and reduction of performance.",
+        "quote_normalized": "when presented in a fixed sequence multiple views had a small advantage over p a views for high spatial ability students but a disadvantage for low ability students this conclusion is consistent with the self reports that when presented with an oblique orientation students mentally rotate back to the canonical form with a consequent increase in cognitive load and reduction of performance",
+        "source_raw": "Is There Any Real Virtue of Virtual Reality?\nAccurate three-dimensional (3D) computer anatomical models have been proliferating as a consequence of the availability of digital resources derived either from mapping the surface of real objects (such as the human skeleton) or by tracing out regions of interest from images of serial slices of the human body. Such models would appear to have obvious educational advantages over the standard three-view book presentation, since the learner can control the position of the object just as if it were a real 3D object in his or her hands. Surprisingly, these advantages may be more imagined than real. Implicitly, these models assume that the learner can accurately assimilate and remember spatial information from multiple view-points. However, some evidence suggests that humans actually synthesize spatial information presented in oblique orientations by first rotating back to a standard (top, side, front) view, then learning the visual information.1 If so, presenting information in multiple orientations may place a heavy load on the individual's ability to rotate the figure. This load will be seen most acutely in those with relatively poorer spatial ability, since mental rotation is a critical element of spatial ability.2 Consequently, studying projections of a 3D object in an orientation in which an object is best visualized and least obscured (called canonical or key viewpoints) may be all that is necessary. Once learned, the object in memory can be mentally rotated to enable recognition of new objects. This hypothesis was borne out in the first of a series of studies,3 which contrasted one group where wrist-bone anatomy was presented in multiple views rotating at 15° increments every 20 seconds (the multiple-view group) with a second group that saw only the palmar and dorsal, posterior/anterior (p/a) views for the same time (the key-view group). The test was based on presentations of a skin-covered wrist in rotated positions, with an arrow pointing to a particular bone that was to be identified. All the rotated positions had been seen by the multiple-view group during learning. The multiple-view presentation had a small benefit for learners with good spatial ability, but it substantially handicapped learners with poor spatial ability. Anecdotal evidence from this study showed that participants in the multiple-view group were using a strategy of memorizing key views; 88% reported that they first mentally rotated the image to a standard position, then memorized the names. To confirm the self-reported strategy of mental rotation and memorizing key views empirically, a second study4 allowed students in one group to control the presentation through multiple views, while those in the control group were restricted to controlling the object in either of the p/a views. Consistent with the post-hoc observations of the first study, learners spent most of their time examining the anterior and posterior views, with small variation around these key views. In this study, there was a small advantage for the multiple-view presentation, although the strategy adopted by the group amounted to spending most of the time on key views, with a significant but small variation around the 0° and 180° presentations. Although this might be interpreted as evidence of the superiority of active learning, an alternative explanation is that, consistent with theory, participants extracted most information from the key views, but deliberately induced a small “wiggle” around the key view to gain some sense of the third dimension. Both these studies are notable in that they controlled for many of the confounding variables that plague studies comparing media. All presentations and tests were done on the computer for both groups, time of presentation was controlled, adjustment was made for spatial ability, and the test was consistent with the instruction. They lead to two conclusions: (1) When presented in a fixed sequence, multiple views had a small advantage over p/a views for high-spatial-ability students, but a disadvantage for low-ability students. This conclusion is consistent with the self-reports that, when presented with an oblique orientation, students mentally rotate back to the canonical form, with a consequent increase in cognitive load and reduction of performance. (2) When learners can control the presentation, they consistently perform better than do students who have only p/a views, but actually spend most of the time at or near the standard orientations. What is unclear from the superficially opposite conclusions of the two studies is whether the superiority of the multiple-views/active-control group in the second study derives from active learning, or whether students actually gained information from “wiggling” the views around the canonical presentations to detect the depths of the objects, while not losing the straight-on presentation. The present study addressed this question by permitting both groups to have active control over the orientation, but in one group, it was restricted to ±10° around the key views; in the other, it is unconstrained. Method Study Design The design was a two-group design with three repeated measures (performance on the test at three occasions) and multiple covariates (described below). Subjects Eighty-seven first-year medical students were randomized in a single-blind fashion to either a multiple-view (MV) group, where students could study the model by positioning it in any of 36 possible angles of rotation, or a key-view and wiggle (KV+W) group, in which they could control six views near 0° and 180° on computer workstations. The study was conducted during orientation week in a two-hour period. All students gave informed consent. Materials The carpal bones were chosen as the object of study because they represent a spatially complex area, and understanding their relationships to the skin is important in the examination and treatment of fractures. The MV and KV+W models were identical in all respects except in the number of viewing angles from which the model could be seen. The MV model was capable of rotating horizontally under subject control in a complete circle at 10° intervals, for a possible 36 different viewing angles. The KV+W model under subject control rotated only 10° on either side of the 0° and 180° views, for a possible six different viewing angles. The hand model was created in 3D modeling and rendering software, using commercial wireframes from Viewpoint Data Labs and Curious Labs. Procedures Students viewed the skeletal hand on three successive occasions (set 1, set 2, set 3) for three minutes each in a single session. Students in the MV group had complete control over the horizontal orientation of the model using the mouse; the computer recorded each increment so that the amount of time spent on each view was recorded. Students in the KV+W group had control of the six orientations around 0° and 180°. Measurement A number of learner characteristics were documented: Medical College Admission Test percentile results (MCAT Verbal Reasoning, Biological Science Knowledge, Physical Science Knowledge, and Writing Sample), a standardized test of spatial ability (mental block rotation—internal constancy alpha coefficient .88, test—re-test reliability .70,8 prior computer use, use of 3D computer games, gender, and age. Carpal spatial knowledge was measured by 50 multiple-choice questions, which required determination of carpal bone intersections by a pin from various viewing angles. Some of the questions were administered each time the models were used; ten questions after the set 1, and 20 questions after sets 2 and 3. In order to determine whether spatial understanding was achieved for the object as a whole, the questions were described as types “near” and “far” based on proximity to key views. Near questions depicted the hand from the palmar (anterior) aspect (0°) or dorsal (posterior) aspect (180°) ±10° and were identical to viewpoints present in the key view model. Far questions depicted the hand from many different perspectives present in the multiple-view model only. The entire carpal spatial knowledge measure had previously been validated and had an internal consistency alpha coefficient .88.1 A post-test survey was administered to measure the processes by which spatial learning was occurring. Analysis The data were initially analyzed with a repeated-measures ANCOVA, with one grouping factor (KV+W or MV) and six repeated measures (test occasions 1, 2, 3, and “near/far”). Initially, three covariates (play 3D computer games, spatial ability, writing ability) that were significant in univariate tests were included; however, only the spatial ability test was significant in the multivariate analysis. Similarly, although there was a main effect of near/far and test occasion (1,2,3), there were no interactions, so the analysis was repeated with the total test score across all occasions using the spatial ability test as covariate. Results Significant differences in several critical baseline variables were found. Students in the MV group were more likely to play 3D computer games, have higher spatial ability, and have lower writing ability (all p < .05) compared with the KV+W group. In the unadjusted data, the MV group showed a better spatial understanding of the carpal bones than did the KV+W group (see Figure 1, mean difference 6.6%). This difference appeared to be evident for the test overall, on far questions, on near questions, and on all three occasions. From the ANCOVA, there were main effects of near/far (F = 10.82, p < .001) and of test occasion (1,2,3) (F = 13.72, p < .0001). There was a significant effect of spatial ability as a covariate (F = 10.39, p < .002). However, upon controlling for spatial ability, the effect of KV+W versus MV was not significant (F = 1.55, n.s.), suggesting that the observed difference was due to differences in the baseline spatial ability, rather than the experimental manipulation.Figure 1: Accuracies (% correct) for the active control (AC) and key view + wiggle (KV+V) groups on each trial. The difference between the groups was not statistically significant.In the post-test pictorial questionnarie, most of students (88%) claimed that they remembered a key view and rotated this mental image to answer the questions. In the MV group, more time was spent studying viewpoints that were similar to the key views, compared with oblique views (see Figure 2). Moreover, the time spent studying key viewpoints increased over the three times the model was used (paired t-test sets 1 and 3, p = .001).Figure 2: Percentages of time spent on each orientation in the active control (AC) and key vew + wiggle (KV+V) groups. One percent is about equal to two seconds in each of the three exposures.Discussion and Conclusions As in the previous study, students who had control over the entire range of rotations chose to spend the majority of their time examining the key (p/a) views of the wrist, with some small variation around these views, presumably to get some sense of the third (depth) dimension. Moreover, when this strategy was contrasted with a strategy that included only the key views with small variation, there was no advantage of the multiple views (once spatial ability was taken into account). These results support the conclusion that certain key or canonical viewpoints of an object are critically important for spatial learning. Learner control of multiple orientations provided no particular advantage over access to orientations close to the key views. The results also confirm previous findings that a learner's spatial ability is an important predictor of success in learning anatomy. There is one important potential limitation to these studies, which relates to the nature of the stimulus. It is possible that the findings are constrained by the stimulus materials, since the wrist bones fall naturally into two planes. The research should be replicated in other domains where the materials are more volumetric. Taking the three studies together, our conclusion is that the potential for dynamic display of multiple orientations provided by computer-based anatomy software may offer minimal advantage to some learners and, based on previous research, may disadvantage learners with poorer spatial ability. The studies consistently show that most spatial information is gathered from the key views, whether under active or passive control, and time spent seeing the display in other orientations is time removed from essential learning. This conclusion is consistent with theories of mental representation of spatial objects, which suggest that objects are remembered in a canonical or familiar orientation and that unfamiliar orientations are recognized by mental rotation from these key views. Since spatial ability is strongly related to the ability to perform mental rotations, it follows that presenting information in oblique views may handicap, rather than aid, learners with poorer spatial ability. One other empirical finding from this program of research should be noted. The second and third studies suggest that the opportunity to slightly change or wiggle the key-view orientation to permit some interpretation of the third dimension, without distracting from the canonical view, may be an optimal strategy for learning 3D objects.",
+        "source_normalized": "is there any real virtue of virtual reality accurate three dimensional 3d computer anatomical models have been proliferating as a consequence of the availability of digital resources derived either from mapping the surface of real objects such as the human skeleton or by tracing out regions of interest from images of serial slices of the human body such models would appear to have obvious educational advantages over the standard three view book presentation since the learner can control the position of the object just as if it were a real 3d object in his or her hands surprisingly these advantages may be more imagined than real implicitly these models assume that the learner can accurately assimilate and remember spatial information from multiple view points however some evidence suggests that humans actually synthesize spatial information presented in oblique orientations by first rotating back to a standard top side front view then learning the visual information 1 if so presenting information in multiple orientations may place a heavy load on the individual s ability to rotate the figure this load will be seen most acutely in those with relatively poorer spatial ability since mental rotation is a critical element of spatial ability 2 consequently studying projections of a 3d object in an orientation in which an object is best visualized and least obscured called canonical or key viewpoints may be all that is necessary once learned the object in memory can be mentally rotated to enable recognition of new objects this hypothesis was borne out in the first of a series of studies 3 which contrasted one group where wrist bone anatomy was presented in multiple views rotating at 15 increments every 20 seconds the multiple view group with a second group that saw only the palmar and dorsal posterior anterior p a views for the same time the key view group the test was based on presentations of a skin covered wrist in rotated positions with an arrow pointing to a particular bone that was to be identified all the rotated positions had been seen by the multiple view group during learning the multiple view presentation had a small benefit for learners with good spatial ability but it substantially handicapped learners with poor spatial ability anecdotal evidence from this study showed that participants in the multiple view group were using a strategy of memorizing key views 88 reported that they first mentally rotated the image to a standard position then memorized the names to confirm the self reported strategy of mental rotation and memorizing key views empirically a second study4 allowed students in one group to control the presentation through multiple views while those in the control group were restricted to controlling the object in either of the p a views consistent with the post hoc observations of the first study learners spent most of their time examining the anterior and posterior views with small variation around these key views in this study there was a small advantage for the multiple view presentation although the strategy adopted by the group amounted to spending most of the time on key views with a significant but small variation around the 0 and 180 presentations although this might be interpreted as evidence of the superiority of active learning an alternative explanation is that consistent with theory participants extracted most information from the key views but deliberately induced a small wiggle around the key view to gain some sense of the third dimension both these studies are notable in that they controlled for many of the confounding variables that plague studies comparing media all presentations and tests were done on the computer for both groups time of presentation was controlled adjustment was made for spatial ability and the test was consistent with the instruction they lead to two conclusions 1 when presented in a fixed sequence multiple views had a small advantage over p a views for high spatial ability students but a disadvantage for low ability students this conclusion is consistent with the self reports that when presented with an oblique orientation students mentally rotate back to the canonical form with a consequent increase in cognitive load and reduction of performance 2 when learners can control the presentation they consistently perform better than do students who have only p a views but actually spend most of the time at or near the standard orientations what is unclear from the superficially opposite conclusions of the two studies is whether the superiority of the multiple views active control group in the second study derives from active learning or whether students actually gained information from wiggling the views around the canonical presentations to detect the depths of the objects while not losing the straight on presentation the present study addressed this question by permitting both groups to have active control over the orientation but in one group it was restricted to 10 around the key views in the other it is unconstrained method study design the design was a two group design with three repeated measures performance on the test at three occasions and multiple covariates described below subjects eighty seven first year medical students were randomized in a single blind fashion to either a multiple view mv group where students could study the model by positioning it in any of 36 possible angles of rotation or a key view and wiggle kv w group in which they could control six views near 0 and 180 on computer workstations the study was conducted during orientation week in a two hour period all students gave informed consent materials the carpal bones were chosen as the object of study because they represent a spatially complex area and understanding their relationships to the skin is important in the examination and treatment of fractures the mv and kv w models were identical in all respects except in the number of viewing angles from which the model could be seen the mv model was capable of rotating horizontally under subject control in a complete circle at 10 intervals for a possible 36 different viewing angles the kv w model under subject control rotated only 10 on either side of the 0 and 180 views for a possible six different viewing angles the hand model was created in 3d modeling and rendering software using commercial wireframes from viewpoint data labs and curious labs procedures students viewed the skeletal hand on three successive occasions set 1 set 2 set 3 for three minutes each in a single session students in the mv group had complete control over the horizontal orientation of the model using the mouse the computer recorded each increment so that the amount of time spent on each view was recorded students in the kv w group had control of the six orientations around 0 and 180 measurement a number of learner characteristics were documented medical college admission test percentile results mcat verbal reasoning biological science knowledge physical science knowledge and writing sample a standardized test of spatial ability mental block rotation internal constancy alpha coefficient 88 test re test reliability 70 8 prior computer use use of 3d computer games gender and age carpal spatial knowledge was measured by 50 multiple choice questions which required determination of carpal bone intersections by a pin from various viewing angles some of the questions were administered each time the models were used ten questions after the set 1 and 20 questions after sets 2 and 3 in order to determine whether spatial understanding was achieved for the object as a whole the questions were described as types near and far based on proximity to key views near questions depicted the hand from the palmar anterior aspect 0 or dorsal posterior aspect 180 10 and were identical to viewpoints present in the key view model far questions depicted the hand from many different perspectives present in the multiple view model only the entire carpal spatial knowledge measure had previously been validated and had an internal consistency alpha coefficient 88 1 a post test survey was administered to measure the processes by which spatial learning was occurring analysis the data were initially analyzed with a repeated measures ancova with one grouping factor kv w or mv and six repeated measures test occasions 1 2 3 and near far initially three covariates play 3d computer games spatial ability writing ability that were significant in univariate tests were included however only the spatial ability test was significant in the multivariate analysis similarly although there was a main effect of near far and test occasion 1 2 3 there were no interactions so the analysis was repeated with the total test score across all occasions using the spatial ability test as covariate results significant differences in several critical baseline variables were found students in the mv group were more likely to play 3d computer games have higher spatial ability and have lower writing ability all p 05 compared with the kv w group in the unadjusted data the mv group showed a better spatial understanding of the carpal bones than did the kv w group see figure 1 mean difference 6 6 this difference appeared to be evident for the test overall on far questions on near questions and on all three occasions from the ancova there were main effects of near far f 10 82 p 001 and of test occasion 1 2 3 f 13 72 p 0001 there was a significant effect of spatial ability as a covariate f 10 39 p 002 however upon controlling for spatial ability the effect of kv w versus mv was not significant f 1 55 n s suggesting that the observed difference was due to differences in the baseline spatial ability rather than the experimental manipulation figure 1 accuracies correct for the active control ac and key view wiggle kv v groups on each trial the difference between the groups was not statistically significant in the post test pictorial questionnarie most of students 88 claimed that they remembered a key view and rotated this mental image to answer the questions in the mv group more time was spent studying viewpoints that were similar to the key views compared with oblique views see figure 2 moreover the time spent studying key viewpoints increased over the three times the model was used paired t test sets 1 and 3 p 001 figure 2 percentages of time spent on each orientation in the active control ac and key vew wiggle kv v groups one percent is about equal to two seconds in each of the three exposures discussion and conclusions as in the previous study students who had control over the entire range of rotations chose to spend the majority of their time examining the key p a views of the wrist with some small variation around these views presumably to get some sense of the third depth dimension moreover when this strategy was contrasted with a strategy that included only the key views with small variation there was no advantage of the multiple views once spatial ability was taken into account these results support the conclusion that certain key or canonical viewpoints of an object are critically important for spatial learning learner control of multiple orientations provided no particular advantage over access to orientations close to the key views the results also confirm previous findings that a learner s spatial ability is an important predictor of success in learning anatomy there is one important potential limitation to these studies which relates to the nature of the stimulus it is possible that the findings are constrained by the stimulus materials since the wrist bones fall naturally into two planes the research should be replicated in other domains where the materials are more volumetric taking the three studies together our conclusion is that the potential for dynamic display of multiple orientations provided by computer based anatomy software may offer minimal advantage to some learners and based on previous research may disadvantage learners with poorer spatial ability the studies consistently show that most spatial information is gathered from the key views whether under active or passive control and time spent seeing the display in other orientations is time removed from essential learning this conclusion is consistent with theories of mental representation of spatial objects which suggest that objects are remembered in a canonical or familiar orientation and that unfamiliar orientations are recognized by mental rotation from these key views since spatial ability is strongly related to the ability to perform mental rotations it follows that presenting information in oblique views may handicap rather than aid learners with poorer spatial ability one other empirical finding from this program of research should be noted the second and third studies suggest that the opportunity to slightly change or wiggle the key view orientation to permit some interpretation of the third dimension without distracting from the canonical view may be an optimal strategy for learning 3d objects"
+      },
+      "corpus_side": {
+        "doi": "10.1097/00001888-200210001-00030",
+        "title": "Is There Any Real Virtue of Virtual Reality?"
+      }
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "doi_unresolved",
+      "detail": "DOI does not resolve for cr_54aaba1894e9b70d403f05b8",
+      "corpus_record_id": "cr_54aaba1894e9b70d403f05b8",
+      "item": {
+        "id": "pattern_002",
+        "term": "Socratic Scaffolding",
+        "description_as_reported": "Longer conversations were slightly negative for absolute beginners but positive for students with prior experience, suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas.",
+        "pattern": "Limit the number of consecutive indirect prompts to {max_indirect_prompts} for users identified as beginners to prevent cognitive overload, switching to direct guidance if the user fails to progress.",
+        "source_domain": "programming education",
+        "artifact_context": [
+          "onboarding"
+        ],
+        "confidence": 0.7,
+        "citations": [
+          {
+            "record_id": "cr_54aaba1894e9b70d403f05b8",
+            "quote_or_locus": "Longer conversations were slightly negative for absolute beginners but positive for students with prior experience, suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_54aaba1894e9b70d403f05b8",
+          "quote_or_locus": "Longer conversations were slightly negative for absolute beginners but positive for students with prior experience, suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "Longer conversations were slightly negative for absolute beginners but positive for students with prior experience, suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas.",
+        "quote_normalized": "longer conversations were slightly negative for absolute beginners but positive for students with prior experience suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas",
+        "source_raw": "Socratic AI Tutors in Introductory Programming\nGenerative AI offers introductory programming students immediate support for debugging, syntax, code explanation, and algorithmic reasoning, but the same tools can also bypass the learning processes that instructors hope to cultivate. This TREO talk presents a mixed-methods learning analytics study of a custom Socratic AI tutor in an introductory Python course. The tutor was designed to withhold completed code and instead provide hints, questions, and reflective prompts grounded in scaffolding, help-seeking, cognitive load, self-efficacy, and self-regulated learning theory (Aleven et al., 2003; Bandura, 1997; Sweller, 1988; Vygotsky & Cole, 1978; Wood et al., 1976). The study links psychometric survey measures of prior programming experience, technical English proficiency, and programming self-efficacy with behavioral features extracted from 95 valid AI-student chat interactions, including user turns, turns to resolution, prompt length, lexical diversity, sentiment, struggle type, and prompting strategy. Findings show that Socratic AI can support productive struggle while also introducing equity-sensitive design challenges. First, results reveal a statistically significant Socratic Gap: prior programming experience moderated the relationship between interaction volume and performance (p = .045). Longer conversations were slightly negative for absolute beginners but positive for students with prior experience, suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas. Second, technical English proficiency strongly predicted interactional efficiency. Each one-point increase in proficiency was associated with approximately 3.18 fewer turns to resolution (r = -.467, p < .001), indicating a linguistic time tax for students who supplied shorter, lower-context prompts. Third, frustration loops were rare: 76 of 95 interactions reflected productive struggle and only two reflected frustration loops, although self-efficacy interacted with sentiment in predicting grades (p = .036). Finally, moderate-difficulty assignments showed a significant decline in user turns across the semester (r = -.341, p = .025), with students requiring about 1.40 fewer turns per comparable assignment block. This pattern suggests that the tutor functioned as a scaffold rather than a crutch, supporting an evolution of learner independence. The study contributes to research on AI-assisted programming education by showing that the pedagogical value of LLM tutors depends not simply on access or usage volume, but on the fit between tutor design and learner characteristics. For educators and designers, the results point to three practical needs: adaptive Socratic strictness for absolute beginners, explicit instruction in high-context prompting, and early monitoring of low-sentiment unresolved sessions. More broadly, the talk argues that transcript-level behavioral evidence is essential for evaluating whether AI tutors promote independence, reinforce dependency, or impose hidden burdens on particular learners.",
+        "source_normalized": "socratic ai tutors in introductory programming generative ai offers introductory programming students immediate support for debugging syntax code explanation and algorithmic reasoning but the same tools can also bypass the learning processes that instructors hope to cultivate this treo talk presents a mixed methods learning analytics study of a custom socratic ai tutor in an introductory python course the tutor was designed to withhold completed code and instead provide hints questions and reflective prompts grounded in scaffolding help seeking cognitive load self efficacy and self regulated learning theory aleven et al 2003 bandura 1997 sweller 1988 vygotsky cole 1978 wood et al 1976 the study links psychometric survey measures of prior programming experience technical english proficiency and programming self efficacy with behavioral features extracted from 95 valid ai student chat interactions including user turns turns to resolution prompt length lexical diversity sentiment struggle type and prompting strategy findings show that socratic ai can support productive struggle while also introducing equity sensitive design challenges first results reveal a statistically significant socratic gap prior programming experience moderated the relationship between interaction volume and performance p 045 longer conversations were slightly negative for absolute beginners but positive for students with prior experience suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas second technical english proficiency strongly predicted interactional efficiency each one point increase in proficiency was associated with approximately 3 18 fewer turns to resolution r 467 p 001 indicating a linguistic time tax for students who supplied shorter lower context prompts third frustration loops were rare 76 of 95 interactions reflected productive struggle and only two reflected frustration loops although self efficacy interacted with sentiment in predicting grades p 036 finally moderate difficulty assignments showed a significant decline in user turns across the semester r 341 p 025 with students requiring about 1 40 fewer turns per comparable assignment block this pattern suggests that the tutor functioned as a scaffold rather than a crutch supporting an evolution of learner independence the study contributes to research on ai assisted programming education by showing that the pedagogical value of llm tutors depends not simply on access or usage volume but on the fit between tutor design and learner characteristics for educators and designers the results point to three practical needs adaptive socratic strictness for absolute beginners explicit instruction in high context prompting and early monitoring of low sentiment unresolved sessions more broadly the talk argues that transcript level behavioral evidence is essential for evaluating whether ai tutors promote independence reinforce dependency or impose hidden burdens on particular learners"
+      },
+      "corpus_side": {
+        "doi": null,
+        "title": "Socratic AI Tutors in Introductory Programming"
+      }
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "strong",
+      "reason": "proposal_not_built",
+      "detail": "provenance grounded but the proposal builder refused the item",
+      "corpus_record_id": "cr_ed3d72a84c90ec927add8160",
+      "item": {
+        "id": null,
+        "term": "Trace-to-Reveal Diagram Step",
+        "description_as_reported": "participants who traced and pointed in the learning phase outperformed participants who did not trace and point on a knowledge test of comprehension, while also reporting lower extraneous load.",
+        "pattern": "Enable a {tracing_mode} on complex instructional diagrams that requires the user to trace a highlighted path with cursor or touch input before the next step in the sequence is revealed.",
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "onboarding",
+          "dashboard_widget"
+        ],
+        "confidence": 0.55,
+        "provenance_refs": [
+          "p1"
+        ]
+      },
+      "provenance": null,
+      "cheap_origin": [
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Path Tracing",
+            "description_as_reported": "participants who traced and pointed in the learning phase outperformed participants who did not trace and point on a knowledge test of comprehension, while also reporting lower extraneous load.",
+            "pattern": "Enable a {tracing_mode} on complex diagrams that requires the user to follow a path with their cursor or touch input to reveal the next step in the sequence.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_ed3d72a84c90ec927add8160",
+                "quote_or_locus": "participants who traced and pointed in the learning phase outperformed participants who did not trace and point on a knowledge test of comprehension, while also reporting lower extraneous load",
+                "start": 1320,
+                "end": 1512,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p1"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Coordinated Gesture Feedback",
+            "description_as_reported": "Speakers recalled significantly more letters when producing movements that coordinated with the meaning of the accompanying speech, i.e., when gesturing, than when producing meaningless movements or no movement.",
+            "pattern": "Provide {gesture_feedback_delay} milliseconds of visual animation that mirrors the user's input action when they interact with complex interface elements to reinforce the semantic connection between the action and the content.",
+            "source_domain": "language and cognitive processes",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_113069739fcccde5b33ffe6c",
+                "quote_or_locus": "Speakers recalled significantly more letters when producing movements that coordinated with the meaning of the accompanying speech, i.e., when gesturing, than when producing meaningless movements or no movement",
+                "start": 642,
+                "end": 852,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p2"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "CVI reduced ICL and ECL, alongside significantly increasing GCL",
+            "pattern": "Highlight the current step in a multi-stage process using a visual indicator that requires the user to click or hover to advance, ensuring the user actively engages with the sequence {step_count} times before unlocking the next phase.",
+            "source_domain": "medical education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.4,
+            "citations": [
+              {
+                "record_id": "cr_44cca7387edce4f60514b851",
+                "quote_or_locus": "CVI reduced ICL and ECL, alongside significantly increasing GCL",
+                "start": 1683,
+                "end": 1746,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p3"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Active Information Chunking",
+            "description_as_reported": "Managing intrinsic load through segmentation, scaffolding, worked examples, pre-training, and stepwise increases in task fidelity supports schema development",
+            "pattern": "Segment long-form content into discrete, interactive modules that require the user to perform a manual action {interaction_threshold} times to reveal subsequent information blocks.",
+            "source_domain": "pharmacy education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_3dbccaffe0bcd2b58343bda0",
+                "quote_or_locus": "Managing intrinsic load through segmentation, scaffolding, worked examples, pre-training, and stepwise increases in task fidelity supports schema development",
+                "start": 650,
+                "end": 807,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p4"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Guided Pathing",
+            "description_as_reported": "Qualitative findings revealed that the use of semi-concrete coastal objects reduced extraneous cognitive load, supported students’ progression across Van Hiele levels, and enabled meaningful connections between geometry and everyday coastal experiences.",
+            "pattern": "Highlight the active step in a multi-step process using a {visual_indicator_opacity} opacity overlay to guide the user's focus, and remove the highlight once the user has interacted with the element {interaction_threshold} times.",
+            "source_domain": "coastal elementary education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.4,
+            "citations": [
+              {
+                "record_id": "cr_6497805800741226b6368a18",
+                "quote_or_locus": "Qualitative findings revealed that the use of semi-concrete coastal objects reduced extraneous cognitive load, supported students’ progression across Van Hiele levels, and enabled meaningful connections between geometry and everyday coastal experiences",
+                "start": 1295,
+                "end": 1547,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p5"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Cognitive Readiness Gate",
+            "description_as_reported": "Based on this diagnostic phase, a daily cognitive readiness assessment was implemented as a pre-shift digital test, completed individually in approximately three minutes. The monitoring program operated continuously for 22 months, during which 9,139 tests were conducted with high workforce acceptance (94%).",
+            "pattern": "Require the user to complete a {assessment_duration} minute cognitive readiness check before accessing high-stakes features if the user has not performed the core action in the last {inactivity_threshold} days.",
+            "source_domain": "offshore oil and gas operations",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_583b469ac3387449c573943f",
+                "quote_or_locus": "Based on this diagnostic phase, a daily cognitive readiness assessment was implemented as a pre-shift digital test, completed individually in approximately three minutes",
+                "start": 1440,
+                "end": 1609,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p6"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Progressive Scaffolding Fading",
+            "description_as_reported": "we propose a fading procedure in which problem-solving elements are successively integrated into example study until the learners are expected to solve problems on their own.",
+            "pattern": "Reduce the level of instructional guidance provided in the interface after {interaction_count} successful completions of the core task, transitioning the user from guided examples to independent action.",
+            "source_domain": "cognitive skill acquisition",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_68739e8507a3076b45e286d1",
+                "quote_or_locus": "we propose a fading procedure in which problem-solving elements are successively integrated into example study until the learners are expected to solve problems on their own",
+                "start": 932,
+                "end": 1105,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p7"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Tracing Prompt",
+            "description_as_reported": "Studies on tracing or tracing and pointing have yielded mixed findings regarding hypothesized effects on intrinsic and extraneous cognitive load. The tracing effect on transfer posttests seen in prior studies was replicated",
+            "pattern": "Prompt the user to trace the path of a diagram using their cursor or touch input after {inactivity_threshold} seconds of idle time on a complex instructional graphic to facilitate knowledge transfer.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_95f0c27ec180721afa4b253d",
+                "quote_or_locus": "The tracing effect on transfer posttests seen in prior studies was replicated",
+                "start": 894,
+                "end": 971,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p8"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Integrated Information Overlay",
+            "description_as_reported": "One example of ineffective instruction occurs if learners unnecessarily are required to mentally integrate disparate sources of mutually referring information such as separate text and diagrams. Such split-source infonnation may generate a heavy cognitive load",
+            "pattern": "Overlay text labels directly onto diagram elements when the user hovers over a component to prevent split-attention, provided the user has performed {interaction_count} interactions with the interface.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_972fd549c5db6d072c2c3f36",
+                "quote_or_locus": "One example of ineffective instruction occurs if learners unnecessarily are required to mentally integrate disparate sources of mutually referring information such as separate text and diagrams",
+                "start": 269,
+                "end": 462,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p9"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Guided Tracing",
+            "description_as_reported": "The EBCLC model offers a novel instructional synthesis that integrates worked-example principles, guided cognitive processing, and multimodal representations into a structured learning sequence explicitly designed to regulate cognitive load.",
+            "pattern": "Enable a {tracing_mode} on complex diagrams where the user must follow a highlighted path with their cursor to unlock the next {step_count} of the instructional sequence.",
+            "source_domain": "biotechnology education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_e93260e213faf8852027eb01",
+                "quote_or_locus": "The EBCLC model offers a novel instructional synthesis that integrates worked-example principles, guided cognitive processing, and multimodal representations into a structured learning sequence explicitly designed to regulate cognitive load",
+                "start": 1859,
+                "end": 2099,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p10"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Progressive Information Disclosure",
+            "description_as_reported": "Extraneous load can be reduced by the use of goal-free tasks, worked examples and completion tasks, by integrating different sources of information, using multiple modalities, and by reducing redundancy.",
+            "pattern": "Hide secondary information panels until the user has performed {interaction_count} interactions with the primary content to ensure the working memory is not overloaded by simultaneous information sources.",
+            "source_domain": "medical education",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_dc770be4502443d042f5cb0f",
+                "quote_or_locus": "Extraneous load can be reduced by the use of goal-free tasks, worked examples and completion tasks, by integrating different sources of information, using multiple modalities, and by reducing redundancy",
+                "start": 1021,
+                "end": 1223,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p11"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Gesture Prompt",
+            "description_as_reported": "Higher recall and pronunciation accuracy were observed when gestures were iconic, actively imitated, and temporally aligned with speech.",
+            "pattern": "Display a visual prompt to {gesture_imitation_threshold} seconds after the start of a complex instructional segment, encouraging the user to perform a physical tracing action on the screen.",
+            "source_domain": "language learning",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_fac0e20b4f80c77b8f27b534",
+                "quote_or_locus": "Higher recall and pronunciation accuracy were observed when gestures were iconic, actively imitated, and temporally aligned with speech",
+                "start": 1076,
+                "end": 1211,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p12"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Visual Scaffolding Toggle",
+            "description_as_reported": "Practitioner and service user feedback highlighted the value of modular, nonlinear navigation, simplified language, grounding cues and visual scaffolding in reducing cognitive load.",
+            "pattern": "Provide a toggle to enable {scaffolding_mode_default} which overlays visual grounding cues on complex interface elements until the user has interacted with the module {interaction_count_threshold} times.",
+            "source_domain": "mental health resource design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_16c307a494c013fa3f519b65",
+                "quote_or_locus": "Practitioner and service user feedback highlighted the value of modular, nonlinear navigation, simplified language, grounding cues and visual scaffolding in reducing cognitive load",
+                "start": 1464,
+                "end": 1644,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p13"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive spatial anchoring",
+            "description_as_reported": "Spatially distributed instructions improve learning outcomes and efficiency by reducing the split-attention effect, where multiple sources of information are placed side by side rather than stacked.",
+            "pattern": "Display instructional content and interactive task elements in a {side_by_side_layout} to minimize split-attention, triggering a transition to a {stacked_layout} only when the user reaches {interaction_threshold} interactions with the primary interface.",
+            "source_domain": "educational psychology",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_76ae18bea4a2e49ba96086d5",
+                "quote_or_locus": "distributed-display instructions led learners to more efficient learning; learners finished the task faster and scored higher in the overall learning test",
+                "start": 1196,
+                "end": 1350,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p14"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Adaptive affective scaffolding",
+            "description_as_reported": "Verbose emotional scaffolding may exceed learners' working memory capacity and act as an extraneous processing burden rather than affective support under high task difficulty.",
+            "pattern": "Monitor task difficulty and dynamically reduce the verbosity of system feedback when the user exceeds {difficulty_threshold} in a session, switching to an {efficient_mode} to prevent extraneous cognitive load.",
+            "source_domain": "educational AI",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_219096e570a0a5b0cc7692e3",
+                "quote_or_locus": "under high task difficulty, verbose emotional scaffolding may exceed learners' working' memory capacity and act as an extraneous processing burden rather than affective support",
+                "start": 3251,
+                "end": 3427,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p15"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Tracing Prompt",
+            "description_as_reported": "Tracing and pointing actions using the index finger on lesson materials enhance learning and reduce extraneous cognitive load.",
+            "pattern": "Display a {tracing_prompt_delay} second delay before enabling the next lesson step, then prompt the user to trace the {target_element_id} with their cursor to unlock the continuation.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_a2c74a2a7cff795aecafddbb",
+                "quote_or_locus": "Dialogue TTS was significantly superior to single TTS in comprehension (p=.006, q=.025) and cognitive engagement (p=.019, q=.048); enjoyment was non-significant after FDR correction (q=.081) but reached significance after controlling for prior knowledge",
+                "start": 1168,
+                "end": 1421,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p16"
+          ]
+        },
+        {
+          "item": {
+            "id": "ui_pattern_001",
+            "term": "Interactive Spatial Anchoring",
+            "description_as_reported": "Physical integration (e.g., combining text and diagrams) may reduce cognitive load and so facilitate learning.",
+            "pattern": "Integrate text and diagrams into a single {container_type} to minimize split-attention, and trigger a {highlight_effect} on the diagrammatic referent when the user hovers over the corresponding text.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget",
+              "onboarding"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_5e41f7b9ea5bce1349210861",
+                "quote_or_locus": "Experiment 2 ameliorated split-attention effects by using colour coding to reduce cognitive load inducing search for diagrammatic referents in the text",
+                "start": 825,
+                "end": 976,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p17"
+          ]
+        },
+        {
+          "item": {
+            "id": "ui_pattern_002",
+            "term": "Dynamic Information Prioritization",
+            "description_as_reported": "Cuing one display item with a brief flash led to rapid development of a recall advantage for that item. This advantage was short-lived if the cue was simply a salient visual event but was maintained if it indicated an object of particular relevance to the task.",
+            "pattern": "Apply a {visual_cue_duration} highlight to elements identified as {core_action_relevance} to guide user attention toward goal-relevant information.",
+            "source_domain": "visual working memory",
+            "artifact_context": [
+              "dashboard_widget",
+              "landing_hero"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_88bdb3f8ca22cb7b553aa97b",
+                "quote_or_locus": "Cuing one display item with a brief flash led to rapid development of a recall advantage for that item. This advantage was short-lived if the cue was simply a salient visual event but was maintained if it indicated an object of particular relevance to the task",
+                "start": 936,
+                "end": 1196,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p18"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Cognitive Load Chunking",
+            "description_as_reported": "The study’s findings highlighted the value of minimalist and clear nano-videos as a pedagogical tool necessary for today’s digitally engaged learner.",
+            "pattern": "Restrict the duration of interactive instructional walkthroughs to {max_duration} seconds per segment to minimize extraneous cognitive load.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_fa70c776fd6a8bdff2986f03",
+                "quote_or_locus": "The study’s findings highlighted the value of minimalist and clear nano-videos as a pedagogical tool necessary for today’s digitally engaged learner",
+                "start": 1537,
+                "end": 1685,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p19"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "The measurement model demonstrated strong convergent and discriminant validity across five constructs—Transportation, Electricity Consumption, Waste Management, Carbon Footprint Awareness, and Consumer Consumption with factor loadings above .70, AVE values exceeding .50, composite reliability above .70, and Cronbach’s alpha ranging from .84 to .91, confirming internal consistency and construct distinctiveness.",
+            "pattern": "Implement a progress tracker that requires the user to manually select or toggle {completion_threshold} items to visualize their current status, reinforcing the cognitive association between active engagement and goal achievement.",
+            "source_domain": "sustainable consumption",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_37b6672cd62754e29a3f52c4",
+                "quote_or_locus": "The measurement model demonstrated strong convergent and discriminant validity across five constructs—Transportation, Electricity Consumption, Waste Management, Carbon Footprint Awareness, and Consumer Consumption with factor loadings above .70, AVE values exceeding .50, composite reliability above .70, and Cronbach’s alpha ranging from .84 to .91, confirming internal consistency and construct distinctiveness",
+                "start": 3357,
+                "end": 3769,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p20"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Spatial Anchoring",
+            "description_as_reported": "VR interventions consistently matched or exceeded traditional methods in immediate knowledge acquisition, with the most pronounced benefits observed in spatially complex anatomical domains.",
+            "pattern": "Enable {spatial_interaction_mode} for complex diagrams to allow users to trace components, triggering a {highlight_opacity} change to confirm active engagement.",
+            "source_domain": "anatomy education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_7b0e4e6840d45e1ee8b10395",
+                "quote_or_locus": "VR interventions consistently matched or exceeded traditional methods in immediate knowledge acquisition, with the most pronounced benefits observed in spatially complex anatomical domains",
+                "start": 1240,
+                "end": 1428,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p21"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Gamified Summarization Scaffolding",
+            "description_as_reported": "The findings indicate that game-based formative assessments effectively mitigate extraneous cognitive load while satisfying the foundational psychological needs of learner autonomy, competence, and relatedness.",
+            "pattern": "Implement {summarization_trigger_count} interactive checkpoints during long-form content to prompt user-generated summaries, rewarding completion with {badge_visual_style} to reinforce competence.",
+            "source_domain": "primary education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_5e5b65f4e01c2e9e20507c83",
+                "quote_or_locus": "The findings indicate that game-based formative assessments effectively mitigate extraneous cognitive load while satisfying the foundational psychological needs of learner autonomy, competence, and relatedness",
+                "start": 1561,
+                "end": 1770,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p22"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Spatial Highlighting",
+            "description_as_reported": "Categorization occurs automatically in most learners, reducing the information-processing load and allowing the individual to understand the world.",
+            "pattern": "Implement a {highlight_trigger} that requires the user to manually trace or point at specific interface elements to reveal hidden information, thereby forcing active categorization.",
+            "source_domain": "neurodevelopmental disorders",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_ac9082bddb5ad2ec00a24c6e",
+                "quote_or_locus": "Categorization occurs automatically in most learners, reducing the information-processing load and allowing the individual to u",
+                "start": 5944,
+                "end": 6071,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p23"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Graded Task Assignment",
+            "description_as_reported": "The core of this somatocognitive therapy (1) To promote awareness of own body, (2) graded task assignment related to the motor patterns utilized in daily activities",
+            "pattern": "Introduce a {task_complexity_threshold} that breaks down complex user workflows into smaller, motor-pattern-aligned steps, requiring physical interaction to progress.",
+            "source_domain": "physiotherapy",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_84f976f7a271e972015f79bc",
+                "quote_or_locus": "The core of this somatocognitive therapy (1) To promote awareness of own body, (2) graded task assignment related to the motor patterns utilized in daily activities",
+                "start": 1210,
+                "end": 1374,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p24"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "The study identified interrelated constraints: limited curricular coverage of blockchain concepts and laboratory exposure; uneven faculty readiness and institutional resource limitations; and learner heterogeneity that increases cognitive load for non-technical cohorts.",
+            "pattern": "Implement a progress tracker that requires the user to manually trace or point to {required_steps} key concepts on the screen before unlocking the next module to reduce extraneous cognitive load.",
+            "source_domain": "supply chain management education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_c9f9f95862afd97ed50452f3",
+                "quote_or_locus": "learner heterogeneity that increases cognitive load for non-technical cohorts",
+                "start": 1241,
+                "end": 1318,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p25"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Guided Interaction Overlay",
+            "description_as_reported": "The 'menu of constructs' notion suggests an approach whereby a wider range of theoretical constructs, including constructs from cognitive theories with scope that makes the immediate application to the new context challenging, may be employed to facilitate development of more effective KT interventions.",
+            "pattern": "Overlay a persistent cursor guide that prompts the user to follow {path_segments} on the interface during complex tasks to anchor attention and minimize extraneous cognitive load.",
+            "source_domain": "cognitive and educational psychology",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_c393fa4d351daa970d068930",
+                "quote_or_locus": "The 'menu of constructs' notion suggests an approach whereby a wider range of theoretical constructs, including constructs from cognitive theories with scope that makes the immediate application to the new context challenging, may be employed to facilitate development of more effective KT interventions",
+                "start": 1593,
+                "end": 1896,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p26"
+          ]
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "strong",
+      "reason": "proposal_not_built",
+      "detail": "provenance grounded but the proposal builder refused the item",
+      "corpus_record_id": "cr_95f0c27ec180721afa4b253d",
+      "item": {
+        "id": null,
+        "term": "Idle-Triggered Tracing Prompt",
+        "description_as_reported": "Tracing and pointing actions using the index finger on lesson materials enhance learning and reduce extraneous cognitive load; the tracing effect on transfer posttests seen in prior studies was replicated.",
+        "pattern": "Prompt the user to trace the highlighted diagram element with cursor or touch input if they remain idle for {inactivity_threshold} seconds on a complex instructional graphic, then unlock the next lesson step once the trace is completed.",
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "onboarding",
+          "dashboard_widget"
+        ],
+        "confidence": 0.5,
+        "provenance_refs": [
+          "p8",
+          "p16"
+        ]
+      },
+      "provenance": null,
+      "cheap_origin": [
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Path Tracing",
+            "description_as_reported": "participants who traced and pointed in the learning phase outperformed participants who did not trace and point on a knowledge test of comprehension, while also reporting lower extraneous load.",
+            "pattern": "Enable a {tracing_mode} on complex diagrams that requires the user to follow a path with their cursor or touch input to reveal the next step in the sequence.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_ed3d72a84c90ec927add8160",
+                "quote_or_locus": "participants who traced and pointed in the learning phase outperformed participants who did not trace and point on a knowledge test of comprehension, while also reporting lower extraneous load",
+                "start": 1320,
+                "end": 1512,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p1"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Coordinated Gesture Feedback",
+            "description_as_reported": "Speakers recalled significantly more letters when producing movements that coordinated with the meaning of the accompanying speech, i.e., when gesturing, than when producing meaningless movements or no movement.",
+            "pattern": "Provide {gesture_feedback_delay} milliseconds of visual animation that mirrors the user's input action when they interact with complex interface elements to reinforce the semantic connection between the action and the content.",
+            "source_domain": "language and cognitive processes",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_113069739fcccde5b33ffe6c",
+                "quote_or_locus": "Speakers recalled significantly more letters when producing movements that coordinated with the meaning of the accompanying speech, i.e., when gesturing, than when producing meaningless movements or no movement",
+                "start": 642,
+                "end": 852,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p2"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "CVI reduced ICL and ECL, alongside significantly increasing GCL",
+            "pattern": "Highlight the current step in a multi-stage process using a visual indicator that requires the user to click or hover to advance, ensuring the user actively engages with the sequence {step_count} times before unlocking the next phase.",
+            "source_domain": "medical education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.4,
+            "citations": [
+              {
+                "record_id": "cr_44cca7387edce4f60514b851",
+                "quote_or_locus": "CVI reduced ICL and ECL, alongside significantly increasing GCL",
+                "start": 1683,
+                "end": 1746,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p3"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Active Information Chunking",
+            "description_as_reported": "Managing intrinsic load through segmentation, scaffolding, worked examples, pre-training, and stepwise increases in task fidelity supports schema development",
+            "pattern": "Segment long-form content into discrete, interactive modules that require the user to perform a manual action {interaction_threshold} times to reveal subsequent information blocks.",
+            "source_domain": "pharmacy education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_3dbccaffe0bcd2b58343bda0",
+                "quote_or_locus": "Managing intrinsic load through segmentation, scaffolding, worked examples, pre-training, and stepwise increases in task fidelity supports schema development",
+                "start": 650,
+                "end": 807,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p4"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Guided Pathing",
+            "description_as_reported": "Qualitative findings revealed that the use of semi-concrete coastal objects reduced extraneous cognitive load, supported students’ progression across Van Hiele levels, and enabled meaningful connections between geometry and everyday coastal experiences.",
+            "pattern": "Highlight the active step in a multi-step process using a {visual_indicator_opacity} opacity overlay to guide the user's focus, and remove the highlight once the user has interacted with the element {interaction_threshold} times.",
+            "source_domain": "coastal elementary education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.4,
+            "citations": [
+              {
+                "record_id": "cr_6497805800741226b6368a18",
+                "quote_or_locus": "Qualitative findings revealed that the use of semi-concrete coastal objects reduced extraneous cognitive load, supported students’ progression across Van Hiele levels, and enabled meaningful connections between geometry and everyday coastal experiences",
+                "start": 1295,
+                "end": 1547,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p5"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Cognitive Readiness Gate",
+            "description_as_reported": "Based on this diagnostic phase, a daily cognitive readiness assessment was implemented as a pre-shift digital test, completed individually in approximately three minutes. The monitoring program operated continuously for 22 months, during which 9,139 tests were conducted with high workforce acceptance (94%).",
+            "pattern": "Require the user to complete a {assessment_duration} minute cognitive readiness check before accessing high-stakes features if the user has not performed the core action in the last {inactivity_threshold} days.",
+            "source_domain": "offshore oil and gas operations",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_583b469ac3387449c573943f",
+                "quote_or_locus": "Based on this diagnostic phase, a daily cognitive readiness assessment was implemented as a pre-shift digital test, completed individually in approximately three minutes",
+                "start": 1440,
+                "end": 1609,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p6"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Progressive Scaffolding Fading",
+            "description_as_reported": "we propose a fading procedure in which problem-solving elements are successively integrated into example study until the learners are expected to solve problems on their own.",
+            "pattern": "Reduce the level of instructional guidance provided in the interface after {interaction_count} successful completions of the core task, transitioning the user from guided examples to independent action.",
+            "source_domain": "cognitive skill acquisition",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_68739e8507a3076b45e286d1",
+                "quote_or_locus": "we propose a fading procedure in which problem-solving elements are successively integrated into example study until the learners are expected to solve problems on their own",
+                "start": 932,
+                "end": 1105,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p7"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Tracing Prompt",
+            "description_as_reported": "Studies on tracing or tracing and pointing have yielded mixed findings regarding hypothesized effects on intrinsic and extraneous cognitive load. The tracing effect on transfer posttests seen in prior studies was replicated",
+            "pattern": "Prompt the user to trace the path of a diagram using their cursor or touch input after {inactivity_threshold} seconds of idle time on a complex instructional graphic to facilitate knowledge transfer.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_95f0c27ec180721afa4b253d",
+                "quote_or_locus": "The tracing effect on transfer posttests seen in prior studies was replicated",
+                "start": 894,
+                "end": 971,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p8"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Integrated Information Overlay",
+            "description_as_reported": "One example of ineffective instruction occurs if learners unnecessarily are required to mentally integrate disparate sources of mutually referring information such as separate text and diagrams. Such split-source infonnation may generate a heavy cognitive load",
+            "pattern": "Overlay text labels directly onto diagram elements when the user hovers over a component to prevent split-attention, provided the user has performed {interaction_count} interactions with the interface.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_972fd549c5db6d072c2c3f36",
+                "quote_or_locus": "One example of ineffective instruction occurs if learners unnecessarily are required to mentally integrate disparate sources of mutually referring information such as separate text and diagrams",
+                "start": 269,
+                "end": 462,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p9"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Guided Tracing",
+            "description_as_reported": "The EBCLC model offers a novel instructional synthesis that integrates worked-example principles, guided cognitive processing, and multimodal representations into a structured learning sequence explicitly designed to regulate cognitive load.",
+            "pattern": "Enable a {tracing_mode} on complex diagrams where the user must follow a highlighted path with their cursor to unlock the next {step_count} of the instructional sequence.",
+            "source_domain": "biotechnology education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_e93260e213faf8852027eb01",
+                "quote_or_locus": "The EBCLC model offers a novel instructional synthesis that integrates worked-example principles, guided cognitive processing, and multimodal representations into a structured learning sequence explicitly designed to regulate cognitive load",
+                "start": 1859,
+                "end": 2099,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p10"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Progressive Information Disclosure",
+            "description_as_reported": "Extraneous load can be reduced by the use of goal-free tasks, worked examples and completion tasks, by integrating different sources of information, using multiple modalities, and by reducing redundancy.",
+            "pattern": "Hide secondary information panels until the user has performed {interaction_count} interactions with the primary content to ensure the working memory is not overloaded by simultaneous information sources.",
+            "source_domain": "medical education",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_dc770be4502443d042f5cb0f",
+                "quote_or_locus": "Extraneous load can be reduced by the use of goal-free tasks, worked examples and completion tasks, by integrating different sources of information, using multiple modalities, and by reducing redundancy",
+                "start": 1021,
+                "end": 1223,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p11"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Gesture Prompt",
+            "description_as_reported": "Higher recall and pronunciation accuracy were observed when gestures were iconic, actively imitated, and temporally aligned with speech.",
+            "pattern": "Display a visual prompt to {gesture_imitation_threshold} seconds after the start of a complex instructional segment, encouraging the user to perform a physical tracing action on the screen.",
+            "source_domain": "language learning",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_fac0e20b4f80c77b8f27b534",
+                "quote_or_locus": "Higher recall and pronunciation accuracy were observed when gestures were iconic, actively imitated, and temporally aligned with speech",
+                "start": 1076,
+                "end": 1211,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p12"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Visual Scaffolding Toggle",
+            "description_as_reported": "Practitioner and service user feedback highlighted the value of modular, nonlinear navigation, simplified language, grounding cues and visual scaffolding in reducing cognitive load.",
+            "pattern": "Provide a toggle to enable {scaffolding_mode_default} which overlays visual grounding cues on complex interface elements until the user has interacted with the module {interaction_count_threshold} times.",
+            "source_domain": "mental health resource design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_16c307a494c013fa3f519b65",
+                "quote_or_locus": "Practitioner and service user feedback highlighted the value of modular, nonlinear navigation, simplified language, grounding cues and visual scaffolding in reducing cognitive load",
+                "start": 1464,
+                "end": 1644,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p13"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive spatial anchoring",
+            "description_as_reported": "Spatially distributed instructions improve learning outcomes and efficiency by reducing the split-attention effect, where multiple sources of information are placed side by side rather than stacked.",
+            "pattern": "Display instructional content and interactive task elements in a {side_by_side_layout} to minimize split-attention, triggering a transition to a {stacked_layout} only when the user reaches {interaction_threshold} interactions with the primary interface.",
+            "source_domain": "educational psychology",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_76ae18bea4a2e49ba96086d5",
+                "quote_or_locus": "distributed-display instructions led learners to more efficient learning; learners finished the task faster and scored higher in the overall learning test",
+                "start": 1196,
+                "end": 1350,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p14"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Adaptive affective scaffolding",
+            "description_as_reported": "Verbose emotional scaffolding may exceed learners' working memory capacity and act as an extraneous processing burden rather than affective support under high task difficulty.",
+            "pattern": "Monitor task difficulty and dynamically reduce the verbosity of system feedback when the user exceeds {difficulty_threshold} in a session, switching to an {efficient_mode} to prevent extraneous cognitive load.",
+            "source_domain": "educational AI",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_219096e570a0a5b0cc7692e3",
+                "quote_or_locus": "under high task difficulty, verbose emotional scaffolding may exceed learners' working' memory capacity and act as an extraneous processing burden rather than affective support",
+                "start": 3251,
+                "end": 3427,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p15"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Tracing Prompt",
+            "description_as_reported": "Tracing and pointing actions using the index finger on lesson materials enhance learning and reduce extraneous cognitive load.",
+            "pattern": "Display a {tracing_prompt_delay} second delay before enabling the next lesson step, then prompt the user to trace the {target_element_id} with their cursor to unlock the continuation.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_a2c74a2a7cff795aecafddbb",
+                "quote_or_locus": "Dialogue TTS was significantly superior to single TTS in comprehension (p=.006, q=.025) and cognitive engagement (p=.019, q=.048); enjoyment was non-significant after FDR correction (q=.081) but reached significance after controlling for prior knowledge",
+                "start": 1168,
+                "end": 1421,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p16"
+          ]
+        },
+        {
+          "item": {
+            "id": "ui_pattern_001",
+            "term": "Interactive Spatial Anchoring",
+            "description_as_reported": "Physical integration (e.g., combining text and diagrams) may reduce cognitive load and so facilitate learning.",
+            "pattern": "Integrate text and diagrams into a single {container_type} to minimize split-attention, and trigger a {highlight_effect} on the diagrammatic referent when the user hovers over the corresponding text.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget",
+              "onboarding"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_5e41f7b9ea5bce1349210861",
+                "quote_or_locus": "Experiment 2 ameliorated split-attention effects by using colour coding to reduce cognitive load inducing search for diagrammatic referents in the text",
+                "start": 825,
+                "end": 976,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p17"
+          ]
+        },
+        {
+          "item": {
+            "id": "ui_pattern_002",
+            "term": "Dynamic Information Prioritization",
+            "description_as_reported": "Cuing one display item with a brief flash led to rapid development of a recall advantage for that item. This advantage was short-lived if the cue was simply a salient visual event but was maintained if it indicated an object of particular relevance to the task.",
+            "pattern": "Apply a {visual_cue_duration} highlight to elements identified as {core_action_relevance} to guide user attention toward goal-relevant information.",
+            "source_domain": "visual working memory",
+            "artifact_context": [
+              "dashboard_widget",
+              "landing_hero"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_88bdb3f8ca22cb7b553aa97b",
+                "quote_or_locus": "Cuing one display item with a brief flash led to rapid development of a recall advantage for that item. This advantage was short-lived if the cue was simply a salient visual event but was maintained if it indicated an object of particular relevance to the task",
+                "start": 936,
+                "end": 1196,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p18"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Cognitive Load Chunking",
+            "description_as_reported": "The study’s findings highlighted the value of minimalist and clear nano-videos as a pedagogical tool necessary for today’s digitally engaged learner.",
+            "pattern": "Restrict the duration of interactive instructional walkthroughs to {max_duration} seconds per segment to minimize extraneous cognitive load.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_fa70c776fd6a8bdff2986f03",
+                "quote_or_locus": "The study’s findings highlighted the value of minimalist and clear nano-videos as a pedagogical tool necessary for today’s digitally engaged learner",
+                "start": 1537,
+                "end": 1685,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p19"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "The measurement model demonstrated strong convergent and discriminant validity across five constructs—Transportation, Electricity Consumption, Waste Management, Carbon Footprint Awareness, and Consumer Consumption with factor loadings above .70, AVE values exceeding .50, composite reliability above .70, and Cronbach’s alpha ranging from .84 to .91, confirming internal consistency and construct distinctiveness.",
+            "pattern": "Implement a progress tracker that requires the user to manually select or toggle {completion_threshold} items to visualize their current status, reinforcing the cognitive association between active engagement and goal achievement.",
+            "source_domain": "sustainable consumption",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_37b6672cd62754e29a3f52c4",
+                "quote_or_locus": "The measurement model demonstrated strong convergent and discriminant validity across five constructs—Transportation, Electricity Consumption, Waste Management, Carbon Footprint Awareness, and Consumer Consumption with factor loadings above .70, AVE values exceeding .50, composite reliability above .70, and Cronbach’s alpha ranging from .84 to .91, confirming internal consistency and construct distinctiveness",
+                "start": 3357,
+                "end": 3769,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p20"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Spatial Anchoring",
+            "description_as_reported": "VR interventions consistently matched or exceeded traditional methods in immediate knowledge acquisition, with the most pronounced benefits observed in spatially complex anatomical domains.",
+            "pattern": "Enable {spatial_interaction_mode} for complex diagrams to allow users to trace components, triggering a {highlight_opacity} change to confirm active engagement.",
+            "source_domain": "anatomy education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_7b0e4e6840d45e1ee8b10395",
+                "quote_or_locus": "VR interventions consistently matched or exceeded traditional methods in immediate knowledge acquisition, with the most pronounced benefits observed in spatially complex anatomical domains",
+                "start": 1240,
+                "end": 1428,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p21"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Gamified Summarization Scaffolding",
+            "description_as_reported": "The findings indicate that game-based formative assessments effectively mitigate extraneous cognitive load while satisfying the foundational psychological needs of learner autonomy, competence, and relatedness.",
+            "pattern": "Implement {summarization_trigger_count} interactive checkpoints during long-form content to prompt user-generated summaries, rewarding completion with {badge_visual_style} to reinforce competence.",
+            "source_domain": "primary education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_5e5b65f4e01c2e9e20507c83",
+                "quote_or_locus": "The findings indicate that game-based formative assessments effectively mitigate extraneous cognitive load while satisfying the foundational psychological needs of learner autonomy, competence, and relatedness",
+                "start": 1561,
+                "end": 1770,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p22"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Spatial Highlighting",
+            "description_as_reported": "Categorization occurs automatically in most learners, reducing the information-processing load and allowing the individual to understand the world.",
+            "pattern": "Implement a {highlight_trigger} that requires the user to manually trace or point at specific interface elements to reveal hidden information, thereby forcing active categorization.",
+            "source_domain": "neurodevelopmental disorders",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_ac9082bddb5ad2ec00a24c6e",
+                "quote_or_locus": "Categorization occurs automatically in most learners, reducing the information-processing load and allowing the individual to u",
+                "start": 5944,
+                "end": 6071,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p23"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Graded Task Assignment",
+            "description_as_reported": "The core of this somatocognitive therapy (1) To promote awareness of own body, (2) graded task assignment related to the motor patterns utilized in daily activities",
+            "pattern": "Introduce a {task_complexity_threshold} that breaks down complex user workflows into smaller, motor-pattern-aligned steps, requiring physical interaction to progress.",
+            "source_domain": "physiotherapy",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_84f976f7a271e972015f79bc",
+                "quote_or_locus": "The core of this somatocognitive therapy (1) To promote awareness of own body, (2) graded task assignment related to the motor patterns utilized in daily activities",
+                "start": 1210,
+                "end": 1374,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p24"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "The study identified interrelated constraints: limited curricular coverage of blockchain concepts and laboratory exposure; uneven faculty readiness and institutional resource limitations; and learner heterogeneity that increases cognitive load for non-technical cohorts.",
+            "pattern": "Implement a progress tracker that requires the user to manually trace or point to {required_steps} key concepts on the screen before unlocking the next module to reduce extraneous cognitive load.",
+            "source_domain": "supply chain management education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_c9f9f95862afd97ed50452f3",
+                "quote_or_locus": "learner heterogeneity that increases cognitive load for non-technical cohorts",
+                "start": 1241,
+                "end": 1318,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p25"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Guided Interaction Overlay",
+            "description_as_reported": "The 'menu of constructs' notion suggests an approach whereby a wider range of theoretical constructs, including constructs from cognitive theories with scope that makes the immediate application to the new context challenging, may be employed to facilitate development of more effective KT interventions.",
+            "pattern": "Overlay a persistent cursor guide that prompts the user to follow {path_segments} on the interface during complex tasks to anchor attention and minimize extraneous cognitive load.",
+            "source_domain": "cognitive and educational psychology",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_c393fa4d351daa970d068930",
+                "quote_or_locus": "The 'menu of constructs' notion suggests an approach whereby a wider range of theoretical constructs, including constructs from cognitive theories with scope that makes the immediate application to the new context challenging, may be employed to facilitate development of more effective KT interventions",
+                "start": 1593,
+                "end": 1896,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p26"
+          ]
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "strong",
+      "reason": "proposal_not_built",
+      "detail": "provenance grounded but the proposal builder refused the item",
+      "corpus_record_id": "cr_ed3d72a84c90ec927add8160",
+      "item": {
+        "id": null,
+        "term": "Point-to-Highlight Hotspot",
+        "description_as_reported": "participants who traced and pointed in the learning phase outperformed participants who did not trace and point on a knowledge test of comprehension, while also reporting lower extraneous load.",
+        "pattern": "Allow the user to tap or click, mirroring a pointing gesture, on a diagram hotspot to reveal an associated info tooltip, which remains visible for {tooltip_duration} seconds before disappearing.",
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "dashboard_widget",
+          "onboarding"
+        ],
+        "confidence": 0.5,
+        "provenance_refs": [
+          "p1"
+        ]
+      },
+      "provenance": null,
+      "cheap_origin": [
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Path Tracing",
+            "description_as_reported": "participants who traced and pointed in the learning phase outperformed participants who did not trace and point on a knowledge test of comprehension, while also reporting lower extraneous load.",
+            "pattern": "Enable a {tracing_mode} on complex diagrams that requires the user to follow a path with their cursor or touch input to reveal the next step in the sequence.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_ed3d72a84c90ec927add8160",
+                "quote_or_locus": "participants who traced and pointed in the learning phase outperformed participants who did not trace and point on a knowledge test of comprehension, while also reporting lower extraneous load",
+                "start": 1320,
+                "end": 1512,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p1"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Coordinated Gesture Feedback",
+            "description_as_reported": "Speakers recalled significantly more letters when producing movements that coordinated with the meaning of the accompanying speech, i.e., when gesturing, than when producing meaningless movements or no movement.",
+            "pattern": "Provide {gesture_feedback_delay} milliseconds of visual animation that mirrors the user's input action when they interact with complex interface elements to reinforce the semantic connection between the action and the content.",
+            "source_domain": "language and cognitive processes",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_113069739fcccde5b33ffe6c",
+                "quote_or_locus": "Speakers recalled significantly more letters when producing movements that coordinated with the meaning of the accompanying speech, i.e., when gesturing, than when producing meaningless movements or no movement",
+                "start": 642,
+                "end": 852,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p2"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "CVI reduced ICL and ECL, alongside significantly increasing GCL",
+            "pattern": "Highlight the current step in a multi-stage process using a visual indicator that requires the user to click or hover to advance, ensuring the user actively engages with the sequence {step_count} times before unlocking the next phase.",
+            "source_domain": "medical education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.4,
+            "citations": [
+              {
+                "record_id": "cr_44cca7387edce4f60514b851",
+                "quote_or_locus": "CVI reduced ICL and ECL, alongside significantly increasing GCL",
+                "start": 1683,
+                "end": 1746,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p3"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Active Information Chunking",
+            "description_as_reported": "Managing intrinsic load through segmentation, scaffolding, worked examples, pre-training, and stepwise increases in task fidelity supports schema development",
+            "pattern": "Segment long-form content into discrete, interactive modules that require the user to perform a manual action {interaction_threshold} times to reveal subsequent information blocks.",
+            "source_domain": "pharmacy education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_3dbccaffe0bcd2b58343bda0",
+                "quote_or_locus": "Managing intrinsic load through segmentation, scaffolding, worked examples, pre-training, and stepwise increases in task fidelity supports schema development",
+                "start": 650,
+                "end": 807,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p4"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Guided Pathing",
+            "description_as_reported": "Qualitative findings revealed that the use of semi-concrete coastal objects reduced extraneous cognitive load, supported students’ progression across Van Hiele levels, and enabled meaningful connections between geometry and everyday coastal experiences.",
+            "pattern": "Highlight the active step in a multi-step process using a {visual_indicator_opacity} opacity overlay to guide the user's focus, and remove the highlight once the user has interacted with the element {interaction_threshold} times.",
+            "source_domain": "coastal elementary education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.4,
+            "citations": [
+              {
+                "record_id": "cr_6497805800741226b6368a18",
+                "quote_or_locus": "Qualitative findings revealed that the use of semi-concrete coastal objects reduced extraneous cognitive load, supported students’ progression across Van Hiele levels, and enabled meaningful connections between geometry and everyday coastal experiences",
+                "start": 1295,
+                "end": 1547,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p5"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Cognitive Readiness Gate",
+            "description_as_reported": "Based on this diagnostic phase, a daily cognitive readiness assessment was implemented as a pre-shift digital test, completed individually in approximately three minutes. The monitoring program operated continuously for 22 months, during which 9,139 tests were conducted with high workforce acceptance (94%).",
+            "pattern": "Require the user to complete a {assessment_duration} minute cognitive readiness check before accessing high-stakes features if the user has not performed the core action in the last {inactivity_threshold} days.",
+            "source_domain": "offshore oil and gas operations",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_583b469ac3387449c573943f",
+                "quote_or_locus": "Based on this diagnostic phase, a daily cognitive readiness assessment was implemented as a pre-shift digital test, completed individually in approximately three minutes",
+                "start": 1440,
+                "end": 1609,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p6"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Progressive Scaffolding Fading",
+            "description_as_reported": "we propose a fading procedure in which problem-solving elements are successively integrated into example study until the learners are expected to solve problems on their own.",
+            "pattern": "Reduce the level of instructional guidance provided in the interface after {interaction_count} successful completions of the core task, transitioning the user from guided examples to independent action.",
+            "source_domain": "cognitive skill acquisition",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_68739e8507a3076b45e286d1",
+                "quote_or_locus": "we propose a fading procedure in which problem-solving elements are successively integrated into example study until the learners are expected to solve problems on their own",
+                "start": 932,
+                "end": 1105,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p7"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Tracing Prompt",
+            "description_as_reported": "Studies on tracing or tracing and pointing have yielded mixed findings regarding hypothesized effects on intrinsic and extraneous cognitive load. The tracing effect on transfer posttests seen in prior studies was replicated",
+            "pattern": "Prompt the user to trace the path of a diagram using their cursor or touch input after {inactivity_threshold} seconds of idle time on a complex instructional graphic to facilitate knowledge transfer.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_95f0c27ec180721afa4b253d",
+                "quote_or_locus": "The tracing effect on transfer posttests seen in prior studies was replicated",
+                "start": 894,
+                "end": 971,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p8"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Integrated Information Overlay",
+            "description_as_reported": "One example of ineffective instruction occurs if learners unnecessarily are required to mentally integrate disparate sources of mutually referring information such as separate text and diagrams. Such split-source infonnation may generate a heavy cognitive load",
+            "pattern": "Overlay text labels directly onto diagram elements when the user hovers over a component to prevent split-attention, provided the user has performed {interaction_count} interactions with the interface.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_972fd549c5db6d072c2c3f36",
+                "quote_or_locus": "One example of ineffective instruction occurs if learners unnecessarily are required to mentally integrate disparate sources of mutually referring information such as separate text and diagrams",
+                "start": 269,
+                "end": 462,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p9"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Guided Tracing",
+            "description_as_reported": "The EBCLC model offers a novel instructional synthesis that integrates worked-example principles, guided cognitive processing, and multimodal representations into a structured learning sequence explicitly designed to regulate cognitive load.",
+            "pattern": "Enable a {tracing_mode} on complex diagrams where the user must follow a highlighted path with their cursor to unlock the next {step_count} of the instructional sequence.",
+            "source_domain": "biotechnology education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_e93260e213faf8852027eb01",
+                "quote_or_locus": "The EBCLC model offers a novel instructional synthesis that integrates worked-example principles, guided cognitive processing, and multimodal representations into a structured learning sequence explicitly designed to regulate cognitive load",
+                "start": 1859,
+                "end": 2099,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p10"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Progressive Information Disclosure",
+            "description_as_reported": "Extraneous load can be reduced by the use of goal-free tasks, worked examples and completion tasks, by integrating different sources of information, using multiple modalities, and by reducing redundancy.",
+            "pattern": "Hide secondary information panels until the user has performed {interaction_count} interactions with the primary content to ensure the working memory is not overloaded by simultaneous information sources.",
+            "source_domain": "medical education",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_dc770be4502443d042f5cb0f",
+                "quote_or_locus": "Extraneous load can be reduced by the use of goal-free tasks, worked examples and completion tasks, by integrating different sources of information, using multiple modalities, and by reducing redundancy",
+                "start": 1021,
+                "end": 1223,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p11"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Gesture Prompt",
+            "description_as_reported": "Higher recall and pronunciation accuracy were observed when gestures were iconic, actively imitated, and temporally aligned with speech.",
+            "pattern": "Display a visual prompt to {gesture_imitation_threshold} seconds after the start of a complex instructional segment, encouraging the user to perform a physical tracing action on the screen.",
+            "source_domain": "language learning",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_fac0e20b4f80c77b8f27b534",
+                "quote_or_locus": "Higher recall and pronunciation accuracy were observed when gestures were iconic, actively imitated, and temporally aligned with speech",
+                "start": 1076,
+                "end": 1211,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p12"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Visual Scaffolding Toggle",
+            "description_as_reported": "Practitioner and service user feedback highlighted the value of modular, nonlinear navigation, simplified language, grounding cues and visual scaffolding in reducing cognitive load.",
+            "pattern": "Provide a toggle to enable {scaffolding_mode_default} which overlays visual grounding cues on complex interface elements until the user has interacted with the module {interaction_count_threshold} times.",
+            "source_domain": "mental health resource design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_16c307a494c013fa3f519b65",
+                "quote_or_locus": "Practitioner and service user feedback highlighted the value of modular, nonlinear navigation, simplified language, grounding cues and visual scaffolding in reducing cognitive load",
+                "start": 1464,
+                "end": 1644,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p13"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive spatial anchoring",
+            "description_as_reported": "Spatially distributed instructions improve learning outcomes and efficiency by reducing the split-attention effect, where multiple sources of information are placed side by side rather than stacked.",
+            "pattern": "Display instructional content and interactive task elements in a {side_by_side_layout} to minimize split-attention, triggering a transition to a {stacked_layout} only when the user reaches {interaction_threshold} interactions with the primary interface.",
+            "source_domain": "educational psychology",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_76ae18bea4a2e49ba96086d5",
+                "quote_or_locus": "distributed-display instructions led learners to more efficient learning; learners finished the task faster and scored higher in the overall learning test",
+                "start": 1196,
+                "end": 1350,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p14"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Adaptive affective scaffolding",
+            "description_as_reported": "Verbose emotional scaffolding may exceed learners' working memory capacity and act as an extraneous processing burden rather than affective support under high task difficulty.",
+            "pattern": "Monitor task difficulty and dynamically reduce the verbosity of system feedback when the user exceeds {difficulty_threshold} in a session, switching to an {efficient_mode} to prevent extraneous cognitive load.",
+            "source_domain": "educational AI",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_219096e570a0a5b0cc7692e3",
+                "quote_or_locus": "under high task difficulty, verbose emotional scaffolding may exceed learners' working' memory capacity and act as an extraneous processing burden rather than affective support",
+                "start": 3251,
+                "end": 3427,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p15"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Tracing Prompt",
+            "description_as_reported": "Tracing and pointing actions using the index finger on lesson materials enhance learning and reduce extraneous cognitive load.",
+            "pattern": "Display a {tracing_prompt_delay} second delay before enabling the next lesson step, then prompt the user to trace the {target_element_id} with their cursor to unlock the continuation.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_a2c74a2a7cff795aecafddbb",
+                "quote_or_locus": "Dialogue TTS was significantly superior to single TTS in comprehension (p=.006, q=.025) and cognitive engagement (p=.019, q=.048); enjoyment was non-significant after FDR correction (q=.081) but reached significance after controlling for prior knowledge",
+                "start": 1168,
+                "end": 1421,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p16"
+          ]
+        },
+        {
+          "item": {
+            "id": "ui_pattern_001",
+            "term": "Interactive Spatial Anchoring",
+            "description_as_reported": "Physical integration (e.g., combining text and diagrams) may reduce cognitive load and so facilitate learning.",
+            "pattern": "Integrate text and diagrams into a single {container_type} to minimize split-attention, and trigger a {highlight_effect} on the diagrammatic referent when the user hovers over the corresponding text.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget",
+              "onboarding"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_5e41f7b9ea5bce1349210861",
+                "quote_or_locus": "Experiment 2 ameliorated split-attention effects by using colour coding to reduce cognitive load inducing search for diagrammatic referents in the text",
+                "start": 825,
+                "end": 976,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p17"
+          ]
+        },
+        {
+          "item": {
+            "id": "ui_pattern_002",
+            "term": "Dynamic Information Prioritization",
+            "description_as_reported": "Cuing one display item with a brief flash led to rapid development of a recall advantage for that item. This advantage was short-lived if the cue was simply a salient visual event but was maintained if it indicated an object of particular relevance to the task.",
+            "pattern": "Apply a {visual_cue_duration} highlight to elements identified as {core_action_relevance} to guide user attention toward goal-relevant information.",
+            "source_domain": "visual working memory",
+            "artifact_context": [
+              "dashboard_widget",
+              "landing_hero"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_88bdb3f8ca22cb7b553aa97b",
+                "quote_or_locus": "Cuing one display item with a brief flash led to rapid development of a recall advantage for that item. This advantage was short-lived if the cue was simply a salient visual event but was maintained if it indicated an object of particular relevance to the task",
+                "start": 936,
+                "end": 1196,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p18"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Cognitive Load Chunking",
+            "description_as_reported": "The study’s findings highlighted the value of minimalist and clear nano-videos as a pedagogical tool necessary for today’s digitally engaged learner.",
+            "pattern": "Restrict the duration of interactive instructional walkthroughs to {max_duration} seconds per segment to minimize extraneous cognitive load.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_fa70c776fd6a8bdff2986f03",
+                "quote_or_locus": "The study’s findings highlighted the value of minimalist and clear nano-videos as a pedagogical tool necessary for today’s digitally engaged learner",
+                "start": 1537,
+                "end": 1685,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p19"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "The measurement model demonstrated strong convergent and discriminant validity across five constructs—Transportation, Electricity Consumption, Waste Management, Carbon Footprint Awareness, and Consumer Consumption with factor loadings above .70, AVE values exceeding .50, composite reliability above .70, and Cronbach’s alpha ranging from .84 to .91, confirming internal consistency and construct distinctiveness.",
+            "pattern": "Implement a progress tracker that requires the user to manually select or toggle {completion_threshold} items to visualize their current status, reinforcing the cognitive association between active engagement and goal achievement.",
+            "source_domain": "sustainable consumption",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_37b6672cd62754e29a3f52c4",
+                "quote_or_locus": "The measurement model demonstrated strong convergent and discriminant validity across five constructs—Transportation, Electricity Consumption, Waste Management, Carbon Footprint Awareness, and Consumer Consumption with factor loadings above .70, AVE values exceeding .50, composite reliability above .70, and Cronbach’s alpha ranging from .84 to .91, confirming internal consistency and construct distinctiveness",
+                "start": 3357,
+                "end": 3769,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p20"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Spatial Anchoring",
+            "description_as_reported": "VR interventions consistently matched or exceeded traditional methods in immediate knowledge acquisition, with the most pronounced benefits observed in spatially complex anatomical domains.",
+            "pattern": "Enable {spatial_interaction_mode} for complex diagrams to allow users to trace components, triggering a {highlight_opacity} change to confirm active engagement.",
+            "source_domain": "anatomy education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_7b0e4e6840d45e1ee8b10395",
+                "quote_or_locus": "VR interventions consistently matched or exceeded traditional methods in immediate knowledge acquisition, with the most pronounced benefits observed in spatially complex anatomical domains",
+                "start": 1240,
+                "end": 1428,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p21"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Gamified Summarization Scaffolding",
+            "description_as_reported": "The findings indicate that game-based formative assessments effectively mitigate extraneous cognitive load while satisfying the foundational psychological needs of learner autonomy, competence, and relatedness.",
+            "pattern": "Implement {summarization_trigger_count} interactive checkpoints during long-form content to prompt user-generated summaries, rewarding completion with {badge_visual_style} to reinforce competence.",
+            "source_domain": "primary education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_5e5b65f4e01c2e9e20507c83",
+                "quote_or_locus": "The findings indicate that game-based formative assessments effectively mitigate extraneous cognitive load while satisfying the foundational psychological needs of learner autonomy, competence, and relatedness",
+                "start": 1561,
+                "end": 1770,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p22"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Spatial Highlighting",
+            "description_as_reported": "Categorization occurs automatically in most learners, reducing the information-processing load and allowing the individual to understand the world.",
+            "pattern": "Implement a {highlight_trigger} that requires the user to manually trace or point at specific interface elements to reveal hidden information, thereby forcing active categorization.",
+            "source_domain": "neurodevelopmental disorders",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_ac9082bddb5ad2ec00a24c6e",
+                "quote_or_locus": "Categorization occurs automatically in most learners, reducing the information-processing load and allowing the individual to u",
+                "start": 5944,
+                "end": 6071,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p23"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Graded Task Assignment",
+            "description_as_reported": "The core of this somatocognitive therapy (1) To promote awareness of own body, (2) graded task assignment related to the motor patterns utilized in daily activities",
+            "pattern": "Introduce a {task_complexity_threshold} that breaks down complex user workflows into smaller, motor-pattern-aligned steps, requiring physical interaction to progress.",
+            "source_domain": "physiotherapy",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_84f976f7a271e972015f79bc",
+                "quote_or_locus": "The core of this somatocognitive therapy (1) To promote awareness of own body, (2) graded task assignment related to the motor patterns utilized in daily activities",
+                "start": 1210,
+                "end": 1374,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p24"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "The study identified interrelated constraints: limited curricular coverage of blockchain concepts and laboratory exposure; uneven faculty readiness and institutional resource limitations; and learner heterogeneity that increases cognitive load for non-technical cohorts.",
+            "pattern": "Implement a progress tracker that requires the user to manually trace or point to {required_steps} key concepts on the screen before unlocking the next module to reduce extraneous cognitive load.",
+            "source_domain": "supply chain management education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_c9f9f95862afd97ed50452f3",
+                "quote_or_locus": "learner heterogeneity that increases cognitive load for non-technical cohorts",
+                "start": 1241,
+                "end": 1318,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p25"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Guided Interaction Overlay",
+            "description_as_reported": "The 'menu of constructs' notion suggests an approach whereby a wider range of theoretical constructs, including constructs from cognitive theories with scope that makes the immediate application to the new context challenging, may be employed to facilitate development of more effective KT interventions.",
+            "pattern": "Overlay a persistent cursor guide that prompts the user to follow {path_segments} on the interface during complex tasks to anchor attention and minimize extraneous cognitive load.",
+            "source_domain": "cognitive and educational psychology",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_c393fa4d351daa970d068930",
+                "quote_or_locus": "The 'menu of constructs' notion suggests an approach whereby a wider range of theoretical constructs, including constructs from cognitive theories with scope that makes the immediate application to the new context challenging, may be employed to facilitate development of more effective KT interventions",
+                "start": 1593,
+                "end": 1896,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p26"
+          ]
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "strong",
+      "reason": "proposal_not_built",
+      "detail": "provenance grounded but the proposal builder refused the item",
+      "corpus_record_id": "cr_ed3d72a84c90ec927add8160",
+      "item": {
+        "id": null,
+        "term": "Guided Tour Fade After Tracing Mastery",
+        "description_as_reported": "participants who traced and pointed in the learning phase outperformed participants who did not trace and point on a knowledge test of comprehension, while also reporting lower extraneous load.",
+        "pattern": "Collapse the guided tracing prompts once the user has completed the trace-to-reveal action {trace_completions} times, transitioning them to independent diagram exploration.",
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "onboarding"
+        ],
+        "confidence": 0.45,
+        "provenance_refs": [
+          "p1"
+        ]
+      },
+      "provenance": null,
+      "cheap_origin": [
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Path Tracing",
+            "description_as_reported": "participants who traced and pointed in the learning phase outperformed participants who did not trace and point on a knowledge test of comprehension, while also reporting lower extraneous load.",
+            "pattern": "Enable a {tracing_mode} on complex diagrams that requires the user to follow a path with their cursor or touch input to reveal the next step in the sequence.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_ed3d72a84c90ec927add8160",
+                "quote_or_locus": "participants who traced and pointed in the learning phase outperformed participants who did not trace and point on a knowledge test of comprehension, while also reporting lower extraneous load",
+                "start": 1320,
+                "end": 1512,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p1"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Coordinated Gesture Feedback",
+            "description_as_reported": "Speakers recalled significantly more letters when producing movements that coordinated with the meaning of the accompanying speech, i.e., when gesturing, than when producing meaningless movements or no movement.",
+            "pattern": "Provide {gesture_feedback_delay} milliseconds of visual animation that mirrors the user's input action when they interact with complex interface elements to reinforce the semantic connection between the action and the content.",
+            "source_domain": "language and cognitive processes",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_113069739fcccde5b33ffe6c",
+                "quote_or_locus": "Speakers recalled significantly more letters when producing movements that coordinated with the meaning of the accompanying speech, i.e., when gesturing, than when producing meaningless movements or no movement",
+                "start": 642,
+                "end": 852,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p2"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "CVI reduced ICL and ECL, alongside significantly increasing GCL",
+            "pattern": "Highlight the current step in a multi-stage process using a visual indicator that requires the user to click or hover to advance, ensuring the user actively engages with the sequence {step_count} times before unlocking the next phase.",
+            "source_domain": "medical education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.4,
+            "citations": [
+              {
+                "record_id": "cr_44cca7387edce4f60514b851",
+                "quote_or_locus": "CVI reduced ICL and ECL, alongside significantly increasing GCL",
+                "start": 1683,
+                "end": 1746,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p3"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Active Information Chunking",
+            "description_as_reported": "Managing intrinsic load through segmentation, scaffolding, worked examples, pre-training, and stepwise increases in task fidelity supports schema development",
+            "pattern": "Segment long-form content into discrete, interactive modules that require the user to perform a manual action {interaction_threshold} times to reveal subsequent information blocks.",
+            "source_domain": "pharmacy education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_3dbccaffe0bcd2b58343bda0",
+                "quote_or_locus": "Managing intrinsic load through segmentation, scaffolding, worked examples, pre-training, and stepwise increases in task fidelity supports schema development",
+                "start": 650,
+                "end": 807,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p4"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Guided Pathing",
+            "description_as_reported": "Qualitative findings revealed that the use of semi-concrete coastal objects reduced extraneous cognitive load, supported students’ progression across Van Hiele levels, and enabled meaningful connections between geometry and everyday coastal experiences.",
+            "pattern": "Highlight the active step in a multi-step process using a {visual_indicator_opacity} opacity overlay to guide the user's focus, and remove the highlight once the user has interacted with the element {interaction_threshold} times.",
+            "source_domain": "coastal elementary education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.4,
+            "citations": [
+              {
+                "record_id": "cr_6497805800741226b6368a18",
+                "quote_or_locus": "Qualitative findings revealed that the use of semi-concrete coastal objects reduced extraneous cognitive load, supported students’ progression across Van Hiele levels, and enabled meaningful connections between geometry and everyday coastal experiences",
+                "start": 1295,
+                "end": 1547,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p5"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Cognitive Readiness Gate",
+            "description_as_reported": "Based on this diagnostic phase, a daily cognitive readiness assessment was implemented as a pre-shift digital test, completed individually in approximately three minutes. The monitoring program operated continuously for 22 months, during which 9,139 tests were conducted with high workforce acceptance (94%).",
+            "pattern": "Require the user to complete a {assessment_duration} minute cognitive readiness check before accessing high-stakes features if the user has not performed the core action in the last {inactivity_threshold} days.",
+            "source_domain": "offshore oil and gas operations",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_583b469ac3387449c573943f",
+                "quote_or_locus": "Based on this diagnostic phase, a daily cognitive readiness assessment was implemented as a pre-shift digital test, completed individually in approximately three minutes",
+                "start": 1440,
+                "end": 1609,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p6"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Progressive Scaffolding Fading",
+            "description_as_reported": "we propose a fading procedure in which problem-solving elements are successively integrated into example study until the learners are expected to solve problems on their own.",
+            "pattern": "Reduce the level of instructional guidance provided in the interface after {interaction_count} successful completions of the core task, transitioning the user from guided examples to independent action.",
+            "source_domain": "cognitive skill acquisition",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_68739e8507a3076b45e286d1",
+                "quote_or_locus": "we propose a fading procedure in which problem-solving elements are successively integrated into example study until the learners are expected to solve problems on their own",
+                "start": 932,
+                "end": 1105,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p7"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Tracing Prompt",
+            "description_as_reported": "Studies on tracing or tracing and pointing have yielded mixed findings regarding hypothesized effects on intrinsic and extraneous cognitive load. The tracing effect on transfer posttests seen in prior studies was replicated",
+            "pattern": "Prompt the user to trace the path of a diagram using their cursor or touch input after {inactivity_threshold} seconds of idle time on a complex instructional graphic to facilitate knowledge transfer.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_95f0c27ec180721afa4b253d",
+                "quote_or_locus": "The tracing effect on transfer posttests seen in prior studies was replicated",
+                "start": 894,
+                "end": 971,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p8"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Integrated Information Overlay",
+            "description_as_reported": "One example of ineffective instruction occurs if learners unnecessarily are required to mentally integrate disparate sources of mutually referring information such as separate text and diagrams. Such split-source infonnation may generate a heavy cognitive load",
+            "pattern": "Overlay text labels directly onto diagram elements when the user hovers over a component to prevent split-attention, provided the user has performed {interaction_count} interactions with the interface.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_972fd549c5db6d072c2c3f36",
+                "quote_or_locus": "One example of ineffective instruction occurs if learners unnecessarily are required to mentally integrate disparate sources of mutually referring information such as separate text and diagrams",
+                "start": 269,
+                "end": 462,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p9"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Guided Tracing",
+            "description_as_reported": "The EBCLC model offers a novel instructional synthesis that integrates worked-example principles, guided cognitive processing, and multimodal representations into a structured learning sequence explicitly designed to regulate cognitive load.",
+            "pattern": "Enable a {tracing_mode} on complex diagrams where the user must follow a highlighted path with their cursor to unlock the next {step_count} of the instructional sequence.",
+            "source_domain": "biotechnology education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_e93260e213faf8852027eb01",
+                "quote_or_locus": "The EBCLC model offers a novel instructional synthesis that integrates worked-example principles, guided cognitive processing, and multimodal representations into a structured learning sequence explicitly designed to regulate cognitive load",
+                "start": 1859,
+                "end": 2099,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p10"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Progressive Information Disclosure",
+            "description_as_reported": "Extraneous load can be reduced by the use of goal-free tasks, worked examples and completion tasks, by integrating different sources of information, using multiple modalities, and by reducing redundancy.",
+            "pattern": "Hide secondary information panels until the user has performed {interaction_count} interactions with the primary content to ensure the working memory is not overloaded by simultaneous information sources.",
+            "source_domain": "medical education",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_dc770be4502443d042f5cb0f",
+                "quote_or_locus": "Extraneous load can be reduced by the use of goal-free tasks, worked examples and completion tasks, by integrating different sources of information, using multiple modalities, and by reducing redundancy",
+                "start": 1021,
+                "end": 1223,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p11"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Gesture Prompt",
+            "description_as_reported": "Higher recall and pronunciation accuracy were observed when gestures were iconic, actively imitated, and temporally aligned with speech.",
+            "pattern": "Display a visual prompt to {gesture_imitation_threshold} seconds after the start of a complex instructional segment, encouraging the user to perform a physical tracing action on the screen.",
+            "source_domain": "language learning",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_fac0e20b4f80c77b8f27b534",
+                "quote_or_locus": "Higher recall and pronunciation accuracy were observed when gestures were iconic, actively imitated, and temporally aligned with speech",
+                "start": 1076,
+                "end": 1211,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p12"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Visual Scaffolding Toggle",
+            "description_as_reported": "Practitioner and service user feedback highlighted the value of modular, nonlinear navigation, simplified language, grounding cues and visual scaffolding in reducing cognitive load.",
+            "pattern": "Provide a toggle to enable {scaffolding_mode_default} which overlays visual grounding cues on complex interface elements until the user has interacted with the module {interaction_count_threshold} times.",
+            "source_domain": "mental health resource design",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_16c307a494c013fa3f519b65",
+                "quote_or_locus": "Practitioner and service user feedback highlighted the value of modular, nonlinear navigation, simplified language, grounding cues and visual scaffolding in reducing cognitive load",
+                "start": 1464,
+                "end": 1644,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p13"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive spatial anchoring",
+            "description_as_reported": "Spatially distributed instructions improve learning outcomes and efficiency by reducing the split-attention effect, where multiple sources of information are placed side by side rather than stacked.",
+            "pattern": "Display instructional content and interactive task elements in a {side_by_side_layout} to minimize split-attention, triggering a transition to a {stacked_layout} only when the user reaches {interaction_threshold} interactions with the primary interface.",
+            "source_domain": "educational psychology",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_76ae18bea4a2e49ba96086d5",
+                "quote_or_locus": "distributed-display instructions led learners to more efficient learning; learners finished the task faster and scored higher in the overall learning test",
+                "start": 1196,
+                "end": 1350,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p14"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Adaptive affective scaffolding",
+            "description_as_reported": "Verbose emotional scaffolding may exceed learners' working memory capacity and act as an extraneous processing burden rather than affective support under high task difficulty.",
+            "pattern": "Monitor task difficulty and dynamically reduce the verbosity of system feedback when the user exceeds {difficulty_threshold} in a session, switching to an {efficient_mode} to prevent extraneous cognitive load.",
+            "source_domain": "educational AI",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_219096e570a0a5b0cc7692e3",
+                "quote_or_locus": "under high task difficulty, verbose emotional scaffolding may exceed learners' working' memory capacity and act as an extraneous processing burden rather than affective support",
+                "start": 3251,
+                "end": 3427,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p15"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Tracing Prompt",
+            "description_as_reported": "Tracing and pointing actions using the index finger on lesson materials enhance learning and reduce extraneous cognitive load.",
+            "pattern": "Display a {tracing_prompt_delay} second delay before enabling the next lesson step, then prompt the user to trace the {target_element_id} with their cursor to unlock the continuation.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_a2c74a2a7cff795aecafddbb",
+                "quote_or_locus": "Dialogue TTS was significantly superior to single TTS in comprehension (p=.006, q=.025) and cognitive engagement (p=.019, q=.048); enjoyment was non-significant after FDR correction (q=.081) but reached significance after controlling for prior knowledge",
+                "start": 1168,
+                "end": 1421,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p16"
+          ]
+        },
+        {
+          "item": {
+            "id": "ui_pattern_001",
+            "term": "Interactive Spatial Anchoring",
+            "description_as_reported": "Physical integration (e.g., combining text and diagrams) may reduce cognitive load and so facilitate learning.",
+            "pattern": "Integrate text and diagrams into a single {container_type} to minimize split-attention, and trigger a {highlight_effect} on the diagrammatic referent when the user hovers over the corresponding text.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "dashboard_widget",
+              "onboarding"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_5e41f7b9ea5bce1349210861",
+                "quote_or_locus": "Experiment 2 ameliorated split-attention effects by using colour coding to reduce cognitive load inducing search for diagrammatic referents in the text",
+                "start": 825,
+                "end": 976,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p17"
+          ]
+        },
+        {
+          "item": {
+            "id": "ui_pattern_002",
+            "term": "Dynamic Information Prioritization",
+            "description_as_reported": "Cuing one display item with a brief flash led to rapid development of a recall advantage for that item. This advantage was short-lived if the cue was simply a salient visual event but was maintained if it indicated an object of particular relevance to the task.",
+            "pattern": "Apply a {visual_cue_duration} highlight to elements identified as {core_action_relevance} to guide user attention toward goal-relevant information.",
+            "source_domain": "visual working memory",
+            "artifact_context": [
+              "dashboard_widget",
+              "landing_hero"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_88bdb3f8ca22cb7b553aa97b",
+                "quote_or_locus": "Cuing one display item with a brief flash led to rapid development of a recall advantage for that item. This advantage was short-lived if the cue was simply a salient visual event but was maintained if it indicated an object of particular relevance to the task",
+                "start": 936,
+                "end": 1196,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p18"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Cognitive Load Chunking",
+            "description_as_reported": "The study’s findings highlighted the value of minimalist and clear nano-videos as a pedagogical tool necessary for today’s digitally engaged learner.",
+            "pattern": "Restrict the duration of interactive instructional walkthroughs to {max_duration} seconds per segment to minimize extraneous cognitive load.",
+            "source_domain": "multimedia instructional design",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_fa70c776fd6a8bdff2986f03",
+                "quote_or_locus": "The study’s findings highlighted the value of minimalist and clear nano-videos as a pedagogical tool necessary for today’s digitally engaged learner",
+                "start": 1537,
+                "end": 1685,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p19"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "The measurement model demonstrated strong convergent and discriminant validity across five constructs—Transportation, Electricity Consumption, Waste Management, Carbon Footprint Awareness, and Consumer Consumption with factor loadings above .70, AVE values exceeding .50, composite reliability above .70, and Cronbach’s alpha ranging from .84 to .91, confirming internal consistency and construct distinctiveness.",
+            "pattern": "Implement a progress tracker that requires the user to manually select or toggle {completion_threshold} items to visualize their current status, reinforcing the cognitive association between active engagement and goal achievement.",
+            "source_domain": "sustainable consumption",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_37b6672cd62754e29a3f52c4",
+                "quote_or_locus": "The measurement model demonstrated strong convergent and discriminant validity across five constructs—Transportation, Electricity Consumption, Waste Management, Carbon Footprint Awareness, and Consumer Consumption with factor loadings above .70, AVE values exceeding .50, composite reliability above .70, and Cronbach’s alpha ranging from .84 to .91, confirming internal consistency and construct distinctiveness",
+                "start": 3357,
+                "end": 3769,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p20"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Spatial Anchoring",
+            "description_as_reported": "VR interventions consistently matched or exceeded traditional methods in immediate knowledge acquisition, with the most pronounced benefits observed in spatially complex anatomical domains.",
+            "pattern": "Enable {spatial_interaction_mode} for complex diagrams to allow users to trace components, triggering a {highlight_opacity} change to confirm active engagement.",
+            "source_domain": "anatomy education",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.75,
+            "citations": [
+              {
+                "record_id": "cr_7b0e4e6840d45e1ee8b10395",
+                "quote_or_locus": "VR interventions consistently matched or exceeded traditional methods in immediate knowledge acquisition, with the most pronounced benefits observed in spatially complex anatomical domains",
+                "start": 1240,
+                "end": 1428,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p21"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Gamified Summarization Scaffolding",
+            "description_as_reported": "The findings indicate that game-based formative assessments effectively mitigate extraneous cognitive load while satisfying the foundational psychological needs of learner autonomy, competence, and relatedness.",
+            "pattern": "Implement {summarization_trigger_count} interactive checkpoints during long-form content to prompt user-generated summaries, rewarding completion with {badge_visual_style} to reinforce competence.",
+            "source_domain": "primary education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.7,
+            "citations": [
+              {
+                "record_id": "cr_5e5b65f4e01c2e9e20507c83",
+                "quote_or_locus": "The findings indicate that game-based formative assessments effectively mitigate extraneous cognitive load while satisfying the foundational psychological needs of learner autonomy, competence, and relatedness",
+                "start": 1561,
+                "end": 1770,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p22"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Spatial Highlighting",
+            "description_as_reported": "Categorization occurs automatically in most learners, reducing the information-processing load and allowing the individual to understand the world.",
+            "pattern": "Implement a {highlight_trigger} that requires the user to manually trace or point at specific interface elements to reveal hidden information, thereby forcing active categorization.",
+            "source_domain": "neurodevelopmental disorders",
+            "artifact_context": [
+              "onboarding",
+              "dashboard_widget"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_ac9082bddb5ad2ec00a24c6e",
+                "quote_or_locus": "Categorization occurs automatically in most learners, reducing the information-processing load and allowing the individual to u",
+                "start": 5944,
+                "end": 6071,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p23"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Graded Task Assignment",
+            "description_as_reported": "The core of this somatocognitive therapy (1) To promote awareness of own body, (2) graded task assignment related to the motor patterns utilized in daily activities",
+            "pattern": "Introduce a {task_complexity_threshold} that breaks down complex user workflows into smaller, motor-pattern-aligned steps, requiring physical interaction to progress.",
+            "source_domain": "physiotherapy",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_84f976f7a271e972015f79bc",
+                "quote_or_locus": "The core of this somatocognitive therapy (1) To promote awareness of own body, (2) graded task assignment related to the motor patterns utilized in daily activities",
+                "start": 1210,
+                "end": 1374,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p24"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_001",
+            "term": "Interactive Progress Tracking",
+            "description_as_reported": "The study identified interrelated constraints: limited curricular coverage of blockchain concepts and laboratory exposure; uneven faculty readiness and institutional resource limitations; and learner heterogeneity that increases cognitive load for non-technical cohorts.",
+            "pattern": "Implement a progress tracker that requires the user to manually trace or point to {required_steps} key concepts on the screen before unlocking the next module to reduce extraneous cognitive load.",
+            "source_domain": "supply chain management education",
+            "artifact_context": [
+              "onboarding"
+            ],
+            "confidence": 0.6,
+            "citations": [
+              {
+                "record_id": "cr_c9f9f95862afd97ed50452f3",
+                "quote_or_locus": "learner heterogeneity that increases cognitive load for non-technical cohorts",
+                "start": 1241,
+                "end": 1318,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p25"
+          ]
+        },
+        {
+          "item": {
+            "id": "pattern_002",
+            "term": "Guided Interaction Overlay",
+            "description_as_reported": "The 'menu of constructs' notion suggests an approach whereby a wider range of theoretical constructs, including constructs from cognitive theories with scope that makes the immediate application to the new context challenging, may be employed to facilitate development of more effective KT interventions.",
+            "pattern": "Overlay a persistent cursor guide that prompts the user to follow {path_segments} on the interface during complex tasks to anchor attention and minimize extraneous cognitive load.",
+            "source_domain": "cognitive and educational psychology",
+            "artifact_context": [
+              "dashboard_widget"
+            ],
+            "confidence": 0.5,
+            "citations": [
+              {
+                "record_id": "cr_c393fa4d351daa970d068930",
+                "quote_or_locus": "The 'menu of constructs' notion suggests an approach whereby a wider range of theoretical constructs, including constructs from cognitive theories with scope that makes the immediate application to the new context challenging, may be employed to facilitate development of more effective KT interventions",
+                "start": 1593,
+                "end": 1896,
+                "span_role": "finding"
+              }
+            ]
+          },
+          "refs": [
+            "p26"
+          ]
+        }
+      ]
+    }
+  ]
+}

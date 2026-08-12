@@ -1,0 +1,51 @@
+{
+  "id": "view-count-triggered-text-suppression",
+  "mechanism_id": "MM-15",
+  "term": "View-Count Triggered Text Suppression",
+  "description_as_reported": "redundancy, involving the duplication of information via image and text, also develops a strong mental model of the meaning.",
+  "artifact_context": [
+    "dashboard_widget"
+  ],
+  "effect_refs": [
+    "mm15-modality-effect"
+  ],
+  "derivation": "inferred",
+  "domain_transfer": {
+    "source_domain": "multimedia instructional design",
+    "application_domain": "product UI"
+  },
+  "pattern": "Offer a toggle that hides on-screen text which merely duplicates adjacent visual content once the user has viewed the associated image {view_threshold} times, excluding any text serving an accessibility function such as captions, subtitles, transcripts, alt text or screen-reader labels, and keeping a manual re-enable option visible at all times.",
+  "parameters": [
+    {
+      "name": "view_threshold",
+      "value": 3,
+      "unit": "views",
+      "evidence_basis": "none — default heuristic"
+    }
+  ],
+  "provenance": [
+    {
+      "mechanism_id": "MM-15",
+      "corpus_record_id": "cr_c2aa2b555308c851aef3cb59",
+      "doi": "10.1145/3588015.3589196",
+      "title": "The effect of intersemiotic relations on L2 learners’ multimodal reading",
+      "quote_or_locus": "redundancy, involving the duplication of information via image and text, also develops a strong mental model of the meaning",
+      "source_span": {
+        "start": 874,
+        "end": 997,
+        "source_text_sha256": "95b4337ad606d67ff322d25d01a059bd7b83a64cae00ef6553bb39f130594b2b"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "MM-15",
+      "corpus_record_id": "cr_0485aaea69be8ac0f3c0300e",
+      "effect_id": "mm15-modality-effect",
+      "title": "Cognitive principles of multimedia learning: The role of modality and contiguity.",
+      "quote_or_locus": "The modality effect, which suggests that pictures are best accompanied by audio explanations rather than text, has not been consistently replicated in computing education.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.5
+}

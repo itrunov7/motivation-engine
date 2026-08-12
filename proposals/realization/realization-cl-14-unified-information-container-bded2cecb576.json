@@ -1,0 +1,180 @@
+{
+  "id": "realization-cl-14-unified-information-container-bded2cecb576",
+  "type": "realization",
+  "target": "CL-14",
+  "payload": {
+    "id": "unified-information-container",
+    "mechanism_id": "CL-14",
+    "term": "Unified Information Container",
+    "description_as_reported": "The sources of information should be both physically and temporally integrated in order to reduce unnecessary search for referents and so reduce extraneous cognitive load.",
+    "artifact_context": [
+      "landing_hero",
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "cl-14-01"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "multimedia instructional design",
+      "application_domain": "product UI"
+    },
+    "pattern": "Merge the {text_label} and {diagram_element} into a single visual container once the user has spent {dwell_time} seconds on the page, rather than presenting them in separate panels or windows.",
+    "parameters": [
+      {
+        "name": "text_label",
+        "value": 1,
+        "unit": "labels",
+        "evidence_basis": "none — default heuristic"
+      },
+      {
+        "name": "diagram_element",
+        "value": 1,
+        "unit": "diagrams",
+        "evidence_basis": "none — default heuristic"
+      },
+      {
+        "name": "dwell_time",
+        "value": 5,
+        "unit": "seconds",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_835cf506c0e8ed0e0fe38ed1",
+        "doi": "10.1017/cbo9780511816819.009",
+        "title": "The Split-Attention Principle in Multimedia Learning",
+        "quote_or_locus": "By eliminating the need to mentally integrate multiple sources of information, extraneous working memory load is reduced, freeing resources for learning",
+        "source_span": {
+          "start": 494,
+          "end": 646,
+          "source_text_sha256": "015dcdf464988144f7298f6280fc7f6732203c8228c994df9ca907520a452622"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_e30ed337f6eed5191a31c144",
+        "doi": "10.1111/j.2044-8279.1992.tb01017.x",
+        "title": "THE SPLIT‐ATTENTION EFFECT AS A FACTOR IN THE DESIGN OF INSTRUCTION",
+        "quote_or_locus": "Physical integration (e.g., combining text and diagrams) may reduce cognitive load and so facilitate learning",
+        "source_span": {
+          "start": 744,
+          "end": 853,
+          "source_text_sha256": "796b531518b8c318a7e122bfa15dcb26ba2689edad59483ef681557f7d58f2cc"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_f2b55d05f7803d43eb21932f",
+        "doi": "10.1017/cbo9781139547369.016",
+        "title": "Principles for Managing Essential Processing in Multimedia Learning: Segmenting, Pre-training, and Modality Principles",
+        "quote_or_locus": "The sources of information should be both physically and temporally integrated in order to reduce unnecessary search for referents and so reduce extraneous cognitive load",
+        "source_span": {
+          "start": 373,
+          "end": 543,
+          "source_text_sha256": "d00a04f2b36576ae2d73ab9a6d06db8dd0f040563b49d051ca5662a3aebfabcd"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_380cef91abc8787ab84b39e4",
+        "doi": "10.2118/232736-ms",
+        "title": "From Readiness to Response: Assuring Emergency Response Competence Through Scenario-Based Virtual Plant Training",
+        "quote_or_locus": "Real incidents, near misses, and process safety requirements were translated into immersive, multi-user control room scenarios that replicate actual control room interfaces, alarm behavior, procedures, communication channels, and operational distractions",
+        "source_span": {
+          "start": 1298,
+          "end": 1552,
+          "source_text_sha256": "1acad1892482f6ba43bb0ffe1d62308602abc9d96277bd97fc508628cb1c2ad3"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+        "effect_id": "cl-14-01",
+        "title": "Cognitive load and the imagination effect",
+        "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.65
+  },
+  "provenance": [
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_835cf506c0e8ed0e0fe38ed1",
+      "doi": "10.1017/cbo9780511816819.009",
+      "title": "The Split-Attention Principle in Multimedia Learning",
+      "quote_or_locus": "By eliminating the need to mentally integrate multiple sources of information, extraneous working memory load is reduced, freeing resources for learning",
+      "source_span": {
+        "start": 494,
+        "end": 646,
+        "source_text_sha256": "015dcdf464988144f7298f6280fc7f6732203c8228c994df9ca907520a452622"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_e30ed337f6eed5191a31c144",
+      "doi": "10.1111/j.2044-8279.1992.tb01017.x",
+      "title": "THE SPLIT‐ATTENTION EFFECT AS A FACTOR IN THE DESIGN OF INSTRUCTION",
+      "quote_or_locus": "Physical integration (e.g., combining text and diagrams) may reduce cognitive load and so facilitate learning",
+      "source_span": {
+        "start": 744,
+        "end": 853,
+        "source_text_sha256": "796b531518b8c318a7e122bfa15dcb26ba2689edad59483ef681557f7d58f2cc"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_f2b55d05f7803d43eb21932f",
+      "doi": "10.1017/cbo9781139547369.016",
+      "title": "Principles for Managing Essential Processing in Multimedia Learning: Segmenting, Pre-training, and Modality Principles",
+      "quote_or_locus": "The sources of information should be both physically and temporally integrated in order to reduce unnecessary search for referents and so reduce extraneous cognitive load",
+      "source_span": {
+        "start": 373,
+        "end": 543,
+        "source_text_sha256": "d00a04f2b36576ae2d73ab9a6d06db8dd0f040563b49d051ca5662a3aebfabcd"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_380cef91abc8787ab84b39e4",
+      "doi": "10.2118/232736-ms",
+      "title": "From Readiness to Response: Assuring Emergency Response Competence Through Scenario-Based Virtual Plant Training",
+      "quote_or_locus": "Real incidents, near misses, and process safety requirements were translated into immersive, multi-user control room scenarios that replicate actual control room interfaces, alarm behavior, procedures, communication channels, and operational distractions",
+      "source_span": {
+        "start": 1298,
+        "end": 1552,
+        "source_text_sha256": "1acad1892482f6ba43bb0ffe1d62308602abc9d96277bd97fc508628cb1c2ad3"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+      "effect_id": "cl-14-01",
+      "title": "Cognitive load and the imagination effect",
+      "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.65,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31108569730",
+  "proposed_at": "2026-08-06T13:59:47.983Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

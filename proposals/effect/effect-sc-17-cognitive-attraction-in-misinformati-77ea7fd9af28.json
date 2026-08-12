@@ -48,9 +48,38 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30818373159",
   "proposed_at": "2026-08-03T13:32:20.847Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.286Z",
+  "decision_note": "NOT_TRANSFERABLE — narrow to Facebook misinformation engagement specifically.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "pass",
+        "reason": "a person interacting with an artifact (images)"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show image or video with post — names a manipulable variable: show image or video with post — Product surface controls presence/prominence of visual media, a mechanism driving shares.",
+        "identified_lever": "show image or video with post"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (reduce)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": []
+  }
 }

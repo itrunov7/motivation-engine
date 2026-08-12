@@ -25,6 +25,15 @@
 # ephemeral dry-run quote (D-025): a run artifact, never committed
 /quote.json
 
+# the transferability probe's captured model answers: one run's output against
+# one queue at one moment, re-scorable offline by `transferability-probe rescore`.
+# A snapshot, not a source — committing it would make it look like one.
+/transferability-answers.json
+
+# owner review packet (D-176): a snapshot of "pending, right now" that goes
+# stale the moment a proposal is decided — not a corpus record or a decision.
+/review-packet-v3.md
+
 # live run-progress heartbeat (D-086): a working file the publisher force-pushes
 # to the ops-progress ref, never committed to main
 /.ops-progress/

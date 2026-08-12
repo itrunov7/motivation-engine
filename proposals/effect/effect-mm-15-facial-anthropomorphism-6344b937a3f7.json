@@ -48,9 +48,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30818854515",
   "proposed_at": "2026-08-03T13:38:36.944Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.230Z",
+  "decision_note": "NOT_TRANSFERABLE — its own boundary states effects are age-dependent (stronger for juvenile students) and material-type dependent (static material); not established as broadly transferable across audiences.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: add facial/anthropomorphic imagery to learning content — names a manipulable variable: add facial/anthropomorphic imagery to learning content — UI can display anthropomorphized faces on static learning materials to boost engagement.",
+        "identified_lever": "add facial/anthropomorphic imagery to learning content"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (improves)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

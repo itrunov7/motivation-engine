@@ -48,9 +48,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:41:42.705Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.170Z",
+  "decision_note": "Rejected as instructed. Content-grounded rationale: a generic, hedged claim (\"CAN facilitate social comparison\") duplicating ground already covered by the approved gamification-mechanics (same mechanism) and SP-08's social-proof effects (different mechanism, decided in the prior batch) — no distinct lever of its own.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: leaderboard showing others' progress toward shared goal — names a manipulable variable: leaderboard showing others' progress toward shared goal — Surfacing peer progress/rankings enables social comparison and mutual support toward goals.",
+        "identified_lever": "leaderboard showing others' progress toward shared goal"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (facilitate)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

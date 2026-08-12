@@ -20,6 +20,7 @@ import { TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS } from "../lib/types";
 import type {
   CandidateLedgerRun,
   CorpusManifestRun,
+  Effect,
   EvidenceCorpusFile,
   EvidenceCorpusRecord,
   ExtractionOpsConfig,
@@ -27,10 +28,15 @@ import type {
   Proposal,
   ReaderCoverageFile,
   RealizationCorpusFile,
+  RealizationDerivation,
 } from "../lib/types";
 import {
+  CHEAP_OUTPUT_EXPECTED,
+  CHEAP_OUTPUT_RESERVE,
+  EXTRACTION_MODES,
   OPENROUTER_SYSTEM_PROMPT,
   OpenRouterOutputValidationError,
+  anchorBlock,
   buildExtractionManifestRun,
   buildExtractionPlan,
   buildExtractionManifestCost,
@@ -53,6 +59,8 @@ import {
   recordUngroundedDrop,
   resolveScope,
   settleResponseBatch,
+  synthesisInstruction,
+  taskInstruction,
   toProposal,
   type DraftItem,
   type ExtractionMode,
@@ -266,6 +274,77 @@ test("resolves mechanism, pack, and segment scopes deterministically", () => {
   assert.throws(
     () => resolveScope({ mechanism: "CL-14", pack: "entry" }),
     /exactly one scope/,
+  );
+});
+
+test("every quoted token is priced at its own tier's rate (D-174)", () => {
+  const quote = buildQuote(
+    "effects",
+    resolveScope({ mechanism: "CL-14" }),
+    configured,
+    new Date("2026-07-21T10:00:00.000Z"),
+    null,
+  );
+  // Prices are nullable on the config type (an unpriced tier is a real state,
+  // reported as price_state "unconfigured"). This test is about the arithmetic,
+  // so it asserts them present rather than defaulting them to zero — a zero
+  // would make every comparison below trivially true.
+  const price = (tier: { input_usd_per_token: number | null; output_usd_per_token: number | null }) => {
+    assert(tier.input_usd_per_token !== null && tier.output_usd_per_token !== null);
+    return { input: tier.input_usd_per_token, output: tier.output_usd_per_token };
+  };
+  const cheap = price(configured.tiers.cheap);
+  const strong = price(configured.tiers.strong);
+
+  // The split must account for the whole, or a term is being priced twice or
+  // not at all.
+  assert.equal(
+    quote.tokens.input_cheap + quote.tokens.input_strong,
+    quote.tokens.input_upper_bound,
+  );
+  assert.equal(
+    quote.tokens.output_reserved_cheap + quote.tokens.output_reserved_strong,
+    quote.tokens.output_reserved,
+  );
+  assert(quote.tokens.input_cheap > 0);
+  assert(quote.tokens.input_strong > 0);
+
+  const expected =
+    quote.tokens.input_cheap * cheap.input +
+    quote.tokens.input_strong * strong.input +
+    quote.tokens.output_reserved_cheap * cheap.output +
+    quote.tokens.output_reserved_strong * strong.output;
+  assert.equal(quote.estimated_usd, Math.round(expected * 1e8) / 1e8);
+
+  // The defect this replaces, stated as arithmetic: charging the dearer input
+  // rate for every token. It must now be strictly more expensive than the real
+  // answer, so a regression to Math.max cannot pass this test.
+  const collapsed =
+    quote.tokens.input_upper_bound *
+      Math.max(cheap.input, strong.input) +
+    quote.tokens.output_reserved_cheap * cheap.output +
+    quote.tokens.output_reserved_strong * strong.output;
+  assert(
+    collapsed > quote.estimated_usd,
+    "the old Math.max form must overstate; if it does not, the fixture prices no longer differ by tier",
+  );
+});
+
+test("the max_tokens ceiling and the output estimate are different numbers (D-174)", () => {
+  // They were one constant, and that is what reserved 20% of the per-run cap
+  // against output no run has produced. Keeping them apart is the fix; this
+  // test is what stops a future edit from quietly re-fusing them.
+  assert.notEqual(CHEAP_OUTPUT_EXPECTED, CHEAP_OUTPUT_RESERVE);
+  assert(
+    CHEAP_OUTPUT_EXPECTED < CHEAP_OUTPUT_RESERVE,
+    "the estimate must sit below the ceiling — a plan may not budget for more than the API will return",
+  );
+  // Measured cheap output was 433 tokens/call (run 31104524768) and 264
+  // (run 31092507605). The estimate keeps a real margin over both rather than
+  // being tuned to the observation.
+  assert(
+    CHEAP_OUTPUT_EXPECTED >= 433 * 2,
+    "the estimate must keep margin over the highest measured output, not track it",
   );
 });
 
@@ -916,6 +995,75 @@ test("every grounding refusal names its own reason", () => {
   assert.equal(doiOutcome.ok === false && doiOutcome.corpus_side?.doi, null);
 });
 
+test("citing the anchoring effect is its own refusal, not an unknown record (D-167)", () => {
+  const file = corpus();
+  const record = file.records.find((candidate) => candidate.abstract && candidate.doi);
+  assert(record?.abstract);
+  const exact = record.abstract.slice(0, 80);
+  const anchorEffectId = "chromatic-asymmetry-in-visual-attention";
+
+  // The run that exposed this: 15 of 19 cheap candidates cited the anchor id,
+  // and every one was filed as unknown_record_id — a prompt-shape defect hidden
+  // inside the bucket for hallucinated ids.
+  const cited = groundingOutcome(
+    { citations: [cite(anchorEffectId, exact)] },
+    file,
+    { anchorEffectId },
+  );
+  assert.equal(cited.ok, false);
+  assert.equal(cited.ok === false && cited.reason, "anchor_cited_as_record");
+  assert.equal(cited.ok === false && cited.corpus_record_id, anchorEffectId);
+  assert(cited.ok === false && cited.detail.includes(anchorEffectId));
+
+  // The two reasons stay distinguishable: a genuinely invented id keeps landing
+  // on unknown_record_id even while the anchor check is armed. If this ever
+  // collapsed into one reason the fix for each would become unmeasurable.
+  const invented = groundingOutcome(
+    { citations: [cite("cr_000000000000000000000000", exact)] },
+    file,
+    { anchorEffectId },
+  );
+  assert.equal(invented.ok === false && invented.reason, "unknown_record_id");
+
+  // Without an anchor the check cannot fire, so an unanchored run and a replay
+  // both report exactly what they reported before this reason existed.
+  const unanchored = groundingOutcome(
+    { citations: [cite(anchorEffectId, exact)] },
+    file,
+  );
+  assert.equal(unanchored.ok === false && unanchored.reason, "unknown_record_id");
+});
+
+test("the anchor block offers no id a model could cite (D-167)", () => {
+  const effectId = "chromatic-asymmetry-in-visual-attention";
+  const block = anchorBlock({
+    effect: {
+      id: effectId,
+      mechanism_id: "CL-14",
+      name: "Chromatic Asymmetry in Visual Attention",
+      fact: "Yellow backgrounds optimize rapid initial attentional capture.",
+      boundary: "Standardized reading tasks with white text.",
+      grade: "C+",
+    } as unknown as Effect,
+    keywords: [],
+    citedRecordIds: new Set<string>(),
+  });
+
+  // Structural, not advisory: the id is absent from the prompt entirely, so
+  // citing it is not something the model can be tempted into. Same shape as the
+  // synthesis-projection tests — the safest instruction is the one that has no
+  // subject to act on.
+  assert(!block.includes(effectId));
+  assert(!/"id"\s*:/.test(block));
+  // The wording it is anchored on must still be present, or the run loses the
+  // thing that tells it which material is on topic.
+  assert(block.includes("Chromatic Asymmetry in Visual Attention"));
+  assert(block.includes("Yellow backgrounds optimize rapid initial attentional capture."));
+  // And the prohibition must be stated where the anchor is introduced.
+  assert(block.includes("NOT A SOURCE"));
+  assert(block.toLowerCase().includes("citations"));
+});
+
 test("an anchored citation stores a span that re-slices to its own quote", () => {
   const file = corpus();
   const record = file.records.find(
@@ -1257,14 +1405,175 @@ interface SchemaNode {
 }
 
 /** The per-item schema the model is held to for one mode and stage. */
-function itemSchema(mode: ExtractionMode, stage: "extract" | "synthesize"): SchemaNode {
-  const format = openRouterResponseFormat(mode, stage) as unknown as {
+function itemSchema(
+  mode: ExtractionMode,
+  stage: "extract" | "synthesize",
+  // Widened for D-171. That this argument was missing is itself the evidence:
+  // the inferred realizations shape had never been schema-tested, which is how
+  // it came to demand a field it forbade.
+  derivation: RealizationDerivation = "reported",
+): SchemaNode {
+  const format = openRouterResponseFormat(mode, stage, derivation) as unknown as {
     json_schema: { schema: SchemaNode };
   };
   const items = format.json_schema.schema.properties.items.items;
   assert(items);
   return items;
 }
+
+/**
+ * Strip every bracketed group — (…), {…}, […] — repeatedly, so nested groups
+ * collapse too. Field lists carry annotations inside brackets (`grade (A+..C-)`,
+ * `preconditions [{predicate,reason}]`) whose contents are vocabularies and
+ * sub-objects, not top-level field names.
+ */
+function stripBracketedGroups(text: string): string {
+  let out = text;
+  let previous = "";
+  while (out !== previous) {
+    previous = out;
+    out = out.replace(/\([^()]*\)|\{[^{}]*\}|\[[^[\]]*\]/g, " ");
+  }
+  return out;
+}
+
+/**
+ * The fields a prompt tells the model to emit (D-171).
+ *
+ * Three conventions are in use, and the parser must tell them apart rather than
+ * matching loosely — the prompts also contain bullet lists and comma lists that
+ * are VALUES (span_role vocabulary, section= names, dossier axis keys), and a
+ * loose match would silently absorb the very mismatch this exists to catch.
+ */
+function promptFields(prompt: string): Set<string> {
+  const fields = new Set<string>();
+  const add = (candidate: string): void => {
+    const name = candidate.trim().replace(/[.,;]+$/, "");
+    if (/^[a-z][a-z0-9_]*$/.test(name)) fields.add(name);
+  };
+
+  // Convention B — "- field: prose" bullets. Scoped to the block after
+  // "Fields per item:" on purpose: provenanceInstruction emits five bullets of
+  // its own (background/hypothesis/method/finding/limitation) into the SAME
+  // string, and those are span_role values inside a citation, not item fields.
+  const bulletBlock = prompt.split("Fields per item:")[1];
+  if (bulletBlock !== undefined) {
+    for (const line of bulletBlock.split("\n")) {
+      if (!line.startsWith("- ")) continue;
+      // The provenance bullet is "- citations." with no colon, so splitting on
+      // ":" alone would drop it.
+      add(stripBracketedGroups(line.slice(2)).split(":")[0]);
+    }
+    return fields;
+  }
+
+  // Conventions C and D — "Item fields:" then a semicolon-separated paragraph,
+  // which is one line: on the NEXT line for mechanism, inline for dossier.
+  // Bounded to that line so the trailing "HARD RULE:" prose is not read as
+  // fields. Split on ";" ONLY — the commas inside these lists separate the keys
+  // of a sub-object (dossier's five score axes), which are not top-level fields.
+  const itemFields = prompt.lastIndexOf("Item fields:");
+  if (itemFields !== -1) {
+    const rest = prompt.slice(itemFields + "Item fields:".length);
+    const line = rest.split("\n").find((candidate) => candidate.trim().length > 0) ?? "";
+    for (const segment of stripBracketedGroups(line).split(";")) {
+      add(segment.trim().split(/\s+/)[0] ?? "");
+    }
+    return fields;
+  }
+
+  // Convention A — inline "Fields: a, b (note), c." The list ends at the first
+  // sentence stop; the synthesize variants append instructions after it
+  // ("merge true duplicates, carry forward every ref…"), and reading those as a
+  // comma list would invent fields called "carry" and "remove".
+  const inline = prompt.lastIndexOf("Fields:");
+  if (inline !== -1) {
+    const list = stripBracketedGroups(prompt.slice(inline + "Fields:".length));
+    for (const segment of list.split(".")[0]!.split(",")) {
+      add(segment.trim().split(/\s+/)[0] ?? "");
+    }
+  }
+  return fields;
+}
+
+test("every field a prompt demands exists in the wire schema (D-171)", () => {
+  // The direction that matters: a field the prompt requires and the schema
+  // omits is IMPOSSIBLE to obey, because strictObject sets
+  // additionalProperties:false. That is not a model failing to comply — it is
+  // the pipeline refusing compliance, and then dropping the candidate for the
+  // absence it caused.
+  //
+  // Measured cost of not having this test: mode=realizations effect-anchored
+  // extraction demanded `parameters` (D-115) from a schema that forbade it, so
+  // every pattern carrying a {placeholder} was refused at proposal_not_built.
+  // Three runs, 88 candidates, zero proposals.
+  const anchor = {
+    effect: {
+      id: "cl-14-002",
+      mechanism_id: "CL-14",
+      name: "Expertise reversal effect",
+      fact: "Techniques that help early learners may not help advanced ones.",
+      boundary: "Instructional design",
+      grade: "C+",
+    } as unknown as Effect,
+    keywords: [],
+    citedRecordIds: new Set<string>(),
+  };
+
+  // Derivation is only consulted when mode === "realizations", so iterating it
+  // for the other five modes would compare the same schema twice and report a
+  // wider matrix than was actually checked.
+  const rows: {
+    mode: ExtractionMode;
+    stage: "extract" | "synthesize";
+    derivation: RealizationDerivation;
+    anchored: boolean;
+  }[] = [];
+  for (const mode of EXTRACTION_MODES) {
+    for (const stage of ["extract", "synthesize"] as const) {
+      if (mode === "realizations") {
+        rows.push({ mode, stage, derivation: "reported", anchored: false });
+        rows.push({ mode, stage, derivation: "inferred", anchored: true });
+      } else {
+        rows.push({ mode, stage, derivation: "reported", anchored: false });
+      }
+    }
+  }
+  assert.equal(rows.length, 14);
+
+  const missing: string[] = [];
+  for (const row of rows) {
+    // The coupling nothing in the source enforces: the schema takes
+    // `derivation` and the prompt takes `anchor`, and they are only held
+    // together at two call sites in runExtraction. Pairing them by hand here is
+    // the point — an unpaired invariant is what let D-171 through.
+    const prompt =
+      row.stage === "synthesize"
+        ? synthesisInstruction(row.mode, "CL-14", row.anchored ? anchor : null)
+        : taskInstruction(row.mode, "CL-14", "extract", row.anchored ? anchor : null);
+    const declared = itemSchema(row.mode, row.stage, row.derivation);
+    const demanded = promptFields(prompt);
+
+    // A row whose field list the parser could not find is a parser bug, not a
+    // pass. Silence here would recreate the blindness being fixed.
+    assert(
+      demanded.size > 0,
+      `no field list parsed for ${row.mode}/${row.stage}/${row.derivation}`,
+    );
+
+    for (const field of Array.from(demanded)) {
+      if (!(field in declared.properties)) {
+        missing.push(`${row.mode}/${row.stage}/${row.derivation}: prompt demands "${field}"`);
+      }
+    }
+  }
+
+  assert.deepEqual(
+    missing,
+    [],
+    `the prompt demands fields the schema forbids:\n  ${missing.join("\n  ")}`,
+  );
+});
 
 test("a parameter the model does not advertise is never sent", () => {
   // D-107. require_parameters:true routes only to a provider honouring every
@@ -1321,6 +1630,17 @@ test("the synthesis schema has no field a model could put a quote in", () => {
   // D-104 in schema form. The extraction stage may emit citations; the synthesis
   // stage may emit refs and nothing else, so there is no field for a quote or a
   // record id to arrive in.
+  // The inferred realizations shape is included explicitly. It was absent from
+  // every schema test until D-171 — itemSchema had no derivation argument — and
+  // that blind spot is exactly where the unsatisfiable schema survived.
+  const inferredExtract = itemSchema("realizations", "extract", "inferred");
+  assert("citations" in inferredExtract.properties);
+  assert.equal("provenance_refs" in inferredExtract.properties, false);
+  const inferredSynthesize = itemSchema("realizations", "synthesize", "inferred");
+  assert.equal("citations" in inferredSynthesize.properties, false);
+  assert("provenance_refs" in inferredSynthesize.properties);
+  assert.equal(inferredSynthesize.additionalProperties, false);
+
   for (const mode of ["effects", "realizations", "interactions", "dissent"] as const) {
     const extract = itemSchema(mode, "extract");
     assert("citations" in extract.properties);
@@ -2102,6 +2422,7 @@ test("run summary exposes every quality-gate and cap outcome", () => {
           monthly_token_cap: 0,
           transport_error: 1,
           malformed_answer: 0,
+          answer_truncated: 0,
         },
         dropped_volume_cap: 4,
         dropped_volume_cap_high_confidence: 1,
@@ -2129,7 +2450,7 @@ test("run summary exposes every quality-gate and cap outcome", () => {
       // place that distinction survives the process that produced it.
       verdict_unavailable: "2",
       verdict_unavailable_by_reason:
-        "no_model_id=0 per_run_token_cap=1 monthly_token_cap=0 transport_error=1 malformed_answer=0",
+        "no_model_id=0 per_run_token_cap=1 monthly_token_cap=0 transport_error=1 malformed_answer=0 answer_truncated=0",
       dropped_volume_cap: "4",
       dropped_volume_cap_high_confidence: "1",
       records_eligible: "200",
@@ -2655,5 +2976,98 @@ test("the ledger builder counts the fates it is told and derives nothing", () =>
   });
   assert.equal(afterFailure.cheap?.synthesis_batch_failed, 1);
   assert.equal(afterFailure.cheap?.into_synthesis, 1);
+});
+
+test("a run that consolidates in one mechanism and expands in another balances (D-168)", () => {
+  // The case that broke run 31095467232 and cost it its spend record. Two
+  // mechanisms, opposite folds: A takes 2 cheap candidates to 1 composed,
+  // B takes 1 to 2. Run-level consolidated=1 AND expanded=1, while E3
+  // (into_synthesis + expanded == consolidated + candidates_strong) is exact:
+  // 3 + 1 == 1 + 3.
+  const ledger = new CandidateLedger();
+  const foldA = ["A-1", "A-2"].map(() => {
+    const id = ledger.id("CL-14", "cheap");
+    ledger.record({
+      candidate_id: id,
+      mechanism_id: "CL-14",
+      pass: "cheap",
+      fate: "into_synthesis",
+    });
+    return id;
+  });
+  const foldB = [ledger.id("MM-15", "cheap")];
+  ledger.record({
+    candidate_id: foldB[0],
+    mechanism_id: "MM-15",
+    pass: "cheap",
+    fate: "into_synthesis",
+  });
+  ledger.recordSynthesisFold(foldA.length, 1); // 2 -> 1, consolidates
+  ledger.recordSynthesisFold(foldB.length, 2); // 1 -> 2, expands
+
+  for (const [mechanismId, count] of [
+    ["CL-14", 1],
+    ["MM-15", 2],
+  ] as const) {
+    for (let index = 0; index < count; index += 1) {
+      ledger.record({
+        candidate_id: ledger.id(mechanismId, "strong"),
+        mechanism_id: mechanismId,
+        pass: "strong",
+        fate: "proposed",
+        proposal_id: `effect-${mechanismId.toLowerCase()}-${index}`,
+      });
+    }
+  }
+
+  const built = ledger.build({
+    runId: "2026-08-06T11:00:16.322Z",
+    dispatchId: "cl14-real-run-2",
+    githubRunId: 31095467232,
+    mode: "realizations",
+    scope: "tracing-and-pointing",
+  });
+
+  assert.equal(built.synthesis?.consolidated, 1);
+  assert.equal(built.synthesis?.expanded, 1);
+  assert.equal(built.synthesis?.folds, 2);
+  // Both non-zero, two folds, and it BALANCES. Before D-168 this exact shape
+  // was reported as a violation, npm run validate failed, and both commit paths
+  // in extract.yml were gated behind that validate.
+  assert.deepEqual(checkLedgerBalance(built), []);
+  assert.equal(built.balanced, true);
+});
+
+test("one fold cannot both consolidate and expand, and the check still says so (D-168)", () => {
+  // Gating the check on the fold count must not defang it. A single-fold run
+  // whose totals claim both directions is arithmetically impossible, so it is
+  // still a violation — the concession is to multi-fold runs only.
+  const singleFold = ledgerFixture({
+    synthesis: {
+      into_synthesis: 2,
+      consolidated: 1,
+      expanded: 1,
+      candidates_strong: 2,
+      folds: 1,
+    },
+  });
+  const violations = checkLedgerBalance(singleFold);
+  assert(
+    violations.some((violation) => violation.includes("a single fold can only do one of the two")),
+    `expected the single-fold violation, got: ${violations.join(" | ")}`,
+  );
+
+  // A run recorded before D-168 carries no fold count. It is not judged by this
+  // check at all — asserting it folded once would invent a measurement nobody
+  // took, which is how a heuristic becomes a false verdict on old data.
+  const legacy: CandidateLedgerRun = {
+    ...singleFold,
+    synthesis: { ...singleFold.synthesis!, folds: undefined },
+  };
+  assert(
+    !checkLedgerBalance(legacy).some((violation) =>
+      violation.includes("a single fold can only do one of the two"),
+    ),
+  );
 });
 

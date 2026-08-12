@@ -1,0 +1,90 @@
+{
+  "id": "realization-cl-14-mental-simulation-prompt-236c782ddd00",
+  "type": "realization",
+  "target": "CL-14",
+  "payload": {
+    "id": "mental-simulation-prompt",
+    "mechanism_id": "CL-14",
+    "term": "Mental Simulation Prompt",
+    "description_as_reported": "Mental imagery (visualization) as one of the useful techniques to optimize germane load was suggested, as it processes further gain access to neural circuits that are engaged in sensory, motor, executive, and decision-making pathways in the brain.",
+    "artifact_context": [
+      "onboarding",
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "cl-14-01"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "health sciences education",
+      "application_domain": "product UI"
+    },
+    "pattern": "After showing the static diagram for {visualization_prompt_delay} seconds, present an interactive prompt asking the user to mentally simulate the procedure before revealing the next step.",
+    "parameters": [
+      {
+        "name": "visualization_prompt_delay",
+        "value": 3,
+        "unit": "seconds",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_f356e5160e79b69d61902a84",
+        "doi": "10.4103/jehp.jehp_643_19",
+        "title": "A systematized review of cognitive load theory in health sciences education and a perspective from cognitive neuroscience",
+        "quote_or_locus": "Mental imagery (visualization) as one of the useful techniques to optimize germane load was suggested, as it processes further gain access to neural circuits that are engaged in sensory, motor, executive, and decision-making pathways in the brain",
+        "source_span": {
+          "start": 1273,
+          "end": 1519,
+          "source_text_sha256": "355d825dd9b7c60886979b4ecc54dddae58a56d27b59d8f20396ca1d5b3636a1"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "CL-14",
+        "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+        "effect_id": "cl-14-01",
+        "title": "Cognitive load and the imagination effect",
+        "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.4
+  },
+  "provenance": [
+    {
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_f356e5160e79b69d61902a84",
+      "doi": "10.4103/jehp.jehp_643_19",
+      "title": "A systematized review of cognitive load theory in health sciences education and a perspective from cognitive neuroscience",
+      "quote_or_locus": "Mental imagery (visualization) as one of the useful techniques to optimize germane load was suggested, as it processes further gain access to neural circuits that are engaged in sensory, motor, executive, and decision-making pathways in the brain",
+      "source_span": {
+        "start": 1273,
+        "end": 1519,
+        "source_text_sha256": "355d825dd9b7c60886979b4ecc54dddae58a56d27b59d8f20396ca1d5b3636a1"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "CL-14",
+      "corpus_record_id": "cr_8be5e48f79c704c8d7e3c4de",
+      "effect_id": "cl-14-01",
+      "title": "Cognitive load and the imagination effect",
+      "quote_or_locus": "Imagining a procedure or concept can be a more effective instructional technique than conventional studying, provided the presentation format is integrated rather than split-attention.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.4,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31108569730",
+  "proposed_at": "2026-08-06T13:59:47.983Z",
+  "status": "held_low_confidence",
+  "hold_reason": "below_confidence_floor",
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

@@ -17,9 +17,14 @@
  *
  * Replay any file offline, forever:
  *   npm run replay-grounding -- replay corpora/extraction/rejected/<run>.json
+ *
+ * "Forever" was not true between D-104 and D-169: a 20-file cap below this
+ * comment deleted the oldest files on every flush, reintroducing exactly the
+ * evaporation described above. It is true now — see the retention note on
+ * REJECTED_DIR.
  */
 
-import { mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type {
   ExtractionPass,
@@ -31,11 +36,23 @@ const ROOT = join(__dirname, "..");
 export const REJECTED_DIR = join(ROOT, "corpora", "extraction", "rejected");
 
 /**
- * Keep the committed history bounded the same way run_history is (20 runs).
- * A rejection file is large by design — it stores full abstracts — so an
- * unbounded directory would grow the repo without bound.
+ * RETENTION: none. This directory is append-only (D-169).
+ *
+ * It used to carry REJECTED_FILE_LIMIT = 20 and delete past it, justified as
+ * "keep the committed history bounded the same way run_history is (20 runs)".
+ * D-166 made that sentence false — run_history is append-only now — and the cap
+ * was never authorised by any decision in the first place. It destroyed 6
+ * refusal records across 2 runs before it was removed.
+ *
+ * It also could not do what it claimed. It sorted by mtime, which git checkout
+ * resets, so in CI it deleted an arbitrary file rather than the oldest; and it
+ * ran from flush(), which persistAccounting calls after every batch, so one
+ * wide run could churn the whole window unaided.
+ *
+ * If repo size ever becomes the real problem the comment above imagined, the
+ * answer is compression or a documented archive — not a silent rmSync of the
+ * evidence this module exists to preserve.
  */
-const REJECTED_FILE_LIMIT = 20;
 
 /** A run's start timestamp is the manifest's run key; reuse it for the file. */
 function fileNameFor(runId: string): string {
@@ -50,28 +67,6 @@ export interface RejectionLog {
   count(): number;
   /** Repo-relative path this log writes to, for run reporting. */
   path(): string;
-}
-
-/**
- * Drop the oldest rejection files beyond the retention limit. Newest-first by
- * filename is not reliable across run-id shapes, so sort by mtime.
- */
-function pruneOldFiles(keep: string): void {
-  const entries = readdirSync(REJECTED_DIR, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
-    .map((entry) => entry.name);
-  if (entries.length <= REJECTED_FILE_LIMIT) return;
-  const sorted = entries
-    .map((name) => ({
-      name,
-      // Files are written repeatedly during a run, so mtime tracks the run.
-      mtime: statSync(join(REJECTED_DIR, name)).mtimeMs,
-    }))
-    .sort((left, right) => right.mtime - left.mtime);
-  for (const entry of sorted.slice(REJECTED_FILE_LIMIT)) {
-    if (entry.name === keep) continue;
-    rmSync(join(REJECTED_DIR, entry.name), { force: true });
-  }
 }
 
 export function createRejectionLog(args: {
@@ -109,7 +104,8 @@ export function createRejectionLog(args: {
       };
       mkdirSync(REJECTED_DIR, { recursive: true });
       writeFileSync(target, `${JSON.stringify(file, null, 2)}\n`);
-      pruneOldFiles(fileName);
+      // Nothing is removed here. flush() is called after every batch, so a
+      // prune in this position deleted evidence mid-run (D-169).
     },
   };
 }

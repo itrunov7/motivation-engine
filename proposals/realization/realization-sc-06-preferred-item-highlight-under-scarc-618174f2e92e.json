@@ -1,0 +1,95 @@
+{
+  "id": "realization-sc-06-preferred-item-highlight-under-scarc-618174f2e92e",
+  "type": "realization",
+  "target": "SC-06",
+  "payload": {
+    "id": "preferred-item-highlight-under-scarcity",
+    "mechanism_id": "SC-06",
+    "term": "Preferred-Item Highlight Under Scarcity",
+    "description_as_reported": "Scarcity versus abundance broadens the discrepancy between the liking of the favorite and nonfavorite items and leads to a greater choice share of the favorite item.",
+    "artifact_context": [
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "sc-06-02"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "marketing research",
+      "application_domain": "product UI"
+    },
+    "pattern": "Apply a {visual_emphasis_style} highlight to the user's most-preferred item in a list when its remaining inventory falls below {inventory_threshold_count} units to amplify preference under scarcity.",
+    "parameters": [
+      {
+        "name": "visual_emphasis_style",
+        "value": 1,
+        "unit": "distinct visual highlight types",
+        "evidence_basis": "none — default heuristic"
+      },
+      {
+        "name": "inventory_threshold_count",
+        "value": 5,
+        "unit": "units remaining",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_f08efcd7525b7213ae4b6022",
+        "doi": "10.1509/jmr.13.0451",
+        "title": "Scarcity Polarizes Preferences: The Impact on Choice among Multiple Items in a Product Class",
+        "quote_or_locus": "scarcity versus abundance broadens the discrepancy between the liking of the favorite and nonfavorite items and leads to a greater choice share of the favorite item",
+        "source_span": {
+          "start": 591,
+          "end": 755,
+          "source_text_sha256": "fecf846693a48edf7fb1bffd36e4b62e79443d8d07a8df6f6a98a2a23006f159"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_c8b954378f01f675fed70897",
+        "effect_id": "sc-06-02",
+        "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+        "quote_or_locus": "Limited-quantity promotion activates competitive anxiety and possessive desire due to scarcity of quantity, increasing perceived value.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.6
+  },
+  "provenance": [
+    {
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_f08efcd7525b7213ae4b6022",
+      "doi": "10.1509/jmr.13.0451",
+      "title": "Scarcity Polarizes Preferences: The Impact on Choice among Multiple Items in a Product Class",
+      "quote_or_locus": "scarcity versus abundance broadens the discrepancy between the liking of the favorite and nonfavorite items and leads to a greater choice share of the favorite item",
+      "source_span": {
+        "start": 591,
+        "end": 755,
+        "source_text_sha256": "fecf846693a48edf7fb1bffd36e4b62e79443d8d07a8df6f6a98a2a23006f159"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_c8b954378f01f675fed70897",
+      "effect_id": "sc-06-02",
+      "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+      "quote_or_locus": "Limited-quantity promotion activates competitive anxiety and possessive desire due to scarcity of quantity, increasing perceived value.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.6,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31480976629",
+  "proposed_at": "2026-08-11T10:10:07.944Z",
+  "status": "approved",
+  "hold_reason": null,
+  "decided_by": "owner",
+  "decided_at": "2026-08-11T11:10:39.529Z",
+  "decision_note": "Approved as extracted. Anchor sc-06-02 Limited-quantity scarcity, capped grade C+; cap discharged upstream on the anchor, confidence unchanged. Reacts to real inventory falling below a threshold and highlights an item the user already prefers; it neither invents a limit nor applies repeated pressure, which is what separated it from repeated-view-scarcity-nudge (D-332)."
+}

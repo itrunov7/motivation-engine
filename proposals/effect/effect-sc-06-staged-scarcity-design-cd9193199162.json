@@ -6,7 +6,7 @@
     "id": "sc-06-03",
     "mechanism_id": "SC-06",
     "name": "Staged scarcity design",
-    "fact": "Staged scarcity design creates an anxiety premium through dynamic supply control, which triggers the prefrontal cortex's anticipated deficit effect.",
+    "fact": "Staged scarcity design creates an anxiety premium through dynamic supply control, associated with an anticipated deficit effect.",
     "grade": "B+",
     "source": [
       "10.5220/0013843200004719"
@@ -44,19 +44,18 @@
       "span_role": "finding"
     }
   ],
-  "confidence": 0.75,
+  "confidence": 0.7,
   "operation": "create",
-  "proposed_by": "extraction:github-actions-31369735214",
-  "proposed_at": "2026-08-10T08:22:48.127Z",
-  "status": "held_non_transferable",
-  "hold_reason": "not_transferable",
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "proposed_by": "extraction:github-actions-31371227436",
+  "proposed_at": "2026-08-10T08:42:31.860Z",
+  "status": "rejected",
+  "hold_reason": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.567Z",
+  "decision_note": "NOT_TRANSFERABLE — narrow to K-pop marketing techniques, and its mechanism ('anxiety premium', 'anticipated deficit effect') is speculative rather than an established, transferable behavioral finding.",
   "transferability": {
-    "ruleset_version": 2,
-    "transferable": false,
-    "escalated_by_warning_pair": false,
+    "ruleset_version": 3,
+    "transferable": true,
     "checks": [
       {
         "check": "subject",
@@ -66,8 +65,8 @@
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: show limited stock count or countdown timer — Scarcity mechanism maps directly to displaying dwindling supply or time remaining.",
-        "identified_lever": "show limited stock count or countdown timer"
+        "reason": "names a manipulable variable: show limited/dwindling stock count dynamically — names a manipulable variable: show limited/dwindling stock count dynamically — Displaying decreasing supply availability drives anticipated deficit anxiety, a controllable UI element.",
+        "identified_lever": "show limited/dwindling stock count dynamically"
       },
       {
         "check": "direction",
@@ -79,6 +78,11 @@
         "outcome": "pass",
         "reason": "no specialist population named — the claim does not require expertise to apply"
       }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
     ]
   }
 }

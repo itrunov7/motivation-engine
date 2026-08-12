@@ -1811,12 +1811,48 @@ function main(): void {
         const byRunId = new Map(
           (ledger.runs ?? []).map((run) => [run.run_id, run]),
         );
+        // Read the manifest BEFORE judging the ledger, because whether an
+        // unbalanced run is an error depends on whether the run owned up to it
+        // (D-168). Until now these two checks contradicted each other: this loop
+        // hard-failed on any violation, while the check below REQUIRED an
+        // unbalanced run to be labelled "broken" — so the only state that
+        // satisfied the second was one the first had already rejected, and
+        // "broken" could never survive validation. The status existed in the
+        // type and in 0 of 22 committed runs.
+        //
+        // That contradiction is what lost run 31095467232's spend: its ledger
+        // did not balance, validate failed, and BOTH commit paths in extract.yml
+        // were gated behind that same validate.
+        const manifestForStatus = existsSync(PATHS.extractionManifest)
+          ? (readJson(PATHS.extractionManifest) as CorpusManifest | undefined)
+          : undefined;
+        const brokenRunIds = new Set(
+          [
+            ...(manifestForStatus?.last_run ? [manifestForStatus.last_run] : []),
+            ...(manifestForStatus?.run_history ?? []),
+          ]
+            .filter((run) => run.status === "broken")
+            .map((run) => run.timestamp),
+        );
         for (const run of ledger.runs ?? []) {
           const violations = [
             ...checkLedgerBalance(run),
             ...checkLedgerDetail(run),
           ];
+          // A run its own manifest entry calls "broken" is REPORTED, not failed.
+          // The point of D-132's broken status is to file an unsound run
+          // honestly rather than to make it uncommittable — an unsound run whose
+          // accounting cannot land is a run whose spend the monthly cap never
+          // sees. An unbalanced run NOT labelled broken still fails hard below:
+          // the concession is to the admission, never to the imbalance.
+          const admitted = brokenRunIds.has(run.run_id);
           for (const violation of violations) {
+            if (admitted) {
+              console.warn(
+                `  ! ${rel(PATHS.candidateLedger)}: ${run.run_id}: ${violation} — run is recorded as broken (D-132/D-168)`,
+              );
+              continue;
+            }
             fail(PATHS.candidateLedger, `${run.run_id}: ${violation}`);
             ok = false;
           }
@@ -1896,8 +1932,16 @@ function main(): void {
             (ledger.runs ?? []).filter(
               (run) => run.reconstruction.status === status,
             ).length;
+          // Never say "N runs balance" when some of them do not. A broken run
+          // that passes because it admitted to being broken is still a broken
+          // run, and a summary that folds it into the balanced count is the
+          // hardcoded-progress failure the honesty rule exists to prevent.
+          const brokenCount = (ledger.runs ?? []).filter((run) =>
+            brokenRunIds.has(run.run_id),
+          ).length;
           console.log(
-            `  ✓ ${rel(PATHS.candidateLedger)} valid (${ledger.runs.length} runs balance; ` +
+            `  ✓ ${rel(PATHS.candidateLedger)} valid (${ledger.runs.length - brokenCount} of ${ledger.runs.length} runs balance` +
+              `${brokenCount > 0 ? `, ${brokenCount} recorded broken` : ""}; ` +
               `${count("recorded")} recorded, ${count("reconstructed")} reconstructed, ` +
               `${count("partial")} partly reconstructed, ${count("unreconstructable")} declared unreconstructable, D-132)`,
           );
@@ -2683,6 +2727,7 @@ function main(): void {
             id?: string;
             mechanism_id?: string;
             effect_refs?: unknown;
+            boundary_refs?: unknown;
             derivation?: unknown;
             pattern?: unknown;
             parameters?: unknown;
@@ -2691,6 +2736,14 @@ function main(): void {
           if (!checkPatternParameters(file, realization)) ok = false;
           const realizationEffectRefs = Array.isArray(realization.effect_refs)
             ? realization.effect_refs.filter(
+                (id): id is string => typeof id === "string",
+              )
+            : [];
+          // boundary_refs names effects to read the pattern AGAINST, not
+          // effects it embodies (D-348) — same existence requirement as
+          // effect_refs, no inference-provenance requirement.
+          const realizationBoundaryRefs = Array.isArray(realization.boundary_refs)
+            ? realization.boundary_refs.filter(
                 (id): id is string => typeof id === "string",
               )
             : [];
@@ -2741,6 +2794,18 @@ function main(): void {
                 "effect (corpus_kind=\"inference\") (D-112)",
             );
             ok = false;
+          }
+          for (const effectId of realizationBoundaryRefs) {
+            if (
+              typeof realization.mechanism_id === "string" &&
+              !effectsByKey.has(`${realization.mechanism_id}\u0000${effectId}`)
+            ) {
+              fail(
+                file,
+                `boundary_refs entry "${effectId}" has no effects/${realization.mechanism_id}/${effectId}.json`,
+              );
+              ok = false;
+            }
           }
           for (const effectId of realizationEffectRefs) {
             if (
@@ -2813,6 +2878,27 @@ function main(): void {
           fail(
             effect.file,
             `realization_id "${realizationId}" must link back with effect_refs containing "${effectId}"`,
+          );
+        }
+      }
+    }
+    // The block above walks effect.realization_ids and checks it against each
+    // realization's effect_refs — but an EMPTY realization_ids array has
+    // nothing to walk, so it silently passed when nothing had ever been
+    // written there at all (D-347). It caught an inconsistent link; it never
+    // caught a MISSING one. This is the other direction: for every realization
+    // that claims an effect, that effect must claim it back.
+    for (const [key, realization] of Array.from(realizationsByKey.entries())) {
+      const [mechanismId, realizationId] = key.split("\u0000");
+      for (const effectId of realization.effectRefs) {
+        const effect = effectsByKey.get(`${mechanismId}\u0000${effectId}`);
+        // Existence of effects/{mechanismId}/{effectId}.json is already
+        // checked where realizationEffectRefs is walked, above; only the
+        // back-link is this loop's concern.
+        if (effect && !effect.realizationIds.includes(realizationId)) {
+          fail(
+            realization.file,
+            `realization claims effects/${mechanismId}/${effectId}.json via effect_refs, but that effect's realization_ids does not list "${realizationId}" back (D-347)`,
           );
         }
       }

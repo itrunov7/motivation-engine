@@ -109,7 +109,12 @@
         "into_synthesis": { "type": "integer", "minimum": 0 },
         "consolidated": { "type": "integer", "minimum": 0 },
         "expanded": { "type": "integer", "minimum": 0 },
-        "candidates_strong": { "type": "integer", "minimum": 0 }
+        "candidates_strong": { "type": "integer", "minimum": 0 },
+        "folds": {
+          "description": "Cheap-to-strong folds performed, one per synthesis call, so one per mechanism per slice (D-168). consolidated and expanded are sums over these folds, so 'both non-zero' only indicates an error when folds <= 1. Absent on runs recorded before D-168; a missing count is not a count of zero.",
+          "type": "integer",
+          "minimum": 0
+        }
       },
       "required": [
         "into_synthesis",
@@ -214,6 +219,7 @@
             "no_citations",
             "malformed_citation",
             "unknown_record_id",
+            "anchor_cited_as_record",
             "quote_not_in_source",
             "wrong_corpus_kind",
             "doi_unresolved",

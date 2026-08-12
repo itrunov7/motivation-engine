@@ -48,9 +48,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:41:15.407Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.203Z",
+  "decision_note": "NOT_TRANSFERABLE — ventral striatal neuron recordings describe a neural correlate; \"countdown timer before reward delivery\" inferred from raw neuron firing patterns is invention, not transfer.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "people (individual) but no artifact and no named setting — the subject is a person in the abstract"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: countdown timer before reward delivery — names a manipulable variable: countdown timer before reward delivery — Anticipation before reward can be evoked by showing timing cues preceding reward delivery.",
+        "identified_lever": "countdown timer before reward delivery"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (increases)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-11T10:06:23.420Z",
+  "dispatch_id": "realizations-probe-mm15-modality-effect",
+  "github_run_id": 31480689996,
+  "mode": "realizations",
+  "written_at": "2026-08-11T10:07:35.955Z",
+  "rejected": [
+    {
+      "mechanism_id": "MM-15",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "quote_not_in_source",
+      "detail": "quote not a substring of cr_c108eb5ca069e66ce1690e82: \"modal redundancy is concerned with the modalities in which the information is displayed. The second type, content redund\"",
+      "corpus_record_id": "cr_c108eb5ca069e66ce1690e82",
+      "item": {
+        "term": "modal_redundancy_suppression",
+        "description_as_reported": "modal redundancy is concerned with the modalities in which the information is displayed... modal redundancy decreases learning outcomes and increases cognitive load.",
+        "pattern": "Disable the simultaneous display of text and narration when the user has reached {redundancy_threshold} interactions with the content.",
+        "parameters": [
+          {
+            "name": "redundancy_threshold",
+            "value": 3,
+            "unit": "interactions"
+          }
+        ],
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "onboarding",
+          "dashboard_widget"
+        ],
+        "confidence": 0.6,
+        "citations": [
+          {
+            "record_id": "cr_c108eb5ca069e66ce1690e82",
+            "quote_or_locus": "modal redundancy is concerned with the modalities in which the information is displayed. The second type, content redundancy, is concerned with the contentual overlap of information. The results show that content redundancy increases learning outcomes and decreases cognitive load, while modal redundancy decreases learning outcomes and increases cognitive load.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_c108eb5ca069e66ce1690e82",
+          "quote_or_locus": "modal redundancy is concerned with the modalities in which the information is displayed. The second type, content redundancy, is concerned with the contentual overlap of information. The results show that content redundancy increases learning outcomes and decreases cognitive load, while modal redundancy decreases learning outcomes and increases cognitive load.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "modal redundancy is concerned with the modalities in which the information is displayed. The second type, content redundancy, is concerned with the contentual overlap of information. The results show that content redundancy increases learning outcomes and decreases cognitive load, while modal redundancy decreases learning outcomes and increases cognitive load.",
+        "quote_normalized": "modal redundancy is concerned with the modalities in which the information is displayed the second type content redundancy is concerned with the contentual overlap of information the results show that content redundancy increases learning outcomes and decreases cognitive load while modal redundancy decreases learning outcomes and increases cognitive load",
+        "source_raw": "Different types of redundancy and their effect on learning and cognitive load\nBACKGROUND: What is redundancy? While most studies confirm that redundancy is harmful to learning, there are two theoretical approaches to redundancy. The first understands redundancy as a contentual overlap that puts demand on the limited cognitive capacities of the learner. The second understands redundancy as an ineffective combination of sources leading to an overload of the limited working memory modalities. AIMS: Since these theoretical differences are rarely acknowledged in operation, this study proposes a classification of two distinct types of redundancy to compare these experimentally to investigate their possible main and interaction effects. The first type, content redundancy, is concerned with the contentual overlap of information. The second type, modal redundancy, is concerned with the modalities in which the information is displayed. METHODS: We used these two types of redundancy as factors in a 2 × 2 within-subject design, in which we experimentally compared their effects. SAMPLE: University students (N = 46) learned from specifically designed domain-general material which aimed to observe redundancy effects without interference from confounding variables. RESULTS: The results show that content redundancy increases learning outcomes and decreases cognitive load, while modal redundancy decreases learning outcomes and increases cognitive load. CONCLUSION: On the theoretical level, these findings confirm the usefulness to distinguish content redundancy from modal redundancy. On the practical level, the empirical findings of the different effects of the two types of redundancy provide educators with important insights that can improve the design of multimedia learning materials.",
+        "source_normalized": "different types of redundancy and their effect on learning and cognitive load background what is redundancy while most studies confirm that redundancy is harmful to learning there are two theoretical approaches to redundancy the first understands redundancy as a contentual overlap that puts demand on the limited cognitive capacities of the learner the second understands redundancy as an ineffective combination of sources leading to an overload of the limited working memory modalities aims since these theoretical differences are rarely acknowledged in operation this study proposes a classification of two distinct types of redundancy to compare these experimentally to investigate their possible main and interaction effects the first type content redundancy is concerned with the contentual overlap of information the second type modal redundancy is concerned with the modalities in which the information is displayed methods we used these two types of redundancy as factors in a 2 2 within subject design in which we experimentally compared their effects sample university students n 46 learned from specifically designed domain general material which aimed to observe redundancy effects without interference from confounding variables results the results show that content redundancy increases learning outcomes and decreases cognitive load while modal redundancy decreases learning outcomes and increases cognitive load conclusion on the theoretical level these findings confirm the usefulness to distinguish content redundancy from modal redundancy on the practical level the empirical findings of the different effects of the two types of redundancy provide educators with important insights that can improve the design of multimedia learning materials"
+      },
+      "corpus_side": {
+        "doi": "10.1111/bjep.12592",
+        "title": "Different types of redundancy and their effect on learning and cognitive load"
+      }
+    }
+  ]
+}

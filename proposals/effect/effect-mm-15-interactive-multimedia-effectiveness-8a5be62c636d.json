@@ -48,9 +48,41 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30818854515",
   "proposed_at": "2026-08-03T13:38:36.944Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.235Z",
+  "decision_note": "NOT_TRANSFERABLE — narrow to high-school biology using specific named software tools (Articulate Storyline, AR E-Magazines); the lever ('interactive multimedia elements') is too generic to be a distinct actionable principle beyond the other approved MM-15 effects.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (school, learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: interactive multimedia elements within lesson content — names a manipulable variable: interactive multimedia elements within lesson content — Product surface can add interactivity (AR, clickable modules) to boost engagement/learning outcomes.",
+        "identified_lever": "interactive multimedia elements within lesson content"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

@@ -7,7 +7,7 @@
     "mechanism_id": "CG-05",
     "name": "Curiosity as a mediator of impulsive purchase intention",
     "fact": "Perceived uncertainty in blind box products has a positive impact on consumers' impulsive purchase intentions, with curiosity acting as a mediating variable.",
-    "grade": "B+",
+    "grade": "C+",
     "source": [
       "10.3389/fnbeh.2022.946337"
     ],
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade B+ -> capped to C+."
   },
   "provenance": [
     {
@@ -48,9 +49,41 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30819577674",
   "proposed_at": "2026-08-03T13:47:45.576Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.386Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), B+ -> C+.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "people (consumers) but no artifact and no named setting — the subject is a person in the abstract"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: hide exact reward, show partial mystery preview — names a manipulable variable: hide exact reward, show partial mystery preview — Concealing outcome details boosts curiosity and impulsive purchase intent; UI can hide/reveal contents.",
+        "identified_lever": "hide exact reward, show partial mystery preview"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "states a structural relation (mediating) but no direction — a path is not an instruction"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

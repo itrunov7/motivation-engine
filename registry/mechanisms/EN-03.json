@@ -8,12 +8,19 @@
   "parent": "S5",
   "lifecycle_status": "incubating",
   "dossier_ref": "dossiers/EN-03.json",
-  "provenance": { "proposed_by": "owner", "date": "2026-07-15" },
+  "provenance": {
+    "proposed_by": "owner",
+    "date": "2026-07-15"
+  },
   "evidence": {
     "grade": "A-",
     "basis": "Kahneman, Knetsch & Thaler (1990) mug experiments; Thaler (1980) coined the term; integrative review Morewedge & Giblin (2015). Robust and widely replicated.",
     "effect_size_note": "WTA typically ~2x WTP for the same good; effect is real but its magnitude and interpretation are contested (procedure and market experience moderate it heavily)",
-    "caveats": ["procedure_sensitive", "attenuates_with_market_experience", "weaker_for_goods_held_for_exchange"]
+    "caveats": [
+      "procedure_sensitive",
+      "attenuates_with_market_experience",
+      "weaker_for_goods_held_for_exchange"
+    ]
   },
   "evidence_terms": [
     "endowment effect",
@@ -42,61 +49,151 @@
   "prior_weight": 0.8,
   "mechanism_summary_for_context": "Once something is 'mine', I value it more highly than I would to acquire it — parting with it is coded as a loss (endowment is upstream of LA-01). Ownership can be psychological, not just legal: having created, customized, or invested in something confers the effect. This is why trials, personalization, and 'your X' framing raise perceived value and resistance to giving up.",
   "applicability": {
-    "funnel_stages": ["activation", "conversion", "retention"],
-    "excluded_stages": ["cold_acquisition"],
-    "artifact_types": ["paywall", "onboarding", "dashboard_widget", "pricing_page", "checkout"],
+    "funnel_stages": [
+      "activation",
+      "conversion",
+      "retention"
+    ],
+    "excluded_stages": [
+      "cold_acquisition"
+    ],
+    "artifact_types": [
+      "paywall",
+      "onboarding",
+      "dashboard_widget",
+      "pricing_page",
+      "checkout"
+    ],
     "preconditions": [
-      { "predicate": "user.has_created_or_customized_artifact == true OR product.has_trial == true", "reason": "the effect requires a sense of ownership; it does not apply before the user has made, customized, or possessed something" }
+      {
+        "predicate": "user.has_created_or_customized_artifact == true OR product.has_trial == true",
+        "reason": "the effect requires a sense of ownership; it does not apply before the user has made, customized, or possessed something"
+      }
     ],
     "culture_note": "Ownership psychology is broadly cross-cultural, but what confers 'mine-ness' (effort, personalization, possession) and its strength varies; treat as an L3 surface parameter"
   },
   "implementations": [
     {
       "id": "EN-03-user-creation-preview",
-      "artifact_types": ["paywall", "dashboard_widget"],
-      "product_requirements": ["user_creates_artifacts"],
-      "generation_directive": "Surface what the user has made as visibly theirs before any ask: 'Your gallery', 'Your workspace', concrete previews of their own outputs. Ownership must be established before LA-01 loss framing is applied (sequence EN-03 -> LA-01).",
-      "copy_formulas": ["Your {artifact_type} · {n} created", "This is yours"],
-      "metrics": ["trial_to_paid_cvr", "activation_rate"],
+      "artifact_types": [
+        "paywall",
+        "dashboard_widget"
+      ],
+      "product_requirements": [
+        "user_creates_artifacts"
+      ],
+      "generation_directive": "Surface what the user has made as visibly theirs before any ask — possessive labeling of the space that holds their own outputs, plus concrete previews of those outputs. Ownership must be established before LA-01 loss framing is applied (sequence EN-03 -> LA-01).",
+      "copy_formulas": [
+        "Your {artifact_type} · {n} created",
+        "This is yours"
+      ],
+      "metrics": [
+        "trial_to_paid_cvr",
+        "activation_rate"
+      ],
       "observed_effects": []
     },
     {
       "id": "EN-03-personalization-investment",
-      "artifact_types": ["onboarding"],
+      "artifact_types": [
+        "onboarding"
+      ],
       "product_requirements": [],
-      "generation_directive": "Have the user invest small effort early (customize, name, configure, pick preferences) so the product becomes 'theirs'. Investment creates ownership even without a purchase. Keep effort light and clearly rewarded — not a chore.",
-      "copy_formulas": ["Make it yours", "Set up your {thing}"],
-      "metrics": ["onboarding_completion", "d7_retention"],
+      "generation_directive": "Have the user invest small effort early (customize, name, configure, pick preferences) so the product becomes something the user experiences as their own. Investment creates ownership even without a purchase. Keep effort light and clearly rewarded — not a chore.",
+      "copy_formulas": [
+        "Make it yours",
+        "Set up your {thing}"
+      ],
+      "metrics": [
+        "onboarding_completion",
+        "d7_retention"
+      ],
       "observed_effects": []
     },
     {
       "id": "EN-03-trial-possession",
-      "artifact_types": ["paywall", "pricing_page"],
-      "product_requirements": ["has_trial"],
+      "artifact_types": [
+        "paywall",
+        "pricing_page"
+      ],
+      "product_requirements": [
+        "has_trial"
+      ],
       "generation_directive": "Frame the trial as already-owned access rather than a sample: the user possesses the full product, and the decision is whether to keep what is theirs. Pairs directly with LA-01-trial-ownership.",
-      "copy_formulas": ["Keep your full access", "Continue with your {product}"],
-      "metrics": ["trial_to_paid_cvr"],
+      "copy_formulas": [
+        "Keep your full access",
+        "Continue with your {product}"
+      ],
+      "metrics": [
+        "trial_to_paid_cvr"
+      ],
       "observed_effects": []
     }
   ],
   "constraints": {
     "hard_rules": [
-      { "id": "real_ownership_only", "rule": "Ownership language must reflect something the user actually created, customized, or possesses; do not fabricate 'your' where nothing was invested", "severity": "block" },
-      { "id": "no_forced_investment", "rule": "Do not coerce meaningless effort solely to manufacture endowment; investment must carry genuine user value", "severity": "block" },
-      { "id": "honest_trial_scope", "rule": "If trial access is partial, do not imply full possession", "severity": "block" }
+      {
+        "id": "real_ownership_only",
+        "rule": "Ownership language must reflect something the user actually created, customized, or possesses; do not fabricate 'your' where nothing was invested",
+        "severity": "block"
+      },
+      {
+        "id": "no_forced_investment",
+        "rule": "Do not coerce meaningless effort solely to manufacture endowment; investment must carry genuine user value",
+        "severity": "block"
+      },
+      {
+        "id": "honest_trial_scope",
+        "rule": "If trial access is partial, do not imply full possession",
+        "severity": "block"
+      }
     ],
-    "compliance_refs": ["EU_DSA_dark_patterns", "apple_asrg_3.1", "ftc_negative_option"],
+    "compliance_refs": [
+      "EU_DSA_dark_patterns",
+      "apple_asrg_3.1",
+      "ftc_negative_option"
+    ],
     "boundary_test": "Does the 'yours' reflect real ownership the user would recognize — or is it manufactured to create false attachment?"
   },
   "relations": [
-    { "type": "enables", "target": "LA-01", "note": "Endowment creates the accumulated value that loss aversion then protects. Canonical sequence: EN-03 establishes ownership -> LA-01 frames its loss." },
-    { "type": "adjacent", "target": "ID-12", "note": "Identity/consistency overlaps: 'mine' shades into 'part of who I am'; distinct driver (ownership vs self-image)" },
-    { "type": "orthogonality_note", "target": "LA-01", "note": "Theoretically downstream of loss aversion; scored 2/3 on orthogonality — see dossier. Kept as a distinct L1 for its unique product implementations (creation, personalization) that LA-01 does not cover." }
+    {
+      "type": "enables",
+      "target": "LA-01",
+      "note": "Endowment creates the accumulated value that loss aversion then protects. Canonical sequence: EN-03 establishes ownership -> LA-01 frames its loss."
+    },
+    {
+      "type": "adjacent",
+      "target": "ID-12",
+      "note": "Identity/consistency overlaps: 'mine' shades into 'part of who I am'; distinct driver (ownership vs self-image)"
+    },
+    {
+      "type": "orthogonality_note",
+      "target": "LA-01",
+      "note": "Theoretically downstream of loss aversion; scored 2/3 on orthogonality — see dossier. Kept as a distinct L1 for its unique product implementations (creation, personalization) that LA-01 does not cover."
+    }
   ],
-  "telemetry": { "tag_format": "me:EN-03:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "telemetry": {
+    "tag_format": "me:EN-03:{implementation_id}",
+    "amplitude_event_property": "mechanism_tags"
+  },
   "reference_examples": [
-    { "product": "Canva / Figma", "what": "User-created designs shown as 'your designs'; the accumulated body of work makes leaving costly regardless of subscription logic" },
-    { "product": "Spotify", "what": "Personal playlists and libraries — user investment converts a commodity catalog into 'my music', raising switching resistance" },
-    { "product": "Duolingo onboarding", "what": "Early goal-setting and personalization make the course 'mine' before any streak or paywall" }
+    {
+      "product": "Canva / Figma",
+      "what": "User-created designs shown as 'your designs'; the accumulated body of work makes leaving costly regardless of subscription logic"
+    },
+    {
+      "product": "Spotify",
+      "what": "Personal playlists and libraries — user investment converts a commodity catalog into 'my music', raising switching resistance"
+    },
+    {
+      "product": "Duolingo onboarding",
+      "what": "Early goal-setting and personalization make the course 'mine' before any streak or paywall"
+    }
+  ],
+  "effect_refs": [
+    "en-03-01",
+    "en-03-02",
+    "en-03-03",
+    "en-03-04"
   ]
 }

@@ -1,0 +1,63 @@
+{
+  "id": "synchronized-audio-visual-cue-highlight",
+  "mechanism_id": "MM-15",
+  "term": "Synchronized Audio-Visual Cue Highlight",
+  "description_as_reported": "students spent more time attending to the relevant portion of the graphic and performed better on posttests if coordinated cues were added to the lesson (coordinated dual cues group), in which key elements were spoken with deeper intonation (auditory cue) at the same time the element turned red in the graphic (visual cue).",
+  "artifact_context": [
+    "onboarding"
+  ],
+  "effect_refs": [
+    "mm15-modality-effect"
+  ],
+  "derivation": "inferred",
+  "domain_transfer": {
+    "source_domain": "multimedia instructional design",
+    "application_domain": "product UI"
+  },
+  "pattern": "Highlight the active interface element with a {color_change} and play a {sound_effect} simultaneously when the user reaches the {interaction_threshold} of the instructional sequence, offering this as an alternative to text-only cueing rather than a guaranteed improvement.",
+  "parameters": [
+    {
+      "name": "color_change",
+      "value": 1,
+      "unit": "visual_highlight_event",
+      "evidence_basis": "none — default heuristic"
+    },
+    {
+      "name": "sound_effect",
+      "value": 1,
+      "unit": "auditory_cue_event",
+      "evidence_basis": "none — default heuristic"
+    },
+    {
+      "name": "interaction_threshold",
+      "value": 1,
+      "unit": "instructional_step",
+      "evidence_basis": "none — default heuristic"
+    }
+  ],
+  "provenance": [
+    {
+      "mechanism_id": "MM-15",
+      "corpus_record_id": "cr_8ba9259da1066e1a65a79d73",
+      "doi": "10.1037/edu0000285",
+      "title": "Coordinating visual and auditory cueing in multimedia learning.",
+      "quote_or_locus": "students spent more time attending to the relevant portion of the graphic and performed better on posttests if coordinated cues were added to the lesson (coordinated dual cues group), in which key elements were spoken with deeper intonation (auditory cue) at the same time the element turned red in the graphic (visual cue",
+      "source_span": {
+        "start": 403,
+        "end": 725,
+        "source_text_sha256": "f63968ba6f0d1455b286ef42c8824c57ae35812958b443015ee5a767408959d9"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "MM-15",
+      "corpus_record_id": "cr_0485aaea69be8ac0f3c0300e",
+      "effect_id": "mm15-modality-effect",
+      "title": "Cognitive principles of multimedia learning: The role of modality and contiguity.",
+      "quote_or_locus": "The modality effect, which suggests that pictures are best accompanied by audio explanations rather than text, has not been consistently replicated in computing education.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.5
+}

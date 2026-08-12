@@ -7,11 +7,11 @@
     "mechanism_id": "MM-15",
     "name": "Content Redundancy",
     "fact": "Content redundancy increases learning outcomes and decreases cognitive load.",
-    "grade": "A",
+    "grade": "C+",
     "source": [
       "10.1111/bjep.12592"
     ],
-    "boundary": "Distinguished from modal redundancy in multimedia learning materials.",
+    "boundary": "Distinguished from modal redundancy in multimedia learning materials. TENSION WITH effect-mm-15-redundancy-effect-c1c7ed537b36: that proposal's cited sources report a mixed, largely negative-direction finding for redundancy broadly (including one \"reverse redundancy effect\" result matching this proposal's positive direction, for foreign-language learners) — whether redundancy helps or hurts learning is NOT resolved by this corpus. Both proposals are kept as a preserved disconfirmation (rule 4), not reconciled.",
     "realization_ids": [],
     "provenance": [
       {
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A -> capped to C+."
   },
   "provenance": [
     {
@@ -48,9 +49,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30818854515",
   "proposed_at": "2026-08-03T13:38:36.944Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.691Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A -> C+. Approved alongside redundancy-effect as a preserved corpus disconfirmation; see the dissent decision entry.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: repeat key content across text and visuals — names a manipulable variable: repeat key content across text and visuals — names a manipulable variable: repeat key content across text and visuals — Interface can show redundant reinforcing content to reduce cognitive load and boost learning.",
+        "identified_lever": "repeat key content across text and visuals"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (increases, decreases)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

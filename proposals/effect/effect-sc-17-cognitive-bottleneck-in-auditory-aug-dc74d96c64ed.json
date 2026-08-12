@@ -48,9 +48,38 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30818373159",
   "proposed_at": "2026-08-03T13:32:20.847Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.290Z",
+  "decision_note": "NOT_TRANSFERABLE — a cognitive-capacity-limit finding about simultaneous multi-conversation comprehension under auditory augmentation, not a visual-attention/scanning lever.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "pass",
+        "reason": "a person interacting with an artifact (interface)"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: sequence or highlight one conversation at a time — names a manipulable variable: sequence or highlight one conversation at a time — Interface can stagger, hide, or highlight conversation streams to reduce simultaneous cognitive load.",
+        "identified_lever": "sequence or highlight one conversation at a time"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (exceeds)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": []
+  }
 }

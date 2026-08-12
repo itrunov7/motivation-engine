@@ -7,8 +7,8 @@
     "mechanism_id": "CL-14",
     "name": "Split-attention effect",
     "fact": "The split-attention effect occurs when learners must mentally integrate disparate sources of information, imposing an extraneous cognitive load that interferes with learning; spatially integrated learning materials reduce this effect compared to spatially separated materials.",
-    "grade": "C+",
-    "grade_basis": "Corpus evidence = one primary study (Mousavi, Low & Sweller 1995), six experiments on geometry worked examples. Narrowed from the model's A: the clause 'increases extraneous working memory load' was not in any cited span, and the second citation (Ayres & Sweller 2005, The Split-Attention Principle in Multimedia Learning) was a design prescription -- 'it is important to avoid formats that require learners to split their attention' -- rather than evidence, so it was dropped from both provenance and source. Capped below the A band because a single-DOI basis is capped there unconditionally. The first provenance item is the paper's own premise, not its finding; the second item is the finding that the prediction built on that premise held across six experiments, which is why the record is graded on a confirmed premise rather than on an unchecked one. Grade reflects OUR corpus provenance, not the literature at large; to be re-graded when the computed rubric (D-114) lands.",
+    "grade": "B",
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 3 independent source(s), original model-asserted grade C+ -> capped to B.",
     "source": [
       "10.1037/0022-0663.87.2.319",
       "10.1037/a0021994",
@@ -177,9 +177,40 @@
   "operation": "enrich",
   "proposed_by": "extraction:github-actions-30818192427",
   "proposed_at": "2026-08-03T13:30:00.552Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.633Z",
+  "decision_note": "Approved under mechanical grade cap: 3 source(s), C+ -> B.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (instructional, educational, learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: place labels/instructions directly next to related visuals — names a manipulable variable: place labels/instructions directly next to related visuals — UI can spatially integrate text and graphics, reducing split-attention extraneous load.",
+        "identified_lever": "place labels/instructions directly next to related visuals"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (reduce)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

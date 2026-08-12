@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-11T10:13:10.917Z",
+  "dispatch_id": "realizations-probe-la-01-04-retry",
+  "github_run_id": 31481202687,
+  "mode": "realizations",
+  "written_at": "2026-08-11T10:13:50.503Z",
+  "rejected": [
+    {
+      "mechanism_id": "LA-01",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "doi_unresolved",
+      "detail": "DOI does not resolve for cr_dc1669d90ea16899e57920c2",
+      "corpus_record_id": "cr_dc1669d90ea16899e57920c2",
+      "item": {
+        "term": "Portfolio_Aggregation_Interval",
+        "description_as_reported": "The results indicate that investors are affected by overconfidence and loss aversion biases. Loss aversion bias has significant effect because 70% of the investors were affected",
+        "pattern": "Aggregate portfolio performance reporting to a longer {reporting_interval} to reduce the frequency of loss-coded feedback.",
+        "parameters": [
+          {
+            "name": "reporting_interval",
+            "value": 30,
+            "unit": "days"
+          }
+        ],
+        "source_domain": "individual equity investor decision making",
+        "artifact_context": [
+          "dashboard_widget"
+        ],
+        "confidence": 0.6,
+        "citations": [
+          {
+            "record_id": "cr_dc1669d90ea16899e57920c2",
+            "quote_or_locus": "The results indicated that investors are affected by overconfidence and loss aversion biases. Loss aversion bias has significant effect because 70% of the investors were affected",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_dc1669d90ea16899e57920c2",
+          "quote_or_locus": "The results indicated that investors are affected by overconfidence and loss aversion biases. Loss aversion bias has significant effect because 70% of the investors were affected",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "The results indicated that investors are affected by overconfidence and loss aversion biases. Loss aversion bias has significant effect because 70% of the investors were affected",
+        "quote_normalized": "the results indicated that investors are affected by overconfidence and loss aversion biases loss aversion bias has significant effect because 70 of the investors were affected",
+        "source_raw": "IMPACT OF OVERCONFIDENCE AND LOSS AVERSION BIASES ON INVESTMENT DECISION: MODERATING ROLE OF RISK PERCEPTION\nThe purpose of this study is to investigate the influence of behavioural biases overconfidence and loss aversion on the decision making behaviour of individual equity investor by considering the risk perception as moderator. Behavioural finance suggests that human decision making involves a combination of cognitive and affective dimensions. The results of study are helpful for the policy makers, financial advisor, equity investor, finance teacher and finance students. To conduct the study, questionnaires were issued to the investors of Islamabad stock exchange and Lahore stock exchange a total of 250 questionnaires were distributed of which 160investors responded of which 90% were men and 10% were women. The results indicated that investors are affected by overconfidence and loss aversion biases. Loss aversion bias has significant effect because 70% of the investors were affected and overconfidence bias has significant effect. The measure with the reworded items is shown in the Appendix 1.",
+        "source_normalized": "impact of overconfidence and loss aversion biases on investment decision moderating role of risk perception the purpose of this study is to investigate the influence of behavioural biases overconfidence and loss aversion on the decision making behaviour of individual equity investor by considering the risk perception as moderator behavioural finance suggests that human decision making involves a combination of cognitive and affective dimensions the results of study are helpful for the policy makers financial advisor equity investor finance teacher and finance students to conduct the study questionnaires were issued to the investors of islamabad stock exchange and lahore stock exchange a total of 250 questionnaires were distributed of which 160investors responded of which 90 were men and 10 were women the results indicated that investors are affected by overconfidence and loss aversion biases loss aversion bias has significant effect because 70 of the investors were affected and overconfidence bias has significant effect the measure with the reworded items is shown in the appendix 1"
+      },
+      "corpus_side": {
+        "doi": null,
+        "title": "IMPACT OF OVERCONFIDENCE AND LOSS AVERSION BIASES ON INVESTMENT DECISION: MODERATING ROLE OF RISK PERCEPTION"
+      }
+    }
+  ]
+}

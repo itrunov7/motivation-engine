@@ -49,12 +49,24 @@ on:
         type: string
         default: ""
 
+# One extraction at a time. `cancel-in-progress: false` protects the RUNNING
+# job, but GitHub keeps only one PENDING entry per group — so a third dispatch
+# silently evicts a queued second, and the evicted run never starts a job, which
+# means no `if: always()` or `if: cancelled()` step inside it can ever fire. It
+# genuinely cannot report on itself; only an observer can (D-343). The "Report
+# any superseded dispatch" step below is that observer.
+#
+# The group key is deliberately NOT made unique per dispatch. That would stop
+# the cancellation, but it would let concurrent runs write the same three
+# aggregate files — trading a visible failure for the silent one D-342 fixed.
+# transferability-probe.yml shares this group on purpose (D-164).
 concurrency:
   group: extraction
   cancel-in-progress: false
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
   quote:
@@ -120,6 +132,19 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Heal any previous run that lost its accounting commit (D-342) BEFORE the
+      # budget gate reads the manifest, so the cap is computed against every
+      # measured dollar rather than only the ones whose commit happened to land.
+      # A receipt is conflict-free but cap-invisible until it is folded back;
+      # this is the fold.
+      - name: Reconcile orphaned spend receipts
+        run: npx tsx tools/reconcile-spend.ts --apply
+      # A dispatch evicted from the concurrency queue never starts a job, so it
+      # cannot report on itself (D-343). This run reports it instead.
+      - name: Report any superseded dispatch
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npx tsx tools/report-superseded.ts --write
       # This estimate is deliberately a separate step before any process with
       # OPENROUTER_API_KEY can call a model (D-087).
       - name: Estimate cost and enforce budget gates before extraction
@@ -133,55 +158,172 @@ jobs:
       # force-pushed to the ops-progress ref every ~2 min so /ops shows batches
       # drafted and running token spend while extraction is in flight.
       - name: Extract grounded proposals
+        id: extract
         run: >-
           npx tsx tools/progress-publisher.ts
           npm run extract --
           run
           mode=${{ inputs.mode }}
           ${{ inputs.scope_kind }}=${{ inputs.scope_id }}
-      - name: Validate generated proposals and manifest
-        run: npm run validate
-      - name: Commit proposals and extraction accounting
-        id: commit
-        run: |
-          if [ -n "$(git status --porcelain proposals corpora/extraction)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add proposals corpora/extraction
-            git commit -m "data: extract ${{ inputs.mode }} for ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
-            git push
-          else
-            echo "No novel grounded proposals — nothing to commit."
-          fi
-
-      # ---------- Spend is recorded even when the run fails (D-099) ----------
-      # The monthly cap is derived from committed corpus manifests, so a run
-      # that called models and then died would spend budget the cap can never
-      # see. tools/extract.ts persists accounting after each batch; this step
-      # commits it when the steps above did not run.
+      # ---------- Accounting lands FIRST, unconditionally (D-099/D-168) -------
+      # This step used to sit AFTER `npm run validate`, and so did its own
+      # fallback — which then re-ran the same failing validate. A broken ledger
+      # therefore blocked both commit paths, and run 31095467232's spend was
+      # lost: real money the monthly cap (derived from committed manifests) can
+      # never see. The two questions are now separated in the order that
+      # matters: "is the money recorded" is answered before "was the run sound".
       #
-      # Scoped to corpora/extraction ONLY. `proposals` stays fail-closed: a
-      # failed run's partial proposals must never reach the queue (rule 8).
-      - name: Commit extraction accounting even on failure
-        if: always() && steps.commit.outcome != 'success'
+      # Scoped to corpora/extraction ONLY, and it runs on `always()` so a failed
+      # extraction still records what it burned. `proposals` is deliberately not
+      # here — it stays fail-closed behind validation below (rule 8).
+      #
+      # D-342 then found the third position the blocker could hide in. D-168
+      # moved it off `npm run validate`; D-173 fixed the discard predicate but
+      # never touched the git tail — so the tail itself became the thing that
+      # could swallow a run's accounting. The commit is now split: the
+      # conflict-free receipt lands first and alone, the conflict-prone
+      # aggregates follow best-effort, and both retry.
+      - name: Record extraction spend before anything can block it
+        if: always()
         run: |
           set -euo pipefail
           if [ -z "$(git status --porcelain corpora/extraction)" ]; then
             echo "No extraction accounting to record — the run spent nothing."
             exit 0
           fi
-          # Discard the failed run's partial proposals before validating, so
-          # this step can never commit an unreviewable proposal and validation
-          # judges only the accounting we are about to land.
-          git checkout -- proposals 2>/dev/null || true
-          git clean -fd proposals
-          if ! npm run validate; then
-            echo "::error::extraction accounting failed validation — not committed; \
-            the run's spend is visible in the Actions log only."
-            exit 1
+          # A FAILED run's partial proposals must never reach the queue, and must
+          # not ride along in this commit either (rule 8). Gated on the extract
+          # step's own outcome, because this step runs on always(): discarding
+          # unconditionally destroyed the proposals of a SUCCESSFUL run before
+          # the commit step below could see them. Run 31107545446 wrote 5
+          # held_low_confidence proposals and committed none of them for exactly
+          # that reason (D-173).
+          if [ "${{ steps.extract.outcome }}" != "success" ]; then
+            echo "Extraction did not succeed — discarding its partial proposals."
+            git checkout -- proposals 2>/dev/null || true
+            git clean -fd proposals
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add corpora/extraction
-          git commit -m "data: record extraction spend for a failed ${{ inputs.mode }} run on ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
-          git push
+
+          # A rebase resolves a fast-forward race. It CANNOT resolve a content
+          # conflict, and coverage.json/ledger.json/manifest.json are whole-file
+          # rewrites that concurrent runs are guaranteed to conflict on. On
+          # 2026-08-11 three realizations runs raced, this step's rebase
+          # conflicted on all three files, `set -e` killed the step, and
+          # $0.070004 of measured spend reached no committed artifact (D-342).
+          # The comment that used to sit here claimed the rebase was the
+          # protection against exactly that race. It was not.
+          push_with_retry() {
+            local label="$1" attempt=1
+            while [ "$attempt" -le 3 ]; do
+              if git pull --rebase --autostash origin "${GITHUB_REF_NAME}" \
+                && git push origin "HEAD:${GITHUB_REF_NAME}"; then
+                echo "${label}: pushed on attempt ${attempt}"
+                return 0
+              fi
+              # Leave no rebase in progress for the next attempt or the next step.
+              git rebase --abort 2>/dev/null || true
+              echo "${label}: attempt ${attempt} did not land"
+              attempt=$((attempt + 1))
+              [ "$attempt" -le 3 ] && sleep $((attempt * 5))
+            done
+            return 1
+          }
+
+          # (1) THE RECEIPT FIRST. corpora/extraction/spend/<run-id>.json and
+          # rejected/<run-id>.json are one file per run, named for the run's own
+          # start timestamp, so no concurrent run can ever touch the same path
+          # and this commit always rebases cleanly. This is the durable record;
+          # everything below is a convenience.
+          # superseded/ rides along: it is the same one-file-per-run shape and is
+          # written by the observer step at the top of this job (D-343).
+          if [ -n "$(git status --porcelain corpora/extraction/spend corpora/extraction/rejected corpora/extraction/superseded)" ]; then
+            git add corpora/extraction/spend corpora/extraction/rejected corpora/extraction/superseded
+            git commit -m "data: spend receipt for ${{ inputs.mode }} on ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
+            if ! push_with_retry "receipt"; then
+              echo "::error::the per-run spend receipt could not be pushed. The measured \
+              spend is in this log above (SPEND, MEASURED) and the run is UNRECONCILED: \
+              run tools/reconcile-spend.ts once the branch is writable."
+            fi
+          fi
+
+          # (2) THE AGGREGATES, BEST EFFORT. These are the files that conflict.
+          # A failure here is now survivable: the receipt is already committed,
+          # and the next run's reconcile step folds it into run_history so the
+          # monthly cap sees it.
+          if [ -n "$(git status --porcelain corpora/extraction)" ]; then
+            git add corpora/extraction
+            git commit -m "data: record extraction spend for ${{ inputs.mode }} on ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
+            if ! push_with_retry "aggregates"; then
+              echo "::warning::aggregate accounting (coverage/ledger/manifest) lost a \
+              write race and was not pushed. The spend receipt IS committed, so no money \
+              is invisible; the next run reconciles it (D-342)."
+              # Deliberately NOT `git reset --hard`: if the receipt push above also
+              # failed, its commit is still local-only and a reset would destroy
+              # the one artifact this whole step exists to protect.
+            fi
+          fi
+
+      - name: Validate generated proposals and manifest
+        run: npm run validate
+
+      # Proposals commit only once validation has passed. A ledger recorded as
+      # `broken` no longer fails validate (D-168) — it is reported — so a broken
+      # run can still land its proposals if they are otherwise valid, while the
+      # job below still goes red so the breakage is impossible to miss.
+      - name: Commit reviewed proposals
+        if: success()
+        run: |
+          set -euo pipefail
+          if [ -n "$(git status --porcelain proposals corpora/extraction)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add proposals corpora/extraction
+            git commit -m "data: extract ${{ inputs.mode }} for ${{ inputs.scope_kind }} ${{ inputs.scope_id }}"
+            # Same rebase-conflict exposure as the accounting step above (D-342):
+            # this commit also carries the three whole-file aggregates, so a
+            # concurrent run makes the rebase fail rather than fast-forward.
+            attempt=1
+            until git pull --rebase --autostash origin "${GITHUB_REF_NAME}" \
+              && git push origin "HEAD:${GITHUB_REF_NAME}"; do
+              git rebase --abort 2>/dev/null || true
+              attempt=$((attempt + 1))
+              if [ "$attempt" -gt 3 ]; then
+                echo "::error::proposals could not be pushed after 3 attempts. They are \
+                valid and were produced by a successful run; re-run the commit against a \
+                quiet branch. Spend is unaffected — its receipt committed separately."
+                exit 1
+              fi
+              sleep $((attempt * 5))
+            done
+          else
+            echo "No novel grounded proposals — nothing to commit."
+          fi
+
+      # ---------- A broken ledger fails the job, after the spend is safe ------
+      # D-132: an unbalanced run cannot say what it did, so every number it
+      # reports is unsound and the run must not read as green. This runs last,
+      # so the accounting is already committed by the time the job goes red.
+      - name: Fail the job if the ledger did not balance
+        if: always()
+        run: |
+          set -euo pipefail
+          if node -e '
+            const { readFileSync } = require("node:fs");
+            const m = JSON.parse(readFileSync("corpora/extraction/manifest.json", "utf8"));
+            const runs = [...(m.last_run ? [m.last_run] : []), ...(m.run_history ?? [])];
+            const mine = runs.filter((r) => r.github_run_id === Number(process.env.GITHUB_RUN_ID));
+            const broken = mine.filter((r) => r.status === "broken");
+            if (broken.length > 0) {
+              console.error(`ledger did not balance for ${broken.length} run entry/entries`);
+              process.exit(1);
+            }
+          '; then
+            echo "Candidate ledger balanced."
+          else
+            echo "::error::candidate ledger did not balance — the run is BROKEN (D-132). \
+            Its spend IS committed and its manifest entry says broken; the funnel numbers \
+            it reports are not trustworthy. Diagnose before reading its yield."
+            exit 1
+          fi

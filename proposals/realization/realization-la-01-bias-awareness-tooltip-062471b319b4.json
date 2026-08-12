@@ -1,0 +1,89 @@
+{
+  "id": "realization-la-01-bias-awareness-tooltip-062471b319b4",
+  "type": "realization",
+  "target": "LA-01",
+  "payload": {
+    "id": "bias-awareness-tooltip",
+    "mechanism_id": "LA-01",
+    "term": "Bias-Awareness Tooltip",
+    "description_as_reported": "higher financial literacy made investors more capable of identifying and overcoming biases. This insight enabled investors to make more logical and well-informed investment decisions.",
+    "artifact_context": [
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "la-01-04"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "behavioral finance",
+      "application_domain": "product UI"
+    },
+    "pattern": "Trigger an educational tooltip that explains loss aversion and its effect on risk-taking whenever the displayed portfolio volatility metric exceeds {volatility_threshold} percent, replacing the bare number with the annotated explanation until dismissed.",
+    "parameters": [
+      {
+        "name": "volatility_threshold",
+        "value": 10,
+        "unit": "percent",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_538688ffcc114a5fcc6be39e",
+        "doi": "10.17010/ijf/2025/v19i5/175045",
+        "title": "Financial Literacy as a Moderator in Behavioral Biases and Investor Decisions",
+        "quote_or_locus": "higher financial literacy made investors more capable of identifying and overcoming biases. This insight enabled investors to make more logical and well-informed investment decisions",
+        "source_span": {
+          "start": 1100,
+          "end": 1282,
+          "source_text_sha256": "1e487234e94c8d2a955e6ef86c3c49740c8b35901481b750aecd0dbf2e24db73"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_10685871ab12b88cfdd604f1",
+        "effect_id": "la-01-04",
+        "title": "An Experiment on Risk Taking and Evaluation Periods",
+        "quote_or_locus": "Myopic loss aversion is the combination of loss aversion and frequent evaluation of investment portfolios, which leads to more conservative risk-taking.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.6
+  },
+  "provenance": [
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_538688ffcc114a5fcc6be39e",
+      "doi": "10.17010/ijf/2025/v19i5/175045",
+      "title": "Financial Literacy as a Moderator in Behavioral Biases and Investor Decisions",
+      "quote_or_locus": "higher financial literacy made investors more capable of identifying and overcoming biases. This insight enabled investors to make more logical and well-informed investment decisions",
+      "source_span": {
+        "start": 1100,
+        "end": 1282,
+        "source_text_sha256": "1e487234e94c8d2a955e6ef86c3c49740c8b35901481b750aecd0dbf2e24db73"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_10685871ab12b88cfdd604f1",
+      "effect_id": "la-01-04",
+      "title": "An Experiment on Risk Taking and Evaluation Periods",
+      "quote_or_locus": "Myopic loss aversion is the combination of loss aversion and frequent evaluation of investment portfolios, which leads to more conservative risk-taking.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.6,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31481202687",
+  "proposed_at": "2026-08-11T10:13:10.917Z",
+  "status": "superseded",
+  "hold_reason": null,
+  "decided_by": "owner",
+  "decided_at": "2026-08-11T11:10:38.450Z",
+  "decision_note": "Superseded by realization-la-01-bias-awareness-tooltip-rewrite-cd3cc8ee837b (approved D-360), which projects the same realization id (bias-awareness-tooltip) with the pattern rewritten to remove portfolio vocabulary per the abstraction rule (D-352). The projected artifact at realizations/LA-01/bias-awareness-tooltip.json now carries the rewrite's text; this proposal's own decision (approved, by owner) is left as it was made."
+}

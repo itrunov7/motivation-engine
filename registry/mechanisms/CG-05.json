@@ -8,65 +8,160 @@
   "parent": "S2",
   "lifecycle_status": "incubating",
   "dossier_ref": "dossiers/CG-05.json",
-  "provenance": { "proposed_by": "owner", "date": "2026-07-15" },
-  "evidence_terms": ["information gap theory curiosity", "curiosity gap attention", "need for cognition curiosity", "curiosity information seeking", "curiosity gap replication"],
+  "provenance": {
+    "proposed_by": "owner",
+    "date": "2026-07-15"
+  },
+  "evidence_terms": [
+    "information gap theory curiosity",
+    "curiosity gap attention",
+    "need for cognition curiosity",
+    "curiosity information seeking",
+    "curiosity gap replication"
+  ],
   "pinned_evidence": [
-    { "doi": "10.1037/0033-2909.116.1.75", "title": "The psychology of curiosity: A review and reinterpretation", "reason": "foundational — Loewenstein information-gap theory" },
-    { "doi": "10.1016/j.neuron.2014.08.060", "title": "States of curiosity modulate hippocampus-dependent learning", "reason": "neural — curiosity engages reward/memory circuitry (Gruber et al.)" }
+    {
+      "doi": "10.1037/0033-2909.116.1.75",
+      "title": "The psychology of curiosity: A review and reinterpretation",
+      "reason": "foundational — Loewenstein information-gap theory"
+    },
+    {
+      "doi": "10.1016/j.neuron.2014.08.060",
+      "title": "States of curiosity modulate hippocampus-dependent learning",
+      "reason": "neural — curiosity engages reward/memory circuitry (Gruber et al.)"
+    }
   ],
   "evidence": {
     "grade": "B+",
     "basis": "Curiosity arises from an information gap between what one knows and wants to know; the gap creates a drive to close it (Loewenstein 1994, information-gap theory). Neuroscience links curiosity states to reward and memory circuitry (Gruber, Kang et al.).",
     "effect_size_note": "The gap effect is well-established for attention and information-seeking; strength depends on the gap being neither trivial (already known) nor overwhelming (hopeless). Works on cold traffic, unlike most core mechanisms.",
-    "caveats": ["gap_must_be_moderate_known_enough_to_care", "clickbait_backlash_if_payoff_disappoints", "attention_effect_stronger_than_lasting_engagement"]
+    "caveats": [
+      "gap_must_be_moderate_known_enough_to_care",
+      "clickbait_backlash_if_payoff_disappoints",
+      "attention_effect_stronger_than_lasting_engagement"
+    ]
   },
   "prior_weight": 0.75,
   "mechanism_summary_for_context": "A gap between what someone knows and what they want to know creates a pull to close it. Surface a specific, resolvable unknown ('see your result', 'what your data reveals', an unfinished reveal) and the user is drawn to complete it. Unique in the set: works at the top of the funnel on cold traffic. The gap must resolve into real value — an unmet curiosity gap is clickbait and backfires.",
   "applicability": {
-    "funnel_stages": ["cold_acquisition", "activation"],
-    "excluded_stages": ["retention"],
-    "artifact_types": ["landing_hero", "onboarding", "email", "paywall"],
+    "funnel_stages": [
+      "cold_acquisition",
+      "activation"
+    ],
+    "excluded_stages": [
+      "retention"
+    ],
+    "artifact_types": [
+      "landing_hero",
+      "onboarding",
+      "email",
+      "paywall"
+    ],
     "preconditions": [
-      { "predicate": "artifact.can_pose_a_resolvable_question == true", "reason": "requires a specific unknown the product can genuinely resolve; not applicable where there is no real reveal to deliver" }
+      {
+        "predicate": "artifact.can_pose_a_resolvable_question == true",
+        "reason": "requires a specific unknown the product can genuinely resolve; not applicable where there is no real reveal to deliver"
+      }
     ],
     "culture_note": "Curiosity is universal; what reads as an intriguing gap vs a trivial or manipulative one is an L3 surface parameter"
   },
   "implementations": [
     {
       "id": "CG-05-personalized-reveal",
-      "artifact_types": ["landing_hero", "onboarding"],
-      "product_requirements": ["produces_personalized_result"],
-      "generation_directive": "Pose a specific, personally-relevant question the product will answer ('See what your {input} reveals', 'Find your {result}'). The reveal must deliver genuine, specific value — a real personalized result, not a generic payoff. The gap should be resolvable within the flow, not endlessly deferred.",
-      "copy_formulas": ["See your {result}", "What does your {input} say about {topic}?"],
-      "metrics": ["cvr", "landing_engagement", "flow_start_rate"],
+      "artifact_types": [
+        "landing_hero",
+        "onboarding"
+      ],
+      "product_requirements": [
+        "produces_personalized_result"
+      ],
+      "generation_directive": "Pose a specific, personally-relevant question framed around the user's own input, promising a personalized result rather than a generic one. The reveal must deliver genuine, specific value — a real personalized result, not a generic payoff. The gap should be resolvable within the flow, not endlessly deferred.",
+      "copy_formulas": [
+        "See your {result}",
+        "What does your {input} say about {topic}?"
+      ],
+      "metrics": [
+        "cvr",
+        "landing_engagement",
+        "flow_start_rate"
+      ],
       "observed_effects": []
     },
     {
       "id": "CG-05-progressive-reveal",
-      "artifact_types": ["onboarding", "email"],
+      "artifact_types": [
+        "onboarding",
+        "email"
+      ],
       "product_requirements": [],
-      "generation_directive": "Open a specific loop and resolve it with real information ('Here's what we found — one thing stands out'). Reveal enough to make the gap felt, deliver the resolution as genuine value. Never tease a payoff the product cannot deliver.",
-      "copy_formulas": ["One thing stood out in your {data}", "Here's what we found"],
-      "metrics": ["open_rate", "click_through", "completion_rate"],
+      "generation_directive": "Open a specific loop and resolve it with real information, surfacing a single genuine standout finding rather than a vague summary. Reveal enough to make the gap felt, deliver the resolution as genuine value. Never tease a payoff the product cannot deliver.",
+      "copy_formulas": [
+        "One thing stood out in your {data}",
+        "Here's what we found"
+      ],
+      "metrics": [
+        "open_rate",
+        "click_through",
+        "completion_rate"
+      ],
       "observed_effects": []
     }
   ],
   "constraints": {
     "hard_rules": [
-      { "id": "real_payoff", "rule": "The curiosity gap must resolve into genuine, specific value; teasing a reveal the product does not deliver (clickbait) is forbidden", "severity": "block" },
-      { "id": "no_deceptive_teaser", "rule": "The teased question must honestly represent what will be revealed; misleading curiosity hooks are forbidden", "severity": "block" }
+      {
+        "id": "real_payoff",
+        "rule": "The curiosity gap must resolve into genuine, specific value; teasing a reveal the product does not deliver (clickbait) is forbidden",
+        "severity": "block"
+      },
+      {
+        "id": "no_deceptive_teaser",
+        "rule": "The teased question must honestly represent what will be revealed; misleading curiosity hooks are forbidden",
+        "severity": "block"
+      }
     ],
-    "compliance_refs": ["EU_DSA_dark_patterns", "ftc_deceptive", "asa_misleading_advertising"],
+    "compliance_refs": [
+      "EU_DSA_dark_patterns",
+      "ftc_deceptive",
+      "asa_misleading_advertising"
+    ],
     "boundary_test": "Does closing the gap give the user something genuinely worth their attention — or is it a bait that disappoints?"
   },
   "relations": [
-    { "type": "adjacent", "target": "VR-02", "note": "Curiosity gap and variable reward co-occur (not knowing what the reward is), but differ: information gap vs reward unpredictability" },
-    { "type": "adjacent", "target": "ZE-07", "note": "An open question is a kind of open loop; distinct — CG-05 is an information gap, ZE-07 is task incompleteness" }
+    {
+      "type": "adjacent",
+      "target": "VR-02",
+      "note": "Curiosity gap and variable reward co-occur (not knowing what the reward is), but differ: information gap vs reward unpredictability"
+    },
+    {
+      "type": "adjacent",
+      "target": "ZE-07",
+      "note": "An open question is a kind of open loop; distinct — CG-05 is an information gap, ZE-07 is task incompleteness"
+    }
   ],
-  "telemetry": { "tag_format": "me:CG-05:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "telemetry": {
+    "tag_format": "me:CG-05:{implementation_id}",
+    "amplitude_event_property": "mechanism_tags"
+  },
   "reference_examples": [
-    { "product": "BuzzFeed-style quizzes", "what": "'What your coffee order says about you' — canonical curiosity gap driving cold-traffic engagement; also the canonical clickbait cautionary case" },
-    { "product": "Spotify Wrapped", "what": "'See your year in music' opens a personally-relevant gap resolved with genuine personal data" },
-    { "product": "Ventora Idea Check (own)", "what": "'See your idea's score' opens a resolvable gap the product genuinely answers with the evaluation" }
+    {
+      "product": "BuzzFeed-style quizzes",
+      "what": "'What your coffee order says about you' — canonical curiosity gap driving cold-traffic engagement; also the canonical clickbait cautionary case"
+    },
+    {
+      "product": "Spotify Wrapped",
+      "what": "'See your year in music' opens a personally-relevant gap resolved with genuine personal data"
+    },
+    {
+      "product": "Ventora Idea Check (own)",
+      "what": "'See your idea's score' opens a resolvable gap the product genuinely answers with the evaluation"
+    }
+  ],
+  "effect_refs": [
+    "cg-05",
+    "cg-05-01",
+    "cg-05-03",
+    "cg-05-04",
+    "cg-05-05"
   ]
 }

@@ -6,8 +6,8 @@
     "id": "sc-06-04",
     "mechanism_id": "SC-06",
     "name": "Scarcity-Induced Arousal Polarization",
-    "fact": "Scarcity salience increases the choice share of the most-preferred item by inducing arousal that polarizes evaluations of items in a choice set.",
-    "grade": "A-",
+    "fact": "Scarcity (versus abundance) broadens the gap between liking of the most- and least-preferred items in a choice set, and increases the choice share of the most-preferred item.",
+    "grade": "C+",
     "source": [
       "10.1509/jmr.13.0451"
     ],
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A- -> capped to C+."
   },
   "provenance": [
     {
@@ -48,9 +49,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:40:10.210Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.746Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A- -> C+. OVERREACH: narrowed fact to what the cited span supports, removing the causal mechanism clause \"by inducing arousal that polarizes evaluations\" — the cited span never mentions arousal; it reports the liking-gap and choice-share finding only.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show limited stock or availability scarcity indicator — names a manipulable variable: show limited stock or availability scarcity indicator — Interface can display scarcity cues to trigger arousal-driven preference polarization.",
+        "identified_lever": "show limited stock or availability scarcity indicator"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (increases)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

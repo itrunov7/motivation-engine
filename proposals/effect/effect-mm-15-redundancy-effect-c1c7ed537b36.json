@@ -6,8 +6,8 @@
     "id": "mm15-redundancy-effect",
     "mechanism_id": "MM-15",
     "name": "Redundancy Effect",
-    "fact": "Redundant information presented through multiple channels (e.g., simultaneous on-screen text and narration, or duplicated modal information) tends to decrease learning outcomes and increase cognitive load, but findings are contested, with some studies reporting no significant redundancy effect or context-dependent benefits.",
-    "grade": "A",
+    "fact": "Redundant information presented through multiple channels (e.g. simultaneous on-screen text and narration) tends to decrease learning outcomes and increase cognitive load, though several of the cited studies report no significant effect, a reversed (beneficial) effect for foreign-language learners, or effects that vary with individual differences such as ADHD symptoms.",
+    "grade": "B",
     "source": [
       "10.1037/0022-0663.93.1.187",
       "10.1080/01443410.2026.2678483",
@@ -17,7 +17,7 @@
       "10.30564/jpr.v1i2.580",
       "10.64546/jaasep.315"
     ],
-    "boundary": "Applies to modality-based redundancy in multimedia learning materials, distinguished from content redundancy; direction and magnitude of the effect vary across studies and instructional contexts, and some research finds no significant impact on learning or cognitive load.",
+    "boundary": "Applies to modality-based redundancy in multimedia learning materials, distinguished from content redundancy. TENSION WITH effect-mm-15-content-redundancy-7686ab66e7bd: that proposal reports content redundancy specifically INCREASES learning and DECREASES cognitive load — the opposite direction from this proposal's dominant finding (though one of this proposal's own 7 sources reports the same positive direction, for foreign-language learners). Both proposals are kept as a preserved disconfirmation (rule 4), not reconciled — see the dissent decision entry.",
     "realization_ids": [],
     "provenance": [
       {
@@ -111,7 +111,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 7 independent source(s), original model-asserted grade A -> capped to B."
   },
   "provenance": [
     {
@@ -210,9 +211,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:42:52.220Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.727Z",
+  "decision_note": "Approved under mechanical grade cap: 7 source(s), A -> B. OVERREACH: narrowed fact to what the cited span supports, removing the generic hedge \"findings are contested\" replaced with the specific contested findings the 7 cited sources actually report (no-effect, reversed-effect, ADHD-moderated). Approved alongside content-redundancy as a preserved corpus disconfirmation; see the dissent decision entry.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: avoid duplicating same text as narration/captions simultaneously — names a manipulable variable: avoid duplicating same text as narration/captions simultaneously — names a manipulable variable: avoid duplicating same text as narration/captions simultaneously — Product can show/hide redundant on-screen text versus narration to reduce cognitive load.",
+        "identified_lever": "avoid duplicating same text as narration/captions simultaneously"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (increase, increases, decrease, +2 more)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

@@ -9,65 +9,169 @@
   "cross_cutting": true,
   "lifecycle_status": "incubating",
   "dossier_ref": "dossiers/PF-16.json",
-  "provenance": { "proposed_by": "owner", "date": "2026-07-20" },
-  "evidence_terms": ["processing fluency judgment", "perceptual fluency preference", "fluency truth effect", "processing fluency replication", "fluency aesthetic pleasure"],
+  "provenance": {
+    "proposed_by": "owner",
+    "date": "2026-07-20"
+  },
+  "evidence_terms": [
+    "processing fluency judgment",
+    "perceptual fluency preference",
+    "fluency truth effect",
+    "processing fluency replication",
+    "fluency aesthetic pleasure"
+  ],
   "pinned_evidence": [
-    { "doi": "10.1207/s15327957pspr0804_3", "title": "Processing Fluency and Aesthetic Pleasure: Is Beauty in the Perceiver's Processing Experience?", "reason": "foundational — Reber, Schwarz & Winkielman 2004" },
-    { "doi": "10.1177/1088868309341564", "title": "Uniting the Tribes of Fluency to Form a Metacognitive Nation", "reason": "integrative review — Alter & Oppenheimer 2009" }
+    {
+      "doi": "10.1207/s15327957pspr0804_3",
+      "title": "Processing Fluency and Aesthetic Pleasure: Is Beauty in the Perceiver's Processing Experience?",
+      "reason": "foundational — Reber, Schwarz & Winkielman 2004"
+    },
+    {
+      "doi": "10.1177/1088868309341564",
+      "title": "Uniting the Tribes of Fluency to Form a Metacognitive Nation",
+      "reason": "integrative review — Alter & Oppenheimer 2009"
+    }
   ],
   "evidence": {
     "grade": "A-",
     "basis": "Ease of mental processing is experienced as a positive feeling and is misattributed to the object being processed: fluently processed material is judged more likeable, more familiar, more confidently, and — critically — more true. Reber, Schwarz & Winkielman (2004) for aesthetic preference; Alter & Oppenheimer (2009) integrating the fluency literatures; Dechêne et al. (2009) meta-analysis of the truth effect.",
     "effect_size_note": "The direction is robust across perceptual, linguistic and conceptual fluency manipulations; effect sizes are modest and the interpretation of the fluency signal is learnable and context-dependent rather than fixed.",
-    "caveats": ["fluency_signal_meaning_is_learned_not_fixed", "measurement_of_fluency_contested", "disfluency_preferred_in_some_contexts", "truth_effect_is_an_ethical_hazard_not_a_tool"]
+    "caveats": [
+      "fluency_signal_meaning_is_learned_not_fixed",
+      "measurement_of_fluency_contested",
+      "disfluency_preferred_in_some_contexts",
+      "truth_effect_is_an_ethical_hazard_not_a_tool"
+    ]
   },
   "prior_weight": 0.75,
   "mechanism_summary_for_context": "When something is easy to read, see or grasp, that ease is felt as a mild positive signal and is attributed to the thing itself rather than to the processing: fluent material is liked more, trusted more and judged more true. Legibility, familiar structure, clean contrast, simple language and coherent layout therefore change judgement, not merely comfort. The same mechanism produces the illusory-truth effect — repeated or easily processed claims feel more accurate regardless of their accuracy — which makes this the mechanism in S7 with the clearest capacity for misuse and the sharpest line around it: fluency may be used to make genuine value easy to grasp, never to make a weak claim feel true.",
   "applicability": {
-    "funnel_stages": ["cold_acquisition", "activation", "conversion", "retention"],
+    "funnel_stages": [
+      "cold_acquisition",
+      "activation",
+      "conversion",
+      "retention"
+    ],
     "excluded_stages": [],
-    "artifact_types": ["landing_hero", "onboarding", "paywall", "pricing_page", "checkout", "email", "dashboard_widget"],
+    "artifact_types": [
+      "landing_hero",
+      "onboarding",
+      "paywall",
+      "pricing_page",
+      "checkout",
+      "email",
+      "dashboard_widget"
+    ],
     "preconditions": [],
     "culture_note": "The fluency-to-judgement link is general, but what reads as fluent — typography, language register, familiar layout conventions — is strongly culture- and audience-specific; an L3 surface parameter"
   },
   "implementations": [
     {
       "id": "PF-16-legibility-and-plain-language",
-      "artifact_types": ["landing_hero", "paywall", "pricing_page", "checkout", "email"],
+      "artifact_types": [
+        "landing_hero",
+        "paywall",
+        "pricing_page",
+        "checkout",
+        "email"
+      ],
       "product_requirements": [],
       "generation_directive": "Make genuine content easy to process: legible contrast and type, plain concrete language over jargon and abstraction, short sentences for key claims, familiar structure. Difficulty of processing is read as a property of the offer, so unnecessary complexity in stating a true claim costs credibility.",
       "copy_formulas": [],
-      "metrics": ["cvr", "comprehension_proxy_task_completion", "time_to_complete"],
+      "metrics": [
+        "cvr",
+        "comprehension_proxy_task_completion",
+        "time_to_complete"
+      ],
       "observed_effects": []
     },
     {
       "id": "PF-16-familiar-structure",
-      "artifact_types": ["landing_hero", "onboarding", "checkout", "dashboard_widget"],
+      "artifact_types": [
+        "landing_hero",
+        "onboarding",
+        "checkout",
+        "dashboard_widget"
+      ],
       "product_requirements": [],
       "generation_directive": "Use conventional structures where convention exists — expected placement of navigation, price, primary action, form order. Familiarity is a fluency source; novelty in structural elements imposes processing cost that is misread as difficulty with the product itself. Reserve novelty for content, not for load-bearing structure.",
       "copy_formulas": [],
-      "metrics": ["task_completion_rate", "error_rate", "cvr"],
+      "metrics": [
+        "task_completion_rate",
+        "error_rate",
+        "cvr"
+      ],
       "observed_effects": []
     }
   ],
   "constraints": {
     "hard_rules": [
-      { "id": "no_fluency_for_false_claims", "rule": "Fluency techniques (repetition, easy phrasing, confident presentation) must never be applied to make an unsupported, exaggerated or false claim feel true; the illusory-truth effect is a hazard to guard against, not a mechanism to exploit", "severity": "block" },
-      { "id": "no_disfluency_obstruction", "rule": "Deliberate disfluency to discourage a user action — small or low-contrast text for terms, cancellation, or price; convoluted phrasing of consequences — is forbidden and specifically regulated", "severity": "block" },
-      { "id": "material_information_fluent", "rule": "Price, terms, recurring charges and limitations must be presented at least as fluently as promotional content; burying material information in comparatively harder-to-process form is a dark pattern", "severity": "block" }
+      {
+        "id": "no_fluency_for_false_claims",
+        "rule": "Fluency techniques (repetition, easy phrasing, confident presentation) must never be applied to make an unsupported, exaggerated or false claim feel true; the illusory-truth effect is a hazard to guard against, not a mechanism to exploit",
+        "severity": "block"
+      },
+      {
+        "id": "no_disfluency_obstruction",
+        "rule": "Deliberate disfluency to discourage a user action — small or low-contrast text for terms, cancellation, or price; convoluted phrasing of consequences — is forbidden and specifically regulated",
+        "severity": "block"
+      },
+      {
+        "id": "material_information_fluent",
+        "rule": "Price, terms, recurring charges and limitations must be presented at least as fluently as promotional content; burying material information in comparatively harder-to-process form is a dark pattern",
+        "severity": "block"
+      }
     ],
-    "compliance_refs": ["EU_DSA_dark_patterns", "eu_ucpd_misleading_omission", "ftc_deceptive", "wcag_2_2_contrast"],
+    "compliance_refs": [
+      "EU_DSA_dark_patterns",
+      "eu_ucpd_misleading_omission",
+      "ftc_deceptive",
+      "wcag_2_2_contrast"
+    ],
     "boundary_test": "Is ease being used to help the user grasp something true — or to make something feel truer, safer or better than it is?"
   },
   "relations": [
-    { "type": "enabled_by", "target": "CL-14", "note": "Lower cognitive load generally raises fluency; distinct constructs — capacity consumption versus the subjective feeling of ease and its misattribution" },
-    { "type": "adjacent", "target": "MM-15", "note": "Coherent, signalled presentation raises fluency as a by-product; MM-15 targets comprehension, PF-16 targets the judgement consequences of ease" },
-    { "type": "adjacent", "target": "SP-08", "note": "Familiarity from repeated social exposure feeds fluency, which is one route by which social proof shifts judgement" }
+    {
+      "type": "enabled_by",
+      "target": "CL-14",
+      "note": "Lower cognitive load generally raises fluency; distinct constructs — capacity consumption versus the subjective feeling of ease and its misattribution"
+    },
+    {
+      "type": "adjacent",
+      "target": "MM-15",
+      "note": "Coherent, signalled presentation raises fluency as a by-product; MM-15 targets comprehension, PF-16 targets the judgement consequences of ease"
+    },
+    {
+      "type": "adjacent",
+      "target": "SP-08",
+      "note": "Familiarity from repeated social exposure feeds fluency, which is one route by which social proof shifts judgement"
+    }
   ],
-  "telemetry": { "tag_format": "me:PF-16:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "telemetry": {
+    "tag_format": "me:PF-16:{implementation_id}",
+    "amplitude_event_property": "mechanism_tags"
+  },
   "reference_examples": [
-    { "product": "Stripe pricing pages", "what": "Plain-language, high-legibility statement of price and terms — material information presented at maximum fluency rather than minimum" },
-    { "product": "Gov.uk service pages", "what": "Deliberate plain-language and conventional structure standard; fluency applied to genuinely important information for a non-commercial motive" },
-    { "product": "Standard checkout conventions", "what": "Expected field order and placement — structural familiarity reducing processing cost at the highest-stakes step" }
+    {
+      "product": "Stripe pricing pages",
+      "what": "Plain-language, high-legibility statement of price and terms — material information presented at maximum fluency rather than minimum"
+    },
+    {
+      "product": "Gov.uk service pages",
+      "what": "Deliberate plain-language and conventional structure standard; fluency applied to genuinely important information for a non-commercial motive"
+    },
+    {
+      "product": "Standard checkout conventions",
+      "what": "Expected field order and placement — structural familiarity reducing processing cost at the highest-stakes step"
+    }
+  ],
+  "effect_refs": [
+    "fluency-based-aesthetic-interest",
+    "fluency-based-aesthetic-pleasure-evaluation",
+    "illusory-truth-effect-fluency-based-truth-perception",
+    "pf-003a",
+    "pf-16-002",
+    "pf-16-004",
+    "pf16-001"
   ]
 }

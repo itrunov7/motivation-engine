@@ -57,7 +57,8 @@
         "rejected",
         "edited",
         "held_low_confidence",
-        "held_non_transferable"
+        "held_non_transferable",
+        "superseded"
       ]
     },
     "hold_reason": {
@@ -294,6 +295,15 @@
             "required": ["check", "outcome", "reason"],
             "additionalProperties": false
           }
+        },
+        "modifiers_flagged": {
+          "description": "The non-VARIABLE checks that flagged, under ruleset v3 (D-165). In v3 these are confidence modifiers rather than refusals: SUBJECT, DIRECTION and POPULATION still run and still state their reasons, but only VARIABLE can refuse. Recorded so the flag survives on an ADMITTED verdict — v3 exists because those three were refusing claims whose lever VARIABLE had already named, and a modifier that vanished on admission would hide the signal that motivated the change. Not required: absent on v1 and v2 verdicts, where these checks could refuse and escalated_by_warning_pair describes the scoring instead. variable is excluded from the enum by construction — the only check that can refuse can never be a modifier.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["subject", "direction", "population"]
+          },
+          "uniqueItems": true
         }
       },
       "required": [
@@ -314,14 +324,15 @@
           "minimum": 1
         },
         "reason": {
-          "description": "Which failure occurred. Split by cause because a run that exhausted its token cap and a run whose model was unreachable produce the same count and demand different responses.",
+          "description": "Which failure occurred. Split by cause because a run that exhausted its token cap and a run whose model was unreachable produce the same count and demand different responses. answer_truncated is split from malformed_answer for the same reason: one is the model failing the format, the other is the model following it and being cut off by a ceiling we set.",
           "type": "string",
           "enum": [
             "no_model_id",
             "per_run_token_cap",
             "monthly_token_cap",
             "transport_error",
-            "malformed_answer"
+            "malformed_answer",
+            "answer_truncated"
           ]
         },
         "detail": {

@@ -1,0 +1,89 @@
+{
+  "id": "realization-sc-06-mobile-expiring-deal-push-notificati-595584917e88",
+  "type": "realization",
+  "target": "SC-06",
+  "payload": {
+    "id": "mobile-expiring-deal-push-notification",
+    "mechanism_id": "SC-06",
+    "term": "Mobile Expiring-Deal Push Notification",
+    "description_as_reported": "Scarcity principles may be more effective on mobile devices due to their pervasiveness and ability to support just-in-time messaging for expiring deals.",
+    "artifact_context": [
+      "email"
+    ],
+    "effect_refs": [
+      "sc-06-02"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "online commerce",
+      "application_domain": "product UI"
+    },
+    "pattern": "Send a push notification or email when a limited-quantity deal is within {time_remaining} minutes of expiration to leverage just-in-time scarcity messaging.",
+    "parameters": [
+      {
+        "name": "time_remaining",
+        "value": 15,
+        "unit": "minutes",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_b3242d889c9c1935de614e06",
+        "doi": "10.13016/m2p37j",
+        "title": "USING INFLUENCE PRINCIPLES TO DETERMINE THE PERSUASIVE SUSCEPTIBILITY OF ONLINE COMMERCE USERS",
+        "quote_or_locus": "We also find evidence that scarcity principles may be more effective on mobile devices due to their pervasiveness and ability to support just-in-time messaging for expiring deals",
+        "source_span": {
+          "start": 981,
+          "end": 1159,
+          "source_text_sha256": "272ffbc449956164c569cd634c89f89fe1548115afacc197057bcc9753d9bfef"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_c8b954378f01f675fed70897",
+        "effect_id": "sc-06-02",
+        "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+        "quote_or_locus": "Limited-quantity promotion activates competitive anxiety and possessive desire due to scarcity of quantity, increasing perceived value.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.65
+  },
+  "provenance": [
+    {
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_b3242d889c9c1935de614e06",
+      "doi": "10.13016/m2p37j",
+      "title": "USING INFLUENCE PRINCIPLES TO DETERMINE THE PERSUASIVE SUSCEPTIBILITY OF ONLINE COMMERCE USERS",
+      "quote_or_locus": "We also find evidence that scarcity principles may be more effective on mobile devices due to their pervasiveness and ability to support just-in-time messaging for expiring deals",
+      "source_span": {
+        "start": 981,
+        "end": 1159,
+        "source_text_sha256": "272ffbc449956164c569cd634c89f89fe1548115afacc197057bcc9753d9bfef"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_c8b954378f01f675fed70897",
+      "effect_id": "sc-06-02",
+      "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+      "quote_or_locus": "Limited-quantity promotion activates competitive anxiety and possessive desire due to scarcity of quantity, increasing perceived value.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.65,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31480976629",
+  "proposed_at": "2026-08-11T10:10:07.944Z",
+  "status": "approved",
+  "hold_reason": null,
+  "decided_by": "owner",
+  "decided_at": "2026-08-11T11:11:12.762Z",
+  "decision_note": "Approved as extracted. Anchor sc-06-02 Limited-quantity scarcity, capped grade C+; cap discharged upstream on the anchor, confidence unchanged. Reports a real expiry on an existing deal rather than manufacturing one, so genuine_scarcity_only is satisfied. Single-source basis, which the C+ anchor grade already reflects."
+}

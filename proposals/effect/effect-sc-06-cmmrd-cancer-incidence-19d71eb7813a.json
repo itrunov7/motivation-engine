@@ -52,5 +52,37 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": false,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (clinical) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "fail",
+        "reason": "names nothing an interface can change — names nothing an interface can change — Clinical epidemiological statistic on genetic cancer risk; no interface mechanism to act on.",
+        "identified_lever": null
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

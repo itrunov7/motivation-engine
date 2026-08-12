@@ -6,7 +6,7 @@
     "id": "ha-04-02",
     "mechanism_id": "HA-04",
     "name": "Context-dependent birdsong structure",
-    "fact": "Collared flycatchers exhibit context-dependent changes in song structure, specifically showing lower richness of short repeated sequences in the presence of an approaching female and higher richness of long repeated sequences during counter-singing.",
+    "fact": "Collared flycatchers exhibit context-dependent changes in syllable sequence richness, with lower richness of short repeated sequences in the presence of an approaching female and higher richness of long repeated sequences during counter-singing.",
     "grade": "A",
     "source": [
       "10.1016/j.anbehav.2024.11.004"
@@ -46,17 +46,16 @@
   ],
   "confidence": 0.95,
   "operation": "create",
-  "proposed_by": "extraction:github-actions-31369735214",
-  "proposed_at": "2026-08-10T08:22:21.673Z",
+  "proposed_by": "extraction:github-actions-31371637456",
+  "proposed_at": "2026-08-10T08:47:59.051Z",
   "status": "held_non_transferable",
   "hold_reason": "not_transferable",
   "decided_by": null,
   "decided_at": null,
   "decision_note": null,
   "transferability": {
-    "ruleset_version": 2,
+    "ruleset_version": 3,
     "transferable": false,
-    "escalated_by_warning_pair": false,
     "checks": [
       {
         "check": "subject",
@@ -66,7 +65,7 @@
       {
         "check": "variable",
         "outcome": "fail",
-        "reason": "names nothing an interface can change — Bird behavioral biology finding; no digital interface mechanism or user-facing lever applicable.",
+        "reason": "names nothing an interface can change — names nothing an interface can change — Bird behavioral/ecological study; no digital interface mechanism or analogous UI construct applies.",
         "identified_lever": null
       },
       {
@@ -79,6 +78,10 @@
         "outcome": "pass",
         "reason": "no specialist population named — the claim does not require expertise to apply"
       }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
     ]
   }
 }

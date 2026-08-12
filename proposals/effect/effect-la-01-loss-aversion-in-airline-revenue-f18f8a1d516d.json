@@ -7,7 +7,7 @@
     "mechanism_id": "LA-01",
     "name": "Loss aversion in airline revenue",
     "fact": "Loss aversion has a greater impact on airline revenue than gain-seeking, particularly among business passengers.",
-    "grade": "A-",
+    "grade": "C+",
     "source": [
       "10.1177/00472875221093014"
     ],
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A- -> capped to C+."
   },
   "provenance": [
     {
@@ -48,9 +49,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:39:21.808Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.650Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A- -> C+.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: frame price as a loss to avoid — names a manipulable variable: frame price as a loss to avoid — UI can reword pricing/messaging to emphasize avoiding a loss rather than gaining a discount.",
+        "identified_lever": "frame price as a loss to avoid"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (greater, than)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

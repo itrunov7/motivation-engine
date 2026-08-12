@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-06T13:59:47.983Z",
+  "dispatch_id": "cl14-fix4-yield",
+  "github_run_id": 31108569730,
+  "mode": "realizations",
+  "written_at": "2026-08-06T14:02:03.458Z",
+  "rejected": [
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "span_role_not_finding",
+      "detail": "no citation carried span_role=finding, so the item rests on background, hypothesis, method or limitation spans alone — none of which report what a source observed (D-129)",
+      "corpus_record_id": "cr_6f1c4053663b72cea3a2b534",
+      "item": {
+        "term": "Integrated Procedure Preview",
+        "description_as_reported": "The primary goal of cognitive load theory is to improve the learning of complex cognitive tasks by transforming current scientific knowledge on how cognitive structures and processes are organized into guidelines for instructional design.",
+        "pattern": "Display a {preview_step_count} step visual walkthrough of the procedure in a single, non-scrolling view to ensure the user perceives the entire process as an integrated whole before beginning the first action.",
+        "parameters": [
+          {
+            "name": "preview_step_count",
+            "value": 5,
+            "unit": "steps"
+          }
+        ],
+        "source_domain": "mathematics education",
+        "artifact_context": [
+          "onboarding"
+        ],
+        "confidence": 0.7,
+        "citations": [
+          {
+            "record_id": "cr_6f1c4053663b72cea3a2b534",
+            "quote_or_locus": "The primary goal of cognitive load theory is to improve the learning of complex cognitive tasks by transforming current scientific knowledge on how cognitive structures and processes are organized into guidelines for instructional design.",
+            "span_role": "background"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_6f1c4053663b72cea3a2b534",
+          "quote_or_locus": "The primary goal of cognitive load theory is to improve the learning of complex cognitive tasks by transforming current scientific knowledge on how cognitive structures and processes are organized into guidelines for instructional design.",
+          "span_role": "background"
+        }
+      ]
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "doi_unresolved",
+      "detail": "DOI does not resolve for cr_1e85f8255e71e7772f6fe370",
+      "corpus_record_id": "cr_1e85f8255e71e7772f6fe370",
+      "item": {
+        "term": "Integrated Concept Card",
+        "description_as_reported": "The artifact uses this structured information chunking and bolded key-phrase signaling to reduce extraneous cognitive load, facilitating rapid scanning in a few seconds.",
+        "pattern": "Present complex procedures as integrated concept cards that combine text and visual cues, and collapse the detailed view until the user has performed {interaction_threshold} interactions with the summary.",
+        "parameters": [
+          {
+            "name": "interaction_threshold",
+            "value": 3,
+            "unit": "clicks"
+          }
+        ],
+        "source_domain": "multimedia instructional design",
+        "artifact_context": [
+          "onboarding",
+          "dashboard_widget"
+        ],
+        "confidence": 0.75,
+        "citations": [
+          {
+            "record_id": "cr_1e85f8255e71e7772f6fe370",
+            "quote_or_locus": "Grounded in Cognitive Load Theory, the artifact uses this structured information chunking and bolded key-phrase signaling to reduce extraneous cognitive load, facilitating rapid scanning in a few seconds.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_1e85f8255e71e7772f6fe370",
+          "quote_or_locus": "Grounded in Cognitive Load Theory, the artifact uses this structured information chunking and bolded key-phrase signaling to reduce extraneous cognitive load, facilitating rapid scanning in a few seconds.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "Grounded in Cognitive Load Theory, the artifact uses this structured information chunking and bolded key-phrase signaling to reduce extraneous cognitive load, facilitating rapid scanning in a few seconds.",
+        "quote_normalized": "grounded in cognitive load theory the artifact uses this structured information chunking and bolded key phrase signaling to reduce extraneous cognitive load facilitating rapid scanning in a few seconds",
+        "source_raw": "Voxvoro: Repurposing Social Media UI Patterns for AI-Augmented Scholarly Synthesis\nThis TREO talk introduces Voxvoro (voxvoro.com), a mobile-optimized Progressive Web App (PWA) designed to mitigate scholarly information overload by repurposing high-engagement social media interface patterns for research discovery. As academic publication volume increases, scholars often default to non-productive digital \"doomscrolling\" habits due to the low friction and variable reward schedules of social media platforms. Voxvoro addresses this by utilizing a local Large Language Model (Gemma3:27b via Ollama) to transform dense academic metadata into easy to digest concept cards. The Voxvoro architecture integrates a multi-stage data pipeline designed for high-signal scholarly synthesis, bridging a Python-based ingestion engine with a Next.js frontend to enable a \"native-feel\" mobile experience. The backend manages a hardcoded registry of 117+ high-impact journals and utilizes the OpenAlex API to fetch and reconstruct recent works from each source. AI orchestration is handled via local LLM inference, where a specialized system prompt directs the model to generate summaries constrained to three standardized areas: Core Finding, Methodology, and Implications. In addition to text, the pipeline generates conversational deep-dive scripts synthesized into high-fidelity audio using the Kokoro ONNX TTS model, stored via Cloudflare R2. Grounded in Cognitive Load Theory, the artifact uses this structured information chunking and bolded key-phrase signaling to reduce extraneous cognitive load, facilitating rapid scanning in a few seconds. The frontend leverages server-side fetching via Supabase for low-latency delivery, while the Progressive Web App (PWA) framework supports mobile-first features and direct DOI linking for immediate access to full-text manuscripts. This presentation discusses the design science process of building the PWA, the technical challenges of local multimodal orchestration, and preliminary faculty feedback regarding the replacement of non-productive digital habits with efficient scholarly engagement. The ongoing evaluation of this artifact focuses on three primary behavioral and cognitive dimensions. First, the project investigates whether the transition from unformatted abstracts to structured, bolded concept cards and audio summaries significantly reduce the extraneous mental effort required for literature screening. Second, the study explores the potential for \"habit displacement,\" questioning if a high-signal, low-friction scholarly PWA can successfully compete for the digital \"micro-moments\" currently dominated by non-productive social media platforms. Finally, the research assesses the affective response of the user, specifically examining how \"scrolling guilt\" or digital fatigue may be mitigated when mobile scrolling, or passive listening, is shifted from entertainment-based content to professional research discovery. These questions will be addressed through a formative evaluation involving a cohort of university faculty, using self-reported engagement data and qualitative feedback to refine the artifact's design science cycle.",
+        "source_normalized": "voxvoro repurposing social media ui patterns for ai augmented scholarly synthesis this treo talk introduces voxvoro voxvoro com a mobile optimized progressive web app pwa designed to mitigate scholarly information overload by repurposing high engagement social media interface patterns for research discovery as academic publication volume increases scholars often default to non productive digital doomscrolling habits due to the low friction and variable reward schedules of social media platforms voxvoro addresses this by utilizing a local large language model gemma3 27b via ollama to transform dense academic metadata into easy to digest concept cards the voxvoro architecture integrates a multi stage data pipeline designed for high signal scholarly synthesis bridging a python based ingestion engine with a next js frontend to enable a native feel mobile experience the backend manages a hardcoded registry of 117 high impact journals and utilizes the openalex api to fetch and reconstruct recent works from each source ai orchestration is handled via local llm inference where a specialized system prompt directs the model to generate summaries constrained to three standardized areas core finding methodology and implications in addition to text the pipeline generates conversational deep dive scripts synthesized into high fidelity audio using the kokoro onnx tts model stored via cloudflare r2 grounded in cognitive load theory the artifact uses this structured information chunking and bolded key phrase signaling to reduce extraneous cognitive load facilitating rapid scanning in a few seconds the frontend leverages server side fetching via supabase for low latency delivery while the progressive web app pwa framework supports mobile first features and direct doi linking for immediate access to full text manuscripts this presentation discusses the design science process of building the pwa the technical challenges of local multimodal orchestration and preliminary faculty feedback regarding the replacement of non productive digital habits with efficient scholarly engagement the ongoing evaluation of this artifact focuses on three primary behavioral and cognitive dimensions first the project investigates whether the transition from unformatted abstracts to structured bolded concept cards and audio summaries significantly reduce the extraneous mental effort required for literature screening second the study explores the potential for habit displacement questioning if a high signal low friction scholarly pwa can successfully compete for the digital micro moments currently dominated by non productive social media platforms finally the research assesses the affective response of the user specifically examining how scrolling guilt or digital fatigue may be mitigated when mobile scrolling or passive listening is shifted from entertainment based content to professional research discovery these questions will be addressed through a formative evaluation involving a cohort of university faculty using self reported engagement data and qualitative feedback to refine the artifact s design science cycle"
+      },
+      "corpus_side": {
+        "doi": null,
+        "title": "Voxvoro: Repurposing Social Media UI Patterns for AI-Augmented Scholarly Synthesis"
+      }
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "doi_unresolved",
+      "detail": "DOI does not resolve for cr_54aaba1894e9b70d403f05b8",
+      "corpus_record_id": "cr_54aaba1894e9b70d403f05b8",
+      "item": {
+        "term": "Adaptive_Socratic_Scaffolding",
+        "description_as_reported": "Longer conversations were slightly negative for absolute beginners but positive for students with prior experience, suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas.",
+        "pattern": "Adjust the verbosity and directness of system guidance based on the user's {experience_level} to prevent cognitive overload for novices while maintaining engagement for experts.",
+        "parameters": [
+          {
+            "name": "experience_level",
+            "value": 1,
+            "unit": "user proficiency tier"
+          }
+        ],
+        "source_domain": "introductory programming",
+        "artifact_context": [
+          "onboarding"
+        ],
+        "confidence": 0.7,
+        "citations": [
+          {
+            "record_id": "cr_54aaba1894e9b70d403f05b8",
+            "quote_or_locus": "Longer conversations were slightly negative for absolute beginners but positive for students with prior experience, suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_54aaba1894e9b70d403f05b8",
+          "quote_or_locus": "Longer conversations were slightly negative for absolute beginners but positive for students with prior experience, suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "Longer conversations were slightly negative for absolute beginners but positive for students with prior experience, suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas.",
+        "quote_normalized": "longer conversations were slightly negative for absolute beginners but positive for students with prior experience suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas",
+        "source_raw": "Socratic AI Tutors in Introductory Programming\nGenerative AI offers introductory programming students immediate support for debugging, syntax, code explanation, and algorithmic reasoning, but the same tools can also bypass the learning processes that instructors hope to cultivate. This TREO talk presents a mixed-methods learning analytics study of a custom Socratic AI tutor in an introductory Python course. The tutor was designed to withhold completed code and instead provide hints, questions, and reflective prompts grounded in scaffolding, help-seeking, cognitive load, self-efficacy, and self-regulated learning theory (Aleven et al., 2003; Bandura, 1997; Sweller, 1988; Vygotsky & Cole, 1978; Wood et al., 1976). The study links psychometric survey measures of prior programming experience, technical English proficiency, and programming self-efficacy with behavioral features extracted from 95 valid AI-student chat interactions, including user turns, turns to resolution, prompt length, lexical diversity, sentiment, struggle type, and prompting strategy. Findings show that Socratic AI can support productive struggle while also introducing equity-sensitive design challenges. First, results reveal a statistically significant Socratic Gap: prior programming experience moderated the relationship between interaction volume and performance (p = .045). Longer conversations were slightly negative for absolute beginners but positive for students with prior experience, suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas. Second, technical English proficiency strongly predicted interactional efficiency. Each one-point increase in proficiency was associated with approximately 3.18 fewer turns to resolution (r = -.467, p < .001), indicating a linguistic time tax for students who supplied shorter, lower-context prompts. Third, frustration loops were rare: 76 of 95 interactions reflected productive struggle and only two reflected frustration loops, although self-efficacy interacted with sentiment in predicting grades (p = .036). Finally, moderate-difficulty assignments showed a significant decline in user turns across the semester (r = -.341, p = .025), with students requiring about 1.40 fewer turns per comparable assignment block. This pattern suggests that the tutor functioned as a scaffold rather than a crutch, supporting an evolution of learner independence. The study contributes to research on AI-assisted programming education by showing that the pedagogical value of LLM tutors depends not simply on access or usage volume, but on the fit between tutor design and learner characteristics. For educators and designers, the results point to three practical needs: adaptive Socratic strictness for absolute beginners, explicit instruction in high-context prompting, and early monitoring of low-sentiment unresolved sessions. More broadly, the talk argues that transcript-level behavioral evidence is essential for evaluating whether AI tutors promote independence, reinforce dependency, or impose hidden burdens on particular learners.",
+        "source_normalized": "socratic ai tutors in introductory programming generative ai offers introductory programming students immediate support for debugging syntax code explanation and algorithmic reasoning but the same tools can also bypass the learning processes that instructors hope to cultivate this treo talk presents a mixed methods learning analytics study of a custom socratic ai tutor in an introductory python course the tutor was designed to withhold completed code and instead provide hints questions and reflective prompts grounded in scaffolding help seeking cognitive load self efficacy and self regulated learning theory aleven et al 2003 bandura 1997 sweller 1988 vygotsky cole 1978 wood et al 1976 the study links psychometric survey measures of prior programming experience technical english proficiency and programming self efficacy with behavioral features extracted from 95 valid ai student chat interactions including user turns turns to resolution prompt length lexical diversity sentiment struggle type and prompting strategy findings show that socratic ai can support productive struggle while also introducing equity sensitive design challenges first results reveal a statistically significant socratic gap prior programming experience moderated the relationship between interaction volume and performance p 045 longer conversations were slightly negative for absolute beginners but positive for students with prior experience suggesting that indirect prompts can become cognitive overload when students lack foundational programming schemas second technical english proficiency strongly predicted interactional efficiency each one point increase in proficiency was associated with approximately 3 18 fewer turns to resolution r 467 p 001 indicating a linguistic time tax for students who supplied shorter lower context prompts third frustration loops were rare 76 of 95 interactions reflected productive struggle and only two reflected frustration loops although self efficacy interacted with sentiment in predicting grades p 036 finally moderate difficulty assignments showed a significant decline in user turns across the semester r 341 p 025 with students requiring about 1 40 fewer turns per comparable assignment block this pattern suggests that the tutor functioned as a scaffold rather than a crutch supporting an evolution of learner independence the study contributes to research on ai assisted programming education by showing that the pedagogical value of llm tutors depends not simply on access or usage volume but on the fit between tutor design and learner characteristics for educators and designers the results point to three practical needs adaptive socratic strictness for absolute beginners explicit instruction in high context prompting and early monitoring of low sentiment unresolved sessions more broadly the talk argues that transcript level behavioral evidence is essential for evaluating whether ai tutors promote independence reinforce dependency or impose hidden burdens on particular learners"
+      },
+      "corpus_side": {
+        "doi": null,
+        "title": "Socratic AI Tutors in Introductory Programming"
+      }
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "quote_not_in_source",
+      "detail": "quote not a substring of cr_924ec72d7f87b4aef093f8e8: \"BijakBM incorporates structured grammar e‑books and interactive formative assessments aligned with the national curricul\"",
+      "corpus_record_id": "cr_924ec72d7f87b4aef093f8e8",
+      "item": {
+        "term": "Integrated_Instructional_Prompting",
+        "description_as_reported": "BijakBM incorporates structured grammar e‑books and interactive formative assessments aligned with the national curriculum. Its progressive module sequencing helps manage cognitive demands, while multimedia features improve comprehension and engagement.",
+        "pattern": "Present instructional content and interactive tasks in an integrated format, avoiding split-attention by ensuring that the {integrated_content_threshold} of related information is displayed within the same visual field.",
+        "parameters": [
+          {
+            "name": "integrated_content_threshold",
+            "value": 1,
+            "unit": "visual field"
+          }
+        ],
+        "source_domain": "digital pedagogical scaffold",
+        "artifact_context": [
+          "onboarding"
+        ],
+        "confidence": 0.7,
+        "citations": [
+          {
+            "record_id": "cr_924ec72d7f87b4aef093f8e8",
+            "quote_or_locus": "BijakBM incorporates structured grammar e‑books and interactive formative assessments aligned with the national curriculum. Its progressive module sequencing helps manage cognitive demands, while multimedia features improve comprehension and engagement.",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_924ec72d7f87b4aef093f8e8",
+          "quote_or_locus": "BijakBM incorporates structured grammar e‑books and interactive formative assessments aligned with the national curriculum. Its progressive module sequencing helps manage cognitive demands, while multimedia features improve comprehension and engagement.",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "BijakBM incorporates structured grammar e‑books and interactive formative assessments aligned with the national curriculum. Its progressive module sequencing helps manage cognitive demands, while multimedia features improve comprehension and engagement.",
+        "quote_normalized": "bijakbm incorporates structured grammar e books and interactive formative assessments aligned with the national curriculum its progressive module sequencing helps manage cognitive demands while multimedia features improve comprehension and engagement",
+        "source_raw": "BIJAKBM: A MOBILE-BASED DIGITAL PEDAGOGICAL SCAFFOLD FOR SUPPORTING NOVICE TEACHERS IN PRIMARY SCHOOLS\nTeaching Malay grammar in primary schools continues to be demanding, particularly for novice and Contract of Service (COS) teachers who often lack formal preparation in the subject. This study presents BijakBM, a mobile‑based digital application designed to provide pedagogical scaffolding and strengthen student learning. Drawing upon Cognitive Load Theory and Multimedia Learning Theory, BijakBM incorporates structured grammar e‑books and interactive formative assessments aligned with the national curriculum. A qualitative conceptual design approach was adopted, involving document analysis, instructional design mapping, and theoretical audits to ensure both cognitive and policy coherence. Findings suggest that BijakBM assists novice teachers by reducing lesson preparation, offering standardized content, and supporting systematic planning. Its progressive module sequencing helps manage cognitive demands, while multimedia features improve comprehension and engagement. Interactive quizzes encourage learner autonomy and allow teachers to adapt instruction based on performance data. The discussion emphasizes BijakBM’s role as a digital scaffold bridging curriculum expectations with teacher capacity. By aligning with Malaysia’s Digital Education Policy, the application demonstrates how technology can translate policy aspirations into classroom practice. In conclusion, BijakBM represents a practical innovation in digital pedagogy, equipping novice teachers with confidence in Malay grammar instruction while fostering student‑centered learning. Its replicable framework offers a model for embedding theory‑driven digital tools into national education systems.",
+        "source_normalized": "bijakbm a mobile based digital pedagogical scaffold for supporting novice teachers in primary schools teaching malay grammar in primary schools continues to be demanding particularly for novice and contract of service cos teachers who often lack formal preparation in the subject this study presents bijakbm a mobile based digital application designed to provide pedagogical scaffolding and strengthen student learning drawing upon cognitive load theory and multimedia learning theory bijakbm incorporates structured grammar e books and interactive formative assessments aligned with the national curriculum a qualitative conceptual design approach was adopted involving document analysis instructional design mapping and theoretical audits to ensure both cognitive and policy coherence findings suggest that bijakbm assists novice teachers by reducing lesson preparation offering standardized content and supporting systematic planning its progressive module sequencing helps manage cognitive demands while multimedia features improve comprehension and engagement interactive quizzes encourage learner autonomy and allow teachers to adapt instruction based on performance data the discussion emphasizes bijakbm s role as a digital scaffold bridging curriculum expectations with teacher capacity by aligning with malaysia s digital education policy the application demonstrates how technology can translate policy aspirations into classroom practice in conclusion bijakbm represents a practical innovation in digital pedagogy equipping novice teachers with confidence in malay grammar instruction while fostering student centered learning its replicable framework offers a model for embedding theory driven digital tools into national education systems"
+      },
+      "corpus_side": {
+        "doi": "10.5281/zenodo.20823917",
+        "title": "BIJAKBM: A MOBILE-BASED DIGITAL PEDAGOGICAL SCAFFOLD FOR SUPPORTING NOVICE TEACHERS IN PRIMARY SCHOOLS"
+      }
+    },
+    {
+      "mechanism_id": "CL-14",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "quote_not_in_source",
+      "detail": "quote not a substring of cr_04dee881f3d414e2830662a7: \"Concurrently, pupillometric data demonstrated a measurable reduction in neurocognitive demand; specifically, the Task-Ev\"",
+      "corpus_record_id": "cr_04dee881f3d414e2830662a7",
+      "item": {
+        "term": "Adaptive_Cognitive_Scaffolding",
+        "description_as_reported": "Concurrently, pupillometric data demonstrated a measurable reduction in neurocognitive demand; specifically, the Task-Evoked Pupillary Response (TEPR) decreased significantly across progressive training sessions (p < 0.05).",
+        "pattern": "Simplify the interface complexity or provide additional automated assistance when the user's interaction frequency with a specific feature reaches {interaction_threshold} sessions, reflecting the transition toward automated task performance.",
+        "parameters": [
+          {
+            "name": "interaction_threshold",
+            "value": 3,
+            "unit": "sessions"
+          }
+        ],
+        "source_domain": "exoskeleton-assisted locomotion",
+        "artifact_context": [
+          "dashboard_widget"
+        ],
+        "confidence": 0.5,
+        "citations": [
+          {
+            "record_id": "cr_04dee881f3d414e2830662a7",
+            "quote_or_locus": "Concurrently, pupillometric data demonstrated a measurable reduction in neurocognitive demand; specifically, the Task-Evoked Pupillary Response (TEPR) decreased significantly across progressive training sessions (p < 0.05).",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_04dee881f3d414e2830662a7",
+          "quote_or_locus": "Concurrently, pupillometric data demonstrated a measurable reduction in neurocognitive demand; specifically, the Task-Evoked Pupillary Response (TEPR) decreased significantly across progressive training sessions (p < 0.05).",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "Concurrently, pupillometric data demonstrated a measurable reduction in neurocognitive demand; specifically, the Task-Evoked Pupillary Response (TEPR) decreased significantly across progressive training sessions (p < 0.05).",
+        "quote_normalized": "concurrently pupillometric data demonstrated a measurable reduction in neurocognitive demand specifically the task evoked pupillary response tepr decreased significantly across progressive training sessions p 0 05",
+        "source_raw": "Measurement of Cognitive and Kinematic Adaptation in Exoskeleton-Assisted Locomotion: Validation of an XR-Based Framework\nRobotic assistive devices, such as exoskeletons, are increasingly employed in walking rehabilitation. Therefore, the measurement of both movement kinematics and cognitive workload is important to understand this human–robot interaction in real-world contexts. To address this need this study presents the validation of a framework integrating inertial motion capture (Xsens) and eye-tracking sensor (Pupil Neon) within a Mixed Reality (Meta Quest 3) architecture. We developed an overground dual-task paradigm in which holographic numbers appear in the user’s peripheral vision. This setup actively stimulates visuospatial attention while quantifying kinematic and cognitive output. To validate the framework, the protocol has been tested on 30 healthy subjects across repeated exoskeleton training sessions. Statistical analyses revealed that the Coefficient of Multiple Correlation (CMC) and Spectral Arc Length (SPARC), calculated on the shank angular velocity, together with the Step Length Variability, exhibited significant time effects (p &lt; 0.01), mapping the transition toward automated gait. Concurrently, pupillometric data demonstrated a measurable reduction in neurocognitive demand; specifically, the Task-Evoked Pupillary Response (TEPR) decreased significantly across progressive training sessions (p &lt; 0.05). With this work, we validated a measurement protocol that aims to provide a novel methodology for objectively evaluating motor and cognitive adaptation in wearable assistive devices.",
+        "source_normalized": "measurement of cognitive and kinematic adaptation in exoskeleton assisted locomotion validation of an xr based framework robotic assistive devices such as exoskeletons are increasingly employed in walking rehabilitation therefore the measurement of both movement kinematics and cognitive workload is important to understand this human robot interaction in real world contexts to address this need this study presents the validation of a framework integrating inertial motion capture xsens and eye tracking sensor pupil neon within a mixed reality meta quest 3 architecture we developed an overground dual task paradigm in which holographic numbers appear in the user s peripheral vision this setup actively stimulates visuospatial attention while quantifying kinematic and cognitive output to validate the framework the protocol has been tested on 30 healthy subjects across repeated exoskeleton training sessions statistical analyses revealed that the coefficient of multiple correlation cmc and spectral arc length sparc calculated on the shank angular velocity together with the step length variability exhibited significant time effects p lt 0 01 mapping the transition toward automated gait concurrently pupillometric data demonstrated a measurable reduction in neurocognitive demand specifically the task evoked pupillary response tepr decreased significantly across progressive training sessions p lt 0 05 with this work we validated a measurement protocol that aims to provide a novel methodology for objectively evaluating motor and cognitive adaptation in wearable assistive devices"
+      },
+      "corpus_side": {
+        "doi": "10.3390/s26123635",
+        "title": "Measurement of Cognitive and Kinematic Adaptation in Exoskeleton-Assisted Locomotion: Validation of an XR-Based Framework"
+      }
+    }
+  ]
+}

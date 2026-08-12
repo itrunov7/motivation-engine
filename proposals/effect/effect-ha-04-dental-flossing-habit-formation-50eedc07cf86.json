@@ -5,13 +5,13 @@
   "payload": {
     "id": "ha-04-05",
     "mechanism_id": "HA-04",
-    "name": "Dental flossing habit formation",
-    "fact": "Initiating flossing after tooth-brushing rather than before promotes stronger habit formation.",
-    "grade": "A",
+    "name": "Habit Sequencing After an Existing Routine",
+    "fact": "Sequencing a new habit immediately after an existing routine step, rather than before it, promotes stronger formation of the new habit.",
+    "grade": "C+",
     "source": [
       "10.1111/j.2044-8287.2012.02086.x"
     ],
-    "boundary": "Dental flossing behavior.",
+    "boundary": "Evidence is from a single dental-flossing-after-brushing intervention study; the general sequencing principle beyond dental flossing specifically is an inference from that one study, not independently replicated.",
     "realization_ids": [],
     "provenance": [
       {
@@ -27,7 +27,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A -> capped to C+."
   },
   "provenance": [
     {
@@ -48,9 +49,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:38:46.972Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.452Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A -> C+. Generalized from a flossing-specific finding to the sequencing principle it demonstrates, per owner instruction: written as the pattern (sequence after an existing routine), not as flossing. Boundary states the empirical basis is a single flossing study.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: reorder flossing prompt after brushing step — names a manipulable variable: reorder flossing prompt after brushing step — names a manipulable variable: reorder flossing prompt after brushing step — Sequencing action after existing habitual cue strengthens habit; product can reorder prompts accordingly.",
+        "identified_lever": "reorder flossing prompt after brushing step"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (than)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

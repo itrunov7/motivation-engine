@@ -52,5 +52,37 @@
   "hold_reason": null,
   "decided_by": null,
   "decided_at": null,
-  "decision_note": null
+  "decision_note": null,
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": false,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "people (adults) but no artifact and no named setting — the subject is a person in the abstract"
+      },
+      {
+        "check": "variable",
+        "outcome": "fail",
+        "reason": "names nothing an interface can change — names nothing an interface can change — Population-level correlational finance/education statistic, no interface mechanism or actionable UI lever exists.",
+        "identified_lever": null
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

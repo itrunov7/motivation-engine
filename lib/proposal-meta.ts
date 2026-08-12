@@ -13,6 +13,7 @@ export const PROPOSAL_STATUS_META: Record<
     label: "held — not transferable",
     actionable: false,
   },
+  superseded: { label: "superseded by a later proposal", actionable: false },
 };
 
 export function isActionableProposal(proposal: Proposal): boolean {

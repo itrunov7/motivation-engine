@@ -48,9 +48,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30818854515",
   "proposed_at": "2026-08-03T13:38:36.944Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.226Z",
+  "decision_note": "NOT_TRANSFERABLE — technology-specific to XR hardware, not a generalizable multimedia design principle; its own boundary states effectiveness varies by learning environment and content type.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "warn",
+        "reason": "a person inside a specific institutional setting (education, learning) — transferable only if the finding survives leaving it"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show interactive storytelling scenarios for problem-solving practice — names a manipulable variable: show interactive storytelling scenarios for problem-solving practice — Digital surface can present XR storytelling content, ordering, or interactivity to boost engagement/learning.",
+        "identified_lever": "show interactive storytelling scenarios for problem-solving practice"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (higher, than)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

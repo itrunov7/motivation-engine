@@ -86,9 +86,40 @@ model the pipeline is not configured to call.
 
 ## Before reporting complete
 
-`npm run validate`, `npm run build`, and the relevant `test:*` suites must pass.
-State which you ran. If a pre-existing failure is present, prove it predates your
-change rather than assuming it.
+The word "green" may only be used after `npm run ci` passes — nothing else licenses
+it. `npm run ci` runs, in order, the exact command set the GitHub Actions `validate`
+job runs (`.github/workflows/validate.yml`):
+
+```
+npm run validate
+npm run test:proposals
+npm run test:ops
+npm run test:github
+npm run test:spans
+npm run test:span-role
+npm run test:provenance
+npm run test:extract
+npm run test:rejected
+npm run test:evidence
+npm run test:analyzer
+npm run test:gaps
+npm run test:packs
+git diff --exit-code   # D-134: no test may leave the working tree dirty
+npm run build
+```
+
+`npm run validate` is one script in that set, not the whole gate — it must never be
+quoted alone as "validate passed" or "green" (D-363: two days of red CI went
+unreported because "npm run validate green" was true but described one step of
+fifteen). State that you ran `npm run ci`. If a step fails, name the step and the
+test, not just "validate failed". If a pre-existing failure is present, prove it
+predates your change rather than assuming it.
+
+**A green local `npm run ci` is not a green build.** After every push, check the
+actual workflow run result (`gh run list` / `gh run view`) before reporting done —
+not a local rerun. `npm run ci` and the CI job run the same commands but not
+necessarily the same inputs (secrets, cache state, checked-out tree); only the
+GitHub-reported run result closes the loop.
 
 ## Known open defects — do not silently work around
 
@@ -100,3 +131,7 @@ change rather than assuming it.
   `min(trigger, action)` misses same-action/different-trigger duplicates.
 - Transferability filter v1: VARIABLE is a lexicon, not a judgement. Ten of eighteen
   mechanisms predict zero transferable proposals under it.
+- Transferability never checks a VARIABLE-identified lever against the mechanism's own
+  `constraints.hard_rules` forbidden list. Caught by owner review, not the pipeline: SC-17's
+  `native-ad-blindness` proposal named a lever ("reword or hide native-ad disclosure cues")
+  that directly violates SC-17's own `no_disguised_advertising` hard rule (D-329).

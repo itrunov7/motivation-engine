@@ -74,9 +74,42 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:40:49.959Z",
-  "status": "pending",
+  "status": "rejected",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.630Z",
+  "decision_note": "NOT_TRANSFERABLE — rejected as a batch because the corpus concentration, not any one claim, is the finding: 3 of these 11 proposals cite the SAME single source (10.1002/cb.70189, smartphone battery depletion) and 3 more cite ANOTHER single source (10.1086/673256, luxury handbag signaling) — 6 of 11 are near-duplicate readings of two papers. This is a corpus coverage defect, not a per-claim transferability judgment; logged separately that ST-09 needs re-harvest, not further review, before its next batch.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: show deliberate nonconforming choice against clear norm baseline — names a manipulable variable: show deliberate nonconforming choice against clear norm baseline — UI can signal intentional deviation from norms to boost perceived status/competence.",
+        "identified_lever": "show deliberate nonconforming choice against clear norm baseline"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "warn",
+        "reason": "depends on domain expertise the general product user lacks (professional)"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction",
+      "population"
+    ]
+  }
 }

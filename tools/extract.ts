@@ -33,10 +33,10 @@ import {
 import { EXTRACTION_RUN_ID_PREFIX } from "../lib/proposal-meta";
 import {
   buildVariablePrompt,
-  judgeTransferabilityV2,
+  judgeTransferabilityV3,
   parseVariableJudgement,
   transferabilityClaimOfProposal,
-  TRANSFERABILITY_RULESET_VERSION_V2,
+  TRANSFERABILITY_RULESET_VERSION_V3,
   type TransferabilityClaim,
 } from "../lib/transferability";
 import {
@@ -117,6 +117,7 @@ import {
 } from "./rejected-candidates";
 import { CandidateLedger, writeCandidateLedger } from "./candidate-ledger";
 import { checkLedgerBalance } from "../lib/candidate-ledger";
+import { writeSpendRecord } from "./spend-record";
 
 const ROOT = join(__dirname, "..");
 const CORPUS_DIR = join(ROOT, "corpora", "evidence");
@@ -128,7 +129,27 @@ const READER_COVERAGE_FILE = join(EXTRACTION_DIR, "coverage.json");
 const QUOTE_FILE = join(ROOT, "quote.json");
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const ABSTRACT_LIMIT = 6000;
-const CHEAP_OUTPUT_RESERVE = 6000;
+/**
+ * The API `max_tokens` ceiling for a cheap call. A CEILING, not a prediction:
+ * it exists so a model cannot run away, and lowering it would truncate a
+ * response mid-JSON — a real failure mode, not a theoretical one.
+ *
+ * Never use it to estimate. That conflation is what D-174 separates:
+ * `output_reserved` fed the truncation comparison as though 6,000 were the
+ * expected output, so 20.2% of the per-run cap was reserved against tokens no
+ * run has ever produced.
+ */
+export const CHEAP_OUTPUT_RESERVE = 6000;
+/**
+ * What a cheap call actually emits, for ESTIMATION only (D-174).
+ *
+ * Measured: 433 tokens per call on run 31104524768 (7,358 over 17 calls) and
+ * 264 on run 31092507605. Set at 1,500 — a 3.5x margin over the highest
+ * measurement, and still 4x below the ceiling above. Deliberately generous:
+ * an estimate that runs slightly high costs a few records of slice width, while
+ * one that runs low lets a plan exceed the cap it was built to respect.
+ */
+export const CHEAP_OUTPUT_EXPECTED = 1500;
 const STRONG_OUTPUT_RESERVE = 10000;
 
 export const EXTRACTION_MODES = [
@@ -190,7 +211,21 @@ export interface ExtractionQuote {
   mode: ExtractionMode;
   scope: { kind: ScopeKind; id: string; mechanism_ids: string[] };
   calls: { cheap: number; strong: number; total: number };
-  tokens: { input_upper_bound: number; output_reserved: number; total_upper_bound: number };
+  tokens: {
+    /**
+     * Split by tier (D-174) because the two are priced at rates 8x apart, and
+     * summing them before pricing forced a single rate on both. The split is
+     * exactly computable — each term already came from its own expression — so
+     * no weighting heuristic is involved.
+     */
+    input_cheap: number;
+    input_strong: number;
+    input_upper_bound: number;
+    output_reserved_cheap: number;
+    output_reserved_strong: number;
+    output_reserved: number;
+    total_upper_bound: number;
+  };
   records: {
     eligible_total: number;
     already_completed: number;
@@ -456,10 +491,32 @@ function extractionItemSchema(
       return commonItem(
         derivation === "inferred"
           ? {
-              id: { type: ["string", "null"] },
+              // No `id`. strictObject makes every declared property required,
+              // and the inferred prompt never names one — but more to the point
+              // a model-authored id is discarded downstream (the id comes from
+              // the term), after a run labelled two different patterns "p1".
+              // Asking for what nobody reads is how the anchor id got cited.
               term: { type: "string" },
               description_as_reported: { type: "string" },
               pattern: { type: "string" },
+              // D-115's other half, and without it the first half is
+              // unsatisfiable: the prompt forbids a bare number in `pattern` and
+              // requires each {placeholder} be declared here, but this property
+              // did not exist and additionalProperties is false — so a compliant
+              // answer was impossible and every pattern carrying a placeholder
+              // was refused at proposal_not_built (D-171).
+              //
+              // `evidence_basis` is deliberately absent: it is one literal,
+              // code-filled by patternParameters, because letting a model write
+              // it would let a model claim its own guess was measured.
+              parameters: {
+                type: "array",
+                items: strictObject({
+                  name: { type: "string" },
+                  value: { type: "number" },
+                  unit: { type: "string" },
+                }),
+              },
               source_domain: { type: "string" },
               artifact_context: stringArraySchema,
             }
@@ -1143,7 +1200,14 @@ export interface Usage {
 }
 
 interface OpenRouterResponse {
-  choices?: { message?: { content?: string } }[];
+  /**
+   * `finish_reason` is read only to tell a TRUNCATED answer from a malformed
+   * one. "length" means the model was still writing when it hit our max_tokens
+   * ceiling, which is our sizing decision failing, not the model failing the
+   * format — opposite causes, opposite fixes, and indistinguishable while they
+   * shared one reason code.
+   */
+  choices?: { message?: { content?: string }; finish_reason?: string }[];
   usage?: { prompt_tokens?: number; completion_tokens?: number };
 }
 
@@ -1457,7 +1521,7 @@ export function recordRelevanceTier(
  * coverage would mean a schema key per effect; the limit is stated here instead
  * of being discovered later.
  */
-interface EffectAnchor {
+export interface EffectAnchor {
   effect: Effect;
   keywords: readonly string[];
   /** Records the effect itself cites: read first, always. */
@@ -1636,6 +1700,15 @@ function provenanceInstruction(
       : "a supplied title or abstract";
   return [
     `Every item must include citations [{record_id,quote_or_locus,span_role}] using only supplied records.`,
+    // The prohibition belongs HERE, next to the demand it qualifies, not only in
+    // the anchor block further down the prompt (D-167). The anchor is the most
+    // quotable text in the context — it states the conclusion in one sentence —
+    // so the rule against citing it has to sit where the citation rule is read.
+    ...(anchor
+      ? [
+          "The claim you are extending is NOT a supplied record: it has no record_id and quoting it grounds nothing. A citation that names it, or that quotes its text, is refused. Ground every item in a record from SUPPLIED RECORDS instead — if no supplied record supports an item, omit the item rather than citing the claim back at itself.",
+        ]
+      : []),
     `quote_or_locus must be an exact span from ${locus}.`,
     "span_role states what the span is DOING in the source it was cut from, and is checked against the text:",
     "- background: what the literature, a theory, or prior work says. Includes anything the source is restating rather than testing, and anything it introduces in order to motivate its own question.",
@@ -1655,12 +1728,24 @@ function provenanceInstruction(
  * material is on-topic, and the synthesis pass composes the final patterns and
  * would otherwise be transferring from candidates alone.
  */
-function anchorBlock(anchor: EffectAnchor): string {
+export function anchorBlock(anchor: EffectAnchor): string {
   const { effect } = anchor;
   return [
-    "EFFECT (the fixed anchor; treat its wording as given, do not restate it as a finding):",
+    "──────────────────────────────────────────",
+    "THE CLAIM YOU ARE EXTENDING — NOT A SOURCE",
+    "──────────────────────────────────────────",
+    "This is an already-approved conclusion, supplied so you know which material",
+    "is on-topic. It is NOT one of the supplied records. It has no record_id, it",
+    "cannot be quoted, and it must NEVER appear in citations — every citation must",
+    "name a record from the SUPPLIED RECORDS section and quote that record's own",
+    "text. Treat the wording below as given; do not restate it as a finding.",
     JSON.stringify({
-      id: effect.id,
+      // No id. The anchor's identifier is deliberately withheld: a model that
+      // can see the id will cite it, and the run that exposed this (D-167) lost
+      // 15 of 19 cheap candidates to exactly that. Nothing downstream needs it
+      // here — effect_refs is written server-side in toProposal from the scope's
+      // own basis, on the same reasoning as D-104: a model-authored link to an
+      // artifact is provenance the model does not get to write.
       name: effect.name,
       fact: effect.fact,
       boundary: effect.boundary,
@@ -1677,6 +1762,15 @@ function anchorBlock(anchor: EffectAnchor): string {
  * transferred out of it. Splitting them is what lets a reader see which half a
  * source supports — a single blended sentence hides the seam, and the seam is
  * the thing under review.
+ *
+ * The split has a direction the first version failed to state: the domain
+ * belongs to `description_as_reported` and must NOT survive into `pattern`.
+ * Saying only where the domain lives left the model free to keep it in both,
+ * and it did — every pattern anchored on la-01-04 came back worded in
+ * portfolios and volatility metrics, which no ceramics shop can apply. A
+ * pattern that only works in the domain the evidence was measured in is an
+ * un-transferred one, so the requirement and the abstraction rule that
+ * satisfies it are both stated below.
  */
 function inferredRealizationInstruction(
   mechanismId: string,
@@ -1688,17 +1782,23 @@ function inferredRealizationInstruction(
     "Fields per item:",
     "- term: a short name for the pattern.",
     "- description_as_reported: what the cited source states, in the source's own domain vocabulary. Do not describe a product interface here, and do not generalise beyond the quote.",
-    "- pattern: the product-UI directive transferred from it, in the imperative. This is your inference, not the source's claim. NEVER write a number in this text, as a digit or as a word — no source measured a threshold for a product interface, and a number in prose reads as if one had. Write {snake_case_name} instead and declare it in parameters.",
-    "- parameters: one entry per {name} the pattern references, as {name, value (your suggested default), unit (what the number counts, in words), evidence_basis: \"none — default heuristic\"}. Every parameter must be referenced by the pattern and every placeholder must be declared.",
+    "- pattern: the product-UI directive transferred from it, in the imperative. This is your inference, not the source's claim. NEVER write a number in this text, as a digit or as a word — no source measured a threshold for a product interface, and a number in prose reads as if one had. Write {snake_case_name} instead and declare it in parameters. State it in domain-neutral product terms: the anchored claim's own vocabulary — its industry, its measured setting, its subject matter — must NOT appear in this text. The domain is already recorded in source_domain and description_as_reported; the pattern's job is to say what ANY product interface should do.",
+    // evidence_basis is NOT asked for (D-115): it is a single literal the code
+    // fills in, because a model that may write it is a model that may claim its
+    // own guess was measured. Asking for a field the code overwrites also put
+    // the prompt out of step with the wire schema, which is the class of defect
+    // D-171 closed.
+    "- parameters: one entry per {name} the pattern references, as {name, value (your suggested default), unit (what the number counts, in words)}. Every parameter must be referenced by the pattern and every placeholder must be declared.",
     "- source_domain: the field the cited evidence was measured in, as the records themselves describe it (for example \"medical education\" or \"multimedia instructional design\"). Never write a product or software domain here.",
     `- artifact_context: where the pattern applies, from this vocabulary where one fits: ${ARTIFACT_TYPES.join("|")}.`,
     "- confidence: your confidence in the TRANSFER holding in a product interface, not in the effect being real. No source measured this pattern in a product, so a value above 0.8 is not credible.",
     `- ${provenanceField}.`,
+    "THE ABSTRACTION RULE — how to satisfy the domain-neutrality requirement on pattern. Replace every object the anchored claim names with its functional role in an interface. \"Portfolio performance notifications\" becomes \"outcome or performance updates the user did not request\". \"Volatility metric\" becomes \"a displayed metric with high variance\". \"Airline fare\" becomes \"a price the user is choosing between\". \"Business passengers\" becomes \"users who buy under time pressure\". Before you write a pattern, ask whether a ceramics shop's checkout could apply it as written. If it could not, the transfer failed: a pattern that only works in the domain the evidence was measured in is not a specific pattern, it is an un-transferred one.",
     "Do not claim or imply that the pattern has been tested in a product. Do not propose a pattern that merely restates the effect.",
   ].join("\n");
 }
 
-function taskInstruction(
+export function taskInstruction(
   mode: ExtractionMode,
   mechanismId: string,
   stage: ExtractionStage = "extract",
@@ -1724,7 +1824,7 @@ function taskInstruction(
   }
 }
 
-function synthesisInstruction(
+export function synthesisInstruction(
   mode: ExtractionMode,
   mechanismId: string,
   anchor: EffectAnchor | null = null,
@@ -1882,7 +1982,7 @@ interface PlannedMechanism {
 interface ExtractionPlan {
   mechanisms: PlannedMechanism[];
   calls: { cheap: number; strong: number; total: number };
-  tokens: { input_upper_bound: number; output_reserved: number; total_upper_bound: number };
+  tokens: ExtractionQuote["tokens"];
   records: ExtractionQuote["records"];
   capped: boolean;
 }
@@ -1905,8 +2005,15 @@ function estimateSelected(
   const strong = configuredTier(config, "strong");
   let cheapCalls = 0;
   let strongCalls = 0;
-  let inputUpper = 0;
-  let outputReserved = 0;
+  // Two accumulators, not one (D-174). These were always two separate
+  // expressions summed into a single variable, and that sum is what forced
+  // buildQuote to pick one price for both.
+  let cheapInput = 0;
+  let strongInput = 0;
+  let cheapOutput = 0;
+  let strongOutput = 0;
+  // Estimation uses what a cheap call EMITS, never the max_tokens ceiling.
+  const cheapOutputEstimate = Math.min(CHEAP_OUTPUT_EXPECTED, cheap.max_tokens_per_call);
   for (const [mechanismId, selected] of Array.from(selectedByMechanism.entries())) {
     if (selected.length === 0) continue;
     const mechanismBatches = batches(
@@ -1915,19 +2022,22 @@ function estimateSelected(
     );
     for (const batch of mechanismBatches) {
       cheapCalls += 1;
-      inputUpper += estimateTokens(cheapPrompt(mode, mechanismId, batch, anchor));
-      outputReserved += Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call);
+      cheapInput += estimateTokens(cheapPrompt(mode, mechanismId, batch, anchor));
+      cheapOutput += cheapOutputEstimate;
     }
     strongCalls += 1;
-    // The strong call's input is the synthesized cheap output; reserve at most
-    // the sum of the cheap output reserves (token units), capped by the strong
-    // tier's own per-call ceiling.
-    inputUpper += Math.min(
-      mechanismBatches.length * Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call),
+    // The strong call's input IS the synthesized cheap output, so it is
+    // estimated from the same expected figure — using the ceiling here made the
+    // term saturate at the strong tier's per-call limit from six batches up,
+    // pinning it to a constant regardless of how much was actually synthesized.
+    strongInput += Math.min(
+      mechanismBatches.length * cheapOutputEstimate,
       strong.max_tokens_per_call,
     );
-    outputReserved += Math.min(STRONG_OUTPUT_RESERVE, strong.max_tokens_per_call);
+    strongOutput += Math.min(STRONG_OUTPUT_RESERVE, strong.max_tokens_per_call);
   }
+  const inputUpper = cheapInput + strongInput;
+  const outputReserved = cheapOutput + strongOutput;
   return {
     calls: {
       cheap: cheapCalls,
@@ -1935,7 +2045,11 @@ function estimateSelected(
       total: cheapCalls + strongCalls,
     },
     tokens: {
+      input_cheap: cheapInput,
+      input_strong: strongInput,
       input_upper_bound: inputUpper,
+      output_reserved_cheap: cheapOutput,
+      output_reserved_strong: strongOutput,
       output_reserved: outputReserved,
       total_upper_bound: inputUpper + outputReserved,
     },
@@ -2056,17 +2170,23 @@ export function buildQuote(
   if (priceState === "unconfigured") reasons.push("model pricing verification date is missing");
   const plan = buildExtractionPlan(mode, scope, config, coverage);
   const { cheap: cheapCalls, strong: strongCalls } = plan.calls;
-  const inputUpper = plan.tokens.input_upper_bound;
-  const outputReserved = plan.tokens.output_reserved;
   const totalUpper = plan.tokens.total_upper_bound;
+  // Every term is priced at ITS OWN tier's rate (D-174). This line used to read
+  // `inputUpper * Math.max(cheap.input_usd_per_token, strong.input_usd_per_token)`,
+  // charging the strong rate — 8x the cheap one — for every estimated input
+  // token, while 92% of the estimate and 97-99% of the measured reality is
+  // cheap-tier input. The output terms were already per-tier; only input
+  // collapsed.
+  //
+  // The old form also re-derived "the dearer tier" from the price table at
+  // runtime, so it would have silently flipped had cheap ever become the more
+  // expensive input. Pricing each term against the tier that will actually be
+  // billed for it removes that coupling entirely.
   const estimatedUsd =
-    inputUpper * Math.max(cheap.input_usd_per_token, strong.input_usd_per_token) +
-    cheapCalls *
-      Math.min(CHEAP_OUTPUT_RESERVE, cheap.max_tokens_per_call) *
-      cheap.output_usd_per_token +
-    strongCalls *
-      Math.min(STRONG_OUTPUT_RESERVE, strong.max_tokens_per_call) *
-      strong.output_usd_per_token;
+    plan.tokens.input_cheap * cheap.input_usd_per_token +
+    plan.tokens.input_strong * strong.input_usd_per_token +
+    plan.tokens.output_reserved_cheap * cheap.output_usd_per_token +
+    plan.tokens.output_reserved_strong * strong.output_usd_per_token;
   const budget = computeBudgetSnapshot(now);
   if (plan.records.remaining > 0 && plan.records.selected === 0) {
     reasons.push(
@@ -2101,11 +2221,9 @@ export function buildQuote(
       strong: strongCalls,
       total: cheapCalls + strongCalls,
     },
-    tokens: {
-      input_upper_bound: inputUpper,
-      output_reserved: outputReserved,
-      total_upper_bound: totalUpper,
-    },
+    // Passed through from the plan rather than rebuilt, so the quote reports
+    // the same split the estimator priced and the truncation loop compared.
+    tokens: plan.tokens,
     records: plan.records,
     capped: plan.capped,
     resumable: plan.capped,
@@ -2313,14 +2431,29 @@ export async function judgeVariableViaModel(
       context.usage.byTier.strong.calls += 1;
     }
     const content = body.choices?.[0]?.message?.content;
+    // Reported by the API when generation stopped at max_tokens rather than at
+    // the model's own end of answer.
+    const truncated = body.choices?.[0]?.finish_reason === "length";
     if (typeof content !== "string") {
-      return variableUnavailable("malformed_answer", "response carried no text content");
+      return truncated
+        ? variableUnavailable("answer_truncated", `cut at the ${maxTokens}-token ceiling before any content`)
+        : variableUnavailable("malformed_answer", "response carried no text content");
     }
     const judgement = parseVariableJudgement(content);
     // The raw answer is deliberately NOT carried into `detail`. A malformed
     // model answer is not evidence, and a proposal is not the place to store it.
+    //
+    // Order matters: a truncated answer is ALSO unparseable, so asking "was it
+    // cut off" before "was it malformed" is what keeps the ceiling's own
+    // failures out of the malformed count. The first wide probe recorded 7 of
+    // its 11 unjudged sitting at exactly this ceiling, all filed as malformed.
     if (!judgement) {
-      return variableUnavailable("malformed_answer", "answer was not a parseable judgement");
+      return truncated
+        ? variableUnavailable(
+            "answer_truncated",
+            `answer cut at the ${maxTokens}-token ceiling before it could be parsed`,
+          )
+        : variableUnavailable("malformed_answer", "answer was not a parseable judgement");
     }
     return { ok: true, judgement };
   } catch (error: unknown) {
@@ -2491,9 +2624,22 @@ export function groundingOutcome(
      * defect the replay exists to re-examine.
      */
     requireSpanRole?: boolean;
+    /**
+     * The id of the effect this run is anchored on, when it has one (D-167).
+     * Supplied so the gate can tell "the model cited the claim it was asked to
+     * extend" apart from "the model cited an id that does not exist" — the two
+     * look identical to a map lookup and have entirely different fixes.
+     *
+     * Absent for unanchored runs and for tools/replay-grounding.ts, which
+     * replays candidates recorded before this distinction existed and must keep
+     * reporting the reason they were actually refused for — the same reasoning
+     * that makes `requireSpanRole` optional.
+     */
+    anchorEffectId?: string | null;
   } = {},
 ): GroundingOutcome {
   const checkRoles = options.requireSpanRole !== false;
+  const anchorEffectId = options.anchorEffectId ?? null;
   if (!Array.isArray(item.citations) || item.citations.length === 0) {
     return {
       ok: false,
@@ -2521,6 +2667,19 @@ export function groundingOutcome(
         detail: "citation missing a record_id or a non-empty quote_or_locus",
         corpus_record_id:
           typeof citation?.record_id === "string" ? citation.record_id : null,
+      };
+    }
+    // Checked BEFORE the map lookup, because the anchor id is never in the
+    // record map and would otherwise land on unknown_record_id — folding a
+    // prompt-shape defect into the bucket for hallucinated ids and hiding it
+    // (D-167). The anchor is the most quotable text in the context, so this is
+    // a failure mode that recurs whenever the prompt lets it.
+    if (anchorEffectId && citation.record_id === anchorEffectId) {
+      return {
+        ok: false,
+        reason: "anchor_cited_as_record",
+        detail: `cited the anchoring effect ${citation.record_id} as a corpus record; the claim being extended is not evidence for extending it`,
+        corpus_record_id: citation.record_id,
       };
     }
     const record = records.get(citation.record_id);
@@ -3952,6 +4111,40 @@ export async function runExtraction(args: {
     // The ledger is written before the manifest because the manifest's status
     // depends on whether it balances (D-132).
     const balanced = persistLedger();
+    // The conflict-free receipt is written BEFORE the three aggregates (D-342).
+    // coverage.json, ledger.json and manifest.json are whole-file rewrites that
+    // concurrent runs are guaranteed to conflict on; this path is unique per run
+    // and always rebases cleanly, so it survives a race the aggregates lose.
+    try {
+      writeSpendRecord({
+        schema_version: 1,
+        run_id: startedAt.toISOString(),
+        dispatch_id: process.env.OPS_DISPATCH_ID ?? null,
+        github_run_id: process.env.GITHUB_RUN_ID
+          ? Number(process.env.GITHUB_RUN_ID)
+          : null,
+        mode: args.mode,
+        scope_kind: args.scope.kind,
+        scope_id: args.scope.id,
+        written_at: new Date().toISOString(),
+        cost: buildExtractionManifestCost(
+          args.config,
+          context.usage,
+          (Date.now() - startedAt.getTime()) / 1000,
+        ),
+        balanced,
+        // An unbalanced run's stage counters are unsound by definition (D-132),
+        // so the receipt says so rather than letting a reconciler read them as
+        // fact.
+        stages_known: balanced,
+        records_fetched: stats.records_processed,
+        files_written: proposals.length + pendingWrites.size,
+      });
+    } catch (error) {
+      console.warn(
+        `[extract] could not persist spend record: ${(error as Error).message}`,
+      );
+    }
     try {
       writeManifest(
         args.mode,
@@ -3971,6 +4164,35 @@ export async function runExtraction(args: {
         `[extract] could not persist interim accounting: ${(error as Error).message}`,
       );
     }
+  };
+
+  /**
+   * Print what the run actually spent, to stdout, once, whatever happens next
+   * (D-168).
+   *
+   * Until now the spend existed in exactly two places: manifest.json and the
+   * ops-progress heartbeat. The terminal console.log prints `stats`, which
+   * carries records and candidates but no tokens, calls or USD. So when run
+   * 31095467232's accounting commit was blocked, extract.yml's error message —
+   * "the run's spend is visible in the Actions log only" — was false. The log
+   * had never contained it, and the figure is now unrecoverable.
+   *
+   * Printed BEFORE any commit step can be reached, so the Actions log is a real
+   * fallback rather than a claimed one. Guarded because both the failure path
+   * and the terminal path call it and a run must not report two spends.
+   */
+  let spendReported = false;
+  const reportMeasuredSpend = (outcome: string): void => {
+    if (spendReported) return;
+    spendReported = true;
+    const usd = computeUsd(args.config, context.usage);
+    console.log(
+      `[extract] SPEND, MEASURED from the responses (${outcome}): ` +
+        `${context.usage.calls} call(s), ` +
+        `${context.usage.input.toLocaleString()} tokens in / ` +
+        `${context.usage.output.toLocaleString()} out, $${usd.toFixed(6)}. ` +
+        `This line is the fallback record if the accounting commit does not land.`,
+    );
   };
 
   const draftContextBase = isDraftMode(args.mode)
@@ -4117,7 +4339,9 @@ export async function runExtraction(args: {
       const groundedCheapIds: string[] = [];
       for (const item of candidates) {
         const candidateId = candidateLedger.id(mechanismId, "cheap");
-        const grounding = groundingOutcome(item, corpus);
+        const grounding = groundingOutcome(item, corpus, {
+          anchorEffectId: anchor?.effect.id ?? null,
+        });
         if (!grounding.ok) {
           dropUngrounded(mechanismId, "cheap", grounding, item, candidateId);
           continue;
@@ -4293,7 +4517,10 @@ export async function runExtraction(args: {
         // requireSpans: this outcome's provenance is what reaches the proposal,
         // so from here on a citation without a re-sliceable span is refused
         // rather than written (D-110).
-        const grounding = groundingOutcome(item, corpus, { requireSpans: true });
+        const grounding = groundingOutcome(item, corpus, {
+          requireSpans: true,
+          anchorEffectId: anchor?.effect.id ?? null,
+        });
         if (!grounding.ok) {
           dropUngrounded(
             mechanismId,
@@ -4349,9 +4576,20 @@ export async function runExtraction(args: {
         // removes a record from consideration with no diagnostic at all.
         const claim = transferabilityClaimOfProposal(proposal);
         // D-162 — VARIABLE is a model judgement (see judgeVariableViaModel), fed
-        // into the v2 verdict alongside the three deterministic checks. It fails
-        // open: model unreachable, cap spent or malformed answer admits the
-        // claim WITHOUT a verdict rather than refusing it.
+        // into the verdict alongside the three deterministic checks. It fails
+        // open: model unreachable, cap spent, truncated or malformed answer
+        // admits the claim WITHOUT a verdict rather than refusing it.
+        //
+        // The verdict is scored under RULESET v3: the named lever decides, and
+        // SUBJECT, DIRECTION and POPULATION are recorded as modifiers rather
+        // than refusals. v3 was built by D-165 and left unwired pending the
+        // measurement that would justify adopting it; the wide probe supplied
+        // it, over 185 judged claims rather than the 10 D-165 reasoned from.
+        // VARIABLE named a lever on 185 of 185, and 105 of the 135 refusals were
+        // made against claims whose lever it had already named — DIRECTION 102
+        // and SUBJECT 79, against VARIABLE's own 30. The three deterministic
+        // checks still run and still state their reasons; they have lost only
+        // the power to refuse.
         //
         // The two "no verdict" cases are NOT the same thing and must not produce
         // the same record:
@@ -4364,7 +4602,7 @@ export async function runExtraction(args: {
         const variableOutcome = claim ? await judgeVariableViaModel(context, claim) : null;
         const verdict =
           claim && variableOutcome?.ok
-            ? judgeTransferabilityV2(claim, variableOutcome.judgement)
+            ? judgeTransferabilityV3(claim, variableOutcome.judgement)
             : null;
         // Recorded on admitted claims too: a gate that files only its refusals
         // cannot be audited for what it let through.
@@ -4375,7 +4613,7 @@ export async function runExtraction(args: {
           judged = {
             ...proposal,
             verdict_unavailable: {
-              ruleset_version: TRANSFERABILITY_RULESET_VERSION_V2,
+              ruleset_version: TRANSFERABILITY_RULESET_VERSION_V3,
               reason: variableOutcome.reason,
               ...(variableOutcome.detail === undefined
                 ? {}
@@ -4595,6 +4833,9 @@ export async function runExtraction(args: {
       // Whatever ended the run, the tokens it already burned are real. Record
       // them before the error propagates (D-099) so the monthly cap sees them.
       persistAccounting("failed");
+      // And print them, because the file this just wrote may never be committed
+      // — which is exactly what happened to run 31095467232 (D-168).
+      reportMeasuredSpend("run failed");
       throw error;
     }
     stats.records_remaining = currentPlan.records.remaining;
@@ -4704,6 +4945,7 @@ export async function runExtraction(args: {
       summary,
     );
     persistAccounting("failed");
+    reportMeasuredSpend("all response batches failed validation");
     throw new Error(
       `Every OpenRouter response batch failed validation (${responseBatchesAttempted}/${responseBatchesAttempted})`,
     );
@@ -4761,6 +5003,7 @@ export async function runExtraction(args: {
     true,
     summary,
   );
+  reportMeasuredSpend(runIncomplete ? "slice completed" : "completed");
   return { proposals, stats, usage: context.usage };
 }
 

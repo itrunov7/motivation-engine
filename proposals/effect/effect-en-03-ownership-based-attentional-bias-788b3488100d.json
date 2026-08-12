@@ -3,11 +3,11 @@
   "type": "effect",
   "target": "EN-03",
   "payload": {
-    "id": "en-03-02",
+    "id": "en-03-04",
     "mechanism_id": "EN-03",
     "name": "Ownership-based attentional bias",
     "fact": "Ownership of an object leads to prioritized processing and responses, as evidenced by a reliable change in the point of subjective simultaneity (PSS) in temporal order judgements.",
-    "grade": "A",
+    "grade": "C+",
     "source": [
       "10.1177/1747021818762010"
     ],
@@ -40,7 +40,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 1 independent source(s), original model-asserted grade A -> capped to C+."
   },
   "provenance": [
     {
@@ -74,9 +75,40 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30819815508",
   "proposed_at": "2026-08-03T13:50:46.132Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.703Z",
+  "decision_note": "Approved under mechanical grade cap: 1 source(s), A -> C+. Renamed payload.id from en-03-02 to en-03-04: another approved proposal in this batch already claims effects/EN-03/en-03-02.json.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: label item as 'yours' or user-owned — names a manipulable variable: label item as 'yours' or user-owned — Ownership framing biases attention/priority; UI can show 'my item' labels to trigger prioritization.",
+        "identified_lever": "label item as 'yours' or user-owned"
+      },
+      {
+        "check": "direction",
+        "outcome": "pass",
+        "reason": "states a direction (leads to)"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject"
+    ]
+  }
 }

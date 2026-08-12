@@ -7,7 +7,7 @@
     "mechanism_id": "SC-06",
     "name": "Situational scarcity and online impulse buying",
     "fact": "Situational scarcity positively influences online impulse buying among Chinese online shoppers in a social commerce environment.",
-    "grade": "A",
+    "grade": "A-",
     "source": [
       "10.3390/su10020352"
     ],
@@ -44,19 +44,18 @@
       "span_role": "finding"
     }
   ],
-  "confidence": 0.95,
+  "confidence": 0.85,
   "operation": "create",
-  "proposed_by": "extraction:github-actions-31369735214",
-  "proposed_at": "2026-08-10T08:22:48.127Z",
-  "status": "held_non_transferable",
-  "hold_reason": "not_transferable",
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null,
+  "proposed_by": "extraction:github-actions-31371227436",
+  "proposed_at": "2026-08-10T08:42:31.860Z",
+  "status": "rejected",
+  "hold_reason": null,
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T13:34:00.563Z",
+  "decision_note": "NOT_TRANSFERABLE — duplicates the core scarcity-cue-to-impulse-buying claim already covered by the approved limited-quantity and limited-time-scarcity effects, framed narrowly to Chinese online shoppers in social commerce with no distinct lever.",
   "transferability": {
-    "ruleset_version": 2,
-    "transferable": false,
-    "escalated_by_warning_pair": false,
+    "ruleset_version": 3,
+    "transferable": true,
     "checks": [
       {
         "check": "subject",
@@ -66,8 +65,8 @@
       {
         "check": "variable",
         "outcome": "pass",
-        "reason": "names a manipulable variable: limited stock/time countdown display — Scarcity cues on product page can be shown or timed to trigger impulse buying.",
-        "identified_lever": "limited stock/time countdown display"
+        "reason": "names a manipulable variable: limited stock or time-left scarcity message — names a manipulable variable: limited stock or time-left scarcity message — Scarcity cues can be displayed via countdown timers or low-stock indicators on product pages.",
+        "identified_lever": "limited stock or time-left scarcity message"
       },
       {
         "check": "direction",
@@ -79,6 +78,11 @@
         "outcome": "pass",
         "reason": "no specialist population named — the claim does not require expertise to apply"
       }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
     ]
   }
 }

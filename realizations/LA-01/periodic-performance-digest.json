@@ -1,0 +1,77 @@
+{
+  "id": "periodic-performance-digest",
+  "mechanism_id": "LA-01",
+  "term": "Periodic Performance Digest",
+  "description_as_reported": "The investors who got the most frequent feedback (and thus the most information) took the least risk and earned the least money; results show that the more frequently returns are evaluated, the more risk averse investors will be.",
+  "artifact_context": [
+    "dashboard_widget"
+  ],
+  "effect_refs": [
+    "la-01-04"
+  ],
+  "derivation": "inferred",
+  "domain_transfer": {
+    "source_domain": "experimental economics",
+    "application_domain": "product UI"
+  },
+  "pattern": "Replace frequent, granular performance notifications with a single periodic digest, suppressing intermediate updates until {evaluation_interval} days have elapsed since the last shown update.",
+  "parameters": [
+    {
+      "name": "evaluation_interval",
+      "value": 30,
+      "unit": "days",
+      "evidence_basis": "none — default heuristic"
+    }
+  ],
+  "provenance": [
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_cf28e680606a9cd5502c78b3",
+      "doi": "10.1162/003355397555226",
+      "title": "The Effect of Myopia and Loss Aversion on Risk Taking: An Experimental Test",
+      "quote_or_locus": "The investors who got the most frequent feedback (and thus the most information) took the least risk and earned the least money",
+      "source_span": {
+        "start": 588,
+        "end": 715,
+        "source_text_sha256": "6311e934c0c7a1e87dea484593049d0585c34287f751ab92a441380400b8180d"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_10685871ab12b88cfdd604f1",
+      "doi": "10.1162/003355397555217",
+      "title": "An Experiment on Risk Taking and Evaluation Periods",
+      "quote_or_locus": "Results from this study show that the more frequently returns are evaluated, the more risk averse investors will be",
+      "source_span": {
+        "start": 153,
+        "end": 268,
+        "source_text_sha256": "1a6b1f3196f6d27b3c060ba06a922229a8d75ec4737a88be8c074e85f0f299bb"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_e8a1af22da9d8525655b4ceb",
+      "doi": "10.1142/9789814417358_0016",
+      "title": "Choices, Values, and Frames",
+      "quote_or_locus": "The process of mental accounting, in which people organize the outcomes of transactions, explains some anomalies of consumer behavior",
+      "source_span": {
+        "start": 538,
+        "end": 671,
+        "source_text_sha256": "68ebae39730af39425e84658edc5d21468066a82b2170b2e6a7ce8ccac1e3067"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_10685871ab12b88cfdd604f1",
+      "effect_id": "la-01-04",
+      "title": "An Experiment on Risk Taking and Evaluation Periods",
+      "quote_or_locus": "Myopic loss aversion is the combination of loss aversion and frequent evaluation of investment portfolios, which leads to more conservative risk-taking.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.6
+}

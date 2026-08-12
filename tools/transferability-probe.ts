@@ -54,6 +54,21 @@
  *   dry-run   print the prompts and the cost estimate, make no calls at all.
  *   record-spend  append this run's measured cost to the extraction manifest
  *                 (D-164). Ignored under dry-run, which spends nothing.
+ *
+ * RE-SCORING, offline and free:
+ *   npm run transferability-probe -- rescore ruleset=3 [target=LA-01] [answers=<path>]
+ *
+ * Every probe run writes the model's answers to transferability-answers.json (a
+ * gitignored run artifact, uploaded by the workflow). `rescore` applies a
+ * ruleset to those STORED answers — no model call, no network, no spend — and
+ * prints the per-mechanism share, the refusals by check, and the lever behind
+ * every refusal VARIABLE itself made.
+ *
+ * This is the comparison D-165 designed for: it made v3's SUBJECT/DIRECTION/
+ * POPULATION computation byte-identical to v2's so the rulesets differ in
+ * scoring alone, which means scoring the same answers both ways separates the
+ * rule change from the model's run-to-run variance. Re-probing measures both at
+ * once; re-scoring measures only the rule.
  */
 
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
@@ -123,6 +138,51 @@ function selectedRuleset(): number {
       `Use ${TRANSFERABILITY_RULESET_VERSION_V2} or ${TRANSFERABILITY_RULESET_VERSION_V3}. ` +
       "v1 is the offline word list and is run by transferability-report, not by a probe.",
   );
+}
+
+/**
+ * Where the probe writes the model's own answers.
+ *
+ * A run artifact, gitignored like quote.json (D-025): it is the output of one
+ * run against one queue at one moment, not a corpus record, and committing it
+ * would make a snapshot look like a source. The workflow uploads it instead.
+ *
+ * It exists because the probe's answers were previously reachable only by
+ * reading an Actions log, which meant a scoring comparison had to be
+ * hand-parsed out of stdout — and a number nobody can re-derive by running a
+ * committed script is exactly the kind of number this project refuses. With the
+ * answers stored, `rescore` applies any ruleset to the SAME model answers, for
+ * free, as many times as anyone wants to check.
+ */
+const ANSWERS_FILE = join(ROOT, "transferability-answers.json");
+
+/** One claim's model answer, plus everything needed to re-score it offline. */
+interface StoredAnswer {
+  proposal_id: string;
+  path: string;
+  target: string;
+  status: string;
+  /** The model's VARIABLE judgement, or null when the call produced no verdict. */
+  judgement: { transferable: boolean; lever: string | null; reason: string } | null;
+  /** Set exactly when judgement is null. */
+  unavailable_reason?: string;
+  /**
+   * The four checks as this run computed them. Kept so a re-score is a pure
+   * function of this file: the three deterministic ones ARE recomputable from
+   * the claim, but recomputing them during a re-score would silently mix
+   * today's lexicons into a measurement of an older run.
+   */
+  checks: { check: string; outcome: string; reason: string; identified_lever?: string | null }[];
+}
+
+interface AnswersFile {
+  schema_version: 1;
+  generated_at: string;
+  ruleset_version_at_capture: number;
+  model_id: string;
+  target: string;
+  status_filter: string;
+  answers: StoredAnswer[];
 }
 
 interface LoadedProposal {
@@ -397,6 +457,7 @@ async function probe(): Promise<void> {
   let escalated = 0;
   const unavailable: Record<string, number> = {};
   const modifierCounts: Record<string, number> = {};
+  const answers: StoredAnswer[] = [];
 
   // A pass that dies half way has still spent what it spent, and the monthly
   // cap only ever sees what a manifest records (D-099). The failure is captured
@@ -422,6 +483,15 @@ async function probe(): Promise<void> {
       console.log(`${proposal.id}  [${proposal.status}]`);
       if (!outcome.ok) {
         unavailable[outcome.reason] = (unavailable[outcome.reason] ?? 0) + 1;
+        answers.push({
+          proposal_id: proposal.id,
+          path,
+          target: proposal.target,
+          status: proposal.status,
+          judgement: null,
+          unavailable_reason: outcome.reason,
+          checks: [],
+        });
         console.log(`  verdict : VERDICT UNAVAILABLE (${outcome.reason})`);
         if (outcome.detail) console.log(`  detail  : ${oneLine(outcome.detail, 200)}`);
         console.log("  lever   : —  (nothing judged this claim)");
@@ -441,6 +511,26 @@ async function probe(): Promise<void> {
       for (const modifier of verdict.modifiers_flagged ?? []) {
         modifierCounts[modifier] = (modifierCounts[modifier] ?? 0) + 1;
       }
+
+      answers.push({
+        proposal_id: proposal.id,
+        path,
+        target: proposal.target,
+        status: proposal.status,
+        judgement: {
+          transferable: outcome.judgement.transferable,
+          lever: outcome.judgement.lever,
+          reason: outcome.judgement.reason,
+        },
+        checks: verdict.checks.map((check) => ({
+          check: check.check,
+          outcome: check.outcome,
+          reason: check.reason,
+          ...(check.identified_lever === undefined
+            ? {}
+            : { identified_lever: check.identified_lever }),
+        })),
+      });
 
       const variable = verdict.checks.find((check) => check.check === "variable");
       console.log(`  verdict : ${describeTransferability(verdict)}`);
@@ -476,6 +566,27 @@ async function probe(): Promise<void> {
       `\nPROBE FAILED after ${usage.byTier.strong.calls} call(s): ${failure.message}`,
     );
     console.log("Everything below is a PARTIAL pass, not a measurement of the queue.\n");
+  }
+
+  // Written on the failure path too, and for the same reason the spend is: a
+  // pass that died half way still asked the model everything it asked, and
+  // throwing those answers away would mean paying for them twice.
+  if (answers.length > 0) {
+    const file: AnswersFile = {
+      schema_version: 1,
+      generated_at: new Date().toISOString(),
+      ruleset_version_at_capture: rulesetVersion,
+      model_id: tier.model_id,
+      target: option("target") ?? "all",
+      status_filter: option("status") ?? "pending",
+      answers,
+    };
+    writeFileSync(ANSWERS_FILE, `${JSON.stringify(file, null, 2)}\n`, "utf8");
+    console.log(
+      `\n${answers.length} model answer(s) written to transferability-answers.json — ` +
+        "re-score them under any ruleset with `npm run transferability-probe -- rescore`, " +
+        "no model call and no spend.",
+    );
   }
 
   const unavailableTotal = Object.values(unavailable).reduce((a, b) => a + b, 0);
@@ -577,9 +688,140 @@ async function probe(): Promise<void> {
   if (failure) throw failure;
 }
 
+/**
+ * Re-score stored model answers under a ruleset, offline.
+ *
+ * No model call, no network, no spend, nothing written. This is the like-for-
+ * like comparison D-165 designed for when it made v3's SUBJECT/DIRECTION/
+ * POPULATION computation byte-identical to v2's: the two rulesets differ in
+ * scoring alone, so applying both to the SAME answers isolates the scoring
+ * change from the model's own variance between runs.
+ *
+ * It re-scores from the STORED checks rather than recomputing them, so what it
+ * reports is what that run would have decided — not what today's lexicons would
+ * decide about that run's claims.
+ */
+function rescore(): void {
+  const path = option("answers") ?? ANSWERS_FILE;
+  if (!existsSync(path)) {
+    throw new Error(
+      `no stored answers at ${path}. Run the probe first — it writes them — or pass answers=<path>.`,
+    );
+  }
+  const file = JSON.parse(readFileSync(path, "utf8")) as AnswersFile;
+  const rulesetVersion = selectedRuleset();
+  const target = option("target");
+
+  const selected = file.answers.filter((a) => !target || a.target === target);
+  console.log(
+    `Re-score — ruleset v${rulesetVersion} applied to ${selected.length} stored answer(s) ` +
+      `captured under v${file.ruleset_version_at_capture} from ${file.model_id} at ${file.generated_at}.`,
+  );
+  console.log("Offline: no model call, no spend, nothing written.\n");
+
+  const byMech: Record<
+    string,
+    { judged: number; ok: number; refusedBy: Record<string, number>; unavailable: number }
+  > = {};
+  const leversOnRefusal: { id: string; target: string; lever: string | null; reason: string }[] = [];
+
+  for (const answer of selected) {
+    const m = (byMech[answer.target] ||= { judged: 0, ok: 0, refusedBy: {}, unavailable: 0 });
+    if (!answer.judgement) {
+      m.unavailable += 1;
+      continue;
+    }
+    m.judged += 1;
+    const variable = answer.checks.find((c) => c.check === "variable");
+    // v3: the lever alone decides. v2: any failing check refuses.
+    const transferable =
+      rulesetVersion === TRANSFERABILITY_RULESET_VERSION_V3
+        ? variable?.outcome === "pass"
+        : !answer.checks.some((c) => c.outcome === "fail");
+    if (transferable) {
+      m.ok += 1;
+      continue;
+    }
+    for (const check of answer.checks) {
+      if (check.outcome !== "fail") continue;
+      if (rulesetVersion === TRANSFERABILITY_RULESET_VERSION_V3 && check.check !== "variable") {
+        continue;
+      }
+      m.refusedBy[check.check] = (m.refusedBy[check.check] ?? 0) + 1;
+    }
+    if (variable?.outcome === "fail") {
+      leversOnRefusal.push({
+        id: answer.proposal_id,
+        target: answer.target,
+        lever: answer.judgement.lever,
+        reason: variable.reason,
+      });
+    }
+  }
+
+  const pad = (value: unknown, width: number): string => String(value).padEnd(width);
+  const share = (a: number, b: number): string =>
+    b === 0 ? "-" : `${a}/${b} (${Math.round((a / b) * 100)}%)`;
+  console.log(`${pad("mech", 7)}${pad("judged", 8)}${pad("transferable", 15)}${pad("unjudged", 10)}refused by`);
+  let judged = 0;
+  let ok = 0;
+  let unavailable = 0;
+  const refusedByAll: Record<string, number> = {};
+  for (const mech of Object.keys(byMech).sort()) {
+    const m = byMech[mech];
+    judged += m.judged;
+    ok += m.ok;
+    unavailable += m.unavailable;
+    for (const [k, v] of Object.entries(m.refusedBy)) {
+      refusedByAll[k] = (refusedByAll[k] ?? 0) + v;
+    }
+    const by =
+      Object.entries(m.refusedBy)
+        .sort((a, b) => b[1] - a[1])
+        .map(([k, v]) => `${k} ${v}`)
+        .join(", ") || "-";
+    console.log(
+      `${pad(mech, 7)}${pad(m.judged, 8)}${pad(share(m.ok, m.judged), 15)}${pad(m.unavailable, 10)}${by}`,
+    );
+  }
+  console.log("-".repeat(78));
+  const byAll =
+    Object.entries(refusedByAll)
+      .sort((a, b) => b[1] - a[1])
+      .map(([k, v]) => `${k} ${v}`)
+      .join(", ") || "-";
+  console.log(
+    `${pad("ALL", 7)}${pad(judged, 8)}${pad(share(ok, judged), 15)}${pad(unavailable, 10)}${byAll}`,
+  );
+
+  // Under v3 this is the entire refusal set, and it is the one the owner asked
+  // to see: what VARIABLE itself threw out, and what it said about it.
+  console.log(
+    `\nREFUSALS MADE BY VARIABLE ITSELF (${leversOnRefusal.length}) — the only refusal v3 has`,
+  );
+  if (leversOnRefusal.length === 0) {
+    console.log("  none — VARIABLE named a lever on every judged claim");
+  }
+  for (const entry of leversOnRefusal) {
+    console.log(`  ${entry.target}  ${entry.id}`);
+    console.log(`    lever : ${entry.lever ?? "none identified"}`);
+    console.log(`    reason: ${oneLine(entry.reason, 200)}`);
+  }
+}
+
 if (require.main === module) {
-  probe().catch((error: unknown) => {
-    console.error(error instanceof Error ? error.message : String(error));
-    process.exit(1);
-  });
+  const command = process.argv[2];
+  if (command === "rescore") {
+    try {
+      rescore();
+    } catch (error: unknown) {
+      console.error(error instanceof Error ? error.message : String(error));
+      process.exit(1);
+    }
+  } else {
+    probe().catch((error: unknown) => {
+      console.error(error instanceof Error ? error.message : String(error));
+      process.exit(1);
+    });
+  }
 }

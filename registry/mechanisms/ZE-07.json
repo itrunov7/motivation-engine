@@ -8,12 +8,19 @@
   "parent": "S3",
   "lifecycle_status": "incubating",
   "dossier_ref": "dossiers/ZE-07.json",
-  "provenance": { "proposed_by": "owner", "date": "2026-07-15" },
+  "provenance": {
+    "proposed_by": "owner",
+    "date": "2026-07-15"
+  },
   "evidence": {
     "grade": "B+",
     "basis": "Goal-gradient: effort accelerates near a goal (Hull 1932; field-validated by Kivetz, Urminsky & Zheng 2006). Endowed-progress effect (Nunes & Dreze 2006). Zeigarnik effect (unfinished tasks stay cognitively active) — real but with mixed replication.",
     "effect_size_note": "Goal-gradient acceleration is well supported in field data; the endowed-progress effect (giving artificial head-start) is robust; the classic Zeigarnik memory effect is smaller and less reliably replicated than its popular reputation.",
-    "caveats": ["zeigarnik_memory_effect_replication_mixed", "requires_visible_attainable_goal", "false_progress_backfires_if_detected"]
+    "caveats": [
+      "zeigarnik_memory_effect_replication_mixed",
+      "requires_visible_attainable_goal",
+      "false_progress_backfires_if_detected"
+    ]
   },
   "evidence_terms": [
     "goal gradient hypothesis",
@@ -37,61 +44,145 @@
   "prior_weight": 0.75,
   "mechanism_summary_for_context": "People are pulled to close what is unfinished, and they push harder the closer the goal appears. A visible progress indicator toward an attainable goal increases completion; an unfinished state creates low-grade tension that motivates return. Two levers: show progress (bars, steps, checklists) and give a sense of head-start (progress already made). Distinct from loss aversion — this is the pull of completion, not the fear of loss.",
   "applicability": {
-    "funnel_stages": ["activation", "onboarding", "retention"],
-    "excluded_stages": ["cold_acquisition"],
-    "artifact_types": ["onboarding", "dashboard_widget", "checkout"],
+    "funnel_stages": [
+      "activation",
+      "onboarding",
+      "retention"
+    ],
+    "excluded_stages": [
+      "cold_acquisition"
+    ],
+    "artifact_types": [
+      "onboarding",
+      "dashboard_widget",
+      "checkout"
+    ],
     "preconditions": [
-      { "predicate": "product.has_multi_step_goal == true", "reason": "requires a goal decomposable into visible steps or progress; not applicable to single-action flows" }
+      {
+        "predicate": "product.has_multi_step_goal == true",
+        "reason": "requires a goal decomposable into visible steps or progress; not applicable to single-action flows"
+      }
     ],
     "culture_note": "Goal pursuit is broadly universal; preferred granularity and visual style of progress are L3 surface parameters"
   },
   "implementations": [
     {
       "id": "ZE-07-progress-indicator",
-      "artifact_types": ["onboarding", "dashboard_widget"],
-      "product_requirements": ["has_multi_step_setup"],
+      "artifact_types": [
+        "onboarding",
+        "dashboard_widget"
+      ],
+      "product_requirements": [
+        "has_multi_step_setup"
+      ],
       "generation_directive": "Show a visible progress indicator toward a concrete, attainable goal (steps completed, profile completeness, setup checklist). The goal must be real and reachable; the progress shown must be true. Break large goals into visible sub-steps so acceleration near each sub-goal compounds.",
-      "copy_formulas": ["{done} of {total} complete", "You're {pct}% there — {next_step} left"],
-      "metrics": ["onboarding_completion", "activation_rate"],
+      "copy_formulas": [
+        "{done} of {total} complete",
+        "You're {pct}% there — {next_step} left"
+      ],
+      "metrics": [
+        "onboarding_completion",
+        "activation_rate"
+      ],
       "observed_effects": []
     },
     {
       "id": "ZE-07-endowed-progress",
-      "artifact_types": ["onboarding"],
+      "artifact_types": [
+        "onboarding"
+      ],
       "product_requirements": [],
-      "generation_directive": "Grant a genuine head-start toward the first goal (pre-complete a real first step the user has effectively already taken, e.g. 'account created ✓'). The head-start must correspond to something real; inventing fake progress the user didn't make is forbidden.",
-      "copy_formulas": ["You've already started — {done} done", "1 of {total} done: account created"],
-      "metrics": ["onboarding_completion", "d7_retention"],
+      "generation_directive": "Grant a genuine head-start toward the first goal — pre-complete a real first step the user has effectively already taken, marked as done. The head-start must correspond to something real; inventing fake progress the user didn't make is forbidden.",
+      "copy_formulas": [
+        "You've already started — {done} done",
+        "1 of {total} done: account created"
+      ],
+      "metrics": [
+        "onboarding_completion",
+        "d7_retention"
+      ],
       "observed_effects": []
     },
     {
       "id": "ZE-07-open-loop",
-      "artifact_types": ["dashboard_widget", "retention_push"],
+      "artifact_types": [
+        "dashboard_widget",
+        "retention_push"
+      ],
       "product_requirements": [],
       "generation_directive": "Surface a genuinely unfinished item the user cares about (draft, incomplete profile, unstarted-but-set-up task) as a gentle open loop that invites completion. Not manufactured incompleteness; only real unfinished states the user would want closed.",
-      "copy_formulas": ["Finish your {thing}", "Your {draft} is waiting"],
-      "metrics": ["return_rate", "task_completion_rate"],
+      "copy_formulas": [
+        "Finish your {thing}",
+        "Your {draft} is waiting"
+      ],
+      "metrics": [
+        "return_rate",
+        "task_completion_rate"
+      ],
       "observed_effects": []
     }
   ],
   "constraints": {
     "hard_rules": [
-      { "id": "true_progress_only", "rule": "Displayed progress must reflect real state; fabricated or inflated progress bars are forbidden", "severity": "block" },
-      { "id": "real_headstart_only", "rule": "Endowed progress must correspond to something the user actually did or received; inventing fake completed steps is forbidden", "severity": "block" },
-      { "id": "attainable_goal", "rule": "The goal must be genuinely reachable; do not create endless or moving goalposts that never complete", "severity": "block" },
-      { "id": "no_manufactured_incompleteness", "rule": "Do not artificially fragment or leave things incomplete solely to create tension; open loops must be real, user-relevant unfinished states", "severity": "block" }
+      {
+        "id": "true_progress_only",
+        "rule": "Displayed progress must reflect real state; fabricated or inflated progress bars are forbidden",
+        "severity": "block"
+      },
+      {
+        "id": "real_headstart_only",
+        "rule": "Endowed progress must correspond to something the user actually did or received; inventing fake completed steps is forbidden",
+        "severity": "block"
+      },
+      {
+        "id": "attainable_goal",
+        "rule": "The goal must be genuinely reachable; do not create endless or moving goalposts that never complete",
+        "severity": "block"
+      },
+      {
+        "id": "no_manufactured_incompleteness",
+        "rule": "Do not artificially fragment or leave things incomplete solely to create tension; open loops must be real, user-relevant unfinished states",
+        "severity": "block"
+      }
     ],
-    "compliance_refs": ["EU_DSA_dark_patterns", "apple_asrg_3.1"],
+    "compliance_refs": [
+      "EU_DSA_dark_patterns",
+      "apple_asrg_3.1"
+    ],
     "boundary_test": "Is the progress and the goal real and reachable — or is completion engineered to always recede?"
   },
   "relations": [
-    { "type": "adjacent", "target": "LA-01", "note": "Near-complete progress can be framed as loss-if-abandoned (hybrid with LA-01), but the core driver here is the pull of completion, not fear of loss" },
-    { "type": "adjacent", "target": "HA-04", "note": "Progress toward goals supports habit formation; distinct — HA-04 is the recurring loop, ZE-07 is goal-directed progress" }
+    {
+      "type": "adjacent",
+      "target": "LA-01",
+      "note": "Near-complete progress can be framed as loss-if-abandoned (hybrid with LA-01), but the core driver here is the pull of completion, not fear of loss"
+    },
+    {
+      "type": "adjacent",
+      "target": "HA-04",
+      "note": "Progress toward goals supports habit formation; distinct — HA-04 is the recurring loop, ZE-07 is goal-directed progress"
+    }
   ],
-  "telemetry": { "tag_format": "me:ZE-07:{implementation_id}", "amplitude_event_property": "mechanism_tags" },
+  "telemetry": {
+    "tag_format": "me:ZE-07:{implementation_id}",
+    "amplitude_event_property": "mechanism_tags"
+  },
   "reference_examples": [
-    { "product": "LinkedIn profile strength", "what": "'Profile 80% complete' meter — canonical progress indicator driving completion of a multi-step goal" },
-    { "product": "Starbucks / loyalty punch cards", "what": "Endowed-progress effect: cards pre-stamped with 'bonus' stamps complete faster than empty cards toward the same required count (Nunes & Dreze)" },
-    { "product": "Duolingo / course path", "what": "Visible unit progress and next-lesson framing use goal-gradient acceleration toward attainable checkpoints" }
+    {
+      "product": "LinkedIn profile strength",
+      "what": "'Profile 80% complete' meter — canonical progress indicator driving completion of a multi-step goal"
+    },
+    {
+      "product": "Starbucks / loyalty punch cards",
+      "what": "Endowed-progress effect: cards pre-stamped with 'bonus' stamps complete faster than empty cards toward the same required count (Nunes & Dreze)"
+    },
+    {
+      "product": "Duolingo / course path",
+      "what": "Visible unit progress and next-lesson framing use goal-gradient acceleration toward attainable checkpoints"
+    }
+  ],
+  "effect_refs": [
+    "ovsiankina-effect",
+    "ze-07-01"
   ]
 }

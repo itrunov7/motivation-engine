@@ -1,0 +1,89 @@
+{
+  "id": "realization-sc-06-scarcity-indicator-fatigue-cutoff-ce8541ff8570",
+  "type": "realization",
+  "target": "SC-06",
+  "payload": {
+    "id": "scarcity-indicator-fatigue-cutoff",
+    "mechanism_id": "SC-06",
+    "term": "Scarcity-Indicator Fatigue Cutoff",
+    "description_as_reported": "Stimuli that initially capture attention appear, beyond a cognitive tolerance threshold, to trigger PRT-consistent motivational states and PKM-activated persuasion coping responses.",
+    "artifact_context": [
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "sc-06-02"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "live commerce",
+      "application_domain": "product UI"
+    },
+    "pattern": "Disable high-arousal scarcity indicators such as countdown timers or stock counters after the user has been exposed to {exposure_limit_count} such triggers within a single session, reverting them to a neutral display state.",
+    "parameters": [
+      {
+        "name": "exposure_limit_count",
+        "value": 3,
+        "unit": "trigger events",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_a295fb500972bf5daf928522",
+        "doi": "10.66638/hnbfw342",
+        "title": "Psychological Reactance and Consumer Burnout: A Qualitative Investigation of High-Arousal Tactics in Live Commerce",
+        "quote_or_locus": "stimuli that initially capture attention appear, beyond a cognitive tolerance threshold, to trigger PRT-consistent motivational states and PKM-activated persuasion coping responses",
+        "source_span": {
+          "start": 1361,
+          "end": 1541,
+          "source_text_sha256": "24dee2f9b57b9420e45406569ee5cb757fda9ab2b82ca842f42bca909d576e01"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "SC-06",
+        "corpus_record_id": "cr_c8b954378f01f675fed70897",
+        "effect_id": "sc-06-02",
+        "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+        "quote_or_locus": "Limited-quantity promotion activates competitive anxiety and possessive desire due to scarcity of quantity, increasing perceived value.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.6
+  },
+  "provenance": [
+    {
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_a295fb500972bf5daf928522",
+      "doi": "10.66638/hnbfw342",
+      "title": "Psychological Reactance and Consumer Burnout: A Qualitative Investigation of High-Arousal Tactics in Live Commerce",
+      "quote_or_locus": "stimuli that initially capture attention appear, beyond a cognitive tolerance threshold, to trigger PRT-consistent motivational states and PKM-activated persuasion coping responses",
+      "source_span": {
+        "start": 1361,
+        "end": 1541,
+        "source_text_sha256": "24dee2f9b57b9420e45406569ee5cb757fda9ab2b82ca842f42bca909d576e01"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "SC-06",
+      "corpus_record_id": "cr_c8b954378f01f675fed70897",
+      "effect_id": "sc-06-02",
+      "title": "The Dual-path Psychological Mechanism Of Limited Time and Limited Promotion",
+      "quote_or_locus": "Limited-quantity promotion activates competitive anxiety and possessive desire due to scarcity of quantity, increasing perceived value.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.6,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31480976629",
+  "proposed_at": "2026-08-11T10:10:07.944Z",
+  "status": "approved",
+  "hold_reason": null,
+  "decided_by": "owner",
+  "decided_at": "2026-08-11T11:10:39.811Z",
+  "decision_note": "Approved as extracted. Anchor sc-06-02 Limited-quantity scarcity, capped grade C+; cap discharged upstream on the anchor, confidence unchanged. Notable as the only proposal in this batch that constrains the mechanism rather than amplifying it — it disables high-arousal scarcity indicators after repeated exposure in a session, which runs with SC-06's reactance boundary instead of against it."
+}

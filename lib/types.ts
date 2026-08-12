@@ -439,6 +439,13 @@ export interface Realization {
   mechanism_id: string;
   /** L2 effects this realization embodies; named as in mechanism.effect_refs. */
   effect_refs?: string[];
+  /**
+   * L2 effects this pattern should be read AGAINST, not effects it embodies
+   * (D-348) — e.g. an opposing or harm effect on the same mechanism a
+   * generator applying the pattern should see. Carries no inference-provenance
+   * requirement, unlike effect_refs.
+   */
+  boundary_refs?: string[];
   derivation?: RealizationDerivation;
   domain_transfer?: RealizationDomainTransfer;
   term: string;
@@ -633,6 +640,21 @@ export const TRANSFERABILITY_VERDICT_UNAVAILABLE_REASONS = [
   "transport_error",
   /** The model answered, and the answer was not a judgement we could parse. */
   "malformed_answer",
+  /**
+   * The model was still writing when it hit the call's max_tokens ceiling, so
+   * the JSON arrived cut off mid-value.
+   *
+   * Split out of `malformed_answer` because the two have opposite fixes and were
+   * indistinguishable while they shared a code. A malformed answer is the model
+   * failing to follow the format; a truncated one is the model following it and
+   * being cut off by a ceiling WE set — the first wide probe recorded 11
+   * unjudged as `malformed_answer`, of which 7 were sitting at exactly the
+   * 200-token ceiling, four of them on one mechanism. That reads as a corpus
+   * problem until the codes are separated, at which point it reads as a sizing
+   * one. The ceiling is deliberately NOT changed here: naming the failure is
+   * what makes changing it measurable.
+   */
+  "answer_truncated",
 ] as const;
 
 export type TransferabilityVerdictUnavailableReason =
@@ -679,7 +701,17 @@ export type ProposalStatus =
    * actionable queue, and recoverable by one owner action. Nothing is destroyed
    * and no reader coverage is consumed.
    */
-  | "held_non_transferable";
+  | "held_non_transferable"
+  /**
+   * An approved proposal whose projected artifact has since been overwritten
+   * by a later `enrich` approval targeting the same record id (D-360/D-361).
+   * Not a re-decision: `decided_by`/`decided_at` stay exactly as they were —
+   * this proposal genuinely was approved, at that time, on that text. Only
+   * `status` and `decision_note` change, the latter naming the proposal that
+   * replaced it, so the ledger stays a true history rather than acquiring a
+   * second live-looking "approved" record for the same artifact.
+   */
+  | "superseded";
 
 export type ProposalOperation = "create" | "enrich";
 
@@ -1659,6 +1691,14 @@ export const UNGROUNDED_DROP_REASONS = [
   "malformed_citation",
   /** A cited record_id is not in the corpus slice the model was shown. */
   "unknown_record_id",
+  /**
+   * The citation names the anchoring EFFECT instead of a corpus record (D-167).
+   * Distinct from unknown_record_id on purpose: that one means the model
+   * invented or misremembered an id, this one means it treated the claim it was
+   * asked to extend as the evidence for extending it. The two have different
+   * fixes, so a single counter for both hides which is happening.
+   */
+  "anchor_cited_as_record",
   /** The quote is not a normalized substring of title + abstract/observation. */
   "quote_not_in_source",
   /** Evidence provenance in a realization corpus, or the reverse. */
@@ -1843,6 +1883,15 @@ export interface CandidateLedgerSynthesisStage {
   consolidated: number;
   expanded: number;
   candidates_strong: number;
+  /**
+   * How many cheap-to-strong folds this run performed — one per synthesis call,
+   * so one per mechanism per slice (D-168). `consolidated` and `expanded` are
+   * run-level SUMS over these folds, which is why "both non-zero" says nothing
+   * about a multi-fold run: one mechanism folding 4 -> 1 and another folding
+   * 1 -> 3 is ordinary. Optional because runs recorded before D-168 do not
+   * carry it, and a missing count must not be read as a fold count of zero.
+   */
+  folds?: number;
 }
 
 /** Strong-pass totals; the fates here partition candidates_strong. */
@@ -2187,20 +2236,50 @@ export interface PackEffect {
   realization_ids: string[];
 }
 
-/** LAYER 3 — one concrete realization projected from mechanism.implementations. */
-/** Source-grounded, descriptive evidence palette entry. */
+/**
+ * LAYER 3 — one realization projected from /realizations/{mechanism}/{id}.json.
+ * (It is NOT projected from mechanism.implementations; that wording predates the
+ * current layer numbering, where implementations are their own section.)
+ *
+ * Carries the transferred pattern and its declared parameters, not only the
+ * description (D-175). The projection used to stop at `description_as_reported`,
+ * which left the generator the source's sentence and none of the transfer built
+ * from it — while the implementations section shipped twenty hand-authored
+ * directives with no provenance at all. A machine pattern carrying a corpus
+ * record, a named parameter and `derivation` is the better-evidenced of the two.
+ */
 export interface PackRealization {
   id: string;
   mechanism_id: string;
   effect_id?: string;
+  /**
+   * Effects this pattern should be read AGAINST, not effects it embodies
+   * (D-348) — carried through in full (unlike effect_id, which projects only
+   * the first ref) since a boundary reference is a caution list, not a claim
+   * a reader needs deduplicated to one.
+   */
+  boundary_refs?: string[];
   term: string;
   description_as_reported: string;
+  /** Absent on a "reported" realization, which transfers nothing. */
+  derivation?: RealizationDerivation;
+  domain_transfer?: RealizationDomainTransfer;
+  pattern?: string;
+  parameters?: RealizationParameter[];
   artifact_context: string[];
   confidence: number;
   source_record_ids: string[];
 }
 
-/** Product-authored directive projected from mechanism.implementations. */
+/**
+ * Product-authored directive projected from mechanism.implementations.
+ *
+ * copy_formulas is deliberately NOT projected here (rule 1, D-346): a pack is
+ * evidence with minimal assertion, and a pre-written string is a copyable
+ * example — the thing rule 1 names directly. The registry record
+ * (Implementation.copy_formulas) keeps every formula as owner reference; this
+ * type just never carries it past extraction into what a generator reads.
+ */
 export interface PackImplementation {
   id: string;
   mechanism_id: string;
@@ -2210,7 +2289,6 @@ export interface PackImplementation {
   artifact_types: ArtifactType[];
   product_requirements: string[];
   generation_directive: string;
-  copy_formulas: string[];
   metrics: string[];
   /** Measured telemetry outcomes, not ontology L2 effects. */
   observed_effects: string[];

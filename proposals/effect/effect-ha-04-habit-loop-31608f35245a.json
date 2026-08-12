@@ -7,7 +7,7 @@
     "mechanism_id": "HA-04",
     "name": "Habit Loop",
     "fact": "The habit loop is a behavioral model consisting of three components: a cue, a routine, and a reward.",
-    "grade": "A-",
+    "grade": "B-",
     "source": [
       "10.1201/9781003304203-12",
       "10.61132/ijier.v3i1.482"
@@ -41,7 +41,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 2 independent source(s), original model-asserted grade A- -> capped to B-."
   },
   "provenance": [
     {
@@ -75,9 +76,41 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30819197240",
   "proposed_at": "2026-08-03T13:42:48.823Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.478Z",
+  "decision_note": "Approved under mechanical grade cap: 2 source(s), A- -> B-.",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: notification cue triggering routine, then reward message — names a manipulable variable: notification cue triggering routine, then reward message — Habit loop maps directly to cue notifications, routine prompts, and reward feedback in UI.",
+        "identified_lever": "notification cue triggering routine, then reward message"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

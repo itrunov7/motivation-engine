@@ -6,8 +6,8 @@
     "id": "fluency-based-aesthetic-pleasure-evaluation",
     "mechanism_id": "PF-16",
     "name": "Fluency-Based Aesthetic Pleasure/Evaluation",
-    "fact": "Stimuli processed more fluently are evaluated as more aesthetically pleasing, with increased fluency also raising evaluations and pleasure in applied contexts such as online shopping.",
-    "grade": "A-",
+    "fact": "Stimuli processed more fluently are evaluated as more aesthetically pleasing and liked more; a MANOVA confirmed the perceptual fluency effect on aesthetic evaluation and pleasure.",
+    "grade": "B",
     "source": [
       "10.1207/s15327957pspr0804_3",
       "10.1037/a0030115",
@@ -55,7 +55,8 @@
         },
         "span_role": "finding"
       }
-    ]
+    ],
+    "grade_basis": "Mechanical single-source grade cap (owner rule, 2026-08-10): 1 source -> C+ max, 2 sources -> B- max, 3+ independent sources -> B max, A band only with a meta-analysis or replication in the cited set. Computed grading does not exist yet; this is the interim mechanical floor. This claim: 3 independent source(s), original model-asserted grade A- -> capped to B."
   },
   "provenance": [
     {
@@ -102,9 +103,41 @@
   "operation": "create",
   "proposed_by": "extraction:github-actions-30806106326",
   "proposed_at": "2026-08-03T10:43:12.101Z",
-  "status": "pending",
+  "status": "approved",
   "hold_reason": null,
-  "decided_by": null,
-  "decided_at": null,
-  "decision_note": null
+  "decided_by": "claude (delegated by owner)",
+  "decided_at": "2026-08-10T14:13:42.778Z",
+  "decision_note": "Approved under mechanical grade cap: 3 source(s), A- -> B. OVERREACH: narrowed fact to what the cited span supports, removing \"raising evaluations and pleasure in applied contexts such as online shopping\" — that specific applied-context claim is not in the cited span (kept in boundary).",
+  "transferability": {
+    "ruleset_version": 3,
+    "transferable": true,
+    "checks": [
+      {
+        "check": "subject",
+        "outcome": "fail",
+        "reason": "no person and no artifact named — the subject is a system, construct, or phenomenon, which is neither of the two subjects a transferable claim can have"
+      },
+      {
+        "check": "variable",
+        "outcome": "pass",
+        "reason": "names a manipulable variable: increase visual clarity and layout simplicity — names a manipulable variable: increase visual clarity and layout simplicity — names a manipulable variable: increase visual clarity and layout simplicity — Product surfaces can boost processing fluency via clean, symmetrical, high-quality visuals raising liking.",
+        "identified_lever": "increase visual clarity and layout simplicity"
+      },
+      {
+        "check": "direction",
+        "outcome": "fail",
+        "reason": "no directional term — nothing is said to raise, lower, or outperform anything"
+      },
+      {
+        "check": "population",
+        "outcome": "pass",
+        "reason": "no specialist population named — the claim does not require expertise to apply"
+      }
+    ],
+    "escalated_by_warning_pair": false,
+    "modifiers_flagged": [
+      "subject",
+      "direction"
+    ]
+  }
 }

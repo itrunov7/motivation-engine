@@ -136,9 +136,28 @@ export function checkLedgerBalance(run: CandidateLedgerRun): string[] {
         `synthesis stage: candidates_strong disagrees between the synthesis stage (${synthesis.candidates_strong}) and the strong stage (${strong.candidates})`,
       );
     }
-    if (synthesis.consolidated > 0 && synthesis.expanded > 0) {
+    // Both non-zero is an error for ONE fold and ordinary across several
+    // (D-168). recordSynthesisFold increments one side or the other per
+    // synthesis call, and `consolidated`/`expanded` are run-level sums over
+    // every call, so a run where mechanism A folds 4 -> 1 and mechanism B folds
+    // 1 -> 3 sets both while E3 above balances exactly. Applied at run level
+    // this check called that broken, which is what cost run 31095467232 its
+    // spend record: validate failed, and the accounting commit was gated behind
+    // the same validate.
+    //
+    // Gated on the fold count rather than deleted, because for a single fold the
+    // statement is true and worth keeping — one fold cannot both consolidate and
+    // expand, so if it ever does, the fold arithmetic has been broken by an edit.
+    // Runs recorded before D-168 carry no count and are not judged: asserting
+    // they folded once would be inventing a measurement nobody took.
+    if (
+      synthesis.folds !== undefined &&
+      synthesis.folds <= 1 &&
+      synthesis.consolidated > 0 &&
+      synthesis.expanded > 0
+    ) {
       violations.push(
-        "synthesis stage: consolidated and expanded are both non-zero for the same run — one of the two is absorbing the other's error",
+        `synthesis stage: consolidated (${synthesis.consolidated}) and expanded (${synthesis.expanded}) are both non-zero across ${synthesis.folds} fold(s) — a single fold can only do one of the two, so the fold arithmetic is wrong`,
       );
     }
   }
