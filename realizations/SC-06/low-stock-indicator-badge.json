@@ -10,12 +10,16 @@
   "effect_refs": [
     "sc-06-02"
   ],
+  "boundary_refs": [
+    "sc-06-03",
+    "scarcity-wellbeing-deterioration"
+  ],
   "derivation": "inferred",
   "domain_transfer": {
     "source_domain": "consumer psychology, persuasion research, and live-streaming shopping",
     "application_domain": "product UI"
   },
-  "pattern": "Display a remaining-stock counter or badge on the product card or page when inventory falls below {stock_threshold} units, where the displayed count must reflect true remaining inventory at the moment it is shown, to trigger competitive anxiety and increase perceived value.",
+  "pattern": "Display a remaining-stock counter or badge on the product card or page when inventory falls below {stock_threshold} units, where the displayed count must reflect true remaining inventory at the moment it is shown.",
   "parameters": [
     {
       "name": "stock_threshold",

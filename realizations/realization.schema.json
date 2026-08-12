@@ -20,6 +20,12 @@
       "uniqueItems": true,
       "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
     },
+    "boundary_refs": {
+      "description": "Effects this pattern should be read AGAINST, not effects it embodies (D-348) — an opposing or harm effect on the same mechanism that a generator applying this pattern should see. Distinct from effect_refs: an entry here is not claimed as evidence for the pattern and carries no inference-provenance requirement. Example: a scarcity display pattern referencing sc-06-03 (scarcity-induced aggression) so a generator reads the two together rather than finding the caution only in the mechanism pack the generator never opens (D-112).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+    },
     "derivation": {
       "description": "How this record came to exist. reported = a source described this embodiment. inferred = the pattern is a domain transfer from an effect nobody measured in a product context; it is a hypothesis for a generator, not evidence. Optional so records written before D-112 stay valid; required of anything the extraction pipeline authors, enforced in tools/validate.ts.",
       "enum": ["reported", "inferred"]

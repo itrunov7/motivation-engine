@@ -72,6 +72,7 @@ const inferredRealization = {
   id: "expertise-based-guidance-toggle",
   mechanism_id: "CL-14",
   effect_refs: ["cl-14-002"],
+  boundary_refs: ["cl-14-001"],
   derivation: "inferred",
   domain_transfer: {
     source_domain: "educational psychology",
@@ -126,6 +127,10 @@ test("LAYER 3 projects the transfer, not only the description (D-175)", () => {
   // What it already carried must survive unchanged.
   assert.equal(projected.effect_id, "cl-14-002");
   assert.deepEqual(projected.source_record_ids, ["cr_7e6bcb42220d86126199d6e2"]);
+  // boundary_refs (D-348): carried through in FULL, unlike effect_refs -> the
+  // singular effect_id above, since it is a caution list a generator should
+  // see all of, not a claim needing one citation.
+  assert.deepEqual(projected.boundary_refs, ["cl-14-001"]);
 });
 
 test("a reported realization declares none of the transfer keys (D-175)", () => {
@@ -137,11 +142,11 @@ test("a reported realization declares none of the transfer keys (D-175)", () => 
   // Absent, not undefined. parseYaml reads `derivation: undefined` back as the
   // STRING "undefined", so the renderer's re-parse self-check would pass a pack
   // asserting a derivation nobody recorded.
-  for (const key of ["derivation", "domain_transfer", "pattern", "parameters"]) {
+  for (const key of ["derivation", "domain_transfer", "pattern", "parameters", "boundary_refs"]) {
     assert.equal(key in projected, false, `${key} must be absent, not undefined`);
   }
   const emitted = renderRealization(projected).join("\n");
-  for (const key of ["derivation:", "domain_transfer:", "pattern:", "parameters:"]) {
+  for (const key of ["derivation:", "domain_transfer:", "pattern:", "parameters:", "boundary_refs:"]) {
     assert.equal(emitted.includes(key), false, `${key} must not be emitted`);
   }
 });

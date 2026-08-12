@@ -439,6 +439,13 @@ export interface Realization {
   mechanism_id: string;
   /** L2 effects this realization embodies; named as in mechanism.effect_refs. */
   effect_refs?: string[];
+  /**
+   * L2 effects this pattern should be read AGAINST, not effects it embodies
+   * (D-348) — e.g. an opposing or harm effect on the same mechanism a
+   * generator applying the pattern should see. Carries no inference-provenance
+   * requirement, unlike effect_refs.
+   */
+  boundary_refs?: string[];
   derivation?: RealizationDerivation;
   domain_transfer?: RealizationDomainTransfer;
   term: string;
@@ -2235,6 +2242,13 @@ export interface PackRealization {
   id: string;
   mechanism_id: string;
   effect_id?: string;
+  /**
+   * Effects this pattern should be read AGAINST, not effects it embodies
+   * (D-348) — carried through in full (unlike effect_id, which projects only
+   * the first ref) since a boundary reference is a caution list, not a claim
+   * a reader needs deduplicated to one.
+   */
+  boundary_refs?: string[];
   term: string;
   description_as_reported: string;
   /** Absent on a "reported" realization, which transfers nothing. */

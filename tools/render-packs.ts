@@ -305,6 +305,12 @@ export function realizationsFor(
       ...(realization.effect_refs?.[0] === undefined
         ? {}
         : { effect_id: realization.effect_refs[0] }),
+      // Carried through in full, not truncated to one like effect_id above: a
+      // boundary reference is a caution list a generator should see all of,
+      // not a claim needing exactly one citation (D-348).
+      ...(realization.boundary_refs === undefined || realization.boundary_refs.length === 0
+        ? {}
+        : { boundary_refs: realization.boundary_refs }),
       term: realization.term,
       description_as_reported: realization.description_as_reported,
       // The transfer itself (D-175). Each is spread conditionally, using the
@@ -438,10 +444,18 @@ function buildContextWeights(members: Mechanism[]): PackContextWeight[] {
  * "forbidden — " prefix already carries the prohibition), and any rule still
  * carrying second-person instruction voice (you / your / should / prefer)
  * collapses to a bare "forbidden" rather than leaking an instruction.
+ *
+ * Quoted spans are stripped before that check. EN-03's real_ownership_only
+ * reads "...do not fabricate 'your' where nothing was invested" — third-person
+ * policy prose that MENTIONS the word 'your' as the quoted example of the
+ * fabricated copy it forbids, not an instruction addressed to a reader. Without
+ * this, the sole occurrence of any voice token in the whole registry (verified
+ * by grep) collapsed a real rule to a bare "forbidden" with no text at all.
  */
 function boundaryReason(rule: string): string {
   const text = rule.trim().replace(/^(?:do not|don't|never)\s+/i, "");
-  if (VOICE_TOKENS.test(text)) return "forbidden";
+  const withoutQuotes = text.replace(/'[^']*'|"[^"]*"/g, "");
+  if (VOICE_TOKENS.test(withoutQuotes)) return "forbidden";
   return `forbidden — ${text}`;
 }
 
@@ -582,6 +596,13 @@ export function renderRealization(realization: PackRealization): string[] {
         `        evidence_basis: ${scalar(parameter.evidence_basis)}`,
       );
     }
+  }
+  if (realization.boundary_refs !== undefined && realization.boundary_refs.length > 0) {
+    // Effects to read the pattern AGAINST, not effects it embodies (D-348) —
+    // e.g. an opposing or harm effect on the same mechanism. Rendered next to
+    // pattern/parameters, the block it qualifies, rather than buried after
+    // artifact_context.
+    lines.push(`    boundary_refs: ${flow(realization.boundary_refs)}`);
   }
   lines.push(
     `    artifact_context: ${scalarFlow(realization.artifact_context)}`,
