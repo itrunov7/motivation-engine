@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-08-12T09:16:07.787Z",
+  "dispatch_id": "domain-leak-d352",
+  "github_run_id": 31582096472,
+  "mode": "realizations",
+  "written_at": "2026-08-12T09:17:09.456Z",
+  "rejected": [
+    {
+      "mechanism_id": "LA-01",
+      "mode": "realizations",
+      "pass": "cheap",
+      "reason": "premise_contradicted_downstream",
+      "detail": "span_role=finding asserted for a span the same source later reverses: marker was-not+participle matched \"is not observed\" in \".” This paper also provides suggestive evidence that reference points are important in determining the relationship between loss-aversion and insurance ownership by showing that the negative association is not observed in the take-up of auto insurance, which is one of the most widely held insurance products and often regarded as a basic necessity.\", sharing aversion, insurance, loss, point, reference with the quote (D-129) — record cr_f182ba6ce8930f85e068dffe",
+      "corpus_record_id": "cr_f182ba6ce8930f85e068dffe",
+      "item": {
+        "term": "Reference-Point Anchoring for Retention",
+        "description_as_reported": "The results are consistent with the prospect theory, which predicts that loss-aversion may decrease insurance demand if an individual's reference points are “the status quo wealth level when they do not engage in insurance contracts.”",
+        "pattern": "Display the current state as the baseline reference point for {duration_days} days to stabilize the user's perception of the status quo before introducing new options.",
+        "parameters": [
+          {
+            "name": "duration_days",
+            "value": 30,
+            "unit": "days"
+          }
+        ],
+        "source_domain": "insurance demand",
+        "artifact_context": [
+          "retention_push",
+          "onboarding"
+        ],
+        "confidence": 0.5,
+        "citations": [
+          {
+            "record_id": "cr_f182ba6ce8930f85e068dffe",
+            "quote_or_locus": "The results are consistent with the prospect theory, which predicts that loss-aversion may decrease insurance demand if an individual's reference points are “the status quo wealth level when they do not engage in insurance contracts.”",
+            "span_role": "finding"
+          }
+        ]
+      },
+      "provenance": [
+        {
+          "record_id": "cr_f182ba6ce8930f85e068dffe",
+          "quote_or_locus": "The results are consistent with the prospect theory, which predicts that loss-aversion may decrease insurance demand if an individual's reference points are “the status quo wealth level when they do not engage in insurance contracts.”",
+          "span_role": "finding"
+        }
+      ],
+      "compared": {
+        "quote_raw": "The results are consistent with the prospect theory, which predicts that loss-aversion may decrease insurance demand if an individual's reference points are “the status quo wealth level when they do not engage in insurance contracts.”",
+        "quote_normalized": "the results are consistent with the prospect theory which predicts that loss aversion may decrease insurance demand if an individual s reference points are the status quo wealth level when they do not engage in insurance contracts",
+        "source_raw": "Prospect theory and insurance demand: Empirical evidence on the role of loss aversion\nAbstract This paper empirically tests if prospect theory's loss aversion can explain an individual's real-world insurance take-up behavior. Using American Life Panel data, this paper shows that loss-averse individuals have a significantly lower ownership rate of private long-term care insurance and supplemental disability insurance than other sample populations. The results are consistent with the prospect theory, which predicts that loss-aversion may decrease insurance demand if an individual's reference points are “the status quo wealth level when they do not engage in insurance contracts.” This paper also provides suggestive evidence that reference points are important in determining the relationship between loss-aversion and insurance ownership by showing that the negative association is not observed in the take-up of auto insurance, which is one of the most widely held insurance products and often regarded as a basic necessity.",
+        "source_normalized": "prospect theory and insurance demand empirical evidence on the role of loss aversion abstract this paper empirically tests if prospect theory s loss aversion can explain an individual s real world insurance take up behavior using american life panel data this paper shows that loss averse individuals have a significantly lower ownership rate of private long term care insurance and supplemental disability insurance than other sample populations the results are consistent with the prospect theory which predicts that loss aversion may decrease insurance demand if an individual s reference points are the status quo wealth level when they do not engage in insurance contracts this paper also provides suggestive evidence that reference points are important in determining the relationship between loss aversion and insurance ownership by showing that the negative association is not observed in the take up of auto insurance which is one of the most widely held insurance products and often regarded as a basic necessity"
+      },
+      "corpus_side": {
+        "doi": "10.1016/j.socec.2021.101764",
+        "title": "Prospect theory and insurance demand: Empirical evidence on the role of loss aversion"
+      }
+    }
+  ]
+}
