@@ -476,6 +476,13 @@ const FUNCTION_WORDS = new Set<string>([
   "often", "onto", "rather", "since", "still", "then", "though", "through",
   "toward", "towards", "under", "unless", "until", "upon", "whether", "within",
   "without", "yet",
+  // "greater" is a comparative adjective describing a relationship between two
+  // quantities, not a quantity itself — same noise class as "rather" above,
+  // found the same way: it co-fired with "loss" on high-involvement-loss-
+  // emphasis against la-01-02's "greater impact... than gain-seeking" (D-357
+  // measurement run), where the reader's own judgement isolated "loss" as the
+  // only term that mattered.
+  "greater",
 ]);
 
 /**
