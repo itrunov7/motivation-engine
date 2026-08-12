@@ -50,7 +50,8 @@
     "reconcile-spend": "tsx tools/reconcile-spend.ts",
     "test:spend": "tsx --test tools/reconcile-spend.test.ts",
     "report-superseded": "tsx tools/report-superseded.ts",
-    "test:superseded": "tsx --test tools/report-superseded.test.ts"
+    "test:superseded": "tsx --test tools/report-superseded.test.ts",
+    "ci": "npm run validate && npm run test:proposals && npm run test:ops && npm run test:github && npm run test:spans && npm run test:span-role && npm run test:provenance && npm run test:extract && npm run test:rejected && npm run test:evidence && npm run test:analyzer && npm run test:gaps && npm run test:packs && git diff --exit-code && npm run build"
   },
   "dependencies": {
     "ajv": "^8.20.0",
