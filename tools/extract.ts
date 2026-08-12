@@ -1762,6 +1762,15 @@ export function anchorBlock(anchor: EffectAnchor): string {
  * transferred out of it. Splitting them is what lets a reader see which half a
  * source supports — a single blended sentence hides the seam, and the seam is
  * the thing under review.
+ *
+ * The split has a direction the first version failed to state: the domain
+ * belongs to `description_as_reported` and must NOT survive into `pattern`.
+ * Saying only where the domain lives left the model free to keep it in both,
+ * and it did — every pattern anchored on la-01-04 came back worded in
+ * portfolios and volatility metrics, which no ceramics shop can apply. A
+ * pattern that only works in the domain the evidence was measured in is an
+ * un-transferred one, so the requirement and the abstraction rule that
+ * satisfies it are both stated below.
  */
 function inferredRealizationInstruction(
   mechanismId: string,
@@ -1773,7 +1782,7 @@ function inferredRealizationInstruction(
     "Fields per item:",
     "- term: a short name for the pattern.",
     "- description_as_reported: what the cited source states, in the source's own domain vocabulary. Do not describe a product interface here, and do not generalise beyond the quote.",
-    "- pattern: the product-UI directive transferred from it, in the imperative. This is your inference, not the source's claim. NEVER write a number in this text, as a digit or as a word — no source measured a threshold for a product interface, and a number in prose reads as if one had. Write {snake_case_name} instead and declare it in parameters.",
+    "- pattern: the product-UI directive transferred from it, in the imperative. This is your inference, not the source's claim. NEVER write a number in this text, as a digit or as a word — no source measured a threshold for a product interface, and a number in prose reads as if one had. Write {snake_case_name} instead and declare it in parameters. State it in domain-neutral product terms: the anchored claim's own vocabulary — its industry, its measured setting, its subject matter — must NOT appear in this text. The domain is already recorded in source_domain and description_as_reported; the pattern's job is to say what ANY product interface should do.",
     // evidence_basis is NOT asked for (D-115): it is a single literal the code
     // fills in, because a model that may write it is a model that may claim its
     // own guess was measured. Asking for a field the code overwrites also put
@@ -1784,6 +1793,7 @@ function inferredRealizationInstruction(
     `- artifact_context: where the pattern applies, from this vocabulary where one fits: ${ARTIFACT_TYPES.join("|")}.`,
     "- confidence: your confidence in the TRANSFER holding in a product interface, not in the effect being real. No source measured this pattern in a product, so a value above 0.8 is not credible.",
     `- ${provenanceField}.`,
+    "THE ABSTRACTION RULE — how to satisfy the domain-neutrality requirement on pattern. Replace every object the anchored claim names with its functional role in an interface. \"Portfolio performance notifications\" becomes \"outcome or performance updates the user did not request\". \"Volatility metric\" becomes \"a displayed metric with high variance\". \"Airline fare\" becomes \"a price the user is choosing between\". \"Business passengers\" becomes \"users who buy under time pressure\". Before you write a pattern, ask whether a ceramics shop's checkout could apply it as written. If it could not, the transfer failed: a pattern that only works in the domain the evidence was measured in is not a specific pattern, it is an un-transferred one.",
     "Do not claim or imply that the pattern has been tested in a product. Do not propose a pattern that merely restates the effect.",
   ].join("\n");
 }

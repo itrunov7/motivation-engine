@@ -596,11 +596,13 @@ function main(): void {
     overreach: 0,
     duplicate: 0,
     weak_anchor: 0,
+    pattern_carries_anchor_domain: 0,
   };
   const flaggedProposals: Record<FlagKind, number> = {
     overreach: 0,
     duplicate: 0,
     weak_anchor: 0,
+    pattern_carries_anchor_domain: 0,
   };
   const byType: Record<string, number> = {};
   let clean = 0;
@@ -624,23 +626,26 @@ function main(): void {
         .map(([type, count]) => `${count} ${type}`)
         .join(", ") || "none"})`,
   );
-  console.log(`  ${pad("flag", 14)}${pad("proposals", 11)}occurrences`);
+  console.log(`  ${pad("flag", 16)}${pad("proposals", 11)}occurrences`);
   console.log(
-    `  ${pad("OVERREACH", 14)}${pad(flaggedProposals.overreach, 11)}${flagCounts.overreach}`,
+    `  ${pad("OVERREACH", 16)}${pad(flaggedProposals.overreach, 11)}${flagCounts.overreach}`,
   );
   console.log(
-    `  ${pad("DUPLICATE", 14)}${pad(flaggedProposals.duplicate, 11)}${flagCounts.duplicate}`,
+    `  ${pad("DUPLICATE", 16)}${pad(flaggedProposals.duplicate, 11)}${flagCounts.duplicate}`,
   );
   console.log(
-    `  ${pad("WEAK ANCHOR", 14)}${pad(flaggedProposals.weak_anchor, 11)}${flagCounts.weak_anchor}`,
+    `  ${pad("WEAK ANCHOR", 16)}${pad(flaggedProposals.weak_anchor, 11)}${flagCounts.weak_anchor}`,
   );
-  console.log(`  ${pad("clean", 14)}${pad(clean, 11)}-`);
+  console.log(
+    `  ${pad("ANCHOR DOMAIN", 16)}${pad(flaggedProposals.pattern_carries_anchor_domain, 11)}${flagCounts.pattern_carries_anchor_domain}`,
+  );
+  console.log(`  ${pad("clean", 16)}${pad(clean, 11)}-`);
   const effectsOnly = Object.keys(byType).every((type) => type === "effect");
   if (effectsOnly && byType.effect) {
     console.log(
       "  NOTE: computeProposalFlags raises OVERREACH for effect proposals only;\n" +
-        "  DUPLICATE and WEAK ANCHOR are realization-only checks, so their zeros\n" +
-        "  above are structural, not measured (D-147).",
+        "  DUPLICATE, WEAK ANCHOR and ANCHOR DOMAIN are realization-only checks,\n" +
+        "  so their zeros above are structural, not measured (D-147).",
     );
   }
   console.log("");

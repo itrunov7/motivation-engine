@@ -25,10 +25,16 @@
  *   topic, because pure lexical overlap alone would also flag every
  *   well-formed inferred realization (a domain transfer is expected to use
  *   different words from the effect it transfers from).
+ * - PATTERN CARRIES ANCHOR DOMAIN (inferred realizations): the exact
+ *   complement of WEAK ANCHOR. That check asks whether the pattern kept
+ *   ENOUGH of the anchor; this one asks whether it kept the wrong part — the
+ *   anchor's industry, measured setting, or subject matter, which belongs in
+ *   `source_domain` and `description_as_reported` and nowhere else.
  */
 import { resolveEffectBasis } from "./effect-basis";
 import { listApprovedRealizations } from "./realization-basis";
 import { normalizeQualityText } from "./proposal-quality";
+import { OVERLAP_STOPWORDS } from "./span-role";
 import type {
   EffectProposal,
   EvidenceProvenanceItem,
@@ -37,7 +43,11 @@ import type {
   RealizationProposal,
 } from "./types";
 
-export type FlagKind = "overreach" | "duplicate" | "weak_anchor";
+export type FlagKind =
+  | "overreach"
+  | "duplicate"
+  | "weak_anchor"
+  | "pattern_carries_anchor_domain";
 
 export interface ProposalFlag {
   kind: FlagKind;
@@ -396,6 +406,151 @@ function weakAnchorFlags(
   return flags;
 }
 
+// --- PATTERN CARRIES ANCHOR DOMAIN -----------------------------------------
+
+/**
+ * Vocabulary a pattern may share with its anchor without that sharing meaning
+ * the domain came along: interface nouns, the artifact types the prompt offers,
+ * and the domain-free descriptors that surround them. A pattern and a finance
+ * paper can both say "frequent" or "notification" and still be about different
+ * things; they cannot both say "portfolio" and be.
+ *
+ * Intentionally small and hand-maintained, on the same terms as CONCEPT_GROUPS
+ * above: extend it as inferred realizations are reviewed rather than treating
+ * it as exhaustive. Entries are singular — tokens are folded to singular before
+ * lookup — and the flag names every term it counted as a leak, so a wrong entry
+ * here shows up as a term the owner can see and argue with rather than as a
+ * silent miss.
+ *
+ * NOT exempt, deliberately: the mechanism's own construct vocabulary. A pattern
+ * that says "loss aversion" is flagged like one that says "portfolio". The rule
+ * is a term drawn from the anchor that is not generic, and a construct name is
+ * not generic; exempting it would also hide a pattern that merely restates the
+ * effect, which the prompt separately forbids.
+ */
+export const GENERIC_UI_TERMS = new Set<string>([
+  // interface surfaces and controls
+  "alert", "badge", "banner", "button", "card", "chart", "checkbox", "column",
+  "control", "dialog", "element", "field", "form", "input", "interface",
+  "item", "label", "layout", "link", "list", "modal", "page", "placeholder",
+  "row", "screen", "scroll", "section", "slider", "summary", "surface", "tab",
+  "text", "toggle", "tooltip", "view", "widget",
+  // things an interface shows or sends
+  "content", "copy", "digest", "display", "graph", "icon", "image", "indicator",
+  "message", "metric", "notification", "number", "prompt", "reminder",
+  "reveal", "value", "update",
+  // the actor and the acting
+  "action", "click", "completion", "flow", "interaction", "session", "step",
+  "task", "user", "visit",
+  // state and behaviour verbs a directive is built from
+  "collapse", "default", "delay", "disable", "enable", "expand", "hide",
+  "replace", "show", "state", "suppress", "trigger", "withhold",
+  // the prompt's own artifact vocabulary (ARTIFACT_TYPES in tools/extract.ts)
+  "cancellation", "checkout", "dashboard", "email", "hero", "landing",
+  "onboarding", "paywall", "pricing", "push", "retention",
+  // CONCEPT_GROUPS.complexity_surface — the same nouns, reused
+  "capability", "config", "configuration", "feature", "functionality", "menu",
+  "option", "panel", "setting", "tool", "toolbar",
+  // domain-free descriptors: shared by an anchor and a pattern without either
+  // being about the other's subject
+  "aggregate", "frequent", "frequency", "granular", "immediate", "initial",
+  "interval", "multiple", "periodic", "recent", "repeated", "single",
+]);
+
+/**
+ * Function words four characters or longer that OVERLAP_STOPWORDS does not
+ * carry, kept separate from GENERIC_UI_TERMS because they are not interface
+ * vocabulary and separate from OVERLAP_STOPWORDS because that list belongs to
+ * span-role's downstream-contradiction scoring and must not be retuned to suit
+ * a different check.
+ *
+ * Measured, not guessed: "rather" alone accounted for four of the seventeen
+ * flagged CL-14/MM-15 proposals in the first run of this check over the
+ * committed corpus, on the shared phrase "X rather than Y" — a discourse word
+ * appearing in both texts says nothing about whether the domain came along.
+ */
+const FUNCTION_WORDS = new Set<string>([
+  "about", "above", "across", "after", "again", "against", "along", "already",
+  "although", "always", "among", "around", "because", "before", "behind",
+  "below", "between", "beyond", "during", "either", "instead", "neither",
+  "often", "onto", "rather", "since", "still", "then", "though", "through",
+  "toward", "towards", "under", "unless", "until", "upon", "whether", "within",
+  "without", "yet",
+]);
+
+/**
+ * Crude singularisation, applied to both sides before they are compared. This
+ * is load-bearing rather than cosmetic: la-01-04's fact says "portfolios" while
+ * every pattern it produced says "portfolio", so a raw token intersection
+ * misses the exact leak the check exists to catch.
+ */
+function foldPlural(token: string): string {
+  if (token.length <= 3 || /(?:ss|us|is)$/.test(token)) return token;
+  if (token.endsWith("ies")) return `${token.slice(0, -3)}y`;
+  if (/(?:s|x|z|ch|sh)es$/.test(token)) return token.slice(0, -2);
+  return token.endsWith("s") ? token.slice(0, -1) : token;
+}
+
+/**
+ * Content tokens of a text, folded to singular, with stopwords and generic
+ * interface vocabulary removed. Tokens shorter than four characters are
+ * dropped by length — the same bar OVERLAP_STOPWORDS is built against, which
+ * is why that list only carries the frequent long words.
+ */
+function domainTokens(text: string): Set<string> {
+  const kept = new Set<string>();
+  for (const raw of normalizeQualityText(text).split(" ")) {
+    if (raw.length < 4) continue;
+    const token = foldPlural(raw);
+    if (token.length < 4) continue;
+    if (OVERLAP_STOPWORDS.has(raw) || OVERLAP_STOPWORDS.has(token)) continue;
+    if (FUNCTION_WORDS.has(raw) || FUNCTION_WORDS.has(token)) continue;
+    if (GENERIC_UI_TERMS.has(raw) || GENERIC_UI_TERMS.has(token)) continue;
+    kept.add(token);
+  }
+  return kept;
+}
+
+function patternDomainFlags(
+  proposal: RealizationProposal,
+  root: string,
+): ProposalFlag[] {
+  if (proposal.payload.derivation !== "inferred") return [];
+  const pattern = proposal.payload.pattern;
+  if (!pattern) return [];
+  // A declared tunable's name is a parameter identifier, not prose the reader
+  // sees — {evaluation_interval} must not be mined for domain words.
+  const patternTokens = domainTokens(
+    pattern.replace(PATTERN_PLACEHOLDER_RE, " "),
+  );
+  const flags: ProposalFlag[] = [];
+  for (const effectId of proposal.payload.effect_refs ?? []) {
+    const basis = resolveEffectBasis(effectId, root);
+    if (!basis) continue;
+    const { fact, boundary } = basis.effect;
+    const anchorTokens = domainTokens(`${fact} ${boundary}`);
+    const leaked = Array.from(patternTokens)
+      .filter((token) => anchorTokens.has(token))
+      .sort();
+    if (leaked.length === 0) continue;
+    flags.push({
+      kind: "pattern_carries_anchor_domain",
+      severity: "warning",
+      summary:
+        `PATTERN CARRIES ANCHOR DOMAIN — the directive reuses ${leaked.length} ` +
+        `term${leaked.length === 1 ? "" : "s"} from ${effectId}'s own fact or ` +
+        `boundary: ${leaked.map((term) => `"${term}"`).join(", ")}. The pattern ` +
+        "should say what any product interface must do, in terms a product " +
+        "outside this evidence's domain could apply.",
+      detail:
+        `Effect ${effectId} fact: "${fact}". Boundary: "${boundary}". ` +
+        `Pattern: "${pattern}". Shared non-generic terms: ${leaked.join(", ")}.`,
+      anchorEffect: { id: effectId, fact },
+    });
+  }
+  return flags;
+}
+
 // --- entry point -----------------------------------------------------------
 
 export function computeProposalFlags(
@@ -407,6 +562,7 @@ export function computeProposalFlags(
     return [
       ...duplicateFlags(proposal, root),
       ...weakAnchorFlags(proposal, root),
+      ...patternDomainFlags(proposal, root),
     ];
   }
   return [];
