@@ -20,10 +20,18 @@
  *    A refusal produces a held proposal carrying this verdict; the record
  *    survives, and so does the reasoning that set it aside.
  */
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { parse as parseYaml } from "yaml";
+import { GENERIC_UI_TERMS } from "./review-flags";
+import { OVERLAP_STOPWORDS } from "./span-role";
 import {
   TRANSFERABILITY_CHECKS,
   type Effect,
+  type Mechanism,
+  type PackMapFile,
   type Proposal,
+  type Realization,
   type TransferabilityCheck,
   type TransferabilityCheckResult,
   type TransferabilityVerdict,
@@ -1138,4 +1146,216 @@ function auditTransferabilityV2(
     return "stored escalation flag disagrees with its own checks";
   }
   return null;
+}
+
+// --- Hard-rule collision (D-357/D-362) --------------------------------------
+//
+// A separate question from the four checks above, and deliberately not folded
+// into TRANSFERABILITY_CHECKS or TransferabilityVerdict: those judge whether an
+// EFFECT's claim names something a product can act on at all — "Scoped to
+// EFFECTS on purpose" (transferabilityClaimOfProposal, above). This judges a
+// REALIZATION's already-inferred `pattern` against constraints.hard_rules, the
+// mechanism registry's own compliance boundary. Different subject (a directive,
+// not a fact/boundary/title triple), different question (may this be built at
+// all, not can an interface act on it), so it gets its own type and its own
+// entry point rather than a fifth member of a closed, replay-critical union.
+//
+// Three consecutive batches (D-329, D-344, D-357) found a lever colliding with
+// a mechanism's own hard_rules while every existing check — including this
+// session's ANCHOR DOMAIN — read clean. This is the check that gap asked for.
+// Owner-scoped (2026-08-12): checked against the hard rules of every mechanism
+// in any pack the realization's own mechanism appears in, because hard rules
+// are the pack's legal frame, not one mechanism's property — a pattern shipped
+// under LA-01 into a paywall pack sits next to SC-06 and SC-17's rules whether
+// or not LA-01's own registry record mentions them.
+//
+// DETERMINISTIC, matching the file's own constraint #2 above: no model call,
+// replayable offline from the pattern text and the registry alone. WARNING
+// ONLY, matching #3: nothing here refuses a candidate or blocks approval — it
+// names a rule and lets the owner judge, because "does this cross a line" is
+// the ethical call the module's own header reserves for a human throughout.
+//
+// MEASURED, not designed to pass a test: prototyped against the six known
+// collisions (D-344's four, D-357's two) before being wired in. Plain token
+// containment between a pattern and a rule's own prose catches the collision
+// cleanly only when the pattern and the rule happen to share vocabulary
+// (repeated-view-scarcity-nudge: 15%/11% on its own SC-06 rules, both the
+// correct ones). It MISSES every collision that is behavioral rather than
+// lexical — loss-first-framing and high-involvement-loss-emphasis score 0-14%
+// on a run of UNRELATED mechanisms' rules and never surface panic_cap at all;
+// view-count-triggered-text-suppression scores 0% on every rule in scope,
+// including the accessibility_preserved rule it actually violated. That is not
+// a bug to tune away — no source measured a "collision" threshold either, and
+// forcing every known case to fire would mean hand-building a lexicon FROM the
+// answer key. A miss here is the finding the owner asked this validation to
+// produce: these rule collisions are not machine-checkable by vocabulary
+// alone, at least not by this general a method.
+
+export interface HardRuleCollisionFlag {
+  mechanism_id: string;
+  rule_id: string;
+  rule: string;
+  severity: "block" | "warn";
+  /** Fraction of the rule's own distinctive tokens found in the pattern. */
+  score: number;
+  matched_terms: string[];
+  /** The pattern's own clause with the densest overlap, for a reader to jump to. */
+  pattern_clause: string | null;
+}
+
+/**
+ * Fixed at this value, not tuned to the six validation cases: it sits in the
+ * same low, permissive register as WEAK_ANCHOR_TOKEN_THRESHOLD (0.12,
+ * lib/review-flags.ts) on the same reasoning that check states for itself —
+ * the cost of a false positive here is one glance from the owner, the cost of
+ * a false negative is a shipped dark pattern. Raising it would not recover any
+ * of the four measured misses above; every one of them scores near zero
+ * everywhere, so a stricter bar only removes true positives, not noise.
+ */
+export const HARD_RULE_COLLISION_TOKEN_THRESHOLD = 0.1;
+
+function normalizeForCollisionCheck(value: string): string {
+  return value
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const COLLISION_PLACEHOLDER_RE = /\{[a-z0-9_]*\}/gi;
+
+function collisionTokens(text: string): string[] {
+  return normalizeForCollisionCheck(text)
+    .split(" ")
+    .filter(
+      (token) =>
+        token.length >= 4 &&
+        !OVERLAP_STOPWORDS.has(token) &&
+        !GENERIC_UI_TERMS.has(token),
+    );
+}
+
+/** Rough clause split, mirroring lib/review-flags.ts's own clausesOf. */
+function collisionClauses(text: string): string[] {
+  return text
+    .split(/(?:,\s*(?:but|and|yet)\s+|;\s*|(?<=[.!?])\s+)/i)
+    .map((clause) => clause.trim())
+    .filter((clause) => clause.length > 0);
+}
+
+let cachedCrossCutting: { root: string; ids: Set<string> } | null = null;
+function crossCuttingMechanismIds(root: string): Set<string> {
+  if (cachedCrossCutting?.root === root) return cachedCrossCutting.ids;
+  const dir = join(root, "registry", "mechanisms");
+  const ids = new Set<string>();
+  for (const file of readdirSync(dir).filter((name) => name.endsWith(".json"))) {
+    const mechanism = JSON.parse(readFileSync(join(dir, file), "utf8")) as Mechanism;
+    if (mechanism.cross_cutting === true) ids.add(mechanism.id);
+  }
+  cachedCrossCutting = { root, ids };
+  return ids;
+}
+
+/**
+ * Every mechanism whose hard_rules apply to a realization anchored on
+ * `mechanismId`: its own mechanism, every mechanism sharing a pack element
+ * with it in packs/pack-map.yaml, and every cross_cutting mechanism — which is
+ * implicitly a member of every pack element, the same rule
+ * tools/extract.ts's own scope resolution already applies when a pack or
+ * segment scope is requested (D-160's `crossCutting` array). A mechanism that
+ * is itself cross_cutting (CL-14, IF-18, MM-15, PF-16, PS-13, SC-17) is
+ * therefore checked against essentially the whole registry: it is a member of
+ * every pack, so every pack's own mechanisms are its peers too.
+ */
+export function peerMechanismIds(mechanismId: string, root: string): string[] {
+  const crossCutting = crossCuttingMechanismIds(root);
+  const packMap = parseYaml(
+    readFileSync(join(root, "packs", "pack-map.yaml"), "utf8"),
+  ) as PackMapFile;
+  const peers = new Set<string>([mechanismId, ...Array.from(crossCutting)]);
+  if (crossCutting.has(mechanismId)) {
+    for (const element of packMap.elements) {
+      for (const id of element.mechanisms) peers.add(id);
+    }
+  } else {
+    for (const element of packMap.elements) {
+      if (!element.mechanisms.includes(mechanismId)) continue;
+      for (const id of element.mechanisms) peers.add(id);
+    }
+  }
+  return Array.from(peers).sort();
+}
+
+interface PeerHardRule {
+  mechanism_id: string;
+  id: string;
+  rule: string;
+  severity: "block" | "warn";
+}
+
+function hardRulesOfPeers(mechanismId: string, root: string): PeerHardRule[] {
+  const rules: PeerHardRule[] = [];
+  for (const peerId of peerMechanismIds(mechanismId, root)) {
+    const path = join(root, "registry", "mechanisms", `${peerId}.json`);
+    let mechanism: Mechanism;
+    try {
+      mechanism = JSON.parse(readFileSync(path, "utf8")) as Mechanism;
+    } catch {
+      // Seed-stage mechanisms (registry/mechanisms/_seed/) resolve here and
+      // carry no constraints yet — nothing to check them against, not a defect.
+      continue;
+    }
+    for (const rule of mechanism.constraints?.hard_rules ?? []) {
+      rules.push({ mechanism_id: peerId, id: rule.id, rule: rule.rule, severity: rule.severity });
+    }
+  }
+  return rules;
+}
+
+/**
+ * Warning-only. Never called from the approval or extraction path, and
+ * nothing in lib/proposals.ts reads its output — the owner runs it (or a
+ * report script that calls it) and judges. A realization with no pattern
+ * (a `reported` record, or an inferred one mid-draft) returns no flags rather
+ * than guessing; there is nothing to check yet.
+ */
+export function judgeHardRuleCollisions(
+  realization: Pick<Realization, "mechanism_id" | "pattern" | "derivation">,
+  root: string,
+): HardRuleCollisionFlag[] {
+  if (realization.derivation !== "inferred" || !realization.pattern) return [];
+  const pattern = realization.pattern;
+  const patternTokens = new Set(
+    collisionTokens(pattern.replace(COLLISION_PLACEHOLDER_RE, " ")),
+  );
+  const clauses = collisionClauses(pattern);
+  const flags: HardRuleCollisionFlag[] = [];
+  for (const rule of hardRulesOfPeers(realization.mechanism_id, root)) {
+    const ruleTokens = collisionTokens(rule.rule);
+    if (ruleTokens.length === 0) continue;
+    const matched = ruleTokens.filter((token) => patternTokens.has(token));
+    const score = matched.length / ruleTokens.length;
+    if (score < HARD_RULE_COLLISION_TOKEN_THRESHOLD) continue;
+    let bestClause: string | null = null;
+    let bestClauseScore = -1;
+    for (const clause of clauses) {
+      const clauseTokens = new Set(collisionTokens(clause));
+      const overlap = matched.filter((token) => clauseTokens.has(token)).length;
+      if (overlap > bestClauseScore) {
+        bestClauseScore = overlap;
+        bestClause = clause;
+      }
+    }
+    flags.push({
+      mechanism_id: rule.mechanism_id,
+      rule_id: rule.id,
+      rule: rule.rule,
+      severity: rule.severity,
+      score,
+      matched_terms: Array.from(new Set(matched)).sort(),
+      pattern_clause: bestClauseScore > 0 ? bestClause : null,
+    });
+  }
+  return flags.sort((a, b) => b.score - a.score).slice(0, 5);
 }

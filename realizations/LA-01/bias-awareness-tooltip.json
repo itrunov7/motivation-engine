@@ -14,7 +14,7 @@
     "source_domain": "behavioral finance",
     "application_domain": "product UI"
   },
-  "pattern": "Trigger an educational tooltip that explains loss aversion and its effect on risk-taking whenever the displayed portfolio volatility metric exceeds {volatility_threshold} percent, replacing the bare number with the annotated explanation until dismissed.",
+  "pattern": "Trigger an educational tooltip that explains loss aversion and its effect on risk-taking whenever a displayed metric with high variance exceeds {volatility_threshold} percent, replacing the bare number with the annotated explanation until dismissed.",
   "parameters": [
     {
       "name": "volatility_threshold",

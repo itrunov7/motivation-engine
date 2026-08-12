@@ -56,6 +56,7 @@ interface ProposalCounts {
   approved: number;
   rejected: number;
   held: number;
+  superseded: number;
   decided: number;
   approval_rate: number | null;
 }
@@ -177,6 +178,11 @@ function proposalCounts(mechanismId: string, all: Proposal[]): ProposalCounts {
   let approved = 0;
   let rejected = 0;
   let held = 0;
+  // Not folded into `held`: a superseded proposal was decided (approved, at
+  // the time) and stays that way in decided_by/decided_at (D-360/D-361) — it
+  // is not awaiting a verdict the way a held one is. Counted on its own so it
+  // is not silently absent from every top-level total either.
+  let superseded = 0;
   for (const proposal of mine) {
     const statuses = (byType[proposal.type] ??= {});
     statuses[proposal.status] = (statuses[proposal.status] ?? 0) + 1;
@@ -184,6 +190,7 @@ function proposalCounts(mechanismId: string, all: Proposal[]): ProposalCounts {
     if (proposal.status === "approved") approved += 1;
     if (proposal.status === "rejected") rejected += 1;
     if (proposal.status === "held_low_confidence") held += 1;
+    if (proposal.status === "superseded") superseded += 1;
   }
   const decided = approved + rejected;
   return {
@@ -192,6 +199,7 @@ function proposalCounts(mechanismId: string, all: Proposal[]): ProposalCounts {
     approved,
     rejected,
     held,
+    superseded,
     decided,
     approval_rate: decided > 0 ? Math.round((approved / decided) * 1000) / 1000 : null,
   };

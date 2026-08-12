@@ -701,7 +701,17 @@ export type ProposalStatus =
    * actionable queue, and recoverable by one owner action. Nothing is destroyed
    * and no reader coverage is consumed.
    */
-  | "held_non_transferable";
+  | "held_non_transferable"
+  /**
+   * An approved proposal whose projected artifact has since been overwritten
+   * by a later `enrich` approval targeting the same record id (D-360/D-361).
+   * Not a re-decision: `decided_by`/`decided_at` stay exactly as they were —
+   * this proposal genuinely was approved, at that time, on that text. Only
+   * `status` and `decision_note` change, the latter naming the proposal that
+   * replaced it, so the ledger stays a true history rather than acquiring a
+   * second live-looking "approved" record for the same artifact.
+   */
+  | "superseded";
 
 export type ProposalOperation = "create" | "enrich";
 
