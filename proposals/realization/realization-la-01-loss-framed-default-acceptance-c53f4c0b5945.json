@@ -1,0 +1,89 @@
+{
+  "id": "realization-la-01-loss-framed-default-acceptance-c53f4c0b5945",
+  "type": "realization",
+  "target": "LA-01",
+  "payload": {
+    "id": "loss-framed-default-acceptance",
+    "mechanism_id": "LA-01",
+    "term": "Loss-framed default acceptance",
+    "description_as_reported": "When the task was reframed such that participants experienced losses for poor performance (money was taken from their endowment), the bias for preferring human assistance was removed.",
+    "artifact_context": [
+      "onboarding"
+    ],
+    "effect_refs": [
+      "la-01-02"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "human-algorithm interaction",
+      "application_domain": "product UI"
+    },
+    "pattern": "Frame the cost of not accepting an assisted or default option as a deduction of {penalty_amount} from the user's existing balance or allocation, rather than as a missed additional gain, in order to reduce resistance to accepting that option.",
+    "parameters": [
+      {
+        "name": "penalty_amount",
+        "value": 5,
+        "unit": "currency units",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_763875e9918cfa1e75e71a8d",
+        "doi": "10.1287/mnsc.2024.05585",
+        "title": "Humans' Use of AI Assistance: The Effect of Loss Aversion on Willingness to Delegate Decisions",
+        "quote_or_locus": "when we reframed the task such that the participant experienced losses for poor performance (i.e., money was taken from their endowment for poor performance), the bias for preferring human assistance was removed",
+        "source_span": {
+          "start": 1068,
+          "end": 1279,
+          "source_text_sha256": "5cb3570d5061eb1a3b97347941decfd819be68e8168a0a20089ca40ab38609b7"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_bfc7653a601d617e5bf7c44d",
+        "effect_id": "la-01-02",
+        "title": "The Impact of Loss Aversion and Diminishing Sensitivity on Airline Revenue: Price Sensitivity in Cabin Classes",
+        "quote_or_locus": "Loss aversion has a greater impact on airline revenue than gain-seeking, particularly among business passengers.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.5
+  },
+  "provenance": [
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_763875e9918cfa1e75e71a8d",
+      "doi": "10.1287/mnsc.2024.05585",
+      "title": "Humans' Use of AI Assistance: The Effect of Loss Aversion on Willingness to Delegate Decisions",
+      "quote_or_locus": "when we reframed the task such that the participant experienced losses for poor performance (i.e., money was taken from their endowment for poor performance), the bias for preferring human assistance was removed",
+      "source_span": {
+        "start": 1068,
+        "end": 1279,
+        "source_text_sha256": "5cb3570d5061eb1a3b97347941decfd819be68e8168a0a20089ca40ab38609b7"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_bfc7653a601d617e5bf7c44d",
+      "effect_id": "la-01-02",
+      "title": "The Impact of Loss Aversion and Diminishing Sensitivity on Airline Revenue: Price Sensitivity in Cabin Classes",
+      "quote_or_locus": "Loss aversion has a greater impact on airline revenue than gain-seeking, particularly among business passengers.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.5,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31582096472",
+  "proposed_at": "2026-08-12T09:16:07.787Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

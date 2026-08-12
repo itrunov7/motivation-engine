@@ -1,0 +1,122 @@
+{
+  "id": "realization-la-01-loss-first-framing-70a05bca8f2b",
+  "type": "realization",
+  "target": "LA-01",
+  "payload": {
+    "id": "loss-first-framing",
+    "mechanism_id": "LA-01",
+    "term": "Loss-first framing",
+    "description_as_reported": "Loss aversion strength depended on measurement format, with fill-in-the-loss formats increasing loss aversion; the psychophysics of value induce risk aversion in the domain of gains and risk seeking in the domain of losses.",
+    "artifact_context": [
+      "checkout",
+      "pricing_page"
+    ],
+    "effect_refs": [
+      "la-01-02"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "Judgment and Decision Making; risky and riskless contexts",
+      "application_domain": "product UI"
+    },
+    "pattern": "When a user is about to commit to a choice, present the negative consequence of that choice above or before the positive consequence, and scale the visual weight of the negative consequence to be {loss_magnitude} times more prominent than the positive consequence, triggering this treatment once the user has interacted with the choice {loss_focus_threshold} time(s).",
+    "parameters": [
+      {
+        "name": "loss_focus_threshold",
+        "value": 1,
+        "unit": "user interactions",
+        "evidence_basis": "none — default heuristic"
+      },
+      {
+        "name": "loss_magnitude",
+        "value": 1.5,
+        "unit": "ratio of visual weight",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_70013468fc68d4570aa119a7",
+        "doi": "10.1017/s1930297500002795",
+        "title": "Measurement-induced focusing and the magnitude of loss aversion: The difference between comparing gains to losses and losses to gains",
+        "quote_or_locus": "the strength of loss aversion depended on the measurement format (fill-in-the-loss versus fill-in-the-gain); filling in the loss side increased loss aversion",
+        "source_span": {
+          "start": 924,
+          "end": 1081,
+          "source_text_sha256": "657288fb305b626aa8c7737205058732b4074364bddba84bda91b566c73f916b"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_e8a1af22da9d8525655b4ceb",
+        "doi": "10.1142/9789814417358_0016",
+        "title": "Choices, Values, and Frames",
+        "quote_or_locus": "The psychophysics of value induce risk aversion in the domain of gains and risk seeking in the domain of losses",
+        "source_span": {
+          "start": 131,
+          "end": 242,
+          "source_text_sha256": "68ebae39730af39425e84658edc5d21468066a82b2170b2e6a7ce8ccac1e3067"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_bfc7653a601d617e5bf7c44d",
+        "effect_id": "la-01-02",
+        "title": "The Impact of Loss Aversion and Diminishing Sensitivity on Airline Revenue: Price Sensitivity in Cabin Classes",
+        "quote_or_locus": "Loss aversion has a greater impact on airline revenue than gain-seeking, particularly among business passengers.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.55
+  },
+  "provenance": [
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_70013468fc68d4570aa119a7",
+      "doi": "10.1017/s1930297500002795",
+      "title": "Measurement-induced focusing and the magnitude of loss aversion: The difference between comparing gains to losses and losses to gains",
+      "quote_or_locus": "the strength of loss aversion depended on the measurement format (fill-in-the-loss versus fill-in-the-gain); filling in the loss side increased loss aversion",
+      "source_span": {
+        "start": 924,
+        "end": 1081,
+        "source_text_sha256": "657288fb305b626aa8c7737205058732b4074364bddba84bda91b566c73f916b"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_e8a1af22da9d8525655b4ceb",
+      "doi": "10.1142/9789814417358_0016",
+      "title": "Choices, Values, and Frames",
+      "quote_or_locus": "The psychophysics of value induce risk aversion in the domain of gains and risk seeking in the domain of losses",
+      "source_span": {
+        "start": 131,
+        "end": 242,
+        "source_text_sha256": "68ebae39730af39425e84658edc5d21468066a82b2170b2e6a7ce8ccac1e3067"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_bfc7653a601d617e5bf7c44d",
+      "effect_id": "la-01-02",
+      "title": "The Impact of Loss Aversion and Diminishing Sensitivity on Airline Revenue: Price Sensitivity in Cabin Classes",
+      "quote_or_locus": "Loss aversion has a greater impact on airline revenue than gain-seeking, particularly among business passengers.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.55,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31582096472",
+  "proposed_at": "2026-08-12T09:16:07.787Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

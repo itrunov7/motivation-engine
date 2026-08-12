@@ -1,0 +1,115 @@
+{
+  "id": "realization-la-01-reduced-update-frequency-for-risk-to-192798c7d1c2",
+  "type": "realization",
+  "target": "LA-01",
+  "payload": {
+    "id": "reduced-update-frequency-for-risk-tolerance",
+    "mechanism_id": "LA-01",
+    "term": "Reduced update frequency for risk tolerance",
+    "description_as_reported": "Investors who got the most frequent feedback took the least risk and earned the least money; the more frequently returns are evaluated, the more risk averse investors will be.",
+    "artifact_context": [
+      "dashboard_widget"
+    ],
+    "effect_refs": [
+      "la-01-02"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "experimental economics; investment in risky assets",
+      "application_domain": "product UI"
+    },
+    "pattern": "Reduce how often performance or outcome updates are surfaced to the user, showing them no more often than every {update_interval}, in order to lessen risk-averse reactions and support continued engagement with longer-term goals.",
+    "parameters": [
+      {
+        "name": "update_interval",
+        "value": 30,
+        "unit": "days",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_cf28e680606a9cd5502c78b3",
+        "doi": "10.1162/003355397555226",
+        "title": "The Effect of Myopia and Loss Aversion on Risk Taking: An Experimental Test",
+        "quote_or_locus": "The investors who got the most frequent feedback (and thus the most information) took the least risk and earned the least money",
+        "source_span": {
+          "start": 588,
+          "end": 715,
+          "source_text_sha256": "6311e934c0c7a1e87dea484593049d0585c34287f751ab92a441380400b8180d"
+        },
+        "span_role": "finding"
+      },
+      {
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_10685871ab12b88cfdd604f1",
+        "doi": "10.1162/003355397555217",
+        "title": "An Experiment on Risk Taking and Evaluation Periods",
+        "quote_or_locus": "the more frequently returns are evaluated, the more risk averse investors will be",
+        "source_span": {
+          "start": 187,
+          "end": 268,
+          "source_text_sha256": "1a6b1f3196f6d27b3c060ba06a922229a8d75ec4737a88be8c074e85f0f299bb"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_bfc7653a601d617e5bf7c44d",
+        "effect_id": "la-01-02",
+        "title": "The Impact of Loss Aversion and Diminishing Sensitivity on Airline Revenue: Price Sensitivity in Cabin Classes",
+        "quote_or_locus": "Loss aversion has a greater impact on airline revenue than gain-seeking, particularly among business passengers.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.6
+  },
+  "provenance": [
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_cf28e680606a9cd5502c78b3",
+      "doi": "10.1162/003355397555226",
+      "title": "The Effect of Myopia and Loss Aversion on Risk Taking: An Experimental Test",
+      "quote_or_locus": "The investors who got the most frequent feedback (and thus the most information) took the least risk and earned the least money",
+      "source_span": {
+        "start": 588,
+        "end": 715,
+        "source_text_sha256": "6311e934c0c7a1e87dea484593049d0585c34287f751ab92a441380400b8180d"
+      },
+      "span_role": "finding"
+    },
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_10685871ab12b88cfdd604f1",
+      "doi": "10.1162/003355397555217",
+      "title": "An Experiment on Risk Taking and Evaluation Periods",
+      "quote_or_locus": "the more frequently returns are evaluated, the more risk averse investors will be",
+      "source_span": {
+        "start": 187,
+        "end": 268,
+        "source_text_sha256": "1a6b1f3196f6d27b3c060ba06a922229a8d75ec4737a88be8c074e85f0f299bb"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_bfc7653a601d617e5bf7c44d",
+      "effect_id": "la-01-02",
+      "title": "The Impact of Loss Aversion and Diminishing Sensitivity on Airline Revenue: Price Sensitivity in Cabin Classes",
+      "quote_or_locus": "Loss aversion has a greater impact on airline revenue than gain-seeking, particularly among business passengers.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.6,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31582096472",
+  "proposed_at": "2026-08-12T09:16:07.787Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}

@@ -1,0 +1,90 @@
+{
+  "id": "realization-la-01-high-involvement-loss-emphasis-6dc58bab8e50",
+  "type": "realization",
+  "target": "LA-01",
+  "payload": {
+    "id": "high-involvement-loss-emphasis",
+    "mechanism_id": "LA-01",
+    "term": "High-involvement loss emphasis",
+    "description_as_reported": "High involvement increases the slope differential between the loss and gain regions of the value function, enhancing loss aversion.",
+    "artifact_context": [
+      "dashboard_widget",
+      "checkout"
+    ],
+    "effect_refs": [
+      "la-01-02"
+    ],
+    "derivation": "inferred",
+    "domain_transfer": {
+      "source_domain": "consumer psychology",
+      "application_domain": "product UI"
+    },
+    "pattern": "Increase the visual prominence of potential negative outcomes shown to a user once they have engaged with the interface for {involvement_threshold} interactions or more, reflecting that users with greater personal stake react more strongly to potential losses.",
+    "parameters": [
+      {
+        "name": "involvement_threshold",
+        "value": 5,
+        "unit": "interactions",
+        "evidence_basis": "none — default heuristic"
+      }
+    ],
+    "provenance": [
+      {
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_5f82e97f776fb6998dd15da2",
+        "doi": "10.1016/j.jcps.2010.06.019",
+        "title": "The influence of involvement on the endowment effect: The moveable value function",
+        "quote_or_locus": "It is proposed that high involvement increases the slope differential between the loss and gain regions of the value function, enhancing loss aversion",
+        "source_span": {
+          "start": 311,
+          "end": 461,
+          "source_text_sha256": "17e4909640cb092ef08a9b984629286900fb6ef4f63823a8c04835d0614be385"
+        },
+        "span_role": "finding"
+      },
+      {
+        "corpus_kind": "inference",
+        "mechanism_id": "LA-01",
+        "corpus_record_id": "cr_bfc7653a601d617e5bf7c44d",
+        "effect_id": "la-01-02",
+        "title": "The Impact of Loss Aversion and Diminishing Sensitivity on Airline Revenue: Price Sensitivity in Cabin Classes",
+        "quote_or_locus": "Loss aversion has a greater impact on airline revenue than gain-seeking, particularly among business passengers.",
+        "span_absent_reason": "no direct span — inferred from effect"
+      }
+    ],
+    "confidence": 0.5
+  },
+  "provenance": [
+    {
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_5f82e97f776fb6998dd15da2",
+      "doi": "10.1016/j.jcps.2010.06.019",
+      "title": "The influence of involvement on the endowment effect: The moveable value function",
+      "quote_or_locus": "It is proposed that high involvement increases the slope differential between the loss and gain regions of the value function, enhancing loss aversion",
+      "source_span": {
+        "start": 311,
+        "end": 461,
+        "source_text_sha256": "17e4909640cb092ef08a9b984629286900fb6ef4f63823a8c04835d0614be385"
+      },
+      "span_role": "finding"
+    },
+    {
+      "corpus_kind": "inference",
+      "mechanism_id": "LA-01",
+      "corpus_record_id": "cr_bfc7653a601d617e5bf7c44d",
+      "effect_id": "la-01-02",
+      "title": "The Impact of Loss Aversion and Diminishing Sensitivity on Airline Revenue: Price Sensitivity in Cabin Classes",
+      "quote_or_locus": "Loss aversion has a greater impact on airline revenue than gain-seeking, particularly among business passengers.",
+      "span_absent_reason": "no direct span — inferred from effect"
+    }
+  ],
+  "confidence": 0.5,
+  "operation": "create",
+  "proposed_by": "extraction:github-actions-31582096472",
+  "proposed_at": "2026-08-12T09:16:07.787Z",
+  "status": "pending",
+  "hold_reason": null,
+  "decided_by": null,
+  "decided_at": null,
+  "decision_note": null
+}
