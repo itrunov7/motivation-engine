@@ -382,7 +382,7 @@ effects:
     grade: B-
     source: ["10.1037/0022-0663.91.2.358", "10.1145/3446871.3469747"]
     boundary: Applies to multimedia instructional messages.
-    realization_ids: []
+    realization_ids: [narration-text-redundancy-toggle, synchronized-audio-visual-cue-highlight, view-count-triggered-text-suppression]
 
   - id: mm15-redundancy-effect
     mechanism_id: MM-15
@@ -657,7 +657,7 @@ implementations:
     mechanism_id: ZE-07
     artifact_types: [onboarding]
     product_requirements: []
-    generation_directive: Grant a genuine head-start toward the first goal (pre-complete a real first step the user has effectively already taken, e.g. 'account created ✓'). The head-start must correspond to something real; inventing fake progress the user didn't make is forbidden.
+    generation_directive: Grant a genuine head-start toward the first goal — pre-complete a real first step the user has effectively already taken, marked as done. The head-start must correspond to something real; inventing fake progress the user didn't make is forbidden.
     metrics: [onboarding_completion, d7_retention]
     observed_effects: []
 
@@ -689,7 +689,7 @@ implementations:
     mechanism_id: EN-03
     artifact_types: [paywall, dashboard_widget]
     product_requirements: ["user_creates_artifacts"]
-    generation_directive: "Surface what the user has made as visibly theirs before any ask: 'Your gallery', 'Your workspace', concrete previews of their own outputs. Ownership must be established before LA-01 loss framing is applied (sequence EN-03 -> LA-01)."
+    generation_directive: Surface what the user has made as visibly theirs before any ask — possessive labeling of the space that holds their own outputs, plus concrete previews of those outputs. Ownership must be established before LA-01 loss framing is applied (sequence EN-03 -> LA-01).
     metrics: [trial_to_paid_cvr, activation_rate]
     observed_effects: []
 
@@ -697,7 +697,7 @@ implementations:
     mechanism_id: EN-03
     artifact_types: [onboarding]
     product_requirements: []
-    generation_directive: Have the user invest small effort early (customize, name, configure, pick preferences) so the product becomes 'theirs'. Investment creates ownership even without a purchase. Keep effort light and clearly rewarded — not a chore.
+    generation_directive: Have the user invest small effort early (customize, name, configure, pick preferences) so the product becomes something the user experiences as their own. Investment creates ownership even without a purchase. Keep effort light and clearly rewarded — not a chore.
     metrics: [onboarding_completion, d7_retention]
     observed_effects: []
 
@@ -892,7 +892,7 @@ hard_boundaries:
   - no-gambling-mechanics: forbidden — No loot-box / paid-random-reward / near-miss / loss-disguised-as-win patterns; no monetary or paid-currency randomized rewards
   - no-compulsion-loops: forbidden — engineer intermittent reward to maximize time-on-app against the user's interest; core functionality must never require chasing the variable reward
   - vulnerable-users: forbidden — deploy variable-reward intensification toward users showing compulsive-use signals; no escalation of unpredictability to re-hook lapsing users
-  - real-ownership-only: forbidden
+  - real-ownership-only: forbidden — Ownership language must reflect something the user actually created, customized, or possesses; do not fabricate 'your' where nothing was invested
   - no-forced-investment: forbidden — coerce meaningless effort solely to manufacture endowment; investment must carry genuine user value
   - honest-trial-scope: forbidden — If trial access is partial, do not imply full possession
   - boundary_test: Is the progress and the goal real and reachable — or is completion engineered to always recede?

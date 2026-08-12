@@ -364,7 +364,7 @@ effects:
     grade: B-
     source: ["10.1037/0022-0663.91.2.358", "10.1145/3446871.3469747"]
     boundary: Applies to multimedia instructional messages.
-    realization_ids: []
+    realization_ids: [narration-text-redundancy-toggle, synchronized-audio-visual-cue-highlight, view-count-triggered-text-suppression]
 
   - id: mm15-redundancy-effect
     mechanism_id: MM-15
@@ -647,7 +647,7 @@ implementations:
     mechanism_id: CG-05
     artifact_types: [landing_hero, onboarding]
     product_requirements: ["produces_personalized_result"]
-    generation_directive: Pose a specific, personally-relevant question the product will answer ('See what your {input} reveals', 'Find your {result}'). The reveal must deliver genuine, specific value — a real personalized result, not a generic payoff. The gap should be resolvable within the flow, not endlessly deferred.
+    generation_directive: Pose a specific, personally-relevant question framed around the user's own input, promising a personalized result rather than a generic one. The reveal must deliver genuine, specific value — a real personalized result, not a generic payoff. The gap should be resolvable within the flow, not endlessly deferred.
     metrics: [cvr, landing_engagement, flow_start_rate]
     observed_effects: []
 
@@ -655,7 +655,7 @@ implementations:
     mechanism_id: CG-05
     artifact_types: [onboarding, email]
     product_requirements: []
-    generation_directive: Open a specific loop and resolve it with real information ('Here's what we found — one thing stands out'). Reveal enough to make the gap felt, deliver the resolution as genuine value. Never tease a payoff the product cannot deliver.
+    generation_directive: Open a specific loop and resolve it with real information, surfacing a single genuine standout finding rather than a vague summary. Reveal enough to make the gap felt, deliver the resolution as genuine value. Never tease a payoff the product cannot deliver.
     metrics: [open_rate, click_through, completion_rate]
     observed_effects: []
 

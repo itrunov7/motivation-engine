@@ -418,7 +418,7 @@ effects:
     grade: B-
     source: ["10.1037/0022-0663.91.2.358", "10.1145/3446871.3469747"]
     boundary: Applies to multimedia instructional messages.
-    realization_ids: []
+    realization_ids: [narration-text-redundancy-toggle, synchronized-audio-visual-cue-highlight, view-count-triggered-text-suppression]
 
   - id: mm15-redundancy-effect
     mechanism_id: MM-15
@@ -685,7 +685,7 @@ implementations:
     mechanism_id: ID-12
     artifact_types: [onboarding]
     product_requirements: []
-    generation_directive: Have the user state a genuine goal or self-definition early ('What do you want to build?', 'I'm here to {goal}'). The stated commitment, freely chosen, anchors later behavior toward consistency. Reflect it back later ('You said you wanted to {goal} — here's your next step'). Never put words in the user's mouth or manufacture commitments they didn't make.
+    generation_directive: Have the user state a genuine goal or self-definition early, in their own words rather than a suggested phrase. The stated commitment, freely chosen, anchors later behavior toward consistency. Reflect the stated goal back later when presenting a relevant next step. Never put words in the user's mouth or manufacture commitments they didn't make.
     metrics: [onboarding_completion, d7_retention, goal_progress]
     observed_effects: []
 
@@ -693,7 +693,7 @@ implementations:
     mechanism_id: ID-12
     artifact_types: [dashboard_widget, email]
     product_requirements: []
-    generation_directive: Make a genuine, self-relevant identity salient in a way that supports the user's own goals ('You're a founder', 'You're a creator') where it truly reflects them. Identity framing motivates aligned action. Do not impose identities the user hasn't embraced or use identity to manipulate against their interest.
+    generation_directive: Make a genuine, self-relevant identity salient in a way that supports the user's own goals, naming the role or identity the user has actually taken on, only where it truly reflects them. Identity framing motivates aligned action. Do not impose identities the user hasn't embraced or use identity to manipulate against their interest.
     metrics: [engagement_depth, feature_adoption, retention]
     observed_effects: []
 
@@ -701,7 +701,7 @@ implementations:
     mechanism_id: EN-03
     artifact_types: [paywall, dashboard_widget]
     product_requirements: ["user_creates_artifacts"]
-    generation_directive: "Surface what the user has made as visibly theirs before any ask: 'Your gallery', 'Your workspace', concrete previews of their own outputs. Ownership must be established before LA-01 loss framing is applied (sequence EN-03 -> LA-01)."
+    generation_directive: Surface what the user has made as visibly theirs before any ask — possessive labeling of the space that holds their own outputs, plus concrete previews of those outputs. Ownership must be established before LA-01 loss framing is applied (sequence EN-03 -> LA-01).
     metrics: [trial_to_paid_cvr, activation_rate]
     observed_effects: []
 
@@ -709,7 +709,7 @@ implementations:
     mechanism_id: EN-03
     artifact_types: [onboarding]
     product_requirements: []
-    generation_directive: Have the user invest small effort early (customize, name, configure, pick preferences) so the product becomes 'theirs'. Investment creates ownership even without a purchase. Keep effort light and clearly rewarded — not a chore.
+    generation_directive: Have the user invest small effort early (customize, name, configure, pick preferences) so the product becomes something the user experiences as their own. Investment creates ownership even without a purchase. Keep effort light and clearly rewarded — not a chore.
     metrics: [onboarding_completion, d7_retention]
     observed_effects: []
 
@@ -733,7 +733,7 @@ implementations:
     mechanism_id: ZE-07
     artifact_types: [onboarding]
     product_requirements: []
-    generation_directive: Grant a genuine head-start toward the first goal (pre-complete a real first step the user has effectively already taken, e.g. 'account created ✓'). The head-start must correspond to something real; inventing fake progress the user didn't make is forbidden.
+    generation_directive: Grant a genuine head-start toward the first goal — pre-complete a real first step the user has effectively already taken, marked as done. The head-start must correspond to something real; inventing fake progress the user didn't make is forbidden.
     metrics: [onboarding_completion, d7_retention]
     observed_effects: []
 
@@ -960,7 +960,7 @@ hard_boundaries:
   - genuine-commitment-only: forbidden — Commitments and stated goals must be genuinely made by the user; fabricating or implying commitments the user did not make is forbidden
   - no-imposed-identity: forbidden — impose or manipulate identities the user hasn't embraced, or weaponize self-image against the user's interest
   - no-consistency-trap: forbidden — use prior small commitments to escalate into significantly larger unwanted ones (manipulative foot-in-the-door); escalation must be reasonable and user-serving
-  - real-ownership-only: forbidden
+  - real-ownership-only: forbidden — Ownership language must reflect something the user actually created, customized, or possesses; do not fabricate 'your' where nothing was invested
   - no-forced-investment: forbidden — coerce meaningless effort solely to manufacture endowment; investment must carry genuine user value
   - honest-trial-scope: forbidden — If trial access is partial, do not imply full possession
   - true-progress-only: forbidden — Displayed progress must reflect real state; fabricated or inflated progress bars are forbidden

@@ -148,7 +148,7 @@ effects:
     grade: B
     source: ["10.1162/003355397555217", "10.1162/003355397555226", "10.2307/2118511"]
     boundary: Investment decision-making
-    realization_ids: []
+    realization_ids: [bias-awareness-tooltip, periodic-performance-digest]
 
   - id: en-03-01
     mechanism_id: EN-03
@@ -229,7 +229,7 @@ effects:
     grade: C+
     source: ["10.54097/3wp35028"]
     boundary: Digital economy promotional methods
-    realization_ids: []
+    realization_ids: [low-stock-indicator-badge, mobile-expiring-deal-push-notification, preferred-item-highlight-under-scarcity, scarcity-indicator-fatigue-cutoff]
 
   - id: sc-06-03
     mechanism_id: SC-06
@@ -463,7 +463,7 @@ effects:
     grade: B-
     source: ["10.1037/0022-0663.91.2.358", "10.1145/3446871.3469747"]
     boundary: Applies to multimedia instructional messages.
-    realization_ids: []
+    realization_ids: [narration-text-redundancy-toggle, synchronized-audio-visual-cue-highlight, view-count-triggered-text-suppression]
 
   - id: mm15-redundancy-effect
     mechanism_id: MM-15
@@ -682,12 +682,13 @@ realizations:
     description_as_reported: Limited-quantity promotions activate competitive anxiety and possessive desire due to scarcity of quantity, increasing perceived value; similar quantity-limit scarcity cues and stock-level counters are reported to boost social value identification, interactive control perception, and purchase intention across consumer psychology, persuasion, and live-streaming shopping literature.
     derivation: inferred
     domain_transfer: { source_domain: consumer psychology, persuasion research, and live-streaming shopping, application_domain: product UI }
-    pattern: Display a remaining-stock counter or badge on the product card or page when inventory falls below {stock_threshold} units, where the displayed count must reflect true remaining inventory at the moment it is shown, to trigger competitive anxiety and increase perceived value.
+    pattern: Display a remaining-stock counter or badge on the product card or page when inventory falls below {stock_threshold} units, where the displayed count must reflect true remaining inventory at the moment it is shown.
     parameters:
       - name: stock_threshold
         value: 5
         unit: units remaining
         evidence_basis: none — default heuristic
+    boundary_refs: [sc-06-03, scarcity-wellbeing-deterioration]
     artifact_context: ["checkout", "dashboard_widget"]
     confidence: 0.65
     source_record_ids: [cr_c8b954378f01f675fed70897, cr_69c6dbd9e0e24962f98be71f, cr_fa753175770242036cda961e, cr_c8b954378f01f675fed70897]
@@ -836,7 +837,7 @@ implementations:
     mechanism_id: LA-01
     artifact_types: [retention_push, dashboard_widget]
     product_requirements: ["has_recurring_user_action"]
-    generation_directive: Frame the user's recurring action as a streak with a visible counter. Push/widget triggers on the RISK of the streak resetting; framing is preservation ('Don't lose your 12 days'), not achievement.
+    generation_directive: Frame the user's recurring action as a streak with a visible counter. Push/widget triggers on the RISK of the streak resetting; framing is preservation of an accumulated streak, not achievement of a new one.
     metrics: [d7_retention, d30_retention, push_return_rate_vs_baseline]
     observed_effects: []
 
@@ -844,7 +845,7 @@ implementations:
     mechanism_id: LA-01
     artifact_types: [paywall]
     product_requirements: ["has_trial", "user_creates_artifacts"]
-    generation_directive: "The paywall shows what the user has CREATED (previews of their projects/results) and frames payment as keeping access to what is theirs, not as a purchase. State a concrete number and deadline: 'Your {n} projects will be deleted in {d} days'."
+    generation_directive: The paywall shows what the user has CREATED (previews of their projects/results) and frames payment as keeping access to what is theirs, not as a purchase. State the concrete count of the user's own artifacts and the real deadline before access is lost.
     metrics: [trial_to_paid_cvr_vs_neutral_paywall]
     observed_effects: []
 
@@ -868,7 +869,7 @@ implementations:
     mechanism_id: LA-01
     artifact_types: [paywall, pricing_page, email, checkout]
     product_requirements: []
-    generation_directive: "Where a benefit exists, frame it as loss prevention: 'Stop losing ${x}/month' instead of 'Save ${x}/month'. Apply selectively — no more than 1 loss frame per screen."
+    generation_directive: Where a benefit exists, frame it as loss prevention — stated as an ongoing cost being avoided rather than an amount being saved. Apply selectively — no more than 1 loss frame per screen.
     metrics: [cvr_loss_frame_vs_gain_frame]
     observed_effects: []
 
@@ -876,7 +877,7 @@ implementations:
     mechanism_id: EN-03
     artifact_types: [paywall, dashboard_widget]
     product_requirements: ["user_creates_artifacts"]
-    generation_directive: "Surface what the user has made as visibly theirs before any ask: 'Your gallery', 'Your workspace', concrete previews of their own outputs. Ownership must be established before LA-01 loss framing is applied (sequence EN-03 -> LA-01)."
+    generation_directive: Surface what the user has made as visibly theirs before any ask — possessive labeling of the space that holds their own outputs, plus concrete previews of those outputs. Ownership must be established before LA-01 loss framing is applied (sequence EN-03 -> LA-01).
     metrics: [trial_to_paid_cvr, activation_rate]
     observed_effects: []
 
@@ -884,7 +885,7 @@ implementations:
     mechanism_id: EN-03
     artifact_types: [onboarding]
     product_requirements: []
-    generation_directive: Have the user invest small effort early (customize, name, configure, pick preferences) so the product becomes 'theirs'. Investment creates ownership even without a purchase. Keep effort light and clearly rewarded — not a chore.
+    generation_directive: Have the user invest small effort early (customize, name, configure, pick preferences) so the product becomes something the user experiences as their own. Investment creates ownership even without a purchase. Keep effort light and clearly rewarded — not a chore.
     metrics: [onboarding_completion, d7_retention]
     observed_effects: []
 
@@ -900,7 +901,7 @@ implementations:
     mechanism_id: FR-11
     artifact_types: [pricing_page, paywall]
     product_requirements: ["has_multiple_tiers_or_reference_price"]
-    generation_directive: "Present a higher-value reference point before the target option so it is judged favorably: a premium tier shown first, a genuine 'was' price, or a recommended plan highlighted as the anchor. The anchor must be real (a genuinely offered tier or a true prior price) — fabricated anchors and fake 'was' prices are forbidden."
+    generation_directive: "Present a higher-value reference point before the target option so it is judged favorably: a premium tier shown first, a genuine prior price shown as the reference point, or a recommended plan highlighted as the anchor. The anchor must be real (a genuinely offered tier or a true prior price) — fabricated anchors and fake prior-price references are forbidden."
     metrics: [cvr, average_plan_value, tier_selection_distribution]
     observed_effects: []
 
@@ -908,7 +909,7 @@ implementations:
     mechanism_id: FR-11
     artifact_types: [pricing_page, landing_hero, checkout]
     product_requirements: []
-    generation_directive: "Frame the value in the terms that make it most salient and truthful — what the user gains, or (paired with LA-01) what they avoid losing. Attribute framing: present the positive attribute ('90% success' not '10% failure') where both are true. Never misrepresent — framing selects emphasis among true statements, it does not distort facts."
+    generation_directive: "Frame the value in the terms that make it most salient and truthful — what the user gains, or (paired with LA-01) what they avoid losing. Attribute framing: of two true, equivalent statements of the same fact, present whichever casts it in its more positive framing. Never misrepresent — framing selects emphasis among true statements, it does not distort facts."
     metrics: [cvr, cvr_frame_a_vs_b]
     observed_effects: []
 
@@ -916,7 +917,7 @@ implementations:
     mechanism_id: SC-06
     artifact_types: [checkout, paywall, landing_hero]
     product_requirements: ["has_genuine_quantity_limit"]
-    generation_directive: Surface a genuine quantity limit truthfully ('2 slots left this week' when there really are 2). Demand-framed scarcity ('others are booking') is stronger than bare supply, but only state it when true. Never invent counts, never use fake live counters. If there is no real limit, do not apply this mechanism.
+    generation_directive: Surface a genuine quantity limit truthfully, stating the real remaining count. Demand-framed scarcity — naming that others are actively taking the same limited supply — is stronger than bare supply, but only state it when true. Never invent counts, never use fake live counters. If there is no real limit, do not apply this mechanism.
     metrics: [cvr, time_to_purchase]
     observed_effects: []
 
@@ -924,7 +925,7 @@ implementations:
     mechanism_id: SC-06
     artifact_types: [paywall, pricing_page]
     product_requirements: ["has_genuine_deadline"]
-    generation_directive: Communicate a real deadline for a real offer ('this price ends {date}' when it genuinely does). The deadline must be true and not silently reset on reload. Pairs with LA-01 as loss-of-opportunity. Fake countdown timers are forbidden and illegal in many jurisdictions.
+    generation_directive: Communicate a real deadline for a real offer, stating the actual date or time the offer genuinely ends. The deadline must be true and not silently reset on reload. Pairs with LA-01 as loss-of-opportunity. Fake countdown timers are forbidden and illegal in many jurisdictions.
     metrics: [cvr, conversion_before_deadline]
     observed_effects: []
 
@@ -1112,7 +1113,7 @@ hard_boundaries:
   - no-withholding-pressure: forbidden — The user's own data, results, or created artifacts are never hidden, delayed, degraded or placed behind a threshold in order to create pressure to pay or act. Access to what the user made or earned is not a lever. This is distinct from no_data_hostage, which governs deletion.
   - panic-cap: forbidden — Loss-framed pushes ≤ 1/day, no anxiety escalation
   - precondition-gate: forbidden — When accumulated_value_score = 0, the mechanism is not applied
-  - real-ownership-only: forbidden
+  - real-ownership-only: forbidden — Ownership language must reflect something the user actually created, customized, or possesses; do not fabricate 'your' where nothing was invested
   - no-forced-investment: forbidden — coerce meaningless effort solely to manufacture endowment; investment must carry genuine user value
   - honest-trial-scope: forbidden — If trial access is partial, do not imply full possession
   - real-anchor-only: forbidden — Anchors (reference prices, tiers, 'was' prices) must be genuine; fabricated anchors and fake original prices are forbidden and often illegal

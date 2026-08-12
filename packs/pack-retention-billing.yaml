@@ -139,7 +139,7 @@ effects:
     grade: B
     source: ["10.1162/003355397555217", "10.1162/003355397555226", "10.2307/2118511"]
     boundary: Investment decision-making
-    realization_ids: []
+    realization_ids: [bias-awareness-tooltip, periodic-performance-digest]
 
   - id: en-03-01
     mechanism_id: EN-03
@@ -373,7 +373,7 @@ effects:
     grade: B-
     source: ["10.1037/0022-0663.91.2.358", "10.1145/3446871.3469747"]
     boundary: Applies to multimedia instructional messages.
-    realization_ids: []
+    realization_ids: [narration-text-redundancy-toggle, synchronized-audio-visual-cue-highlight, view-count-triggered-text-suppression]
 
   - id: mm15-redundancy-effect
     mechanism_id: MM-15
@@ -674,7 +674,7 @@ implementations:
     mechanism_id: LA-01
     artifact_types: [retention_push, dashboard_widget]
     product_requirements: ["has_recurring_user_action"]
-    generation_directive: Frame the user's recurring action as a streak with a visible counter. Push/widget triggers on the RISK of the streak resetting; framing is preservation ('Don't lose your 12 days'), not achievement.
+    generation_directive: Frame the user's recurring action as a streak with a visible counter. Push/widget triggers on the RISK of the streak resetting; framing is preservation of an accumulated streak, not achievement of a new one.
     metrics: [d7_retention, d30_retention, push_return_rate_vs_baseline]
     observed_effects: []
 
@@ -682,7 +682,7 @@ implementations:
     mechanism_id: LA-01
     artifact_types: [paywall]
     product_requirements: ["has_trial", "user_creates_artifacts"]
-    generation_directive: "The paywall shows what the user has CREATED (previews of their projects/results) and frames payment as keeping access to what is theirs, not as a purchase. State a concrete number and deadline: 'Your {n} projects will be deleted in {d} days'."
+    generation_directive: The paywall shows what the user has CREATED (previews of their projects/results) and frames payment as keeping access to what is theirs, not as a purchase. State the concrete count of the user's own artifacts and the real deadline before access is lost.
     metrics: [trial_to_paid_cvr_vs_neutral_paywall]
     observed_effects: []
 
@@ -706,7 +706,7 @@ implementations:
     mechanism_id: LA-01
     artifact_types: [paywall, pricing_page, email, checkout]
     product_requirements: []
-    generation_directive: "Where a benefit exists, frame it as loss prevention: 'Stop losing ${x}/month' instead of 'Save ${x}/month'. Apply selectively — no more than 1 loss frame per screen."
+    generation_directive: Where a benefit exists, frame it as loss prevention — stated as an ongoing cost being avoided rather than an amount being saved. Apply selectively — no more than 1 loss frame per screen.
     metrics: [cvr_loss_frame_vs_gain_frame]
     observed_effects: []
 
@@ -714,7 +714,7 @@ implementations:
     mechanism_id: EN-03
     artifact_types: [paywall, dashboard_widget]
     product_requirements: ["user_creates_artifacts"]
-    generation_directive: "Surface what the user has made as visibly theirs before any ask: 'Your gallery', 'Your workspace', concrete previews of their own outputs. Ownership must be established before LA-01 loss framing is applied (sequence EN-03 -> LA-01)."
+    generation_directive: Surface what the user has made as visibly theirs before any ask — possessive labeling of the space that holds their own outputs, plus concrete previews of those outputs. Ownership must be established before LA-01 loss framing is applied (sequence EN-03 -> LA-01).
     metrics: [trial_to_paid_cvr, activation_rate]
     observed_effects: []
 
@@ -722,7 +722,7 @@ implementations:
     mechanism_id: EN-03
     artifact_types: [onboarding]
     product_requirements: []
-    generation_directive: Have the user invest small effort early (customize, name, configure, pick preferences) so the product becomes 'theirs'. Investment creates ownership even without a purchase. Keep effort light and clearly rewarded — not a chore.
+    generation_directive: Have the user invest small effort early (customize, name, configure, pick preferences) so the product becomes something the user experiences as their own. Investment creates ownership even without a purchase. Keep effort light and clearly rewarded — not a chore.
     metrics: [onboarding_completion, d7_retention]
     observed_effects: []
 
@@ -738,7 +738,7 @@ implementations:
     mechanism_id: ST-09
     artifact_types: [dashboard_widget, retention_push]
     product_requirements: ["has_achievement_system"]
-    generation_directive: Recognize genuine achievement and progress (levels, milestones, badges tied to real accomplishment). Prefer self-referential progress ('your best week') and attainable next steps over harsh peer ranking. Recognition must reflect real accomplishment, not participation inflation.
+    generation_directive: Recognize genuine achievement and progress (levels, milestones, badges tied to real accomplishment). Prefer self-referential progress — comparing the user against their own past performance — and attainable next steps over harsh peer ranking. Recognition must reflect real accomplishment, not participation inflation.
     metrics: [d7_retention, engagement_depth, achievement_completion]
     observed_effects: []
 
@@ -929,7 +929,7 @@ hard_boundaries:
   - no-withholding-pressure: forbidden — The user's own data, results, or created artifacts are never hidden, delayed, degraded or placed behind a threshold in order to create pressure to pay or act. Access to what the user made or earned is not a lever. This is distinct from no_data_hostage, which governs deletion.
   - panic-cap: forbidden — Loss-framed pushes ≤ 1/day, no anxiety escalation
   - precondition-gate: forbidden — When accumulated_value_score = 0, the mechanism is not applied
-  - real-ownership-only: forbidden
+  - real-ownership-only: forbidden — Ownership language must reflect something the user actually created, customized, or possesses; do not fabricate 'your' where nothing was invested
   - no-forced-investment: forbidden — coerce meaningless effort solely to manufacture endowment; investment must carry genuine user value
   - honest-trial-scope: forbidden — If trial access is partial, do not imply full possession
   - no-harmful-comparison: forbidden — engineer demoralizing or wellbeing-damaging comparison (permanent bottom-ranking, shaming, appearance/self-worth comparison); comparison must motivate, not harm

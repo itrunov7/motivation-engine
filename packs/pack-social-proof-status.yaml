@@ -337,7 +337,7 @@ effects:
     grade: B-
     source: ["10.1037/0022-0663.91.2.358", "10.1145/3446871.3469747"]
     boundary: Applies to multimedia instructional messages.
-    realization_ids: []
+    realization_ids: [narration-text-redundancy-toggle, synchronized-audio-visual-cue-highlight, view-count-triggered-text-suppression]
 
   - id: mm15-redundancy-effect
     mechanism_id: MM-15
@@ -604,7 +604,7 @@ implementations:
     mechanism_id: SP-08
     artifact_types: [landing_hero, pricing_page]
     product_requirements: ["has_real_usage_data"]
-    generation_directive: "Show genuine, specific social signals: real user counts, 'X businesses use this', real ratings. Specificity and truth beat vague grandiosity ('trusted by 12,400 founders' only if true). Prefer referents similar to the user where the data allows."
+    generation_directive: "Show genuine, specific social signals: real user counts stated as an actual number, real ratings. Specificity and truth beat vague grandiosity — any such count is shown only if true. Prefer referents similar to the user where the data allows."
     metrics: [cvr, trust_signal_engagement]
     observed_effects: []
 
@@ -612,7 +612,7 @@ implementations:
     mechanism_id: SP-08
     artifact_types: [pricing_page, paywall]
     product_requirements: ["has_multiple_options"]
-    generation_directive: Indicate what similar users chose ('most popular', 'chosen by {segment}') where genuinely true, to resolve choice uncertainty. The 'most popular' label must reflect real selection data, not a marketing preference.
+    generation_directive: Indicate what similar users chose — the option genuinely selected most often by users in the same segment — where genuinely true, to resolve choice uncertainty. Any such popularity label must reflect real selection data, not a marketing preference.
     metrics: [cvr, tier_selection_distribution]
     observed_effects: []
 
@@ -620,7 +620,7 @@ implementations:
     mechanism_id: ST-09
     artifact_types: [dashboard_widget, retention_push]
     product_requirements: ["has_achievement_system"]
-    generation_directive: Recognize genuine achievement and progress (levels, milestones, badges tied to real accomplishment). Prefer self-referential progress ('your best week') and attainable next steps over harsh peer ranking. Recognition must reflect real accomplishment, not participation inflation.
+    generation_directive: Recognize genuine achievement and progress (levels, milestones, badges tied to real accomplishment). Prefer self-referential progress — comparing the user against their own past performance — and attainable next steps over harsh peer ranking. Recognition must reflect real accomplishment, not participation inflation.
     metrics: [d7_retention, engagement_depth, achievement_completion]
     observed_effects: []
 

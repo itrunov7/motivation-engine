@@ -202,7 +202,7 @@ effects:
     grade: B
     source: ["10.1162/003355397555217", "10.1162/003355397555226", "10.2307/2118511"]
     boundary: Investment decision-making
-    realization_ids: []
+    realization_ids: [bias-awareness-tooltip, periodic-performance-digest]
 
   - id: ovsiankina-effect
     mechanism_id: ZE-07
@@ -418,7 +418,7 @@ effects:
     grade: B-
     source: ["10.1037/0022-0663.91.2.358", "10.1145/3446871.3469747"]
     boundary: Applies to multimedia instructional messages.
-    realization_ids: []
+    realization_ids: [narration-text-redundancy-toggle, synchronized-audio-visual-cue-highlight, view-count-triggered-text-suppression]
 
   - id: mm15-redundancy-effect
     mechanism_id: MM-15
@@ -735,7 +735,7 @@ implementations:
     mechanism_id: LA-01
     artifact_types: [retention_push, dashboard_widget]
     product_requirements: ["has_recurring_user_action"]
-    generation_directive: Frame the user's recurring action as a streak with a visible counter. Push/widget triggers on the RISK of the streak resetting; framing is preservation ('Don't lose your 12 days'), not achievement.
+    generation_directive: Frame the user's recurring action as a streak with a visible counter. Push/widget triggers on the RISK of the streak resetting; framing is preservation of an accumulated streak, not achievement of a new one.
     metrics: [d7_retention, d30_retention, push_return_rate_vs_baseline]
     observed_effects: []
 
@@ -743,7 +743,7 @@ implementations:
     mechanism_id: LA-01
     artifact_types: [paywall]
     product_requirements: ["has_trial", "user_creates_artifacts"]
-    generation_directive: "The paywall shows what the user has CREATED (previews of their projects/results) and frames payment as keeping access to what is theirs, not as a purchase. State a concrete number and deadline: 'Your {n} projects will be deleted in {d} days'."
+    generation_directive: The paywall shows what the user has CREATED (previews of their projects/results) and frames payment as keeping access to what is theirs, not as a purchase. State the concrete count of the user's own artifacts and the real deadline before access is lost.
     metrics: [trial_to_paid_cvr_vs_neutral_paywall]
     observed_effects: []
 
@@ -767,7 +767,7 @@ implementations:
     mechanism_id: LA-01
     artifact_types: [paywall, pricing_page, email, checkout]
     product_requirements: []
-    generation_directive: "Where a benefit exists, frame it as loss prevention: 'Stop losing ${x}/month' instead of 'Save ${x}/month'. Apply selectively — no more than 1 loss frame per screen."
+    generation_directive: Where a benefit exists, frame it as loss prevention — stated as an ongoing cost being avoided rather than an amount being saved. Apply selectively — no more than 1 loss frame per screen.
     metrics: [cvr_loss_frame_vs_gain_frame]
     observed_effects: []
 
@@ -783,7 +783,7 @@ implementations:
     mechanism_id: ZE-07
     artifact_types: [onboarding]
     product_requirements: []
-    generation_directive: Grant a genuine head-start toward the first goal (pre-complete a real first step the user has effectively already taken, e.g. 'account created ✓'). The head-start must correspond to something real; inventing fake progress the user didn't make is forbidden.
+    generation_directive: Grant a genuine head-start toward the first goal — pre-complete a real first step the user has effectively already taken, marked as done. The head-start must correspond to something real; inventing fake progress the user didn't make is forbidden.
     metrics: [onboarding_completion, d7_retention]
     observed_effects: []
 

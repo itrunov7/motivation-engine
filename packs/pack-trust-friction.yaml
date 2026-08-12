@@ -373,7 +373,7 @@ effects:
     grade: B-
     source: ["10.1037/0022-0663.91.2.358", "10.1145/3446871.3469747"]
     boundary: Applies to multimedia instructional messages.
-    realization_ids: []
+    realization_ids: [narration-text-redundancy-toggle, synchronized-audio-visual-cue-highlight, view-count-triggered-text-suppression]
 
   - id: mm15-redundancy-effect
     mechanism_id: MM-15
@@ -640,7 +640,7 @@ implementations:
     mechanism_id: SP-08
     artifact_types: [landing_hero, pricing_page]
     product_requirements: ["has_real_usage_data"]
-    generation_directive: "Show genuine, specific social signals: real user counts, 'X businesses use this', real ratings. Specificity and truth beat vague grandiosity ('trusted by 12,400 founders' only if true). Prefer referents similar to the user where the data allows."
+    generation_directive: "Show genuine, specific social signals: real user counts stated as an actual number, real ratings. Specificity and truth beat vague grandiosity — any such count is shown only if true. Prefer referents similar to the user where the data allows."
     metrics: [cvr, trust_signal_engagement]
     observed_effects: []
 
@@ -648,7 +648,7 @@ implementations:
     mechanism_id: SP-08
     artifact_types: [pricing_page, paywall]
     product_requirements: ["has_multiple_options"]
-    generation_directive: Indicate what similar users chose ('most popular', 'chosen by {segment}') where genuinely true, to resolve choice uncertainty. The 'most popular' label must reflect real selection data, not a marketing preference.
+    generation_directive: Indicate what similar users chose — the option genuinely selected most often by users in the same segment — where genuinely true, to resolve choice uncertainty. Any such popularity label must reflect real selection data, not a marketing preference.
     metrics: [cvr, tier_selection_distribution]
     observed_effects: []
 
@@ -656,7 +656,7 @@ implementations:
     mechanism_id: FR-11
     artifact_types: [pricing_page, paywall]
     product_requirements: ["has_multiple_tiers_or_reference_price"]
-    generation_directive: "Present a higher-value reference point before the target option so it is judged favorably: a premium tier shown first, a genuine 'was' price, or a recommended plan highlighted as the anchor. The anchor must be real (a genuinely offered tier or a true prior price) — fabricated anchors and fake 'was' prices are forbidden."
+    generation_directive: "Present a higher-value reference point before the target option so it is judged favorably: a premium tier shown first, a genuine prior price shown as the reference point, or a recommended plan highlighted as the anchor. The anchor must be real (a genuinely offered tier or a true prior price) — fabricated anchors and fake prior-price references are forbidden."
     metrics: [cvr, average_plan_value, tier_selection_distribution]
     observed_effects: []
 
@@ -664,7 +664,7 @@ implementations:
     mechanism_id: FR-11
     artifact_types: [pricing_page, landing_hero, checkout]
     product_requirements: []
-    generation_directive: "Frame the value in the terms that make it most salient and truthful — what the user gains, or (paired with LA-01) what they avoid losing. Attribute framing: present the positive attribute ('90% success' not '10% failure') where both are true. Never misrepresent — framing selects emphasis among true statements, it does not distort facts."
+    generation_directive: "Frame the value in the terms that make it most salient and truthful — what the user gains, or (paired with LA-01) what they avoid losing. Attribute framing: of two true, equivalent statements of the same fact, present whichever casts it in its more positive framing. Never misrepresent — framing selects emphasis among true statements, it does not distort facts."
     metrics: [cvr, cvr_frame_a_vs_b]
     observed_effects: []
 
