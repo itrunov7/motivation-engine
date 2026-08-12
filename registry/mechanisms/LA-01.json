@@ -81,7 +81,7 @@
       "product_requirements": [
         "has_recurring_user_action"
       ],
-      "generation_directive": "Frame the user's recurring action as a streak with a visible counter. Push/widget triggers on the RISK of the streak resetting; framing is preservation ('Don't lose your 12 days'), not achievement.",
+      "generation_directive": "Frame the user's recurring action as a streak with a visible counter. Push/widget triggers on the RISK of the streak resetting; framing is preservation of an accumulated streak, not achievement of a new one.",
       "copy_formulas": [
         "Don't lose your {n}-day streak!",
         "{n} days in a row — {h} hours left to keep it going"
@@ -102,7 +102,7 @@
         "has_trial",
         "user_creates_artifacts"
       ],
-      "generation_directive": "The paywall shows what the user has CREATED (previews of their projects/results) and frames payment as keeping access to what is theirs, not as a purchase. State a concrete number and deadline: 'Your {n} projects will be deleted in {d} days'.",
+      "generation_directive": "The paywall shows what the user has CREATED (previews of their projects/results) and frames payment as keeping access to what is theirs, not as a purchase. State the concrete count of the user's own artifacts and the real deadline before access is lost.",
       "copy_formulas": [
         "Your {n} projects will be deleted in {d} days",
         "Keep access to your work"
@@ -156,7 +156,7 @@
         "checkout"
       ],
       "product_requirements": [],
-      "generation_directive": "Where a benefit exists, frame it as loss prevention: 'Stop losing ${x}/month' instead of 'Save ${x}/month'. Apply selectively — no more than 1 loss frame per screen.",
+      "generation_directive": "Where a benefit exists, frame it as loss prevention — stated as an ongoing cost being avoided rather than an amount being saved. Apply selectively — no more than 1 loss frame per screen.",
       "copy_formulas": [
         "Stop losing ${x} every month"
       ],

@@ -75,7 +75,7 @@
       "product_requirements": [
         "produces_personalized_result"
       ],
-      "generation_directive": "Pose a specific, personally-relevant question the product will answer ('See what your {input} reveals', 'Find your {result}'). The reveal must deliver genuine, specific value — a real personalized result, not a generic payoff. The gap should be resolvable within the flow, not endlessly deferred.",
+      "generation_directive": "Pose a specific, personally-relevant question framed around the user's own input, promising a personalized result rather than a generic one. The reveal must deliver genuine, specific value — a real personalized result, not a generic payoff. The gap should be resolvable within the flow, not endlessly deferred.",
       "copy_formulas": [
         "See your {result}",
         "What does your {input} say about {topic}?"
@@ -94,7 +94,7 @@
         "email"
       ],
       "product_requirements": [],
-      "generation_directive": "Open a specific loop and resolve it with real information ('Here's what we found — one thing stands out'). Reveal enough to make the gap felt, deliver the resolution as genuine value. Never tease a payoff the product cannot deliver.",
+      "generation_directive": "Open a specific loop and resolve it with real information, surfacing a single genuine standout finding rather than a vague summary. Reveal enough to make the gap felt, deliver the resolution as genuine value. Never tease a payoff the product cannot deliver.",
       "copy_formulas": [
         "One thing stood out in your {data}",
         "Here's what we found"

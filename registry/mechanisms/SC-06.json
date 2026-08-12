@@ -78,7 +78,7 @@
       "product_requirements": [
         "has_genuine_quantity_limit"
       ],
-      "generation_directive": "Surface a genuine quantity limit truthfully ('2 slots left this week' when there really are 2). Demand-framed scarcity ('others are booking') is stronger than bare supply, but only state it when true. Never invent counts, never use fake live counters. If there is no real limit, do not apply this mechanism.",
+      "generation_directive": "Surface a genuine quantity limit truthfully, stating the real remaining count. Demand-framed scarcity — naming that others are actively taking the same limited supply — is stronger than bare supply, but only state it when true. Never invent counts, never use fake live counters. If there is no real limit, do not apply this mechanism.",
       "copy_formulas": [
         "{n} left",
         "{n} spots remaining this {period}"
@@ -98,7 +98,7 @@
       "product_requirements": [
         "has_genuine_deadline"
       ],
-      "generation_directive": "Communicate a real deadline for a real offer ('this price ends {date}' when it genuinely does). The deadline must be true and not silently reset on reload. Pairs with LA-01 as loss-of-opportunity. Fake countdown timers are forbidden and illegal in many jurisdictions.",
+      "generation_directive": "Communicate a real deadline for a real offer, stating the actual date or time the offer genuinely ends. The deadline must be true and not silently reset on reload. Pairs with LA-01 as loss-of-opportunity. Fake countdown timers are forbidden and illegal in many jurisdictions.",
       "copy_formulas": [
         "Offer ends {date}",
         "{time} left at this price"

@@ -81,7 +81,7 @@
       "product_requirements": [
         "has_multiple_tiers_or_reference_price"
       ],
-      "generation_directive": "Present a higher-value reference point before the target option so it is judged favorably: a premium tier shown first, a genuine 'was' price, or a recommended plan highlighted as the anchor. The anchor must be real (a genuinely offered tier or a true prior price) — fabricated anchors and fake 'was' prices are forbidden.",
+      "generation_directive": "Present a higher-value reference point before the target option so it is judged favorably: a premium tier shown first, a genuine prior price shown as the reference point, or a recommended plan highlighted as the anchor. The anchor must be real (a genuinely offered tier or a true prior price) — fabricated anchors and fake prior-price references are forbidden.",
       "copy_formulas": [
         "Most popular · {plan}",
         "{anchor_price} value for {target_price}"
@@ -101,7 +101,7 @@
         "checkout"
       ],
       "product_requirements": [],
-      "generation_directive": "Frame the value in the terms that make it most salient and truthful — what the user gains, or (paired with LA-01) what they avoid losing. Attribute framing: present the positive attribute ('90% success' not '10% failure') where both are true. Never misrepresent — framing selects emphasis among true statements, it does not distort facts.",
+      "generation_directive": "Frame the value in the terms that make it most salient and truthful — what the user gains, or (paired with LA-01) what they avoid losing. Attribute framing: of two true, equivalent statements of the same fact, present whichever casts it in its more positive framing. Never misrepresent — framing selects emphasis among true statements, it does not distort facts.",
       "copy_formulas": [
         "{positive_attribute}",
         "Everything you get: {inclusions}"
