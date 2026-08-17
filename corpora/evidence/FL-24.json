@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-17T08:16:17.318Z",
+  "fetched_at": "2026-08-17T08:18:11.643Z",
   "terms_source": "record",
   "terms": [
     "flow experience challenge skill balance",
@@ -18,12 +18,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 885
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
@@ -56,19 +56,19 @@
       "upstream_total_results": 885
     },
     {
-      "query_id": "graph:backward-reference:W1683284848",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Challenge/Skill Balance, Flow, and Performance Anxiety",
-      "bucket": "citation",
-      "kind": "backward-reference",
+      "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance",
+      "api": "semantic-scholar",
+      "angle": "recent",
+      "term": "flow experience challenge skill balance",
+      "bucket": "relevance",
+      "kind": "search",
       "requested": 25,
-      "returned": 2,
-      "unique_returned": 2,
-      "records_added": 0,
-      "novelty_rate": 0,
+      "returned": 25,
+      "unique_returned": 25,
+      "records_added": 8,
+      "novelty_rate": 0.32,
       "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "upstream_total_results": 5722
     },
     {
       "query_id": "graph:backward-reference:W7201969041",
@@ -86,6 +86,216 @@
       "upstream_total_results": null
     },
     {
+      "query_id": "graph:backward-reference:W1683284848",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Challenge/Skill Balance, Flow, and Performance Anxiety",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W1683284848",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Challenge/Skill Balance, Flow, and Performance Anxiety",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2042314632",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 6,
+      "unique_returned": 6,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2042314632",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2948469271",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Modelling Chinese EFL learners’ flow experiences in digital game-based vocabulary learning: the roles of learner and contextual factors",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2948469271",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Modelling Chinese EFL learners’ flow experiences in digital game-based vocabulary learning: the roles of learner and contextual factors",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.032,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2419624448",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "The experience of flow and subjective well-being of music students",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.032,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2419624448",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "The experience of flow and subjective well-being of music students",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.032,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2100919822",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Arousal of Flow Experience in a Learning Setting and Its Effects on Exam Performance and Affect",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2100919822",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Arousal of Flow Experience in a Learning Setting and Its Effects on Exam Performance and Affect",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 5,
+      "unique_returned": 5,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W4221001939",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W4221001939",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2020443333",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "“I Feel Present. Therefore, I Experience Flow:” A Structural Equation Modeling Approach to Flow and Presence in Video Games",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 3,
+      "novelty_rate": 1,
+      "rolling_novelty_rate": 0.1,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2020443333",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "“I Feel Present. Therefore, I Experience Flow:” A Structural Equation Modeling Approach to Flow and Presence in Video Games",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 1,
+      "novelty_rate": 1,
+      "rolling_novelty_rate": 0.2,
+      "upstream_total_results": null
+    },
+    {
       "query_id": "graph:forward-citation:W7201969041",
       "api": "openalex",
       "angle": "canon",
@@ -97,7 +307,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0.2,
       "upstream_total_results": null
     },
     {
@@ -112,7 +322,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0.2,
       "upstream_total_results": null
     },
     {
@@ -127,7 +337,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0.2,
       "upstream_total_results": null
     },
     {
@@ -142,7 +352,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0.2,
       "upstream_total_results": null
     },
     {
@@ -157,7 +367,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.2,
       "upstream_total_results": null
     },
     {
@@ -172,7 +382,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.2,
       "upstream_total_results": null
     },
     {
@@ -187,7 +397,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.2,
       "upstream_total_results": null
     },
     {
@@ -202,7 +412,7 @@
       "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.2,
       "upstream_total_results": null
     },
     {
@@ -217,7 +427,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.1,
       "upstream_total_results": null
     },
     {
@@ -264,201 +474,6 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7162533360",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Flow as Minimum-Displacement Maximum-Performance: Csikszentmihalyi's Optimal Experience as S⁰ Condition, Skill-Challenge Balance as Basin Geometry, and the Neurochemistry of Return",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7162293062",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 6,
-      "unique_returned": 6,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7162293062",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7163342239",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Study on the Design of Intangible Cultural Heritage VR Experience and Immersive Communication Strategy Based on Flow Theory",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7163342239",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Study on the Design of Intangible Cultural Heritage VR Experience and Immersive Communication Strategy Based on Flow Theory",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W1683284848",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Challenge/Skill Balance, Flow, and Performance Anxiety",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 3,
-      "unique_returned": 3,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W2042314632",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 6,
-      "unique_returned": 6,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W2042314632",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 2,
-      "unique_returned": 2,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W3046829123",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Detecting Students’ Flow States and Their Construct Through Electroencephalogram: Reflective Flow Experiences, Balance of Challenge and Skill, and Sense of Control",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 3,
-      "unique_returned": 3,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W3046829123",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Detecting Students’ Flow States and Their Construct Through Electroencephalogram: Reflective Flow Experiences, Balance of Challenge and Skill, and Sense of Control",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 11,
-      "unique_returned": 11,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W279868603",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Flow Experience and Challenge-Skill Balance in E-Learning",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 3,
-      "unique_returned": 3,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W279868603",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Flow Experience and Challenge-Skill Balance in E-Learning",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 2,
-      "unique_returned": 2,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W4221001939",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
     }
   ],
   "coverage_report": {
@@ -488,59 +503,59 @@
     "snowball_added": 0
   },
   "category_counts": {
-    "foundational": 32,
+    "foundational": 34,
     "meta-analysis": 22,
     "replication": 95,
-    "dissent": 153,
-    "recent": 517
+    "dissent": 154,
+    "recent": 519
   },
   "diversity_report": {
     "viewpoint_spread": [
       {
         "angle": "canon",
         "queries": 3,
-        "returned": 75,
-        "unique_records": 58
+        "returned": 50,
+        "unique_records": 49
+      },
+      {
+        "angle": "recent",
+        "queries": 1,
+        "returned": 25,
+        "unique_records": 25
       }
     ],
     "source_spread": [
       {
         "api": "openalex",
         "queries": 3,
-        "returned": 75,
-        "unique_records": 58
+        "returned": 50,
+        "unique_records": 49
+      },
+      {
+        "api": "semantic-scholar",
+        "queries": 1,
+        "returned": 25,
+        "unique_records": 25
       }
     ],
-    "recent_records": 26,
-    "recency_rate": 0.4483,
+    "recent_records": 34,
+    "recency_rate": 0.5075,
     "novelty": {
       "previous_corpus_records": 855,
-      "unique_records": 58,
-      "already_in_corpus": 58,
-      "new_records": 0,
-      "novelty_rate": 0,
+      "unique_records": 67,
+      "already_in_corpus": 59,
+      "new_records": 8,
+      "novelty_rate": 0.1194,
       "low_novelty": true,
       "known_share_threshold": 0.8
     }
   },
   "saturation_report": {
     "queries_issued": 30,
-    "records_added": 0,
+    "records_added": 12,
     "novelty_curve": [
       {
         "query_index": 1,
-        "query_id": "search:relevance:openalex:canon:p1:flow experience challenge skill balance",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 2,
         "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
         "bucket": "recency",
         "kind": "search",
@@ -552,7 +567,7 @@
         "cumulative_records": 855
       },
       {
-        "query_index": 3,
+        "query_index": 2,
         "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
         "bucket": "citation",
         "kind": "search",
@@ -564,19 +579,19 @@
         "cumulative_records": 855
       },
       {
-        "query_index": 4,
-        "query_id": "graph:backward-reference:W1683284848",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 2,
-        "unique_returned": 2,
-        "records_added": 0,
-        "novelty_rate": 0,
+        "query_index": 3,
+        "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 8,
+        "novelty_rate": 0.32,
         "rolling_novelty_rate": null,
-        "cumulative_records": 855
+        "cumulative_records": 863
       },
       {
-        "query_index": 5,
+        "query_index": 4,
         "query_id": "graph:backward-reference:W7201969041",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -585,214 +600,22 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 855
+        "cumulative_records": 863
+      },
+      {
+        "query_index": 5,
+        "query_id": "graph:backward-reference:W1683284848",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 2,
+        "unique_returned": 2,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 863
       },
       {
         "query_index": 6,
-        "query_id": "graph:forward-citation:W7201969041",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 7,
-        "query_id": "graph:backward-reference:W7201976895",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 8,
-        "query_id": "graph:forward-citation:W7201976895",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 9,
-        "query_id": "graph:backward-reference:W7202291746",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 10,
-        "query_id": "graph:forward-citation:W7202291746",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 11,
-        "query_id": "graph:backward-reference:W7169557143",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 12,
-        "query_id": "graph:forward-citation:W7169557143",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 13,
-        "query_id": "graph:backward-reference:W7165564922",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 14,
-        "query_id": "graph:forward-citation:W7165564922",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 15,
-        "query_id": "graph:backward-reference:W7166715852",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 16,
-        "query_id": "graph:forward-citation:W7166715852",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 17,
-        "query_id": "graph:backward-reference:W7162533360",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 18,
-        "query_id": "graph:forward-citation:W7162533360",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 19,
-        "query_id": "graph:backward-reference:W7162293062",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 6,
-        "unique_returned": 6,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 20,
-        "query_id": "graph:forward-citation:W7162293062",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 21,
-        "query_id": "graph:backward-reference:W7163342239",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 22,
-        "query_id": "graph:forward-citation:W7163342239",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
-      },
-      {
-        "query_index": 23,
         "query_id": "graph:forward-citation:W1683284848",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -800,11 +623,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
+        "rolling_novelty_rate": null,
+        "cumulative_records": 863
       },
       {
-        "query_index": 24,
+        "query_index": 7,
         "query_id": "graph:backward-reference:W2042314632",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -812,11 +635,11 @@
         "unique_returned": 6,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
+        "rolling_novelty_rate": null,
+        "cumulative_records": 863
       },
       {
-        "query_index": 25,
+        "query_index": 8,
         "query_id": "graph:forward-citation:W2042314632",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -824,59 +647,83 @@
         "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
+        "rolling_novelty_rate": null,
+        "cumulative_records": 863
       },
       {
-        "query_index": 26,
-        "query_id": "graph:backward-reference:W3046829123",
+        "query_index": 9,
+        "query_id": "graph:backward-reference:W2948469271",
         "bucket": "citation",
         "kind": "backward-reference",
-        "returned": 3,
-        "unique_returned": 3,
+        "returned": 2,
+        "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
+        "rolling_novelty_rate": null,
+        "cumulative_records": 863
       },
       {
-        "query_index": 27,
-        "query_id": "graph:forward-citation:W3046829123",
+        "query_index": 10,
+        "query_id": "graph:forward-citation:W2948469271",
         "bucket": "recency",
         "kind": "forward-citation",
-        "returned": 11,
-        "unique_returned": 11,
+        "returned": 3,
+        "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
+        "rolling_novelty_rate": 0.032,
+        "cumulative_records": 863
       },
       {
-        "query_index": 28,
-        "query_id": "graph:backward-reference:W279868603",
+        "query_index": 11,
+        "query_id": "graph:backward-reference:W2419624448",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 3,
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
+        "rolling_novelty_rate": 0.032,
+        "cumulative_records": 863
       },
       {
-        "query_index": 29,
-        "query_id": "graph:forward-citation:W279868603",
+        "query_index": 12,
+        "query_id": "graph:forward-citation:W2419624448",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 2,
         "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 855
+        "rolling_novelty_rate": 0.032,
+        "cumulative_records": 863
       },
       {
-        "query_index": 30,
+        "query_index": 13,
+        "query_id": "graph:backward-reference:W2100919822",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 863
+      },
+      {
+        "query_index": 14,
+        "query_id": "graph:forward-citation:W2100919822",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 5,
+        "unique_returned": 5,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 863
+      },
+      {
+        "query_index": 15,
         "query_id": "graph:backward-reference:W4221001939",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -885,29 +732,209 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 855
+        "cumulative_records": 863
+      },
+      {
+        "query_index": 16,
+        "query_id": "graph:forward-citation:W4221001939",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 863
+      },
+      {
+        "query_index": 17,
+        "query_id": "graph:backward-reference:W2020443333",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 3,
+        "novelty_rate": 1,
+        "rolling_novelty_rate": 0.1,
+        "cumulative_records": 866
+      },
+      {
+        "query_index": 18,
+        "query_id": "graph:forward-citation:W2020443333",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 1,
+        "novelty_rate": 1,
+        "rolling_novelty_rate": 0.2,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 19,
+        "query_id": "graph:forward-citation:W7201969041",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.2,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 20,
+        "query_id": "graph:backward-reference:W7201976895",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.2,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 21,
+        "query_id": "graph:forward-citation:W7201976895",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.2,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 22,
+        "query_id": "graph:backward-reference:W7202291746",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.2,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 23,
+        "query_id": "graph:forward-citation:W7202291746",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.2,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 24,
+        "query_id": "graph:backward-reference:W7169557143",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.2,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 25,
+        "query_id": "graph:forward-citation:W7169557143",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.2,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 26,
+        "query_id": "graph:backward-reference:W7165564922",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.2,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 27,
+        "query_id": "graph:forward-citation:W7165564922",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.1,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 28,
+        "query_id": "graph:backward-reference:W7166715852",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 29,
+        "query_id": "graph:forward-citation:W7166715852",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 867
+      },
+      {
+        "query_index": 30,
+        "query_id": "graph:backward-reference:W7162533360",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 867
       }
     ],
     "window_queries": 10,
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 1,
+      "relevance": 2,
       "recency": 1,
       "citation": 1
     },
-    "topical_candidates": 43,
-    "topical_confirmed": 20,
-    "topical_rejected": 23,
-    "topical_confirmation_rate": 0.4651,
+    "topical_candidates": 49,
+    "topical_confirmed": 19,
+    "topical_rejected": 30,
+    "topical_confirmation_rate": 0.3878,
     "graph_anchors_expanded": 14,
     "field_union_estimate": {
-      "estimate": 885,
+      "estimate": 5982,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 1,
+      "measured_queries": 2,
       "total_search_queries": 3,
-      "summed_upstream_results": 885,
-      "observed_sample_multiplicity": 1
+      "summed_upstream_results": 6607,
+      "observed_sample_multiplicity": 1.1045
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -1130,6 +1157,29 @@
       "record_id": "cr_6b9ac332d84d1f9b1970940a"
     },
     {
+      "title": "Task Characteristics and the Experience of Optimal Flow in Human—Computer Interaction",
+      "authors": [
+        "Jawaid Abdul Ghani",
+        "Satish P. Deshpande"
+      ],
+      "year": 1994,
+      "venue": "The Journal of Psychology",
+      "doi": "10.1080/00223980.1994.9712742",
+      "citations": 999,
+      "abstract": "This article builds on job characteristics and optimal flow theory to describe the experience of individuals using computers in the workplace. A model was developed and tested with linear structural relationship modeling (LISREL) with data from 149 professionals employed in a variety of organizations. Flow, which is characterized by intense concentration and enjoyment, was found to be significantly linked with exploratory use behavior, which in turn was linked to extent of computer use. Flow was itself determined by the individual's sense of being in control and the level of challenge perceived in using computers. Perceived control was more important for individuals with high task-scope jobs, that is, jobs with high variety, identity, autonomy, and feedback. Challenge played a greater role for low task-scope individuals. Practical and theoretical implications of the model are discussed, and suggestions for further research are offered.",
+      "openalex_id": "W2139346530",
+      "openalex_type": "article",
+      "referenced_works_count": 37,
+      "categories": [
+        "foundational"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2020443333"
+      ],
+      "record_id": "cr_00b0b9124047e1b9dc816e98"
+    },
+    {
       "title": "Self-Assessment in the Health Professions: A Reformulation and Research Agenda",
       "authors": [
         "Kevin W. Eva",
@@ -1191,7 +1241,7 @@
       "year": 2008,
       "venue": "Motivation and Emotion",
       "doi": "10.1007/s11031-008-9102-4",
-      "citations": 841,
+      "citations": 844,
       "abstract": null,
       "openalex_id": "W1984683739",
       "openalex_type": "article",
@@ -1522,6 +1572,51 @@
         "recent"
       ],
       "record_id": "cr_8a532ac2dd4b68ce4a4b9260"
+    },
+    {
+      "title": "The Role of Flow Experience in Cyber-Game Addiction",
+      "authors": [
+        "Ting‐Jui Chou",
+        "Chih-Chen Ting"
+      ],
+      "year": 2003,
+      "venue": "CyberPsychology & Behavior",
+      "doi": "10.1089/109493103322725469",
+      "citations": 494,
+      "abstract": "Consumer habit, an important key to repetitive consumption, is an interesting yet puzzling phenomenon. Sometimes this consumption becomes obsessive--consumers will continue to act a certain way even when they feel it is not in their best interests. However, not all consumers develop such addictions. This study uses cyber-game addiction syndrome as an analogue to trace the possible causes of consumer addiction. Results from structure equation modeling show that repetition of favorite activities has a moderate effect upon addiction, which is in line with the assertion of rational addiction theory. However, flow experience--the emotional state embracing perceptional distortion and enjoyment--shows a much stronger impact on addiction. This suggests that consumers who have experienced flow are more likely to be addicted.",
+      "openalex_id": "W2066426987",
+      "openalex_type": "article",
+      "referenced_works_count": 33,
+      "categories": [
+        "foundational"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2020443333"
+      ],
+      "record_id": "cr_3e9cf762e3c6a513263138f3"
+    },
+    {
+      "title": "Optimal experience of Web activities",
+      "authors": [
+        "Hsiang Chen",
+        "Rolf T. Wigand",
+        "Michael S. Nilan"
+      ],
+      "year": 1999,
+      "venue": "Computers in Human Behavior",
+      "doi": "10.1016/s0747-5632(99)00038-2",
+      "citations": 473,
+      "abstract": "This paper reports on Web users' optimal flow experiences (Csikszentmihalyi, 1975b) in the Web environment. The concept of flow was employed to see if there were some positive aspects of Web experiences that could be linked to theory applied to other media and then incorporated into Web design to enhance its utility to users. The notions of the Web as a ‘multi-activity medium’ and a view of the Web as a ‘situated experience’ are proposed and verified in this study in order to demonstrate evidence of flow phenomena in the Web environment. Further, in order to overcome methodological hurdles inherent in previous studies, this study employed content analytic procedures to analyze open-ended questionnaires to directly elicit 304 Web users' perceived flow experiences on the Web. Results of this study provide baseline data on the existence of the flow phenomenon in the Web environment, such as factors and conditions associated with the flow experience, causes of Web users' perceived challenges and controls, and Web users' flow feelings and enjoyments. This study also establishes the groundwork for building a situational measuring instrument which may be used to identify Web users' flow experience for further exploration. We conclude that the concept of flow is a fruitful area for research that aims at improving Web design practice. The data suggest that additional research under more rigorous methodological conditions can further specify the factors and conditions associated with flow experiences on the Web.",
+      "openalex_id": "W2141119748",
+      "openalex_type": "article",
+      "referenced_works_count": 33,
+      "categories": [],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2020443333"
+      ],
+      "record_id": "cr_41455dfb3a5d59a06b230716"
     },
     {
       "title": "Changing systems for supporting farmers' decisions: problems, paradigms, and prospects",
@@ -2105,7 +2200,7 @@
       "year": 1995,
       "venue": "Journal of Applied Sport Psychology",
       "doi": "10.1080/10413209508406962",
-      "citations": 344,
+      "citations": 345,
       "abstract": "Understanding factors which may influence the occurrence of flow in elaite athletes was the goal of the present investigation. Twenty-eight elite level athletes from seven sports were interviewed about the factors they perceived influenced their experience of flow state. Inductive content analyses of athletes' responses to questions about what facilitates, prevents, and disrupts flow, resulted in 10 dimensions that synthesized the 361 themes suggested by the athletes. These themes and dimensions provided insight into factors that may influence whether or not flow occurs in elite athletes. For example. some of the more salient factors influencing whether or not flow occurred included: preparation, both physical and mental; confidence; focus; how the performance felt and progressed; and optimal motivation and arousal level. This study also involved asking elite athletes about the perceived controllability of these factors, and of the state of flow itself. The majority of the athletes interviewed perceived the flow state to be controllable. or potentially within their control. A large percentage of the factors seen to facilitate or prevent flow were perceived as controllable; however, factors seen as disrupting flow were largely seen as uncontrollable.",
       "openalex_id": "W1987162308",
       "openalex_type": "article",
@@ -3419,6 +3514,35 @@
       "record_id": "cr_677c3c54b6003986270457dd"
     },
     {
+      "title": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
+      "authors": [
+        "Wilk Oliveira",
+        "Juho Hamari",
+        "Sivaldo Joaquim",
+        "A. Toda",
+        "P. Palomino",
+        "Julita Vassileva",
+        "Seiji Isotani"
+      ],
+      "year": 2022,
+      "venue": "Smart Learning Environments",
+      "doi": "10.1186/s40561-022-00194-x",
+      "citations": 138,
+      "abstract": "Gamification refers to the attempt to transform different kinds of systems to be able to better invoke positive experiences such as the flow state. However, the ability of such intervention to invoke flow state is commonly believed to depend on several moderating factors including the user’s traits. Currently, there is a dearth of research on the effect of user traits on the results of gamification. Gamer types (personality traits related to gaming styles and preferences) are considered some of the most relevant factors affecting the individual’s susceptibility to gamification. Therefore, in this study we investigate how gamer types from the BrainHex taxonomy (achiever, conqueror, daredevil, mastermind, seeker, socializer and survivor) moderate the effects of personalized/non-personalized gamification on users’ flow experience (challenge-skill balance, merging of action and awareness, clear goals, feedback, concentration, control, loss of self-consciousness and autotelic experience), enjoyment, perception of gamification and motivation. We conducted a mixed factorial within-subject experiment involving 121 elementary school students comparing a personalized version against a non-personalized version of a gamified education system. There were no main effects between personalization and students’ flow experience, perception of gamification and motivation, and enjoyment. Our results also indicate patterns of characteristics that can lead students to the high flow experience (e.g., those who prefer to play multiplayer have a high flow experience in both personalized and non-personalized versions). Based on our results, we provided recommendations to advance the design of gamifed educational systems.",
+      "openalex_id": "W4221001939",
+      "openalex_type": "article",
+      "referenced_works_count": 80,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon",
+        "recent"
+      ],
+      "record_id": "cr_30d554911b08842b57a8d563"
+    },
+    {
       "title": "Interaction criticism: An introduction to the practice",
       "authors": [
         "Jeffrey Bardzell"
@@ -3464,35 +3588,6 @@
         "replication"
       ],
       "record_id": "cr_ad9545205759bcd07b3302b7"
-    },
-    {
-      "title": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
-      "authors": [
-        "Wilk Oliveira",
-        "Juho Hamari",
-        "Sivaldo Joaquim",
-        "A. Toda",
-        "P. Palomino",
-        "Julita Vassileva",
-        "Seiji Isotani"
-      ],
-      "year": 2022,
-      "venue": "Smart Learning Environments",
-      "doi": "10.1186/s40561-022-00194-x",
-      "citations": 136,
-      "abstract": "Gamification refers to the attempt to transform different kinds of systems to be able to better invoke positive experiences such as the flow state. However, the ability of such intervention to invoke flow state is commonly believed to depend on several moderating factors including the user’s traits. Currently, there is a dearth of research on the effect of user traits on the results of gamification. Gamer types (personality traits related to gaming styles and preferences) are considered some of the most relevant factors affecting the individual’s susceptibility to gamification. Therefore, in this study we investigate how gamer types from the BrainHex taxonomy (achiever, conqueror, daredevil, mastermind, seeker, socializer and survivor) moderate the effects of personalized/non-personalized gamification on users’ flow experience (challenge-skill balance, merging of action and awareness, clear goals, feedback, concentration, control, loss of self-consciousness and autotelic experience), enjoyment, perception of gamification and motivation. We conducted a mixed factorial within-subject experiment involving 121 elementary school students comparing a personalized version against a non-personalized version of a gamified education system. There were no main effects between personalization and students’ flow experience, perception of gamification and motivation, and enjoyment. Our results also indicate patterns of characteristics that can lead students to the high flow experience (e.g., those who prefer to play multiplayer have a high flow experience in both personalized and non-personalized versions). Based on our results, we provided recommendations to advance the design of gamifed educational systems.",
-      "openalex_id": "W4221001939",
-      "openalex_type": "article",
-      "referenced_works_count": 80,
-      "categories": [
-        "recent"
-      ],
-      "source_api": "semantic-scholar",
-      "search_angles": [
-        "canon",
-        "recent"
-      ],
-      "record_id": "cr_30d554911b08842b57a8d563"
     },
     {
       "title": "<scp>Multidisciplinary</scp> collaborative consensus guidance statement on the assessment and treatment of fatigue in <scp>postacute</scp> sequelae of <scp>SARS‐CoV</scp>‐2 infection (<scp>PASC</scp>) patients",
@@ -6764,6 +6859,29 @@
       "record_id": "cr_e861e0ca8054ab3215fe34d3"
     },
     {
+      "title": "Flow Experience in Paragliding: Effects on Experience and Life Satisfaction",
+      "authors": [
+        "R. A. Ayazlar",
+        "Atìla Yüksel"
+      ],
+      "year": 2018,
+      "venue": "Tourism Analysis",
+      "doi": "10.3727/108354218x15391984820396",
+      "citations": 29,
+      "abstract": "Although individuals' life satisfaction have been studied in a tourism setting, there has been limited research suggesting the flow experience as a predictor of life satisfaction. Studies investigating the antecedents of flow experience in an adventure setting are also scarce. Therefore, this study was aimed to explore the interrelationships among these constructs using a quantitative design. A sample drawn from 296 paragliding participants in Turkey was used. Structural equation modeling approach was utilized to test the research model. The results strongly supported six of seven hypotheses; the sense of control dimension was not supported. Sensation seeking dimension was first time supported as an antecedent of flow experience in paragliding activity. Challenge–skill balance and concentration were also found as strong antecedents of flow state. The direct and indirect relationships through experience satisfaction between flow experience and life satisfaction was also demonstrated in this setting. Results are discussed and recommendations are identified for adventure tourism managers.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "recent"
+      ],
+      "record_id": "cr_b6bc420a2c13cc6e9daf0e34"
+    },
+    {
       "title": "Technology empowerment: Digital transformation and enterprise ESG performance—Evidence from China’s manufacturing sector",
       "authors": [
         "Xianyun Wu",
@@ -6840,6 +6958,27 @@
         "replication"
       ],
       "record_id": "cr_180994e7fba76a373d008864"
+    },
+    {
+      "title": "Flow experience in computer game playing among Thai university students",
+      "authors": [
+        "Supat Sanjamsai",
+        "Darunee Phukao"
+      ],
+      "year": 2018,
+      "venue": null,
+      "doi": "10.1016/j.kjss.2018.03.003",
+      "citations": 28,
+      "abstract": "Abstract This study was based on the flow theory of Mihaly Csikszentmihalyi. A cross sectional study was performed to examine flow experience in computer game playing among university students and to identify behavior that led to positive consequences and addictive behavior. Multi-stage sampling was conducted to select a sample of 478 university students aged 18–24 years who usually played computer games. Data were collected using the assessment instruments of computer game addictive behavior and perception of the consequences from game playing. Based on exploratory factor analysis, the construct of flow experience could be divided into two dimensions: 1) cognitive flow which was composed of challenge-skill balance, clear goals, and unambiguous feedback, and 2) emotional flow which was composed of action-awareness merging, concentration on the task at hand, sense of control, loss of consciousness, and time transformation. Based on structural equation modeling, cognitive flow was positively correlated to perception of utility from the game (β = .85) and emotional flow was positively correlated to physical and psychological impacts from the game (β = .52). Moreover, males were more likely to spend time on computer games than females. This study found that time duration was not a key indicator of game-playing consequences. However, the state of flow in computer game playing was indeed a key factor that could perpetrate positive or negative outcomes. The findings of this study suggested that flow experience in computer game playing has both benefits and drawbacks. It is recommended that youth-related organizations should promote cognitive flow experiences to develop the self-improvement of computer game players rather than emotional flow experiences.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "recent"
+      ],
+      "record_id": "cr_c6195292035c4ad2243055be"
     },
     {
       "title": "A simple tree planting framework to improve climate, air pollution, health, and urban heat in vulnerable locations using non‐traditional partners",
@@ -7205,6 +7344,28 @@
       "record_id": "cr_63690489e939eb19289f3c94"
     },
     {
+      "title": "Flow and quiet eye: the role of attentional control in flow experience",
+      "authors": [
+        "D. Harris",
+        "S. Vine",
+        "Mark R. Wilson"
+      ],
+      "year": 2017,
+      "venue": "Cognitive Processing",
+      "doi": "10.1007/s10339-017-0794-9",
+      "citations": 24,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "recent"
+      ],
+      "record_id": "cr_08ef69bca6faa1f16c1d659b"
+    },
+    {
       "title": "Flow State Experiences as a Biopsychosocial Guide for Tai Ji Intervention and Research in Neuro-Rehabilitation",
       "authors": [
         "Giles Yeates"
@@ -7410,6 +7571,26 @@
         "application"
       ],
       "record_id": "cr_c7417c844d4da3e415c8a2ab"
+    },
+    {
+      "title": "Facilitating flow experience in physical education settings",
+      "authors": [
+        "M. Kawabata"
+      ],
+      "year": 2018,
+      "venue": "Psychology of Sport And Exercise",
+      "doi": "10.1016/j.psychsport.2018.05.006",
+      "citations": 22,
+      "abstract": "Objective: The present study aimed to examine the efficacy of an intervention program for fostering flow in a physical education (PE) setting. Design: A cluster‐randomized control trial design was employed in the study. Method: A total of 135 college students (124 women and 11 men) participated in the study. Three PE classes were randomly allocated to two intervention groups (Class 1 [n = 47] and Class 2 [n = 41]) and one control group (Class 3: n = 47). Basketball was used as the major physical activity in both intervention and control conditions, and all participants played basketball in their PE lessons once a week for 10 weeks. The intervention program focused on increasing participants' abilities and awareness relating to the preconditions of a flow state (clear goals, unambiguous feedback, and challenge‐skill balance). Participant's flow experience in each PE lesson was measured with the Japanese version of the Flow State Scale‐2. Growth curve modeling was conducted on the situational flow scores. Results: Both intervention groups' global flow state scores in the first PE lesson (Week 1) were not different from that of the control group; however, both the intervention groups' global flow state scores increased significantly in later weeks (Weeks 7–10), compared to the control group. Conclusions: The present study was the first cluster‐randomized control trial with a moderate sample size to foster flow in a PE setting. The findings of the study generally confirmed that the intervention program was successful in promoting flow in PE contexts. HighlightsAn intervention program associated to the proximal conditions of a flow state was proposed.This study was the first cluster‐randomized control trial with a moderate sample size to foster flow in a PE setting.The effectiveness of the intervention was rigorously examined by analyzing longitudinal data with growth curve modeling.The intervention strategy was successful to support intervention groups in satisfying the proximal conditions of flow.These findings confirmed that the promotion of a flow state in PE contexts is possible through an intervention program.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "recent"
+      ],
+      "record_id": "cr_e76aa998f14011042fbc05d7"
     },
     {
       "title": "Prevention and Management of Noncommunicable Disease",
@@ -7903,6 +8084,28 @@
         "recent"
       ],
       "record_id": "cr_800f3196691506d1643e4b91"
+    },
+    {
+      "title": "Alternative music playlists on the radio: Flow experience and appraisal during the reception of music radio programs",
+      "authors": [
+        "Nicolas Ruth",
+        "Benedikt Spangardt",
+        "Holger Schramm"
+      ],
+      "year": 2017,
+      "venue": null,
+      "doi": "10.1177/1029864916642623",
+      "citations": 18,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "recent"
+      ],
+      "record_id": "cr_34ed75136214b0fa1191f36c"
     },
     {
       "title": "Flow State as an Existential Tool to Increase Optimal Experience and Life Enjoyment",
@@ -8459,6 +8662,30 @@
         "canon"
       ],
       "record_id": "cr_3a6a612d71922640dfff169d"
+    },
+    {
+      "title": "Flow Experience Study of Eco-Tourists: A Case Study of Hunan Daweishan Mountain Ski Area",
+      "authors": [
+        "Zheng Qun-ming",
+        "Tang Rong",
+        "Mo Ting",
+        "Duan Nijing",
+        "Liu Jia"
+      ],
+      "year": 2017,
+      "venue": "Journal of Resources and Ecology",
+      "doi": "10.5814/j.issn.1674-764x.2017.05.007",
+      "citations": 15,
+      "abstract": null,
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "recent"
+      ],
+      "record_id": "cr_ae2b12c079af985c8bfd01ac"
     },
     {
       "title": "Phenomics for sustainable production in the South African dairy and beef cattle industry",
@@ -12001,6 +12228,27 @@
       "record_id": "cr_b510a4e841dedfc93dc2171b"
     },
     {
+      "title": "The Relationship between Flow Experience in Leisure and Life Satisfaction in Undergraduates",
+      "authors": [
+        "Yongmei Hou",
+        "Yuan Jiang"
+      ],
+      "year": 2020,
+      "venue": "Journal of psychological researches",
+      "doi": "10.30564/jpr.v2i2.1901",
+      "citations": 3,
+      "abstract": "Objective: To understand the current situation of undergraduates' flow experience in leisure and life satisfaction, and to explore the relationship between the two. Methods: A stratified random sampling method was used to select 781 undergraduates (377 males and 410 females) from 7 colleges and universities in Guangdong Province. They were investigated using the Flow Experience in Leisure Questionnaire (FELQ) and the Youth Life Satisfaction Scale (YLSS). Results: The total scores of FELQ and YLSS of the students in this group are (161.73 ± 19.81) and (174.45 ± 26.50). FELQ's unity of knowledge and action, challenge and skill balance, concentration, grade ranking, family economic status are positively related to YLSS 'life satisfaction (β = .227, .115, .098, .158, .082, P < .05); \"Like to sleep during leisure\" is negatively correlated with life satisfaction of YLSS (β =-. 097, P <.05); FELQ's unity of knowledge and action, concentration, grade ranking and family economic status are positively related to YLSS's self-satisfaction (β = .286, .126, .194, .096, P <.01); \"Like to sleep during leisure” is negatively correlated with YLSS ’s self-satisfaction (β =-. 091, P <.01); FELQ ’s unity of knowledge and action, challenge and skill balance, father’s occupation, “like self-study in leisure” are positively related to YLSS ’environmental satisfaction (β = .198, .131, .075, .073, P <.05); \"Like to sleep during leisure\", gender and YLSS environment satisfaction negatively correlated (β =-. 094, -.091, P <.01). Conclusion: Flow experience in leisure, types of leisure activities, gender, grade ranking and family factors (family economic status and father's occupation) may be related factors for the development of college students' life satisfaction.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "recent"
+      ],
+      "record_id": "cr_792909eb131c64ff8f77a31f"
+    },
+    {
       "title": "The Use of Language Styles in Multimodal Texts on the Facebook Account “HT”",
       "authors": [
         "Nyoman Elly Swandayani",
@@ -13989,6 +14237,28 @@
         "replication"
       ],
       "record_id": "cr_a1e1803a79d19b6246421c52"
+    },
+    {
+      "title": "The Effect of Game Experience on Flow Zone",
+      "authors": [
+        "Libuyu Xu"
+      ],
+      "year": 2024,
+      "venue": "Lecture Notes in Education Psychology and Public Media",
+      "doi": "10.54254/2753-7048/73/20241051",
+      "citations": 1,
+      "abstract": "Abstract: Flow theory is frequently combined with educational games to assess learning outcomes and offer guidance. Nevertheless, studying the impact of gaming experiences on players' flow zone is also an engaging topic. This paper constructed a model based on Csikszentmihalyis skill/challenge model. The underlying principle of this model is that the diverse ways in which players confront different game difficulties result in changes in the player's flow zone, and it discovers the objective role of emotions within it. Since the difficulty of Elden Ring is ideal for analyzing the skill/challenge balance model and a large player base provides a counterexample for study, it can be used to interpret many of the phenomena and player experiences in the game. Additionally, to further validate the model, qualitative interviews are conducted with about their experience of the flow of the game. The research identified that other factors of flow experience, such as total concentration and loss of self-consciousness, rather than skill/challenge balance, are more important for game players.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "recent"
+      ],
+      "record_id": "cr_e560a8e718a19c717e550841"
     },
     {
       "title": "The Productive Engagement SPACE: A Guide to Improve Critical Learner Interactions in e-Learning Environments",
@@ -17653,6 +17923,30 @@
         "recent"
       ],
       "record_id": "cr_8fe3693f0b6ee6126a716b24"
+    },
+    {
+      "title": "Exploring How <scp>AI</scp> Tour Guides' Automated Social Presence Influences Tourist Flow Experience and Behavioral Intentions",
+      "authors": [
+        "Fan Liu",
+        "Lianping Ren",
+        "Yilin Hu"
+      ],
+      "year": 2026,
+      "venue": "International Journal of Tourism Research",
+      "doi": "10.1002/jtr.70326",
+      "citations": 0,
+      "abstract": "ABSTRACT This study examines how the dimensions of automated social presence (ASP) in AI tour guides influence tourists' flow experience and behavioral intentions. Using 413 valid questionnaire responses, the research integrates partial least squares structural equation modeling (PLS‐SEM) and fuzzy‐set qualitative comparative analysis (fsQCA) to capture both linear and configurational relationships among the constructs. The findings reveal that the social affability, empathy, responsiveness, communication versatility, and competence of AI tour guides positively affect tourists' flow experience and behavioral intentions, with flow experience playing a mediating role. Furthermore, four fsQCA configurations leading to high behavioral intentions are identified. This study advances the theoretical understanding of AI‐enabled tourism services by uncovering the psychological mechanisms that drive tourists' engagement with AI tour guides. It also offers practical implications for tourism and hospitality practitioners to improve AI tour guide design and service quality, enhance visitor experiences, and strengthen destination competitiveness.",
+      "openalex_id": "W7154562262",
+      "openalex_type": "article",
+      "referenced_works_count": 49,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2020443333"
+      ],
+      "record_id": "cr_635d5344615db1e85d875ed1"
     },
     {
       "title": "Exploring learning engagement among Spanish undergraduates in Asia: the chain mediating roles of flow experience and self-determined motivation in short video platform use",
