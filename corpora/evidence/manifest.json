@@ -6,29 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-10T11:02:04.420Z",
-    "status": "partial",
+    "timestamp": "2026-08-17T05:38:04.912Z",
+    "status": "success",
     "params": {
       "mechanism": "FL-24",
-      "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      "terms": ""
     },
-    "records_fetched": 853,
+    "records_fetched": 855,
     "files_written": 1,
-    "duration_s": 41.09,
-    "error": "search semantic-scholar critique \"flow experience challenge skill balance b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "duration_s": 43.56,
     "warnings": {
-      "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 41,
-      "duration_s": 41.09,
+      "api_calls": 44,
+      "duration_s": 43.56,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-17T05:38:04.912Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 855,
+      "files_written": 1,
+      "duration_s": 43.56,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 44,
+        "duration_s": 43.56,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-10T11:02:04.420Z",
       "status": "partial",
@@ -447,27 +466,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-10T10:38:24.624Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 853,
-      "files_written": 1,
-      "duration_s": 38.52,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 40,
-        "duration_s": 38.52,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -545,14 +543,14 @@
     },
     {
       "path": "FL-24.json",
-      "records": 853,
-      "bytes": 7612019,
+      "records": 855,
+      "bytes": 7621174,
       "categories": {
         "foundational": 32,
         "meta-analysis": 22,
         "replication": 95,
-        "dissent": 152,
-        "recent": 515
+        "dissent": 153,
+        "recent": 517
       }
     },
     {
