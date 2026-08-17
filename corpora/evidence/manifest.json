@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-17T05:38:04.912Z",
+    "timestamp": "2026-08-17T05:39:18.435Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 855,
     "files_written": 1,
-    "duration_s": 43.56,
+    "duration_s": 43.63,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 44,
-      "duration_s": 43.56,
+      "duration_s": 43.63,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-17T05:39:18.435Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 855,
+      "files_written": 1,
+      "duration_s": 43.63,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 44,
+        "duration_s": 43.63,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-17T05:38:04.912Z",
       "status": "success",
@@ -445,27 +466,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-10T10:39:36.000Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 853,
-      "files_written": 1,
-      "duration_s": 46.82,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 42,
-        "duration_s": 46.82,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -544,7 +544,7 @@
     {
       "path": "FL-24.json",
       "records": 855,
-      "bytes": 7621174,
+      "bytes": 7621139,
       "categories": {
         "foundational": 32,
         "meta-analysis": 22,
