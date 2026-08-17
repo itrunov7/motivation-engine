@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-17T05:55:17.030Z",
+    "timestamp": "2026-08-17T05:56:31.290Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 855,
     "files_written": 1,
-    "duration_s": 43.57,
+    "duration_s": 43.5,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 44,
-      "duration_s": 43.57,
+      "duration_s": 43.5,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-17T05:56:31.290Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 855,
+      "files_written": 1,
+      "duration_s": 43.5,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 44,
+        "duration_s": 43.5,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-17T05:55:17.030Z",
       "status": "success",
@@ -425,27 +446,6 @@
       "cost": {
         "api_calls": 39,
         "duration_s": 37.41,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-10T10:57:14.968Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 853,
-      "files_written": 1,
-      "duration_s": 34.75,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 38,
-        "duration_s": 34.75,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
