@@ -6,27 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-24T15:49:38.185Z",
-    "status": "success",
+    "timestamp": "2026-08-24T15:51:10.658Z",
+    "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 933,
     "files_written": 1,
-    "duration_s": 52.02,
+    "duration_s": 209.51,
+    "error": "backward-reference openalex canon \"AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · forward-citation openalex canon \"AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works",
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 44,
-      "duration_s": 52.02,
+      "api_calls": 54,
+      "duration_s": 209.51,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-24T15:51:10.658Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 933,
+      "files_written": 1,
+      "duration_s": 209.51,
+      "error": "backward-reference openalex canon \"AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · forward-citation openalex canon \"AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 54,
+        "duration_s": 209.51,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-24T15:49:38.185Z",
       "status": "success",
@@ -428,27 +451,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-24T15:14:23.529Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 933,
-      "files_written": 1,
-      "duration_s": 44.91,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 44,
-        "duration_s": 44.91,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -527,7 +529,7 @@
     {
       "path": "FL-24.json",
       "records": 933,
-      "bytes": 7878412,
+      "bytes": 7879356,
       "categories": {
         "foundational": 34,
         "meta-analysis": 25,

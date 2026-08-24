@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-24T15:50:30.162Z",
+  "fetched_at": "2026-08-24T15:54:40.123Z",
   "terms_source": "record",
   "terms": [
     "flow experience challenge skill balance",
@@ -288,11 +288,11 @@
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
-      "returned": 6,
-      "unique_returned": 6,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
@@ -307,7 +307,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
@@ -455,6 +455,36 @@
       "requested": 25,
       "returned": 3,
       "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W279868603",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Flow Experience and Challenge-Skill Balance in E-Learning",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W4221001939",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
@@ -745,30 +775,6 @@
       },
       {
         "query_index": 19,
-        "query_id": "graph:backward-reference:W7162293062",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 6,
-        "unique_returned": 6,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 933
-      },
-      {
-        "query_index": 20,
-        "query_id": "graph:forward-citation:W7162293062",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 933
-      },
-      {
-        "query_index": 21,
         "query_id": "graph:backward-reference:W7163342239",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -780,7 +786,7 @@
         "cumulative_records": 933
       },
       {
-        "query_index": 22,
+        "query_index": 20,
         "query_id": "graph:forward-citation:W7163342239",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -792,7 +798,7 @@
         "cumulative_records": 933
       },
       {
-        "query_index": 23,
+        "query_index": 21,
         "query_id": "graph:backward-reference:W7162254536",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -804,7 +810,7 @@
         "cumulative_records": 933
       },
       {
-        "query_index": 24,
+        "query_index": 22,
         "query_id": "graph:forward-citation:W7162254536",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -816,7 +822,7 @@
         "cumulative_records": 933
       },
       {
-        "query_index": 25,
+        "query_index": 23,
         "query_id": "graph:forward-citation:W1683284848",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -828,7 +834,7 @@
         "cumulative_records": 933
       },
       {
-        "query_index": 26,
+        "query_index": 24,
         "query_id": "graph:backward-reference:W2042314632",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -840,7 +846,7 @@
         "cumulative_records": 933
       },
       {
-        "query_index": 27,
+        "query_index": 25,
         "query_id": "graph:forward-citation:W2042314632",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -852,7 +858,7 @@
         "cumulative_records": 933
       },
       {
-        "query_index": 28,
+        "query_index": 26,
         "query_id": "graph:backward-reference:W3046829123",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -864,7 +870,7 @@
         "cumulative_records": 933
       },
       {
-        "query_index": 29,
+        "query_index": 27,
         "query_id": "graph:forward-citation:W3046829123",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -876,12 +882,36 @@
         "cumulative_records": 933
       },
       {
-        "query_index": 30,
+        "query_index": 28,
         "query_id": "graph:backward-reference:W279868603",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 3,
         "unique_returned": 3,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 933
+      },
+      {
+        "query_index": 29,
+        "query_id": "graph:forward-citation:W279868603",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 2,
+        "unique_returned": 2,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 933
+      },
+      {
+        "query_index": 30,
+        "query_id": "graph:backward-reference:W4221001939",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -900,7 +930,7 @@
     "topical_confirmed": 20,
     "topical_rejected": 25,
     "topical_confirmation_rate": 0.4444,
-    "graph_anchors_expanded": 14,
+    "graph_anchors_expanded": 15,
     "field_union_estimate": {
       "estimate": 933,
       "method": "sample_overlap_adjusted_union",
