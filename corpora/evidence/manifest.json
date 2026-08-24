@@ -6,28 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-24T15:55:21.997Z",
-    "status": "partial",
+    "timestamp": "2026-08-24T15:59:00.999Z",
+    "status": "success",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 933,
     "files_written": 1,
-    "duration_s": 140.35,
-    "error": "forward-citation openalex canon \"From challenge-skills balance to wellbeing in sports: the role of team identification and flow\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works",
+    "duration_s": 184.11,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 50,
-      "duration_s": 140.35,
+      "api_calls": 49,
+      "duration_s": 184.11,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-24T15:59:00.999Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 933,
+      "files_written": 1,
+      "duration_s": 184.11,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 49,
+        "duration_s": 184.11,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-24T15:55:21.997Z",
       "status": "partial",
@@ -431,27 +451,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-24T15:17:18.612Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 933,
-      "files_written": 1,
-      "duration_s": 56.74,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 44,
-        "duration_s": 56.74,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -530,7 +529,7 @@
     {
       "path": "FL-24.json",
       "records": 933,
-      "bytes": 7878860,
+      "bytes": 7878412,
       "categories": {
         "foundational": 34,
         "meta-analysis": 25,
