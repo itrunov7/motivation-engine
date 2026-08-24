@@ -6,28 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-24T16:30:42.207Z",
-    "status": "partial",
+    "timestamp": "2026-08-24T16:34:07.047Z",
+    "status": "success",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 933,
     "files_written": 1,
-    "duration_s": 165.64,
-    "error": "backward-reference openalex canon \"Challenge/Skill Balance, Flow, and Performance Anxiety\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works/W1683284848",
+    "duration_s": 54.5,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 52,
-      "duration_s": 165.64,
+      "api_calls": 45,
+      "duration_s": 54.5,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-24T16:34:07.047Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 933,
+      "files_written": 1,
+      "duration_s": 54.5,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 45,
+        "duration_s": 54.5,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-24T16:30:42.207Z",
       "status": "partial",
@@ -435,27 +455,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-24T15:31:41.489Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 933,
-      "files_written": 1,
-      "duration_s": 97.73,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 45,
-        "duration_s": 97.73,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -534,7 +533,7 @@
     {
       "path": "FL-24.json",
       "records": 933,
-      "bytes": 7878855,
+      "bytes": 7878412,
       "categories": {
         "foundational": 34,
         "meta-analysis": 25,
