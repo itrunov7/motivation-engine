@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-24T17:33:01.543Z",
+    "timestamp": "2026-08-24T17:34:32.765Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 933,
     "files_written": 1,
-    "duration_s": 50.75,
+    "duration_s": 50.47,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 45,
-      "duration_s": 50.75,
+      "duration_s": 50.47,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-24T17:34:32.765Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 933,
+      "files_written": 1,
+      "duration_s": 50.47,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 45,
+        "duration_s": 50.47,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-24T17:33:01.543Z",
       "status": "success",
@@ -425,28 +446,6 @@
       "cost": {
         "api_calls": 45,
         "duration_s": 50.77,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-24T16:48:33.130Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 933,
-      "files_written": 1,
-      "duration_s": 1015.52,
-      "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · backward-reference openalex canon \"The Relationship Between Flow, Task Difficulty, and Performance\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works/W7202291746 · forward-citation openalex canon \"The Relationship Between Flow, Task Difficulty, and Performance\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · backward-reference openalex canon \"Understanding Flow Experience Among College Basketball Players: The Mediating Role of Perceived Skill–Challenge Balance\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · forward-citation openalex canon \"Understanding Flow Experience Among College Basketball Players: The Mediating Role of Perceived Skill–Challenge Balance\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · backward-reference openalex canon \"From challenge-skills balance to wellbeing in sports: the role of team identification and flow\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works/W7165564922 · forward-citation openalex canon \"From challenge-skills balance to wellbeing in sports: the role of team identification and flow\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · backward-reference openalex canon \"Exploring College Students’ AI-Supported Flow during Language Learning Tasks in Virtual Environments\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works/W7166715852 · forward-citation openalex canon \"Exploring College Students’ AI-Supported Flow during Language Learning Tasks in Virtual Environments\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · forward-citation openalex canon \"Flow as Minimum-Displacement Maximum-Performance: Csikszentmihalyi's Optimal Experience as S⁰ Condition, Skill-Challenge Balance as Basin Geometry, and the Neurochemistry of Return\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · backward-reference openalex canon \"AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works/W7162293062 · forward-citation openalex canon \"AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · backward-reference openalex canon \"Study on the Design of Intangible Cultural Heritage VR Experience and Immersive Communication Strategy Based on Flow Theory\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works/W7163342239 · backward-reference openalex canon \"When Challenge Turns into Threat at the Chessboard: Cardiovascular Reactivity and Flow Across Two Hours of Task Performance\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works/W7162254536 · forward-citation openalex canon \"When Challenge Turns into Threat at the Chessboard: Cardiovascular Reactivity and Flow Across Two Hours of Task Performance\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · forward-citation openalex canon \"Challenge/Skill Balance, Flow, and Performance Anxiety\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · backward-reference openalex canon \"The challenge–skill balance and antecedents of flow: A meta-analytic investigation\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works/W2042314632 · forward-citation openalex canon \"The challenge–skill balance and antecedents of flow: A meta-analytic investigation\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · backward-reference openalex canon \"Detecting Students’ Flow States and Their Construct Through Electroencephalogram: Reflective Flow Experiences, Balance of Challenge and Skill, and Sense of Control\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · forward-citation openalex canon \"Detecting Students’ Flow States and Their Construct Through Electroencephalogram: Reflective Flow Experiences, Balance of Challenge and Skill, and Sense of Control\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · backward-reference openalex canon \"Flow Experience and Challenge-Skill Balance in E-Learning\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works/W279868603 · backward-reference openalex canon \"The effects of personalized gamification on students’ flow experience, motivation, and enjoyment\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · forward-citation openalex canon \"The effects of personalized gamification on students’ flow experience, motivation, and enjoyment\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works",
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 124,
-        "duration_s": 1015.52,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
