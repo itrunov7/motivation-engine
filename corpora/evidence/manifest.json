@@ -6,28 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-24T23:02:14.645Z",
+    "timestamp": "2026-08-24T23:03:03.638Z",
     "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 933,
-    "files_written": 0,
-    "duration_s": 0.36,
-    "error": "upstream API quota requires a later continuation; logical run FL-24-mt7ucjhd checkpointed at query 1/1050",
+    "files_written": 1,
+    "duration_s": 43.57,
+    "error": "search openalex canon \"flow experience challenge skill balance\": api.openalex.org upstream cooldown is 3466s; checkpoint and resume later",
     "warnings": {
-      "resume_required": true
+      "low_novelty": true
     },
     "cost": {
-      "api_calls": 1,
-      "duration_s": 0.36,
+      "api_calls": 45,
+      "duration_s": 43.57,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-24T23:03:03.638Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 933,
+      "files_written": 1,
+      "duration_s": 43.57,
+      "error": "search openalex canon \"flow experience challenge skill balance\": api.openalex.org upstream cooldown is 3466s; checkpoint and resume later",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 45,
+        "duration_s": 43.57,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-24T23:02:14.645Z",
       "status": "partial",
@@ -427,27 +449,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-24T22:35:08.172Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 933,
-      "files_written": 1,
-      "duration_s": 43.45,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 44,
-        "duration_s": 43.45,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -526,7 +527,7 @@
     {
       "path": "FL-24.json",
       "records": 933,
-      "bytes": 7878412,
+      "bytes": 7878762,
       "categories": {
         "foundational": 34,
         "meta-analysis": 25,
