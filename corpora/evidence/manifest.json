@@ -6,27 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-24T16:06:43.780Z",
-    "status": "success",
+    "timestamp": "2026-08-24T16:08:15.046Z",
+    "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 933,
     "files_written": 1,
-    "duration_s": 52.84,
+    "duration_s": 242.52,
+    "error": "backward-reference openalex canon \"When Challenge Turns into Threat at the Chessboard: Cardiovascular Reactivity and Flow Across Two Hours of Task Performance\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · forward-citation openalex canon \"When Challenge Turns into Threat at the Chessboard: Cardiovascular Reactivity and Flow Across Two Hours of Task Performance\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · forward-citation openalex canon \"Challenge/Skill Balance, Flow, and Performance Anxiety\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works",
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 44,
-      "duration_s": 52.84,
+      "api_calls": 58,
+      "duration_s": 242.52,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-24T16:08:15.046Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 933,
+      "files_written": 1,
+      "duration_s": 242.52,
+      "error": "backward-reference openalex canon \"When Challenge Turns into Threat at the Chessboard: Cardiovascular Reactivity and Flow Across Two Hours of Task Performance\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · forward-citation openalex canon \"When Challenge Turns into Threat at the Chessboard: Cardiovascular Reactivity and Flow Across Two Hours of Task Performance\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · forward-citation openalex canon \"Challenge/Skill Balance, Flow, and Performance Anxiety\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 58,
+        "duration_s": 242.52,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-24T16:06:43.780Z",
       "status": "success",
@@ -431,27 +454,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-24T15:24:55.060Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 933,
-      "files_written": 1,
-      "duration_s": 63.75,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 44,
-        "duration_s": 63.75,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -530,7 +532,7 @@
     {
       "path": "FL-24.json",
       "records": 933,
-      "bytes": 7878412,
+      "bytes": 7879847,
       "categories": {
         "foundational": 34,
         "meta-analysis": 25,
