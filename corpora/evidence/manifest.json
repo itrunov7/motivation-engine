@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-24T17:23:09.199Z",
+    "timestamp": "2026-08-24T17:24:55.634Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 933,
     "files_written": 1,
-    "duration_s": 50.77,
+    "duration_s": 50.7,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 45,
-      "duration_s": 50.77,
+      "duration_s": 50.7,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-24T17:24:55.634Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 933,
+      "files_written": 1,
+      "duration_s": 50.7,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 45,
+        "duration_s": 50.7,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-24T17:23:09.199Z",
       "status": "success",
@@ -427,28 +448,6 @@
       "cost": {
         "api_calls": 45,
         "duration_s": 54.5,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-24T16:30:42.207Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 933,
-      "files_written": 1,
-      "duration_s": 165.64,
-      "error": "backward-reference openalex canon \"Challenge/Skill Balance, Flow, and Performance Anxiety\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works/W1683284848",
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 52,
-        "duration_s": 165.64,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
