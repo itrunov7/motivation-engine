@@ -6,28 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-24T16:40:32.097Z",
-    "status": "partial",
+    "timestamp": "2026-08-24T16:46:20.430Z",
+    "status": "success",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 933,
     "files_written": 1,
-    "duration_s": 305.82,
-    "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
+    "duration_s": 88.27,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 56,
-      "duration_s": 305.82,
+      "api_calls": 47,
+      "duration_s": 88.27,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-24T16:46:20.430Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 933,
+      "files_written": 1,
+      "duration_s": 88.27,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 47,
+        "duration_s": 88.27,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-24T16:40:32.097Z",
       "status": "partial",
@@ -433,27 +453,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-24T15:40:53.185Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 933,
-      "files_written": 1,
-      "duration_s": 61.03,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 44,
-        "duration_s": 61.03,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -532,7 +531,7 @@
     {
       "path": "FL-24.json",
       "records": 933,
-      "bytes": 7878874,
+      "bytes": 7878412,
       "categories": {
         "foundational": 34,
         "meta-analysis": 25,
