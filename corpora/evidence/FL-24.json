@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-24T08:03:56.431Z",
+  "fetched_at": "2026-08-24T08:10:15.267Z",
   "terms_source": "record",
   "terms": [
     "flow experience challenge skill balance",
@@ -18,17 +18,62 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 875
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
       "api": "openalex",
       "angle": "canon",
+      "term": "flow experience challenge skill balance",
+      "bucket": "recency",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "flow experience challenge skill balance",
+      "bucket": "citation",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance",
+      "api": "semantic-scholar",
+      "angle": "recent",
+      "term": "flow experience challenge skill balance",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 25,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": 5734
+    },
+    {
+      "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance",
+      "api": "openalex",
+      "angle": "recent",
       "term": "flow experience challenge skill balance",
       "bucket": "recency",
       "kind": "search",
@@ -41,9 +86,9 @@
       "upstream_total_results": 875
     },
     {
-      "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
+      "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "flow experience challenge skill balance",
       "bucket": "citation",
       "kind": "search",
@@ -56,9 +101,39 @@
       "upstream_total_results": 875
     },
     {
+      "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance applied intervention",
+      "api": "openalex",
+      "angle": "application",
+      "term": "flow experience challenge skill balance applied intervention",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 25,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": 44
+    },
+    {
+      "query_id": "graph:backward-reference:W7201969041",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "Flow-Related Engagement in Children Undergoing Cancer Treatment in China: A Scoping Review of Psychosocial and Digital Interventions",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
       "query_id": "graph:backward-reference:W1683284848",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "Challenge/Skill Balance, Flow, and Performance Anxiety",
       "bucket": "citation",
       "kind": "backward-reference",
@@ -71,24 +146,234 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W7201969041",
+      "query_id": "graph:backward-reference:W2905435317",
       "api": "openalex",
-      "angle": "canon",
-      "term": "Flow-Related Engagement in Children Undergoing Cancer Treatment in China: A Scoping Review of Psychosocial and Digital Interventions",
+      "angle": "application",
+      "term": "Effect of adjusting the challenge–skill balance for occupational therapy: study protocol for a randomised controlled trial",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 1,
+      "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2905435317",
+      "api": "openalex",
+      "angle": "application",
+      "term": "Effect of adjusting the challenge–skill balance for occupational therapy: study protocol for a randomised controlled trial",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 5,
+      "unique_returned": 5,
+      "records_added": 3,
+      "novelty_rate": 0.6,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W1683284848",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "Challenge/Skill Balance, Flow, and Performance Anxiety",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2042314632",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 6,
+      "unique_returned": 6,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.06,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2042314632",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.06,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2948469271",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "Modelling Chinese EFL learners’ flow experiences in digital game-based vocabulary learning: the roles of learner and contextual factors",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.06,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2948469271",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "Modelling Chinese EFL learners’ flow experiences in digital game-based vocabulary learning: the roles of learner and contextual factors",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.06,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2419624448",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "The experience of flow and subjective well-being of music students",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.06,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2419624448",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "The experience of flow and subjective well-being of music students",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.06,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2100919822",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "Arousal of Flow Experience in a Learning Setting and Its Effects on Exam Performance and Affect",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.06,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2100919822",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "Arousal of Flow Experience in a Learning Setting and Its Effects on Exam Performance and Affect",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 5,
+      "unique_returned": 5,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.06,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W4221001939",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W4221001939",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2020443333",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "“I Feel Present. Therefore, I Experience Flow:” A Structural Equation Modeling Approach to Flow and Presence in Video Games",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2020443333",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "“I Feel Present. Therefore, I Experience Flow:” A Structural Equation Modeling Approach to Flow and Presence in Video Games",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
       "query_id": "graph:forward-citation:W7201969041",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "Flow-Related Engagement in Children Undergoing Cancer Treatment in China: A Scoping Review of Psychosocial and Digital Interventions",
       "bucket": "recency",
       "kind": "forward-citation",
@@ -97,13 +382,13 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
       "query_id": "graph:backward-reference:W7201976895",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "Redefining Digital Education: The Impact of AI-Driven Flow Experience on Learner Satisfaction and Continuous Intention",
       "bucket": "citation",
       "kind": "backward-reference",
@@ -112,13 +397,13 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
       "query_id": "graph:forward-citation:W7201976895",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "Redefining Digital Education: The Impact of AI-Driven Flow Experience on Learner Satisfaction and Continuous Intention",
       "bucket": "recency",
       "kind": "forward-citation",
@@ -127,13 +412,13 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
       "query_id": "graph:backward-reference:W7202291746",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "The Relationship Between Flow, Task Difficulty, and Performance",
       "bucket": "citation",
       "kind": "backward-reference",
@@ -142,13 +427,13 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
       "query_id": "graph:forward-citation:W7202291746",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "The Relationship Between Flow, Task Difficulty, and Performance",
       "bucket": "recency",
       "kind": "forward-citation",
@@ -163,7 +448,7 @@
     {
       "query_id": "graph:backward-reference:W7169557143",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "Understanding Flow Experience Among College Basketball Players: The Mediating Role of Perceived Skill–Challenge Balance",
       "bucket": "citation",
       "kind": "backward-reference",
@@ -178,7 +463,7 @@
     {
       "query_id": "graph:forward-citation:W7169557143",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "Understanding Flow Experience Among College Basketball Players: The Mediating Role of Perceived Skill–Challenge Balance",
       "bucket": "recency",
       "kind": "forward-citation",
@@ -193,7 +478,7 @@
     {
       "query_id": "graph:backward-reference:W7165564922",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "From challenge-skills balance to wellbeing in sports: the role of team identification and flow",
       "bucket": "citation",
       "kind": "backward-reference",
@@ -208,253 +493,13 @@
     {
       "query_id": "graph:forward-citation:W7165564922",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "From challenge-skills balance to wellbeing in sports: the role of team identification and flow",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
       "returned": 0,
       "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7166715852",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Exploring College Students’ AI-Supported Flow during Language Learning Tasks in Virtual Environments",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7166715852",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Exploring College Students’ AI-Supported Flow during Language Learning Tasks in Virtual Environments",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7162533360",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Flow as Minimum-Displacement Maximum-Performance: Csikszentmihalyi's Optimal Experience as S⁰ Condition, Skill-Challenge Balance as Basin Geometry, and the Neurochemistry of Return",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7162533360",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Flow as Minimum-Displacement Maximum-Performance: Csikszentmihalyi's Optimal Experience as S⁰ Condition, Skill-Challenge Balance as Basin Geometry, and the Neurochemistry of Return",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7162293062",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 6,
-      "unique_returned": 6,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7162293062",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7163342239",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Study on the Design of Intangible Cultural Heritage VR Experience and Immersive Communication Strategy Based on Flow Theory",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7163342239",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Study on the Design of Intangible Cultural Heritage VR Experience and Immersive Communication Strategy Based on Flow Theory",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7162254536",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "When Challenge Turns into Threat at the Chessboard: Cardiovascular Reactivity and Flow Across Two Hours of Task Performance",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7162254536",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "When Challenge Turns into Threat at the Chessboard: Cardiovascular Reactivity and Flow Across Two Hours of Task Performance",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W1683284848",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Challenge/Skill Balance, Flow, and Performance Anxiety",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 3,
-      "unique_returned": 3,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W2042314632",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 6,
-      "unique_returned": 6,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W2042314632",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W3046829123",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Detecting Students’ Flow States and Their Construct Through Electroencephalogram: Reflective Flow Experiences, Balance of Challenge and Skill, and Sense of Control",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 3,
-      "unique_returned": 3,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W3046829123",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Detecting Students’ Flow States and Their Construct Through Electroencephalogram: Reflective Flow Experiences, Balance of Challenge and Skill, and Sense of Control",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 11,
-      "unique_returned": 11,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W279868603",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Flow Experience and Challenge-Skill Balance in E-Learning",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 3,
-      "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
@@ -489,34 +534,52 @@
   },
   "category_counts": {
     "foundational": 34,
-    "meta-analysis": 22,
+    "meta-analysis": 23,
     "replication": 95,
     "dissent": 155,
-    "recent": 520
+    "recent": 523
   },
   "diversity_report": {
     "viewpoint_spread": [
       {
         "angle": "canon",
         "queries": 3,
+        "returned": 0,
+        "unique_records": 0
+      },
+      {
+        "angle": "recent",
+        "queries": 3,
         "returned": 75,
-        "unique_records": 57
+        "unique_records": 67
+      },
+      {
+        "angle": "application",
+        "queries": 1,
+        "returned": 25,
+        "unique_records": 25
       }
     ],
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 3,
+        "queries": 6,
         "returned": 75,
-        "unique_records": 57
+        "unique_records": 73
+      },
+      {
+        "api": "semantic-scholar",
+        "queries": 1,
+        "returned": 25,
+        "unique_records": 25
       }
     ],
-    "recent_records": 26,
-    "recency_rate": 0.4561,
+    "recent_records": 39,
+    "recency_rate": 0.4286,
     "novelty": {
       "previous_corpus_records": 868,
-      "unique_records": 57,
-      "already_in_corpus": 57,
+      "unique_records": 91,
+      "already_in_corpus": 91,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -525,11 +588,11 @@
   },
   "saturation_report": {
     "queries_issued": 30,
-    "records_added": 0,
+    "records_added": 3,
     "novelty_curve": [
       {
         "query_index": 1,
-        "query_id": "search:relevance:openalex:canon:p1:flow experience challenge skill balance",
+        "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance",
         "bucket": "relevance",
         "kind": "search",
         "returned": 25,
@@ -541,7 +604,7 @@
       },
       {
         "query_index": 2,
-        "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
+        "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance",
         "bucket": "recency",
         "kind": "search",
         "returned": 25,
@@ -553,7 +616,7 @@
       },
       {
         "query_index": 3,
-        "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
+        "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance",
         "bucket": "citation",
         "kind": "search",
         "returned": 25,
@@ -565,11 +628,11 @@
       },
       {
         "query_index": 4,
-        "query_id": "graph:backward-reference:W1683284848",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 2,
-        "unique_returned": 2,
+        "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance applied intervention",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -589,11 +652,11 @@
       },
       {
         "query_index": 6,
-        "query_id": "graph:forward-citation:W7201969041",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
+        "query_id": "graph:backward-reference:W1683284848",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 2,
+        "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -601,11 +664,11 @@
       },
       {
         "query_index": 7,
-        "query_id": "graph:backward-reference:W7201976895",
+        "query_id": "graph:backward-reference:W2905435317",
         "bucket": "citation",
         "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -613,6 +676,198 @@
       },
       {
         "query_index": 8,
+        "query_id": "graph:forward-citation:W2905435317",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 5,
+        "unique_returned": 5,
+        "records_added": 3,
+        "novelty_rate": 0.6,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 9,
+        "query_id": "graph:forward-citation:W1683284848",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 10,
+        "query_id": "graph:backward-reference:W2042314632",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 6,
+        "unique_returned": 6,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.06,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 11,
+        "query_id": "graph:forward-citation:W2042314632",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.06,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 12,
+        "query_id": "graph:backward-reference:W2948469271",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 2,
+        "unique_returned": 2,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.06,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 13,
+        "query_id": "graph:forward-citation:W2948469271",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.06,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 14,
+        "query_id": "graph:backward-reference:W2419624448",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.06,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 15,
+        "query_id": "graph:forward-citation:W2419624448",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 2,
+        "unique_returned": 2,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.06,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 16,
+        "query_id": "graph:backward-reference:W2100919822",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.06,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 17,
+        "query_id": "graph:forward-citation:W2100919822",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 5,
+        "unique_returned": 5,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.06,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 18,
+        "query_id": "graph:backward-reference:W4221001939",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 19,
+        "query_id": "graph:forward-citation:W4221001939",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 20,
+        "query_id": "graph:backward-reference:W2020443333",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 21,
+        "query_id": "graph:forward-citation:W2020443333",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 22,
+        "query_id": "graph:forward-citation:W7201969041",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 23,
+        "query_id": "graph:backward-reference:W7201976895",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 871
+      },
+      {
+        "query_index": 24,
         "query_id": "graph:forward-citation:W7201976895",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -620,11 +875,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 868
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 871
       },
       {
-        "query_index": 9,
+        "query_index": 25,
         "query_id": "graph:backward-reference:W7202291746",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -632,11 +887,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 868
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 871
       },
       {
-        "query_index": 10,
+        "query_index": 26,
         "query_id": "graph:forward-citation:W7202291746",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -645,10 +900,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 868
+        "cumulative_records": 871
       },
       {
-        "query_index": 11,
+        "query_index": 27,
         "query_id": "graph:backward-reference:W7169557143",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -657,10 +912,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 868
+        "cumulative_records": 871
       },
       {
-        "query_index": 12,
+        "query_index": 28,
         "query_id": "graph:forward-citation:W7169557143",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -669,10 +924,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 868
+        "cumulative_records": 871
       },
       {
-        "query_index": 13,
+        "query_index": 29,
         "query_id": "graph:backward-reference:W7165564922",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -681,10 +936,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 868
+        "cumulative_records": 871
       },
       {
-        "query_index": 14,
+        "query_index": 30,
         "query_id": "graph:forward-citation:W7165564922",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -693,221 +948,29 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 15,
-        "query_id": "graph:backward-reference:W7166715852",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 16,
-        "query_id": "graph:forward-citation:W7166715852",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 17,
-        "query_id": "graph:backward-reference:W7162533360",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 18,
-        "query_id": "graph:forward-citation:W7162533360",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 19,
-        "query_id": "graph:backward-reference:W7162293062",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 6,
-        "unique_returned": 6,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 20,
-        "query_id": "graph:forward-citation:W7162293062",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 21,
-        "query_id": "graph:backward-reference:W7163342239",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 22,
-        "query_id": "graph:forward-citation:W7163342239",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 23,
-        "query_id": "graph:backward-reference:W7162254536",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 24,
-        "query_id": "graph:forward-citation:W7162254536",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 25,
-        "query_id": "graph:forward-citation:W1683284848",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 3,
-        "unique_returned": 3,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 26,
-        "query_id": "graph:backward-reference:W2042314632",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 6,
-        "unique_returned": 6,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 27,
-        "query_id": "graph:forward-citation:W2042314632",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 28,
-        "query_id": "graph:backward-reference:W3046829123",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 3,
-        "unique_returned": 3,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 29,
-        "query_id": "graph:forward-citation:W3046829123",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 11,
-        "unique_returned": 11,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
-      },
-      {
-        "query_index": 30,
-        "query_id": "graph:backward-reference:W279868603",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 3,
-        "unique_returned": 3,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 868
+        "cumulative_records": 871
       }
     ],
     "window_queries": 10,
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 1,
-      "recency": 1,
-      "citation": 1
+      "relevance": 3,
+      "recency": 2,
+      "citation": 2
     },
-    "topical_candidates": 45,
+    "topical_candidates": 51,
     "topical_confirmed": 20,
-    "topical_rejected": 25,
-    "topical_confirmation_rate": 0.4444,
-    "graph_anchors_expanded": 14,
+    "topical_rejected": 31,
+    "topical_confirmation_rate": 0.3922,
+    "graph_anchors_expanded": 13,
     "field_union_estimate": {
-      "estimate": 875,
+      "estimate": 6115,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 1,
-      "total_search_queries": 3,
-      "summed_upstream_results": 875,
-      "observed_sample_multiplicity": 1
+      "measured_queries": 3,
+      "total_search_queries": 4,
+      "summed_upstream_results": 6653,
+      "observed_sample_multiplicity": 1.0879
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -1214,7 +1277,7 @@
       "year": 2008,
       "venue": "Motivation and Emotion",
       "doi": "10.1007/s11031-008-9102-4",
-      "citations": 844,
+      "citations": 845,
       "abstract": null,
       "openalex_id": "W1984683739",
       "openalex_type": "article",
@@ -2145,6 +2208,26 @@
       "record_id": "cr_420c24d812146b6399e70f70"
     },
     {
+      "title": "Factors influencing the occurrence of flow state in elite athletes",
+      "authors": [
+        "Susan A. Jackson"
+      ],
+      "year": 1995,
+      "venue": "Journal of Applied Sport Psychology",
+      "doi": "10.1080/10413209508406962",
+      "citations": 346,
+      "abstract": "Understanding factors which may influence the occurrence of flow in elaite athletes was the goal of the present investigation. Twenty-eight elite level athletes from seven sports were interviewed about the factors they perceived influenced their experience of flow state. Inductive content analyses of athletes' responses to questions about what facilitates, prevents, and disrupts flow, resulted in 10 dimensions that synthesized the 361 themes suggested by the athletes. These themes and dimensions provided insight into factors that may influence whether or not flow occurs in elite athletes. For example. some of the more salient factors influencing whether or not flow occurred included: preparation, both physical and mental; confidence; focus; how the performance felt and progressed; and optimal motivation and arousal level. This study also involved asking elite athletes about the perceived controllability of these factors, and of the state of flow itself. The majority of the athletes interviewed perceived the flow state to be controllable. or potentially within their control. A large percentage of the factors seen to facilitate or prevent flow were perceived as controllable; however, factors seen as disrupting flow were largely seen as uncontrollable.",
+      "openalex_id": "W1987162308",
+      "openalex_type": "article",
+      "referenced_works_count": 26,
+      "categories": [],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2100919822"
+      ],
+      "record_id": "cr_616679c50c8db6c5efb28137"
+    },
+    {
       "title": "Flow at work: An experience sampling approach",
       "authors": [
         "Clive Fullagar",
@@ -2164,26 +2247,6 @@
         "W1683284848"
       ],
       "record_id": "cr_706359f956d058ac44a8012a"
-    },
-    {
-      "title": "Factors influencing the occurrence of flow state in elite athletes",
-      "authors": [
-        "Susan A. Jackson"
-      ],
-      "year": 1995,
-      "venue": "Journal of Applied Sport Psychology",
-      "doi": "10.1080/10413209508406962",
-      "citations": 345,
-      "abstract": "Understanding factors which may influence the occurrence of flow in elaite athletes was the goal of the present investigation. Twenty-eight elite level athletes from seven sports were interviewed about the factors they perceived influenced their experience of flow state. Inductive content analyses of athletes' responses to questions about what facilitates, prevents, and disrupts flow, resulted in 10 dimensions that synthesized the 361 themes suggested by the athletes. These themes and dimensions provided insight into factors that may influence whether or not flow occurs in elite athletes. For example. some of the more salient factors influencing whether or not flow occurred included: preparation, both physical and mental; confidence; focus; how the performance felt and progressed; and optimal motivation and arousal level. This study also involved asking elite athletes about the perceived controllability of these factors, and of the state of flow itself. The majority of the athletes interviewed perceived the flow state to be controllable. or potentially within their control. A large percentage of the factors seen to facilitate or prevent flow were perceived as controllable; however, factors seen as disrupting flow were largely seen as uncontrollable.",
-      "openalex_id": "W1987162308",
-      "openalex_type": "article",
-      "referenced_works_count": 26,
-      "categories": [],
-      "source_api": "snowball",
-      "snowball_from": [
-        "W2100919822"
-      ],
-      "record_id": "cr_616679c50c8db6c5efb28137"
     },
     {
       "title": "The Path from C3 to C4 Photosynthesis",
@@ -3500,7 +3563,7 @@
       "year": 2022,
       "venue": "Smart Learning Environments",
       "doi": "10.1186/s40561-022-00194-x",
-      "citations": 138,
+      "citations": 140,
       "abstract": "Gamification refers to the attempt to transform different kinds of systems to be able to better invoke positive experiences such as the flow state. However, the ability of such intervention to invoke flow state is commonly believed to depend on several moderating factors including the user’s traits. Currently, there is a dearth of research on the effect of user traits on the results of gamification. Gamer types (personality traits related to gaming styles and preferences) are considered some of the most relevant factors affecting the individual’s susceptibility to gamification. Therefore, in this study we investigate how gamer types from the BrainHex taxonomy (achiever, conqueror, daredevil, mastermind, seeker, socializer and survivor) moderate the effects of personalized/non-personalized gamification on users’ flow experience (challenge-skill balance, merging of action and awareness, clear goals, feedback, concentration, control, loss of self-consciousness and autotelic experience), enjoyment, perception of gamification and motivation. We conducted a mixed factorial within-subject experiment involving 121 elementary school students comparing a personalized version against a non-personalized version of a gamified education system. There were no main effects between personalization and students’ flow experience, perception of gamification and motivation, and enjoyment. Our results also indicate patterns of characteristics that can lead students to the high flow experience (e.g., those who prefer to play multiplayer have a high flow experience in both personalized and non-personalized versions). Based on our results, we provided recommendations to advance the design of gamifed educational systems.",
       "openalex_id": "W4221001939",
       "openalex_type": "article",
@@ -3807,6 +3870,7 @@
       "source_api": "openalex",
       "search_angles": [
         "canon",
+        "recent",
         "replication"
       ],
       "record_id": "cr_b7e62b837327ad111fe3f29f"
@@ -5076,6 +5140,26 @@
       "record_id": "cr_d217323a4f6e6f5c843f5ea5"
     },
     {
+      "title": "Saudi Arabia: From Oil Kingdom to Knowledge‐Based Economy",
+      "authors": [
+        "Mohammad S Khorsheed"
+      ],
+      "year": 2015,
+      "venue": "Middle East Policy",
+      "doi": "10.1111/mepo.12149",
+      "citations": 59,
+      "abstract": "A large proportion of economic growth is accounted for by knowledge-driven technological change and innovation. Irrespective of whether innovation is related to products or processes, whether it is abrupt or incremental in nature, or whether it is technological or related to business models and organizational structures, it improves value for the consumer, the producer or the society at large. It is a nonlinear process involving complex interactions among a multitude of organizations. A society's capacity for innovation, as well as its ability to sustain growth, depends to a large extent on the strengths of and interactions among many institutions and the effectiveness of a variety of policies. The phrases “national innovation ecosystem” (NIE) and “national innovation system” (NIS) have come into use to characterize the relationship among people, enterprises and institutions that guides the flow of technology and information within a country.1 Both include elements such as human resources, research and development (R&D), knowledge networks that enable rapid communication and collaboration among technical professionals, an environment for entrepreneurship, a policy environment, market and financial conditions, and infrastructure. A serious weakness in any element can pose a significant barrier to innovation. Different schools of thought have emerged in the study of NIEs. Frameworks implemented by the governments of Taiwan and Korea have led to improvements in innovation capacities.2 The Korean model is based on the development of infrastructure, intellectual capital, incentives and commercialization. It encourages various sectors by use of incentives such as an intellectual property (IP) information center (an IP bank), IP rights protection, a procurement system, standardization and quality control, and the promotion of the quality of industrial products, standards, measurements, inspection and testing. This motivates each sector to innovate and out-compete the others and thus propel the economy further.3 The Australian government also continues to invest in infrastructure in order to promote skills development through teamwork, problem-solving, communication, prioritizing and managing innovation, and the development of fluency in the languages needed to enhance global competitiveness.4 The Finnish NIE process also considers infrastructure and intellectual-capital development as essential building blocks.5 The innovation capacity of both China and India has contributed to their economic growth in recent years.6 Their enhanced innovation capacity was primarily the outcome of heavy investments in R&D and personnel. Both governments have transformed their NIEs by linking the science and business sectors, incentivizing innovation activities, and balancing the import of technology with indigenous R&D efforts. The same may be said about Japan,7 where relationships among R&D entities, industry and other sectors play an important role in transforming the NIE there. Other Southeast Asian countries formulated their NIE frameworks to enable developing economies to pursue an industrial-development strategy.8 Both industrial policy and value-enhancing rents are playing an important role in the development of indigenous technology. Thanks to the industrial-development strategy in those countries, indigenous technologies benefit from linkages and technological spillovers, as is evident in the newly industrialized economies of Asia. Some nations have developed customized NIE structures designed to address major challenges related to science and technology development in their states. These practical models of NIE frameworks often exhibit iterative or radical changes that illustrate how an NIE framework evolves to meet needs over time.9 One of those models is the “7i” (seven eyes) framework, which identifies seven factors, all beginning with the letter I, that contribute to improving a nation's innovative capacity: infrastructure, intellectual capital, interaction, integrity, interactions, incentives and institutions.10 These factors facilitate movement up the innovation value chain. The 7i framework is surrounded by various agents, including government, enterprises, entrepreneurs, associations, financiers, knowledge-transfer centers, social networks and research hubs. The placement of the seven Is at the center of these organizations points to implicitly formed interactions, connections and feedback loops. Another NIE framework model is open innovation.11 This reinforces NIE by balancing the internal and external elements involved in the ability to acquire and sell knowledge and intellectual property. Open innovation enables a firm to benefit from various components within NIE — research centers, universities, technology-based firms, corporate entrepreneurship and intellectual-property management. For four decades, a question has often been posed: what would be the impact of the sudden deluge of wealth for the future of one of the most underpopulated and underdeveloped regions in the world?12 Saudi Arabia represents a rare case in which capital formation does not impose any constraint on development. The kingdom has focused on technology transfer to compensate for a paucity of indigenous technological capabilities. Three main factors are involved: manpower, expenditures and — most importantly — a well-conceived policy for carrying out scientific and technological activities. The five-year national development plans the Saudi government inaugurated in the mid-1970s (eight of them so far) have been an attempt to orchestrate the development rhythm inside the country, retaining its prominence as a modern state without losing its leadership position as the heart of the Islamic world. Since mid-2003, Saudi Arabia has experienced a strong economic performance, due primarily to a combination of high oil prices, increased oil production and oil-based export earnings. Increasing demand for oil, paired with structural reforms and stable macroeconomic policy making, has enabled a sustained growth momentum in the last decade. However, despite some attempts at economic diversification, the Saudi economy remains heavily dependent on oil and petroleum-related industries including petrochemicals and petroleum refining. Saudi Arabia's population of more than 27 million represents about two-thirds of the Gulf Cooperation Council (GCC). Its gross domestic product (GDP), which exceeded $727 billion with an annual growth rate of 8.63 percent in 2012, is dominated by the oil sector, accounting for 85 percent of GDP.13 Supported by higher oil and gas prices (despite reductions in output), government and private investment and consumption are driving overall economic growth. In order to defend its most significant resource, Saudi Arabia increased its oil-production capacity to more than 11 million barrels per day in 2011.14 Large parastatal corporations still dominate the Saudi economy: Saudi Aramco, which has a monopoly on upstream oil development and controls 98 percent of the country's oil reserves, and Saudi Basic Industries Corporation (SABIC), the world's seventh-largest petrochemical producer and the largest non-oil company in the Middle East. SABIC has been leading the nation's efforts to diversify into the manufacturing of petrochemicals, plastics, fertilizers and metals (mostly steel), all of which are dependent on oil or gas feedstocks or are energy intensive. Most other manufacturing in Saudi Arabia consists of the production, assembly or packaging of consumer products for the domestic market. In the Eastern Province, an industry cluster around light manufacturing, machine tools and assembly has emerged, in addition to the more established industry cluster related to chemicals, petrochemicals and fertilizers. In the Al Baha, Jazzan and Tabouk areas, food processing, packaging and other agriculture-related sectors are gaining ground. The Qaseem region has substantial industrial activity in building materials, foodstuffs, chemicals, plastics, fabrics, smelting and electro-mechanical equipment manufacturing. The Riyadh region has a solid industrial base in value-added manufacturing, assembly and chemicals, as well as service sectors such as information technology, healthcare and financial services. The Makkah (Mecca) region includes the Muslim holy places, in addition to King Abdullah Economic City (KAEC) and King Abdullah University for Science and Technology (KAUST) — an entrepreneurial hub for the whole country. The most populated region in Saudi Arabia, Makkah provides a huge demand for goods and services — light industry, healthcare technology, Islamic tourism and transportation. Generally speaking, small and medium-sized enterprises carry out the majority of manufacturing in the country. Many of these facilities are located in one of several industrial parks. Despite efforts by the government to spread economic activity around, development performance has been uneven among the provinces. The vast majority of production-line workers are expatriates, while at the same time, Saudi Arabia faces serious unemployment, particularly among younger people (6 percent for males, 35 percent for females).15 The nation also has one of the world's highest population growth rates, around 2.9 percent annually, which necessitates much higher levels of employment creation. Since the recovery of oil prices in the late 1990s, economic reform has steadily progressed, paving the way for Saudi Arabia's accession to the World Trade Organization (WTO) in 2005. The World Economic Forum's Global Competitiveness Index (GCI) included Saudi Arabia for the first time in 2007. Saudi Arabia's ranking of 35th made it the highest new entrant to the index. In addition, Saudi Arabia entered the index as one of the highest-ranked countries in the region. Its ranking in the World Bank and International Finance Corporation's Doing Business 2013 report jumped from 67th in 2004 to 22nd in 2012 out of 185 countries. Saudi Arabia was the top-ranked country in the Middle East and North Africa in 2012. As the home of the two holy mosques, Saudi Arabia has a unique advantage in the Islamic world that translates into economic opportunities: the Hajj and Umrah. Both are pilgrimages to Mecca performed by Muslims at least once in their lifetimes. The Hajj occurs from the eighth to the thirteenth of Dhu al-Hijjah, the twelfth and last month of the Islamic calendar; Umrah can be undertaken at any time of the year. In 2012, more than 3 million pilgrims performed the Hajj and more than 6 million Umrah. These figures illustrate the importance of investment in hard and soft infrastructure — security, crowd control and public health — in order to provide pilgrims with appropriate services. Thanks to its extensive capital resources, the country has made substantial investments in roads, air and sea ports, telecommunications, schools and hospitals, providing some of the most modern infrastructure available in the region. There are substantial reserves in its banking system, a history of government budget surpluses, and abundant domestic and offshore investments by institutions and individuals. Some of the key economic sectors in the country are leaders in the global arena and have attracted world-class companies and natural cluster formations around them. In addition, with a young population, Saudi Arabia has a continuously expanding labor pool that, if properly activated, could create sustained economic growth for the country. The most serious challenges facing Saudi Arabia in its efforts to stimulate innovation lie in its human resources. Despite enormous gains in education over the past three decades, a shortage of qualified people in science, technology and engineering is a major constraint on the development of innovation capacity and competitiveness. The number of science and engineering students has increased significantly, but graduates continue to be fewer than 1.0 per 1,000 people aged 20 to 34 — low when compared with most developed countries. In addition, employers generally agree that the quality of Saudi graduates’ skill sets is a problem. Brain drain is also a major handicap; around 25 percent of graduates in science, medicine and engineering emigrate each year. Low student enrollment at secondary and tertiary levels and low public expenditures on education aggravate the human-resource situation. Despite the oil boom and financial liquidity, Saudi Arabia offers limited specialized loan and risk capital to innovation-oriented companies. Saudi investors tend to be risk averse and less favorable towards extending funds to young technology-driven companies, which almost always have a high-risk profile. Banks and investors are currently geared to extending funds to companies in established sectors such as trade and consumer-goods, wholesaling and retailing. Concerning national innovation performance, data on key indicators are scarce. For example, figures on employment in knowledge-intensive occupations are unavailable. R&D expenditures by private firms are not being monitored but are considered very low by international standards. R&D programs are limited largely to a handful of major companies. Until recently, institutions of higher education have focused solely on teaching; academic research has lacked momentum. Because of market failures related to knowledge creation and diffusion activities in the private sector, government spending on higher education and scientific research has been bolstered in the last few years. The country's leadership has committed itself to raising science and technology expenditures from below 0.2 percent of GDP in 2000 to 2.5 percent by 2020. An expanding spectrum of emerging opportunities, coupled with the aforementioned strengths of the Saudi economy, provides the country with the to its innovation capacity and competitiveness. the same time, a of emerging coupled with the the of in the innovation The of in countries the flow of trade and people, Saudi Arabia's accession to the has the way for expanding to new The of India and as well as regions such as has the of for Saudi enterprises, in the export market. these also for Saudi Arabia to of development. The of a of of innovation offers the country an of to its The global economic more recently, the huge in oil prices pose major to Saudi Arabia's oil in the In addition, of technologies related to energy the of the economic boom Saudi Arabia has in the past few years. The country's private sector and still in when it to research and technology development. global institutions of higher education and research the Saudi private sector to with them than with the other are developing their technology plans without from Saudi Arabia's is to an international in science and technology. In the the country to an infrastructure of people, and institutions that provide the for growth. In the Saudi Arabia to investments in science and technology to one of the leaders in the region and in Asia. these the of an of the population and effectiveness of the country's Saudi Arabia has the to invest in people, infrastructure and It is that these be to its population in and science and them to be and technological The country investment in on the technical where it has the of and and people based on in Saudi Arabia's innovation other that continue to the country's towards a knowledge For example, an with and of property rights the country's growth momentum. to a shortage of in economic activities, public science and a of and among in and a of for and the country's into a knowledge-driven of these abundant financial from oil and the recent boom have a a of the that has the of the manufacturing sector less among young and the to pursue technology and innovation. A framework for innovation at the national needs to be This framework enable all to their innovation plans with the activities of other in the important and and of organizational and national NIE provides the the various and programs by major in Saudi Arabia, of technology and information all This would Saudi Arabia into a global innovation the and of in these an of a system, in all institutions and in their and communication enable and at all The NIE framework for Saudi Arabia not be for the nation's of development but also and to enable the nation to development elements — infrastructure, — be included in the as the kingdom is still in the process of building its capacity for innovation. In addition, to the NIE components be so that are developed and investment is components from the NIEs of other countries — — also be included so that the NIE from global The Saudi NIE framework infrastructure, human capital, innovative networks and and and both the essential on which be to world standards, and more elements with which more countries are This is essential for and innovation in a country. Three major infrastructure are and infrastructure the and quality of the country's including roads, ports, and of such infrastructure investment and the and of tools including the infrastructure the public investment in research business and as well as facilities such as and specialized The of the infrastructure to whether the innovation is an country or a knowledge Three components of human capital are quality and and specialized for and The education the overall expenditures and quality of It and tertiary including that related to science, technology, engineering and Saudi Arabia's public on education its ranking in the health and from in to in 2012. This also the investments made by in the workers R&D manufacturing their and proportion of and their out of and within the country. is to the of an innovation it what are what are or in many how of the with and incentives be to the of R&D activities, the of intellectual-property and the of products and services. also include economic the macroeconomic environment in the country, trade and investment to investment and — including the of in public — public in government and and the to business of and This on the available to the of a of new into products, or services. There is a the and levels of research and the levels of It to the for technology transfer and the to which research is and the business for both and enterprises, in and It is important for a to value and This is by an environment in which people such are to with each other and to the to with their This collaboration and linkages among public and private enterprises and knowledge of in order to be to market and market and investment in R&D and entrepreneurship are to the development of a innovation as is an overall financial and that is and provides the variety of needed by The and capital the of the financial and to both public and private for It is also with capital investments that innovation in the the Saudi NIE in a with the framework, Saudi Arabia's of and from countries with developed innovation These to address within the innovation included its elements and the key its value and importance to the country, the activities and of and human and and institutions involved in the and their Some institutions for and of the other key and in the of the The to these is more than billion Saudi It is among of Technology and and Science and Technology Technology and Technology and and the of of and and Technology and As 25 percent of budget is to Science and Technology the Saudi main is the of human resources, in science and technology. and in are if Saudi Arabia is to its position among The Saudi NIE has designed a to and and students in The international for example, and An important that is not of the NIE but it is the King Abdullah This to Saudi and students to pursue that to and and the of 2012, more than Saudi students in around the percent of them in the business education for is a not for but also for a nation's economic development. in science and technology their on academic However, for scientific and technological knowledge to be to use as a product or or for research to be a to the business of science and technology is The Saudi NIE to future about the business of science and technology and to technology transfer and research within the country. This future on such as business business business entrepreneurship, and and This has developed into an for and students in science and technology in order to key and in the country and the of at is a driving of innovation and economic growth, as well as a of the Saudi NIE has developed a and that provides with the skills and needed to an into a business it has designed an that on development and business The is to advantage of the to linkages new and business A of NIE that is also related to entrepreneurship is intellectual property. This not the most economic of private firms, but also the social and of NIE to and education in the of IP and This is new to many academic institutions It be with the of national small and enterprises by providing IP and services through of and Despite the external and internal challenges facing Saudi Arabia — a global economy, and in countries, the recent in oil prices, and internal challenges such as a shortage of qualified and and low labor — the is to orchestrate activities among various NIE components in order to competitiveness. strong components inside the does not solely all the components be and the linkages among those components have to be the country has a framework for its NIE and developed a to the of innovation various components through key These are by by Saudi Arabia's efforts have been to these into the NIE framework — providing funds to small and enterprises and and the public and private This and Saudi Arabia's growth technology and in the nation to the to This is leading to an in for science, technology and innovation The is in incentives for and and the communication and infrastructure.",
+      "openalex_id": "W1948656609",
+      "openalex_type": "article",
+      "referenced_works_count": 0,
+      "categories": [],
+      "source_api": "openalex",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_4f4680ccf37e764d1543bd1b"
+    },
+    {
       "title": "Big Data in Life Cycle Assessment",
       "authors": [
         "Joyce Cooper",
@@ -5147,26 +5231,6 @@
         "application"
       ],
       "record_id": "cr_a9369a8569f80bbc5b5ad40c"
-    },
-    {
-      "title": "Saudi Arabia: From Oil Kingdom to Knowledge‐Based Economy",
-      "authors": [
-        "Mohammad S Khorsheed"
-      ],
-      "year": 2015,
-      "venue": "Middle East Policy",
-      "doi": "10.1111/mepo.12149",
-      "citations": 58,
-      "abstract": "A large proportion of economic growth is accounted for by knowledge-driven technological change and innovation. Irrespective of whether innovation is related to products or processes, whether it is abrupt or incremental in nature, or whether it is technological or related to business models and organizational structures, it improves value for the consumer, the producer or the society at large. It is a nonlinear process involving complex interactions among a multitude of organizations. A society's capacity for innovation, as well as its ability to sustain growth, depends to a large extent on the strengths of and interactions among many institutions and the effectiveness of a variety of policies. The phrases “national innovation ecosystem” (NIE) and “national innovation system” (NIS) have come into use to characterize the relationship among people, enterprises and institutions that guides the flow of technology and information within a country.1 Both include elements such as human resources, research and development (R&D), knowledge networks that enable rapid communication and collaboration among technical professionals, an environment for entrepreneurship, a policy environment, market and financial conditions, and infrastructure. A serious weakness in any element can pose a significant barrier to innovation. Different schools of thought have emerged in the study of NIEs. Frameworks implemented by the governments of Taiwan and Korea have led to improvements in innovation capacities.2 The Korean model is based on the development of infrastructure, intellectual capital, incentives and commercialization. It encourages various sectors by use of incentives such as an intellectual property (IP) information center (an IP bank), IP rights protection, a procurement system, standardization and quality control, and the promotion of the quality of industrial products, standards, measurements, inspection and testing. This motivates each sector to innovate and out-compete the others and thus propel the economy further.3 The Australian government also continues to invest in infrastructure in order to promote skills development through teamwork, problem-solving, communication, prioritizing and managing innovation, and the development of fluency in the languages needed to enhance global competitiveness.4 The Finnish NIE process also considers infrastructure and intellectual-capital development as essential building blocks.5 The innovation capacity of both China and India has contributed to their economic growth in recent years.6 Their enhanced innovation capacity was primarily the outcome of heavy investments in R&D and personnel. Both governments have transformed their NIEs by linking the science and business sectors, incentivizing innovation activities, and balancing the import of technology with indigenous R&D efforts. The same may be said about Japan,7 where relationships among R&D entities, industry and other sectors play an important role in transforming the NIE there. Other Southeast Asian countries formulated their NIE frameworks to enable developing economies to pursue an industrial-development strategy.8 Both industrial policy and value-enhancing rents are playing an important role in the development of indigenous technology. Thanks to the industrial-development strategy in those countries, indigenous technologies benefit from linkages and technological spillovers, as is evident in the newly industrialized economies of Asia. Some nations have developed customized NIE structures designed to address major challenges related to science and technology development in their states. These practical models of NIE frameworks often exhibit iterative or radical changes that illustrate how an NIE framework evolves to meet needs over time.9 One of those models is the “7i” (seven eyes) framework, which identifies seven factors, all beginning with the letter I, that contribute to improving a nation's innovative capacity: infrastructure, intellectual capital, interaction, integrity, interactions, incentives and institutions.10 These factors facilitate movement up the innovation value chain. The 7i framework is surrounded by various agents, including government, enterprises, entrepreneurs, associations, financiers, knowledge-transfer centers, social networks and research hubs. The placement of the seven Is at the center of these organizations points to implicitly formed interactions, connections and feedback loops. Another NIE framework model is open innovation.11 This reinforces NIE by balancing the internal and external elements involved in the ability to acquire and sell knowledge and intellectual property. Open innovation enables a firm to benefit from various components within NIE — research centers, universities, technology-based firms, corporate entrepreneurship and intellectual-property management. For four decades, a question has often been posed: what would be the impact of the sudden deluge of wealth for the future of one of the most underpopulated and underdeveloped regions in the world?12 Saudi Arabia represents a rare case in which capital formation does not impose any constraint on development. The kingdom has focused on technology transfer to compensate for a paucity of indigenous technological capabilities. Three main factors are involved: manpower, expenditures and — most importantly — a well-conceived policy for carrying out scientific and technological activities. The five-year national development plans the Saudi government inaugurated in the mid-1970s (eight of them so far) have been an attempt to orchestrate the development rhythm inside the country, retaining its prominence as a modern state without losing its leadership position as the heart of the Islamic world. Since mid-2003, Saudi Arabia has experienced a strong economic performance, due primarily to a combination of high oil prices, increased oil production and oil-based export earnings. Increasing demand for oil, paired with structural reforms and stable macroeconomic policy making, has enabled a sustained growth momentum in the last decade. However, despite some attempts at economic diversification, the Saudi economy remains heavily dependent on oil and petroleum-related industries including petrochemicals and petroleum refining. Saudi Arabia's population of more than 27 million represents about two-thirds of the Gulf Cooperation Council (GCC). Its gross domestic product (GDP), which exceeded $727 billion with an annual growth rate of 8.63 percent in 2012, is dominated by the oil sector, accounting for 85 percent of GDP.13 Supported by higher oil and gas prices (despite reductions in output), government and private investment and consumption are driving overall economic growth. In order to defend its most significant resource, Saudi Arabia increased its oil-production capacity to more than 11 million barrels per day in 2011.14 Large parastatal corporations still dominate the Saudi economy: Saudi Aramco, which has a monopoly on upstream oil development and controls 98 percent of the country's oil reserves, and Saudi Basic Industries Corporation (SABIC), the world's seventh-largest petrochemical producer and the largest non-oil company in the Middle East. SABIC has been leading the nation's efforts to diversify into the manufacturing of petrochemicals, plastics, fertilizers and metals (mostly steel), all of which are dependent on oil or gas feedstocks or are energy intensive. Most other manufacturing in Saudi Arabia consists of the production, assembly or packaging of consumer products for the domestic market. In the Eastern Province, an industry cluster around light manufacturing, machine tools and assembly has emerged, in addition to the more established industry cluster related to chemicals, petrochemicals and fertilizers. In the Al Baha, Jazzan and Tabouk areas, food processing, packaging and other agriculture-related sectors are gaining ground. The Qaseem region has substantial industrial activity in building materials, foodstuffs, chemicals, plastics, fabrics, smelting and electro-mechanical equipment manufacturing. The Riyadh region has a solid industrial base in value-added manufacturing, assembly and chemicals, as well as service sectors such as information technology, healthcare and financial services. The Makkah (Mecca) region includes the Muslim holy places, in addition to King Abdullah Economic City (KAEC) and King Abdullah University for Science and Technology (KAUST) — an entrepreneurial hub for the whole country. The most populated region in Saudi Arabia, Makkah provides a huge demand for goods and services — light industry, healthcare technology, Islamic tourism and transportation. Generally speaking, small and medium-sized enterprises carry out the majority of manufacturing in the country. Many of these facilities are located in one of several industrial parks. Despite efforts by the government to spread economic activity around, development performance has been uneven among the provinces. The vast majority of production-line workers are expatriates, while at the same time, Saudi Arabia faces serious unemployment, particularly among younger people (6 percent for males, 35 percent for females).15 The nation also has one of the world's highest population growth rates, around 2.9 percent annually, which necessitates much higher levels of employment creation. Since the recovery of oil prices in the late 1990s, economic reform has steadily progressed, paving the way for Saudi Arabia's accession to the World Trade Organization (WTO) in 2005. The World Economic Forum's Global Competitiveness Index (GCI) included Saudi Arabia for the first time in 2007. Saudi Arabia's ranking of 35th made it the highest new entrant to the index. In addition, Saudi Arabia entered the index as one of the highest-ranked countries in the region. Its ranking in the World Bank and International Finance Corporation's Doing Business 2013 report jumped from 67th in 2004 to 22nd in 2012 out of 185 countries. Saudi Arabia was the top-ranked country in the Middle East and North Africa in 2012. As the home of the two holy mosques, Saudi Arabia has a unique advantage in the Islamic world that translates into economic opportunities: the Hajj and Umrah. Both are pilgrimages to Mecca performed by Muslims at least once in their lifetimes. The Hajj occurs from the eighth to the thirteenth of Dhu al-Hijjah, the twelfth and last month of the Islamic calendar; Umrah can be undertaken at any time of the year. In 2012, more than 3 million pilgrims performed the Hajj and more than 6 million Umrah. These figures illustrate the importance of investment in hard and soft infrastructure — security, crowd control and public health — in order to provide pilgrims with appropriate services. Thanks to its extensive capital resources, the country has made substantial investments in roads, air and sea ports, telecommunications, schools and hospitals, providing some of the most modern infrastructure available in the region. There are substantial reserves in its banking system, a history of government budget surpluses, and abundant domestic and offshore investments by institutions and individuals. Some of the key economic sectors in the country are leaders in the global arena and have attracted world-class companies and natural cluster formations around them. In addition, with a young population, Saudi Arabia has a continuously expanding labor pool that, if properly activated, could create sustained economic growth for the country. The most serious challenges facing Saudi Arabia in its efforts to stimulate innovation lie in its human resources. Despite enormous gains in education over the past three decades, a shortage of qualified people in science, technology and engineering is a major constraint on the development of innovation capacity and competitiveness. The number of science and engineering students has increased significantly, but graduates continue to be fewer than 1.0 per 1,000 people aged 20 to 34 — low when compared with most developed countries. In addition, employers generally agree that the quality of Saudi graduates’ skill sets is a problem. Brain drain is also a major handicap; around 25 percent of graduates in science, medicine and engineering emigrate each year. Low student enrollment at secondary and tertiary levels and low public expenditures on education aggravate the human-resource situation. Despite the oil boom and financial liquidity, Saudi Arabia offers limited specialized loan and risk capital to innovation-oriented companies. Saudi investors tend to be risk averse and less favorable towards extending funds to young technology-driven companies, which almost always have a high-risk profile. Banks and investors are currently geared to extending funds to companies in established sectors such as trade and consumer-goods, wholesaling and retailing. Concerning national innovation performance, data on key indicators are scarce. For example, figures on employment in knowledge-intensive occupations are unavailable. R&D expenditures by private firms are not being monitored but are considered very low by international standards. R&D programs are limited largely to a handful of major companies. Until recently, institutions of higher education have focused solely on teaching; academic research has lacked momentum. Because of market failures related to knowledge creation and diffusion activities in the private sector, government spending on higher education and scientific research has been bolstered in the last few years. The country's leadership has committed itself to raising science and technology expenditures from below 0.2 percent of GDP in 2000 to 2.5 percent by 2020. An expanding spectrum of emerging opportunities, coupled with the aforementioned strengths of the Saudi economy, provides the country with the to its innovation capacity and competitiveness. the same time, a of emerging coupled with the the of in the innovation The of in countries the flow of trade and people, Saudi Arabia's accession to the has the way for expanding to new The of India and as well as regions such as has the of for Saudi enterprises, in the export market. these also for Saudi Arabia to of development. The of a of of innovation offers the country an of to its The global economic more recently, the huge in oil prices pose major to Saudi Arabia's oil in the In addition, of technologies related to energy the of the economic boom Saudi Arabia has in the past few years. The country's private sector and still in when it to research and technology development. global institutions of higher education and research the Saudi private sector to with them than with the other are developing their technology plans without from Saudi Arabia's is to an international in science and technology. In the the country to an infrastructure of people, and institutions that provide the for growth. In the Saudi Arabia to investments in science and technology to one of the leaders in the region and in Asia. these the of an of the population and effectiveness of the country's Saudi Arabia has the to invest in people, infrastructure and It is that these be to its population in and science and them to be and technological The country investment in on the technical where it has the of and and people based on in Saudi Arabia's innovation other that continue to the country's towards a knowledge For example, an with and of property rights the country's growth momentum. to a shortage of in economic activities, public science and a of and among in and a of for and the country's into a knowledge-driven of these abundant financial from oil and the recent boom have a a of the that has the of the manufacturing sector less among young and the to pursue technology and innovation. A framework for innovation at the national needs to be This framework enable all to their innovation plans with the activities of other in the important and and of organizational and national NIE provides the the various and programs by major in Saudi Arabia, of technology and information all This would Saudi Arabia into a global innovation the and of in these an of a system, in all institutions and in their and communication enable and at all The NIE framework for Saudi Arabia not be for the nation's of development but also and to enable the nation to development elements — infrastructure, — be included in the as the kingdom is still in the process of building its capacity for innovation. In addition, to the NIE components be so that are developed and investment is components from the NIEs of other countries — — also be included so that the NIE from global The Saudi NIE framework infrastructure, human capital, innovative networks and and and both the essential on which be to world standards, and more elements with which more countries are This is essential for and innovation in a country. Three major infrastructure are and infrastructure the and quality of the country's including roads, ports, and of such infrastructure investment and the and of tools including the infrastructure the public investment in research business and as well as facilities such as and specialized The of the infrastructure to whether the innovation is an country or a knowledge Three components of human capital are quality and and specialized for and The education the overall expenditures and quality of It and tertiary including that related to science, technology, engineering and Saudi Arabia's public on education its ranking in the health and from in to in 2012. This also the investments made by in the workers R&D manufacturing their and proportion of and their out of and within the country. is to the of an innovation it what are what are or in many how of the with and incentives be to the of R&D activities, the of intellectual-property and the of products and services. also include economic the macroeconomic environment in the country, trade and investment to investment and — including the of in public — public in government and and the to business of and This on the available to the of a of new into products, or services. There is a the and levels of research and the levels of It to the for technology transfer and the to which research is and the business for both and enterprises, in and It is important for a to value and This is by an environment in which people such are to with each other and to the to with their This collaboration and linkages among public and private enterprises and knowledge of in order to be to market and market and investment in R&D and entrepreneurship are to the development of a innovation as is an overall financial and that is and provides the variety of needed by The and capital the of the financial and to both public and private for It is also with capital investments that innovation in the the Saudi NIE in a with the framework, Saudi Arabia's of and from countries with developed innovation These to address within the innovation included its elements and the key its value and importance to the country, the activities and of and human and and institutions involved in the and their Some institutions for and of the other key and in the of the The to these is more than billion Saudi It is among of Technology and and Science and Technology Technology and Technology and and the of of and and Technology and As 25 percent of budget is to Science and Technology the Saudi main is the of human resources, in science and technology. and in are if Saudi Arabia is to its position among The Saudi NIE has designed a to and and students in The international for example, and An important that is not of the NIE but it is the King Abdullah This to Saudi and students to pursue that to and and the of 2012, more than Saudi students in around the percent of them in the business education for is a not for but also for a nation's economic development. in science and technology their on academic However, for scientific and technological knowledge to be to use as a product or or for research to be a to the business of science and technology is The Saudi NIE to future about the business of science and technology and to technology transfer and research within the country. This future on such as business business business entrepreneurship, and and This has developed into an for and students in science and technology in order to key and in the country and the of at is a driving of innovation and economic growth, as well as a of the Saudi NIE has developed a and that provides with the skills and needed to an into a business it has designed an that on development and business The is to advantage of the to linkages new and business A of NIE that is also related to entrepreneurship is intellectual property. This not the most economic of private firms, but also the social and of NIE to and education in the of IP and This is new to many academic institutions It be with the of national small and enterprises by providing IP and services through of and Despite the external and internal challenges facing Saudi Arabia — a global economy, and in countries, the recent in oil prices, and internal challenges such as a shortage of qualified and and low labor — the is to orchestrate activities among various NIE components in order to competitiveness. strong components inside the does not solely all the components be and the linkages among those components have to be the country has a framework for its NIE and developed a to the of innovation various components through key These are by by Saudi Arabia's efforts have been to these into the NIE framework — providing funds to small and enterprises and and the public and private This and Saudi Arabia's growth technology and in the nation to the to This is leading to an in for science, technology and innovation The is in incentives for and and the communication and infrastructure.",
-      "openalex_id": "W1948656609",
-      "openalex_type": "article",
-      "referenced_works_count": 0,
-      "categories": [],
-      "source_api": "openalex",
-      "search_angles": [
-        "application"
-      ],
-      "record_id": "cr_4f4680ccf37e764d1543bd1b"
     },
     {
       "title": "Cohort Profile Update: The Harmonised Cognitive Assessment Protocol Sub-study of the English Longitudinal Study of Ageing (ELSA-HCAP)",
@@ -5511,6 +5575,35 @@
         "recent"
       ],
       "record_id": "cr_0cada7087f32f2d5383a3eda"
+    },
+    {
+      "title": "Getting into a “Flow” state: a systematic review of flow experience in neurological diseases",
+      "authors": [
+        "Beatrice Ottiger",
+        "Erwin E. H. van Wegen",
+        "Katja Keller",
+        "Tobias Nef",
+        "Thomas Nyffeler",
+        "Gert Kwakkel",
+        "Tim Vanbellingen"
+      ],
+      "year": 2021,
+      "venue": "Journal of NeuroEngineering and Rehabilitation",
+      "doi": "10.1186/s12984-021-00864-w",
+      "citations": 49,
+      "abstract": "BACKGROUND: Flow is a subjective psychological state that people report when they are fully involved in an activity to the point of forgetting time and their surrounding except the activity itself. Being in flow during physical/cognitive rehabilitation may have a considerable impact on functional outcome, especially when patients with neurological diseases engage in exercises using robotics, virtual/augmented reality, or serious games on tablets/computer. When developing new therapy games, measuring flow experience can indicate whether the game motivates one to train. The purpose of this study was to identify and systematically review current literature on flow experience assessed in patients with stroke, traumatic brain injury, multiple sclerosis and Parkinson's disease. Additionally, we critically appraised, compared and summarized the measurement properties of self-reported flow questionnaires used in neurorehabilitation setting. DESIGN: A systematic review using PRISMA and COSMIN guidelines. METHODS: MEDLINE Ovid, EMBASE Ovid, CINAHL EBSCO, SCOPUS were searched. Inclusion criteria were (1) peer-reviewed studies that (2) focused on the investigation of flow experience in (3) patients with neurological diseases (i.e., stroke, traumatic brain injury, multiple sclerosis and/or Parkinson's disease). A qualitative data synthesis was performed to present the measurement properties of the used flow questionnaires. RESULTS: Ten studies out of 911 records met the inclusion criteria. Seven studies measured flow in the context of serious games in patients with stroke, traumatic brain injury, multiple sclerosis and Parkinson's disease. Three studies assessed flow in other activities than gaming (song-writing intervention and activities of daily living). Six different flow questionnaires were used, all of which were originally validated in healthy people. None of the studies presented psychometric data in their respective research population. CONCLUSION: The present review indicates that flow experience is increasingly measured in the physical/cognitive rehabilitation setting in patients with neurological diseases. However, psychometric properties of used flow questionnaires are lacking. For exergame developers working in the field of physical/cognitive rehabilitation in patients with neurological diseases, a valid flow questionnaire can help to further optimize the content of the games so that optimal engagement can occur during the gameplay. Whether flow experiences can ultimately have positive effects on physical/cognitive parameters needs further study.",
+      "openalex_id": "W3156027704",
+      "openalex_type": "review",
+      "referenced_works_count": 74,
+      "categories": [
+        "meta-analysis",
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2905435317"
+      ],
+      "record_id": "cr_079b21ccf089521b2e74a1b6"
     },
     {
       "title": "Healthy Islands in the Western Pacific--international settings development",
@@ -9842,6 +9935,33 @@
       "record_id": "cr_9e1c16a034b724f2ec7a1cb5"
     },
     {
+      "title": "Using generative artificial intelligence in clinical practice: a narrative review and proposed agenda for implementation",
+      "authors": [
+        "Ian Scott",
+        "Sandeep Reddy",
+        "Tanya Kelly",
+        "Tim Miller",
+        "Anton van der Vegt"
+      ],
+      "year": 2025,
+      "venue": "The Medical Journal of Australia",
+      "doi": "10.5694/mja2.70057",
+      "citations": 10,
+      "abstract": "Generative artificial intelligence (GenAI) is any computer system capable of generating text, images, or other types of content, often in response to a prompt or question entered through a chat interface. GenAI comprises large language models (LLMs) and other general-purpose foundation models powered mostly by generative pre-trained transformer (GPT) deep learning technology. Compared with traditional AI models using single data modalities for specific classification or prediction tasks, GenAI comprises task-agnostic, increasingly multimodal models that learn shared representations of different data types and, using suitable prompts, may perform never-before-seen tasks.1 GenAI tools (also termed solutions or applications) are compelling because, unlike traditional AI, they are conversant, interacting directly with humans and generating human-like responses to prompts. These tools, in the form of ChatGPT and other GenAI chatbots, have very quickly captured the interest of researchers, clinicians and industry. Anecdotally, certain GenAI tools, such as ambient AI scribes and assistants, are already being used in many practice areas.2, 3 In the UK, one in five general practitioners now routinely use GenAI for various tasks.4 At the time of submission, this rapid uptake was occurring with little guidance on what use cases (tasks or clinical indications) are most amenable to GenAI, how GenAI tools intended for clinical practice should be used, evaluated and governed, and how to safeguard reliability, safety, privacy, and consent. In addressing these issues, we undertook a narrative review of existing literature, and using this evidence, we propose a phased, risk-tiered approach to implementing GenAI tools, discuss risks and mitigations, and consider factors likely to influence adoption of GenAI by both clinicians and health services. Although GenAI encompasses both text and image generation, this review primarily focuses on text-based applications in clinical practice, with image-related applications limited to report generation rather than image generation. Box 1 contains a glossary of terms used when describing GenAI. We searched PubMed and Google Scholar for articles published between 1 January 2022 and 31 August 2024 using search terms “generative AI”, “large language models”, “clinical practice” or “health care”. We focused on review articles and grouped them into key application domains to inform our implementation framework: clinical documentation (16), operational efficiency (20), patient safety (11), clinical decision making (42), and patient self-care (4). Seven reviews covering all these domains were also retrieved.5-11 From these reviews, we extracted references outlining the problem(s) being addressed and exemplars of implemented GenAI tools used to solve them. We noted considerable heterogeneity in study design and methodological rigour and relative paucity of real-world implementations across several domains. Despite the aforementioned limitations in current evidence, our review suggests that GenAI tools could be implemented over five phases (Box 2). These are sequenced according to increasing levels of patient risk, task complexity, and implementation effort, and decreasing levels of current technical maturity and evidence of safety and effectiveness. The phased approach affords careful introduction of GenAI, beginning with tools that primarily enhance administrative efficiency (lower patient risk), progressing to those directly influencing clinical decisions and patient self-care (higher patient risk and requiring regulatory approval). EMRs = electronic medical records. Automating clinical documentation: Doctors in clinics can spend up to 2 hours on documentation for each hour of direct clinician–patient interaction;12 hospital residents and nurses spend up to 25%13 and 60%14 respectively of shift time on documentation. Ambient GenAI tools capable of voice transcription and note generation during doctor–patient encounters can decrease documentation time up to 25% (“keyboard liberation”),15-17 and allow more attentiveness to patients. Similarly, scribes in nurse–patient encounters can double the time the nurse spends on direct patient care.18 Ambient GenAI tools can also generate a readily understood patient summary,19 potentially increasing satisfaction and adherence with care. Ambient scribes could also include real-time advice, such as highlighting missed items in history or overlooked investigation results.20 Synthesising patient information from medical records: When interviewing new patients in the clinic or on ward rounds, clinicians can spend up to a third of the encounter retrieving, reading and synthesising patient summaries from electronic medical records (EMRs) before patient contact.21 GenAI can generate easily interpreted summaries of pertinent history, investigation results and treatments more accurately than clinicians22 while reducing this familiarisation time by around 20%.23 Generating discharge summaries from EMRs: Writing discharge summaries is time consuming, error prone and often slow in reaching recipients,24 with suboptimal patient outcomes.25 GenAI can generate summaries more accurate than those of junior doctors in 90% of cases,26 are available at discharge,27 and lessen the time seniors spend in supervision for complex cases by a third.28 Optimising consent: The reading grades (school-grade level of reading skill required for understanding) of most consent forms exceed the population average (8th grade) and often lack procedure-specific information required for informed consent. Clinicians can use GenAI chatbots that, by inputting clinician-verified text, could provide more comprehensible, informative and empathetic versions that take less time to read.29 Automating routine administrative tasks: Scheduling clinic appointments, organising staff rosters, drafting minutes and policy documents, and coding patient records are all labour-intensive but potentially automatable tasks. As examples, GenAI could more quickly create safer and fairer rosters,30 expedite coding for faster remuneration,31 and improve operational decision making.32 Improving hospital capacity management: Overcrowded emergency departments, access block to inpatient beds, delayed discharges and avoidable readmissions are commonplace. GenAI-enabled patient triage and discharge planning33, 34 and command and control patient flow systems could assist clinicians and bed managers in optimising bed use.35 Improving workflows in image-based disciplines: Taking radiology as the most mature domain, heavy workloads stress radiologists and cause delays in issuing reports, which can compromise patient care.36 Tools that automate image interpretation and structured reporting37 can reduce total reporting time by a third,38 reducing radiologist burnout and shortening report turnaround times.39 GenAI could potentially optimise referral and reporting prioritisation, patient scheduling and preparedness, and scan protocoling.40 Similar benefits in prioritising, interpreting and reporting digital pathology slides could also be realised with GenAI.41 Facilitating gathering and trending of data: Care-related near misses or adverse events such as medication harm and delirium are currently ascertained retrospectively from medical records or incident reports, with significant lag times. Such data could be captured, quantified and trended in real-time using LLMs applied to EMRs, thus facilitating more timely recognition of unsafe situations warranting remedial intervention.42-44 Expediting analysis of data: Considerable time and effort are spent in gathering, analysing and reporting quality and safety measures, incident data, and undertaking root cause analyses, with often little impact on care.45, 46 GenAI could aggregate and analyse these data more efficiently,47 identify safety hazards and contributors more quickly, automate audit48 and survey analyses,49 and allow quality and safety staff to redirect resources to proactive safety improvement.50 Retrieving medical evidence to inform decision making: Current online literature search systems (eg, PubMed) take time to search and synthesise data, are limited to simple keyword queries, and often retrieve limited relevant, actionable reports.51 GenAI, particularly using retrieval augmented generation, can very quickly and iteratively, in response to serial prompts, screen available literature and synthesise high quality, actionable evidence with supporting references,52 although the ability of LLMs to assess risk of bias of clinical trials remains limited.53 Reducing diagnostic error: Diagnostic error accounts for 60–70% of all medical errors causing harm, mostly caused by cognitive biases in reasoning.54 Responding to clinician prompts, GenAI could suggest more accurate differential diagnoses or detect and reduce misdiagnosis,55 particularly for complex, undifferentiated general medical cases involving non-expert clinicians.56 Personalising therapies: The response of many patients to specific therapies for diagnosed and confirmed diseases remains unpredictable.57 Applying GenAI to EMRs and genomic databases could identify patient genotypes or phenotypes associated with favourable or unfavourable treatment responses, as seen in various oncological applications.58 More rigorous evaluation will be required of consumer-facing applications relying on the do-it-yourself proficiency of users who may lack medical expertise, especially as GenAI chatbots could give seemingly confident, personalised but inappropriate advice.59 Providing medical advice: GenAI symptom checkers can diagnose conditions better than laypeople using traditional online information sources, but remain inferior to vetting by clinicians, with triage decisions for acute conditions particularly problematic.60 However, GenAI chatbots fine-tuned on curated medical knowledge could reliably identify patients’ needs and provide informed suggestions.61 Chatbots that can process and draft responses to messages and queries of patients with diagnosed conditions under the care of clinicians can also alleviate clinician burden and enhance patient engagement.62 Improving chronic disease self-management: The use of GenAI chatbots to manage chronic diseases seems well accepted by patients in supporting mental health, physical activity and behaviour change for selected conditions,63 but evidence of effects on patient outcomes is limited.64 Wearable devices integrated with GenAI can potentially detect adverse health states such as falls or clinical deterioration.65 Several risks to patient safety and quality of care require careful consideration.66-73 These relate to: reliability (errors, hallucinations); consistency (different responses to the same question); explainability (few rationales for responses); limited understanding of context; biased responses due to unrepresentative training data; misuse of prompts; potential privacy breaches; little auditability of tool processes and outputs; workflow disruptions and job displacement; depersonalised care; over-reliance of clinicians on GenAI with clinician de-skilling; limited clinician and patient acceptance; and costs and carbon footprint. However, risk mitigation strategies exist and will continue to evolve (Box 3). Although many of these risks are common to all forms of AI, certain risks, such as hallucinations, prompt misuse and the inability to be audited, are peculiar to GenAI. GenAI is also not yet capable of higher-order reasoning, contextual understanding, capturing sensory and nonverbal cues, or making moral or ethical judgements. Decision support LLMs may produce inconsistent advice to the same queries and be as prone to cognitive biases as humans.74 GenAI alters its behaviour in response to new data inputs or updating or recalibration of its operations, which may go unannounced. Importantly, in performing several different tasks, acceptable GenAI performance on one “benchmark” task does not translate to other, seemingly related tasks for which it was not trained.75 This challenges the generalisability of any single, point in time evaluation of an evolving model with a large potential task capability. Ensuring the quality of massive datasets used to train GenAI models is challenging compared with traditional AI models trained on smaller, targeted datasets. The behaviour of hugely complex LLMs with billions of parameters performing different tasks cannot be understood, despite knowing their technical architecture. Evaluation and regulation of GenAI tools with their limitless and changing arrays of inputs and outputs is hugely challenging. A single, fit-for-purpose pre-deployment assessment and approval of all GenAI tools, as software as a medical device (SaMD), may not suffice for tools that continue to learn and adapt. Currently the Therapeutic Goods Administration (TGA) regulates some but not all AI tools designed to support clinical decision making as SaMD, but exempts tools, such as GenAI scribes, which provide only documentation or administrative assistance. The TGA’s remit for consumer-facing AI tools remains undefined. Current regulatory and accreditation processes,76 coupled with amendments in society-wide laws (eg, privacy, consumer and anti-discrimination laws) may be sufficient to cover many GenAI applications. Two regulatory approaches are possible: an application-centric approach, and a system-centric approach. In an application-centric approach, individual tools are evaluated according to task criticality and patient risk. For high risk diagnostic or treatment applications (phases 4 and 5), the tool may be frozen pre-deployment and evaluated in a standard pathway (versus a fast pathway) using pragmatic clinical trials (Box 4).77-79 If approved, the tool could later be locked down, re-opened, retrained (if needed), and re-evaluated for re-approval if any substantive change in function or deviation from benchmark tasks is seen. The US Food and Drug Administration calls for AI developers to provide an algorithm change protocol describing how modifications are generated and validated.80 Lower risk tools (phases 1 and 2) may pass through a fast pathway, requiring only observational studies or post-deployment verification studies for approval. A standardised, actionable, risk-based checklist for evaluating GenAI along multiple axes, including post-deployment monitoring of real-world performance and clinical impact, is needed81-83 as are similar checklists for identifying and resolving ethical concerns.84, 85 Importantly, any GenAI tool must undergo a standardised clinical validation process at the local level using local data, including tools with regulatory approval. Using open-source or open-weight tools hosted on local servers may be the best option for protecting privacy, but requires in-house data scientists and technical staff for model training and tool deployment. Clinical validation stage (by risk level): For lower risk applications (phases 1–3): For higher risk applications (phases 4 and 5): A complementary system-centric approach requires tool developers and deployers (ie, large-scale health services) to wrap a quality assurance framework86 around their GenAI activities, comprising both risk mitigation (Box 3) and life cycle monitoring and evaluation. This framework may include statistical process control analyses that define acceptable bounds around tool accuracy or analyses of downstream effects on proximal clinical outcomes (eg, adverse events, mortality).87 More proxy measures of tool use, such as tracking the number of human-initiated corrections to LLM-created documents, could also be used.88 Developers and deployers might be accredited by an appointed authority to use GenAI tools depending on how well they measure, report and satisfy these parameters. Health services may need to establish dedicated, multidisciplinary clinical AI units to perform these tasks and provide the necessary human expertise and digital infrastructure.89 Such units may also specialise in validating and piloting specific applications before deployment in other similar or affiliated services, given the limited capacity of some services to undertake these tasks for every GenAI tool they may want to deploy.90 A balance is therefore needed between bespoke and more centralised evaluations, with the latter preferred for widely used, high value, high risk or high impact solutions. Because of its human-like interactivity, GenAI is rapidly gaining acceptance by frontline clinicians for certain tasks (eg, ambient scribes), bringing a cultural shift in how medicine is practised and providing more value over time.91 Clinicians will likely adopt GenAI for common tasks where it has demonstrated acceptable accuracy and safety, is easy to use, aligns with clinical workflows, and enhances clinician–patient interactions.92 Clinician trust will rely on clearly articulated use cases, well defined risk-based clinical testing processes and evidence generation, and ongoing monitoring of performance linked to original indications.93 Consumer trust will centre on tool accuracy, transparency around GenAI use in their care, and privacy assurances.94 Meaningful co-design with diverse consumer groups can help identify concerns and build appropriate safeguards into GenAI implementation.95 users of GenAI, both health and will need to be well through and training in its how to use it human to its and undertake appropriate consent in using AI in care GenAI tool should with a or model providing as on its function and training performance bias safety technical prompt and conditions of appropriate narrative review several or system factors likely to influence GenAI with some common to all forms of is the need for involving researchers, data clinicians and in and GenAI tools and they are for health services must to adopt GenAI open-source or tools, with local as or or with a tools to tools with EMRs through application or them EMRs is for to that health services to assess the of GenAI tools before to deployment is The and of and also need Lower may be using integrated and units to data from EMRs and using it to train and their or tools, if are to all services for local it is for and health services to enhance access for developers to patient data from EMRs and other for GenAI while data Health data are currently often lack data and access is on multiple data using different access access processes and data using common data are GenAI into clinical practice should be by implementation that optimise and for a patient their acceptance or of GenAI advice must be defined and using strategies from and in implementing health care AI (Box This narrative review has potential from GenAI in clinical our evidence may be for reviews published over the which LLMs such as ChatGPT were and our of use cases is not intended to be As GenAI is rapidly evolving and is a time lag between of original and into review we that some articles may have We the limitations of current and the need for more real-world to the evidence on the quality and safety of care, and identify the tasks and for which this new and rapidly evolving is best The of GenAI is its across multiple tasks and its conversant, language rather than performance on every tasks will be better by fine-tuned learning models rather than and technical will be required coupled with rigorous evaluation that allow users to quickly to and We propose a phased, risk-tiered implementation of GenAI tools into health care coupled with risk mitigation As a human GenAI will be but and introduction may improve current access by The of as of the The of the of data original original review and Writing review and Writing review and Writing review and",
+      "openalex_id": "W4414879239",
+      "openalex_type": "review",
+      "referenced_works_count": 103,
+      "categories": [
+        "meta-analysis",
+        "recent"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_003fad027719735e5e5a3cee"
+    },
+    {
       "title": "A Method for Designing Symmetrical Simulation Scenarios for Evaluation of Behavioral Skills",
       "authors": [
         "Mary Chasko Bush",
@@ -10144,6 +10264,28 @@
       "record_id": "cr_065c1e5e9e662a89066232c3"
     },
     {
+      "title": "Flow Experience and Challenge-Skill Balance in E-Learning",
+      "authors": [
+        "Chih-Chien Wang",
+        "Ming-Chang Hsu"
+      ],
+      "year": 2013,
+      "venue": "Pacific Asia Conference on Information Systems",
+      "doi": null,
+      "citations": 8,
+      "abstract": "Flow is an optimal experience resulting in intense engagement in the activity. People achieved flow state when they perceived balance between challenge of the activity and their skill to the activity. The concept of flow can be used to explore students’ learning performance in e-learning environment. The current research aims to empirically explore the influence of challenge-skill balance on the flow experience and the influence of flow experience on learning satisfaction and learning performance in e-learning environment. The current research conducted a quasi-experimental design with questionnaire survey and carried out an electroencephalography (EEG) analysis, a psychophysiological method. The empirical survey results have shown that challenge-skill balance is an antecedent factor affecting learners’ flow experience. Once learners reach flow experience, their learning performance and learning satisfaction would get improved. Besides, the current research also found that flow experience is relative with learners’ attention measured by EEG brainwave signal. Learners’ perception of challenge-skill balance would influence their attention in elearning activities. The current research is also in the pioneering position that using non-medical purpose EEG device in e-learning research.",
+      "openalex_id": "W279868603",
+      "openalex_type": "conference-paper",
+      "referenced_works_count": 40,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon",
+        "recent"
+      ],
+      "record_id": "cr_7e30c2982c7140ce1147f339"
+    },
+    {
       "title": "Multi-Source Domain Generalization for CSI-Based Human Activity Recognition",
       "authors": [
         "Tianqi Fan",
@@ -10234,33 +10376,6 @@
         "application"
       ],
       "record_id": "cr_b3a4ad33ebd5c69156fadb44"
-    },
-    {
-      "title": "Using generative artificial intelligence in clinical practice: a narrative review and proposed agenda for implementation",
-      "authors": [
-        "Ian Scott",
-        "Sandeep Reddy",
-        "Tanya Kelly",
-        "Tim Miller",
-        "Anton van der Vegt"
-      ],
-      "year": 2025,
-      "venue": "The Medical Journal of Australia",
-      "doi": "10.5694/mja2.70057",
-      "citations": 8,
-      "abstract": "Generative artificial intelligence (GenAI) is any computer system capable of generating text, images, or other types of content, often in response to a prompt or question entered through a chat interface. GenAI comprises large language models (LLMs) and other general-purpose foundation models powered mostly by generative pre-trained transformer (GPT) deep learning technology. Compared with traditional AI models using single data modalities for specific classification or prediction tasks, GenAI comprises task-agnostic, increasingly multimodal models that learn shared representations of different data types and, using suitable prompts, may perform never-before-seen tasks.1 GenAI tools (also termed solutions or applications) are compelling because, unlike traditional AI, they are conversant, interacting directly with humans and generating human-like responses to prompts. These tools, in the form of ChatGPT and other GenAI chatbots, have very quickly captured the interest of researchers, clinicians and industry. Anecdotally, certain GenAI tools, such as ambient AI scribes and assistants, are already being used in many practice areas.2, 3 In the UK, one in five general practitioners now routinely use GenAI for various tasks.4 At the time of submission, this rapid uptake was occurring with little guidance on what use cases (tasks or clinical indications) are most amenable to GenAI, how GenAI tools intended for clinical practice should be used, evaluated and governed, and how to safeguard reliability, safety, privacy, and consent. In addressing these issues, we undertook a narrative review of existing literature, and using this evidence, we propose a phased, risk-tiered approach to implementing GenAI tools, discuss risks and mitigations, and consider factors likely to influence adoption of GenAI by both clinicians and health services. Although GenAI encompasses both text and image generation, this review primarily focuses on text-based applications in clinical practice, with image-related applications limited to report generation rather than image generation. Box 1 contains a glossary of terms used when describing GenAI. We searched PubMed and Google Scholar for articles published between 1 January 2022 and 31 August 2024 using search terms “generative AI”, “large language models”, “clinical practice” or “health care”. We focused on review articles and grouped them into key application domains to inform our implementation framework: clinical documentation (16), operational efficiency (20), patient safety (11), clinical decision making (42), and patient self-care (4). Seven reviews covering all these domains were also retrieved.5-11 From these reviews, we extracted references outlining the problem(s) being addressed and exemplars of implemented GenAI tools used to solve them. We noted considerable heterogeneity in study design and methodological rigour and relative paucity of real-world implementations across several domains. Despite the aforementioned limitations in current evidence, our review suggests that GenAI tools could be implemented over five phases (Box 2). These are sequenced according to increasing levels of patient risk, task complexity, and implementation effort, and decreasing levels of current technical maturity and evidence of safety and effectiveness. The phased approach affords careful introduction of GenAI, beginning with tools that primarily enhance administrative efficiency (lower patient risk), progressing to those directly influencing clinical decisions and patient self-care (higher patient risk and requiring regulatory approval). EMRs = electronic medical records. Automating clinical documentation: Doctors in clinics can spend up to 2 hours on documentation for each hour of direct clinician–patient interaction;12 hospital residents and nurses spend up to 25%13 and 60%14 respectively of shift time on documentation. Ambient GenAI tools capable of voice transcription and note generation during doctor–patient encounters can decrease documentation time up to 25% (“keyboard liberation”),15-17 and allow more attentiveness to patients. Similarly, scribes in nurse–patient encounters can double the time the nurse spends on direct patient care.18 Ambient GenAI tools can also generate a readily understood patient summary,19 potentially increasing satisfaction and adherence with care. Ambient scribes could also include real-time advice, such as highlighting missed items in history or overlooked investigation results.20 Synthesising patient information from medical records: When interviewing new patients in the clinic or on ward rounds, clinicians can spend up to a third of the encounter retrieving, reading and synthesising patient summaries from electronic medical records (EMRs) before patient contact.21 GenAI can generate easily interpreted summaries of pertinent history, investigation results and treatments more accurately than clinicians22 while reducing this familiarisation time by around 20%.23 Generating discharge summaries from EMRs: Writing discharge summaries is time consuming, error prone and often slow in reaching recipients,24 with suboptimal patient outcomes.25 GenAI can generate summaries more accurate than those of junior doctors in 90% of cases,26 are available at discharge,27 and lessen the time seniors spend in supervision for complex cases by a third.28 Optimising consent: The reading grades (school-grade level of reading skill required for understanding) of most consent forms exceed the population average (8th grade) and often lack procedure-specific information required for informed consent. Clinicians can use GenAI chatbots that, by inputting clinician-verified text, could provide more comprehensible, informative and empathetic versions that take less time to read.29 Automating routine administrative tasks: Scheduling clinic appointments, organising staff rosters, drafting minutes and policy documents, and coding patient records are all labour-intensive but potentially automatable tasks. As examples, GenAI could more quickly create safer and fairer rosters,30 expedite coding for faster remuneration,31 and improve operational decision making.32 Improving hospital capacity management: Overcrowded emergency departments, access block to inpatient beds, delayed discharges and avoidable readmissions are commonplace. GenAI-enabled patient triage and discharge planning33, 34 and command and control patient flow systems could assist clinicians and bed managers in optimising bed use.35 Improving workflows in image-based disciplines: Taking radiology as the most mature domain, heavy workloads stress radiologists and cause delays in issuing reports, which can compromise patient care.36 Tools that automate image interpretation and structured reporting37 can reduce total reporting time by a third,38 reducing radiologist burnout and shortening report turnaround times.39 GenAI could potentially optimise referral and reporting prioritisation, patient scheduling and preparedness, and scan protocoling.40 Similar benefits in prioritising, interpreting and reporting digital pathology slides could also be realised with GenAI.41 Facilitating gathering and trending of data: Care-related near misses or adverse events such as medication harm and delirium are currently ascertained retrospectively from medical records or incident reports, with significant lag times. Such data could be captured, quantified and trended in real-time using LLMs applied to EMRs, thus facilitating more timely recognition of unsafe situations warranting remedial intervention.42-44 Expediting analysis of data: Considerable time and effort are spent in gathering, analysing and reporting quality and safety measures, incident data, and undertaking root cause analyses, with often little impact on care.45, 46 GenAI could aggregate and analyse these data more efficiently,47 identify safety hazards and contributors more quickly, automate audit48 and survey analyses,49 and allow quality and safety staff to redirect resources to proactive safety improvement.50 Retrieving medical evidence to inform decision making: Current online literature search systems (eg, PubMed) take time to search and synthesise data, are limited to simple keyword queries, and often retrieve limited relevant, actionable reports.51 GenAI, particularly using retrieval augmented generation, can very quickly and iteratively, in response to serial prompts, screen available literature and synthesise high quality, actionable evidence with supporting references,52 although the ability of LLMs to assess risk of bias of clinical trials remains limited.53 Reducing diagnostic error: Diagnostic error accounts for 60–70% of all medical errors causing harm, mostly caused by cognitive biases in reasoning.54 Responding to clinician prompts, GenAI could suggest more accurate differential diagnoses or detect and reduce misdiagnosis,55 particularly for complex, undifferentiated general medical cases involving non-expert clinicians.56 Personalising therapies: The response of many patients to specific therapies for diagnosed and confirmed diseases remains unpredictable.57 Applying GenAI to EMRs and genomic databases could identify patient genotypes or phenotypes associated with favourable or unfavourable treatment responses, as seen in various oncological applications.58 More rigorous evaluation will be required of consumer-facing applications relying on the do-it-yourself proficiency of users who may lack medical expertise, especially as GenAI chatbots could give seemingly confident, personalised but inappropriate advice.59 Providing medical advice: GenAI symptom checkers can diagnose conditions better than laypeople using traditional online information sources, but remain inferior to vetting by clinicians, with triage decisions for acute conditions particularly problematic.60 However, GenAI chatbots fine-tuned on curated medical knowledge could reliably identify patients’ needs and provide informed suggestions.61 Chatbots that can process and draft responses to messages and queries of patients with diagnosed conditions under the care of clinicians can also alleviate clinician burden and enhance patient engagement.62 Improving chronic disease self-management: The use of GenAI chatbots to manage chronic diseases seems well accepted by patients in supporting mental health, physical activity and behaviour change for selected conditions,63 but evidence of effects on patient outcomes is limited.64 Wearable devices integrated with GenAI can potentially detect adverse health states such as falls or clinical deterioration.65 Several risks to patient safety and quality of care require careful consideration.66-73 These relate to: reliability (errors, hallucinations); consistency (different responses to the same question); explainability (few rationales for responses); limited understanding of context; biased responses due to unrepresentative training data; misuse of prompts; potential privacy breaches; little auditability of tool processes and outputs; workflow disruptions and job displacement; depersonalised care; over-reliance of clinicians on GenAI with clinician de-skilling; limited clinician and patient acceptance; and costs and carbon footprint. However, risk mitigation strategies exist and will continue to evolve (Box 3). Although many of these risks are common to all forms of AI, certain risks, such as hallucinations, prompt misuse and the inability to be audited, are peculiar to GenAI. GenAI is also not yet capable of higher-order reasoning, contextual understanding, capturing sensory and nonverbal cues, or making moral or ethical judgements. Decision support LLMs may produce inconsistent advice to the same queries and be as prone to cognitive biases as humans.74 GenAI alters its behaviour in response to new data inputs or updating or recalibration of its operations, which may go unannounced. Importantly, in performing several different tasks, acceptable GenAI performance on one “benchmark” task does not translate to other, seemingly related tasks for which it was not trained.75 This challenges the generalisability of any single, point in time evaluation of an evolving model with a large potential task capability. Ensuring the quality of massive datasets used to train GenAI models is challenging compared with traditional AI models trained on smaller, targeted datasets. The behaviour of hugely complex LLMs with billions of parameters performing different tasks cannot be understood, despite knowing their technical architecture. Evaluation and regulation of GenAI tools with their limitless and changing arrays of inputs and outputs is hugely challenging. A single, fit-for-purpose pre-deployment assessment and approval of all GenAI tools, as software as a medical device (SaMD), may not suffice for tools that continue to learn and adapt. Currently the Therapeutic Goods Administration (TGA) regulates some but not all AI tools designed to support clinical decision making as SaMD, but exempts tools, such as GenAI scribes, which provide only documentation or administrative assistance. The TGA’s remit for consumer-facing AI tools remains undefined. Current regulatory and accreditation processes,76 coupled with amendments in society-wide laws (eg, privacy, consumer and anti-discrimination laws) may be sufficient to cover many GenAI applications. Two regulatory approaches are possible: an application-centric approach, and a system-centric approach. In an application-centric approach, individual tools are evaluated according to task criticality and patient risk. For high risk diagnostic or treatment applications (phases 4 and 5), the tool may be frozen pre-deployment and evaluated in a standard pathway (versus a fast pathway) using pragmatic clinical trials (Box 4).77-79 If approved, the tool could later be locked down, re-opened, retrained (if needed), and re-evaluated for re-approval if any substantive change in function or deviation from benchmark tasks is seen. The US Food and Drug Administration calls for AI developers to provide an algorithm change protocol describing how modifications are generated and validated.80 Lower risk tools (phases 1 and 2) may pass through a fast pathway, requiring only observational studies or post-deployment verification studies for approval. A standardised, actionable, risk-based checklist for evaluating GenAI along multiple axes, including post-deployment monitoring of real-world performance and clinical impact, is needed81-83 as are similar checklists for identifying and resolving ethical concerns.84, 85 Importantly, any GenAI tool must undergo a standardised clinical validation process at the local level using local data, including tools with regulatory approval. Using open-source or open-weight tools hosted on local servers may be the best option for protecting privacy, but requires in-house data scientists and technical staff for model training and tool deployment. Clinical validation stage (by risk level): For lower risk applications (phases 1–3): For higher risk applications (phases 4 and 5): A complementary system-centric approach requires tool developers and deployers (ie, large-scale health services) to wrap a quality assurance framework86 around their GenAI activities, comprising both risk mitigation (Box 3) and life cycle monitoring and evaluation. This framework may include statistical process control analyses that define acceptable bounds around tool accuracy or analyses of downstream effects on proximal clinical outcomes (eg, adverse events, mortality).87 More proxy measures of tool use, such as tracking the number of human-initiated corrections to LLM-created documents, could also be used.88 Developers and deployers might be accredited by an appointed authority to use GenAI tools depending on how well they measure, report and satisfy these parameters. Health services may need to establish dedicated, multidisciplinary clinical AI units to perform these tasks and provide the necessary human expertise and digital infrastructure.89 Such units may also specialise in validating and piloting specific applications before deployment in other similar or affiliated services, given the limited capacity of some services to undertake these tasks for every GenAI tool they may want to deploy.90 A balance is therefore needed between bespoke and more centralised evaluations, with the latter preferred for widely used, high value, high risk or high impact solutions. Because of its human-like interactivity, GenAI is rapidly gaining acceptance by frontline clinicians for certain tasks (eg, ambient scribes), bringing a cultural shift in how medicine is practised and providing more value over time.91 Clinicians will likely adopt GenAI for common tasks where it has demonstrated acceptable accuracy and safety, is easy to use, aligns with clinical workflows, and enhances clinician–patient interactions.92 Clinician trust will rely on clearly articulated use cases, well defined risk-based clinical testing processes and evidence generation, and ongoing monitoring of performance linked to original indications.93 Consumer trust will centre on tool accuracy, transparency around GenAI use in their care, and privacy assurances.94 Meaningful co-design with diverse consumer groups can help identify concerns and build appropriate safeguards into GenAI implementation.95 users of GenAI, both health and will need to be well through and training in its how to use it human to its and undertake appropriate consent in using AI in care GenAI tool should with a or model providing as on its function and training performance bias safety technical prompt and conditions of appropriate narrative review several or system factors likely to influence GenAI with some common to all forms of is the need for involving researchers, data clinicians and in and GenAI tools and they are for health services must to adopt GenAI open-source or tools, with local as or or with a tools to tools with EMRs through application or them EMRs is for to that health services to assess the of GenAI tools before to deployment is The and of and also need Lower may be using integrated and units to data from EMRs and using it to train and their or tools, if are to all services for local it is for and health services to enhance access for developers to patient data from EMRs and other for GenAI while data Health data are currently often lack data and access is on multiple data using different access access processes and data using common data are GenAI into clinical practice should be by implementation that optimise and for a patient their acceptance or of GenAI advice must be defined and using strategies from and in implementing health care AI (Box This narrative review has potential from GenAI in clinical our evidence may be for reviews published over the which LLMs such as ChatGPT were and our of use cases is not intended to be As GenAI is rapidly evolving and is a time lag between of original and into review we that some articles may have We the limitations of current and the need for more real-world to the evidence on the quality and safety of care, and identify the tasks and for which this new and rapidly evolving is best The of GenAI is its across multiple tasks and its conversant, language rather than performance on every tasks will be better by fine-tuned learning models rather than and technical will be required coupled with rigorous evaluation that allow users to quickly to and We propose a phased, risk-tiered implementation of GenAI tools into health care coupled with risk mitigation As a human GenAI will be but and introduction may improve current access by The of as of the The of the of data original original review and Writing review and Writing review and Writing review and",
-      "openalex_id": "W4414879239",
-      "openalex_type": "review",
-      "referenced_works_count": 103,
-      "categories": [
-        "meta-analysis",
-        "recent"
-      ],
-      "source_api": "openalex",
-      "search_angles": [
-        "application"
-      ],
-      "record_id": "cr_003fad027719735e5e5a3cee"
     },
     {
       "title": "Validating a digital depression prevention program for adolescents in Jordan: cultural adaptation and user testing in a randomized controlled trial",
@@ -10382,28 +10497,6 @@
         "critique"
       ],
       "record_id": "cr_2a475885c2e2ec919f960b62"
-    },
-    {
-      "title": "Flow Experience and Challenge-Skill Balance in E-Learning",
-      "authors": [
-        "Chih-Chien Wang",
-        "Ming-Chang Hsu"
-      ],
-      "year": 2013,
-      "venue": "Pacific Asia Conference on Information Systems",
-      "doi": null,
-      "citations": 7,
-      "abstract": "Flow is an optimal experience resulting in intense engagement in the activity. People achieved flow state when they perceived balance between challenge of the activity and their skill to the activity. The concept of flow can be used to explore students’ learning performance in e-learning environment. The current research aims to empirically explore the influence of challenge-skill balance on the flow experience and the influence of flow experience on learning satisfaction and learning performance in e-learning environment. The current research conducted a quasi-experimental design with questionnaire survey and carried out an electroencephalography (EEG) analysis, a psychophysiological method. The empirical survey results have shown that challenge-skill balance is an antecedent factor affecting learners’ flow experience. Once learners reach flow experience, their learning performance and learning satisfaction would get improved. Besides, the current research also found that flow experience is relative with learners’ attention measured by EEG brainwave signal. Learners’ perception of challenge-skill balance would influence their attention in elearning activities. The current research is also in the pioneering position that using non-medical purpose EEG device in e-learning research.",
-      "openalex_id": "W279868603",
-      "openalex_type": "conference-paper",
-      "referenced_works_count": 40,
-      "categories": [],
-      "source_api": "semantic-scholar",
-      "search_angles": [
-        "canon",
-        "recent"
-      ],
-      "record_id": "cr_7e30c2982c7140ce1147f339"
     },
     {
       "title": "Flow Experience and Innovative Behavior of University Teachers: Model Development and Empirical Testing",
@@ -13587,6 +13680,52 @@
         "replication"
       ],
       "record_id": "cr_6a4fcc4dd919110fd3913983"
+    },
+    {
+      "title": "Exploring How AI Tour Guides' Automated Social Presence Influences Tourist Flow Experience and Behavioral Intentions",
+      "authors": [
+        "Fan Liu",
+        "Lianping Ren",
+        "Yilin Hu"
+      ],
+      "year": 2026,
+      "venue": "International Journal of Tourism Research",
+      "doi": "10.1002/jtr.70326",
+      "citations": 1,
+      "abstract": "ABSTRACT This study examines how the dimensions of automated social presence (ASP) in AI tour guides influence tourists' flow experience and behavioral intentions. Using 413 valid questionnaire responses, the research integrates partial least squares structural equation modeling (PLS‐SEM) and fuzzy‐set qualitative comparative analysis (fsQCA) to capture both linear and configurational relationships among the constructs. The findings reveal that the social affability, empathy, responsiveness, communication versatility, and competence of AI tour guides positively affect tourists' flow experience and behavioral intentions, with flow experience playing a mediating role. Furthermore, four fsQCA configurations leading to high behavioral intentions are identified. This study advances the theoretical understanding of AI‐enabled tourism services by uncovering the psychological mechanisms that drive tourists' engagement with AI tour guides. It also offers practical implications for tourism and hospitality practitioners to improve AI tour guide design and service quality, enhance visitor experiences, and strengthen destination competitiveness.",
+      "openalex_id": "W7154562262",
+      "openalex_type": "article",
+      "referenced_works_count": 49,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2020443333"
+      ],
+      "record_id": "cr_635d5344615db1e85d875ed1"
+    },
+    {
+      "title": "Feasibility and User Experience of an AI-Supported mHealth Intervention for Remote Life Goal Setting Based on Flow Theory: Exploratory Within-Participant Study",
+      "authors": [
+        "Ippei Yoshida"
+      ],
+      "year": 2026,
+      "venue": "JMIR Formative Research",
+      "doi": "10.2196/78717",
+      "citations": 1,
+      "abstract": "BACKGROUND: Life goal setting contributes substantially to well-being and quality of life, particularly among middle-aged and older adults. However, delivering remote goal-setting support remains challenging due to limited professional resources and accessibility barriers. Recent advancements in mobile health (mHealth) technologies, telemedicine, and generative artificial intelligence (AI) present new opportunities for scalable, personalized health behavior interventions. Nevertheless, few studies have compared AI-driven life goal interventions with conventional human-facilitated approaches in real-world settings. OBJECTIVE: This study aimed to evaluate the feasibility and user experience of an AI-supported mHealth intervention for remote life goal setting based on flow theory. We compared the AI-supported approach to occupational therapist (OT)-facilitated support and explored the differential characteristics of AI-guided and human-guided interventions for self-management and motivation enhancement. METHODS: An exploratory, within-participant, 2-condition comparison with a counterbalanced order was conducted among 28 community-dwelling adults (aged between 20 and 76 years) who were smartphone users. Each participant selected 2 personal life goals and completed remote adjusting the challenge-skill balance (R-ACS) sessions, a structured telemedicine process based on flow theory. One goal was supported by an OT, while the other was facilitated by a generative AI chatbot integrated into an mHealth platform. Following each session, participants completed a 4-item rubric-based questionnaire (5-point Likert scale), assessing the quantity and quality of questions, appropriateness of suggestions, and perceived contribution to goal attainment. Free-text feedback was also collected. Quantitative data were analyzed using Wilcoxon signed-rank tests with effect size calculations and Benjamini-Hochberg correction for multiple comparisons. Qualitative differences were explored using text mining (term frequency-inverse document frequency analysis) and sentiment evaluation. RESULTS: Both AI-supported and OT-facilitated R-ACS sessions were feasible and successfully delivered tailored suggestions for all participants. AI-supported sessions received higher scores on all rubric items than OT-facilitated sessions, with a statistically significant difference in suggestion appropriateness (z score=3.13; P=.002; r=0.418; false discovery rate-adjusted P=.008). Term frequency-inverse document frequency analysis of free-text comments revealed that AI-supported sessions emphasized actionability, motivation, and immediacy, while OT-facilitated sessions highlighted reflection, self-understanding, and emotional safety. Participants expressed high acceptance of both intervention types, with AI-supported interactions perceived as particularly accessible and conducive to health behavior change. CONCLUSIONS: AI-supported mHealth interventions for remote life goal setting based on flow theory are feasible, well accepted, and offer potential advantages in immediacy, motivation enhancement, and action-oriented support. OT-facilitated support provides complementary strengths by fostering reflection and psychological safety. A hybrid R-ACS model that integrates both AI and human expertise may optimize personalized, scalable self-management support for life goal setting. Future randomized controlled trials are warranted to further investigate the long-term impact of AI-driven mHealth interventions on health behavior, well-being, and quality of life.",
+      "openalex_id": "W7125797003",
+      "openalex_type": "article",
+      "referenced_works_count": 42,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2905435317"
+      ],
+      "record_id": "cr_af47b0a36004b8b260b97b98"
     },
     {
       "title": "Forming B2B Sales Strategies: Digital Challenges, Mutual Benefits and Supportive Partnerships Establishment",
@@ -17824,7 +17963,8 @@
       ],
       "source_api": "openalex",
       "search_angles": [
-        "canon"
+        "canon",
+        "recent"
       ],
       "record_id": "cr_26eb02af0f1bf7951568b180"
     },
@@ -17898,30 +18038,6 @@
       "record_id": "cr_8fe3693f0b6ee6126a716b24"
     },
     {
-      "title": "Exploring How <scp>AI</scp> Tour Guides' Automated Social Presence Influences Tourist Flow Experience and Behavioral Intentions",
-      "authors": [
-        "Fan Liu",
-        "Lianping Ren",
-        "Yilin Hu"
-      ],
-      "year": 2026,
-      "venue": "International Journal of Tourism Research",
-      "doi": "10.1002/jtr.70326",
-      "citations": 0,
-      "abstract": "ABSTRACT This study examines how the dimensions of automated social presence (ASP) in AI tour guides influence tourists' flow experience and behavioral intentions. Using 413 valid questionnaire responses, the research integrates partial least squares structural equation modeling (PLS‐SEM) and fuzzy‐set qualitative comparative analysis (fsQCA) to capture both linear and configurational relationships among the constructs. The findings reveal that the social affability, empathy, responsiveness, communication versatility, and competence of AI tour guides positively affect tourists' flow experience and behavioral intentions, with flow experience playing a mediating role. Furthermore, four fsQCA configurations leading to high behavioral intentions are identified. This study advances the theoretical understanding of AI‐enabled tourism services by uncovering the psychological mechanisms that drive tourists' engagement with AI tour guides. It also offers practical implications for tourism and hospitality practitioners to improve AI tour guide design and service quality, enhance visitor experiences, and strengthen destination competitiveness.",
-      "openalex_id": "W7154562262",
-      "openalex_type": "article",
-      "referenced_works_count": 49,
-      "categories": [
-        "recent"
-      ],
-      "source_api": "snowball",
-      "snowball_from": [
-        "W2020443333"
-      ],
-      "record_id": "cr_635d5344615db1e85d875ed1"
-    },
-    {
       "title": "Exploring learning engagement among Spanish undergraduates in Asia: the chain mediating roles of flow experience and self-determined motivation in short video platform use",
       "authors": [
         "Lin Liang",
@@ -17965,6 +18081,28 @@
         "recent"
       ],
       "record_id": "cr_dfc692fa7a6669060e0c0443"
+    },
+    {
+      "title": "Feasibility and User Experience of an AI-Supported mHealth Intervention for Remote Life Goal Setting Based on Flow Theory: Exploratory Within-Participant Study (Preprint)",
+      "authors": [
+        "Ippei Yoshida"
+      ],
+      "year": 2025,
+      "venue": null,
+      "doi": "10.2196/preprints.78717",
+      "citations": 0,
+      "abstract": "BACKGROUND Life goal setting contributes substantially to well-being and quality of life, particularly among middle-aged and older adults. However, delivering remote goal-setting support remains challenging due to limited professional resources and accessibility barriers. Recent advancements in mobile health (mHealth) technologies, telemedicine, and generative artificial intelligence (AI) present new opportunities for scalable, personalized health behavior interventions. Nevertheless, few studies have compared AI-driven life goal interventions with conventional human-facilitated approaches in real-world settings. OBJECTIVE This study aimed to evaluate the feasibility and user experience of an AI-supported mHealth intervention for remote life goal setting based on flow theory. We compared the AI-supported approach to occupational therapist (OT)–facilitated support and explored the differential characteristics of AI-guided and human-guided interventions for self-management and motivation enhancement. METHODS An exploratory, within-participant, 2-condition comparison with a counterbalanced order was conducted among 28 community-dwelling adults (aged between 20 and 76 years) who were smartphone users. Each participant selected 2 personal life goals and completed remote adjusting the challenge-skill balance (R-ACS) sessions, a structured telemedicine process based on flow theory. One goal was supported by an OT, while the other was facilitated by a generative AI chatbot integrated into an mHealth platform. Following each session, participants completed a 4-item rubric-based questionnaire (5-point Likert scale), assessing the quantity and quality of questions, appropriateness of suggestions, and perceived contribution to goal attainment. Free-text feedback was also collected. Quantitative data were analyzed using Wilcoxon signed-rank tests with effect size calculations and Benjamini-Hochberg correction for multiple comparisons. Qualitative differences were explored using text mining (term frequency–inverse document frequency analysis) and sentiment evaluation. RESULTS Both AI-supported and OT-facilitated R-ACS sessions were feasible and successfully delivered tailored suggestions for all participants. AI-supported sessions received higher scores on all rubric items than OT-facilitated sessions, with a statistically significant difference in suggestion appropriateness (z score=3.13; P=.002; r=0.418; false discovery rate–adjusted P=.008). Term frequency–inverse document frequency analysis of free-text comments revealed that AI-supported sessions emphasized actionability, motivation, and immediacy, while OT-facilitated sessions highlighted reflection, self-understanding, and emotional safety. Participants expressed high acceptance of both intervention types, with AI-supported interactions perceived as particularly accessible and conducive to health behavior change. CONCLUSIONS AI-supported mHealth interventions for remote life goal setting based on flow theory are feasible, well accepted, and offer potential advantages in immediacy, motivation enhancement, and action-oriented support. OT-facilitated support provides complementary strengths by fostering reflection and psychological safety. A hybrid R-ACS model that integrates both AI and human expertise may optimize personalized, scalable self-management support for life goal setting. Future randomized controlled trials are warranted to further investigate the long-term impact of AI-driven mHealth interventions on health behavior, well-being, and quality of life.",
+      "openalex_id": "W7125852424",
+      "openalex_type": "preprint",
+      "referenced_works_count": 43,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2905435317"
+      ],
+      "record_id": "cr_44dad6f861930ababc853ac2"
     },
     {
       "title": "Feasibility of immersive VR and MR exergames for older adults: psychological predictors of long-term engagement",
@@ -21198,7 +21336,8 @@
       ],
       "source_api": "openalex",
       "search_angles": [
-        "canon"
+        "canon",
+        "recent"
       ],
       "record_id": "cr_f83d6c15509178f34bd7b3f5"
     },
@@ -21244,7 +21383,8 @@
       ],
       "source_api": "openalex",
       "search_angles": [
-        "canon"
+        "canon",
+        "recent"
       ],
       "record_id": "cr_bf601ae6668f01f71e761ab4"
     },
