@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-17T14:59:01.483Z",
+  "fetched_at": "2026-08-24T05:42:06.582Z",
   "terms_source": "record",
   "terms": [
     "flow experience challenge skill balance",
@@ -23,7 +23,7 @@
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 885
+      "upstream_total_results": 875
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
@@ -35,10 +35,10 @@
       "requested": 25,
       "returned": 25,
       "unique_returned": 24,
-      "records_added": 0,
-      "novelty_rate": 0,
+      "records_added": 1,
+      "novelty_rate": 0.0417,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 885
+      "upstream_total_results": 875
     },
     {
       "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
@@ -53,7 +53,7 @@
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 885
+      "upstream_total_results": 875
     },
     {
       "query_id": "graph:backward-reference:W1683284848",
@@ -157,7 +157,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.0042,
       "upstream_total_results": null
     },
     {
@@ -172,7 +172,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.0042,
       "upstream_total_results": null
     },
     {
@@ -341,6 +341,36 @@
       "upstream_total_results": null
     },
     {
+      "query_id": "graph:backward-reference:W7162254536",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "When Challenge Turns into Threat at the Chessboard: Cardiovascular Reactivity and Flow Across Two Hours of Task Performance",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W7162254536",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "When Challenge Turns into Threat at the Chessboard: Cardiovascular Reactivity and Flow Across Two Hours of Task Performance",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
       "query_id": "graph:forward-citation:W1683284848",
       "api": "openalex",
       "angle": "canon",
@@ -378,8 +408,8 @@
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
-      "returned": 2,
-      "unique_returned": 2,
+      "returned": 1,
+      "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
@@ -429,36 +459,6 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W279868603",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Flow Experience and Challenge-Skill Balance in E-Learning",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 2,
-      "unique_returned": 2,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W4221001939",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
     }
   ],
   "coverage_report": {
@@ -478,7 +478,7 @@
         "title": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
         "doi": "10.1080/17439760.2014.967799",
         "openalex_id": "W2042314632",
-        "citations": 173,
+        "citations": 174,
         "references_total": 125,
         "references_resolved": 115,
         "references_in_corpus": 18,
@@ -491,8 +491,8 @@
     "foundational": 34,
     "meta-analysis": 22,
     "replication": 95,
-    "dissent": 154,
-    "recent": 519
+    "dissent": 155,
+    "recent": 520
   },
   "diversity_report": {
     "viewpoint_spread": [
@@ -500,7 +500,7 @@
         "angle": "canon",
         "queries": 3,
         "returned": 75,
-        "unique_records": 58
+        "unique_records": 57
       }
     ],
     "source_spread": [
@@ -508,24 +508,24 @@
         "api": "openalex",
         "queries": 3,
         "returned": 75,
-        "unique_records": 58
+        "unique_records": 57
       }
     ],
     "recent_records": 26,
-    "recency_rate": 0.4483,
+    "recency_rate": 0.4561,
     "novelty": {
       "previous_corpus_records": 867,
-      "unique_records": 58,
-      "already_in_corpus": 58,
-      "new_records": 0,
-      "novelty_rate": 0,
+      "unique_records": 57,
+      "already_in_corpus": 56,
+      "new_records": 1,
+      "novelty_rate": 0.0175,
       "low_novelty": true,
       "known_share_threshold": 0.8
     }
   },
   "saturation_report": {
     "queries_issued": 30,
-    "records_added": 0,
+    "records_added": 1,
     "novelty_curve": [
       {
         "query_index": 1,
@@ -546,10 +546,10 @@
         "kind": "search",
         "returned": 25,
         "unique_returned": 24,
-        "records_added": 0,
-        "novelty_rate": 0,
+        "records_added": 1,
+        "novelty_rate": 0.0417,
         "rolling_novelty_rate": null,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 3,
@@ -561,7 +561,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 4,
@@ -573,7 +573,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 5,
@@ -585,7 +585,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 6,
@@ -597,7 +597,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 7,
@@ -609,7 +609,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 8,
@@ -621,7 +621,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 9,
@@ -633,7 +633,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 10,
@@ -644,8 +644,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "rolling_novelty_rate": 0.0042,
+        "cumulative_records": 868
       },
       {
         "query_index": 11,
@@ -656,8 +656,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "rolling_novelty_rate": 0.0042,
+        "cumulative_records": 868
       },
       {
         "query_index": 12,
@@ -669,7 +669,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 13,
@@ -681,7 +681,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 14,
@@ -693,7 +693,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 15,
@@ -705,7 +705,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 16,
@@ -717,7 +717,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 17,
@@ -729,7 +729,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 18,
@@ -741,7 +741,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 19,
@@ -753,7 +753,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 20,
@@ -765,7 +765,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 21,
@@ -777,7 +777,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 22,
@@ -789,10 +789,34 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
         "query_index": 23,
+        "query_id": "graph:backward-reference:W7162254536",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 868
+      },
+      {
+        "query_index": 24,
+        "query_id": "graph:forward-citation:W7162254536",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 868
+      },
+      {
+        "query_index": 25,
         "query_id": "graph:forward-citation:W1683284848",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -801,10 +825,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
-        "query_index": 24,
+        "query_index": 26,
         "query_id": "graph:backward-reference:W2042314632",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -813,22 +837,22 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
-        "query_index": 25,
+        "query_index": 27,
         "query_id": "graph:forward-citation:W2042314632",
         "bucket": "recency",
         "kind": "forward-citation",
-        "returned": 2,
-        "unique_returned": 2,
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
-        "query_index": 26,
+        "query_index": 28,
         "query_id": "graph:backward-reference:W3046829123",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -837,10 +861,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
-        "query_index": 27,
+        "query_index": 29,
         "query_id": "graph:forward-citation:W3046829123",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -849,10 +873,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       },
       {
-        "query_index": 28,
+        "query_index": 30,
         "query_id": "graph:backward-reference:W279868603",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -861,31 +885,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 867
-      },
-      {
-        "query_index": 29,
-        "query_id": "graph:forward-citation:W279868603",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 2,
-        "unique_returned": 2,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 867
-      },
-      {
-        "query_index": 30,
-        "query_id": "graph:backward-reference:W4221001939",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 867
+        "cumulative_records": 868
       }
     ],
     "window_queries": 10,
@@ -896,17 +896,17 @@
       "recency": 1,
       "citation": 1
     },
-    "topical_candidates": 43,
+    "topical_candidates": 45,
     "topical_confirmed": 20,
-    "topical_rejected": 23,
-    "topical_confirmation_rate": 0.4651,
+    "topical_rejected": 25,
+    "topical_confirmation_rate": 0.4444,
     "graph_anchors_expanded": 14,
     "field_union_estimate": {
-      "estimate": 885,
+      "estimate": 875,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 1,
       "total_search_queries": 3,
-      "summed_upstream_results": 885,
+      "summed_upstream_results": 875,
       "observed_sample_multiplicity": 1
     },
     "saturation_reached": true,
@@ -1161,7 +1161,7 @@
       "year": 2005,
       "venue": "Academic Medicine",
       "doi": "10.1097/00001888-200510001-00015",
-      "citations": 983,
+      "citations": 985,
       "abstract": "Many researchers and educators have identified self-assessment as a vital aspect of professional self-regulation.1,2,3 This rationale has been the expressed motivation for a large number of studies of self-assessment ability in medical education, health professional education, and professions education generally. Unfortunately, the outcome of most studies would seem to cast doubt on the capacity for self-assessment, with the majority of authors concluding that self-assessment is, in fact, quite poor.4 In a recent article, Ward and colleagues suggested that this conclusion must be questioned because the methodologies used to evaluate self-assessment are fraught with methodological weaknesses.4 However, even studies that have attempted to address the weaknesses within the methodological paradigm have produced little evidence for effective self-assessment.5 Thus, the health professional education community is left with a conundrum that can only be resolved by deciding either that the conclusions of the studies are wrong, or that a critical premise underlying the concept of “self-regulation” in the professions is unsupportable. The current paper addresses this conundrum by arguing that there is a problem with the literature on self-assessment, and that this problem is more fundamental than a list of easily correctable methodological flaws. Rather, the roots of the problem in the self-assessment literature involve a failure to effectively conceptualize the nature of self-assessment in the daily practice of health care professionals, and a failure to properly explicate the role of self-assessment in a self-regulating profession. Until such an articulation of self-assessment is elaborated, it is difficult to know even which literatures might be informative in addressing this issue, and impossible to develop programs of research that operationalize the concept of self-assessment ability in a form that can be effectively studied. Thus, we will begin with a brief reflection on the various functions of self-assessment for a practicing health care professional and the manner in which these functions operate. The Purposes of Self-Assessment in Practice Self-assessment has been defined broadly as the involvement of learners in judging whether or not learner-identified standards have been met.6 While attractive due to their concise and encompassing nature, we fear that such simple definitions risk being misleading as they can cause underappreciation of the complexities of the construct. Self-assessment functions both as a mechanism for identifying one’s weaknesses and as a mechanism for identifying one’s strengths. Each of these mechanisms can be considered to have distinct, albeit complementary, functions. As a mechanism for identifying weaknesses or gaps in one’s skills and abilities, self-assessment serves several potential functions. First, in daily practice, the identification of one’s weaknesses allows the professional to self-limit in areas of limited competence. For example, in many circumstances the professional can quickly reject certain plans of action because she recognizes that she is unlikely to be able to complete the component tasks necessary to enact the plan. In other circumstances, a professional might recognize that he is “over his head” in a particular case and decide that it is time to recruit additional resources: to “look this up,” to obtain a consultation, to recruit additional support, or to refer the problem to another individual who is more competent in this domain. Second, in reflecting on one’s practice in general, the ability to identify weaknesses can serve the function of helping the professional set appropriate learning goals. That is, the traditional model of self-regulated continuing professional development presumes that an individual will select ongoing learning activities that fill professional gaps, but this presumes that the professional can effectively self-assess. Thus, in this role, the identification of weakness can help a professional to decide what must be learned. As a corollary to this, effective self-assessment is vital for setting realistic expectations of oneself, to avoid setting oneself up for failure. Thus, the identification of weakness also helps the self-regulating professional to decide what not to try learning, what should be accepted as forever outside one’s scope of competent practice. There is a complementary set of functions served by the ability to accurately self-assess one’s strengths. First, in daily practice, having a clear and accurate sense of one’s strengths allows the professional to act with appropriate confidence. For example, knowing one’s strengths provides the professional with the confidence to move forward on a fitting plan of action without inappropriate hesitation or trepidation. Similarly, it ensures that the individual will choose to persist on an appropriate plan of action in the face of initially negative feedback. The right path is not always smooth even if it is right, and early abandonment of an appropriate plan of action is as costly as selecting an inappropriate plan in the first place. Second, when reflecting on one’s practice in general, an appropriate assessment of one’s strengths ensures that one can set appropriately challenging learning goals, pushing the edges of one’s knowledge rather than choosing professional development courses that merely reiterate what one already knows. At the same time, by knowing one’s strengths, a professional can select learning objectives that are within her grasp, and therefore will be able to enjoy the motivational influence of attaining her goals and experience the satisfaction of a job well done. Together, then, the ability to accurately assess one’s weaknesses and one’s strengths generates a capacity for finding an effective balance both in daily practice and in setting personal learning goals. In daily practice, it generates a balance of confidence and caution, of persistence and flexibility, of experimentation and safety, and of independence and collaboration. In establishing learning goals, it generates a balance of learning enough but not too much, of starting neither too high nor too low, of knowing what to tackle and what to abandon. And in reflecting on accomplishments, it generates a balance of satisfaction and incentive, of self reward without self delusion. In order to fulfill these various functions, it seems that self-assessment must be effectively enacted in three forms: summatively, predictively, and concurrently. Enacting self-assessment summatively, a professional must reflect on completed performances both for the purposes of assessing the specific performance and for the purposes of assessing his abilities generally. When evaluating performance on a particular task, the professional can often assess the overall quality of the completed job as a question that may come in various forms. That is, the individual might ask how good this performance was relative to what she could have done; relative to what her peers might typically do; relative to the best that could have been done (a gold standard); or relative to some minimally acceptable standard. Alternatively, there are some situations where the mechanisms for objectively assessing the outcome are not immediately available, in which case the professional might ask herself how confident she is in the conclusion or outcome generated it will it could there have been a the The professional might her assessment of the specific to conclusions herself or her abilities in this generally. such conclusions may be in good enough in this minimally or in relative or and should be In conclusions her abilities a particular the professional must also whether this particular should be as an appropriate reflection of her there circumstances that to a performance that might one to this outcome as of overall In to these functions, self-assessment must be used are to assess their ability to situations and In this role, self-assessment to such up to this be starting this in this are realistic goals for in this would to be a good or acceptable outcome for might with some additional and is the the in additional should recruit or the to strengths and up self-assessment a vital role in of In this self-assessment as an ongoing the performance of a is self-assessment in that to such this the on the right in be persist in the face of negative the are not the they would or as easily as they to recruit additional such as or such as to or Thus, self-assessment is a that a number of functions as a a and a such as and this of self-assessment, it is unlikely that such as health professional effective will to the nature and of Rather, researchers must ask such what these their the assessment to be in order to be first addressing these must be to who is already and what we may their and has to several literatures that seem and and of performance and the development of and the concept of practice. In the we will on of these literatures and how they might of is not to a of but to an of being by researchers outside medical education that should of self-assessment as a For literature we will the of the and the for self-assessment in the will with a for a of research that has the potential to move the current paradigm of concluding that self-assessment is and In the of education researchers in the health professions have to on what we have the function the ability to conclusions one’s skills or knowledge in specific well able to effectively with other of the health care this has been in research studies as a that try to how well they on an immediately there is an of one’s ability in an and the more specific question of how one on a particular in the of for example, of and the development of is the in one’s to recruit the and the to is the of oneself that is various Thus, are of that involve of a specific or not of is a specific assessment of to a specific or of tasks in a an of her to complete a is, by nature, by an one’s skills or abilities and the specific in which skills or abilities will be for the of the particular is with the of skills that to the concept of self-assessment as in the health professions education literature in that is not only by and but also the performance of tasks we the we how we persist when with or in the face of Thus, there is an and only will to a sense of but will also to an of are not merely of but of a that As a there is an to high even in circumstances where such may not be by there is a to one’s abilities, but this must be with the of that one can more than one has in the and that one can the that one will As a researchers in the of to be the of and more on problem the of such the order in which of having various or negative the high or of or performance expectations of on within the of the that will when judging or the of on tasks within that for researchers in the of the to be these studies is that and can For the that one can an self-assessment of performance to be for the question of a of that would influence could be personal and In has that fundamental mechanisms as will be in the will influence the to which will be In general, that are not by an of in the of but rather that fundamental used for a of tasks influence quite then, it that researchers in the literature several and methodological that can research in in the and of they and the that these and they with the of these for and In to the on in the self-assessment literature and the on in the in of one’s to on the mechanisms that to and the in which we particular for purposes are of how form and what influence of how well they have is a fundamental of this that we not have to or knowledge Rather, as we must of knowledge and their and other too we must to of knowledge and In fact, it is that of abilities are often on the same or that we to For example, the it is to a of the more we are to that we will that (a are that effective and within a limited However, they can also in a that to in when to in to identify strengths and this when to one’s ability in a or when to the of on a task, the of these is on the to which the of learning the of the For example, research when are to a of as a list of for several their of having in their learning are more accurate if the of are and with other than if of are to the of of in judging the to which they have as the they have when is by Similarly, are more accurate when there is a of the and to practice. In general, their learning if the are or if too on of the because these of the are than the they will be to a The the the learning the the of the of learning that merely the list and practice are often to if are left to their That is, in order to recognize one’s to the it is necessary to try to and in these as to their ability to the are unlikely to in the that of For example, of learning to be more accurate are to a and the than if they are to This without to the not try and but rather not and in an that they might have used to their This finding is with the performance and self-assessment in the health professions literature when are relative to as a the this literature the of of self-assess to that on the various that of learning or knowledge or In the of to we are to on a of and to be more accurate when these accurately reflect the that but there are many in which the used for of learning or performance and of which are used and which should be used in health professional education well as the these have on might and of the concept of the of that are often misleading in situations for the of the inappropriate of specific has been researchers in the of the of the in has many to that of what we to know outside of Each of an that of and This of the is because we have to the and of we not enjoy such to the that are have a to for but these are often and more than are the of This is because there are to to be more a than the While it is impossible that we are the individual such can be in who such are to be and more to persist difficult and of the the we will to a sense of well and we is but as one example, a number of mechanisms some in fundamental by which can develop and many of which are to an of what is to accurately self-assess one’s strengths and As one example, and evidence that the that they can the because they or their the more on their and than the that they are by the on the they should have if not for some the being As a come to of as and the that they can the in a is to an of one’s ability by the but the question or a in to that This to with the of the that in will be that the of self-assessment is to avoid such of oneself, that it is necessary to one’s and how to it rather than reflecting When reflecting on knowledge and abilities we have a of to that is not to but capacity for that not with of can the of that additional in a misleading of confidence in the of of such a we have to more than on and being more than to on the to being broadly as the fundamental This a for self-regulating in that it one must and the of and in order to develop an accurate of question the of are also to but the more the of the might be to for This that self-assessment is for the of accurate is with the finding that peers to be of performance than both in health and This self-assessment quite the simple question of that has self-assessment researchers in professional what health care to can we with the of to a and appropriate sense of what is for such to be This question has been a in the of of and the of have that the is a the serves more as a this is also with current of a being as the of to both a of and a more of specific In the current the question of is what role, if this or of in the development and of In the of on and colleagues have been able to on in the of practice on specific tasks by practice is the of as up and to to is the of an who can their current ability by to or that are to if one on In fact, by in of the health professions is an on to the role of early and to be more to the development of in many areas than learning not be a must practice and that practice often in And can and on their However, as a the that one could current of ability without who is in other health professional education has a whether or not learners are in able to their seems clear that not are with who enough in the to be that and can be practicing to have their continuing education a by as being the of a of learning will in because they their learning time that seems within rather than that is one of the we is that has been There is good evidence that of a problem of the learning of than simple of the problem and However, it should be that such are always of that an with knowledge of the has When the reward of learning is by a of the to be of their time in a more manner than of learning would As in the on the of in many tasks of what has of that to be the question of not one of able to their learning in a that but their learning within by There is evidence the health professional literature with of but whether can be in a that continuing education more to be is to a particular form of reflection that may or may not be The of Practice In to the of self-assessment, we have been to a that rather than the of have suggested that professional education is only one in which the concept of reflection has been used to the to assess one’s of of practice that have and of practice the of In such competent must not only by selecting the appropriate to clear and self they must also or choose of a as to a problem When a is the of problem the effective of a This of a problem is, not a situations be by or the of professional that these of practice are to professional practice and are the that reflection is this, three is an capacity to what is in a and to enact the right to to it without having a capacity to or what we are or how may be in of of and of a or problem appropriate to the is and This some of professional but not of as as the within the of what we have to as However, and this of reflection are by is a reflection on what we is to how particular of might have to the as it and how we might have with the may also by the in the for a and but it is not to action in the sense of of the literature on self-assessment to be the concept of the that action is when such reflection oneself in some and is as a simple of this (a often assessment of one’s performance on a particular by is a in which we to act but action is a form of more problem in which more is in the form of As we the of is a is in action and it is for it to be without or there may be in the and For example, when one might without or one’s as one to to another who seems to be or to involve a of when a the the scope of The ability to to must some form of of the When it is this may be and in some may even be for is to if we are other as a that whether the in the case of the or of an in of some even if must be to one to the for a to form of can be in the of who the of which a a sense of a sense of and a of due to of it seems that for a sense of to there must be some if of the experience for it to this as we would that the in the self-assessment literature on has come the of to self-assessment as it is that health care in some form of in order to in continuing professional There are when it is that a their practice a and be able to such these of or should to because she more than in this However, we would to on a is a more mechanism for and effective than being confident that can their overall ability their ability relative to their we would to know that know when to and “look it because they recognize that they not know the specific case they are with that in the current self-assessment literature are of whether or not accurately and appropriately such have to more without or to skills with such and what such being when are research that have to be there is little or research the to which the in are to or the in However, there may be some already that would a sense of the which could be we have that are able to which they are most to the of an have evidence that more time to when the they is relative to when it is Many literatures are with these that are of in practice the often when they are to overall of their are typically with a the question of self-assessment and as have to be considered in this For professional programs in the have the of being able to self-assess one’s ability as the critical on which to learning skills and the self-regulating nature of the In recent have to that question the of the on which this of has been authors have to address these by the literature on self-assessment and these to self-assessment as a and the are This was completed in an to the literature on self-assessment within the health professions and the of the and definitions of self-assessment that the health professional education community have we are to the these various literatures we must the and literatures that self-assessment is not a but one that that will by and Thus, to ask whether are or even to ask which are in a particular the on the to these we must the and literatures that we have abilities relative to outside that it may be inappropriate to try to of of or Thus, the to is not a more accurate but and and then, to the a to the rather than to reflect rather than has suggested that the self-assessment should not an or it should involve and other of we must be that the of self-assessment is more than gaps and learning As the literature the there are when accurate self-assessment is not always with There are when confidence and persistence in the face of negative may in be and the literature would that such persistence is more when of are high of most for daily practice, the literature on practice that the education and research community must move the and of self-assessment as a and That is, it seems that most of the that self-assessment provides for the not the where the individual is reflecting on her performance or ability a time that is the performance or of that While this may be to learning and professional there is an in which it may not be vital to and practice. practice in a health performance an of when one the specific knowledge or to a good a particular when more a is This in is being able to accurately one’s strengths and weaknesses in an this to effective self-assessment should not be of as a general, personal to of ability that in to a to more a particular domain. Rather, practice that self-assessment be as of and ongoing addressing and one’s ability to effectively the current As an we that most not the of the that they to their Rather, they up specific that they when they are of the goals in this literature to of the of self-assessment more and to begin an of potential to develop and assess the skills necessary for by the literatures we have are to be they cast doubt on the to which in the health professions literature on self-assessment evidence to the ability of health to function as self-regulating The in the that self-assessment has been and in the current literature are fundamental that and of the will not At the of these has been of the of generated of overall a whether are able to relative to their or to their strengths and weaknesses relative to one or to accurately the of on a that the of personal on this generated form of self-assessment is inappropriate for First, the literature a of would that in fact, effectively in these in and Thus, it is time to recognize when to identify and gaps in learning, and will be a model for than form of generated Second, and to more the on self-assessment as to the to which self-assessment is, in fact, critical to the of reflection in practice. Self-assessment as a mechanism of ongoing must self-assessment as a mechanism for identifying and Thus, the research to self-assessment to be with the various literatures as a for of more must move what has been studies of a we should begin to such as what is the of in self-assessment to what which is to what such practice. And a we should begin to on what are most to what are to such to be what assessment have on this list is by and accurately addressing even the will methodological such will be necessary if the self-assessment is to up with literatures in the of and that for that self-assessment is not a but rather it as a that is specific and these literatures may the of methodologies that can be in the concept of and we would the to of the they might rather than the and that self-assessment research in the health The of of in for the of this is as the and in authors are to and for critical that to the of this",
       "openalex_id": "W2120386903",
       "openalex_type": "article",
@@ -1264,7 +1264,7 @@
       "year": 2002,
       "venue": "Journal of Sport and Exercise Psychology",
       "doi": "10.1123/jsep.24.2.133",
-      "citations": 788,
+      "citations": 790,
       "abstract": "The Flow State Scale-2 (FSS-2) and Dispositional Flow Scale-2 (DFS-2) are presented as two self-report instruments designed to assess flow experiences in physical activity. Item modifications were made to the original versions of these scales in order to improve the measurement of some of the flow dimensions. Confirmatory factor analyses of an item identification and a cross-validation sample demonstrated a good fit of the new scales. There was support for both a 9-first-order factor model and a higher order model with a global flow factor. The item identification sample yielded mean item loadings on the first-order factor of .78 for the FSS-2 and .77 for the DFS-2. Reliability estimates ranged from .80 to .90 for the FSS-2, and .81 to .90 for the DFS-2. In the cross-validation sample, mean item loadings on the first-order factor were .80 for the FSS-2, and .73 for the DFS-2. Reliability estimates ranged between .80 to .92 for the FSS-2 and .78 to .86 for the DFS-2. The scales are presented as ways of assessing flow experienced within a particular event (FSS-2) or the frequency of flow experiences in chosen physical activity in general (DFS-2).",
       "openalex_id": "W2157505989",
       "openalex_type": "article",
@@ -1379,7 +1379,7 @@
       "year": 2004,
       "venue": "Journal of Vocational Behavior",
       "doi": "10.1016/j.jvb.2003.11.001",
-      "citations": 680,
+      "citations": 681,
       "abstract": null,
       "openalex_id": "W2148258171",
       "openalex_type": "article",
@@ -1403,7 +1403,7 @@
       "year": 1996,
       "venue": "Journal of Personality",
       "doi": "10.1111/j.1467-6494.1996.tb00512.x",
-      "citations": 613,
+      "citations": 614,
       "abstract": "This article investigates the effects that perceived challenges and skills in activities have on the quality of everyday life experience. Based on flow theory it was predicted that quality of daily experience would depend on the challenge experienced and skill required in specific situations, as well as on the balance between challenge and skill. The Experience Sampling Method (ESM) was used on a sample of 208 talented adolescents to measure daily variations in four dimensions of experience (concentration, wish to do the activity, involvement, and happiness) in four contexts (in school, with relatives, with friends, and in solitude). The four dimensions of experience were regressed on the predictors challenges, skills, and their absolute difference expressing the balance/imbalance of challenges and skills. Hierarchical linear modeling, explained in detail herein, was conducted on a 1-week sample of experiences. Findings confirm the prediction of flow theory that the balance of challenges and skills has a positive and independent effect on the quality of experience. Yet some differences of parameter estimates were found between dimensions of experience and between social contexts. These heterogeneities call for a further improvement of the flow model.",
       "openalex_id": "W2085595739",
       "openalex_type": "article",
@@ -1455,7 +1455,7 @@
       "year": 2008,
       "venue": "World Psychiatry",
       "doi": "10.1002/j.2051-5545.2008.tb00182.x",
-      "citations": 580,
+      "citations": 582,
       "abstract": "Psychotic disorders and particularly schizophrenia are serious and sometimes fatal illnesses which typically emerge during the sensitive developmental period of adolescence and emerging adulthood 1. For over a century, a corrosive blend of pessimism, stigma and neglect have confined therapeutic efforts to delayed and inconsistent palliative care. Much of this can be attributed to the conceptual error underpinning the concept of schizophrenia, namely that a true disorder could be validly defined by its (poor) outcome. This error was, in turn, a legacy of the 19th century degeneration theory, which has been allowed to influence the field well beyond its use-by date 2. Although Kraepelin himself and some of his contemporaries ultimately recognized the fallacy, his dichotomy (between dementia praecox and manic depressive insanity) has withstood several challenges and has been strongly reinforced with the advent of operational diagnostic systems. This has not only hampered neurobiological research, but has caused widespread iatrogenic harm and inhibited early diagnosis because of an exaggerated fear of the expected outcome. Until recently, apart from transient and illusory optimism generated by the mental hygiene movement in the 1920s, early intervention for psychotic disorders has been the furthest thing from the minds of clinicians and researchers. Ironically, however, since the early 1990s, this hitherto barren landscape has seen the growth of an increasingly rich harvest of evidence, and widespread national and international efforts for reform in services and treatment approaches, setting the scene for more serious efforts in early intervention in other mental disorders 3–5. Building on seminal research on first episode psychosis from the 1980s 6–8, frontline early psychosis clinical services were established, first in Melbourne 9 and soon after in many key locations in the UK, Europe, North America and Asia 10. There are now hundreds of early intervention programs worldwide, of varying intensity and duration, which focus on the special needs of young people and their families. International clinical practice guidelines and a consensus statement have been published 11 and clinical practice guidelines for the treatment of schizophrenia now typically have a major section on early psychosis 12,13. The International Early Psychosis Association (www.iepa.org.au), an international organization which seeks to improve knowledge, clinical care and service reform in early psychosis, has been in existence for over ten years, led by a highly collegial leadership group of clinicians and researchers. This association has over 3000 members from over 60 different countries, and by 2008 will have held six international conferences, stimulating and capturing a large volume of research and experience. In recent months, responding to the widespread international momentum, the US National Institute of Mental Health has announced a large new funding initiative to study and promote the development of better services for patients with first episode psychosis (www.nimh.nih.gov). The advent of preventive thinking has required a shift in the way schizophrenia and other psychotic disorders are viewed. Rather than seeing them as having inevitably poor prognoses with deterioration in social and functional outcome as the norm, more recent thinking backed up by evidence from large international studies 14–25 views the course of these disorders as much more fluid and malleable. Examination of risk factors which can influence outcome has revealed that many of these may be reversible. For example, disruption of peer and family networks and vocational drop-out commonly occur around and even before the onset of a first psychotic episode. Attention to these areas as part of treatment has the potential to limit or repair the damage. Comorbid depression, substance use, personality dysfunction and post-traumatic stress disorder (PTSD) are all factors which may influence outcome in a person with first episode psychosis. Again, early and vigorous management of these problems can result in better outcomes 26. Early intervention is a potentially confusing term. Because there is no aetiopathological basis for diagnosing psychotic disorders, they can only be diagnosed by symptoms or combinations of symptoms. In addition, we have no known malleable causal risk factors which predict onset of psychotic disorder with any specificity. Thus, it seems that primary prevention is currently out of our reach. Early intervention, therefore, means early secondary prevention. In keeping with the clinical staging model 27 articulated below, early intervention in psychosis can be defined as comprising three foci or stages: ultra-high risk, first episode, and the recovery or critical period. The principal reason for making such distinctions relates to the underlying risk of chronicity, and specifically the timing and duration of prescription of antipsychotic medication, since psychosocial interventions are needed at all stages, though these interventions too vary by stage. Clinicians and researchers have debated whether to focus on the preventive target of schizophrenia or of psychotic disorders more broadly. There are several reasons for stepping out of the current diagnostic silos and preferring a relatively broad target. As described above, schizophrenia is conceived and defined in part as an outcome as much as a diagnosis. While it is very stable once applied 28–31, it is intrinsically difficult to apply until the patient has been ill for a prolonged period of time. Within a sample of ultra-high risk cases (already defined in order to preferentially predict transition to non-affective psychosis), only 75% of those who go on to develop a first episode psychosis will progress to a schizophrenia diagnosis 32. So, the false positive rate is higher for schizophrenia than for first episode psychosis. Even within a first episode psychosis sample, only 30–40% will meet criteria for schizophrenia, and this percentage will increase over time with additional diagnostic flux. Thus, some cases of first episode psychosis which do not meet criteria for schizophrenia can be seen as being at risk for this in the future 33. Schizophrenia, therefore, is to some extent a more distal target than psychosis, which is a better and broader initial waystation for critical treatment decisions. An even earlier and broader point for intervention is the ultra-high risk clinical stage, where there is a need for care prior to the positive psychotic symptoms having become severe and sustained. In addition, due to fear and stigma derived from the notion of intrinsic poor prognosis, clinicians are reluctant to use the label “schizophrenia” early on anyway, justifiably concerned about iatrogenic effects on hope and the potential for recovery 34. This has led some countries, such as Japan, to change their diagnostic terminology and eschew the word “schizophrenia” 35. Our preferred alternative is to retain it for the time being, as one subtype of psychotic disorder outcome, admittedly a major one, among a small range of distal targets. Psychosis itself is a variable syndrome, defined by the presence of positive psychotic symptoms, especially delusions and hallucinations, and typically features one or many comorbidities, including negative symptoms, mood syndromes, personality disorders, substance use disorders, medical diseases and PTSD. The relative prominence of the positive symptoms and comorbidities varies, and this leads to a more hetero-geneous group of patients. As a consequence of this, a broader range of clinical skills will be required in early psychosis programs than in narrower schizophrenia programs. Some have argued that the schizophrenia focus allows the other psychotic disorders, especially psychotic mood disorders and psychoses associated with certain personality disorders and PTSD, to be treated in more appropriate settings. However, provided there is a flexible attitude and a broad range of clinical expertise available, both groups of patients benefit more from this broad, early, and inclusive focus on the spectrum of psychosis. It provides a good balance between specialization and addressing common needs, and also facilitates both clinical and aetiological research, which increasingly needs to transcend traditional diagnostic barriers. Many of the problems of categorical diagnosis flow from a telescoping of syndromes and stages of illness which conceals and distorts the natural ebb and flow of illness, remission and progression. In addition to augmenting categorical approaches with symptom dimensions, consideration needs to be given to the dimensions of time, severity, persistence and recurrence. The notion of staging can be borrowed and adapted from mainstream medicine to assist us here. A clinical staging model provides a heuristic framework allowing the development and evaluation of broad and specific interventions as well as the study of the variables and processes underlying the evolution of psychiatric disorder 27,36. Clinical staging is simply a more refined form of diagnosis 37,38. Its value is recognized in the treatment of malignancies, where quality of life and survival rely on the earliest possible delivery of effective interventions. However, it also has applicability in a diverse range of diseases. Clinical staging differs from conventional diagnostic practice in that it defines the extent of progression of disease at a particular point in time, and where a person lies currently along the continuum of the course of illness 36. The differentiation of early and milder clinical phenomena from those that accompany illness extension, progression and chronicity lies at the heart of the concept. It enables the clinician to select treatments relevant to earlier stages, and assumes that such interventions will be both more effective and less harmful than treatments delivered later in the course. While staging links treatment selection and prediction, its role in the former is more crucial than in the latter, particularly since early successful treatment may change the prognosis and thus prevent progression to subsequent stages. In addition to guiding treatment selection, a staging framework, which moves beyond the current diagnostic silos to encompass a broader range of clinical phenotypes, and which at the same time introduces subtypes along a longitudinal dimension, has the potential to organize endophenotypic data in a more coherent and 36. In other medical clinical stages are defined by the of progression and of illness in the which in with This a to as well as the or extent of the disease In clinical this could not only a clinical but a of extent or progression. in addition to the severity, persistence and of symptoms, volume and the social of the disorder the social and could also be the a model could the clinical stages to progression of disease a framework for the evaluation of interventions. The key positive outcomes are prevention of progression to more stages, or to an earlier stage. This an of those broad and risk and factors which influence progression from one to the we need to the relative of these risk factors and which of them may be to current interventions. While some factors may several or all may be for substance or stress may be especially harmful in onset of the first episode of illness, be less and these where variables such as substance psychosocial and social may with and other risk factors an aetiological over a century of research with traditional diagnostic of psychosis and severe mood disorders has to these to any A clinical staging which allows the of to of illness to be may to the of current or defined clinical processes from and and to be better and In psychotic disorders, an early is known to one in which much of the psychosocial is known to occur This earliest in be the the of the psychotic stage. However, since we can only apply the with the psychotic such as the or have been to that psychosis is not and that false positive cases also This is the earliest point at which preventive interventions for psychosis can be conceived The in such a is to the clinical for earliest intervention and for which the between and a of clinical and other need to be defined which a at risk for psychotic This is a and the key have been in many recent to the diagnosis of schizophrenia in the in the century in and though their that they on A operational of a or mental which could be to a risk of psychosis within a and in the early This has the of the field and has been the focus of much subsequent research, on prediction, treatment and neurobiological criteria do predict an group for early transition to psychosis to a relative risk of to the rate of psychotic disorders in the However, there is a false positive rate of though they typically are or out to be true for other disorders, and While the for psychosis can be by the use of key variables such as risk, depression, functional and substance use this is of due to the This means that the positive value the and percentage of cases that can So, the sample is one is on but cases who do go on to develop the disorder are due to the narrower focus that cases of first episode psychosis are by There have been a of clinical of relatively small sample both as preventive treatment for ultra-high risk patients that and may prevent or at the onset of psychotic disorder and A of clinical has been with for a range of psychosocial and including and However, young people in the some that patients be to and potentially harmful This has in the US in particular around this of This in has led to being preferred the traditional the that this thinking have allowed the same treatments that could not be of within a to be label in a widespread and in these the a since the natural course may be by studies that use of antipsychotic seems to be common in clinical in the by with delayed and treatment of first episode and psychotic disorders Clinical data is crucial to the and of of treatment in a new clinical focus and for an This is the to on widespread and potentially harmful and use of antipsychotic in The or ultra-high risk field in clinical since we do not which treatments will be and to and in which or or data can be in the and in the of a large clinical with an than and a intervention to which to can be can that and and such as and are to be but their use in research be within study In the the international clinical practice guidelines on early psychosis which a to the use of antipsychotic and more use of psychosocial be This to treatment of ultra-high risk is even more as it has been that the of early transition to first episode psychosis have been in the more with a much higher rate of being these This may be due to earlier of ultra-high risk or of interventions provided This in transition rate and over treatment in the ultra-high risk group has led to about of and intervention with these patients defined by the ultra-high risk criteria for first episode psychosis are at risk not only for schizophrenia or psychosis but for other mental outcomes may need to an even broader initial clinical with a range of possible or target we have our clinical and research with the development of a broader and more of clinical care for those in the of risk for all of mental disorders and with the of a clinical staging model for mood and disorders This enables a to to that the transition in ultra-high risk and the false positive rate can be in future clinical and that other syndromes and remission and can be us to beyond some of the to early diagnosis and namely the potential problems with the of and of specificity. As we this the problems with our and the need to the more The a therapeutic focus on the period after the onset of psychosis known as episode This is the period before psychosis is and the period after the or can be even in even psychosis is the of effective treatment may be The is to this duration of psychosis the intervention are and of and psychosocial interventions at and functional recovery and the prevention of are delivered during the early and of The the of and treatment in first episode psychosis seems to have been the of some key and recent longitudinal studies have now that is both a and risk for poor outcome. The Early and of Psychosis study in has the possible that leads to early in risk and of illness at initial treatment and in of negative symptoms and social The between and outcome is being over many of However, these studies do though being a malleable risk for a relatively of outcome the of treatment and quality during the early of There is an to the of care of the first psychotic episode. This is in the International Clinical for Early Psychosis published in the growth in research in this has This has led to the of the The large has that in the treatment of first episode and disorders, or have some While patients well to both and with no and were for This true even with very While the and were the of the of the with those of the Clinical of study in schizophrenia, where no were for outcome The data the of the International Clinical in Early Psychosis which the use of as first because of better crucial in first episode and risk for However, some have a particularly risk of and and these need to be and A recent however, that is a in the first of for first episode patients on both and with the key being the rate at which it treatments in early psychosis have been and there are positive to the value of in and and functional recovery there has been to the that in do by to a to This has led to an focus on the need to social recovery especially and vocational the of effective psychosocial interventions with There is also an focus on to limit the of that is as illness has in the of evidence but also the of early diagnosis. we we have effective interventions in psychosis, it is to that delayed treatment is being a is In the the key of intervention are and are as the data from and other studies have both are in it is possible to very of of a also result in a less and of care and patients to be a of positive symptoms or being required to or highly service systems. be in all and a of all mental systems. In of the specific of first episode psychosis intervention, a of have that in are for first episode patients where and are at a though some may be out on these in many patients. The recent study is especially The of new and needs to be as well as that of such as and and vocational are the key psychosocial interventions in early psychosis and need to be much more and treatment for the of patients is interventions are also an of even though the evidence is not This the critical early beyond the first episode, which can be as the critical period in this are the management of effective and the use of effective psychosocial interventions to the development of and of concept is now for these However, there a large in between and is available, even in and in the and the first episode, we that the first are crucial in setting the for recovery and outcome. This is the period of risk for and as well as with the major developmental challenges of a stable peer vocational and It that a of care on young people and on this of illness is required to the of of appropriate to family and vocational recovery and the evidence from and studies strongly the value of early psychosis programs in outcome in the these programs are only provided for years, there is also evidence that some of the are for a at early psychosis care needs to be provided for a up to in many cases The evidence that care provides outcomes in the to to care While this may be to meet the such evidence, with and has been to mental and service in hundreds of locations to and this The have only of this with a treatment model being the Even the are positive for the first of care. It seems for a at these are to be the early psychosis model be for up to this illness and may be in a much percentage of needs may be well by more traditional mental services for This may be a much better point to care. The of reform is typically in care. While early intervention in psychosis has progress in recent years, in many Many and have no progress at and even those which have have only have on this and some of the reasons for it can be seen as a blend of care and in which evidence is only one of a range of from a and the as and to flow of evidence This has been as since and and the of change and reform are other key on is a as well as a of reform and the by setting and by the once evidence is can be as a to and reform in a that be in other of medicine In better this it is to on and reform in care of is a major in all from to The study of of has a in the social Many have and to and promote this in care There are many factors but there are also of and care which influence the we of the There be the be with the and needs of those It be or of in the of it is that be adapted and in to there are several groups of in the of The are the group and the and are who form national and international networks or and they in these may be of as in a The early are a group of who on the and with one are to a range of new and have the and risk to new they are by the the early who are more in their focus and more risk The early to the early for about is to The the are even more and to the early an only it to be the new we have the members of a point of is the be this their since they point to the need to retain some of current and prior However, they are also the and and of evidence before the evidence for are applied to the which in mental at is typically less than the new This is and by the of to and after of the progress in early intervention, the have been in the early intervention While medicine is by the for and potentially and in of change have been to the to change which is and in the of the There is about where the of lies in such and other than evidence influence especially where have such as care and early it is that the relative value of early diagnosis and palliative which is where has out that the of has a point around once the early have in an the are to to as This is a that can be by several by example, and early with and time, making the of early highly and as a form of than of Many of the to early intervention are the same which progress in mental more as in the on Mental Health pessimism, the that the and a to and need to the of and treated mental A key which is to be recognized is that mental disorders are the diseases of the young mental disorders substance use and personality disorders have their onset and in adolescence and early A broader focus for early intervention many of the order by the early psychosis reform such as diagnostic a need for stigma and and be more effective in for and reform in mental This is in and and is in a of other countries, along the of the described It currently a and for early in to",
       "openalex_id": "W1590650015",
       "openalex_type": "article",
@@ -2393,7 +2393,7 @@
       "year": 2006,
       "venue": "British Journal of Educational Technology",
       "doi": "10.1111/j.1467-8535.2006.00641.x",
-      "citations": 305,
+      "citations": 307,
       "abstract": "Abstract This study is concerned with online learners’‘flow’ experiences. On the basis of Csikszentmihalyi’s theory of flow, flow was conceptualised as a complex, multimentional, reflective construct composing of ‘enjoyment’, ‘telepresence’, ‘focused attention’, ‘engagement’ and ‘time distortion’ on the part of learners. A flow model was put forward with regard to virtual class environment in a traditional university context, comprised with flow antecedents, flow and flow consequences. Based on the model, a virtual‐course flow measure was developed and administered to 525 undergraduate students engaged in virtual classes in order to examine the empirical relationships between measured flow antecedents, flow experiences and flow consequence‐course satisfaction in this case. The analysis of the data showed that: (1) students’ perceptions of their level of ‘skill’ and ‘challenge’ specific to each course are critical to determining the level of flow, (2) flow is a significant predictor of course satisfaction and (3) other than flow, individual differences such as ‘gender’ and ‘having a clear goal’ can make a significant difference in the level of flow in a virtual course. These findings are discussed along with the implications for bringing up a computer‐mediated environment more conducive to flow and learning.",
       "openalex_id": "W1990950397",
       "openalex_type": "article",
@@ -2971,6 +2971,31 @@
       "record_id": "cr_de164e4043d27fbddc24153e"
     },
     {
+      "title": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
+      "authors": [
+        "Carlton J. Fong",
+        "Diana Janet Zaleski",
+        "Jennifer Kay Leach"
+      ],
+      "year": 2014,
+      "venue": "The Journal of Positive Psychology",
+      "doi": "10.1080/17439760.2014.967799",
+      "citations": 174,
+      "abstract": "Flow is an intrinsically motivating state of consciousness characterized by simultaneous perception of high challenge and skill. The position that challenge–skill balance is the primary antecedent for achieving a flow state is unclear, and more research is needed to examine its impact on flow within multiple domains. Therefore, a meta-analysis was conducted on 28 studies examining the challenge–skill balance related to flow and intrinsic motivation in a variety of contexts. The results indicated that the relationship between challenge–skill balance and flow was moderate, and smaller with intrinsic motivation. Moderator analyses revealed weaker correlations when individuals were from an individualistic culture, in work or education contexts, using experience sampling method, and self-reporting state flow vs. trait. Compared to other theorized antecedents, challenge–skill balance was a robust contributor to flow along with clear goals and sense of control.",
+      "openalex_id": "W2042314632",
+      "openalex_type": "article",
+      "referenced_works_count": 125,
+      "categories": [
+        "meta-analysis"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "canon",
+        "recent"
+      ],
+      "record_id": "cr_36ba2b0e9a772ab6e1261e2f"
+    },
+    {
       "title": "A person‐in‐context approach to student engagement in science: Examining learning activities and choice",
       "authors": [
         "Jennifer Schmidt",
@@ -2991,31 +3016,6 @@
         "canon"
       ],
       "record_id": "cr_1ee11709d0c3ff7b79a6482b"
-    },
-    {
-      "title": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
-      "authors": [
-        "Carlton J. Fong",
-        "Diana Janet Zaleski",
-        "Jennifer Kay Leach"
-      ],
-      "year": 2014,
-      "venue": "The Journal of Positive Psychology",
-      "doi": "10.1080/17439760.2014.967799",
-      "citations": 173,
-      "abstract": "Flow is an intrinsically motivating state of consciousness characterized by simultaneous perception of high challenge and skill. The position that challenge–skill balance is the primary antecedent for achieving a flow state is unclear, and more research is needed to examine its impact on flow within multiple domains. Therefore, a meta-analysis was conducted on 28 studies examining the challenge–skill balance related to flow and intrinsic motivation in a variety of contexts. The results indicated that the relationship between challenge–skill balance and flow was moderate, and smaller with intrinsic motivation. Moderator analyses revealed weaker correlations when individuals were from an individualistic culture, in work or education contexts, using experience sampling method, and self-reporting state flow vs. trait. Compared to other theorized antecedents, challenge–skill balance was a robust contributor to flow along with clear goals and sense of control.",
-      "openalex_id": "W2042314632",
-      "openalex_type": "article",
-      "referenced_works_count": 125,
-      "categories": [
-        "meta-analysis"
-      ],
-      "source_api": "openalex",
-      "search_angles": [
-        "canon",
-        "recent"
-      ],
-      "record_id": "cr_36ba2b0e9a772ab6e1261e2f"
     },
     {
       "title": "Holding the World in Balance: The Connected Histories of the Iberian Overseas Empires, 1500–1640",
@@ -3302,7 +3302,7 @@
       "year": 2019,
       "venue": "Computer Assisted Language Learning",
       "doi": "10.1080/09588221.2019.1619585",
-      "citations": 150,
+      "citations": 152,
       "abstract": "Although digital game-based vocabulary learning (DGBVL) has attracted considerable attention, factors attributing to the facilitative effects of DGBVL have not yet been satisfactorily understood. To this end, under the theoretical framework of flow theory, this study investigates the effects of flow experiences on Chinese English-as-a-foreign-language (EFL) learners’ learning outcomes. Specifically, this study explores the influences of learner factors (balance of skill and challenge, and clear goal) and contextual factors (feedback and playability) on learners’ flow experiences, such as concentration, intrinsic motivation and enjoyment. It also examines the effects of flow experiences on learners’ perceived learning and satisfaction. Based on a survey of 291 Chinese EFL learners who used a DGBVL APP (application) named Baicizhan, the results demonstrated that balance of skill and challenge, clear goal and playability provided by the DGBVL have a positive effect on concentration. Feedback positively influences intrinsic motivation. Moreover, both concentration and intrinsic motivation positively affect perceived learning and satisfaction, but enjoyment only positively influences perceived learning rather than satisfaction. Lastly, satisfaction is positively affected by perceived learning. Implications of the findings are also discussed.",
       "openalex_id": "W2948469271",
       "openalex_type": "article",
@@ -12366,6 +12366,30 @@
       "record_id": "cr_803f0bcb83886443dee36e28"
     },
     {
+      "title": "Configurational Antecedents of Flow Experience in EFL Vocabulary Acquisition: A Mixed‐Methods Analysis",
+      "authors": [
+        "Jie Meng",
+        "Rui Li"
+      ],
+      "year": 2026,
+      "venue": "International Journal of Applied Linguistics",
+      "doi": "10.1111/ijal.70231",
+      "citations": 2,
+      "abstract": "ABSTRACT Despite a multitude of studies examining technological, task‐related, and individual antecedents influencing English‐as‐a‐foreign‐language (EFL) learners’ flow experience in digital game‐based vocabulary learning (DGBVL), the way these antecedents interact to shape their flow experience is still largely unknown. To bridge the gaps, this study, drawing on the person‐artefact‐task model, implemented a mixed‐methods research analysis—the integration of structural equation modeling and fuzzy‐set qualitative comparative analysis (fsQCA)—scrutinized the convergent effect of these antecedents on the DGBVL flow experience of 503 Chinese EFL learners. The SEM results indicated that learners’ flow experience is significantly predicted by ease of use, clear goal, control, and challenge‐skill balance, while interactivity and feedback showed no significant impact. Furthermore, the fsQCA analysis revealed the formation of three (i.e., barrier‐free‐oriented, goal‐oriented, and interactivity‐oriented) configurations that fostered a high flow experience among learners. The findings highlight the importance of pinpointing essential design features and multiple pathways to boost EFL learners’ flow experience, providing actionable insights for the application of DGBVL in pedagogical practice.",
+      "openalex_id": "W7161073500",
+      "openalex_type": "article",
+      "referenced_works_count": 52,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "canon",
+        "recent"
+      ],
+      "record_id": "cr_e05513f80f8ac333aee902ae"
+    },
+    {
       "title": "Controversies Around Restorative Justice",
       "authors": [
         "David Belden"
@@ -13160,30 +13184,6 @@
         "W3091919961"
       ],
       "record_id": "cr_6db8b0c3a6a82cae8813cd51"
-    },
-    {
-      "title": "Configurational Antecedents of Flow Experience in EFL Vocabulary Acquisition: A Mixed‐Methods Analysis",
-      "authors": [
-        "Jie Meng",
-        "Rui Li"
-      ],
-      "year": 2026,
-      "venue": "International Journal of Applied Linguistics",
-      "doi": "10.1111/ijal.70231",
-      "citations": 1,
-      "abstract": "ABSTRACT Despite a multitude of studies examining technological, task‐related, and individual antecedents influencing English‐as‐a‐foreign‐language (EFL) learners’ flow experience in digital game‐based vocabulary learning (DGBVL), the way these antecedents interact to shape their flow experience is still largely unknown. To bridge the gaps, this study, drawing on the person‐artefact‐task model, implemented a mixed‐methods research analysis—the integration of structural equation modeling and fuzzy‐set qualitative comparative analysis (fsQCA)—scrutinized the convergent effect of these antecedents on the DGBVL flow experience of 503 Chinese EFL learners. The SEM results indicated that learners’ flow experience is significantly predicted by ease of use, clear goal, control, and challenge‐skill balance, while interactivity and feedback showed no significant impact. Furthermore, the fsQCA analysis revealed the formation of three (i.e., barrier‐free‐oriented, goal‐oriented, and interactivity‐oriented) configurations that fostered a high flow experience among learners. The findings highlight the importance of pinpointing essential design features and multiple pathways to boost EFL learners’ flow experience, providing actionable insights for the application of DGBVL in pedagogical practice.",
-      "openalex_id": "W7161073500",
-      "openalex_type": "article",
-      "referenced_works_count": 52,
-      "categories": [
-        "recent"
-      ],
-      "source_api": "openalex",
-      "search_angles": [
-        "canon",
-        "recent"
-      ],
-      "record_id": "cr_e05513f80f8ac333aee902ae"
     },
     {
       "title": "Correction: Relationships between self-esteem, self-efficacy, and interoceptive awareness among pole dancers: a network analysis",
@@ -21224,6 +21224,29 @@
         "application"
       ],
       "record_id": "cr_fb559e75e8e25b758726f0ef"
+    },
+    {
+      "title": "The Role of Organizational Communication in Building Trust for Delegation: A Georgian Perspective",
+      "authors": [
+        "Mariam Burmistrova"
+      ],
+      "year": 2026,
+      "venue": "EKONOMISTI",
+      "doi": "10.52340/ekonomisti.2026.02.17",
+      "citations": 0,
+      "abstract": "Annotation. Delegation is one of the most essential functions of management, primarily aimed at enhancing work efficiency and optimizing organizational performance. Beyond task allocation, delegation fosters employees’ professional growth, skill development, and increased motivation by empowering them with responsibilities and autonomy. A strong organizational communication culture plays a pivotal role in the delegation process by facilitating clear expectations, providing ongoing support, and encouraging feedback. In today’s dynamic business environment, where companies are continuously expanding and augmenting their human resources, effective task delegation has become increasingly important to manage growing workloads and complex operations. The success of delegation largely depends on the level of trust established between managers and employees, which is significantly influenced by the quality and transparency of organizational communication. This study focuses on examining the role of organizational communication in building and sustaining trust for delegation within the context of Georgian business organizations. Key factors such as selecting the right personnel, assigning appropriate tasks, setting realistic and clear expectations, granting trust and autonomy to subordinates, and maintaining continuous encouragement and constructive feedback are explored as essential elements of successful delegation. Employing a quantitative research approach, the study utilizes a structured questionnaire survey conducted among managers and non-managers from various Georgian companies. The findings indicate that transparent, consistent, and two-way communication practices substantially strengthen trust, thereby enabling more effective delegation. Furthermore, the research highlights several cultural and contextual factors unique to Georgia that influence communication behaviors and trust-building mechanisms within organizations. The article concludes with practical recommendations aimed at improving organizational communication and reinforcing trust, ultimately contributing to enhanced delegation practices, increased employee satisfaction, and improved overall organizational performance. Keywords: Organizational Communication; Delegation; Trust Building; Management; 1. Introduction In today\\`s dynamic and complex business environment, organizations constantly strive for efficiency, adaptability, and competitive advantage. One of the key managerial practices that contribute to achieving these goals is delegation — the process of assigning responsibility and authority to subordinates to carry out specific activities. However, successful delegation does not occur in isolation; it depends on various organizational factors, among which communication and trust play a central role. Effective delegation stems from effective leadership, which empowers employees, motivates them, and fosters accountability throughout the organizational hierarchy. Leaders who delegate appropriately free themselves to concentrate on strategic priorities while simultaneously building competence and leadership potential within their teams. Delegation is considered a vital managerial function that contributes significantly to employee performance and overall organizational success. Effective delegation begins with effective leadership, which serves as the foundation for empowering employees, motivating them, and ensuring accountability. Leaders and managers cannot handle every task on their own, making delegation essential for distributing responsibilities and empowering team members to contribute meaningfully. Delegation is not simply a transfer of tasks, but a strategic process aimed at building trust, developing skills, and improving communication within the organization. When properly implemented, it allows managers to focus on more strategic objectives while simultaneously cultivating leadership capacity among team members. (Ugoani, 2020) Organizational communication is a fundamental component of any institution, as it enables the coordination of activities, the sharing of information, and the building of relationships that drive performance. (Keyton, 2011) defines organizational communication as \"the interaction required to direct a group toward a shared goal.\" In both formal and informal forms, organizational communication fosters understanding, reduces uncertainty, and supports decision-making processes. Within the context of delegation, effective communication ensures clarity of roles, the transmission of expectations, and the creation of feedback loops necessary for performance improvement and employee development. Inadequate communication, on the other hand, can lead to misunderstandings, and poor execution of tasks. Organizational trust comprises employees’ belief in their coworkers’ integrity and competence, as well as confidence in the institution’s supportiveness and fairness. It reflects the extent to which individuals feel secure, respected, and valued within their work environment. (Tichtich & Amira, 2024). Trust not only reduces fear and uncertainty but also enhances performance by encouraging initiative, risk-taking, and feedback-seeking behaviors. Within the delegation process, trust plays a central role—managers must trust employees to fulfill tasks responsibly, while employees must trust that delegated responsibilities are fair and meaningful. Thus, trust acts as a crucial bridge between leadership, communication, and performance in modern organizations. The purpose of this study is to explore the role of organizational communication in fostering trust that supports effective delegation, specifically within Georgian business organizations. This research aims to provide insights into how communication dynamics can be enhanced to strengthen delegation outcomes. The findings are expected to contribute to both theoretical discussions on organizational behavior and practical recommendations for improving communication and trust in the workplace. 1.1 Problem Statement Effective delegation is a critical component of organizational management, yet many organizations face challenges in ensuring that tasks are assigned clearly and executed efficiently. Research indicates that communication quality within an organization significantly influences employees’ trust in leadership and the success of delegated tasks. In the context of Georgian organizations, there is limited empirical evidence exploring how organizational communication shapes trust and impacts delegation effectiveness, highlighting a gap that this study seeks to address. 1.2 Research Objectives To examine the quality and characteristics of organizational communication in selected Georgian companies. To assess the level of trust employees have in their managers and how it relates to delegated tasks. To identify key factors in communication that facilitate effective delegation and reduce misunderstandings or ambiguities. To provide practical recommendations for enhancing organizational communication and trust to improve delegation processes. 1.3 Research Questions How do organizational communication practices influence trust between managers and employees in Georgian organizations? What is the relationship between trust in leadership and the effectiveness of task delegation? How do differences in communication perception between managerial and non-managerial staff affect delegation outcomes? How can improved communication strategies enhance mutual trust and delegation success in Georgian organizations? 2. Theory Delegation plays a crucial role in maintaining strong business relationships. In the modern business environment, where organizations are constantly growing and increasing their workforce, the ability to delegate tasks efficiently is essential due to the rising volume of work. It is important that delegation is organized in a well-defined, hierarchical manner. The person assigning the tasks should have a clear grasp of what needs to be done, as well as the expected standards in terms of both quality and quantity. 2.1 Organizational Communication and Trust Trust is essential for organizational success, affecting engagement, cooperation, and performance. Communication is a key factor in building trust, as it fosters openness, clarity, and shared understanding among employees, which are necessary for trust to develop (Iddrisu, 2025). A critical element in building trust is organizational communication. According to (Vokic, Bilusic, & Najjar, 2020), internal communication satisfaction is significantly correlated with organizational trust. Their research shows that transparent and consistent communication between managers and subordinates contributes directly to employees\\` willingness to accept delegated responsibilities. Similarly, (Kulachai, Lerdtomornsakul, & Homyamyen, 2023) argue that open, two-way communication strengthens employee engagement and trust, creating an environment where delegation is more readily accepted. Recent research has increasingly emphasized the link between leadership authenticity, trust, and employee well-being as crucial elements of organizational success. (Baquero, 2023) highlights that organizations adopting sustainable human resource management (HRM) practices tend to prioritize the needs and well-being of employees, which in turn fosters trust in leadership and a positive work environment. According to the author, core leadership values such as fairness, honesty, and integrity play a vital role in establishing trust and building a supportive organizational climate. Leaders who communicate openly, act ethically, and demonstrate genuine concern for their subordinates’ interests enhance employees’ sense of well-being and engagement. Baquero’s study further supports that workplace well-being (WW) and trust in the leader (TL) are strong predictors of employee commitment and engagement at work. The research underscores that effective leaders are not solely result-oriented but are also people-centric, showing sincere care for the needs of their employees. This human-centered leadership approach strengthens trust and contributes to higher levels of motivation, satisfaction, and productivity within organizations. (Cornelissen, 2020) points out, corporate communication is a strategic function that integrates marketing communication, public relations, and internal communication to achieve organizational goals. In this sense, communication goes beyond the mere exchange of — it a core for organizational culture and Effective organizational communication not only shapes culture and supports leadership but also directly influences employee performance. The of clear and communication ensures that information, and are shared among employees, enabling them to their and & 2020) an organization to achieve goals corporate objectives must be clearly and shared levels of the organization. should not solely the responsibility of the communication and understanding of these among employees are essential for their effective organizational members have a shared understanding of the and goals can strategic be executed efficiently The role of organizational culture as a has in research that effective two-way with enhanced organizational performance. the of this is have explored the mechanisms this relationship in Recent that from communication as and in understanding and developing a organizational elements contribute to the and improvement of a culture within organizations. communication is fundamental for cultivating a strong organizational culture The of Communication in Delegation Effective communication is a of organizational as it ensures that employees the and responsibilities. communication can lead to misunderstandings, and consistent communication enhances engagement, and overall performance. play a key role in employees, and facilitating coordination organizational highlights that organizations function as where communication these to achieve In complex and work structured communication and appropriate are critical for tasks, and employee performance Communication is one of the core functions of It the process of and information, and from one person to with the of achieving organizational objectives Effective delegation clear communication from leaders task expectations, and responsibilities. demonstrate that employees are more to accept and delegated tasks managers communicate and (Baquero, Organizational culture shapes communication and influences how delegation is establishing and culture of fairness, support, and which are important for effective delegation and trust (Iddrisu, 2025). Delegation is a key leadership skill that assigning tasks to team thereby efficiency and professional development. Effective delegation trust in employees, which enhances their motivation, engagement, and commitment to responsibilities. empowering team members and providing clear leaders a supportive environment that strengthens trust, fosters and overall team performance. communication is central to successful delegation. Leaders must task expectations, and while providing the necessary and feedback and of employees’ further trust and such as or task ensures that delegation to both effective task and skill among team members. delegation not only allows leaders to focus on strategic goals but also a culture of trust and in a more and team 2025). Effective delegation is central to success, enabling managers to tasks to team and delegation of team clear communication, and positive that trust and between managers and employees. delegation, which priorities and roles, depends on both the confidence in the approach and the ability to are goals are are and performance is and and management enhance team commitment and task quality and communication further delegation, ensuring that tasks are are and are efficiently. on these factors, managers can delegation as a to enhance and strengthen trust within the & Effective delegation is not assigning it is a strategic approach that trust and enhances team performance. Leaders who delegate demonstrate confidence in their team empowering them to and responsibility for their work 2025). This trust fosters motivation, and engagement, creating a positive where performance improvement strengthens trust for successful delegation clear communication, and Leaders must identify tasks for delegation, communicate and provide and constructive feedback. this structured approach a culture of mutual trust and continuous both managers and team members to efficiently. leaders autonomy and professional growth, which strengthens team and organizational and communication plays a pivotal role in the delegation of tasks, as a key factor in ensuring employees their responsibilities and and that communication is it not only enhances employee and engagement but also overall success. can lead to misunderstandings, and leaders to improve delegation and organizational should prioritize communication to employee appropriate and fostering two-way feedback and enhance the overall effectiveness of delegation, which is increasingly critical in work structured communication providing and and cultivating a culture of feedback have as practical to enhance employee satisfaction, and efficiency & 2025). Trust as a Communication and Delegation Trust the relationship between communication and delegation. communication, fair leadership and positive employee relationships strengthen trust, enabling delegation, higher and improved organizational performance (Iddrisu, 2025). communication between leaders and their subordinates is a critical factor in trust and work outcomes. In where tasks are and effective communication is essential for and achieving communication their and affect employees’ engagement, and willingness to of delegated tasks. Research indicates that trust the relationship between leadership communication and outcomes. and consistent communication trust, which in turn strengthens commitment and performance. or communication can reduce trust and engagement, affecting delegation the and dynamic of leaders must relationships to cooperation, clarity, and accountability. fostering trust appropriate communication, leaders can enhance the success of delegated tasks, improve work engagement, and ultimately contribute to overall team performance & In modern and complex work team effectiveness depends not only on performance and satisfaction but also on the ability to to as team A key factor team is the commitment of team which reflects shared and positive relationships within the When team members are are more to trust one as and This trust, in the relationship between commitment and team enhancing cooperation, and successful of shared the role of trust more critical in in or where communication and In such trust functions as a that allows to and that delegated tasks are executed fostering commitment and facilitating trust-building are essential strategies for leaders to improve delegation team engagement, and overall organizational performance & 2024). Delegation is a critical within leaders to authority and responsibilities to team members while enhancing efficiency and developing potential managers face challenges in delegation to outcomes. Research highlights several success factors for delegation, and the skills, and of both and plays a key role in delegation, while and trust between managers and team members are essential for successful task motivation, and for influence the willingness of employees to accept and in delegated responsibilities. feedback and culture further the effectiveness of delegation. these factors enables leaders to delegation as a for both performance and employee & on have the role of mutual understanding and trust in achieving successful outcomes. Research and has that in mutual understanding significantly contribute to and increasing satisfaction with while in trust not directly successful outcomes. communication which can affect and of the and findings that in organizational clear and effective communication is crucial not only for building trust but also for ensuring mutual understanding, which in turn can influence the effectiveness of delegation and & employees improve yet examine how leaders can Recent research that delegation feedback-seeking by empowering employees feel and of which motivates them to feedback. the effectiveness of delegation depends on employees’ with higher in more to delegated delegation can enhance feedback-seeking by fostering and trust in employees Research This study a quantitative research a structured questionnaire A quantitative to of communication practices and trust enabling of relationships between The questionnaire to explore the relationship between organizational communication and trust in the delegation process organizations in It both and communication and of communication, delegation and a to while insights and providing context to the quantitative The survey by from both managerial and non-managerial ensuring on organizational communication and delegation The questionnaire and professional and to and reduce The to identify and relationships between communication trust in leadership, and the effectiveness of task delegation. The that the of communication quality in their organization as with assigning of or on a quality of communication The most communication and by group and This a for both formal and informal communication in operations. Communication This indicates that employees a between formal and more informal which enhance both clarity and trust within teams. The of communication allows organizations to work and and engagement that communication within their organizations is transparent, and consistent, which are important for building trust. This supports the that communication quality is a of organizational trust. Organizational Communication the and of communication to with higher that employees feel more and This with of leadership and organizational trust, that fosters a culture where delegation is and executed A of that trust their managers to fair communication is clear and Trust in clear and supportive feedback tasks are delegated to and with This the that trust is not solely an but is such as providing granting and constructive feedback. who these behaviors tend to higher engagement and motivation, which contributes to overall organizational performance. in managerial a higher level of autonomy and trust in non-managerial This highlights a potential communication gap or between hierarchical Delegation in organizations, many that tasks are delegated several a This that delegation is an of on the or role. of delegation that in the where managers are more strategic objectives and decision-making processes. this gap or transparent can expectations, reduce misunderstandings, and improve delegation for employees. The that of feedback and task among the most challenges in the delegation challenges the critical role of feedback loops and communication in task can lead to and structured and feedback employees to with clarity and The the critical role of structured communication, and feedback in fostering trust, which with on leadership and organizational trust. between managerial and non-managerial staff affect delegation and transparent can reduce misunderstandings and improve outcomes. This supports that organizational communication quality directly impacts both trust and delegation It also that aimed at improving as and feedback in employee satisfaction, engagement, and task performance. with higher communication quality higher delegation satisfaction, that communication quality directly impacts trust and task The study practical enhancing communication and feedback loops can significantly improve employee engagement, satisfaction, and performance. The findings that strong organizational communication plays a crucial role in fostering trust, which in turn enhances the effectiveness of task delegation. and two-way communication significantly contributes to employees and which motivates them to and delegated tasks more In this that managers who transparent and communication can an environment where delegation is not only but also a strategic to develop employee skills, strengthen and enhance overall organizational The study aimed to explore the role of organizational communication in building trust and enhancing the delegation process in Georgian organizations. The findings that communication practices, trust and of delegation are and play a role in organizational efficiency and employee the influence of organizational communication practices on trust, the demonstrate that communication in their organizations as but not transparent or A the overall communication quality as or yet that is and In the Georgian where relationships cultural the quality of internal communication the level of trust between managers and employees. in to the relationship between trust in leadership and delegation effectiveness, the indicate a direct positive who managerial communication as transparent and supportive also higher satisfaction with the delegation process and confidence in delegated tasks. emphasized the of authority and feedback tasks are that directly contribute to of and in the findings on differences in communication perception between managerial and non-managerial staff that managers tend to the clarity and of communication to non-managerial employees. most managers communication and non-managerial employees of consistent or feedback. In the Georgian business environment, this gap stems from hierarchical and limited feedback how improved communication strategies can enhance mutual trust and delegation success, the study highlights that establishing feedback and ensuring levels of management can significantly enhance trust and delegation outcomes. that team performance expectations, and transparent strengthen trust and reduce misunderstandings delegation. The the that communication culture — both formal and informal — serves as a factor between organizational trust and delegation success. a the study objectives by that the quality of communication, the level of managerial and the clarity of delegated authority the success of delegation in Georgian organizations. Effective communication which enables employees to accept delegated responsibilities with confidence and autonomy. communication or feedback to trust and lead to in task a this research contributes to the understanding of how communication and trust within Georgian organizational It underscores the for organizations to beyond communication toward a more transparent, and organizational communication is not a managerial but a strategic in fostering trust, and sustainable delegation and The study has the research The — to examine the quality and characteristics of organizational communication in selected Georgian companies — the quantitative of survey which that while communication quality is as there are in transparency and The — to assess the level of trust employees have in their managers and how it relates to delegated tasks — by a positive between transparent communication, managerial support, and in task delegation. The — to identify key factors in communication that facilitate effective delegation and reduce misunderstandings or — which clarity, and as the most the — to provide practical recommendations for enhancing organizational communication and trust to improve delegation — is the strategic in this feedback and communication culture as of organizational trust and delegation success. the study that effective communication is not only a but a component for building trust and enabling successful delegation in Georgian organizations. This study concludes that effective organizational communication is fundamental to building trust, which in turn enhances the success of delegation. consistent, and two-way communication fosters an environment where employees feel and more to of delegated tasks. In the Georgian organizational the that cultural and communication influence how delegation is and that and levels of authority tend to trust and improved task structured communication that clarity and feedback delegation. This establishing for task setting clear expectations, and creating or for delegation can reduce and provide managers with a to communication also employees to their responsibilities and feel in or providing reinforcing accountability. delegation and authority the of authority with delegated tasks reduces uncertainty and enhances employee or roles, expectations, and mechanisms can delegation more structured and managers to and communication, with non-managerial can focus on and engagement. from employees of managers a sense of and This staff reduces misunderstandings, and supports a positive organizational culture where delegation is more effective employees trust the assigned tasks. communication can and facilitate and in managers a work environment that strengthens team feedback loops to trust and feedback such as or formal both managers and employees to on what well and identify improvement and two-way feedback strengthens mutual trust, enables professional growth, and a environment. this continuous feedback employees and reduces in delegated tasks. It is that feedback not only in formal but also on a or ensuring that employees are continuously in the process and feel throughout task should not be limited to task it should be an ongoing process that and trust. feedback managerial and supports continuous improvement in both communication and performance. communication between levels by creating for and or provide where can be fear of transparent discussions and strategic ensures that employees are with organizational goals. between management and staff enhances trust, and supports delegation, as employees feel and also an in these employees to or This further strengthens trust and ensures that employees feel and trust-building into managerial practices should on communication, and leaders to demonstrate fairness, and — that employees as central to effective delegation. a culture of and Organizational communication should a culture where employees feel and in decision-making fosters strengthens mutual and trust between management and for internal communication improvement communication internal can in organizations with complex or — not — communication. transparent and communication should beyond communication and mechanisms that and feedback from employees at staff and communication can that efficiently and communication effectiveness and employee trust levels or trust can organizations identify communication and ensures that communication strategies to organizational and cultural these practices, organizations in Georgia and cultural can internal trust and improve overall performance more effective delegation. In these strategies to the cultural and organizational context ensures communication and allows leaders to these a culture where delegation is not only a but also a trust-building that engagement, efficiency, and organizational In to the practices, organizations can further strengthen trust and improve delegation several and accountability and motivation, reinforcing task modern communication clear and trust or feedback identify and continuous enhances and mutual support, while management staff to these strategies improve efficiency, engagement, and performance while fostering a organizational & The of and Communication in The of Communication for A of Delegation for Trust in the and A Research and A to Theory and & & The of on Trust and in and the between organizational culture and The of communication, leadership, and employee relationships. & of Communication on the of of Research in and Communication and Organizational A Key to Lerdtomornsakul, & Homyamyen, & When commitment to The role of trust as a and as a & The of Delegation and of and How Delegation Trust in The of Effective Communication on Organizational on the of and Communication and Organizational In Organizational the of communication in business & Amira, Effective Delegation and on of and at Bilusic, & Najjar, organizational trust internal communication. & of Trust Communication and in & The of Delegation in",
+      "openalex_id": "W7165810879",
+      "openalex_type": "article",
+      "referenced_works_count": 0,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_bf601ae6668f01f71e761ab4"
     },
     {
       "title": "The role of state policy in overcoming the shadow economy",
