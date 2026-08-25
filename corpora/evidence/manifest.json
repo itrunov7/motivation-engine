@@ -6,28 +6,52 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-25T07:07:50.691Z",
+    "timestamp": "2026-08-25T07:08:34.930Z",
     "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 933,
-    "files_written": 0,
-    "duration_s": 0.19,
-    "error": "upstream API quota requires a later continuation; logical run FL-24-mt8bp102 checkpointed at query 1/1050",
+    "files_written": 1,
+    "duration_s": 50.76,
+    "error": "search openalex canon \"flow experience challenge skill balance\": api.openalex.org upstream cooldown is 60730s; checkpoint and resume later · search semantic-scholar recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
     "warnings": {
-      "resume_required": true
+      "s2_throttled": true,
+      "low_novelty": true
     },
     "cost": {
-      "api_calls": 1,
-      "duration_s": 0.19,
+      "api_calls": 48,
+      "duration_s": 50.76,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-25T07:08:34.930Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 933,
+      "files_written": 1,
+      "duration_s": 50.76,
+      "error": "search openalex canon \"flow experience challenge skill balance\": api.openalex.org upstream cooldown is 60730s; checkpoint and resume later · search semantic-scholar recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true,
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 48,
+        "duration_s": 50.76,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-25T07:07:50.691Z",
       "status": "partial",
@@ -427,27 +451,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-25T06:39:20.824Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 933,
-      "files_written": 1,
-      "duration_s": 43.57,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 44,
-        "duration_s": 43.57,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -526,7 +529,7 @@
     {
       "path": "FL-24.json",
       "records": 933,
-      "bytes": 7878412,
+      "bytes": 7879281,
       "categories": {
         "foundational": 34,
         "meta-analysis": 25,
