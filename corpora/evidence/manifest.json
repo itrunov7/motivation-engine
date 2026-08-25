@@ -6,27 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-25T23:27:53.147Z",
-    "status": "success",
+    "timestamp": "2026-08-25T23:29:29.604Z",
+    "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 933,
-    "files_written": 1,
-    "duration_s": 43.66,
+    "files_written": 0,
+    "duration_s": 0.25,
+    "error": "upstream API quota requires a later continuation; logical run FL-24-mt9arfp2 checkpointed at query 1/1050",
     "warnings": {
-      "low_novelty": true
+      "resume_required": true
     },
     "cost": {
-      "api_calls": 44,
-      "duration_s": 43.66,
+      "api_calls": 1,
+      "duration_s": 0.25,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-25T23:29:29.604Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 933,
+      "files_written": 0,
+      "duration_s": 0.25,
+      "error": "upstream API quota requires a later continuation; logical run FL-24-mt9arfp2 checkpointed at query 1/1050",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.25,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-25T23:27:53.147Z",
       "status": "success",
@@ -421,28 +444,6 @@
       "cost": {
         "api_calls": 44,
         "duration_s": 43.98,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-25T22:57:36.977Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 933,
-      "files_written": 1,
-      "duration_s": 45.97,
-      "error": "search openalex canon \"flow experience challenge skill balance\": api.openalex.org upstream cooldown is 3792s; checkpoint and resume later",
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 46,
-        "duration_s": 45.97,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
