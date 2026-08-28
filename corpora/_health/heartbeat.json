@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-08-28T08:40:14.596Z",
+  "generated_at": "2026-08-28T21:40:26.802Z",
   "entries": [
     {
       "source_id": "wayback-cdx",
-      "checked_at": "2026-08-28T08:39:54.004Z",
+      "checked_at": "2026-08-28T21:40:07.744Z",
       "status": "down",
-      "latency_ms": 15004,
+      "latency_ms": 15003,
       "note": "GET /cdx/search/cdx limit=1 — timeout after 15s"
     },
     {
       "source_id": "openalex",
-      "checked_at": "2026-08-28T08:40:10.008Z",
+      "checked_at": "2026-08-28T21:40:23.748Z",
       "status": "ok",
-      "latency_ms": 564,
+      "latency_ms": 467,
       "note": "GET /works search=motivation per-page=1 — HTTP 200"
     },
     {
       "source_id": "semantic-scholar",
-      "checked_at": "2026-08-28T08:40:11.576Z",
-      "status": "ok",
-      "latency_ms": 1776,
-      "note": "GET /graph/v1/paper/search limit=1 (keyed) — HTTP 200"
+      "checked_at": "2026-08-28T21:40:25.220Z",
+      "status": "degraded",
+      "latency_ms": 275,
+      "note": "GET /graph/v1/paper/search limit=1 (keyed) — HTTP 429 (throttled)"
     },
     {
       "source_id": "pubmed-europepmc",
-      "checked_at": "2026-08-28T08:40:14.353Z",
+      "checked_at": "2026-08-28T21:40:26.496Z",
       "status": "ok",
-      "latency_ms": 241,
+      "latency_ms": 304,
       "note": "GET esearch.fcgi db=pubmed retmax=1 — HTTP 200"
     },
     {
       "source_id": "app-store-reviews",
-      "checked_at": "2026-08-28T08:40:14.596Z",
+      "checked_at": "2026-08-28T21:40:26.802Z",
       "status": "unknown",
       "latency_ms": null,
       "note": "no probe — host not in the D-011 whitelist (a probe arrives with this source's connector)"
     },
     {
       "source_id": "ventora-telemetry",
-      "checked_at": "2026-08-28T08:40:14.596Z",
+      "checked_at": "2026-08-28T21:40:26.802Z",
       "status": "n_a",
       "latency_ms": null,
       "note": "internal source — no external endpoint by design"
     },
     {
       "source_id": "sec-edgar",
-      "checked_at": "2026-08-28T08:40:14.596Z",
+      "checked_at": "2026-08-28T21:40:26.802Z",
       "status": "unknown",
       "latency_ms": null,
       "note": "no probe — host not in the D-011 whitelist (a probe arrives with this source's connector)"
     },
     {
       "source_id": "google-patents",
-      "checked_at": "2026-08-28T08:40:14.596Z",
+      "checked_at": "2026-08-28T21:40:26.802Z",
       "status": "unknown",
       "latency_ms": null,
       "note": "no probe — host not in the D-011 whitelist (a probe arrives with this source's connector)"
