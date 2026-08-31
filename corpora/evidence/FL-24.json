@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-31T16:53:49.014Z",
+  "fetched_at": "2026-08-31T16:55:28.659Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -61,12 +61,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 25,
+      "unique_returned": 25,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "upstream_total_results": 615
     },
     {
       "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
@@ -151,12 +151,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 1
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
@@ -518,8 +518,8 @@
       {
         "angle": "recent",
         "queries": 6,
-        "returned": 28,
-        "unique_records": 4
+        "returned": 53,
+        "unique_records": 29
       },
       {
         "angle": "application",
@@ -530,8 +530,8 @@
       {
         "angle": "critique",
         "queries": 4,
-        "returned": 1,
-        "unique_records": 1
+        "returned": 0,
+        "unique_records": 0
       },
       {
         "angle": "replication",
@@ -562,16 +562,16 @@
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 51,
-        "unique_records": 51
+        "returned": 75,
+        "unique_records": 75
       }
     ],
-    "recent_records": 48,
-    "recency_rate": 0.8727,
+    "recent_records": 64,
+    "recency_rate": 0.8101,
     "novelty": {
       "previous_corpus_records": 939,
-      "unique_records": 55,
-      "already_in_corpus": 55,
+      "unique_records": 79,
+      "already_in_corpus": 79,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -620,6 +620,18 @@
       },
       {
         "query_index": 4,
+        "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance b2b enterprise",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 5,
         "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -631,7 +643,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 5,
+        "query_index": 6,
         "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -643,7 +655,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 6,
+        "query_index": 7,
         "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "relevance",
         "kind": "search",
@@ -655,7 +667,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 7,
+        "query_index": 8,
         "query_id": "search:recency:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -667,24 +679,12 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 8,
+        "query_index": 9,
         "query_id": "search:citation:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "citation",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 9,
-        "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 1,
-        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -957,12 +957,12 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 5174,
+      "estimate": 5808,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 13,
       "total_search_queries": 30,
-      "summed_upstream_results": 5268,
-      "observed_sample_multiplicity": 1.0182
+      "summed_upstream_results": 5882,
+      "observed_sample_multiplicity": 1.0127
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
