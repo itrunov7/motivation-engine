@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-31T14:53:00.407Z",
+  "fetched_at": "2026-08-31T14:55:21.645Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -151,12 +151,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 1,
+      "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 1
     },
     {
       "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
@@ -331,12 +331,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 5213
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
@@ -423,10 +423,10 @@
       "requested": 25,
       "returned": 25,
       "unique_returned": 25,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 44
+      "records_added": 1,
+      "novelty_rate": 0.04,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": 37
     },
     {
       "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
@@ -440,7 +440,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": 0
     },
     {
@@ -455,7 +455,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": 0
     },
     {
@@ -470,7 +470,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": 0
     }
   ],
@@ -512,8 +512,8 @@
       {
         "angle": "canon",
         "queries": 6,
-        "returned": 47,
-        "unique_records": 29
+        "returned": 22,
+        "unique_records": 4
       },
       {
         "angle": "recent",
@@ -530,8 +530,8 @@
       {
         "angle": "critique",
         "queries": 4,
-        "returned": 0,
-        "unique_records": 0
+        "returned": 1,
+        "unique_records": 1
       },
       {
         "angle": "replication",
@@ -562,25 +562,25 @@
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 75,
-        "unique_records": 75
+        "returned": 51,
+        "unique_records": 51
       }
     ],
-    "recent_records": 64,
-    "recency_rate": 0.8101,
+    "recent_records": 37,
+    "recency_rate": 0.6727,
     "novelty": {
       "previous_corpus_records": 934,
-      "unique_records": 79,
-      "already_in_corpus": 79,
-      "new_records": 0,
-      "novelty_rate": 0,
+      "unique_records": 55,
+      "already_in_corpus": 54,
+      "new_records": 1,
+      "novelty_rate": 0.0182,
       "low_novelty": true,
       "known_share_threshold": 0.8
     }
   },
   "saturation_report": {
     "queries_issued": 30,
-    "records_added": 0,
+    "records_added": 1,
     "novelty_curve": [
       {
         "query_index": 1,
@@ -692,6 +692,18 @@
       },
       {
         "query_index": 10,
+        "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 934
+      },
+      {
+        "query_index": 11,
         "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "recency",
         "kind": "search",
@@ -703,7 +715,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 11,
+        "query_index": 12,
         "query_id": "search:citation:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "citation",
         "kind": "search",
@@ -715,7 +727,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 12,
+        "query_index": 13,
         "query_id": "search:relevance:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "relevance",
         "kind": "search",
@@ -727,7 +739,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 13,
+        "query_index": 14,
         "query_id": "search:recency:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "recency",
         "kind": "search",
@@ -739,7 +751,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 14,
+        "query_index": 15,
         "query_id": "search:citation:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "citation",
         "kind": "search",
@@ -751,7 +763,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 15,
+        "query_index": 16,
         "query_id": "search:relevance:semantic-scholar:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "relevance",
         "kind": "search",
@@ -763,7 +775,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 16,
+        "query_index": 17,
         "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "recency",
         "kind": "search",
@@ -775,7 +787,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 17,
+        "query_index": 18,
         "query_id": "search:citation:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "citation",
         "kind": "search",
@@ -787,7 +799,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 18,
+        "query_index": 19,
         "query_id": "search:relevance:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "relevance",
         "kind": "search",
@@ -799,7 +811,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 19,
+        "query_index": 20,
         "query_id": "search:recency:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "recency",
         "kind": "search",
@@ -811,24 +823,12 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 20,
+        "query_index": 21,
         "query_id": "search:citation:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "citation",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 934
-      },
-      {
-        "query_index": 21,
-        "query_id": "search:relevance:semantic-scholar:canon:p1:flow state digital environments b2b enterprise",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -901,10 +901,10 @@
         "kind": "search",
         "returned": 25,
         "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 934
+        "records_added": 1,
+        "novelty_rate": 0.04,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 935
       },
       {
         "query_index": 28,
@@ -915,8 +915,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 934
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 935
       },
       {
         "query_index": 29,
@@ -927,8 +927,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 934
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 935
       },
       {
         "query_index": 30,
@@ -939,8 +939,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 934
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 935
       }
     ],
     "window_queries": 10,
@@ -957,12 +957,12 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 5808,
+      "estimate": 935,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 13,
       "total_search_queries": 30,
-      "summed_upstream_results": 5882,
-      "observed_sample_multiplicity": 1.0127
+      "summed_upstream_results": 663,
+      "observed_sample_multiplicity": 1.0182
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -13054,6 +13054,27 @@
         "replication"
       ],
       "record_id": "cr_3292c5c41eb714d96020413f"
+    },
+    {
+      "title": "APPLIED RISK ASSESSMENT IN THE SYSTEM OF SOCIO-ECONOMIC PROCESSES IN CYBERSPACE",
+      "authors": [
+        "O. Shandrivska",
+        "N. Shynkarenko"
+      ],
+      "year": 2020,
+      "venue": null,
+      "doi": "10.23939/semi2020.02.094",
+      "citations": 2,
+      "abstract": "In the paper investigated safety of socio-economic processes in the virtual space. Studied the main trends influence on formation of preventive and adaptive mechanisms for ensuring information and cyber security enterprises. Key trends of the modern business and social environment include: globalization, informatization and individualization of consumer needs; mediatization, territorialization and universalization of social phenomena. Presented an original ensuring security model for the virtual information sphere. In this model was invented a conceptual scheme for identifying the information security system: given the identification sequence and risks assessment in cyberspace by stages; risk identification; a description of the threats it poses; identification of vulnerable market segments; analysis and assessment of the risk occurrence probability level; analysis and assessment of the risk manifestation consequences level; score determination of the general rick level; proposal to eliminate the development environment risks of the study object; net risk identification; risks in cyberspace have been identified and assessed in terms of security and financial flows. Among the dominant risks of the external and internal security environment in the information virtual Ukrainian space the following are highlighted: insufficient system security, processes and technologies, disinformation and information asymmetry; high sensitivity of financial flows to the processes of the implementation of shock macroeconomic phenomena (including almost unsignificant currencies devaluation against the pandemic background) in terms of the safety of financial flows; technical, technological and personal vulnerability growth in the information sphere, due to the increasing cybercrime in terms of the information flow security. Among the mitigation measures and neutralization of the general risk level, was proposed the creation of a single protection system. The single data protection system should be based on: data protection progressive principles, tasks to ensure security from information influences, information infrastructure security, information rights, open access to information, publicity of open information, etc.; organizational and right mechanism of data protection. This mechanism is based on the need to streamline the responsibilities of information marked actors; state control over data manipulation; data manipulation standards development; information systems certification for their processing. Construction of database registers, as well as registration of owners and/or data administrators, third parties to whom the data was transferred for further manipulation; an independent coordination center formation for the state policy implementation in terms of monitoring compliance with data protection requirements, etc.; increasing the financial flow transparency, namely risk-oriented monitoring in digital currency exchanges and licensing of transactions in virtual currencies requires support from the Financial Action Task Force on Money Laundering and the Financial Intelligence Unit.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_885e54cc08f993c4a833e290"
     },
     {
       "title": "Architecture and interfaces",
