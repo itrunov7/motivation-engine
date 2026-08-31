@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-31T14:42:52.691Z",
+  "fetched_at": "2026-08-31T14:44:46.413Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -61,12 +61,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 25,
+      "unique_returned": 25,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "upstream_total_results": 615
     },
     {
       "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
@@ -155,7 +155,7 @@
       "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": 1
     },
     {
@@ -245,8 +245,8 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 0
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
@@ -518,8 +518,8 @@
       {
         "angle": "recent",
         "queries": 6,
-        "returned": 28,
-        "unique_records": 4
+        "returned": 53,
+        "unique_records": 29
       },
       {
         "angle": "application",
@@ -562,16 +562,16 @@
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 51,
-        "unique_records": 51
+        "returned": 76,
+        "unique_records": 76
       }
     ],
-    "recent_records": 48,
-    "recency_rate": 0.8727,
+    "recent_records": 64,
+    "recency_rate": 0.8,
     "novelty": {
       "previous_corpus_records": 934,
-      "unique_records": 55,
-      "already_in_corpus": 55,
+      "unique_records": 80,
+      "already_in_corpus": 80,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -620,6 +620,18 @@
       },
       {
         "query_index": 4,
+        "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance b2b enterprise",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 934
+      },
+      {
+        "query_index": 5,
         "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -631,7 +643,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 5,
+        "query_index": 6,
         "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -643,7 +655,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 6,
+        "query_index": 7,
         "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "relevance",
         "kind": "search",
@@ -655,7 +667,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 7,
+        "query_index": 8,
         "query_id": "search:recency:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -667,7 +679,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 8,
+        "query_index": 9,
         "query_id": "search:citation:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "citation",
         "kind": "search",
@@ -679,7 +691,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 9,
+        "query_index": 10,
         "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "relevance",
         "kind": "search",
@@ -687,11 +699,11 @@
         "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": null,
+        "rolling_novelty_rate": 0,
         "cumulative_records": 934
       },
       {
-        "query_index": 10,
+        "query_index": 11,
         "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "recency",
         "kind": "search",
@@ -703,7 +715,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 11,
+        "query_index": 12,
         "query_id": "search:citation:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "citation",
         "kind": "search",
@@ -715,7 +727,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 12,
+        "query_index": 13,
         "query_id": "search:relevance:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "relevance",
         "kind": "search",
@@ -727,7 +739,7 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 13,
+        "query_index": 14,
         "query_id": "search:recency:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "recency",
         "kind": "search",
@@ -739,21 +751,9 @@
         "cumulative_records": 934
       },
       {
-        "query_index": 14,
+        "query_index": 15,
         "query_id": "search:citation:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "citation",
-        "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 934
-      },
-      {
-        "query_index": 15,
-        "query_id": "search:relevance:semantic-scholar:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
-        "bucket": "relevance",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
@@ -957,12 +957,12 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 5174,
+      "estimate": 5810,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 13,
       "total_search_queries": 30,
-      "summed_upstream_results": 5268,
-      "observed_sample_multiplicity": 1.0182
+      "summed_upstream_results": 5883,
+      "observed_sample_multiplicity": 1.0125
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -7987,6 +7987,33 @@
       "record_id": "cr_34b79053c0a41b0485af77da"
     },
     {
+      "title": "Predicting students’ flow experience through behavior data in gamified educational systems",
+      "authors": [
+        "Wilk Oliveira",
+        "Kamilla Tenório",
+        "Juho Hamari",
+        "O. Pastushenko",
+        "Seiji Isotani"
+      ],
+      "year": 2021,
+      "venue": "Smart Learning Environments",
+      "doi": "10.1186/s40561-021-00175-6",
+      "citations": 21,
+      "abstract": "The flow experience (i.e., challenge-skill balance, action-awareness merging, clear goals, unambiguous feedback, concentration, sense of control, loss of self-consciousness, transformation of time, and autotelic experience) is an experience highly related to the learning experience. One of the current challenges is to identify whether students are managing to achieve this experience in educational systems. The methods currently used to identify students’ flow experience are based on self-reports or equipment (e.g., eye trackers or electroencephalograms). The main problem with these methods is the high cost of the equipment and the impossibility of applying them massively. To address this challenge, we used behavior data logs produced by students during the use of a gamified educational system to predict the students’ flow experience. Through a data-driven study (N = 23) using structural equation modeling, we identified possibilities to predict the students’ flow experience through the speed of students’ actions. With this initial study, we advance the literature, especially contributing to the field of student experience analysis, by bringing insights showing how to step towards automatic students’ flow experience identification in gamified educational systems.",
+      "openalex_id": "W3213626294",
+      "openalex_type": "article",
+      "referenced_works_count": 71,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "recent",
+        "critique"
+      ],
+      "record_id": "cr_de78e81d64ee43d14800fad6"
+    },
+    {
       "title": "The Role of Telenephrology in the Management of CKD",
       "authors": [
         "Justin M. Belcher"
@@ -8091,33 +8118,6 @@
         "application"
       ],
       "record_id": "cr_71a9c7f3068f5bf54dca2485"
-    },
-    {
-      "title": "Predicting students’ flow experience through behavior data in gamified educational systems",
-      "authors": [
-        "Wilk Oliveira",
-        "Kamilla Tenório",
-        "Juho Hamari",
-        "O. Pastushenko",
-        "Seiji Isotani"
-      ],
-      "year": 2021,
-      "venue": "Smart Learning Environments",
-      "doi": "10.1186/s40561-021-00175-6",
-      "citations": 20,
-      "abstract": "The flow experience (i.e., challenge-skill balance, action-awareness merging, clear goals, unambiguous feedback, concentration, sense of control, loss of self-consciousness, transformation of time, and autotelic experience) is an experience highly related to the learning experience. One of the current challenges is to identify whether students are managing to achieve this experience in educational systems. The methods currently used to identify students’ flow experience are based on self-reports or equipment (e.g., eye trackers or electroencephalograms). The main problem with these methods is the high cost of the equipment and the impossibility of applying them massively. To address this challenge, we used behavior data logs produced by students during the use of a gamified educational system to predict the students’ flow experience. Through a data-driven study (N = 23) using structural equation modeling, we identified possibilities to predict the students’ flow experience through the speed of students’ actions. With this initial study, we advance the literature, especially contributing to the field of student experience analysis, by bringing insights showing how to step towards automatic students’ flow experience identification in gamified educational systems.",
-      "openalex_id": "W3213626294",
-      "openalex_type": "article",
-      "referenced_works_count": 71,
-      "categories": [
-        "recent"
-      ],
-      "source_api": "semantic-scholar",
-      "search_angles": [
-        "recent",
-        "critique"
-      ],
-      "record_id": "cr_de78e81d64ee43d14800fad6"
     },
     {
       "title": "The importance of theory at the <i>Information Systems Journal</i>",
