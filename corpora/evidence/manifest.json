@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-31T14:45:47.419Z",
+    "timestamp": "2026-08-31T14:47:29.348Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 934,
     "files_written": 1,
-    "duration_s": 48.11,
+    "duration_s": 69.67,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 40,
-      "duration_s": 48.11,
+      "api_calls": 37,
+      "duration_s": 69.67,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-31T14:47:29.348Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 934,
+      "files_written": 1,
+      "duration_s": 69.67,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 37,
+        "duration_s": 69.67,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-31T14:45:47.419Z",
       "status": "success",
@@ -425,27 +446,6 @@
       "cost": {
         "api_calls": 44,
         "duration_s": 43.46,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-31T12:01:57.522Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 934,
-      "files_written": 1,
-      "duration_s": 43.51,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 44,
-        "duration_s": 43.51,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
