@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-31T16:38:25.509Z",
+    "timestamp": "2026-08-31T16:40:03.477Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 939,
     "files_written": 1,
-    "duration_s": 38.4,
+    "duration_s": 39.88,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 38,
-      "duration_s": 38.4,
+      "api_calls": 39,
+      "duration_s": 39.88,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-31T16:40:03.477Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 939,
+      "files_written": 1,
+      "duration_s": 39.88,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 39,
+        "duration_s": 39.88,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-31T16:38:25.509Z",
       "status": "success",
@@ -445,28 +466,6 @@
       "cost": {
         "api_calls": 40,
         "duration_s": 82.53,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-31T16:04:38.833Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 939,
-      "files_written": 1,
-      "duration_s": 108.05,
-      "error": "search semantic-scholar canon \"flow state digital environments b2b enterprise\": Request failed after 3 attempts: HTTP 500 Internal Server Error for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 41,
-        "duration_s": 108.05,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
