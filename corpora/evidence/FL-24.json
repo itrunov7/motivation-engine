@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-31T15:29:27.268Z",
+  "fetched_at": "2026-08-31T15:32:00.853Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -331,12 +331,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "returned": 25,
+      "unique_returned": 25,
+      "records_added": 1,
+      "novelty_rate": 0.04,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": 945
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
@@ -350,7 +350,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": 8
     },
     {
@@ -365,7 +365,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": 8
     },
     {
@@ -380,7 +380,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": 8
     },
     {
@@ -395,7 +395,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": 8
     },
     {
@@ -410,7 +410,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": 8
     },
     {
@@ -421,12 +421,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 44
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
@@ -440,7 +440,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": 0
     },
     {
@@ -455,7 +455,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": 0
     },
     {
@@ -470,7 +470,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": 0
     }
   ],
@@ -505,15 +505,15 @@
     "meta-analysis": 26,
     "replication": 106,
     "dissent": 163,
-    "recent": 575
+    "recent": 576
   },
   "diversity_report": {
     "viewpoint_spread": [
       {
         "angle": "canon",
         "queries": 6,
-        "returned": 22,
-        "unique_records": 4
+        "returned": 47,
+        "unique_records": 29
       },
       {
         "angle": "recent",
@@ -524,8 +524,8 @@
       {
         "angle": "application",
         "queries": 6,
-        "returned": 25,
-        "unique_records": 25
+        "returned": 0,
+        "unique_records": 0
       },
       {
         "angle": "critique",
@@ -566,21 +566,21 @@
         "unique_records": 51
       }
     ],
-    "recent_records": 39,
-    "recency_rate": 0.7091,
+    "recent_records": 44,
+    "recency_rate": 0.8,
     "novelty": {
       "previous_corpus_records": 938,
       "unique_records": 55,
-      "already_in_corpus": 55,
-      "new_records": 0,
-      "novelty_rate": 0,
+      "already_in_corpus": 54,
+      "new_records": 1,
+      "novelty_rate": 0.0182,
       "low_novelty": true,
       "known_share_threshold": 0.8
     }
   },
   "saturation_report": {
     "queries_issued": 30,
-    "records_added": 0,
+    "records_added": 1,
     "novelty_curve": [
       {
         "query_index": 1,
@@ -836,6 +836,18 @@
       },
       {
         "query_index": 22,
+        "query_id": "search:relevance:semantic-scholar:canon:p1:flow state digital environments b2b enterprise",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 1,
+        "novelty_rate": 0.04,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 23,
         "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -843,11 +855,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 938
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 939
       },
       {
-        "query_index": 23,
+        "query_index": 24,
         "query_id": "search:citation:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -855,11 +867,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 938
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 939
       },
       {
-        "query_index": 24,
+        "query_index": 25,
         "query_id": "search:relevance:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -867,11 +879,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 938
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 939
       },
       {
-        "query_index": 25,
+        "query_index": 26,
         "query_id": "search:recency:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -879,11 +891,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 938
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 939
       },
       {
-        "query_index": 26,
+        "query_index": 27,
         "query_id": "search:citation:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -891,20 +903,8 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 938
-      },
-      {
-        "query_index": 27,
-        "query_id": "search:relevance:semantic-scholar:application:p1:flow state digital environments b2b enterprise applied intervention",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 938
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 939
       },
       {
         "query_index": 28,
@@ -915,8 +915,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 938
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 939
       },
       {
         "query_index": 29,
@@ -927,8 +927,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 938
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 939
       },
       {
         "query_index": 30,
@@ -939,8 +939,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 938
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 939
       }
     ],
     "window_queries": 10,
@@ -957,11 +957,11 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 938,
+      "estimate": 1543,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 13,
       "total_search_queries": 30,
-      "summed_upstream_results": 670,
+      "summed_upstream_results": 1571,
       "observed_sample_multiplicity": 1.0182
     },
     "saturation_reached": true,
@@ -5577,6 +5577,29 @@
         "replication"
       ],
       "record_id": "cr_e1f37e4efb8922aeae7b9f7a"
+    },
+    {
+      "title": "Digital Transformation and Enterprise Resilience: Evidence from China",
+      "authors": [
+        "Dong Wang",
+        "Sheng Chen"
+      ],
+      "year": 2022,
+      "venue": "Sustainability",
+      "doi": "10.3390/su142114218",
+      "citations": 52,
+      "abstract": "Digital transformation has become a key strategy for enterprises to enhance resilience in effectively responding to external shocks and achieving sustainable development in the context of the global spread of the epidemic and the increase of uncertainties in external environments. In this paper, the impact and mechanism of digital transformation on corporate resilience are examined based on data of listed Chinese companies from 2007 to 2020. Our research results reveal that digital transformation can significantly enhance corporate resilience. This conclusion remains unchanged after controlling for endogeneity issues and performing various robustness analyses. Digital transformation has heterogeneous effects in the dimensions of corporate property rights, industries, and regions, with state-owned enterprises, manufacturing, and eastern enterprises benefiting more. Digital transformation primarily reinforces corporate resilience through mechanisms that improve human capital, strengthen innovation capabilities, ease financing constraints, and enhance internal control. Therefore, the government must guide macro policies, pay attention to the leading role of state-owned enterprises, and narrow the regional digital divide to better enact digital transformation and promote corporate resilience. Simultaneously, in the process of digital transformation, enterprises should combine the characteristics and development stages of their industry by exploring the development requirements and strategically implementing them in stages in a targeted manner. The findings of this paper provide new empirical evidence for the economic impact of enterprise digital transformation, as well as useful inspiration for enhancing enterprise resilience and promoting high-quality development.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_526c27e06c421cdc3ab8cfe8"
     },
     {
       "title": "Hybrid intelligence: Human– <scp>AI</scp> coevolution and learning",
