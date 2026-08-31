@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-31T16:40:03.477Z",
+    "timestamp": "2026-08-31T16:41:39.211Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 939,
     "files_written": 1,
-    "duration_s": 39.88,
+    "duration_s": 40.56,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 39,
-      "duration_s": 39.88,
+      "duration_s": 40.56,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-31T16:41:39.211Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 939,
+      "files_written": 1,
+      "duration_s": 40.56,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 39,
+        "duration_s": 40.56,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-31T16:40:03.477Z",
       "status": "success",
@@ -443,29 +464,6 @@
       "cost": {
         "api_calls": 36,
         "duration_s": 31.88,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-31T16:07:21.453Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 939,
-      "files_written": 1,
-      "duration_s": 82.53,
-      "error": "search semantic-scholar critique \"flow experience challenge skill balance b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true,
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 40,
-        "duration_s": 82.53,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
