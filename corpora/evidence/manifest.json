@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-31T18:44:09.987Z",
+    "timestamp": "2026-08-31T18:45:36.305Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 939,
     "files_written": 1,
-    "duration_s": 30.84,
+    "duration_s": 33.46,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 36,
-      "duration_s": 30.84,
+      "api_calls": 37,
+      "duration_s": 33.46,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-31T18:45:36.305Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 939,
+      "files_written": 1,
+      "duration_s": 33.46,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 37,
+        "duration_s": 33.46,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-31T18:44:09.987Z",
       "status": "success",
@@ -431,29 +452,6 @@
       "cost": {
         "api_calls": 41,
         "duration_s": 47.86,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-31T18:12:24.938Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 939,
-      "files_written": 1,
-      "duration_s": 54.88,
-      "error": "search semantic-scholar recent \"flow experience challenge skill balance b2b enterprise\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true,
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 41,
-        "duration_s": 54.88,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
