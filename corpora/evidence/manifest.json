@@ -6,27 +6,52 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-31T21:43:36.908Z",
-    "status": "success",
+    "timestamp": "2026-08-31T21:45:08.623Z",
+    "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
     },
     "records_fetched": 939,
     "files_written": 1,
-    "duration_s": 35.4,
+    "duration_s": 49.25,
+    "error": "search semantic-scholar application \"flow state digital environments b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
     "warnings": {
+      "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 38,
-      "duration_s": 35.4,
+      "api_calls": 43,
+      "duration_s": 49.25,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-31T21:45:08.623Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 939,
+      "files_written": 1,
+      "duration_s": 49.25,
+      "error": "search semantic-scholar application \"flow state digital environments b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true,
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 43,
+        "duration_s": 49.25,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-31T21:43:36.908Z",
       "status": "success",
@@ -449,29 +474,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-31T21:10:53.411Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 939,
-      "files_written": 1,
-      "duration_s": 64.44,
-      "error": "search semantic-scholar critique \"flow experience challenge skill balance b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar boundary \"flow experience challenge skill balance b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true,
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 46,
-        "duration_s": 64.44,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -550,7 +552,7 @@
     {
       "path": "FL-24.json",
       "records": 939,
-      "bytes": 7893685,
+      "bytes": 7894187,
       "categories": {
         "foundational": 34,
         "meta-analysis": 26,
