@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-31T17:05:09.513Z",
+  "fetched_at": "2026-08-31T17:06:42.053Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -421,12 +421,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 25,
+      "unique_returned": 25,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 44
     },
     {
       "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
@@ -449,21 +449,6 @@
       "angle": "application",
       "term": "flow state digital environments b2b enterprise applied intervention",
       "bucket": "citation",
-      "kind": "search",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 0
-    },
-    {
-      "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
-      "api": "openalex",
-      "angle": "critique",
-      "term": "flow state digital environments b2b enterprise critique criticism",
-      "bucket": "relevance",
       "kind": "search",
       "requested": 25,
       "returned": 0,
@@ -524,12 +509,12 @@
       {
         "angle": "application",
         "queries": 6,
-        "returned": 0,
-        "unique_records": 0
+        "returned": 25,
+        "unique_records": 25
       },
       {
         "angle": "critique",
-        "queries": 4,
+        "queries": 3,
         "returned": 1,
         "unique_records": 1
       },
@@ -555,23 +540,23 @@
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 26,
+        "queries": 25,
         "returned": 50,
         "unique_records": 4
       },
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 51,
-        "unique_records": 51
+        "returned": 76,
+        "unique_records": 76
       }
     ],
-    "recent_records": 44,
+    "recent_records": 64,
     "recency_rate": 0.8,
     "novelty": {
       "previous_corpus_records": 939,
-      "unique_records": 55,
-      "already_in_corpus": 55,
+      "unique_records": 80,
+      "already_in_corpus": 80,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -908,6 +893,18 @@
       },
       {
         "query_index": 28,
+        "query_id": "search:relevance:semantic-scholar:application:p1:flow state digital environments b2b enterprise applied intervention",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 29,
         "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -919,21 +916,9 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 29,
+        "query_index": 30,
         "query_id": "search:citation:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "citation",
-        "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 30,
-        "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
-        "bucket": "relevance",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
@@ -947,7 +932,7 @@
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 11,
+      "relevance": 10,
       "recency": 10,
       "citation": 10
     },
@@ -957,12 +942,12 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 5735,
+      "estimate": 5810,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 13,
       "total_search_queries": 30,
-      "summed_upstream_results": 5839,
-      "observed_sample_multiplicity": 1.0182
+      "summed_upstream_results": 5883,
+      "observed_sample_multiplicity": 1.0125
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -1269,7 +1254,7 @@
       "year": 2008,
       "venue": "Motivation and Emotion",
       "doi": "10.1007/s11031-008-9102-4",
-      "citations": 845,
+      "citations": 846,
       "abstract": null,
       "openalex_id": "W1984683739",
       "openalex_type": "article",
