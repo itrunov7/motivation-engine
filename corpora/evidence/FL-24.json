@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-31T20:15:13.896Z",
+  "fetched_at": "2026-08-31T20:17:43.696Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -245,8 +245,8 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 0
     },
     {
       "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
@@ -290,8 +290,8 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 0
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
@@ -764,6 +764,18 @@
       },
       {
         "query_index": 16,
+        "query_id": "search:relevance:semantic-scholar:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 17,
         "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "recency",
         "kind": "search",
@@ -775,21 +787,9 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 17,
+        "query_index": 18,
         "query_id": "search:citation:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "citation",
-        "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 18,
-        "query_id": "search:relevance:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
-        "bucket": "relevance",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
@@ -959,7 +959,7 @@
     "field_union_estimate": {
       "estimate": 5810,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 13,
+      "measured_queries": 14,
       "total_search_queries": 30,
       "summed_upstream_results": 5883,
       "observed_sample_multiplicity": 1.0125
