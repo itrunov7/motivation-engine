@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-31T16:50:17.368Z",
+  "fetched_at": "2026-08-31T16:51:52.419Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -245,8 +245,8 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 0
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
@@ -457,6 +457,21 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": 0
+    },
+    {
+      "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+      "api": "openalex",
+      "angle": "critique",
+      "term": "flow state digital environments b2b enterprise critique criticism",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 0
     }
   ],
   "coverage_report": {
@@ -514,7 +529,7 @@
       },
       {
         "angle": "critique",
-        "queries": 3,
+        "queries": 4,
         "returned": 1,
         "unique_records": 1
       },
@@ -540,7 +555,7 @@
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 25,
+        "queries": 26,
         "returned": 50,
         "unique_records": 4
       },
@@ -749,18 +764,6 @@
       },
       {
         "query_index": 16,
-        "query_id": "search:relevance:semantic-scholar:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 17,
         "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "recency",
         "kind": "search",
@@ -772,7 +775,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 18,
+        "query_index": 17,
         "query_id": "search:citation:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "citation",
         "kind": "search",
@@ -784,7 +787,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 19,
+        "query_index": 18,
         "query_id": "search:relevance:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "relevance",
         "kind": "search",
@@ -796,7 +799,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 20,
+        "query_index": 19,
         "query_id": "search:recency:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "recency",
         "kind": "search",
@@ -808,7 +811,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 21,
+        "query_index": 20,
         "query_id": "search:citation:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "citation",
         "kind": "search",
@@ -820,7 +823,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 22,
+        "query_index": 21,
         "query_id": "search:relevance:semantic-scholar:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -832,7 +835,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 23,
+        "query_index": 22,
         "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -844,7 +847,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 24,
+        "query_index": 23,
         "query_id": "search:citation:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -856,7 +859,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 25,
+        "query_index": 24,
         "query_id": "search:relevance:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -868,7 +871,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 26,
+        "query_index": 25,
         "query_id": "search:recency:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -880,7 +883,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 27,
+        "query_index": 26,
         "query_id": "search:citation:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -892,7 +895,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 28,
+        "query_index": 27,
         "query_id": "search:relevance:semantic-scholar:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "relevance",
         "kind": "search",
@@ -904,7 +907,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 29,
+        "query_index": 28,
         "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -916,9 +919,21 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 30,
+        "query_index": 29,
         "query_id": "search:citation:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "citation",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 30,
+        "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+        "bucket": "relevance",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
@@ -932,7 +947,7 @@
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 10,
+      "relevance": 11,
       "recency": 10,
       "citation": 10
     },
@@ -5923,6 +5938,44 @@
       "record_id": "cr_e6d5332a8f34e4da00303e8c"
     },
     {
+      "title": "Digital twin-based cyber-physical manufacturing systems, extended reality metaverse enterprise and production management algorithms, and Internet of Things financial and labor market technologies in generative artificial intelligence economics",
+      "authors": [
+        "George Lăzăroiu",
+        "Tom Gedeon",
+        "Elżbieta Rogalska",
+        "Katarína Valášková",
+        "Marek Nagy",
+        "Hussam Musa",
+        "Katarína Zvaríková",
+        "Miloš Poliak",
+        "Jakub Horák",
+        "R. Crețoiu",
+        "T. Krulický",
+        "Luminița Ionescu",
+        "C. Popa",
+        "L. Hurloiu",
+        "F. Nistor",
+        "L. Avram",
+        "Viorica Braga"
+      ],
+      "year": 2024,
+      "venue": "Oeconomia Copernicana",
+      "doi": "10.24136/oc.3183",
+      "citations": 45,
+      "abstract": "Research background: Generative artificial intelligence (AI) and machine learning algorithms support industrial Internet of Things (IoT)-based big data and enterprise asset management in multiphysics simulation environments by industrial big data processing, modeling, and monitoring, enabling business organizational and managerial practices. Machine learning-based decision support and edge generative AI sensing systems can reduce persistent labor shortages and job vacancies and power productivity growth and labor market dynamics, shaping career pathways and facilitating occupational transitions by skill gap identification and labor-intensive manufacturing job automation by path planning and spatial cognition algorithms, furthering theoretical implications for management sciences. Generative AI fintech, machine learning algorithms, and behavioral analytics can assist multi-layered payment and transaction processing screening with regard to authorized push payment, account takeover, and synthetic identity frauds, flagging suspicious activities and combating economic crimes by rigorous verification processes.\nPurpose of the article: We show that edge device management functionalities of cloud industrial IoT and virtual robotic simulation technologies configure plant production and route planning processes across cyber-physical production and industrial automation systems in multi-cloud immersive 3D environments, leading to tangible business outcomes by reinforcement learning and convolutional neural networks. Labor-augmenting automation and generative AI technologies can impact employment participation, increase wage and wealth inequality, and lead to potential job displacement and massive labor market disruptions. The deep learning capabilities of generative AI fintech in terms of adaptive behavioral analytics and credit scoring mechanisms can enhance financial transaction behaviors and algorithmic trading returns, identify fraudulent payment transactions swiftly, and improve financial forecasts, leading to customized investment recommendations and well-informed financial decisions.\nMethods: Machine learning-based study selection process and text mining systematic review management software and tools leveraged include Abstrackr, CADIMA, Colandr, DistillerSR, EPPI-Reviewer, JBI SUMARI, METAGEAR package for R, SluRp, and SWIFT-Active Screener. Such reference management systems are harnessed for methodologically rigorous evidence synthesis, study selection and characteristic extraction, predictive document classification, machine learning-based citation and record screening, bias assessment, article retrieval automation, and document classification and prioritization.\nFindings & value added: Industrial IoT and 3D augmented reality technologies can create business value by streamlining virtual product and remote asset management across extended reality-based navigation and robotic autonomous systems in smart factory environments by generative AI and machine learning algorithms, articulating business organizational level and theory of management implications. 3D simulation and operational modeling tools can execute and complete complex cognitive task-oriented and knowledge economy jobs, producing first-rate quality outputs swiftly while leading to unemployment spells, labor market disruptions, job displacement losses, and reduced earnings by machine learning clustering and spatial cognition algorithms. Generative AI decentralized finance, interoperable blockchain networks, cash flow management tools, and asset tokenization can mitigate fraud risks, enable digital fund and crypto investing servicing, and automate treasury operations by integrating real-time payment capabilities, routing and configurable workflows, and lending and payment technologies.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_a5080e9f1e1787bca1df4381"
+    },
+    {
       "title": "Do No Harm",
       "authors": [
         "Gunnar Andersson",
@@ -5998,44 +6051,6 @@
         "application"
       ],
       "record_id": "cr_12f68de79bb4236a44490957"
-    },
-    {
-      "title": "Digital twin-based cyber-physical manufacturing systems, extended reality metaverse enterprise and production management algorithms, and Internet of Things financial and labor market technologies in generative artificial intelligence economics",
-      "authors": [
-        "George Lăzăroiu",
-        "Tom Gedeon",
-        "Elżbieta Rogalska",
-        "Katarína Valášková",
-        "Marek Nagy",
-        "Hussam Musa",
-        "Katarína Zvaríková",
-        "Miloš Poliak",
-        "Jakub Horák",
-        "R. Crețoiu",
-        "T. Krulický",
-        "Luminița Ionescu",
-        "C. Popa",
-        "L. Hurloiu",
-        "F. Nistor",
-        "L. Avram",
-        "Viorica Braga"
-      ],
-      "year": 2024,
-      "venue": "Oeconomia Copernicana",
-      "doi": "10.24136/oc.3183",
-      "citations": 44,
-      "abstract": "Research background: Generative artificial intelligence (AI) and machine learning algorithms support industrial Internet of Things (IoT)-based big data and enterprise asset management in multiphysics simulation environments by industrial big data processing, modeling, and monitoring, enabling business organizational and managerial practices. Machine learning-based decision support and edge generative AI sensing systems can reduce persistent labor shortages and job vacancies and power productivity growth and labor market dynamics, shaping career pathways and facilitating occupational transitions by skill gap identification and labor-intensive manufacturing job automation by path planning and spatial cognition algorithms, furthering theoretical implications for management sciences. Generative AI fintech, machine learning algorithms, and behavioral analytics can assist multi-layered payment and transaction processing screening with regard to authorized push payment, account takeover, and synthetic identity frauds, flagging suspicious activities and combating economic crimes by rigorous verification processes.\nPurpose of the article: We show that edge device management functionalities of cloud industrial IoT and virtual robotic simulation technologies configure plant production and route planning processes across cyber-physical production and industrial automation systems in multi-cloud immersive 3D environments, leading to tangible business outcomes by reinforcement learning and convolutional neural networks. Labor-augmenting automation and generative AI technologies can impact employment participation, increase wage and wealth inequality, and lead to potential job displacement and massive labor market disruptions. The deep learning capabilities of generative AI fintech in terms of adaptive behavioral analytics and credit scoring mechanisms can enhance financial transaction behaviors and algorithmic trading returns, identify fraudulent payment transactions swiftly, and improve financial forecasts, leading to customized investment recommendations and well-informed financial decisions.\nMethods: Machine learning-based study selection process and text mining systematic review management software and tools leveraged include Abstrackr, CADIMA, Colandr, DistillerSR, EPPI-Reviewer, JBI SUMARI, METAGEAR package for R, SluRp, and SWIFT-Active Screener. Such reference management systems are harnessed for methodologically rigorous evidence synthesis, study selection and characteristic extraction, predictive document classification, machine learning-based citation and record screening, bias assessment, article retrieval automation, and document classification and prioritization.\nFindings & value added: Industrial IoT and 3D augmented reality technologies can create business value by streamlining virtual product and remote asset management across extended reality-based navigation and robotic autonomous systems in smart factory environments by generative AI and machine learning algorithms, articulating business organizational level and theory of management implications. 3D simulation and operational modeling tools can execute and complete complex cognitive task-oriented and knowledge economy jobs, producing first-rate quality outputs swiftly while leading to unemployment spells, labor market disruptions, job displacement losses, and reduced earnings by machine learning clustering and spatial cognition algorithms. Generative AI decentralized finance, interoperable blockchain networks, cash flow management tools, and asset tokenization can mitigate fraud risks, enable digital fund and crypto investing servicing, and automate treasury operations by integrating real-time payment capabilities, routing and configurable workflows, and lending and payment technologies.",
-      "openalex_id": null,
-      "openalex_type": null,
-      "referenced_works_count": null,
-      "categories": [
-        "recent"
-      ],
-      "source_api": "semantic-scholar",
-      "search_angles": [
-        "canon"
-      ],
-      "record_id": "cr_a5080e9f1e1787bca1df4381"
     },
     {
       "title": "Experiences with HIV Testing, Entry, and Engagement in Care by HIV-Infected Women of Color, and the Need for Autonomy, Competency, and Relatedness",
