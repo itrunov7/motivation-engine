@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-31T19:40:29.842Z",
+  "fetched_at": "2026-08-31T19:42:09.310Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -151,12 +151,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 1,
+      "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "upstream_total_results": 1
     },
     {
       "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
@@ -170,7 +170,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": 0
     },
     {
@@ -331,12 +331,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 25,
+      "unique_returned": 25,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 5213
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
@@ -421,12 +421,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 25,
+      "unique_returned": 25,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 44
     },
     {
       "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
@@ -487,51 +487,6 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": 0
-    },
-    {
-      "query_id": "search:citation:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
-      "api": "openalex",
-      "angle": "critique",
-      "term": "flow state digital environments b2b enterprise critique criticism",
-      "bucket": "citation",
-      "kind": "search",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 0
-    },
-    {
-      "query_id": "search:relevance:semantic-scholar:replication:p1:flow state digital environments b2b enterprise replication",
-      "api": "semantic-scholar",
-      "angle": "replication",
-      "term": "flow state digital environments b2b enterprise replication",
-      "bucket": "relevance",
-      "kind": "search",
-      "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 216
-    },
-    {
-      "query_id": "search:recency:openalex:replication:p1:flow state digital environments b2b enterprise replication",
-      "api": "openalex",
-      "angle": "replication",
-      "term": "flow state digital environments b2b enterprise replication",
-      "bucket": "recency",
-      "kind": "search",
-      "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 1
     }
   ],
   "coverage_report": {
@@ -572,8 +527,8 @@
       {
         "angle": "canon",
         "queries": 6,
-        "returned": 22,
-        "unique_records": 4
+        "returned": 47,
+        "unique_records": 29
       },
       {
         "angle": "recent",
@@ -584,20 +539,20 @@
       {
         "angle": "application",
         "queries": 6,
-        "returned": 0,
-        "unique_records": 0
+        "returned": 25,
+        "unique_records": 25
       },
       {
         "angle": "critique",
-        "queries": 6,
-        "returned": 0,
-        "unique_records": 0
+        "queries": 5,
+        "returned": 1,
+        "unique_records": 1
       },
       {
         "angle": "replication",
-        "queries": 5,
-        "returned": 26,
-        "unique_records": 26
+        "queries": 3,
+        "returned": 0,
+        "unique_records": 0
       },
       {
         "angle": "boundary",
@@ -615,23 +570,23 @@
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 29,
-        "returned": 51,
+        "queries": 27,
+        "returned": 50,
         "unique_records": 4
       },
       {
         "api": "semantic-scholar",
-        "queries": 6,
-        "returned": 25,
-        "unique_records": 25
+        "queries": 5,
+        "returned": 51,
+        "unique_records": 51
       }
     ],
-    "recent_records": 28,
-    "recency_rate": 0.9655,
+    "recent_records": 48,
+    "recency_rate": 0.8727,
     "novelty": {
       "previous_corpus_records": 939,
-      "unique_records": 29,
-      "already_in_corpus": 29,
+      "unique_records": 55,
+      "already_in_corpus": 55,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -740,11 +695,11 @@
       },
       {
         "query_index": 9,
-        "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
-        "bucket": "recency",
+        "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
+        "bucket": "relevance",
         "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -752,6 +707,18 @@
       },
       {
         "query_index": 10,
+        "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
+        "bucket": "recency",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 11,
         "query_id": "search:citation:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "citation",
         "kind": "search",
@@ -763,7 +730,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 11,
+        "query_index": 12,
         "query_id": "search:relevance:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "relevance",
         "kind": "search",
@@ -775,7 +742,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 12,
+        "query_index": 13,
         "query_id": "search:recency:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "recency",
         "kind": "search",
@@ -787,7 +754,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 13,
+        "query_index": 14,
         "query_id": "search:citation:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "citation",
         "kind": "search",
@@ -799,7 +766,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 14,
+        "query_index": 15,
         "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "recency",
         "kind": "search",
@@ -811,7 +778,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 15,
+        "query_index": 16,
         "query_id": "search:citation:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "citation",
         "kind": "search",
@@ -823,7 +790,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 16,
+        "query_index": 17,
         "query_id": "search:relevance:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "relevance",
         "kind": "search",
@@ -835,7 +802,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 17,
+        "query_index": 18,
         "query_id": "search:recency:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "recency",
         "kind": "search",
@@ -847,7 +814,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 18,
+        "query_index": 19,
         "query_id": "search:citation:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "citation",
         "kind": "search",
@@ -859,7 +826,19 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 19,
+        "query_index": 20,
+        "query_id": "search:relevance:semantic-scholar:canon:p1:flow state digital environments b2b enterprise",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 21,
         "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -871,7 +850,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 20,
+        "query_index": 22,
         "query_id": "search:citation:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -883,7 +862,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 21,
+        "query_index": 23,
         "query_id": "search:relevance:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -895,7 +874,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 22,
+        "query_index": 24,
         "query_id": "search:recency:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -907,7 +886,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 23,
+        "query_index": 25,
         "query_id": "search:citation:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -919,7 +898,19 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 24,
+        "query_index": 26,
+        "query_id": "search:relevance:semantic-scholar:application:p1:flow state digital environments b2b enterprise applied intervention",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 27,
         "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -931,7 +922,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 25,
+        "query_index": 28,
         "query_id": "search:citation:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "citation",
         "kind": "search",
@@ -943,7 +934,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 26,
+        "query_index": 29,
         "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
         "bucket": "relevance",
         "kind": "search",
@@ -955,48 +946,12 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 27,
+        "query_index": 30,
         "query_id": "search:recency:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
         "bucket": "recency",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 28,
-        "query_id": "search:citation:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
-        "bucket": "citation",
-        "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 29,
-        "query_id": "search:relevance:semantic-scholar:replication:p1:flow state digital environments b2b enterprise replication",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 30,
-        "query_id": "search:recency:openalex:replication:p1:flow state digital environments b2b enterprise replication",
-        "bucket": "recency",
-        "kind": "search",
-        "returned": 1,
-        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -1007,22 +962,22 @@
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 12,
-      "recency": 12,
-      "citation": 11
+      "relevance": 11,
+      "recency": 11,
+      "citation": 10
     },
-    "topical_candidates": 26,
+    "topical_candidates": 25,
     "topical_confirmed": 0,
-    "topical_rejected": 26,
+    "topical_rejected": 25,
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 939,
+      "estimate": 5174,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 11,
+      "measured_queries": 12,
       "total_search_queries": 30,
-      "summed_upstream_results": 227,
-      "observed_sample_multiplicity": 1.069
+      "summed_upstream_results": 5268,
+      "observed_sample_multiplicity": 1.0182
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
