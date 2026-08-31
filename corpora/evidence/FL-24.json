@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-31T16:06:26.825Z",
+  "fetched_at": "2026-08-31T16:08:43.938Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -155,8 +155,8 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 0
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
@@ -331,12 +331,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 25,
+      "unique_returned": 25,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 5213
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
@@ -426,7 +426,7 @@
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
-      "upstream_total_results": 38
+      "upstream_total_results": 44
     },
     {
       "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
@@ -512,8 +512,8 @@
       {
         "angle": "canon",
         "queries": 6,
-        "returned": 22,
-        "unique_records": 4
+        "returned": 47,
+        "unique_records": 29
       },
       {
         "angle": "recent",
@@ -562,16 +562,16 @@
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 50,
-        "unique_records": 50
+        "returned": 75,
+        "unique_records": 75
       }
     ],
-    "recent_records": 37,
-    "recency_rate": 0.6852,
+    "recent_records": 64,
+    "recency_rate": 0.8101,
     "novelty": {
       "previous_corpus_records": 939,
-      "unique_records": 54,
-      "already_in_corpus": 54,
+      "unique_records": 79,
+      "already_in_corpus": 79,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -692,18 +692,6 @@
       },
       {
         "query_index": 10,
-        "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 11,
         "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "recency",
         "kind": "search",
@@ -715,7 +703,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 12,
+        "query_index": 11,
         "query_id": "search:citation:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "citation",
         "kind": "search",
@@ -727,7 +715,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 13,
+        "query_index": 12,
         "query_id": "search:relevance:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "relevance",
         "kind": "search",
@@ -739,7 +727,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 14,
+        "query_index": 13,
         "query_id": "search:recency:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "recency",
         "kind": "search",
@@ -751,7 +739,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 15,
+        "query_index": 14,
         "query_id": "search:citation:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "citation",
         "kind": "search",
@@ -763,7 +751,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 16,
+        "query_index": 15,
         "query_id": "search:relevance:semantic-scholar:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "relevance",
         "kind": "search",
@@ -775,7 +763,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 17,
+        "query_index": 16,
         "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "recency",
         "kind": "search",
@@ -787,7 +775,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 18,
+        "query_index": 17,
         "query_id": "search:citation:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "citation",
         "kind": "search",
@@ -799,7 +787,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 19,
+        "query_index": 18,
         "query_id": "search:relevance:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "relevance",
         "kind": "search",
@@ -811,7 +799,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 20,
+        "query_index": 19,
         "query_id": "search:recency:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "recency",
         "kind": "search",
@@ -823,12 +811,24 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 21,
+        "query_index": 20,
         "query_id": "search:citation:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "citation",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 21,
+        "query_id": "search:relevance:semantic-scholar:canon:p1:flow state digital environments b2b enterprise",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -957,12 +957,12 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 939,
+      "estimate": 5808,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 13,
       "total_search_queries": 30,
-      "summed_upstream_results": 663,
-      "observed_sample_multiplicity": 1.0185
+      "summed_upstream_results": 5882,
+      "observed_sample_multiplicity": 1.0127
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -3526,6 +3526,36 @@
       "record_id": "cr_2ba4b5398680d109618e946f"
     },
     {
+      "title": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
+      "authors": [
+        "Wilk Oliveira",
+        "Juho Hamari",
+        "Sivaldo Joaquim",
+        "A. Toda",
+        "P. Palomino",
+        "Julita Vassileva",
+        "Seiji Isotani"
+      ],
+      "year": 2022,
+      "venue": "Smart Learning Environments",
+      "doi": "10.1186/s40561-022-00194-x",
+      "citations": 141,
+      "abstract": "Gamification refers to the attempt to transform different kinds of systems to be able to better invoke positive experiences such as the flow state. However, the ability of such intervention to invoke flow state is commonly believed to depend on several moderating factors including the user’s traits. Currently, there is a dearth of research on the effect of user traits on the results of gamification. Gamer types (personality traits related to gaming styles and preferences) are considered some of the most relevant factors affecting the individual’s susceptibility to gamification. Therefore, in this study we investigate how gamer types from the BrainHex taxonomy (achiever, conqueror, daredevil, mastermind, seeker, socializer and survivor) moderate the effects of personalized/non-personalized gamification on users’ flow experience (challenge-skill balance, merging of action and awareness, clear goals, feedback, concentration, control, loss of self-consciousness and autotelic experience), enjoyment, perception of gamification and motivation. We conducted a mixed factorial within-subject experiment involving 121 elementary school students comparing a personalized version against a non-personalized version of a gamified education system. There were no main effects between personalization and students’ flow experience, perception of gamification and motivation, and enjoyment. Our results also indicate patterns of characteristics that can lead students to the high flow experience (e.g., those who prefer to play multiplayer have a high flow experience in both personalized and non-personalized versions). Based on our results, we provided recommendations to advance the design of gamifed educational systems.",
+      "openalex_id": "W4221001939",
+      "openalex_type": "article",
+      "referenced_works_count": 80,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon",
+        "recent",
+        "critique"
+      ],
+      "record_id": "cr_30d554911b08842b57a8d563"
+    },
+    {
       "title": "Consumer Research Insights on Brands and Branding: A JCR Curation",
       "authors": [
         "Kevin Lane Keller"
@@ -3547,36 +3577,6 @@
         "boundary"
       ],
       "record_id": "cr_677c3c54b6003986270457dd"
-    },
-    {
-      "title": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
-      "authors": [
-        "Wilk Oliveira",
-        "Juho Hamari",
-        "Sivaldo Joaquim",
-        "A. Toda",
-        "P. Palomino",
-        "Julita Vassileva",
-        "Seiji Isotani"
-      ],
-      "year": 2022,
-      "venue": "Smart Learning Environments",
-      "doi": "10.1186/s40561-022-00194-x",
-      "citations": 140,
-      "abstract": "Gamification refers to the attempt to transform different kinds of systems to be able to better invoke positive experiences such as the flow state. However, the ability of such intervention to invoke flow state is commonly believed to depend on several moderating factors including the user’s traits. Currently, there is a dearth of research on the effect of user traits on the results of gamification. Gamer types (personality traits related to gaming styles and preferences) are considered some of the most relevant factors affecting the individual’s susceptibility to gamification. Therefore, in this study we investigate how gamer types from the BrainHex taxonomy (achiever, conqueror, daredevil, mastermind, seeker, socializer and survivor) moderate the effects of personalized/non-personalized gamification on users’ flow experience (challenge-skill balance, merging of action and awareness, clear goals, feedback, concentration, control, loss of self-consciousness and autotelic experience), enjoyment, perception of gamification and motivation. We conducted a mixed factorial within-subject experiment involving 121 elementary school students comparing a personalized version against a non-personalized version of a gamified education system. There were no main effects between personalization and students’ flow experience, perception of gamification and motivation, and enjoyment. Our results also indicate patterns of characteristics that can lead students to the high flow experience (e.g., those who prefer to play multiplayer have a high flow experience in both personalized and non-personalized versions). Based on our results, we provided recommendations to advance the design of gamifed educational systems.",
-      "openalex_id": "W4221001939",
-      "openalex_type": "article",
-      "referenced_works_count": 80,
-      "categories": [
-        "recent"
-      ],
-      "source_api": "semantic-scholar",
-      "search_angles": [
-        "canon",
-        "recent",
-        "critique"
-      ],
-      "record_id": "cr_30d554911b08842b57a8d563"
     },
     {
       "title": "Interaction criticism: An introduction to the practice",
