@@ -6,29 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-31T14:43:53.680Z",
-    "status": "partial",
+    "timestamp": "2026-08-31T14:45:47.419Z",
+    "status": "success",
     "params": {
       "mechanism": "FL-24",
       "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
     },
     "records_fetched": 934,
     "files_written": 1,
-    "duration_s": 52.81,
-    "error": "search semantic-scholar boundary \"flow experience challenge skill balance b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "duration_s": 48.11,
     "warnings": {
-      "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
       "api_calls": 40,
-      "duration_s": 52.81,
+      "duration_s": 48.11,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-31T14:45:47.419Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 934,
+      "files_written": 1,
+      "duration_s": 48.11,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 40,
+        "duration_s": 48.11,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-31T14:43:53.680Z",
       "status": "partial",
@@ -431,27 +450,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-31T12:00:18.244Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 934,
-      "files_written": 1,
-      "duration_s": 43.56,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 44,
-        "duration_s": 43.56,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -530,7 +528,7 @@
     {
       "path": "FL-24.json",
       "records": 934,
-      "bytes": 7884550,
+      "bytes": 7884056,
       "categories": {
         "foundational": 34,
         "meta-analysis": 26,
