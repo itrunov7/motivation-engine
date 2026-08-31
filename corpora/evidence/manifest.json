@@ -6,29 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-31T18:15:57.298Z",
-    "status": "partial",
+    "timestamp": "2026-08-31T18:17:41.989Z",
+    "status": "success",
     "params": {
       "mechanism": "FL-24",
       "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
     },
     "records_fetched": 939,
     "files_written": 1,
-    "duration_s": 41.88,
-    "error": "search semantic-scholar application \"flow state digital environments b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "duration_s": 38.48,
     "warnings": {
-      "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 41,
-      "duration_s": 41.88,
+      "api_calls": 38,
+      "duration_s": 38.48,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-31T18:17:41.989Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 939,
+      "files_written": 1,
+      "duration_s": 38.48,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 38,
+        "duration_s": 38.48,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-31T18:15:57.298Z",
       "status": "partial",
@@ -437,27 +456,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-31T17:46:01.622Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 939,
-      "files_written": 1,
-      "duration_s": 37.17,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 39,
-        "duration_s": 37.17,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -536,7 +534,7 @@
     {
       "path": "FL-24.json",
       "records": 939,
-      "bytes": 7894187,
+      "bytes": 7893685,
       "categories": {
         "foundational": 34,
         "meta-analysis": 26,
