@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-31T19:38:22.089Z",
+  "fetched_at": "2026-08-31T19:40:29.842Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -61,12 +61,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 615
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
@@ -151,12 +151,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 1
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
@@ -170,7 +170,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": 0
     },
     {
@@ -245,8 +245,8 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 0
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
@@ -331,12 +331,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 5213
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
@@ -421,12 +421,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 44
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
@@ -457,6 +457,81 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": 0
+    },
+    {
+      "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+      "api": "openalex",
+      "angle": "critique",
+      "term": "flow state digital environments b2b enterprise critique criticism",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 0
+    },
+    {
+      "query_id": "search:recency:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+      "api": "openalex",
+      "angle": "critique",
+      "term": "flow state digital environments b2b enterprise critique criticism",
+      "bucket": "recency",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 0
+    },
+    {
+      "query_id": "search:citation:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+      "api": "openalex",
+      "angle": "critique",
+      "term": "flow state digital environments b2b enterprise critique criticism",
+      "bucket": "citation",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 0
+    },
+    {
+      "query_id": "search:relevance:semantic-scholar:replication:p1:flow state digital environments b2b enterprise replication",
+      "api": "semantic-scholar",
+      "angle": "replication",
+      "term": "flow state digital environments b2b enterprise replication",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 25,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 216
+    },
+    {
+      "query_id": "search:recency:openalex:replication:p1:flow state digital environments b2b enterprise replication",
+      "api": "openalex",
+      "angle": "replication",
+      "term": "flow state digital environments b2b enterprise replication",
+      "bucket": "recency",
+      "kind": "search",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 1
     }
   ],
   "coverage_report": {
@@ -497,32 +572,32 @@
       {
         "angle": "canon",
         "queries": 6,
-        "returned": 47,
-        "unique_records": 29
+        "returned": 22,
+        "unique_records": 4
       },
       {
         "angle": "recent",
         "queries": 6,
-        "returned": 53,
-        "unique_records": 29
+        "returned": 28,
+        "unique_records": 4
       },
       {
         "angle": "application",
         "queries": 6,
-        "returned": 25,
-        "unique_records": 25
+        "returned": 0,
+        "unique_records": 0
       },
       {
         "angle": "critique",
-        "queries": 3,
-        "returned": 1,
-        "unique_records": 1
+        "queries": 6,
+        "returned": 0,
+        "unique_records": 0
       },
       {
         "angle": "replication",
-        "queries": 3,
-        "returned": 0,
-        "unique_records": 0
+        "queries": 5,
+        "returned": 26,
+        "unique_records": 26
       },
       {
         "angle": "boundary",
@@ -540,23 +615,23 @@
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 25,
-        "returned": 50,
+        "queries": 29,
+        "returned": 51,
         "unique_records": 4
       },
       {
         "api": "semantic-scholar",
-        "queries": 5,
-        "returned": 76,
-        "unique_records": 76
+        "queries": 6,
+        "returned": 25,
+        "unique_records": 25
       }
     ],
-    "recent_records": 64,
-    "recency_rate": 0.8,
+    "recent_records": 28,
+    "recency_rate": 0.9655,
     "novelty": {
       "previous_corpus_records": 939,
-      "unique_records": 80,
-      "already_in_corpus": 80,
+      "unique_records": 29,
+      "already_in_corpus": 29,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -605,18 +680,6 @@
       },
       {
         "query_index": 4,
-        "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance b2b enterprise",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 5,
         "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -628,7 +691,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 6,
+        "query_index": 5,
         "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -640,7 +703,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 7,
+        "query_index": 6,
         "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "relevance",
         "kind": "search",
@@ -652,7 +715,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 8,
+        "query_index": 7,
         "query_id": "search:recency:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -664,7 +727,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 9,
+        "query_index": 8,
         "query_id": "search:citation:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "citation",
         "kind": "search",
@@ -676,19 +739,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 10,
-        "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 11,
+        "query_index": 9,
         "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "recency",
         "kind": "search",
@@ -696,11 +747,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
+        "rolling_novelty_rate": null,
         "cumulative_records": 939
       },
       {
-        "query_index": 12,
+        "query_index": 10,
         "query_id": "search:citation:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
         "bucket": "citation",
         "kind": "search",
@@ -712,7 +763,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 13,
+        "query_index": 11,
         "query_id": "search:relevance:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "relevance",
         "kind": "search",
@@ -724,7 +775,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 14,
+        "query_index": 12,
         "query_id": "search:recency:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "recency",
         "kind": "search",
@@ -736,7 +787,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 15,
+        "query_index": 13,
         "query_id": "search:citation:openalex:replication:p1:flow experience challenge skill balance b2b enterprise replication",
         "bucket": "citation",
         "kind": "search",
@@ -748,19 +799,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 16,
-        "query_id": "search:relevance:semantic-scholar:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 17,
+        "query_index": 14,
         "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "recency",
         "kind": "search",
@@ -772,7 +811,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 18,
+        "query_index": 15,
         "query_id": "search:citation:openalex:boundary:p1:flow experience challenge skill balance b2b enterprise boundary conditions moderators",
         "bucket": "citation",
         "kind": "search",
@@ -784,7 +823,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 19,
+        "query_index": 16,
         "query_id": "search:relevance:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "relevance",
         "kind": "search",
@@ -796,7 +835,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 20,
+        "query_index": 17,
         "query_id": "search:recency:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "recency",
         "kind": "search",
@@ -808,7 +847,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 21,
+        "query_index": 18,
         "query_id": "search:citation:openalex:cross-domain:p1:flow experience challenge skill balance b2b enterprise cross-domain generalization",
         "bucket": "citation",
         "kind": "search",
@@ -820,19 +859,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 22,
-        "query_id": "search:relevance:semantic-scholar:canon:p1:flow state digital environments b2b enterprise",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 23,
+        "query_index": 19,
         "query_id": "search:recency:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -844,7 +871,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 24,
+        "query_index": 20,
         "query_id": "search:citation:openalex:canon:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -856,7 +883,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 25,
+        "query_index": 21,
         "query_id": "search:relevance:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -868,7 +895,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 26,
+        "query_index": 22,
         "query_id": "search:recency:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -880,7 +907,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 27,
+        "query_index": 23,
         "query_id": "search:citation:openalex:recent:p1:flow state digital environments b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -892,19 +919,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 28,
-        "query_id": "search:relevance:semantic-scholar:application:p1:flow state digital environments b2b enterprise applied intervention",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 29,
+        "query_index": 24,
         "query_id": "search:recency:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -916,12 +931,72 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 30,
+        "query_index": 25,
         "query_id": "search:citation:openalex:application:p1:flow state digital environments b2b enterprise applied intervention",
         "bucket": "citation",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 26,
+        "query_id": "search:relevance:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 27,
+        "query_id": "search:recency:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+        "bucket": "recency",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 28,
+        "query_id": "search:citation:openalex:critique:p1:flow state digital environments b2b enterprise critique criticism",
+        "bucket": "citation",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 29,
+        "query_id": "search:relevance:semantic-scholar:replication:p1:flow state digital environments b2b enterprise replication",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 30,
+        "query_id": "search:recency:openalex:replication:p1:flow state digital environments b2b enterprise replication",
+        "bucket": "recency",
+        "kind": "search",
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -932,22 +1007,22 @@
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 10,
-      "recency": 10,
-      "citation": 10
+      "relevance": 12,
+      "recency": 12,
+      "citation": 11
     },
-    "topical_candidates": 25,
+    "topical_candidates": 26,
     "topical_confirmed": 0,
-    "topical_rejected": 25,
+    "topical_rejected": 26,
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 5810,
+      "estimate": 939,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 13,
+      "measured_queries": 11,
       "total_search_queries": 30,
-      "summed_upstream_results": 5883,
-      "observed_sample_multiplicity": 1.0125
+      "summed_upstream_results": 227,
+      "observed_sample_multiplicity": 1.069
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -8640,6 +8715,28 @@
       ]
     },
     {
+      "title": "AI-POWERED DEEP LEARNING MODELS FOR REAL-TIME CYBERSECURITY RISK ASSESSMENT IN ENTERPRISE IT SYSTEMS",
+      "authors": [
+        "Tonoy Kanti Chowdhury"
+      ],
+      "year": 2025,
+      "venue": "ASRC Procedia: Global Perspectives in Science and Scholarship",
+      "doi": "10.63125/137k6y79",
+      "citations": 16,
+      "abstract": "This study presents a systematic review of the rapidly growing body of research on AI-powered deep learning models for real-time cybersecurity risk assessment in enterprise IT systems, a domain where accurate and timely risk estimation has become critical for safeguarding large-scale digital infrastructures. Following the Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA) guidelines, an initial pool of 2,347 scholarly articles published between 2010 and 2024 was identified across major scientific databases, of which 142 met the inclusion criteria after rigorous multi-phase screening for relevance, methodological quality, and direct alignment with the study’s scope. These selected studies collectively demonstrate how deep learning architectures—particularly convolutional neural networks (CNNs), recurrent neural networks (RNNs), long short-term memory (LSTM) networks, transformer-based attention models, and graph neural networks (GNNs)—have advanced the analytical capacity to process high-dimensional, heterogeneous security telemetry including network flows, authentication logs, endpoint detection and response (EDR) events, DNS/HTTP traffic, and host–user–process relationships. The review found that these models consistently outperform traditional signature-based and statistical machine learning techniques in detecting complex, low-signal threats, while supporting continuous risk scoring in real-time environments. A major thematic pattern across the 142 reviewed studies was the operational embedding of these models within distributed streaming frameworks, where they achieve sub-second inference latency and integrate with Security Information and Event Management (SIEM) and Security Orchestration, Automation, and Response (SOAR) systems to drive automated incident response workflows. However, the synthesis also revealed persistent challenges, including heavy reliance on synthetic or staged datasets with limited realism, fragmented evaluation practices emphasizing accuracy over operational metrics, and scarce evidence from longitudinal, production-scale deployments. Overall, this review consolidates the state of knowledge from 142 studies to provide a structured, evidence-based understanding of how deep learning has become the analytical core of real-time enterprise cybersecurity risk assessment, while also identifying methodological and infrastructural gaps that shape the reliability of current approaches.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "replication"
+      ],
+      "record_id": "cr_c56abb7e8332def5200071f6"
+    },
+    {
       "title": "Artificial intelligence: The new wave of innovation in EUS",
       "authors": [
         "Siyu Sun",
@@ -8878,28 +8975,6 @@
         "application"
       ],
       "record_id": "cr_6688713b22eff506b62ac2b3"
-    },
-    {
-      "title": "AI-POWERED DEEP LEARNING MODELS FOR REAL-TIME CYBERSECURITY RISK ASSESSMENT IN ENTERPRISE IT SYSTEMS",
-      "authors": [
-        "Tonoy Kanti Chowdhury"
-      ],
-      "year": 2025,
-      "venue": "ASRC Procedia: Global Perspectives in Science and Scholarship",
-      "doi": "10.63125/137k6y79",
-      "citations": 15,
-      "abstract": "This study presents a systematic review of the rapidly growing body of research on AI-powered deep learning models for real-time cybersecurity risk assessment in enterprise IT systems, a domain where accurate and timely risk estimation has become critical for safeguarding large-scale digital infrastructures. Following the Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA) guidelines, an initial pool of 2,347 scholarly articles published between 2010 and 2024 was identified across major scientific databases, of which 142 met the inclusion criteria after rigorous multi-phase screening for relevance, methodological quality, and direct alignment with the study’s scope. These selected studies collectively demonstrate how deep learning architectures—particularly convolutional neural networks (CNNs), recurrent neural networks (RNNs), long short-term memory (LSTM) networks, transformer-based attention models, and graph neural networks (GNNs)—have advanced the analytical capacity to process high-dimensional, heterogeneous security telemetry including network flows, authentication logs, endpoint detection and response (EDR) events, DNS/HTTP traffic, and host–user–process relationships. The review found that these models consistently outperform traditional signature-based and statistical machine learning techniques in detecting complex, low-signal threats, while supporting continuous risk scoring in real-time environments. A major thematic pattern across the 142 reviewed studies was the operational embedding of these models within distributed streaming frameworks, where they achieve sub-second inference latency and integrate with Security Information and Event Management (SIEM) and Security Orchestration, Automation, and Response (SOAR) systems to drive automated incident response workflows. However, the synthesis also revealed persistent challenges, including heavy reliance on synthetic or staged datasets with limited realism, fragmented evaluation practices emphasizing accuracy over operational metrics, and scarce evidence from longitudinal, production-scale deployments. Overall, this review consolidates the state of knowledge from 142 studies to provide a structured, evidence-based understanding of how deep learning has become the analytical core of real-time enterprise cybersecurity risk assessment, while also identifying methodological and infrastructural gaps that shape the reliability of current approaches.",
-      "openalex_id": null,
-      "openalex_type": null,
-      "referenced_works_count": null,
-      "categories": [
-        "recent"
-      ],
-      "source_api": "semantic-scholar",
-      "search_angles": [
-        "replication"
-      ],
-      "record_id": "cr_c56abb7e8332def5200071f6"
     },
     {
       "title": "Can the development of digital finance stimulate enterprise innovation? Empirical evidence from China",
@@ -10717,6 +10792,35 @@
       "record_id": "cr_47ed0471e3c11adcbd142a95"
     },
     {
+      "title": "Building Resilient Enterprise Risk Programs through Integrated Digital Governance Models",
+      "authors": [
+        "Joshua Oluwagbenga Ajayi",
+        "Emmanuel Cadet",
+        "Iboro Akpan Essien",
+        "Eseoghene Daniel Erigh",
+        "Ehimah Obuse",
+        "Noah Ayanbode",
+        "Lawal Abdulmutalib Babatunde"
+      ],
+      "year": 2024,
+      "venue": "International Journal of Scientific Research in Humanities and Social Sciences",
+      "doi": "10.32628/ijsrssh242554",
+      "citations": 7,
+      "abstract": "In an increasingly volatile business environment, organizations face complex, interdependent risks spanning operational, financial, technological, and regulatory domains. Traditional risk management approaches often operate in silos, limiting their ability to anticipate, adapt to, and mitigate rapidly evolving threats. This paper presents a strategic framework for building resilient enterprise risk programs through integrated digital governance models. By embedding governance, risk, and compliance (GRC) functions into a unified digital architecture, enterprises can improve risk visibility, accelerate decision-making, and strengthen organizational agility. The proposed model leverages advanced analytics, artificial intelligence, blockchain-enabled audit trails, and cloud-based collaboration platforms to enable real-time risk assessment and proactive mitigation. It emphasizes the integration of governance mechanisms across corporate policies, operational controls, and regulatory compliance, ensuring that risk intelligence flows seamlessly between stakeholders and decision-makers. The framework addresses critical challenges such as data silos, inconsistent reporting standards, and fragmented accountability structures. It proposes a layered approach in which governance policies are digitally codified, risk indicators are continuously monitored through automated systems, and compliance status is dynamically updated in alignment with evolving regulations. Cybersecurity, supply chain resilience, and ESG (environmental, social, and governance) considerations are embedded as core pillars, reflecting the increasing interconnectivity between operational performance and reputational risk. Case examples illustrate how enterprises adopting integrated digital governance models have achieved measurable improvements in risk response times, incident recovery rates, and compliance audit readiness. Furthermore, the model aligns with international risk management standards such as ISO 31000 and NIST frameworks, promoting interoperability and cross-border governance consistency. It also underscores the importance of fostering a risk-aware culture through digital training tools, predictive scenario planning, and transparent reporting dashboards. By uniting technology, governance structures, and cultural transformation, the integrated model enables enterprises not only to withstand disruptions but to adapt and thrive in high-uncertainty environments. This research contributes to both academic and practical discourse by offering a replicable, technology-enabled governance blueprint that can be tailored to diverse industries and regulatory contexts. It positions integrated digital governance as a catalyst for transforming enterprise risk management from a reactive compliance exercise into a proactive, strategic value driver.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "canon",
+        "replication"
+      ],
+      "record_id": "cr_baee397b7293c2c3dcde07bf"
+    },
+    {
       "title": "Digital Transformation of Ukrainian Libraries: Current State and Prospects",
       "authors": [
         "Y. Horban",
@@ -10939,35 +11043,6 @@
         "canon"
       ],
       "record_id": "cr_50e02e3922cf6f8c58439e28"
-    },
-    {
-      "title": "Building Resilient Enterprise Risk Programs through Integrated Digital Governance Models",
-      "authors": [
-        "Joshua Oluwagbenga Ajayi",
-        "Emmanuel Cadet",
-        "Iboro Akpan Essien",
-        "Eseoghene Daniel Erigh",
-        "Ehimah Obuse",
-        "Noah Ayanbode",
-        "Lawal Abdulmutalib Babatunde"
-      ],
-      "year": 2024,
-      "venue": "International Journal of Scientific Research in Humanities and Social Sciences",
-      "doi": "10.32628/ijsrssh242554",
-      "citations": 6,
-      "abstract": "In an increasingly volatile business environment, organizations face complex, interdependent risks spanning operational, financial, technological, and regulatory domains. Traditional risk management approaches often operate in silos, limiting their ability to anticipate, adapt to, and mitigate rapidly evolving threats. This paper presents a strategic framework for building resilient enterprise risk programs through integrated digital governance models. By embedding governance, risk, and compliance (GRC) functions into a unified digital architecture, enterprises can improve risk visibility, accelerate decision-making, and strengthen organizational agility. The proposed model leverages advanced analytics, artificial intelligence, blockchain-enabled audit trails, and cloud-based collaboration platforms to enable real-time risk assessment and proactive mitigation. It emphasizes the integration of governance mechanisms across corporate policies, operational controls, and regulatory compliance, ensuring that risk intelligence flows seamlessly between stakeholders and decision-makers. The framework addresses critical challenges such as data silos, inconsistent reporting standards, and fragmented accountability structures. It proposes a layered approach in which governance policies are digitally codified, risk indicators are continuously monitored through automated systems, and compliance status is dynamically updated in alignment with evolving regulations. Cybersecurity, supply chain resilience, and ESG (environmental, social, and governance) considerations are embedded as core pillars, reflecting the increasing interconnectivity between operational performance and reputational risk. Case examples illustrate how enterprises adopting integrated digital governance models have achieved measurable improvements in risk response times, incident recovery rates, and compliance audit readiness. Furthermore, the model aligns with international risk management standards such as ISO 31000 and NIST frameworks, promoting interoperability and cross-border governance consistency. It also underscores the importance of fostering a risk-aware culture through digital training tools, predictive scenario planning, and transparent reporting dashboards. By uniting technology, governance structures, and cultural transformation, the integrated model enables enterprises not only to withstand disruptions but to adapt and thrive in high-uncertainty environments. This research contributes to both academic and practical discourse by offering a replicable, technology-enabled governance blueprint that can be tailored to diverse industries and regulatory contexts. It positions integrated digital governance as a catalyst for transforming enterprise risk management from a reactive compliance exercise into a proactive, strategic value driver.",
-      "openalex_id": null,
-      "openalex_type": null,
-      "referenced_works_count": null,
-      "categories": [
-        "recent"
-      ],
-      "source_api": "semantic-scholar",
-      "search_angles": [
-        "canon",
-        "replication"
-      ],
-      "record_id": "cr_baee397b7293c2c3dcde07bf"
     },
     {
       "title": "Compulsory licence and Crown use provisions in the Covid-19 pandemic—the Australian perspective",
