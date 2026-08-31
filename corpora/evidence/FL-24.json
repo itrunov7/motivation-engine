@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-08-31T17:33:11.098Z",
+  "fetched_at": "2026-08-31T17:35:35.091Z",
   "terms_source": "param",
   "terms": [
     "flow experience challenge skill balance b2b enterprise",
@@ -16,12 +16,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 2,
-      "unique_returned": 2,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 2
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance b2b enterprise",
@@ -151,12 +151,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 1,
+      "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "upstream_total_results": 1
     },
     {
       "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
@@ -512,7 +512,7 @@
       {
         "angle": "canon",
         "queries": 6,
-        "returned": 47,
+        "returned": 45,
         "unique_records": 29
       },
       {
@@ -530,8 +530,8 @@
       {
         "angle": "critique",
         "queries": 4,
-        "returned": 0,
-        "unique_records": 0
+        "returned": 1,
+        "unique_records": 1
       },
       {
         "angle": "replication",
@@ -556,22 +556,22 @@
       {
         "api": "openalex",
         "queries": 26,
-        "returned": 50,
+        "returned": 48,
         "unique_records": 4
       },
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 75,
-        "unique_records": 75
+        "returned": 76,
+        "unique_records": 76
       }
     ],
     "recent_records": 64,
-    "recency_rate": 0.8101,
+    "recency_rate": 0.8,
     "novelty": {
       "previous_corpus_records": 939,
-      "unique_records": 79,
-      "already_in_corpus": 79,
+      "unique_records": 80,
+      "already_in_corpus": 80,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -584,18 +584,6 @@
     "novelty_curve": [
       {
         "query_index": 1,
-        "query_id": "search:relevance:openalex:canon:p1:flow experience challenge skill balance b2b enterprise",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 2,
-        "unique_returned": 2,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 939
-      },
-      {
-        "query_index": 2,
         "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -607,7 +595,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 3,
+        "query_index": 2,
         "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -619,7 +607,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 4,
+        "query_index": 3,
         "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -631,7 +619,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 5,
+        "query_index": 4,
         "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -643,7 +631,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 6,
+        "query_index": 5,
         "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -655,7 +643,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 7,
+        "query_index": 6,
         "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "relevance",
         "kind": "search",
@@ -667,7 +655,7 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 8,
+        "query_index": 7,
         "query_id": "search:recency:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -679,12 +667,24 @@
         "cumulative_records": 939
       },
       {
-        "query_index": 9,
+        "query_index": 8,
         "query_id": "search:citation:openalex:application:p1:flow experience challenge skill balance b2b enterprise applied intervention",
         "bucket": "citation",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 939
+      },
+      {
+        "query_index": 9,
+        "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance b2b enterprise critique criticism",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -951,18 +951,18 @@
       "recency": 10,
       "citation": 10
     },
-    "topical_candidates": 25,
+    "topical_candidates": 23,
     "topical_confirmed": 0,
-    "topical_rejected": 25,
+    "topical_rejected": 23,
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 5808,
+      "estimate": 5810,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 13,
+      "measured_queries": 14,
       "total_search_queries": 30,
-      "summed_upstream_results": 5882,
-      "observed_sample_multiplicity": 1.0127
+      "summed_upstream_results": 5883,
+      "observed_sample_multiplicity": 1.0125
     },
     "saturation_reached": true,
     "stop_reason": "saturation",

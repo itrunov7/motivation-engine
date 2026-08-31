@@ -6,28 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-31T17:34:05.980Z",
+    "timestamp": "2026-08-31T17:35:03.475Z",
     "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
     },
     "records_fetched": 939,
-    "files_written": 0,
-    "duration_s": 0.37,
-    "error": "upstream API quota requires a later continuation; logical run FL-24-mthipia9 checkpointed at query 1/630",
+    "files_written": 1,
+    "duration_s": 31.66,
+    "error": "search openalex canon \"flow experience challenge skill balance b2b enterprise\": api.openalex.org upstream cooldown is 23154s; checkpoint and resume later",
     "warnings": {
-      "resume_required": true
+      "low_novelty": true
     },
     "cost": {
-      "api_calls": 1,
-      "duration_s": 0.37,
+      "api_calls": 36,
+      "duration_s": 31.66,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-08-31T17:35:03.475Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      },
+      "records_fetched": 939,
+      "files_written": 1,
+      "duration_s": 31.66,
+      "error": "search openalex canon \"flow experience challenge skill balance b2b enterprise\": api.openalex.org upstream cooldown is 23154s; checkpoint and resume later",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 36,
+        "duration_s": 31.66,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-31T17:34:05.980Z",
       "status": "partial",
@@ -439,27 +461,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-31T16:59:36.630Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 939,
-      "files_written": 1,
-      "duration_s": 46.23,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 41,
-        "duration_s": 46.23,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -538,7 +539,7 @@
     {
       "path": "FL-24.json",
       "records": 939,
-      "bytes": 7894194,
+      "bytes": 7894221,
       "categories": {
         "foundational": 34,
         "meta-analysis": 26,
