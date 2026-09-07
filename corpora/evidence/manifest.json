@@ -6,27 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-08-31T22:18:05.457Z",
+    "timestamp": "2026-09-07T10:02:34.862Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
-      "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
+      "terms": ""
     },
-    "records_fetched": 939,
+    "records_fetched": 946,
     "files_written": 1,
-    "duration_s": 38.95,
+    "duration_s": 44.44,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 39,
-      "duration_s": 38.95,
+      "api_calls": 45,
+      "duration_s": 44.44,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-09-07T10:02:34.862Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 946,
+      "files_written": 1,
+      "duration_s": 44.44,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 45,
+        "duration_s": 44.44,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-08-31T22:18:05.457Z",
       "status": "success",
@@ -447,29 +468,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-08-31T21:45:08.623Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 939,
-      "files_written": 1,
-      "duration_s": 49.25,
-      "error": "search semantic-scholar application \"flow state digital environments b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true,
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 43,
-        "duration_s": 49.25,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -547,14 +545,14 @@
     },
     {
       "path": "FL-24.json",
-      "records": 939,
-      "bytes": 7893685,
+      "records": 946,
+      "bytes": 7907741,
       "categories": {
         "foundational": 34,
         "meta-analysis": 26,
         "replication": 106,
-        "dissent": 163,
-        "recent": 576
+        "dissent": 164,
+        "recent": 580
       }
     },
     {
