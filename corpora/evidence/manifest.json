@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-09-07T10:22:56.095Z",
+    "timestamp": "2026-09-07T10:24:31.606Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 946,
     "files_written": 1,
-    "duration_s": 44.46,
+    "duration_s": 44.48,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 45,
-      "duration_s": 44.46,
+      "duration_s": 44.48,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-09-07T10:24:31.606Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 946,
+      "files_written": 1,
+      "duration_s": 44.48,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 45,
+        "duration_s": 44.48,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-09-07T10:22:56.095Z",
       "status": "success",
@@ -429,29 +450,6 @@
       "cost": {
         "api_calls": 46,
         "duration_s": 55.93,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-08-31T22:07:22.996Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": "flow experience challenge skill balance b2b enterprise;flow state digital environments b2b enterprise;optimal experience engagement b2b enterprise"
-      },
-      "records_fetched": 939,
-      "files_written": 1,
-      "duration_s": 51.41,
-      "error": "search semantic-scholar recent \"flow experience challenge skill balance b2b enterprise\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true,
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 44,
-        "duration_s": 51.41,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
