@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-09-14T13:52:44.269Z",
+    "timestamp": "2026-09-14T13:54:27.408Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 948,
     "files_written": 1,
-    "duration_s": 45,
+    "duration_s": 56.54,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 45,
-      "duration_s": 45,
+      "api_calls": 46,
+      "duration_s": 56.54,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-09-14T13:54:27.408Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 948,
+      "files_written": 1,
+      "duration_s": 56.54,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 46,
+        "duration_s": 56.54,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-09-14T13:52:44.269Z",
       "status": "success",
@@ -427,28 +448,6 @@
       "cost": {
         "api_calls": 49,
         "duration_s": 137.3,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-09-14T12:39:33.043Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 948,
-      "files_written": 1,
-      "duration_s": 129.33,
-      "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 129.33,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
