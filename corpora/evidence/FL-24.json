@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-09-08T03:34:14.223Z",
+  "fetched_at": "2026-09-14T10:26:53.229Z",
   "terms_source": "record",
   "terms": [
     "flow experience challenge skill balance",
@@ -23,7 +23,7 @@
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 876
+      "upstream_total_results": 833
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
@@ -35,10 +35,10 @@
       "requested": 25,
       "returned": 25,
       "unique_returned": 23,
-      "records_added": 0,
-      "novelty_rate": 0,
+      "records_added": 1,
+      "novelty_rate": 0.0435,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 876
+      "upstream_total_results": 833
     },
     {
       "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
@@ -48,12 +48,12 @@
       "bucket": "citation",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
+      "returned": 25,
+      "unique_returned": 25,
+      "records_added": 1,
+      "novelty_rate": 0.04,
       "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "upstream_total_results": 833
     },
     {
       "query_id": "graph:backward-reference:W1683284848",
@@ -65,6 +65,36 @@
       "requested": 25,
       "returned": 2,
       "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W7212190422",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Flow Experience in the Chinese Blended Classroom: How Students and Teachers Shape English Success",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W7212190422",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Flow Experience in the Chinese Blended Classroom: How Students and Teachers Shape English Success",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
@@ -127,7 +157,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0.0084,
       "upstream_total_results": null
     },
     {
@@ -142,7 +172,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0.0084,
       "upstream_total_results": null
     },
     {
@@ -157,7 +187,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": null
     },
     {
@@ -311,36 +341,6 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W7166715852",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Exploring College Students’ AI-Supported Flow during Language Learning Tasks in Virtual Environments",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7166715852",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Exploring College Students’ AI-Supported Flow during Language Learning Tasks in Virtual Environments",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
       "query_id": "graph:forward-citation:W1683284848",
       "api": "openalex",
       "angle": "canon",
@@ -459,21 +459,6 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W4221001939",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
     }
   ],
   "coverage_report": {
@@ -495,9 +480,9 @@
         "openalex_id": "W2042314632",
         "citations": 177,
         "references_total": 125,
-        "references_resolved": 115,
+        "references_resolved": 114,
         "references_in_corpus": 19,
-        "coverage": 0.1652
+        "coverage": 0.1667
       }
     ],
     "snowball_added": 0
@@ -506,41 +491,41 @@
     "foundational": 34,
     "meta-analysis": 26,
     "replication": 106,
-    "dissent": 164,
-    "recent": 580
+    "dissent": 165,
+    "recent": 581
   },
   "diversity_report": {
     "viewpoint_spread": [
       {
         "angle": "canon",
         "queries": 3,
-        "returned": 50,
-        "unique_records": 48
+        "returned": 75,
+        "unique_records": 56
       }
     ],
     "source_spread": [
       {
         "api": "openalex",
         "queries": 3,
-        "returned": 50,
-        "unique_records": 48
+        "returned": 75,
+        "unique_records": 56
       }
     ],
-    "recent_records": 24,
-    "recency_rate": 0.5,
+    "recent_records": 25,
+    "recency_rate": 0.4464,
     "novelty": {
       "previous_corpus_records": 946,
-      "unique_records": 48,
-      "already_in_corpus": 48,
-      "new_records": 0,
-      "novelty_rate": 0,
+      "unique_records": 56,
+      "already_in_corpus": 54,
+      "new_records": 2,
+      "novelty_rate": 0.0357,
       "low_novelty": true,
       "known_share_threshold": 0.8
     }
   },
   "saturation_report": {
     "queries_issued": 30,
-    "records_added": 0,
+    "records_added": 2,
     "novelty_curve": [
       {
         "query_index": 1,
@@ -561,13 +546,25 @@
         "kind": "search",
         "returned": 25,
         "unique_returned": 23,
-        "records_added": 0,
-        "novelty_rate": 0,
+        "records_added": 1,
+        "novelty_rate": 0.0435,
         "rolling_novelty_rate": null,
-        "cumulative_records": 946
+        "cumulative_records": 947
       },
       {
         "query_index": 3,
+        "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
+        "bucket": "citation",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 1,
+        "novelty_rate": 0.04,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 948
+      },
+      {
+        "query_index": 4,
         "query_id": "graph:backward-reference:W1683284848",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -576,10 +573,34 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 4,
+        "query_index": 5,
+        "query_id": "graph:backward-reference:W7212190422",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 948
+      },
+      {
+        "query_index": 6,
+        "query_id": "graph:forward-citation:W7212190422",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 948
+      },
+      {
+        "query_index": 7,
         "query_id": "graph:backward-reference:W7204854129",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -588,10 +609,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 5,
+        "query_index": 8,
         "query_id": "graph:forward-citation:W7204854129",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -600,10 +621,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 6,
+        "query_index": 9,
         "query_id": "graph:backward-reference:W7204641889",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -612,10 +633,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 7,
+        "query_index": 10,
         "query_id": "graph:forward-citation:W7204641889",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -623,11 +644,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 946
+        "rolling_novelty_rate": 0.0084,
+        "cumulative_records": 948
       },
       {
-        "query_index": 8,
+        "query_index": 11,
         "query_id": "graph:backward-reference:W7204957777",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -635,11 +656,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 946
+        "rolling_novelty_rate": 0.0084,
+        "cumulative_records": 948
       },
       {
-        "query_index": 9,
+        "query_index": 12,
         "query_id": "graph:forward-citation:W7204957777",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -647,11 +668,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 946
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 948
       },
       {
-        "query_index": 10,
+        "query_index": 13,
         "query_id": "graph:backward-reference:W7201969041",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -660,10 +681,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 11,
+        "query_index": 14,
         "query_id": "graph:forward-citation:W7201969041",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -672,10 +693,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 12,
+        "query_index": 15,
         "query_id": "graph:backward-reference:W7201976895",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -684,10 +705,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 13,
+        "query_index": 16,
         "query_id": "graph:forward-citation:W7201976895",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -696,10 +717,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 14,
+        "query_index": 17,
         "query_id": "graph:backward-reference:W7202291746",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -708,10 +729,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 15,
+        "query_index": 18,
         "query_id": "graph:forward-citation:W7202291746",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -720,10 +741,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 16,
+        "query_index": 19,
         "query_id": "graph:backward-reference:W7169557143",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -732,10 +753,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 17,
+        "query_index": 20,
         "query_id": "graph:forward-citation:W7169557143",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -744,10 +765,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 18,
+        "query_index": 21,
         "query_id": "graph:backward-reference:W7165564922",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -756,10 +777,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 19,
+        "query_index": 22,
         "query_id": "graph:forward-citation:W7165564922",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -768,34 +789,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 20,
-        "query_id": "graph:backward-reference:W7166715852",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 946
-      },
-      {
-        "query_index": 21,
-        "query_id": "graph:forward-citation:W7166715852",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 946
-      },
-      {
-        "query_index": 22,
+        "query_index": 23,
         "query_id": "graph:forward-citation:W1683284848",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -804,10 +801,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 23,
+        "query_index": 24,
         "query_id": "graph:backward-reference:W2042314632",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -816,10 +813,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 24,
+        "query_index": 25,
         "query_id": "graph:forward-citation:W2042314632",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -828,10 +825,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 25,
+        "query_index": 26,
         "query_id": "graph:backward-reference:W3046829123",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -840,10 +837,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 26,
+        "query_index": 27,
         "query_id": "graph:forward-citation:W3046829123",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -852,10 +849,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 27,
+        "query_index": 28,
         "query_id": "graph:backward-reference:W279868603",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -864,10 +861,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 28,
+        "query_index": 29,
         "query_id": "graph:forward-citation:W279868603",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -876,10 +873,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       },
       {
-        "query_index": 29,
+        "query_index": 30,
         "query_id": "graph:backward-reference:W4221001939",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -888,19 +885,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 946
-      },
-      {
-        "query_index": 30,
-        "query_id": "graph:forward-citation:W4221001939",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 946
+        "cumulative_records": 948
       }
     ],
     "window_queries": 10,
@@ -911,17 +896,17 @@
       "recency": 1,
       "citation": 1
     },
-    "topical_candidates": 43,
+    "topical_candidates": 42,
     "topical_confirmed": 20,
-    "topical_rejected": 23,
-    "topical_confirmation_rate": 0.4651,
+    "topical_rejected": 22,
+    "topical_confirmation_rate": 0.4762,
     "graph_anchors_expanded": 14,
     "field_union_estimate": {
-      "estimate": 946,
+      "estimate": 948,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 1,
-      "total_search_queries": 2,
-      "summed_upstream_results": 876,
+      "total_search_queries": 3,
+      "summed_upstream_results": 833,
       "observed_sample_multiplicity": 1
     },
     "saturation_reached": true,
@@ -2170,7 +2155,7 @@
       "year": 2008,
       "venue": "Journal of Occupational and Organizational Psychology",
       "doi": "10.1348/096317908x357903",
-      "citations": 348,
+      "citations": 350,
       "abstract": "One of the core constructs of the positive psychology movement is that of ‘flow’, or optimal experience. The current study investigated the relationship between ‘flow’, the core job dimensions, and subjective well‐being (SWB), as well as distinguishing between the state and trait components of flow. Experience sampling methodology (ESM) was used to track 40 architectural students over a 15 week semester while they engaged in studio work. Hierarchical linear modelling (HLM) indicated that 74% of the variance in flow was attributable to situational characteristics compared to dispositional factors. Results also indicated that academic work that was high in skill variety and autonomy was associated with flow. Flow was found to be correlated with positive mood. Cross‐lagged regression analysis showed that momentary flow was predictive of momentary mood and not vice versa. The strengths and limitations of using ESM to study subjective work experiences and well‐being are discussed, as well as the implications of the study of flow or optimal experience for industrial/organizational psychology.",
       "openalex_id": "W2015351884",
       "openalex_type": "article",
@@ -2320,7 +2305,7 @@
       "year": 2022,
       "venue": "PEDIATRICS",
       "doi": "10.1542/peds.2022-057010",
-      "citations": 319,
+      "citations": 320,
       "abstract": "This clinical report is designed to assist the pediatrician in caring for the child, adolescent, and family in whom a diagnosis of Down syndrome has been confirmed by chromosome analysis or suspected by prenatal screening. Although a pediatrician’s initial contact with the child is usually during infancy, occasionally the pregnant woman who has been given a prenatal diagnosis of Down syndrome will be referred for review of the condition and genetic counseling; this report offers guidance for this situation, as well. Age-specific guidance for the clinician is provided in Supplemental Fig 1.Pediatricians play an important role in the care of children and adolescents with Down syndrome and their families. Down syndrome is the most common chromosomal cause of intellectual disability, and there has been a significant improvement in quality of life for affected people. Awareness of the issues important to affected children, adolescents, and their caregivers can make a great difference in outcomes across the lifespan.Children with Down syndrome may have many cooccurring medical conditions and cognitive impairment because of the presence of extra genetic material from chromosome 21 (Table 1).1,2 Although the phenotype is variable, there typically are multiple features that enable the experienced clinician to suspect the diagnosis. Among the more common physical findings are hypotonia, small brachycephalic head, epicanthal folds, flat nasal bridge, upward-slanting palpebral fissures, Brushfield spots, small mouth, small ears, excessive skin at the nape of the neck, single transverse palmar crease, short fifth finger with clinodactyly, and wide spacing between the first and second toes, often with a deep plantar groove. The degree of cognitive impairment is variable and may be mild (IQ of 50–70), usually is moderate (IQ of 35–50), or occasionally is severe (IQ of 20–35).Medical conditions common in children with Down syndrome include hearing loss (75%), obstructive sleep apnea (50%–79%), otitis media (50%–70%), eye problems (60%–80%), including cataracts (<1%–3%),3 nasolacrimal duct obstruction (3%–36%), and strabismus and severe refractive errors (36%–80%), congenital heart defects (50%), neurologic dysfunction (1%–13%), gastrointestinal atresia (12%), hip dislocation and hip abnormalities (2%–8%),4,5 symptomatic atlantoaxial instability (1%–2%),6,7 thyroid disease (24%–50%)2,8 and, less commonly, transient abnormal myelopoiesis (4%–10%) and later leukemia (1%), autoimmune diseases,2,8–10 including Hashimoto thyroiditis (13%–39%), with incidence dependent on age, celiac disease (1%–5%), Hirschsprung disease (<1%),3 and autism (7%–19%).11,12People with Down syndrome often function more effectively in social situations than would be predicted based on cognitive assessment results, unless there is presence of cooccurring autism. Although the level of social–emotional functioning may vary, these skills may be improved with early intervention and therapy through early adulthood.In ∼96% of children with Down syndrome, the condition is sporadic because of nonfamilial trisomy 21, in which there are 47 chromosomes with the presence of a free extra chromosome 21. In ∼3% to 4% of people with the Down syndrome phenotype, the extra chromosomal material is the result of an unbalanced translocation between chromosome 21 and another acrocentric chromosome, usually chromosome 14 or 21. Approximately three-quarters of these unbalanced translocations are de novo, and the remainder result from translocation inherited from a parent. If the child has a translocation, the parents should be offered a karyotype to determine whether the translocation is familial or de novo. In the remaining 1% to 2% of people with the Down syndrome phenotype, a mix of 2 cell lines is present: 1 normal and the other with trisomy 21. This condition is called mosaicism. People with mosaicism may be more mildly affected than people with complete trisomy 21 or translocation chromosome 21, but this is not always the case, and their condition may include any of the associated medical problems and may be indistinguishable from trisomy 21. The chance of recurrence for families with an affected child depends on many factors and vary greatly, from 1% in most families to 100% in some circumstances. Table 2 describes the different chromosomal characteristics of Down syndrome.Formal counseling by a clinical geneticist or genetic counselor is recommended for all families.Several areas require ongoing assessment throughout childhood and should be reviewed at every health supervision visit and at least annually. These areas include: personal support available to family;participation in a family-centered medical home;age-specific Down syndrome-related medical and developmental conditions;financial and medical support programs and long-term financial planning for which the child and family may be eligible;injury and abuse prevention, with special consideration of developmental skills and intellectual ability; andnutrition and activity to maintain appropriate weight.The American College of Obstetricians and Gynecologists recommends that all pregnant women, regardless of age or risk status, be offered the option of screening and diagnostic testing for Down syndrome.17,18A wide variety of screening test options exist in the first and second trimester using maternal serum and ultrasonography. Each offers varying levels of sensitivity and specificity. No 1 screening test is superior to other screening tests in all characteristics. In recent years, noninvasive prenatal testing by cell-free DNA (cfDNA) has become available and is the most sensitive method for screening for Down syndrome. cfDNA screening for Down syndrome is significantly more sensitive and specific than conventional screening methods, with a 2017 meta-analysis reporting a detection rate of 99.7%, with a false-positive rate of 0.04% in singleton pregnancies.19 cfDNA uses a maternal blood sample to analyze free-floating small fragments of DNA from the placenta. Because cfDNA is from the placenta and not directly from the fetus, it is a screening test and not diagnostic. cfDNA analysis can be performed as early as 9 to 10 weeks’ gestation depending on the laboratory, and a high-risk result from cfDNA would require confirmation by diagnostic testing with chorionic villus sampling (CVS) or amniocentesis. Screening for trisomy 21 by cfDNA in twin pregnancies can be performed, but total number of reported cases is small.20Other screening tests for Down syndrome include first-trimester screening, which incorporates maternal age, nuchal translucency ultrasonography, and measurement of maternal serum β human chorionic gonadotropin and pregnancy-associated plasma protein A. Second-trimester screening is available for patients who first seek medical care in the second trimester or in locations where first-trimester screening is not available. The second-trimester serum screening, often called the quad screen, incorporates maternal age risk with measurement of maternal serum β human chorionic gonadotropin, unconjugated estriol, α-fetoprotein, and inhibin concentrations. The detection rate of Down syndrome by first-trimester screening is 82% to 87%, by second trimester screening is 80%, and by combined first- and second-trimester screening (referred to as integrated screening) is ∼95%. These screening tests are reported to have a 5% false-positive rate.21–24Ultrasonography is an additional screening tool for Down syndrome because structural changes, including congenital heart defects, increased nuchal skin fold, “double bubble” sign suggestive of duodenal atresia, ventriculomegaly, and short–long bones, may be identified by prenatal imaging. Although ultrasonography is an additional screening tool, it is not diagnostic for Down syndrome.Diagnostic testing for Down syndrome includes CVS or amniocentesis. CVS has the benefit of being performed earlier in pregnancy, between 10 and 14 completed weeks’ gestation. A placental sample is obtained either transabdominally or transcervically, depending on provider preference and placental location. Amniocentesis is a transabdominal procedure to remove a sample of amniotic fluid performed after 15 weeks’ gestational age. Risk for procedure-related loss of pregnancy from CVS or amniocentesis is comparable in recent studies when performed by providers with expertise, 0.22% for amniocentesis and 0.11% for CVS.25,26Pediatricians may be asked to counsel a family whose fetus has been identified with or is at increased chance of having Down syndrome. Families may have a great number of questions during any pregnancy and especially when the child will have Down syndrome. They may have received counseling from a certified genetic counselor, a clinical geneticist, maternal–fetal medicine specialist, obstetrician, or developmental specialist. In addition, parents may have received information and support from a family-led organization such as Parent to Parent USA, a local Down syndrome group, a national Down syndrome organization, social media, or possibly an Internet site with inaccurate information. Pediatricians who often have a previous relationship with the family may be the natural source of support for and guidance in the context of the medical home. The clinician should be prepared to respond to questions, review information the family has received, and assist in the decision-making process.27 When asked, the pediatrician should discuss the following topics with the family: The prenatal laboratory studies and any confirmatory testing that led to the diagnosis and any fetal imaging studies that have been or will be performed. Many families find it important to have the diagnosis confirmed before they can consider what it will mean to their infant and their family.Families benefit from hearing a fair and balanced perspective, including the many positive outcomes of children with Down syndrome and their effects on the family. Families usually have questions about prognosis and phenotypic manifestations, including the wide range of variability seen in infants and children with Down syndrome. The prenatal visit is a good time to offer a connection to a peer-to-peer organization for support (see Family Resources).Discuss any additional studies performed that may refine the estimation of the prognosis (eg, fetal echocardiography, ultrasonography for gastrointestinal tract malformations). Consultation with an appropriate medical subspecialist, such as a pediatric cardiologist or a pediatric surgeon, may occur prenatally if abnormal findings are detected.Discuss currently available treatments and interventions. Families need to hear that they are not alone and that there are supports and services for them after the infant is born. Discuss early intervention resources, parent-support programs, and any appropriate future treatments.Discuss extended life expectancy that has increased from 30 years in 1973 to 60 years in 2002. This increase has resulted from improved medical care, educational options, and enhanced social adaptation. Potential complications and adverse effects, costs and financial supports available, and other challenges associated with comprehensive management and care should also be discussed. The pediatrician can explain that they will be supported best in the context of a patient-centered medical home.There are many issues for the family learning that their child will have Down syndrome to consider. These issues should be discussed using a nondirective approach. In cases of prenatal diagnosis, this may include discussion of pregnancy continuation or termination, raising the child in the family, foster care placement, and adoption.28The mechanism for occurrence of Down syndrome in the fetus and the potential recurrence rate for the family, as provided by genetic counseling, should be shared. Discuss availability of genetic counseling or meeting with a genetics professional.As the pregnancy continues, the pediatrician may: Develop a plan for delivery and neonatal care with the obstetrician and the family. As the pregnancy progresses, additional studies should be performed if available, if recommended by medical subspecialists and/or if desired by the family. These studies (eg, detection of a complex heart defect by fetal echocardiography) may help direct development of a management plan and improve outcome for the mother and infant.29Offer parent-to-parent contact and information about local and national support organizations because communication with experienced parents is often a very helpful resource for caregiver decision-making.Offer referral to a clinical geneticist or genetic counselor for a more extended discussion of clinical outcomes and variability, recurrence rates, future reproductive options, and evaluation of the risks for other family members.It is recognized that the medical needs of newborn infants with Down syndrome vary, and the timing of each intervention depends on the infant’s needs, but that it is important that all interventions are addressed and that careful transfer of care occurs at the time of discharge from the hospital.The first step in evaluating a newborn infant for trisomy 21 is a careful review of the family history and prenatal information, to include: results of prenatal chromosome studies, if performed; andfamily history of previous children born with trisomy 21 or developmental differences or pregnancies that ended in miscarriage. (These may be significant clues that a family may carry a balanced translocation that predisposes them to having children with trisomy 21.)For children who have had the diagnosis made prenatally, a formal copy of the chromosome report from an amniocentesis or CVS should be obtained. This report allows the clinician to confirm the diagnosis, review the results with the family, and add the formal diagnosis to the child’s medical record. If the results of prenatal testing are not available or if cfDNA alone was performed, a sample of cord or peripheral blood should be obtained for postnatal karyotype to confirm the diagnosis and rule out a chromosome translocation.A physical examination is the most sensitive test in the first 24 hours of life to diagnose trisomy 21 in an infant. If the clinician believes that criteria for Down syndrome are present on physical examination, then a blood sample should be sent for a karyotype. The clinician should alert the laboratory and request rapid results. A study that uses fluorescent in situ hybridization (FISH) technology, in addition, should be available within 24 to 48 hours, if necessary, to facilitate diagnosis and parent counseling. A FISH study, however, can only indicate that an extra copy of chromosome 21 is present and does not determine the presence or absence of a translocation. Therefore, a positive FISH result should be confirmed by a karyotype to identify translocations that may have implications for further reproductive counseling for the parents and possibly other family members. A chromosomal microarray analysis is not appropriate because it will not differentiate trisomy 21 caused by nondisjunction versus an unbalanced translocation.When delivering a diagnosis of Trisomy 21 (Table 3): the mother should be allowed to recover from the immediate delivery of the infant and have her partner or support person present before the diagnosis is given;the information should be relayed in a private setting by the physicians involved, optimally by the primary care provider for the infant and the delivering physician30; andit is recommended that hospitals coordinate the delivery of the information and offer a private hospital room pending confirmation of the diagnosis.When providing information about Down syndrome to families, the physician should first congratulate parents on the birth of their infant. Obstetricians and pediatricians should coordinate their messaging and inform parents of their suspicion immediately, in a private setting, and when appropriate, with both parents together. Physicians should use their experience and expertise in providing support and guidance for families. Clinicians should ensure a balanced approach that reflects the variability and broad range of current outcomes, rather than their personal opinions or experience, give current printed materials, and offer access to other families who have children with Down syndrome and support organizations if locally available. It is important that clinicians be cognizant of the realities and possibilities for people with Down syndrome to have healthy, productive lives.30The laboratory diagnosis of Down syndrome should be confirmed, and the karyotype should be reviewed with the parents when the final result is available. The specific findings should be discussed with both parents whenever possible, including the potential clinical manifestations associated with the syndrome. These topics should be reviewed again at a subsequent meeting. Families should be offered referral for genetic counseling if it was not conducted prenatally.Newborn care is often provided in a hospital setting by a physician who will not be the primary care pediatrician. If the physician providing newborn care will not be the primary care pediatrician, he or she should ensure that there is a smooth transition by transferring medical records and ensuring that an early newborn follow-up appointment is scheduled.Characteristics attributable to Down syndrome, as well as those that are familial, should be discussed.Follow Bright Futures schedule or more frequently if indicated. Obtain a history and perform a physical examination.Monitor weight and follow weight-for-length trends at each health care visit. Review the infant’s growth and plot it on the Down syndrome-specific charts for weight, length, weight for length, and head circumference (available at www.cdc.gov).57,58Review feeding at every health supervision visit, ensure adequate iron intake, and inquire about any changes in respiratory symptoms with feeding (see “Health Supervision From Birth to 1 Month” for discussion).Review the previous hearing evaluation (brainstem auditory evoked response [BAER] or otoacoustic emission). If the infant passed the newborn screening study, rescreen at 6 months of age for confirmation.Risk of otitis media with effusion is 50% to 75%.43 Middle-ear disease should be treated immediately when diagnosed. As soon as a clear ear is established, a diagnostic BAER should be performed to accurately establish hearing status.In children with stenotic canals in which the tympanic membranes cannot be seen, refer to an otolaryngologist as soon as possible for examination under an office microscope. Interval ear examinations should be performed by the otolaryngologist every 3 to 6 months until the tympanic membrane can be visualized by the pediatrician and tympanometry can be performed reliably.43A behavioral audiogram may be attempted at 1 year of age, but many children will not be able to complete the study. If unable to complete a behavioral audiogram, additional testing by BAER should be performed at 1 year.Ear anomalies also place child at risk for sensorineural hearing loss and vestibular problems that may the assessment the first 6 months of refer to a pediatric or with expertise and experience with infants with to for nasolacrimal duct refractive and the infant’s at each visit and use appropriate and If duct obstruction is refer for evaluation for of if not by 9 to months of results of newborn if not Because of increased risk of thyroid measurement of at 6 and months of age and then (see Supervision From Birth to 1 for infants with defects at all typically or defects that cause for symptoms and of heart as and blood feeding and weight may indicate heart including may be until the infant is in condition to to the defects to the potential for development of and associated and children with Down syndrome are also at increased risk of in the absence of structural of care between the primary care physician and the is important for these Obtain a complete blood cell with and either a of and protein or a of serum iron and total at 1 year of age and with Down syndrome have been to have a risk for as the but it may be because of may and also can have long-term neurologic with increased mean is present in to of patients with Down a mean is not a for the of iron or in children with Down syndrome. Screening by iron but iron the of an with or or serum iron by to 100% sensitivity in iron iron or is an and is not if is present or is subsequent evaluation with iron and may be to confirm diagnosis. Although not to children with Down syndrome, is also associated with sleep and iron may be in for children with sleep A physician may iron for children with sleep problems and a should be alert to the and symptoms of leukemia discussed in Supervision From Birth to 1 and an extra with if symptoms with Down syndrome who leukemia can be treated with leukemia therapy or leukemia with outcomes superior to other with complete neurologic history and examination and with as for of neurologic dysfunction that may with Down syndrome have an increased risk of including and other including and such as including respiratory for infants with cooccurring and other recommended for all children, unless there are specific for findings and parents that and are least during the first 6 months of discuss with family symptoms of obstructive sleep including sleep and problems that be associated with to a physician with expertise in pediatric sleep for examination and further evaluation of a possible sleep if any of the symptoms each visit, discuss with parents the of the in a during any or procedure to the risk of cord and review the and symptoms of which include of and, on examination, increased deep Obtain history and perform a physical examination, for and Bright Futures schedule or more frequently if Bright Futures schedule or more frequently as indicated. Obtain a history and perform a physical examination.Monitor weight and follow trends at each health care visit. Review the child’s growth and plot it on the Down syndrome-specific charts for weight, and head These charts should be in with the Down syndrome-specific for children to age 10 and with the from the for and which is a of for children with Down syndrome the age of about any changes in respiratory symptoms with feeding and ensure adequate iron (see Supervision From Birth to 1 for and for evaluation (see Supervision From 1 to 1 for If ear disease appropriate hearing evaluation after evaluation by if available, at every health supervision visit or by a pediatric or with expertise in children with every 2 (see Supervision From 1 to 1 for the risk of with age “Health Supervision From 1 to for every 6 months if have been follow-up on the of history of a and either a of and or a of serum iron and at 1 year of age and (see Supervision From 1 to 1 for physician may iron for children with sleep problems and a (see Supervision From 1 to for at each health supervision visit (see Supervision From 1 to for children on a that review for symptoms to celiac disease at every health visit and if (see Supervision From 1 to for each visit, discuss with family the of for of the during any or careful history and physical examination, with to and should also be to contact their physician immediately for of symptoms of (see Supervision From 1 to for and care at each health care visit and refer to if (see Supervision From 1 to for caregivers to skills and appropriate in the home. for problems that with function in the or and are some of the common typically children may also for medical problems that can be associated with changes, including thyroid celiac and on the child’s age, the of the and the setting in which the When symptoms with refer to programs, services for care, or behavioral experienced in with children with special patients who have behavioral problems or in function for evaluation and (see Supervision From 1 to for that children with Down syndrome are frequently more sensitive to for the should be discussed between the primary care physician and in the child’s Although there has been to directly the use of children with Down syndrome, indicate that these children may in their response to has led to the to at the recommended and increase or the to the child’s symptoms of neurologic including and perform a neurologic symptoms to at every visit, including and abnormal sleep to a physician with expertise in pediatric or a pediatric sleep medicine any child with or symptoms of or abnormal results. with sleep problems and a may benefit from iron Discuss as a risk of sleep apnea and review need to and activity in affected patients (see Supervision From 1 to for Bright Futures schedule or more frequently as issues to the development and health of people with Down syndrome to be and for both health and topics have been in topics of great to the care of children with Down syndrome be enhanced through A review of screening and of atlantoaxial for is and is for the care for outcomes of people with Down A. A. A. American College of A. of and American College of Obstetricians and Gynecologists A. and and for and",
       "openalex_id": "W4223962902",
       "openalex_type": "article",
@@ -2876,6 +2861,30 @@
       "record_id": "cr_467357e865d5d845c72e86a3"
     },
     {
+      "title": "Challenge/Skill Balance, Flow, and Performance Anxiety",
+      "authors": [
+        "Clive Fullagar",
+        "Patrick A. Knight",
+        "Heather S. Sovern"
+      ],
+      "year": 2012,
+      "venue": "Applied Psychology",
+      "doi": "10.1111/j.1464-0597.2012.00494.x",
+      "citations": 185,
+      "abstract": "The study longitudinally tracked the relationship among challenge/skill balance, flow, and performance anxiety in 27 student musicians over the course of a semester as they worked toward a recital of a piece of music. Using hierarchical linear modeling, the balance between the challenge of a passage of music and the perceived skills necessary to play that music was found to be significantly and consistently correlated with optimal experience. Results of moderated multiple regression indicated that skill level moderated the relationship between challenge, flow, and performance anxiety. Results also indicated that flow and performance anxiety were antithetical experiences, such that when flow was highest, performance anxiety was lowest and vice versa. These findings are discussed in terms of the application of flow theory to understanding performance, and the practical implications for reducing task‐specific anxiety.",
+      "openalex_id": "W1683284848",
+      "openalex_type": "article",
+      "referenced_works_count": 59,
+      "categories": [],
+      "source_api": "openalex",
+      "search_angles": [
+        "canon",
+        "recent",
+        "critique"
+      ],
+      "record_id": "cr_b9d63cd22bfa66b0a07fa608"
+    },
+    {
       "title": "Policy capacity in public administration",
       "authors": [
         "B. Guy Peters"
@@ -2895,30 +2904,6 @@
         "recent"
       ],
       "record_id": "cr_f72bbb03c4a3a7ba84d35e99"
-    },
-    {
-      "title": "Challenge/Skill Balance, Flow, and Performance Anxiety",
-      "authors": [
-        "Clive Fullagar",
-        "Patrick A. Knight",
-        "Heather S. Sovern"
-      ],
-      "year": 2012,
-      "venue": "Applied Psychology",
-      "doi": "10.1111/j.1464-0597.2012.00494.x",
-      "citations": 184,
-      "abstract": "The study longitudinally tracked the relationship among challenge/skill balance, flow, and performance anxiety in 27 student musicians over the course of a semester as they worked toward a recital of a piece of music. Using hierarchical linear modeling, the balance between the challenge of a passage of music and the perceived skills necessary to play that music was found to be significantly and consistently correlated with optimal experience. Results of moderated multiple regression indicated that skill level moderated the relationship between challenge, flow, and performance anxiety. Results also indicated that flow and performance anxiety were antithetical experiences, such that when flow was highest, performance anxiety was lowest and vice versa. These findings are discussed in terms of the application of flow theory to understanding performance, and the practical implications for reducing task‐specific anxiety.",
-      "openalex_id": "W1683284848",
-      "openalex_type": "article",
-      "referenced_works_count": 59,
-      "categories": [],
-      "source_api": "openalex",
-      "search_angles": [
-        "canon",
-        "recent",
-        "critique"
-      ],
-      "record_id": "cr_b9d63cd22bfa66b0a07fa608"
     },
     {
       "title": "Predicting the Subjective Experience of Intrinsic Motivation: The Roles of Self-Determination, the Balance of Challenges and Skills, and Self-Realization Values",
@@ -3324,7 +3309,7 @@
       "year": 2019,
       "venue": "Computer Assisted Language Learning",
       "doi": "10.1080/09588221.2019.1619585",
-      "citations": 152,
+      "citations": 154,
       "abstract": "Although digital game-based vocabulary learning (DGBVL) has attracted considerable attention, factors attributing to the facilitative effects of DGBVL have not yet been satisfactorily understood. To this end, under the theoretical framework of flow theory, this study investigates the effects of flow experiences on Chinese English-as-a-foreign-language (EFL) learners’ learning outcomes. Specifically, this study explores the influences of learner factors (balance of skill and challenge, and clear goal) and contextual factors (feedback and playability) on learners’ flow experiences, such as concentration, intrinsic motivation and enjoyment. It also examines the effects of flow experiences on learners’ perceived learning and satisfaction. Based on a survey of 291 Chinese EFL learners who used a DGBVL APP (application) named Baicizhan, the results demonstrated that balance of skill and challenge, clear goal and playability provided by the DGBVL have a positive effect on concentration. Feedback positively influences intrinsic motivation. Moreover, both concentration and intrinsic motivation positively affect perceived learning and satisfaction, but enjoyment only positively influences perceived learning rather than satisfaction. Lastly, satisfaction is positively affected by perceived learning. Implications of the findings are also discussed.",
       "openalex_id": "W2948469271",
       "openalex_type": "article",
@@ -3345,7 +3330,7 @@
       "year": 2020,
       "venue": "Frontiers in Psychology",
       "doi": "10.3389/fpsyg.2020.00158",
-      "citations": 148,
+      "citations": 149,
       "abstract": "The \"flow\" experience (Csikszentmihalyi, 1975) has been the focus of a large body of empirical work spanning more than four decades. Nevertheless, advancement in understanding - beyond what Csikszentmihalyi uncovered during his initial breakthrough in 1975 - has been modest. In this conceptual analysis, it is argued that progress within the field has been impeded by a lack of consistency in how flow is operationalized, and that this inconsistency in part reflects an underlying confusion regarding what flow is. Flow operationalizations from papers published within the past 5 years are reviewed. Across the 42 reviewed studies, flow was operationalized in 24 distinct ways. Three specific points of inconsistency are then highlighted: (1) inconsistences in operationalizing flow as a continuous versus discrete construct, (2) inconsistencies in operationalizing flow as inherently enjoyable (i.e., \"autotelic\") or not, and (3) inconsistencies in operationalizing flow as dependent on versus distinct from the task characteristics proposed to elicit it (i.e., the conditions/antecedents). After tracing the origins of these discrepancies, the author argues that, in the interest of conceptual intelligibility, flow should be conceptualized and operationalized exclusively as a discrete, highly enjoyable, \"optimal\" state of consciousness, and that this state should be clearly distinguished from the conditions proposed to elicit it. He suggests that more mundane instances of goal-directed engagement are better conceived and operationalized as variations in task involvement rather than variations in flow. Additional ways to achieve greater conceptual and operational consistency within the field are suggested.",
       "openalex_id": "W3006267446",
       "openalex_type": "article",
@@ -3876,6 +3861,30 @@
       "record_id": "cr_b7e62b837327ad111fe3f29f"
     },
     {
+      "title": "Nursing resilience interventions–A way forward in challenging healthcare territories",
+      "authors": [
+        "Catherine Henshall",
+        "Zoe Davey",
+        "Debra Jackson"
+      ],
+      "year": 2020,
+      "venue": "Journal of Clinical Nursing",
+      "doi": "10.1111/jocn.15276",
+      "citations": 118,
+      "abstract": "Personal resilience has been conceptualised in many different ways; however, a common definition is that resilience is the ability to cope successfully despite adverse circumstances (Henshall, Davey, & Jackson, 2020). Historically, the term \"resilience\" encompasses both physiological and psychological aspects and the latter is personal to individuals, with some people having more developed strategies for personal resilience than others. Understandings of resilience vary between populations, contexts and cultures (McDonald, Jackson, Wilkes, & Vickers, 2012), with resilience being viewed in some cases as an inherent personality trait and in others as a dynamic process existing on a continuum between resilience and vulnerability. The former infers that some individuals are more vulnerable or \"do not have what it takes\" to overcome adversity (Masten, 1994), whereas the latter suggests that levels of individual resilience can ebb and flow depending on a person's contextual circumstances and environment (Rutter, 1985). This latter concept of resilience as a fluid process has implications for the way in which we consider resilience in the nursing workforce. The current very high demand for nurses, exacerbated by the COVID-19 pandemic, has really highlighted the need to ensure a robust and resilient workforce. Current and projected shortfalls in the number of nursing staff that are required for the delivery of high quality care, has compounded the challenge of responding, to better support staff in meeting increased healthcare demand. The pressure is on nurses to provide high quality, complex patient care within the context of scarcer resources in terms of staffing, infrastructure or financial reward (Burmeister et al., 2019), even in the context of major challenges such as those presented by a pandemic. In addition, nurses commonly experience incidences of workplace adversity that can challenge and impact on their levels of resilience (Hart, Brannan, & De Chesnay, 2014). Excessive workloads, increased use of casual staff, decreased autonomy, bullying, violence and almost continual organizational change have all been linked to workplace adversity, creating workplaces that can be experienced as hostile, unrewarding and even abusive by nurses. The need to meet service demands under highly pressured, and often suboptimal and even unsafe conditions combined with a lack of career structure or progression, can lead to registered nurses facing stress and burnout. This has resulted in many nurses leaving the workforce at a time when their skills, training and professionalism are most in need (Jackson, Firtko, & Edenborough, 2007; Jennings, 2008). In response to the increasing pressures facing nurses working within overstretched and under-resourced healthcare systems, building personal resilience has been identified as being essential in coping with work related stress and adversity, maintaining job satisfaction, engaging in self-care and helping to address problems with workforce retention and staff well-being (Foster et al., 2019; Slatyer, Craigie, Heritage, Davis, & Rees, 2017). Internationally, multiple resilience enhancement interventions have been developed and implemented in various settings (Craigie et al., 2016; Henshall et al., 2020; McDonald et al., 2012). However, whilst these interventions have been evaluated positively and have been shown to support personal resilience in the short-term, care must be taken to ensure that these interventions are not viewed as a panacea for the overarching problems facing healthcare services and the resultant challenges to those working within them. Rather, resilience enhancement interventions should be viewed as tools to underpin existing support structures, as a way of helping to promote and sustain resilience levels within the nursing workforce. Health services need to follow the lead of nurses who are investing in their own personal resilience strategies by providing appropriate system level interventions and support mechanisms; this will not only enhance the personal resilience of individuals, but will also enhance systems resilience in the longer term. The way in which the concept of resilience is framed within resilience-enhancing interventions is crucial in ensuring that nurses are not deterred from engaging with these interventions due to feeling judged or criticised by colleagues, peers or managers, or due to being deemed fragile, unable to cope or lacking in resilience. The purpose of resilience-enhancing interventions, as mechanisms for reflecting on, building and sustaining resilience needs to be clearly articulated so that nurses do not feel that enrolment on these courses is a sign of failure, incompetence or unworthiness. This may be especially true if nurses have recently been exposed to difficult or challenging situations at work, which may lead to them feeling that they are being exclusively targeted or selected for enrolment to improve their coping abilities. This is encapsualted in an excerpt from a recent study reporting on a workplace resilience enhancement intervention (Henshall et al., 2020). In this study, a nurse participant summarised their beliefs prior to the intervention about being selected to take part: \"I thought I was put on the Resilience Course because my manager didn't think I was resilient enough and that it was a shortfall in my performance\". However, once the participant was fully engaged in the program, this perspective shifted, with the participant describing the intervention as \"really helpful\" because of its focus on \"Caring for staff, trying to help you do your job better, and building with the other people there.\" Whether conceptualised as an inherent trait or a dynamic process, the vast majority of people entering the nursing profession display characteristics that are compatible with the concept of resilience from the outset, such as altruism, vocation, empathy and caring for others (Eley, Eley, & Rogers, 2010). From the onset of their nursing training student nurses are exposed to a range of clinical scenarios involving patients and clients with complex and diverse health and social care needs. This results in nurses' baseline resilience levels being buffeted, reshaped and reinforced due to rapid exposure to a range of new experiences which may challenge their previously held conceptions and beliefs, leading to almost continual self-reflection and self-critique, and can allow for qualities such as resilience, empathy, and compassion to be developed; such qualities continue to be continuously tested and reinforced throughout a nursing career. The stresses and strains associated with encountering challenging and difficult situations can be tempered by the satisfaction engendered through the intimacy of the nurse/patient relationship (Williams, 2001). However, the increasing environmental, financial, cultural, and social workplace pressures impacting on healthcare service provision means that the equilibrium between challenge and reward is becoming increasingly difficult to maintain. Increasingly, there are sacrifices in the quality of care that nurses are able to give to patients, because of pressures on the nursing workforce associated with staffing, vacancies, and increased demands on time. Nurses are central to the patient care pathway and are required to provide emotional, physical, psychological and social support to patients and their families at all times. However, little consideration is given as to the impact of the provision of this support on nurses' emotional well-being, or their ability to maintain a satisfactory work-life balance. Furthermore, limited provisions are in place to provide nurses with reciprocal emotional, physical, psychological and social support. Where these supports are place, for example through peer supervision, reflective practice or mentoring, they are often deprioritised or sacrificed at the expense of more immediate clinical demands. In response to the international retention and recruitment crises facing nurses, many healthcare systems are focusing on strategies to enhance and sustain the health and well-being of their clinical workforce (Buchan, Charlseworth, Gershlick, & Seccombe, 2019; Health Workforce Australia, 2014). One example of this is via the United Kingdom NHS National Retention Strategy, launched in 2017 to decrease nursing turnover rates in all hospital trusts (NHS Improvement, 2019); the strategy advocated for more investment in workplace based interventions and training, and the provision of additional mentoring support for nurses and other healthcare professionals. Whilst this is a welcome move, it is imperative that these initiatives are implemented across the whole career trajectory beginning at undergraduate level. Resilience in nursing must be viewed and acknowledged as a dynamic, fluid process that requires continuous nurturing and commitment, as well as adaptability and flexibility in the face of changing professional and personal requirements. In order for resilience enhancement interventions to be successful system level change is required at an organizational, cultural, team and managerial level. Resilience-enhancement programmes should be integrated into the overall well-being strategies of healthcare organisations as part of a larger, more comprehensive staff support strategy; these programmes should be evaluated to measure their short- and long-term impact and outcomes (Blake & Lloyd, 2008). Proactively addressing the need for nurses to maintain, preserve and build their resilience, may help to alleviate some of the retention and recruitment challenges facing nursing. In addition, taking better care of the nursing workforce has substantial implications in terms of increasing efficiency within healthcare systems and benefitting the quality and safety of patient care.",
+      "openalex_id": "W3013858721",
+      "openalex_type": "article",
+      "referenced_works_count": 14,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_15379878cfdfe14bb0e1f7c9"
+    },
+    {
       "title": "“Digital Well-Being”. Developing a New Theoretical Tool For Media Literacy Research",
       "authors": [
         "Marco Gui",
@@ -3968,6 +3977,27 @@
       "record_id": "cr_762fff1a4a80e7435b48201f"
     },
     {
+      "title": "An exploratory study using inexpensive electroencephalography (EEG) to understand flow experience in computer-based instruction",
+      "authors": [
+        "Chih‐Chien Wang",
+        "Ming-Chang Hsu"
+      ],
+      "year": 2014,
+      "venue": "Information & Management",
+      "doi": "10.1016/j.im.2014.05.010",
+      "citations": 104,
+      "abstract": null,
+      "openalex_id": "W1988729248",
+      "openalex_type": "article",
+      "referenced_works_count": 86,
+      "categories": [],
+      "source_api": "openalex",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_a07cc3db797b9a8d5d50c23e"
+    },
+    {
       "title": "Carers’ experiences of involvement in care planning: a qualitative exploration of the facilitators and barriers to engagement with mental health services",
       "authors": [
         "Lindsey Cree",
@@ -4012,27 +4042,6 @@
         "canon"
       ],
       "record_id": "cr_3ea2e9d9e912a677f85d8ed5"
-    },
-    {
-      "title": "An exploratory study using inexpensive electroencephalography (EEG) to understand flow experience in computer-based instruction",
-      "authors": [
-        "Chih‐Chien Wang",
-        "Ming-Chang Hsu"
-      ],
-      "year": 2014,
-      "venue": "Information & Management",
-      "doi": "10.1016/j.im.2014.05.010",
-      "citations": 103,
-      "abstract": null,
-      "openalex_id": "W1988729248",
-      "openalex_type": "article",
-      "referenced_works_count": 86,
-      "categories": [],
-      "source_api": "openalex",
-      "search_angles": [
-        "canon"
-      ],
-      "record_id": "cr_a07cc3db797b9a8d5d50c23e"
     },
     {
       "title": "AgriColMap: Aerial-Ground Collaborative 3D Mapping for Precision Farming",
@@ -4757,7 +4766,7 @@
       "year": 2022,
       "venue": "Frontiers in Psychology",
       "doi": "10.3389/fpsyg.2021.807084",
-      "citations": 70,
+      "citations": 71,
       "abstract": "Built on the integrated theoretical framework of antecedents of flow and expectation confirmation model (ECM), this research investigates the way flow experience drives the online students' intention to engage in online English teaching platforms. This study focused on the online students engaged in online English learning platforms in Taiwan. A total of 500 online students were selected. An online survey was conducted with the help of a marketing research agency located in Taiwan. According to the results, the online students' flow experience was found to be in a significant relationship with continuous intention. The antecedents, including perceived enjoyment, challenge, and situational involvement, were found to be in a positive relationship with flow experience; however, confirmation and perceived vividness did not have significant effects on the flow. Furthermore, flow and confirmation were found to be in a significant relationship with perceived usefulness and satisfaction. Moreover, perceived usefulness was found to be in a significant relationship with satisfaction and continuous intention. Lastly, satisfaction was found to be in a significant relationship with continuous intention. Finally, the questions proposed in this research with their empirical findings offer profound understanding for establishing a well-devised online English learning platform that can motivate online learning. These results and managerial implications for online English language platforms are innovative and significant in practice.",
       "openalex_id": "W4210853942",
       "openalex_type": "article",
@@ -19597,6 +19606,31 @@
         "boundary"
       ],
       "record_id": "cr_be8f2d7d05a778ff37147c7d"
+    },
+    {
+      "title": "Flow Experience in the Chinese Blended Classroom: How Students and Teachers Shape English Success",
+      "authors": [
+        "A. Shorouk",
+        "Liu Jing",
+        "Meshari Alharthi",
+        "Esayas Teshome Taddese"
+      ],
+      "year": 2026,
+      "venue": "World Journal of English Language",
+      "doi": "10.5430/wjel.v16n6p466",
+      "citations": 0,
+      "abstract": "While blended learning has become increasingly institutionalised in Chinese higher education, low academic performance in English and limited participation in English-Medium Instruction (EMI) environments remain significant concerns. Although much has been researched on technological integration and linguistic challenges, little research has examined the interaction of student- and teacher-related factors to foster a flow experience and, subsequently, improve academic performance in English. This research is based on the Flow Theory (Csikszentmihalyi, 1990), which examines direct and mediated relationships among student and teacher factors, flow experience, and English academic performance within a Chinese blended classroom context. The sample data were gathered from 165 non-English majors, both first- and second-year undergraduates enrolled in mandatory College English classes, using purposive sampling. A structured questionnaire comprising 38 questions was developed and administered, and the data were analysed using Partial Least Squares Structural Equation Modelling (PLS-SEM). The results show that student- and teacher-related factors have significant positive direct effects on English academic performance. The results of the flow experience are notably large and positive, and flow experience partially mediates the relationships between students’ and teachers’ factors and academic outcomes. The findings provide empirical support for the challenge-skill balance hypothesis of Flow Theory, demonstrating how the joint influence of the learners’ capabilities and the instructional requirements leads to optimal psychological involvement. The study contributes to existing knowledge by incorporating variables related to learners and instruction into a single structural model, which will help understand how psychological immersion can be applied to English language success within a blended higher education setting.",
+      "openalex_id": "W7212190422",
+      "openalex_type": "article",
+      "referenced_works_count": 0,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_065f04f30ca22817d3e580db"
     },
     {
       "title": "Flow in Everyday Life: Activity Domains, Individual Differences, and Wellbeing Outcomes",
