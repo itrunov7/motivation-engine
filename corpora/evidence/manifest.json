@@ -6,28 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-09-21T15:25:47.866Z",
-    "status": "partial",
+    "timestamp": "2026-09-21T15:27:36.738Z",
+    "status": "success",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 953,
     "files_written": 1,
-    "duration_s": 45.56,
-    "error": "search openalex canon \"flow experience challenge skill balance\": api.openalex.org upstream cooldown is 30925s; checkpoint and resume later",
+    "duration_s": 44.78,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 45,
-      "duration_s": 45.56,
+      "duration_s": 44.78,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-09-21T15:27:36.738Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 953,
+      "files_written": 1,
+      "duration_s": 44.78,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 45,
+        "duration_s": 44.78,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-09-21T15:25:47.866Z",
       "status": "partial",
@@ -432,27 +452,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-09-21T14:18:51.359Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 948,
-      "files_written": 1,
-      "duration_s": 77.58,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 45,
-        "duration_s": 77.58,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -531,7 +530,7 @@
     {
       "path": "FL-24.json",
       "records": 953,
-      "bytes": 7961982,
+      "bytes": 7961269,
       "categories": {
         "foundational": 34,
         "meta-analysis": 26,
