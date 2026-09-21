@@ -6,27 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-09-21T14:30:38.974Z",
-    "status": "success",
+    "timestamp": "2026-09-21T14:33:03.244Z",
+    "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 952,
     "files_written": 1,
-    "duration_s": 74.27,
+    "duration_s": 222.46,
+    "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex application \"flow experience challenge skill balance applied intervention\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 46,
-      "duration_s": 74.27,
+      "api_calls": 53,
+      "duration_s": 222.46,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-09-21T14:33:03.244Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 952,
+      "files_written": 1,
+      "duration_s": 222.46,
+      "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex application \"flow experience challenge skill balance applied intervention\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 53,
+        "duration_s": 222.46,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-09-21T14:30:38.974Z",
       "status": "success",
@@ -425,27 +448,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-09-21T13:50:25.452Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 948,
-      "files_written": 1,
-      "duration_s": 44.61,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 44,
-        "duration_s": 44.61,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -524,7 +526,7 @@
     {
       "path": "FL-24.json",
       "records": 952,
-      "bytes": 7950339,
+      "bytes": 7951564,
       "categories": {
         "foundational": 34,
         "meta-analysis": 26,
