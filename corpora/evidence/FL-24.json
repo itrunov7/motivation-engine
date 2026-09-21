@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-09-21T14:36:45.656Z",
+  "fetched_at": "2026-09-21T14:49:13.178Z",
   "terms_source": "record",
   "terms": [
     "flow experience challenge skill balance",
@@ -48,12 +48,12 @@
       "bucket": "citation",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 824
+      "upstream_total_results": null
     },
     {
       "query_id": "graph:backward-reference:W1683284848",
@@ -80,36 +80,6 @@
       "requested": 25,
       "returned": 3,
       "unique_returned": 3,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W2020443333",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "“I Feel Present. Therefore, I Experience Flow:” A Structural Equation Modeling Approach to Flow and Presence in Video Games",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 3,
-      "unique_returned": 3,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W2020443333",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "“I Feel Present. Therefore, I Experience Flow:” A Structural Equation Modeling Approach to Flow and Presence in Video Games",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
@@ -172,7 +142,7 @@
       "unique_returned": 11,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
@@ -187,7 +157,7 @@
       "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
@@ -202,7 +172,7 @@
       "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
@@ -408,12 +378,12 @@
       "bucket": "recency",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 23,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 824
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance",
@@ -421,21 +391,6 @@
       "angle": "recent",
       "term": "flow experience challenge skill balance",
       "bucket": "citation",
-      "kind": "search",
-      "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 824
-    },
-    {
-      "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance applied intervention",
-      "api": "openalex",
-      "angle": "application",
-      "term": "flow experience challenge skill balance applied intervention",
-      "bucket": "relevance",
       "kind": "search",
       "requested": 25,
       "returned": 0,
@@ -446,25 +401,100 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W7212190422",
+      "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance applied intervention",
       "api": "openalex",
-      "angle": "recent",
-      "term": "Flow Experience in the Chinese Blended Classroom: How Students and Teachers Shape English Success",
+      "angle": "application",
+      "term": "flow experience challenge skill balance applied intervention",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 25,
+      "records_added": 1,
+      "novelty_rate": 0.04,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": 37
+    },
+    {
+      "query_id": "search:recency:openalex:application:p1:flow experience challenge skill balance applied intervention",
+      "api": "openalex",
+      "angle": "application",
+      "term": "flow experience challenge skill balance applied intervention",
+      "bucket": "recency",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 24,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": 37
+    },
+    {
+      "query_id": "search:citation:openalex:application:p1:flow experience challenge skill balance applied intervention",
+      "api": "openalex",
+      "angle": "application",
+      "term": "flow experience challenge skill balance applied intervention",
+      "bucket": "citation",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 24,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": 37
+    },
+    {
+      "query_id": "graph:backward-reference:W2905435317",
+      "api": "openalex",
+      "angle": "application",
+      "term": "Effect of adjusting the challenge–skill balance for occupational therapy: study protocol for a randomised controlled trial",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 1,
+      "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W7212190422",
+      "query_id": "graph:forward-citation:W2905435317",
       "api": "openalex",
-      "angle": "recent",
-      "term": "Flow Experience in the Chinese Blended Classroom: How Students and Teachers Shape English Success",
+      "angle": "application",
+      "term": "Effect of adjusting the challenge–skill balance for occupational therapy: study protocol for a randomised controlled trial",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 5,
+      "unique_returned": 5,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W40588719",
+      "api": "openalex",
+      "angle": "application",
+      "term": "Propensity and attainment of flow state",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W40588719",
+      "api": "openalex",
+      "angle": "application",
+      "term": "Propensity and attainment of flow state",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
@@ -472,23 +502,23 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W7204854129",
-      "api": "openalex",
-      "angle": "recent",
-      "term": "Examination of Dispositional Flow State and Self-Esteem of University Students Who Do Sport and Exercise",
-      "bucket": "citation",
-      "kind": "backward-reference",
+      "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance critique criticism",
+      "api": "semantic-scholar",
+      "angle": "critique",
+      "term": "flow experience challenge skill balance critique criticism",
+      "bucket": "relevance",
+      "kind": "search",
       "requested": 25,
-      "returned": 4,
-      "unique_returned": 4,
+      "returned": 25,
+      "unique_returned": 25,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": 602
     }
   ],
   "coverage_report": {
@@ -529,51 +559,57 @@
       {
         "angle": "canon",
         "queries": 3,
-        "returned": 50,
-        "unique_records": 33
+        "returned": 25,
+        "unique_records": 25
       },
       {
         "angle": "recent",
         "queries": 3,
-        "returned": 75,
-        "unique_records": 67
+        "returned": 25,
+        "unique_records": 25
       },
       {
         "angle": "application",
-        "queries": 1,
-        "returned": 0,
-        "unique_records": 0
-      }
-    ],
-    "source_spread": [
-      {
-        "api": "openalex",
-        "queries": 6,
-        "returned": 100,
-        "unique_records": 56
+        "queries": 3,
+        "returned": 75,
+        "unique_records": 33
       },
       {
-        "api": "semantic-scholar",
+        "angle": "critique",
         "queries": 1,
         "returned": 25,
         "unique_records": 25
       }
     ],
-    "recent_records": 34,
-    "recency_rate": 0.4595,
+    "source_spread": [
+      {
+        "api": "openalex",
+        "queries": 8,
+        "returned": 100,
+        "unique_records": 58
+      },
+      {
+        "api": "semantic-scholar",
+        "queries": 2,
+        "returned": 50,
+        "unique_records": 33
+      }
+    ],
+    "recent_records": 27,
+    "recency_rate": 0.3253,
     "novelty": {
       "previous_corpus_records": 952,
-      "unique_records": 74,
-      "already_in_corpus": 74,
-      "new_records": 0,
-      "novelty_rate": 0,
+      "unique_records": 83,
+      "already_in_corpus": 82,
+      "new_records": 1,
+      "novelty_rate": 0.012,
       "low_novelty": true,
       "known_share_threshold": 0.8
     }
   },
   "saturation_report": {
     "queries_issued": 30,
-    "records_added": 0,
+    "records_added": 1,
     "novelty_curve": [
       {
         "query_index": 1,
@@ -589,18 +625,6 @@
       },
       {
         "query_index": 2,
-        "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
-        "bucket": "citation",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 952
-      },
-      {
-        "query_index": 3,
         "query_id": "graph:backward-reference:W1683284848",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -612,7 +636,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 4,
+        "query_index": 3,
         "query_id": "graph:forward-citation:W1683284848",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -624,31 +648,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 5,
-        "query_id": "graph:backward-reference:W2020443333",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 3,
-        "unique_returned": 3,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 952
-      },
-      {
-        "query_index": 6,
-        "query_id": "graph:forward-citation:W2020443333",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 952
-      },
-      {
-        "query_index": 7,
+        "query_index": 4,
         "query_id": "graph:backward-reference:W2042314632",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -660,7 +660,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 8,
+        "query_index": 5,
         "query_id": "graph:forward-citation:W2042314632",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -672,7 +672,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 9,
+        "query_index": 6,
         "query_id": "graph:backward-reference:W3046829123",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -684,7 +684,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 10,
+        "query_index": 7,
         "query_id": "graph:forward-citation:W3046829123",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -692,11 +692,11 @@
         "unique_returned": 11,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
+        "rolling_novelty_rate": null,
         "cumulative_records": 952
       },
       {
-        "query_index": 11,
+        "query_index": 8,
         "query_id": "graph:backward-reference:W4221001939",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -704,11 +704,11 @@
         "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
+        "rolling_novelty_rate": null,
         "cumulative_records": 952
       },
       {
-        "query_index": 12,
+        "query_index": 9,
         "query_id": "graph:forward-citation:W4221001939",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -716,11 +716,11 @@
         "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
+        "rolling_novelty_rate": null,
         "cumulative_records": 952
       },
       {
-        "query_index": 13,
+        "query_index": 10,
         "query_id": "graph:backward-reference:W279868603",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -732,7 +732,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 14,
+        "query_index": 11,
         "query_id": "graph:forward-citation:W279868603",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -744,7 +744,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 15,
+        "query_index": 12,
         "query_id": "graph:backward-reference:W2419624448",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -756,7 +756,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 16,
+        "query_index": 13,
         "query_id": "graph:forward-citation:W2419624448",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -768,7 +768,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 17,
+        "query_index": 14,
         "query_id": "graph:backward-reference:W2100919822",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -780,7 +780,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 18,
+        "query_index": 15,
         "query_id": "graph:forward-citation:W2100919822",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -792,7 +792,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 19,
+        "query_index": 16,
         "query_id": "graph:backward-reference:W2948469271",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -804,7 +804,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 20,
+        "query_index": 17,
         "query_id": "graph:forward-citation:W2948469271",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -816,7 +816,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 21,
+        "query_index": 18,
         "query_id": "graph:backward-reference:W2991104879",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -828,7 +828,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 22,
+        "query_index": 19,
         "query_id": "graph:forward-citation:W2991104879",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -840,7 +840,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 23,
+        "query_index": 20,
         "query_id": "graph:backward-reference:W3091919961",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -852,7 +852,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 24,
+        "query_index": 21,
         "query_id": "graph:forward-citation:W3091919961",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -864,7 +864,7 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 25,
+        "query_index": 22,
         "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance",
         "bucket": "relevance",
         "kind": "search",
@@ -876,86 +876,122 @@
         "cumulative_records": 952
       },
       {
-        "query_index": 26,
-        "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance",
-        "bucket": "recency",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 23,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 952
-      },
-      {
-        "query_index": 27,
-        "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance",
-        "bucket": "citation",
+        "query_index": 23,
+        "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance applied intervention",
+        "bucket": "relevance",
         "kind": "search",
         "returned": 25,
         "unique_returned": 25,
+        "records_added": 1,
+        "novelty_rate": 0.04,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 24,
+        "query_id": "search:recency:openalex:application:p1:flow experience challenge skill balance applied intervention",
+        "bucket": "recency",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 24,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 952
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 25,
+        "query_id": "search:citation:openalex:application:p1:flow experience challenge skill balance applied intervention",
+        "bucket": "citation",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 24,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 26,
+        "query_id": "graph:backward-reference:W2905435317",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 27,
+        "query_id": "graph:forward-citation:W2905435317",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 5,
+        "unique_returned": 5,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 953
       },
       {
         "query_index": 28,
-        "query_id": "graph:backward-reference:W7212190422",
+        "query_id": "graph:backward-reference:W40588719",
         "bucket": "citation",
         "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 952
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 953
       },
       {
         "query_index": 29,
-        "query_id": "graph:forward-citation:W7212190422",
+        "query_id": "graph:forward-citation:W40588719",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 952
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 953
       },
       {
         "query_index": 30,
-        "query_id": "graph:backward-reference:W7204854129",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 4,
-        "unique_returned": 4,
+        "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance critique criticism",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 952
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 953
       }
     ],
     "window_queries": 10,
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 3,
-      "recency": 2,
-      "citation": 2
+      "relevance": 4,
+      "recency": 3,
+      "citation": 3
     },
-    "topical_candidates": 61,
-    "topical_confirmed": 20,
-    "topical_rejected": 41,
-    "topical_confirmation_rate": 0.3279,
-    "graph_anchors_expanded": 13,
+    "topical_candidates": 95,
+    "topical_confirmed": 12,
+    "topical_rejected": 83,
+    "topical_confirmation_rate": 0.1263,
+    "graph_anchors_expanded": 12,
     "field_union_estimate": {
-      "estimate": 6041,
+      "estimate": 5573,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 2,
-      "total_search_queries": 5,
-      "summed_upstream_results": 6612,
-      "observed_sample_multiplicity": 1.0946
+      "measured_queries": 4,
+      "total_search_queries": 6,
+      "summed_upstream_results": 7251,
+      "observed_sample_multiplicity": 1.3012
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -5796,6 +5832,35 @@
       "record_id": "cr_0cada7087f32f2d5383a3eda"
     },
     {
+      "title": "Getting into a “Flow” state: a systematic review of flow experience in neurological diseases",
+      "authors": [
+        "Beatrice Ottiger",
+        "Erwin E. H. van Wegen",
+        "Katja Keller",
+        "Tobias Nef",
+        "Thomas Nyffeler",
+        "Gert Kwakkel",
+        "Tim Vanbellingen"
+      ],
+      "year": 2021,
+      "venue": "Journal of NeuroEngineering and Rehabilitation",
+      "doi": "10.1186/s12984-021-00864-w",
+      "citations": 50,
+      "abstract": "BACKGROUND: Flow is a subjective psychological state that people report when they are fully involved in an activity to the point of forgetting time and their surrounding except the activity itself. Being in flow during physical/cognitive rehabilitation may have a considerable impact on functional outcome, especially when patients with neurological diseases engage in exercises using robotics, virtual/augmented reality, or serious games on tablets/computer. When developing new therapy games, measuring flow experience can indicate whether the game motivates one to train. The purpose of this study was to identify and systematically review current literature on flow experience assessed in patients with stroke, traumatic brain injury, multiple sclerosis and Parkinson's disease. Additionally, we critically appraised, compared and summarized the measurement properties of self-reported flow questionnaires used in neurorehabilitation setting. DESIGN: A systematic review using PRISMA and COSMIN guidelines. METHODS: MEDLINE Ovid, EMBASE Ovid, CINAHL EBSCO, SCOPUS were searched. Inclusion criteria were (1) peer-reviewed studies that (2) focused on the investigation of flow experience in (3) patients with neurological diseases (i.e., stroke, traumatic brain injury, multiple sclerosis and/or Parkinson's disease). A qualitative data synthesis was performed to present the measurement properties of the used flow questionnaires. RESULTS: Ten studies out of 911 records met the inclusion criteria. Seven studies measured flow in the context of serious games in patients with stroke, traumatic brain injury, multiple sclerosis and Parkinson's disease. Three studies assessed flow in other activities than gaming (song-writing intervention and activities of daily living). Six different flow questionnaires were used, all of which were originally validated in healthy people. None of the studies presented psychometric data in their respective research population. CONCLUSION: The present review indicates that flow experience is increasingly measured in the physical/cognitive rehabilitation setting in patients with neurological diseases. However, psychometric properties of used flow questionnaires are lacking. For exergame developers working in the field of physical/cognitive rehabilitation in patients with neurological diseases, a valid flow questionnaire can help to further optimize the content of the games so that optimal engagement can occur during the gameplay. Whether flow experiences can ultimately have positive effects on physical/cognitive parameters needs further study.",
+      "openalex_id": "W3156027704",
+      "openalex_type": "review",
+      "referenced_works_count": 74,
+      "categories": [
+        "meta-analysis",
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2905435317"
+      ],
+      "record_id": "cr_079b21ccf089521b2e74a1b6"
+    },
+    {
       "title": "Intrapartum ultrasound",
       "authors": [
         "David M. Sherer"
@@ -5817,35 +5882,6 @@
         "replication"
       ],
       "record_id": "cr_1645e9c565642cc918510d10"
-    },
-    {
-      "title": "Getting into a “Flow” state: a systematic review of flow experience in neurological diseases",
-      "authors": [
-        "Beatrice Ottiger",
-        "Erwin E. H. van Wegen",
-        "Katja Keller",
-        "Tobias Nef",
-        "Thomas Nyffeler",
-        "Gert Kwakkel",
-        "Tim Vanbellingen"
-      ],
-      "year": 2021,
-      "venue": "Journal of NeuroEngineering and Rehabilitation",
-      "doi": "10.1186/s12984-021-00864-w",
-      "citations": 49,
-      "abstract": "BACKGROUND: Flow is a subjective psychological state that people report when they are fully involved in an activity to the point of forgetting time and their surrounding except the activity itself. Being in flow during physical/cognitive rehabilitation may have a considerable impact on functional outcome, especially when patients with neurological diseases engage in exercises using robotics, virtual/augmented reality, or serious games on tablets/computer. When developing new therapy games, measuring flow experience can indicate whether the game motivates one to train. The purpose of this study was to identify and systematically review current literature on flow experience assessed in patients with stroke, traumatic brain injury, multiple sclerosis and Parkinson's disease. Additionally, we critically appraised, compared and summarized the measurement properties of self-reported flow questionnaires used in neurorehabilitation setting. DESIGN: A systematic review using PRISMA and COSMIN guidelines. METHODS: MEDLINE Ovid, EMBASE Ovid, CINAHL EBSCO, SCOPUS were searched. Inclusion criteria were (1) peer-reviewed studies that (2) focused on the investigation of flow experience in (3) patients with neurological diseases (i.e., stroke, traumatic brain injury, multiple sclerosis and/or Parkinson's disease). A qualitative data synthesis was performed to present the measurement properties of the used flow questionnaires. RESULTS: Ten studies out of 911 records met the inclusion criteria. Seven studies measured flow in the context of serious games in patients with stroke, traumatic brain injury, multiple sclerosis and Parkinson's disease. Three studies assessed flow in other activities than gaming (song-writing intervention and activities of daily living). Six different flow questionnaires were used, all of which were originally validated in healthy people. None of the studies presented psychometric data in their respective research population. CONCLUSION: The present review indicates that flow experience is increasingly measured in the physical/cognitive rehabilitation setting in patients with neurological diseases. However, psychometric properties of used flow questionnaires are lacking. For exergame developers working in the field of physical/cognitive rehabilitation in patients with neurological diseases, a valid flow questionnaire can help to further optimize the content of the games so that optimal engagement can occur during the gameplay. Whether flow experiences can ultimately have positive effects on physical/cognitive parameters needs further study.",
-      "openalex_id": "W3156027704",
-      "openalex_type": "review",
-      "referenced_works_count": 74,
-      "categories": [
-        "meta-analysis",
-        "recent"
-      ],
-      "source_api": "snowball",
-      "snowball_from": [
-        "W2905435317"
-      ],
-      "record_id": "cr_079b21ccf089521b2e74a1b6"
     },
     {
       "title": "Healthy Islands in the Western Pacific--international settings development",
@@ -8474,6 +8510,29 @@
       "record_id": "cr_1439e6ee9ec8023c0990cfb0"
     },
     {
+      "title": "Picturing Race in the British National Health Service, 1948-1988",
+      "authors": [
+        "Roberta Bivins"
+      ],
+      "year": 2016,
+      "venue": "Twentieth Century British History",
+      "doi": "10.1093/tcbh/hww059",
+      "citations": 19,
+      "abstract": "In 1970, Harold Evans, the respected editor of Britain’s best-selling Sunday broadsheet the Sunday Times from 1967 to 1981, roundly reproached his fellow journalists for their reporting of ‘race’. Writing for the resolutely middle-brow The Listener magazine (published from 1929 to 1991 by the British Broadcasting Corporation [BBC] since 1929 to accompany and amplify the national broadcaster’s educational and cultural mission), Evans asserted that ‘the way race is reported can uniquely affect the reality of the subject itself’. In the matter of race, he observed, the newspapers did far more than fulfil their ‘traditional’ role as a ‘mirror of society’. Instead, ‘stealthily in Britain, the malformed seeds of prejudice have been watered by a rain of false statistics and stories’.1 Evans, famously a supporter of US-style campaigning investigative journalism, applied similar techniques to excoriate his fellow journalists. Focusing closely on the language in which stories about non-white migrants and racialized ethnic minorities were reported, he condemned rhetoric portraying migrants as ‘pouring in’ and Britain as being ‘overrun’. Evans also drew attention to the striking inconsistency with which information about (perceived) race or ethnicity was reported. As the ‘most spectacular’ evidence of such dangerous ‘selectivity’ he pointed to the conservative broadsheet, the Daily Telegraph. On 1 March 1969, that paper headlined a coroner’s criticisms of a doctor prominently identified by the Telegraph as ‘Pakistani-born’. Yet only inches below, the paper ignored the Asian ethnicity of another doctor (Dr. Hassam Gareeboo) whose heroics saved an infant’s life.2 Using another medical story—press coverage of 1961–2 outbreak of smallpox traced to a number of migrants from Pakistan—Evans highlighted the influential role played by press photography in shaping interpretation of the news. Referring to work by the sociologist Eric Butterworth, Evans walked his readers through the exploitation of the outbreaks by an anti-immigration regional newspaper. The Yorkshire Post, he claimed, deliberately fostered the impression of ‘a conflict of interest’ between ‘immigrants’ (in fact, British subjects moving entirely legally to the UK from its colonies and Commonwealth) and the local population, not least by portraying a smiling, recently arrived Pakistani migrant next to an unsupported claim that ‘Pakistani smallpox papers can be forged’ to generate the impression that ‘immigrants did not care about the risks to which they exposed local people’.3 It is not a coincidence that when Evans turned his attention to the reporting of race in Britain, stories with medical subjects sprang to mind. While the impact of ‘coloured’ immigration on access to housing and employment featured most strongly in popular expressions of discontent, health was not far behind. The advent of the National Health Service (NHS) in 1948 coincided almost exactly with the post-war mass movement to Britain of once-colonial populations from the ‘New Commonwealth’ and thus with the emergence of what became known as the ‘colour problem’. Moreover, concern about the supposed or presumed health impacts of mass migration was strengthened by (sporadic and often self-contradictory) official endorsement.4 As Evans asserted in his rebuke, discussions of ‘immigration’—discussions which rarely differentiated between migrating British subjects and immigrating aliens—in post-war Britain routinely employed highly provocative language, accompanied by images intended to inflame. And while racialized migrants were present in large numbers in a variety of industries and were notably visible in public transport services by the 1960s,5 it was their work in the NHS that was most frequently visualized in the press. This article argues that in relation to both the NHS and non-white immigration, such visual material often revealed assumptions and expectations that were either too uncomfortable or too thoroughly normalized to be made otherwise explicit. Evans’ attention to news photography and the suggestive associations created between images and texts on the terrain of the printed page was fleeting if insightful. He devoted far more attention to the rhetoric of race than to its visual representation. Until the last decade, mainstream historical scholarship on race and immigration in post-war Britain has been similarly transfixed by text.6 Only with the emergence of a body of scholarship examining the impacts of empire on the British home nations themselves and the growth of interdisciplinary research on visual cultures, has the balance begun to shift towards increasing attention to visual representations, particularly in cinematography and the broadcast media.7 Less attention has been paid to the images, photographic and editorial, that accompanied press coverage of ‘race relations’ and immigration, a lacuna which this article will begin to redress. Even in recent innovative work exploring the creation and interpretation of a welfare state that was both ‘post-war’ and ‘post-colonial’, linguistic representations of race, ethnicity, empire and decolonization retain their largely unchallenged centrality.8 Moreover, relatively few historians have examined British racial discourses through the lens of specifically medical events, institutions and phenomena.9 Yet as Evans’ commentary indicates, such events and sites both prompted and stimulated debates about the very fabric of identity in post-imperial Britain. Here, I will argue that close scrutiny of visual representations of racialized minorities in the NHS can shed new light on British attitudes towards race, ethnicity and belonging in the post-war period. While some images of this intersection are propagandist, candid, opportunistic, or even accidental, particularly in photojournalism and the broadcast media, others are explicitly humorous, ironic, or satirical, most notably a rich seam of editorial cartoons. The latter in particular explicitly use images of racialized bodies and situations in the NHS to comment on and critique social attitudes towards immigration in a welfare state. This article will use visual representations of white and non-white figures in the context of the NHS to explore perceptions of race and ethnicity, and attitudes towards racism in post-war Britain.10 In an initial discussion of the wider British context, it considers the value of editorial cartoons and news photography as tools offering traction on implicit or assumed truths about the NHS. Subsequent sections examine depictions—initially photographic, then in editorial cartoons and for comparison in broadcast and newsreel footage—of non-white nurses, doctors and, largely in absentia, patients. These establish the importance of the NHS as a site in which racial and ethnic inclusion and British diversity could be recognized and portrayed. Little explored by historians, these sources allow consideration of the roles played by both humour and visuality in shaping and expressing responses to human difference understood through the lens of ‘race’. In representing or obscuring racialized figures at work in an institution often regarded as embodying core national values, editorial cartoons and the editorial selection of photographic images deployed visibility itself very deliberately to encode, interpret and challenge attitudes towards such difference in the wider society. The contemporary conflation of skin colour and cultural identity made such work possible, and is correspondingly at the heart of the analysis below. Close reading of specific images also sheds new light on the NHS as an institution imbued with meaning in and for British culture. Since 1948, the language of the British NHS has been both possessive and inclusive. Pamphlets, films and other propaganda introduced the service to the population as ‘your’ NHS, and stressed that it was available to ‘everyone—rich or poor, man, woman or child’.11 In doing so, documentary sources and political rhetoric reflect and support the ideals of universalism and ‘equalitarianism’ so often associated with the immediately post-war period.12 However, if the language of the NHS and in its of press and images of the NHS a by the national media, the of or the of the NHS in its almost white and British and In these and of the new services the and to the British public from and and from the the visual the contemporary and of the NHS, very that the possessive by the and was assumed and intended to be a that even in 1948 did not was in this In from 1948 to British of its colonies and and on the of the nations the of British with and a British population of non-white in historians have the of this largely population at by rarely in such figures at the the diversity of Britain’s and immediately post-war population was by the of and and 1948 and they were by some migrants from the and also the and migrant numbers were not migrants from Britain’s colonies and colonies were to and that reported a population of ‘New Commonwealth’ Yet the subjects frequently in other Britain’s ethnic played visible role in official of the new NHS in its and the NHS a service by and to the they explicitly to to their However, in a documentary broadcast of a that an of a non-white service as as a a of or in a the and this have official popular racism through a of public Only a the medical introduced a played by became the to be in a UK by it its the by And by the it was either to or to or and both and the NHS that of expectations about health and to medical of new of new sites of and new of between recent and to the visibility of Britain’s increasing human diversity in the service of the as the of mass migration from Britain’s colonies and the nations of the ‘New the its and at on 1948, only the NHS As British the were immediately to NHS The have been as their the of a largely population of migrants and and and Asian migrants and from the and and migrants and from the historical of the British or or these prompted humour and and In relation to the NHS, they often of and about the of the NHS by the UK specifically to themselves of its new health services the of the Health the that in particular and the NHS were Yet some of the also became of care and of the of the Service and of its on These and and the other on doctors and representations of the intersection between post-war migration and the NHS from its also between visual and discourses of racialized migration in this of almost of and have the of the migrant as a of and post-war Britain was However, while the and was in this was rarely in In the migrant of the NHS were and particularly in news photography and editorial cartoons. to both the and the of and Asian NHS as have most migrants were in in relation to they made use of the most and NHS the from the and through to the about Britain’s racial diversity were by about the emergence and of popular least in relation to the NHS, evidence that the latter the creation of images on its while the of visual representations that such explicitly by their As the political made some migrants and social specifically their itself as both and either to migrants or to the wider sociologist identified this visual as of particular to social skin colour became ‘the and visible of as an and that was of its as to more or and the of of In the social British to the of the while asserted that their visible could both and These both and wider race in Britain. In for the of a of in the that the of of the was a Instead, of the is that can that a is from this is not so in the of an an or even an He explicitly of the visible in support of his The that visibility could the emergence and of racial and in and to which the of is not became the of the It discussions of British and was by and at least in press It is not a coincidence that the most frequently to migrants from Britain’s colonies and from the to the was that the and ‘coloured’ became in both political and As observed, the immigration about the ‘colour ‘the can so be The attention paid to the visual of skin did not the of it as a for the of cultural and linguistic that these it is in this on the visibility of migrants from Britain’s colonies and empire that a on the and of racialized human often as in explicitly and institutions the Here, editorial cartoons and humour in particular are historical since their to and to the with which their the public and their of and even This latter is in cartoons race and race in the post-war period. and have the importance of humour as ‘a through which highly and could be for In Britain, few were either as or as as cartoons and other of visual humour could challenge social did so in with their Writing in the editorial that or were in the post-war by the the the also by public Moreover, as the from their while it as a social to images in this medical context also the importance of visual evidence as a of in the health in relation to the of the post-war visual evidence of health or in the of was the British and for the medical of migrants either to the UK or on at British uniquely the that visual particularly evidence of Moreover, medical responses to non-white immigration and ethnic frequently their as visible and for or while on these was also highly to striking the or of the migrants and their Yet the with their access to and on the as a and an of the largely and few of non-white in the between the and the even as the population of subjects In this in the of public health the NHS of The large and highly visible public health of the and post-war the mass that as the in the of the were by through the and broadcast journalists access to these which in to the or that have their It is of both editorial to the and the of to it that when were introduced in to migrants for at they were the subject of a of in the anti-immigration national the Daily Yet even Pakistani work through the health as he Britain for the could not the was in the of the the of the that an official were of these by the of the of the with both doctors and the cartoons were not by similar could from which the press was did editorial cartoons particularly striking and of to their in the when the was frequently figures were often as the they were intended to And post-war editorial did not this provocative or to a non-white population the NHS. the editorial cartoons either explicitly or NHS as subjects in the British of the of editorial cartoons and papers in Britain, with images from a political of the national news only between 1948 and non-white of were Even this of and images deployed non-white as visual for political for for the Daily the of a large in a to the political of itself than particular medical The magazine the of the NHS as only on a medical subject 1948 a In fact, research thus far has only editorial in the national press that and at the of the 1961–2 debates the and at the of the smallpox it explicitly attitudes and than the migrants In the a of for the of on to the UK is by the was by his role as to the of he as an from the to only have In the a of Asian of an to While newspapers frequently and with Evans in with news stories about they did not could similar medical Even the smallpox outbreak and news photography of such were or in the Britain have been ‘a of of its social and new were of in to the of the welfare these only visible and visualized for the an increasing and striking diversity its are with images of the NHS, both and the most popular subjects for images were in these the rich ethnic diversity of NHS is from at least the In their non-white or in white were highly visible in news Daily in made a specific of their skin colour and their are the of a and white to a white and of a on the of a white while a and in the what The article with a both and on these work at in and only a few white to The is as as and and from the from in close to an the of racial prejudice the NHS, even when they its its It is that both of the are also to their Britain’s national even the Daily which were resolutely to immigration in and Asian either in a or as an of the NHS doctors and both in the and in the of the provocative of in the Times in it was an a that an article be for of the Daily article this Times to the NHS as from racial while the article the racism that ‘coloured’ in its that similar did not in the NHS, were an were not for the to non-white with their white on of the national as in of a service the of and a are in the images of new a of non-white in this nurses, with of their white by the they been in the NHS has even when and Asian in news they are as a Times article the NHS on its a a white race race in was an or subject in the article article in the Daily while portraying and their as an on the NHS, was by of a by a non-white similar accompanied a the NHS that the claimed, NHS While to of the NHS, editorial to the NHS and its The British has of editorial cartoons or between 1948 and in which doctors or are These also frequently in editorial cartoons with In of their from the and of medical and The the in particular was a for for and at for the NHS in relation to for and a on or understood Even relatively news stories in for a prompted than editorial cartoons on NHS on and about in at least to the an for Sunday British British even more and are the in which non-white and nurses, editorial cartoons about the NHS which are not specifically of race or the cartoons debates the NHS, its its and the of its of the specific subjects of the these research has of of the popular and expectations of the NHS which editorial cartoons drew for their they the from or which the political or claim and And these highly non-white with exactly the applied to their white and or and they are of the the and the NHS and are only to be its In fact, migrants of and of by and thus a very of the inclusion in editorial cartoons at the very an of the NHS a I a of the Daily British an editorial for the known for his also his from the while for the Daily and then the conservative Daily a similar visual from was a political as in a in the of the a of nurses, its subject was and the for However, his to representing race in the NHS of the conservative political critique that his other cartoons. such editorial of racialized are either when explicitly or racism as if editorial cartoons in the mainstream press specifically non-white their white they are often or made the of or humour by or in a of editorial cartoons to in care at the (NHS) have I an editorial in which a racialized was Even in this a by for the Daily and the of the race is not the the racialized as a for nurses, as its white and a and the other ignored the by its ethnic in prompted more nurses, and Asian doctors were often in cartoons explicitly the of British the role they played in the NHS. anti-immigration rhetoric in particular prompted such responses in the for the Daily a visual of popular racism with an of an explicitly NHS by a Asian doctor reading a while a to the In the white figures in a to exactly the white most by this some of the at least some of the impact from the of such a and national institution being by its as for the of made a similar in As he is an entirely by figures in a white his to the of while the a by is of an NHS entirely and routinely by ethnic and in which the of race and that were so in were themselves he I only in for 1969, British other the to with the of racial in the in relation to stories about doctor in the the was turned on its to As in his a doctor a with and of In cartoons to another news about NHS of doctors to turned to the visual of the this such highly racialized was even the of the editorial The British to the of both the Daily and the Daily which printed the that at humour of this a of that While the Daily to Daily editor The Daily he to to racism the wider of As as more editorial non-white doctors were to as of the NHS While comment an of doctors to for more in 1970, and from such representations the of the non-white of political or racial by the a of about both and of and Asian doctors editorial of and it that the with which and Asian could be understood as a role was in their in the NHS and and Asian their on the was to at least for and for their as as their racial difference could be a of could to or the very of non-white doctors in the newspapers could or of these As the reported in such doctors made a very of the British it that of doctors the of of and of from It is that this article was itself accompanied by an of a and a white doctor at a In by the of the films and could only non-white doctors by very or The of a documentary that the visible of non-white doctors in the NHS in it in by the of the In this documentary the of the NHS for a doctor is as ‘a to the to retain and the NHS for more from the the he arrived in with a at an in on National and for The documentary his medical doctors a of from and as a of the so for the NHS in In the the a of in a from of Asian It on the of the and ethnic the only and almost of of the that images of ethnic the NHS too a even for a intended to on migrant the Daily of the and its of the NHS as on ‘the the about of and Instead, the highlighted new almost on It is in that that the difference between editorial, photographic and documentary about race in the NHS of news stories and commentary the of the NHS to the and very of doctors and as the of the NHS. In a commentary on his documentary exploring responses to immigration in the of his of this popular about are on an of the of are of attitudes towards the population which can be as of these attitudes are in and it for the the Health Service or to of And these are at the in cartoons this to most through the lens of their to themselves from the evidence of racial also from the to which the editorial of a NHS as as the of the photography the NHS, by the both of the and of medical most often to and amplify than to images of the NHS. It was the and the of a highly ‘coloured’ than inches that the to The entirely reality made visible in this deliberately the of the and the created by the inclusion in the humour of the editorial the visual I have the NHS context in to and It both and was as the migrant it is to argue that the NHS played a very specific role in the visual of human difference in Britain in this period. the NHS a in which the of Britain as a could be as as In editorial in the NHS a of both in of its social and by the of the and racial or ethnic and expectations were in this body of to the that such themselves became the as in the images which the NHS as a in which and racialized medical And both news photography and editorial cartoons in the NHS the they the of British as from racial by or by the NHS was the site which representations of this were as evidence to the to its cultural meaning as the most of post-war social to an and for this article was by a of the I to and of the for their and are as to the and and to the British and for their with the images",
+      "openalex_id": "W2573540865",
+      "openalex_type": "article",
+      "referenced_works_count": 0,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "application",
+        "critique"
+      ],
+      "record_id": "cr_f05d7909b007246a1c79d1d0"
+    },
+    {
       "title": "Regulating cross-border data flows and privacy in the networked digital environment and global knowledge economy",
       "authors": [
         "François Lesieur"
@@ -8584,29 +8643,6 @@
         "recent"
       ],
       "record_id": "cr_1acf81a90079589bd0b9086e"
-    },
-    {
-      "title": "Picturing Race in the British National Health Service, 1948-1988",
-      "authors": [
-        "Roberta Bivins"
-      ],
-      "year": 2016,
-      "venue": "Twentieth Century British History",
-      "doi": "10.1093/tcbh/hww059",
-      "citations": 18,
-      "abstract": "In 1970, Harold Evans, the respected editor of Britain’s best-selling Sunday broadsheet the Sunday Times from 1967 to 1981, roundly reproached his fellow journalists for their reporting of ‘race’. Writing for the resolutely middle-brow The Listener magazine (published from 1929 to 1991 by the British Broadcasting Corporation [BBC] since 1929 to accompany and amplify the national broadcaster’s educational and cultural mission), Evans asserted that ‘the way race is reported can uniquely affect the reality of the subject itself’. In the matter of race, he observed, the newspapers did far more than fulfil their ‘traditional’ role as a ‘mirror of society’. Instead, ‘stealthily in Britain, the malformed seeds of prejudice have been watered by a rain of false statistics and stories’.1 Evans, famously a supporter of US-style campaigning investigative journalism, applied similar techniques to excoriate his fellow journalists. Focusing closely on the language in which stories about non-white migrants and racialized ethnic minorities were reported, he condemned rhetoric portraying migrants as ‘pouring in’ and Britain as being ‘overrun’. Evans also drew attention to the striking inconsistency with which information about (perceived) race or ethnicity was reported. As the ‘most spectacular’ evidence of such dangerous ‘selectivity’ he pointed to the conservative broadsheet, the Daily Telegraph. On 1 March 1969, that paper headlined a coroner’s criticisms of a doctor prominently identified by the Telegraph as ‘Pakistani-born’. Yet only inches below, the paper ignored the Asian ethnicity of another doctor (Dr. Hassam Gareeboo) whose heroics saved an infant’s life.2 Using another medical story—press coverage of 1961–2 outbreak of smallpox traced to a number of migrants from Pakistan—Evans highlighted the influential role played by press photography in shaping interpretation of the news. Referring to work by the sociologist Eric Butterworth, Evans walked his readers through the exploitation of the outbreaks by an anti-immigration regional newspaper. The Yorkshire Post, he claimed, deliberately fostered the impression of ‘a conflict of interest’ between ‘immigrants’ (in fact, British subjects moving entirely legally to the UK from its colonies and Commonwealth) and the local population, not least by portraying a smiling, recently arrived Pakistani migrant next to an unsupported claim that ‘Pakistani smallpox papers can be forged’ to generate the impression that ‘immigrants did not care about the risks to which they exposed local people’.3 It is not a coincidence that when Evans turned his attention to the reporting of race in Britain, stories with medical subjects sprang to mind. While the impact of ‘coloured’ immigration on access to housing and employment featured most strongly in popular expressions of discontent, health was not far behind. The advent of the National Health Service (NHS) in 1948 coincided almost exactly with the post-war mass movement to Britain of once-colonial populations from the ‘New Commonwealth’ and thus with the emergence of what became known as the ‘colour problem’. Moreover, concern about the supposed or presumed health impacts of mass migration was strengthened by (sporadic and often self-contradictory) official endorsement.4 As Evans asserted in his rebuke, discussions of ‘immigration’—discussions which rarely differentiated between migrating British subjects and immigrating aliens—in post-war Britain routinely employed highly provocative language, accompanied by images intended to inflame. And while racialized migrants were present in large numbers in a variety of industries and were notably visible in public transport services by the 1960s,5 it was their work in the NHS that was most frequently visualized in the press. This article argues that in relation to both the NHS and non-white immigration, such visual material often revealed assumptions and expectations that were either too uncomfortable or too thoroughly normalized to be made otherwise explicit. Evans’ attention to news photography and the suggestive associations created between images and texts on the terrain of the printed page was fleeting if insightful. He devoted far more attention to the rhetoric of race than to its visual representation. Until the last decade, mainstream historical scholarship on race and immigration in post-war Britain has been similarly transfixed by text.6 Only with the emergence of a body of scholarship examining the impacts of empire on the British home nations themselves and the growth of interdisciplinary research on visual cultures, has the balance begun to shift towards increasing attention to visual representations, particularly in cinematography and the broadcast media.7 Less attention has been paid to the images, photographic and editorial, that accompanied press coverage of ‘race relations’ and immigration, a lacuna which this article will begin to redress. Even in recent innovative work exploring the creation and interpretation of a welfare state that was both ‘post-war’ and ‘post-colonial’, linguistic representations of race, ethnicity, empire and decolonization retain their largely unchallenged centrality.8 Moreover, relatively few historians have examined British racial discourses through the lens of specifically medical events, institutions and phenomena.9 Yet as Evans’ commentary indicates, such events and sites both prompted and stimulated debates about the very fabric of identity in post-imperial Britain. Here, I will argue that close scrutiny of visual representations of racialized minorities in the NHS can shed new light on British attitudes towards race, ethnicity and belonging in the post-war period. While some images of this intersection are propagandist, candid, opportunistic, or even accidental, particularly in photojournalism and the broadcast media, others are explicitly humorous, ironic, or satirical, most notably a rich seam of editorial cartoons. The latter in particular explicitly use images of racialized bodies and situations in the NHS to comment on and critique social attitudes towards immigration in a welfare state. This article will use visual representations of white and non-white figures in the context of the NHS to explore perceptions of race and ethnicity, and attitudes towards racism in post-war Britain.10 In an initial discussion of the wider British context, it considers the value of editorial cartoons and news photography as tools offering traction on implicit or assumed truths about the NHS. Subsequent sections examine depictions—initially photographic, then in editorial cartoons and for comparison in broadcast and newsreel footage—of non-white nurses, doctors and, largely in absentia, patients. These establish the importance of the NHS as a site in which racial and ethnic inclusion and British diversity could be recognized and portrayed. Little explored by historians, these sources allow consideration of the roles played by both humour and visuality in shaping and expressing responses to human difference understood through the lens of ‘race’. In representing or obscuring racialized figures at work in an institution often regarded as embodying core national values, editorial cartoons and the editorial selection of photographic images deployed visibility itself very deliberately to encode, interpret and challenge attitudes towards such difference in the wider society. The contemporary conflation of skin colour and cultural identity made such work possible, and is correspondingly at the heart of the analysis below. Close reading of specific images also sheds new light on the NHS as an institution imbued with meaning in and for British culture. Since 1948, the language of the British NHS has been both possessive and inclusive. Pamphlets, films and other propaganda introduced the service to the population as ‘your’ NHS, and stressed that it was available to ‘everyone—rich or poor, man, woman or child’.11 In doing so, documentary sources and political rhetoric reflect and support the ideals of universalism and ‘equalitarianism’ so often associated with the immediately post-war period.12 However, if the language of the NHS and in its of press and images of the NHS a by the national media, the of or the of the NHS in its almost white and British and In these and of the new services the and to the British public from and and from the the visual the contemporary and of the NHS, very that the possessive by the and was assumed and intended to be a that even in 1948 did not was in this In from 1948 to British of its colonies and and on the of the nations the of British with and a British population of non-white in historians have the of this largely population at by rarely in such figures at the the diversity of Britain’s and immediately post-war population was by the of and and 1948 and they were by some migrants from the and also the and migrant numbers were not migrants from Britain’s colonies and colonies were to and that reported a population of ‘New Commonwealth’ Yet the subjects frequently in other Britain’s ethnic played visible role in official of the new NHS in its and the NHS a service by and to the they explicitly to to their However, in a documentary broadcast of a that an of a non-white service as as a a of or in a the and this have official popular racism through a of public Only a the medical introduced a played by became the to be in a UK by it its the by And by the it was either to or to or and both and the NHS that of expectations about health and to medical of new of new sites of and new of between recent and to the visibility of Britain’s increasing human diversity in the service of the as the of mass migration from Britain’s colonies and the nations of the ‘New the its and at on 1948, only the NHS As British the were immediately to NHS The have been as their the of a largely population of migrants and and and Asian migrants and from the and and migrants and from the historical of the British or or these prompted humour and and In relation to the NHS, they often of and about the of the NHS by the UK specifically to themselves of its new health services the of the Health the that in particular and the NHS were Yet some of the also became of care and of the of the Service and of its on These and and the other on doctors and representations of the intersection between post-war migration and the NHS from its also between visual and discourses of racialized migration in this of almost of and have the of the migrant as a of and post-war Britain was However, while the and was in this was rarely in In the migrant of the NHS were and particularly in news photography and editorial cartoons. to both the and the of and Asian NHS as have most migrants were in in relation to they made use of the most and NHS the from the and through to the about Britain’s racial diversity were by about the emergence and of popular least in relation to the NHS, evidence that the latter the creation of images on its while the of visual representations that such explicitly by their As the political made some migrants and social specifically their itself as both and either to migrants or to the wider sociologist identified this visual as of particular to social skin colour became ‘the and visible of as an and that was of its as to more or and the of of In the social British to the of the while asserted that their visible could both and These both and wider race in Britain. In for the of a of in the that the of of the was a Instead, of the is that can that a is from this is not so in the of an an or even an He explicitly of the visible in support of his The that visibility could the emergence and of racial and in and to which the of is not became the of the It discussions of British and was by and at least in press It is not a coincidence that the most frequently to migrants from Britain’s colonies and from the to the was that the and ‘coloured’ became in both political and As observed, the immigration about the ‘colour ‘the can so be The attention paid to the visual of skin did not the of it as a for the of cultural and linguistic that these it is in this on the visibility of migrants from Britain’s colonies and empire that a on the and of racialized human often as in explicitly and institutions the Here, editorial cartoons and humour in particular are historical since their to and to the with which their the public and their of and even This latter is in cartoons race and race in the post-war period. and have the importance of humour as ‘a through which highly and could be for In Britain, few were either as or as as cartoons and other of visual humour could challenge social did so in with their Writing in the editorial that or were in the post-war by the the the also by public Moreover, as the from their while it as a social to images in this medical context also the importance of visual evidence as a of in the health in relation to the of the post-war visual evidence of health or in the of was the British and for the medical of migrants either to the UK or on at British uniquely the that visual particularly evidence of Moreover, medical responses to non-white immigration and ethnic frequently their as visible and for or while on these was also highly to striking the or of the migrants and their Yet the with their access to and on the as a and an of the largely and few of non-white in the between the and the even as the population of subjects In this in the of public health the NHS of The large and highly visible public health of the and post-war the mass that as the in the of the were by through the and broadcast journalists access to these which in to the or that have their It is of both editorial to the and the of to it that when were introduced in to migrants for at they were the subject of a of in the anti-immigration national the Daily Yet even Pakistani work through the health as he Britain for the could not the was in the of the the of the that an official were of these by the of the of the with both doctors and the cartoons were not by similar could from which the press was did editorial cartoons particularly striking and of to their in the when the was frequently figures were often as the they were intended to And post-war editorial did not this provocative or to a non-white population the NHS. the editorial cartoons either explicitly or NHS as subjects in the British of the of editorial cartoons and papers in Britain, with images from a political of the national news only between 1948 and non-white of were Even this of and images deployed non-white as visual for political for for the Daily the of a large in a to the political of itself than particular medical The magazine the of the NHS as only on a medical subject 1948 a In fact, research thus far has only editorial in the national press that and at the of the 1961–2 debates the and at the of the smallpox it explicitly attitudes and than the migrants In the a of for the of on to the UK is by the was by his role as to the of he as an from the to only have In the a of Asian of an to While newspapers frequently and with Evans in with news stories about they did not could similar medical Even the smallpox outbreak and news photography of such were or in the Britain have been ‘a of of its social and new were of in to the of the welfare these only visible and visualized for the an increasing and striking diversity its are with images of the NHS, both and the most popular subjects for images were in these the rich ethnic diversity of NHS is from at least the In their non-white or in white were highly visible in news Daily in made a specific of their skin colour and their are the of a and white to a white and of a on the of a white while a and in the what The article with a both and on these work at in and only a few white to The is as as and and from the from in close to an the of racial prejudice the NHS, even when they its its It is that both of the are also to their Britain’s national even the Daily which were resolutely to immigration in and Asian either in a or as an of the NHS doctors and both in the and in the of the provocative of in the Times in it was an a that an article be for of the Daily article this Times to the NHS as from racial while the article the racism that ‘coloured’ in its that similar did not in the NHS, were an were not for the to non-white with their white on of the national as in of a service the of and a are in the images of new a of non-white in this nurses, with of their white by the they been in the NHS has even when and Asian in news they are as a Times article the NHS on its a a white race race in was an or subject in the article article in the Daily while portraying and their as an on the NHS, was by of a by a non-white similar accompanied a the NHS that the claimed, NHS While to of the NHS, editorial to the NHS and its The British has of editorial cartoons or between 1948 and in which doctors or are These also frequently in editorial cartoons with In of their from the and of medical and The the in particular was a for for and at for the NHS in relation to for and a on or understood Even relatively news stories in for a prompted than editorial cartoons on NHS on and about in at least to the an for Sunday British British even more and are the in which non-white and nurses, editorial cartoons about the NHS which are not specifically of race or the cartoons debates the NHS, its its and the of its of the specific subjects of the these research has of of the popular and expectations of the NHS which editorial cartoons drew for their they the from or which the political or claim and And these highly non-white with exactly the applied to their white and or and they are of the the and the NHS and are only to be its In fact, migrants of and of by and thus a very of the inclusion in editorial cartoons at the very an of the NHS a I a of the Daily British an editorial for the known for his also his from the while for the Daily and then the conservative Daily a similar visual from was a political as in a in the of the a of nurses, its subject was and the for However, his to representing race in the NHS of the conservative political critique that his other cartoons. such editorial of racialized are either when explicitly or racism as if editorial cartoons in the mainstream press specifically non-white their white they are often or made the of or humour by or in a of editorial cartoons to in care at the (NHS) have I an editorial in which a racialized was Even in this a by for the Daily and the of the race is not the the racialized as a for nurses, as its white and a and the other ignored the by its ethnic in prompted more nurses, and Asian doctors were often in cartoons explicitly the of British the role they played in the NHS. anti-immigration rhetoric in particular prompted such responses in the for the Daily a visual of popular racism with an of an explicitly NHS by a Asian doctor reading a while a to the In the white figures in a to exactly the white most by this some of the at least some of the impact from the of such a and national institution being by its as for the of made a similar in As he is an entirely by figures in a white his to the of while the a by is of an NHS entirely and routinely by ethnic and in which the of race and that were so in were themselves he I only in for 1969, British other the to with the of racial in the in relation to stories about doctor in the the was turned on its to As in his a doctor a with and of In cartoons to another news about NHS of doctors to turned to the visual of the this such highly racialized was even the of the editorial The British to the of both the Daily and the Daily which printed the that at humour of this a of that While the Daily to Daily editor The Daily he to to racism the wider of As as more editorial non-white doctors were to as of the NHS While comment an of doctors to for more in 1970, and from such representations the of the non-white of political or racial by the a of about both and of and Asian doctors editorial of and it that the with which and Asian could be understood as a role was in their in the NHS and and Asian their on the was to at least for and for their as as their racial difference could be a of could to or the very of non-white doctors in the newspapers could or of these As the reported in such doctors made a very of the British it that of doctors the of of and of from It is that this article was itself accompanied by an of a and a white doctor at a In by the of the films and could only non-white doctors by very or The of a documentary that the visible of non-white doctors in the NHS in it in by the of the In this documentary the of the NHS for a doctor is as ‘a to the to retain and the NHS for more from the the he arrived in with a at an in on National and for The documentary his medical doctors a of from and as a of the so for the NHS in In the the a of in a from of Asian It on the of the and ethnic the only and almost of of the that images of ethnic the NHS too a even for a intended to on migrant the Daily of the and its of the NHS as on ‘the the about of and Instead, the highlighted new almost on It is in that that the difference between editorial, photographic and documentary about race in the NHS of news stories and commentary the of the NHS to the and very of doctors and as the of the NHS. In a commentary on his documentary exploring responses to immigration in the of his of this popular about are on an of the of are of attitudes towards the population which can be as of these attitudes are in and it for the the Health Service or to of And these are at the in cartoons this to most through the lens of their to themselves from the evidence of racial also from the to which the editorial of a NHS as as the of the photography the NHS, by the both of the and of medical most often to and amplify than to images of the NHS. It was the and the of a highly ‘coloured’ than inches that the to The entirely reality made visible in this deliberately the of the and the created by the inclusion in the humour of the editorial the visual I have the NHS context in to and It both and was as the migrant it is to argue that the NHS played a very specific role in the visual of human difference in Britain in this period. the NHS a in which the of Britain as a could be as as In editorial in the NHS a of both in of its social and by the of the and racial or ethnic and expectations were in this body of to the that such themselves became the as in the images which the NHS as a in which and racialized medical And both news photography and editorial cartoons in the NHS the they the of British as from racial by or by the NHS was the site which representations of this were as evidence to the to its cultural meaning as the most of post-war social to an and for this article was by a of the I to and of the for their and are as to the and and to the British and for their with the images",
-      "openalex_id": "W2573540865",
-      "openalex_type": "article",
-      "referenced_works_count": 0,
-      "categories": [
-        "dissent"
-      ],
-      "source_api": "openalex",
-      "search_angles": [
-        "application",
-        "critique"
-      ],
-      "record_id": "cr_f05d7909b007246a1c79d1d0"
     },
     {
       "title": "Scaling with Digital Connection : Services Innovation",
@@ -9200,6 +9236,37 @@
       "record_id": "cr_37b9e7aee73a84ddf608c045"
     },
     {
+      "title": "The data scientist as a mainstay of the tumor board: global implications and opportunities for the global south",
+      "authors": [
+        "Myles Joshua Toledo Tan",
+        "Daniel Andrew Lichlyter",
+        "Nicholle Mae Amor Tan Maravilla",
+        "Weston John Schrock",
+        "Frederic Ivan L. Ting",
+        "Joanna Marie Choa-Go",
+        "Kishi Kobe Yee Francisco",
+        "Mickael Cavanaugh Byers",
+        "Hezerul Abdul Karim",
+        "Nouar AlDahoul"
+      ],
+      "year": 2025,
+      "venue": "Frontiers in Digital Health",
+      "doi": "10.3389/fdgth.2025.1535018",
+      "citations": 15,
+      "abstract": "Tumor boards are multidisciplinary teams of healthcare professionals that are working together to encompass the full spectrum of care around diagnosing, planning treatment, and advising outcomes for individual cancer patients. These boards typically consist of oncologists, radiologists, pathologists, geneticists, surgeons, nurse practitioners, and other palliative care professionals (National Cancer Institute, 2024). These boards create a collaborative space for experts from various disciplines to assess clinical factors and patient circumstances, ensuring the application of appropriate care standards and personalized recommendations from the National Comprehensive Cancer Network (NCCN) Guidelines to enhance cancer treatment are met. Since no patient fits the \"textbook\" cancer profile, oncologists benefit from discussing tailored treatment plans and learning from their colleagues' experiences. When tumor boards are functioning well, they can have a significant impact on patient care (NCCN, 2025). For instance, a thoracic oncology board in Munich, Germany, found that 90% of their recommendations met or exceeded clinical standards, with nearly 90% being implemented in practice (Walter et al, 2023).Tumor boards are increasingly used worldwide, but expertise and resources for conducting multidisciplinary tumor boards are still limited in the Global South. However, this does not mean they cannot be implemented in developing countries. A 2020 survey from Southeast Asia found that 80.4% of pediatric solid tumor units had pediatric-trained specialists, including oncologists, surgeons, radiologists, pathologists, radiation oncologists, nuclear medicine physicians, and nurses. This indicates that multidisciplinary tumor boards are already in place and that these specialists play a critical role in cancer care (Ottman, 2020). With full implementation in the global south, data scientists can further enhance tumor boards with AI and data analytics to improve decision-making and personalize cancer care.Advances in big data, machine learning (ML), and artificial intelligence (AI) provide more precise, evidence-based, and patient-specific care, thus, giving a different approach as to how healthcare professionals diagnose, treat, and manage their patients (Alowais et al, 2023). For instance, there is a growing number and complexity of data in the healthcare industry such as from Electronic Health Records (EHRs), next-generation genomic sequencing (NGS), and advanced imaging modalities like X-ray Radiography, Magnetic Resonance Imaging (MRI), and Computed Tomography (CT) scans. However, analyzing these data, individually and manually, can be time-consuming and considerably impractical. This is where clinical decision support systems (CDSS) powered by AI and ML are put into action. These systems provide predictive analysis of the disease progression or prognosis, personalized treatment based on the patients' genomic profile, and drug-drug interaction alerts (Wang et al, 2023;Alowais et al, 2023). As precision medicine and big data continue to evolve, healthcare will increasingly rely on data-driven tools to enhance patient care, reduce errors, and improve overall health outcomes (Khalifa and Albadawy, 2024). Data scientists are critical to this process as they can analyze large datasets to identify biomarkers that can predict how a patient will respond to specific treatments (Nardone et al, 2024). In addition, AI algorithms are being used to interpret radiological images, detect early signs of cancer, and predict tumor progression. These tools are increasingly becoming standard in tumor boards, especially in high-income countries (Bi et al, 2019;El Saghir et al, 2015).For instance, in oncology, the most commonly used diagnostic tools to identify biomarkers and guide targeted therapies in precision medicine are Polymerase Chain Reaction (PCR), fluorescent in situ hybridization (FISH), and immunohistochemistry (IHC) to identify biomarkers and guide targeted therapies (Goosens et al, 2015). However, high-throughput next-generation sequencing (NGS)-based diagnostics, which analyze somatic mutations in tumors, have proven clinically useful in identifying single-nucleotide mutations, insertions, deletions, and large genomic rearrangements (Kamps et al, 2017). Thus, multigene NGS testing can provide the oncologist a clinical picture of the patients' molecular profile which can be utilized in planning the best treatment option (Mehta et al, 2020).As precision medicine continues to gain prominence and the molecular characterization of individual cancers becomes increasingly complex (Specchia et al., 2020;Nardone et al., 2024), incorporating data scientists into tumor boards is essential. Data scientists bring advanced expertise in ML, data analysis, and bioinformatics, enabling tumor boards to make more accurate, evidence-based clinical decisions that lead to improved patient outcomes (Nardone et al., 2024;Rodriguez Ruiz et al., 2022). They play a critical role in synthesizing and analyzing diverse datasets generated in oncology care, uncovering actionable insights, and informing treatment strategies. This role is particularly as cancer treatment personalized based on the and molecular of data scientists advanced including analysis, and predictive to actionable and treatment of such as from and to from data, such as and (Nardone et al, et al, there is a growing data-driven into cancer In high-income tools are being used to in images, patient and identifying treatment strategies. In the for like Cancer are AI tools to guide clinical decisions in oncology (Wang et al, 2023). These powered by machine learning can analyze patient data in and provide recommendations tumor board However, the of these tools with countries significant to to a of and expertise et al, high-income countries like in the and data scientists are already of tumor For instance, data scientists the of with oncologists to personalized treatment plans based on genomic data and machine learning 2024). These experts tools to predict patient to various therapies and identify clinical in Germany, data scientists with oncologists to analyze data and into clinical ensuring that patient the most appropriate care based on their profile et al, by data scientists have personalized cancer analyzing genomic and clinical data scientists can identify mutations cancer and targeted therapies that are to be more standard treatments and can be used to patient oncologists to treatment plans based on the These data-driven reduce the of cancer treatment and lead to more and care (National Cancer Institute, is a in with from and to and data the of these AI is to have a significant impact on the of et al, in to the of and to healthcare especially This of to their to AI in or other healthcare et al, the most significant and in AI are not in and advanced but in and with the healthcare and high-income countries have significant in data into oncology care, significant These a of to and a of professionals of AI and machine learning tools et al, 2020). there are and the of AI in particularly in countries with diverse patient and 2022). these will significant in and as as the of for the of AI in clinical the Global which or developing in and or the cancer care is by a of to advanced diagnostic a of healthcare and These to of cancer and outcomes to high-income countries and 2024). In of and Southeast patients to to in and treatment et al, 2023). healthcare systems in these are and the resources to the in cancer like in the the of cancer care is the of to global standards of care to the to the patients and their 2023). global and recommendations to precision medicine in the care of patients with cancer in the et al, is still for to this in their clinical not a oncologists in the AI in precision medicine in their patients et al, scientists have the to healthcare in the Global by AI and machine learning to and improve diagnostic such as and health can be used to provide diagnostic support in where to healthcare professionals is limited et al, et al, 2024). ML can be used to predict cancer identify patients of developing and most in of treatment 2023). for AI for oncology et al, is found to be a in cancer care in et al, 2024). these tools can disease progression and treatment enabling more personalized care (Bi et al, developing predictive that can be in the of advanced diagnostic data scientists can improve outcomes for cancer patients in these there are discussing the of AI in healthcare in the full implementation of AI in healthcare or in oncology are In for instance, are being used to for cancer in the to and in machine learning algorithms have used to analyze to with et al, 2024). These the for data to cancer care in the Global by to of the most the already to the by identifying the to AI implementation in and the that can most the appropriate of AI to enhance health outcomes in these as a critical approach in particularly in cancer treatment, where of expertise are to complex from various This collaborative approach professionals from diverse such as bioinformatics, data and from these healthcare can more and personalized care for especially in oncology 2017). For instance, in the of in and other healthcare professionals such as oncologists, and have together to identify the of patients and to et al, 2017). teams have proven to be a in patient the of and other health the to patients' more ensuring of care et al, a analysis of the on that with multidisciplinary teams outcomes 2017). are increasingly found including to data such as a health in Thus, these the for data scientists to make a significant impact teams various healthcare to tumor boards, data scientists a of and A solid in data analysis, and machine learning is particularly with expertise in datasets such as data, and health a in a with a on and data such as or This of expertise the to large and datasets to healthcare to the Health and of the to patient data and of and clinical with oncologists, radiologists, pathologists, and other healthcare data scientists in complex into actionable insights, data that diverse and are for into the multidisciplinary of tumor the and of their for this role by or a to learning in data and oncology that data scientists can to and in precision from the of and on the of as a particularly in in the Global the critical of and in expertise into This that as and have advanced healthcare limited resources to these to the of data scientists in tumor boards the for and or tailored to to the and of data scientists such as the Data which a for the of data such as the the of the and the et al., et al., et al., et al., In the the for health which with data et al., for further this with for data and for the for AI and data with a on of 2024). the National of the a standard which for data analysis in particularly to data (National data a role as a of from datasets including and data et al, 2022). tumor boards, data scientists not advanced ML but a of and to treatment planning and personalize patient care (Nardone et al, 2024). of their predictive and data into more such as and a of machine learning where to make of decisions by growing in treatment planning et al, 2020). Data scientists to for the the oncology and a the that the of a on et al, They this by to a In oncology, is used to treatment that based on the to algorithms can of radiation or to et al, a based on for personalized proven in the of with AI in early and can be to different et al, 2022). A personalized treatment approach to treatment plans in as patient data personalized to individual early and treatment scientists that a of and their These in outcomes and the of various treatment based on In a tumor board can from different data, molecular and patient the of different clinical outcomes and provide make more decisions in where there is et al, 2024). For in the of et they a patient to patient data and for treatment decisions in and the with and significant to treatment decisions for patients. This to a decision-making in tumor boards, clinical and molecular data to identify the best treatment for data scientists to create treatment and can the of various plans to patients. These are especially in complex with of treatments like with or predict patient based on 2022). like in the of et they a for Tumor treatment planning for on the tumor with their based on patient and tumor such algorithms into advanced treatment planning systems is to enhance of patient to treatment data scientists to personalize the and of therapies such as or These to with especially in treatments that based on individual patient and tumor can and to the of patient of 2024). of treatments further for strategies. Data scientists can be useful by which can approach to assess and a clinical et al, 2023). in learning have to the of from patient or to treatment planning systems for can predict based on data and et al, is of treatment Data scientists data from and to create a molecular profile of a these diverse data scientists tumor boards more targeted For a approach not a the cancer but how with other molecular to more tailored such as in to the genomic and 2023). a of cancer but the large data AI these by identifying and from complex data, cancer et al, 2024). to the by et which machine learning for data in cancer their on and They data from the Cancer in cancer and recommendations for appropriate and the of tools to and personalized from imaging that can tumor and predict patient to identify that not be by a Data scientists these with clinical and genomic data to improve treatment and strategies. in the of et they ML that can and to predict in patients with and as as their overall (Wang et al, et al, and are particularly in where testing not be for tumor et al, et al, 2022). such as and are cancer by molecular with These the of tumor and that sequencing cannot For instance, like and enhance tumor analysis by imaging with and et al., 2023). enabling more of and in et al., of the most of in the of oncology is the of in the improved patient outcomes in precision cancer treatment still to where different of the respond to that the from the to the that tumor can respond on their et al, 2024). Thus, is to not the profile of the tumor but and the This approach lead to more personalized and treatments by the and the of treatment on to how specific lead to This is particularly critical in oncology, where data scientists advanced like the et al., and to identify in treatment and disease progression et al., 2022). like the and interpret machine learning they et al., a large used to improve of the factors in Cancer such as a on treatment et al, 2024). role of data scientists such as and to like treatment in analysis et al., these into clinical data scientists tumor boards to decisions on insights, patient outcomes in personalized oncology application where data scientists play a role is in developing treatment strategies. These are to in to the For instance, a tumor becomes to data scientists can to such as to targeted or analyzing patient data the treatment that treatment plans and to in disease progression et al, For is used as a cancer treatment that the radiation treatment to for in the and as as This make the treatment more and by the tumor to the and et al, scientists decision support systems that oncologists in treatment based on the of patient data, clinical and outcomes from These systems a of machine learning algorithms and clinical to provide recommendations that standard care and personalized In data scientists systems of decision support by data from or For a clinical the in the to or et al, data in cancer patients for such as and in and treatment identify and et al, 2024). a from the of found that especially be used to create a clinical (CDSS) for cancer decision support 2024). A of or radiation the of and a mean of the tumor decision as scientists can where treatments such as and are used in the interaction various they can predict the or outcomes of This is particularly in oncology, where treatments are but be to benefit et al, 2024). For instance, are used to improve treatment precision and reduce by especially in with and other cancer treatment et al, 2025). With the of data predictive can be utilized to in the and of and This will enhance the of their in and cancer decisions for and cancer by patient data and treatment et al, clinical and data in Network to et al, with advanced to Network and enhance predictive et al, Tumor for by and tumor et al, 2020). particularly like and et al, et al, et al, et al, have and in tools for tumor These are clinical data, including and images, which critical for and analyzing of data, to make more precise, data-driven decisions that improve patient outcomes et al, including and et al, et al, large of data from patient and clinical to data and complex like and analysis significant which with the and in data 2024). In tumor boards, can complex patient and predict treatment oncologists with actionable are to enhance for the of et al, This is particularly for the progression of like cancer, where data tumor and treatment can care strategies. are in treatment assess how a et al, play a role in factors such as and et al, These analyze complex to provide into molecular that cancer progression. identify for personalized treatment in oncology et al, a approach to et al, These are how a useful for treatment and disease progression. are particularly in like oncology, where patient can to treatment or disease is a in to in the in et al, 2023). In tumor boards, can be to analyze patient such as data from clinical or This to for from patient and radiological to more personalized and treatment the found in with which are and are particularly useful in where and data is such as analyzing large datasets of patient or data from et al, 2022). In tumor boards, be used to from data like patient in the for more decision-making cancer are to process data large like but with more et al, 2023). This can be useful in oncology, where a of patient data is the can tumor boards the of treatments analyzing data from and genomic to that treatments as the disease is a in that and 2017). is particularly in where different of a of In tumor boards, these can resources to the most critical patient data, such as genomic or in patients with advanced This that the on the most data to with clinical play role in data, which is in oncology to the complexity of and clinical and can be used to these large datasets the most for tumor or In tumor boards, by data enabling to on the most critical for personalized treatment planning et al, on which to analyze complex and for in the complexity of cancer data, especially as datasets in and complexity et al, 2023). learning particularly a more as they can from data and in These are not by the of and are to the of cancer treatment et al, working data scientists advanced ML the and data-driven This that tumor boards can the most insights, for more and personalized cancer care around that the of healthcare teams to more diverse as data AI specialists, and to improved patient As healthcare becomes more the of data scientists are to further et al, like the learning health that learning and data lead to clinical which with the data role in synthesizing diverse of et al, professionals are to and AI in their to the and of As of the healthcare for instance, and in AI to for the of This can be most AI and are into the ensuring are with the and tools to and AI in their practice et al, 2024). AI can support by their to provide and imaging for with other healthcare and decision AI on more complex of patient care and and teams that are to complex as they benefit from the expertise of professionals from different This collaborative approach the to to and patient of is and most are to on these in to their Data scientists are with the as and from and datasets to the tumor This tumor boards to the of cancer treatment such as in the Global a data to to from limited data can be these to data, data scientists can improve diagnostic treatment and make personalized cancer care more to et al, Global significant to the of data in particularly in is a of in the Global by is by where indicates the to For the can be to the most in the such as in the with based on the in there is not a AI which can from For the which number on the be the for AI which be used for AI be used for predictive of such as of of the the for AI in tumor of is that does not for systems to is to the of which is the by with or This of the on the and for such as is developing AI but the of to the a of with is in developing this but countries which are and These countries can the to the to a and AI Southeast Asia is of AI including Asia including and and with the is the in developing in the especially with the of the with of and a of in other countries in the are for the of such including and the will be to this is a of data scientists and healthcare professionals in advanced data analytics in healthcare the to complex AI the of data in clinical practice et al, in Health Data Health systems in from with limited in health This of support the of health data systems that the of AI and ML in cancer care and of AI and have as to AI to improve healthcare in of the to AI have with and such as to 2024). and AI the to improve healthcare in and is as a for global health et al, et al, 2024), data in the to and For the data and developing countries to a in which of data from or and to which are to AI tools be used to further a such as the and and a the to this and and and with to with the of AI is that on to This can in outcomes like and medicine et al, These AI being can still make or in a the is for ensuring the best the other patients AI and most of are with are on AI for This is by factors such as and on For in or patients are AI they that will their or no significant They are in AI for health support a they that AI does not However, with and more in AI AI as a for patient Thus, have from limited and data addition, patients are more their health have and is on a and on and This support patients' and from Thus, AI with these et al, in they a a to cancer and a to the and are precise, by that the the is AI with most oncologists not being by be that and healthcare professionals rely on AI in the of or Thus, data scientists be of the role they play in As data scientists more in tumor boards, they how AI can enhance the patient by ensuring they and Data scientists and have of data scientists on such as data analysis, AI and patient care, and clinical These can lead to in working as they not or data scientists and to Data scientists to complex not the of patient care, to and in data-driven healthcare these to and together more Data scientists can their to make their more to can data scientists the of patient This that AI and data tools are in that benefit patients 2022). of For oncologists and data a is data as a to enhance patient care, data scientists gain a of clinical and are with data scientists their and oncologists data-driven from This can lead to more decision-making and improved patient outcomes by clinical with data-driven learning is a global that data and with and datasets et al, et al, et al, et al, 2022). data from various but in of the overall data being to other of implementation et al, and et al, 2022). As and in developing countries the for data and with as a to this the data and a in the of a in which for as they with to their AI play a role in the by where to advanced These to on or with limited have significant various For instance, et for enabling and more in healthcare a AI tailored to reduce health in and like a how can disease in critical in healthcare et to healthcare by and AI to and diagnostic healthcare more and for the of AI that not but with the of As et these into and to like data and the for AI in further how AI can in For instance, machine learning and data enabling AI to be more and et al., 2024). as by et and for machine learning in have in on AI for decision-making et al., et al., 2025). not enhance but in healthcare ensuring that benefit from These the of AI to improve of support and in the of data in cancer care, from are play role in in health data systems and can create enabling by that ensuring data and and for health Health can as healthcare systems and for in health can to by and et al, especially in the and healthcare can provide expertise and for the of AI and data in These can such as data and AI that are more in the the Global a to of cancer care by AI and data can the for by and health These healthcare to and analyze data cancer care more and in et al, 2024). Data and data health and can datasets that into cancer care These can be used to treatment that the and disease in these et al, et al, 2024). and diagnostic tools can improve early by analyzing imaging and data with AI can personalize treatment plans based on disease and enabling more targeted cancer therapies et al, data and artificial intelligence (AI) in especially in for and these can healthcare professionals enhance their that can be can guide this healthcare professionals as they and as by a to approach with and In this the to and how data-driven or enhance This that by on their and professionals can make AI and data learning can healthcare teams these as useful tools in patient care and especially tumor boards where data-driven decisions can have a However, the of and that professionals are growing and In this the of to that data and AI and can the by and this as to on by that can further enhance patient the of as for In professionals approach AI and data with a are to these tools as a to their and improve their to care for patients. a teams a where professionals in learning the of AI and data a a and data scientists into tumor boards in and this and to these a and for healthcare systems with the expertise to data-driven cancer care with a of the specific by healthcare and be with tumor boards, healthcare and to identify in and For to clinical and for a of including healthcare and the is with patient further with healthcare the for and on global standards like the Data et al., et al., et al., et al., this oncology, data and machine tumor predictive and in data the and of ensuring with healthcare and such as or can the of tailored to is in data scientists with and can the of and learning like or tailored for can provide learning be by to tumor board tools and healthcare such as tumor in as a testing for These be in with",
+      "openalex_id": "W4407230179",
+      "openalex_type": "article",
+      "referenced_works_count": 127,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_41f2b7ffa6c3ef660f585fe2"
+    },
+    {
       "title": "Toward a moral approach to stakeholder management: insights from the inclusion of marginalized stakeholders in the operations of social enterprises",
       "authors": [
         "Kelsey M. Taylor",
@@ -9566,37 +9633,6 @@
         "application"
       ],
       "record_id": "cr_69dccad6395fbf0ab6553acc"
-    },
-    {
-      "title": "The data scientist as a mainstay of the tumor board: global implications and opportunities for the global south",
-      "authors": [
-        "Myles Joshua Toledo Tan",
-        "Daniel Andrew Lichlyter",
-        "Nicholle Mae Amor Tan Maravilla",
-        "Weston John Schrock",
-        "Frederic Ivan L. Ting",
-        "Joanna Marie Choa-Go",
-        "Kishi Kobe Yee Francisco",
-        "Mickael Cavanaugh Byers",
-        "Hezerul Abdul Karim",
-        "Nouar AlDahoul"
-      ],
-      "year": 2025,
-      "venue": "Frontiers in Digital Health",
-      "doi": "10.3389/fdgth.2025.1535018",
-      "citations": 14,
-      "abstract": "Tumor boards are multidisciplinary teams of healthcare professionals that are working together to encompass the full spectrum of care around diagnosing, planning treatment, and advising outcomes for individual cancer patients. These boards typically consist of oncologists, radiologists, pathologists, geneticists, surgeons, nurse practitioners, and other palliative care professionals (National Cancer Institute, 2024). These boards create a collaborative space for experts from various disciplines to assess clinical factors and patient circumstances, ensuring the application of appropriate care standards and personalized recommendations from the National Comprehensive Cancer Network (NCCN) Guidelines to enhance cancer treatment are met. Since no patient fits the \"textbook\" cancer profile, oncologists benefit from discussing tailored treatment plans and learning from their colleagues' experiences. When tumor boards are functioning well, they can have a significant impact on patient care (NCCN, 2025). For instance, a thoracic oncology board in Munich, Germany, found that 90% of their recommendations met or exceeded clinical standards, with nearly 90% being implemented in practice (Walter et al, 2023).Tumor boards are increasingly used worldwide, but expertise and resources for conducting multidisciplinary tumor boards are still limited in the Global South. However, this does not mean they cannot be implemented in developing countries. A 2020 survey from Southeast Asia found that 80.4% of pediatric solid tumor units had pediatric-trained specialists, including oncologists, surgeons, radiologists, pathologists, radiation oncologists, nuclear medicine physicians, and nurses. This indicates that multidisciplinary tumor boards are already in place and that these specialists play a critical role in cancer care (Ottman, 2020). With full implementation in the global south, data scientists can further enhance tumor boards with AI and data analytics to improve decision-making and personalize cancer care.Advances in big data, machine learning (ML), and artificial intelligence (AI) provide more precise, evidence-based, and patient-specific care, thus, giving a different approach as to how healthcare professionals diagnose, treat, and manage their patients (Alowais et al, 2023). For instance, there is a growing number and complexity of data in the healthcare industry such as from Electronic Health Records (EHRs), next-generation genomic sequencing (NGS), and advanced imaging modalities like X-ray Radiography, Magnetic Resonance Imaging (MRI), and Computed Tomography (CT) scans. However, analyzing these data, individually and manually, can be time-consuming and considerably impractical. This is where clinical decision support systems (CDSS) powered by AI and ML are put into action. These systems provide predictive analysis of the disease progression or prognosis, personalized treatment based on the patients' genomic profile, and drug-drug interaction alerts (Wang et al, 2023;Alowais et al, 2023). As precision medicine and big data continue to evolve, healthcare will increasingly rely on data-driven tools to enhance patient care, reduce errors, and improve overall health outcomes (Khalifa and Albadawy, 2024). Data scientists are critical to this process as they can analyze large datasets to identify biomarkers that can predict how a patient will respond to specific treatments (Nardone et al, 2024). In addition, AI algorithms are being used to interpret radiological images, detect early signs of cancer, and predict tumor progression. These tools are increasingly becoming standard in tumor boards, especially in high-income countries (Bi et al, 2019;El Saghir et al, 2015).For instance, in oncology, the most commonly used diagnostic tools to identify biomarkers and guide targeted therapies in precision medicine are Polymerase Chain Reaction (PCR), fluorescent in situ hybridization (FISH), and immunohistochemistry (IHC) to identify biomarkers and guide targeted therapies (Goosens et al, 2015). However, high-throughput next-generation sequencing (NGS)-based diagnostics, which analyze somatic mutations in tumors, have proven clinically useful in identifying single-nucleotide mutations, insertions, deletions, and large genomic rearrangements (Kamps et al, 2017). Thus, multigene NGS testing can provide the oncologist a clinical picture of the patients' molecular profile which can be utilized in planning the best treatment option (Mehta et al, 2020).As precision medicine continues to gain prominence and the molecular characterization of individual cancers becomes increasingly complex (Specchia et al., 2020;Nardone et al., 2024), incorporating data scientists into tumor boards is essential. Data scientists bring advanced expertise in ML, data analysis, and bioinformatics, enabling tumor boards to make more accurate, evidence-based clinical decisions that lead to improved patient outcomes (Nardone et al., 2024;Rodriguez Ruiz et al., 2022). They play a critical role in synthesizing and analyzing diverse datasets generated in oncology care, uncovering actionable insights, and informing treatment strategies. This role is particularly as cancer treatment personalized based on the and molecular of data scientists advanced including analysis, and predictive to actionable and treatment of such as from and to from data, such as and (Nardone et al, et al, there is a growing data-driven into cancer In high-income tools are being used to in images, patient and identifying treatment strategies. In the for like Cancer are AI tools to guide clinical decisions in oncology (Wang et al, 2023). These powered by machine learning can analyze patient data in and provide recommendations tumor board However, the of these tools with countries significant to to a of and expertise et al, high-income countries like in the and data scientists are already of tumor For instance, data scientists the of with oncologists to personalized treatment plans based on genomic data and machine learning 2024). These experts tools to predict patient to various therapies and identify clinical in Germany, data scientists with oncologists to analyze data and into clinical ensuring that patient the most appropriate care based on their profile et al, by data scientists have personalized cancer analyzing genomic and clinical data scientists can identify mutations cancer and targeted therapies that are to be more standard treatments and can be used to patient oncologists to treatment plans based on the These data-driven reduce the of cancer treatment and lead to more and care (National Cancer Institute, is a in with from and to and data the of these AI is to have a significant impact on the of et al, in to the of and to healthcare especially This of to their to AI in or other healthcare et al, the most significant and in AI are not in and advanced but in and with the healthcare and high-income countries have significant in data into oncology care, significant These a of to and a of professionals of AI and machine learning tools et al, 2020). there are and the of AI in particularly in countries with diverse patient and 2022). these will significant in and as as the of for the of AI in clinical the Global which or developing in and or the cancer care is by a of to advanced diagnostic a of healthcare and These to of cancer and outcomes to high-income countries and 2024). In of and Southeast patients to to in and treatment et al, 2023). healthcare systems in these are and the resources to the in cancer like in the the of cancer care is the of to global standards of care to the to the patients and their 2023). global and recommendations to precision medicine in the care of patients with cancer in the et al, is still for to this in their clinical not a oncologists in the AI in precision medicine in their patients et al, scientists have the to healthcare in the Global by AI and machine learning to and improve diagnostic such as and health can be used to provide diagnostic support in where to healthcare professionals is limited et al, et al, 2024). ML can be used to predict cancer identify patients of developing and most in of treatment 2023). for AI for oncology et al, is found to be a in cancer care in et al, 2024). these tools can disease progression and treatment enabling more personalized care (Bi et al, developing predictive that can be in the of advanced diagnostic data scientists can improve outcomes for cancer patients in these there are discussing the of AI in healthcare in the full implementation of AI in healthcare or in oncology are In for instance, are being used to for cancer in the to and in machine learning algorithms have used to analyze to with et al, 2024). These the for data to cancer care in the Global by to of the most the already to the by identifying the to AI implementation in and the that can most the appropriate of AI to enhance health outcomes in these as a critical approach in particularly in cancer treatment, where of expertise are to complex from various This collaborative approach professionals from diverse such as bioinformatics, data and from these healthcare can more and personalized care for especially in oncology 2017). For instance, in the of in and other healthcare professionals such as oncologists, and have together to identify the of patients and to et al, 2017). teams have proven to be a in patient the of and other health the to patients' more ensuring of care et al, a analysis of the on that with multidisciplinary teams outcomes 2017). are increasingly found including to data such as a health in Thus, these the for data scientists to make a significant impact teams various healthcare to tumor boards, data scientists a of and A solid in data analysis, and machine learning is particularly with expertise in datasets such as data, and health a in a with a on and data such as or This of expertise the to large and datasets to healthcare to the Health and of the to patient data and of and clinical with oncologists, radiologists, pathologists, and other healthcare data scientists in complex into actionable insights, data that diverse and are for into the multidisciplinary of tumor the and of their for this role by or a to learning in data and oncology that data scientists can to and in precision from the of and on the of as a particularly in in the Global the critical of and in expertise into This that as and have advanced healthcare limited resources to these to the of data scientists in tumor boards the for and or tailored to to the and of data scientists such as the Data which a for the of data such as the the of the and the et al., et al., et al., et al., In the the for health which with data et al., for further this with for data and for the for AI and data with a on of 2024). the National of the a standard which for data analysis in particularly to data (National data a role as a of from datasets including and data et al, 2022). tumor boards, data scientists not advanced ML but a of and to treatment planning and personalize patient care (Nardone et al, 2024). of their predictive and data into more such as and a of machine learning where to make of decisions by growing in treatment planning et al, 2020). Data scientists to for the the oncology and a the that the of a on et al, They this by to a In oncology, is used to treatment that based on the to algorithms can of radiation or to et al, a based on for personalized proven in the of with AI in early and can be to different et al, 2022). A personalized treatment approach to treatment plans in as patient data personalized to individual early and treatment scientists that a of and their These in outcomes and the of various treatment based on In a tumor board can from different data, molecular and patient the of different clinical outcomes and provide make more decisions in where there is et al, 2024). For in the of et they a patient to patient data and for treatment decisions in and the with and significant to treatment decisions for patients. This to a decision-making in tumor boards, clinical and molecular data to identify the best treatment for data scientists to create treatment and can the of various plans to patients. These are especially in complex with of treatments like with or predict patient based on 2022). like in the of et they a for Tumor treatment planning for on the tumor with their based on patient and tumor such algorithms into advanced treatment planning systems is to enhance of patient to treatment data scientists to personalize the and of therapies such as or These to with especially in treatments that based on individual patient and tumor can and to the of patient of 2024). of treatments further for strategies. Data scientists can be useful by which can approach to assess and a clinical et al, 2023). in learning have to the of from patient or to treatment planning systems for can predict based on data and et al, is of treatment Data scientists data from and to create a molecular profile of a these diverse data scientists tumor boards more targeted For a approach not a the cancer but how with other molecular to more tailored such as in to the genomic and 2023). a of cancer but the large data AI these by identifying and from complex data, cancer et al, 2024). to the by et which machine learning for data in cancer their on and They data from the Cancer in cancer and recommendations for appropriate and the of tools to and personalized from imaging that can tumor and predict patient to identify that not be by a Data scientists these with clinical and genomic data to improve treatment and strategies. in the of et they ML that can and to predict in patients with and as as their overall (Wang et al, et al, and are particularly in where testing not be for tumor et al, et al, 2022). such as and are cancer by molecular with These the of tumor and that sequencing cannot For instance, like and enhance tumor analysis by imaging with and et al., 2023). enabling more of and in et al., of the most of in the of oncology is the of in the improved patient outcomes in precision cancer treatment still to where different of the respond to that the from the to the that tumor can respond on their et al, 2024). Thus, is to not the profile of the tumor but and the This approach lead to more personalized and treatments by the and the of treatment on to how specific lead to This is particularly critical in oncology, where data scientists advanced like the et al., and to identify in treatment and disease progression et al., 2022). like the and interpret machine learning they et al., a large used to improve of the factors in Cancer such as a on treatment et al, 2024). role of data scientists such as and to like treatment in analysis et al., these into clinical data scientists tumor boards to decisions on insights, patient outcomes in personalized oncology application where data scientists play a role is in developing treatment strategies. These are to in to the For instance, a tumor becomes to data scientists can to such as to targeted or analyzing patient data the treatment that treatment plans and to in disease progression et al, For is used as a cancer treatment that the radiation treatment to for in the and as as This make the treatment more and by the tumor to the and et al, scientists decision support systems that oncologists in treatment based on the of patient data, clinical and outcomes from These systems a of machine learning algorithms and clinical to provide recommendations that standard care and personalized In data scientists systems of decision support by data from or For a clinical the in the to or et al, data in cancer patients for such as and in and treatment identify and et al, 2024). a from the of found that especially be used to create a clinical (CDSS) for cancer decision support 2024). A of or radiation the of and a mean of the tumor decision as scientists can where treatments such as and are used in the interaction various they can predict the or outcomes of This is particularly in oncology, where treatments are but be to benefit et al, 2024). For instance, are used to improve treatment precision and reduce by especially in with and other cancer treatment et al, 2025). With the of data predictive can be utilized to in the and of and This will enhance the of their in and cancer decisions for and cancer by patient data and treatment et al, clinical and data in Network to et al, with advanced to Network and enhance predictive et al, Tumor for by and tumor et al, 2020). particularly like and et al, et al, et al, et al, have and in tools for tumor These are clinical data, including and images, which critical for and analyzing of data, to make more precise, data-driven decisions that improve patient outcomes et al, including and et al, et al, large of data from patient and clinical to data and complex like and analysis significant which with the and in data 2024). In tumor boards, can complex patient and predict treatment oncologists with actionable are to enhance for the of et al, This is particularly for the progression of like cancer, where data tumor and treatment can care strategies. are in treatment assess how a et al, play a role in factors such as and et al, These analyze complex to provide into molecular that cancer progression. identify for personalized treatment in oncology et al, a approach to et al, These are how a useful for treatment and disease progression. are particularly in like oncology, where patient can to treatment or disease is a in to in the in et al, 2023). In tumor boards, can be to analyze patient such as data from clinical or This to for from patient and radiological to more personalized and treatment the found in with which are and are particularly useful in where and data is such as analyzing large datasets of patient or data from et al, 2022). In tumor boards, be used to from data like patient in the for more decision-making cancer are to process data large like but with more et al, 2023). This can be useful in oncology, where a of patient data is the can tumor boards the of treatments analyzing data from and genomic to that treatments as the disease is a in that and 2017). is particularly in where different of a of In tumor boards, these can resources to the most critical patient data, such as genomic or in patients with advanced This that the on the most data to with clinical play role in data, which is in oncology to the complexity of and clinical and can be used to these large datasets the most for tumor or In tumor boards, by data enabling to on the most critical for personalized treatment planning et al, on which to analyze complex and for in the complexity of cancer data, especially as datasets in and complexity et al, 2023). learning particularly a more as they can from data and in These are not by the of and are to the of cancer treatment et al, working data scientists advanced ML the and data-driven This that tumor boards can the most insights, for more and personalized cancer care around that the of healthcare teams to more diverse as data AI specialists, and to improved patient As healthcare becomes more the of data scientists are to further et al, like the learning health that learning and data lead to clinical which with the data role in synthesizing diverse of et al, professionals are to and AI in their to the and of As of the healthcare for instance, and in AI to for the of This can be most AI and are into the ensuring are with the and tools to and AI in their practice et al, 2024). AI can support by their to provide and imaging for with other healthcare and decision AI on more complex of patient care and and teams that are to complex as they benefit from the expertise of professionals from different This collaborative approach the to to and patient of is and most are to on these in to their Data scientists are with the as and from and datasets to the tumor This tumor boards to the of cancer treatment such as in the Global a data to to from limited data can be these to data, data scientists can improve diagnostic treatment and make personalized cancer care more to et al, Global significant to the of data in particularly in is a of in the Global by is by where indicates the to For the can be to the most in the such as in the with based on the in there is not a AI which can from For the which number on the be the for AI which be used for AI be used for predictive of such as of of the the for AI in tumor of is that does not for systems to is to the of which is the by with or This of the on the and for such as is developing AI but the of to the a of with is in developing this but countries which are and These countries can the to the to a and AI Southeast Asia is of AI including Asia including and and with the is the in developing in the especially with the of the with of and a of in other countries in the are for the of such including and the will be to this is a of data scientists and healthcare professionals in advanced data analytics in healthcare the to complex AI the of data in clinical practice et al, in Health Data Health systems in from with limited in health This of support the of health data systems that the of AI and ML in cancer care and of AI and have as to AI to improve healthcare in of the to AI have with and such as to 2024). and AI the to improve healthcare in and is as a for global health et al, et al, 2024), data in the to and For the data and developing countries to a in which of data from or and to which are to AI tools be used to further a such as the and and a the to this and and and with to with the of AI is that on to This can in outcomes like and medicine et al, These AI being can still make or in a the is for ensuring the best the other patients AI and most of are with are on AI for This is by factors such as and on For in or patients are AI they that will their or no significant They are in AI for health support a they that AI does not However, with and more in AI AI as a for patient Thus, have from limited and data addition, patients are more their health have and is on a and on and This support patients' and from Thus, AI with these et al, in they a a to cancer and a to the and are precise, by that the the is AI with most oncologists not being by be that and healthcare professionals rely on AI in the of or Thus, data scientists be of the role they play in As data scientists more in tumor boards, they how AI can enhance the patient by ensuring they and Data scientists and have of data scientists on such as data analysis, AI and patient care, and clinical These can lead to in working as they not or data scientists and to Data scientists to complex not the of patient care, to and in data-driven healthcare these to and together more Data scientists can their to make their more to can data scientists the of patient This that AI and data tools are in that benefit patients 2022). of For oncologists and data a is data as a to enhance patient care, data scientists gain a of clinical and are with data scientists their and oncologists data-driven from This can lead to more decision-making and improved patient outcomes by clinical with data-driven learning is a global that data and with and datasets et al, et al, et al, et al, 2022). data from various but in of the overall data being to other of implementation et al, and et al, 2022). As and in developing countries the for data and with as a to this the data and a in the of a in which for as they with to their AI play a role in the by where to advanced These to on or with limited have significant various For instance, et for enabling and more in healthcare a AI tailored to reduce health in and like a how can disease in critical in healthcare et to healthcare by and AI to and diagnostic healthcare more and for the of AI that not but with the of As et these into and to like data and the for AI in further how AI can in For instance, machine learning and data enabling AI to be more and et al., 2024). as by et and for machine learning in have in on AI for decision-making et al., et al., 2025). not enhance but in healthcare ensuring that benefit from These the of AI to improve of support and in the of data in cancer care, from are play role in in health data systems and can create enabling by that ensuring data and and for health Health can as healthcare systems and for in health can to by and et al, especially in the and healthcare can provide expertise and for the of AI and data in These can such as data and AI that are more in the the Global a to of cancer care by AI and data can the for by and health These healthcare to and analyze data cancer care more and in et al, 2024). Data and data health and can datasets that into cancer care These can be used to treatment that the and disease in these et al, et al, 2024). and diagnostic tools can improve early by analyzing imaging and data with AI can personalize treatment plans based on disease and enabling more targeted cancer therapies et al, data and artificial intelligence (AI) in especially in for and these can healthcare professionals enhance their that can be can guide this healthcare professionals as they and as by a to approach with and In this the to and how data-driven or enhance This that by on their and professionals can make AI and data learning can healthcare teams these as useful tools in patient care and especially tumor boards where data-driven decisions can have a However, the of and that professionals are growing and In this the of to that data and AI and can the by and this as to on by that can further enhance patient the of as for In professionals approach AI and data with a are to these tools as a to their and improve their to care for patients. a teams a where professionals in learning the of AI and data a a and data scientists into tumor boards in and this and to these a and for healthcare systems with the expertise to data-driven cancer care with a of the specific by healthcare and be with tumor boards, healthcare and to identify in and For to clinical and for a of including healthcare and the is with patient further with healthcare the for and on global standards like the Data et al., et al., et al., et al., this oncology, data and machine tumor predictive and in data the and of ensuring with healthcare and such as or can the of tailored to is in data scientists with and can the of and learning like or tailored for can provide learning be by to tumor board tools and healthcare such as tumor in as a testing for These be in with",
-      "openalex_id": "W4407230179",
-      "openalex_type": "article",
-      "referenced_works_count": 127,
-      "categories": [
-        "recent"
-      ],
-      "source_api": "openalex",
-      "search_angles": [
-        "application"
-      ],
-      "record_id": "cr_41f2b7ffa6c3ef660f585fe2"
     },
     {
       "title": "The effects of gender stereotype-based interfaces on users’ flow experience and performance",
@@ -24112,6 +24148,26 @@
         "application"
       ],
       "record_id": "cr_b7b5422f62a7185cd12e8b67"
+    },
+    {
+      "title": "What's in this issue?",
+      "authors": [
+        "Julie Scholes"
+      ],
+      "year": 2013,
+      "venue": "Nursing in Critical Care",
+      "doi": "10.1111/nicc.12045",
+      "citations": 0,
+      "abstract": "This issue of the journal contains a group of papers that examine the evidence underpinning practice. Some challenge the taken for granted assumptions and offer alternative perspectives on clinical management; others offer guidance on specialist care for patients who are rarely encountered in intensive care units (ICUs). Maureen Coombs' (2013) guest editorial explores the four quadrant concepts of: conscious competence; unconscious competence; conscious incompetence and unconscious incompetence. She has applied this concept to end-of-life care and offers solutions to address shortfalls in knowledge, including reflexive questions to challenge our assumptions of how much we might know. Such practice serves to keep us consciously attending to our competence to manage both the ‘routine’ as well as the unusual. Building a portfolio of knowledge and experience and a willingness to transfer these skills to different contexts helps to individualize care and celebrate the core transferable skills of critical care nursing. The second guest editorial by Parissopoulos et al. (2013) explores the ritual of the ward round. The ward round can be the forum in which to exercise interdisciplinary decision-making. It is in the ward round where expertise is pooled and new approaches to care are decided. This relies on the active engagement of all those who participate and valuing of different contributions, ways of knowing and alternative solutions to both the exceptional as much as the predictable circumstances that affect our patients. The ward round provides opportunity for the critical care nurse (CCN) to act as an advocate to the patient, raising issues of concern and ideas for patient care on a regular basis. It can also be a place to learn from others and discover different solutions to manage complex and challenging care situations. However, this does require us to rethink what the ward round is about and contribute towards its transformation from a ritualistic routine to an inspirational encounter. The article by Noujeim et al. (2013) on auto-triggering of the ventilator details a phenomenon that can lead to delayed assessment of brain death by an apnoea test. The authors have conducted a systematic review of the phenomenon and offer a case history to illustrate the clinical presentation. Heartbeats can produce waves and flow signals at the airway opening known as cardiogenic oscillations and these trigger auto-cycling on the ventilator that are sometimes assumed to be respiratory effort (Tusman et al. 2009). In addition to the cardiogenic oscillations, bronchopleural fistula or an endotracheal cuff leak or air leak could equally set off the auto-triggering (Noujeim et al. 2013). In the case history provided by the authors, it was cardiac oscillations that set the ventilator to auto-trigger. This rare although unusual event, the authors claim can raise unrealistic hope of patient recovery for the family. As a CCN is constantly at the bedside, it is likely that they would be the first to notice the auto-triggering. Although directed mainly towards medical assessment, it is imperative that the CCN knows of this phenomenon so that they can act promptly and work alongside their medical colleagues to differentiate respiratory effort from a physiological or iatrogenic artefact. Prompt referral to differentiate cause is essential to alleviate any unnecessary distress or false hope for the patient's family. The article by Camsooksai et al. (2013) examines the introduction of a dedicated research nurse role for critical care in a district general hospital. The authors claim, without any supporting evidence, that research in critical care usually takes place in a University Teaching Hospital. Therefore, their success in winning money to fund the role from the Comprehensive Local Research Network (CLRN) was celebrated and they invested considerable effort to ensure the role had an impact on all the staff in the unit. The quest for evidence-based care, participation in clinical trials and building a research portfolio were central to the ambitions of the research nurses. Credibility as a CCN was given priority over research experience and skills because the research nurses wanted to be seen as part of the team, undertake a bedside role and offer education and facilitation to their clinical colleagues to establish and maintain the trial protocols. The qualities a CCN brings to the sensitive process of gaining assent from the relatives for a patient to be recruited to a research study and then gathering consent from the patients later in their recovery trajectory are not detailed. The technique of assessing capacity to consent, and the complex challenges this presents for a patient recovering from a stay in ICU are additional skills that a research nurse with critical care experience can offer. In addition, it is the capability to undertake the full scope of research activity to address a range of research questions that demands the qualities of specialist and highly qualified research nurses and that distinguishes them from data technicians. The article by Crossan and Cole (2013) explores the care of a patient with polytrauma. Their paper provides a case history of a critically ill patient suffering from major injuries to illustrate the physical care needs and to integrate the best evidence from the literature to support the life-saving strategies deployed. Trauma sustained following severe injuries can sometimes demand interventions that contradict normal patterns of care provision. Prioritizing interventions relative to the greatest threat to life and then function requires constant review. This can create significant challenges to nursing care. In this case study, the delayed stabilization of spinal injuries due to haemodynamic instability and the need for damage-control abdominal surgery resulted in the patient developing a debicutus ulcer. Regular pressure relieving devices could not be considered to offset this risk because of the threat to the spinal cord and care required for a patient suffering from a flail segment. Under these conditions, the nurse has to be vigilant at all times and actively work to adopt caring practices that meet the needs of the patient. Importantly, amidst all the physical and life-saving interventions, it is often the CCN who has to ensure that the psychological needs of the patient are met. In addition, the CCN also has to consider what care and support can be provided to address the impact that the incident, polytrauma and the interventions for the patient have on the family and friends who visit. Preparing the visitor for what they are likely to see, in terms of equipment, dressings and injuries is one small but essential step to facilitate the visitor's adaptation to this traumatic experience. Reid's (2013) article provides an important explanation of central venous oxygen saturation and the significance of different readings on patient mortality. This literature review was conducted after searching a broad range of databases over the past 10 years. The review takes the reader through the basics of central venous oxygen saturation, when different saturations should be used, the significance of the assessment findings and their impact on mortality. This review shares important research evidence and clinical knowledge that in tandem provide a guide to best practice. For some, this paper will serve to revise what they already know, for others it will provide an explanation that makes sense of past experience and can be foundational to the development of new insights, knowledge and references to guide their practice. The article by Engstrom and Lindberg (2013) offers guidance on the care of nursing mothers in intensive care. A group of 13 CCNs working in one ICU in Sweden contributed through three focus groups to identify their concerns and educational needs to help them care for a mother who has been subject to a life-threatening condition following a birth. The core challenges for the nurses included facilitating bonding, opportunity for breast feeding, family care and balancing the needs of a new family with respect to the needs of other patients on the unit. The specialist skills of a midwife were considered necessary to help manage the first three issues. In the first instance, CCNs concerned themselves with the life-saving interventions directed towards the mother. When a baby was admitted to the ICU to be alongside the mother, the CCNs were concerned about their role in caring for the father and infant. A unit guideline indicated a father was responsible for care of the infant, but the CCNs recognized this could be difficult for a first-time father suffering from the stress of his partner's critical condition. The importance of trying to create a private space for the new family, which also took into account the needs of other patients and their relatives on the unit, was considered to be challenging. The authors concluded that wherever possible, admission, or transfer, to a high-dependency unit as soon as the mother's physical condition would allow provided a better environment for recovery and family bonding. Unusual events in ICU may instill a concern for coping with the unexpected. However, there are a range of core capabilities that a CCN holds that can be adapted to the physical and psychological needs of the patient requiring specialist interventions. How those generic skills can be adapted to the specific scenario takes a moment to pause and reflect. Thinking about how much one can do in critical care management rather than how little one knows about a specialist problem can help the development of an individualized package of care for the patients and their family. This awakens our unconscious competence to address complex situations when no explicit guidance is immediately available. Drawing on the expertise of others as well as access to written guidance from those experts can help to boost the capabilities of CCNs that might otherwise be subject to skill-fade because of the rarity of the experience. Consciously attending to what we already know and can apply to a given context and what we need to know and how to acquire that knowledge requires deliberation, thought and planning. We hope these papers serve as a reference to facilitate the understanding of patient's care whether that need is rare, common or idiosyncratic.",
+      "openalex_id": "W4242017217",
+      "openalex_type": "article",
+      "referenced_works_count": 8,
+      "categories": [],
+      "source_api": "openalex",
+      "search_angles": [
+        "application"
+      ],
+      "record_id": "cr_c2b3504fb4f750ce0133f50d"
     },
     {
       "title": "When Challenge Turns into Threat at the Chessboard: Cardiovascular Reactivity and Flow Across Two Hours of Task Performance",

@@ -6,28 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-09-21T14:33:03.244Z",
+    "timestamp": "2026-09-21T14:37:51.977Z",
     "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
-    "records_fetched": 952,
+    "records_fetched": 953,
     "files_written": 1,
-    "duration_s": 222.46,
-    "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex application \"flow experience challenge skill balance applied intervention\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
+    "duration_s": 681.26,
+    "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 503 Service Unavailable for api.openalex.org/works · search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 503 Service Unavailable for api.openalex.org/works · search openalex recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 503 Service Unavailable for api.openalex.org/works · search openalex recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 503 Service Unavailable for api.openalex.org/works",
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 53,
-      "duration_s": 222.46,
+      "api_calls": 63,
+      "duration_s": 681.26,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-09-21T14:37:51.977Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 953,
+      "files_written": 1,
+      "duration_s": 681.26,
+      "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 503 Service Unavailable for api.openalex.org/works · search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 503 Service Unavailable for api.openalex.org/works · search openalex recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 503 Service Unavailable for api.openalex.org/works · search openalex recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 503 Service Unavailable for api.openalex.org/works",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 63,
+        "duration_s": 681.26,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-09-21T14:33:03.244Z",
       "status": "partial",
@@ -427,27 +449,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-09-21T13:52:10.058Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 948,
-      "files_written": 1,
-      "duration_s": 43.74,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 44,
-        "duration_s": 43.74,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -525,8 +526,8 @@
     },
     {
       "path": "FL-24.json",
-      "records": 952,
-      "bytes": 7951564,
+      "records": 953,
+      "bytes": 7963805,
       "categories": {
         "foundational": 34,
         "meta-analysis": 26,
