@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-09-22T00:41:27.407Z",
+  "fetched_at": "2026-09-22T00:45:22.741Z",
   "terms_source": "record",
   "terms": [
     "flow experience challenge skill balance",
@@ -18,12 +18,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 25,
+      "unique_returned": 25,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "upstream_total_results": 824
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
@@ -48,27 +48,27 @@
       "bucket": "citation",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance",
-      "api": "semantic-scholar",
-      "angle": "recent",
-      "term": "flow experience challenge skill balance",
-      "bucket": "relevance",
-      "kind": "search",
-      "requested": 25,
       "returned": 25,
       "unique_returned": 25,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 5788
+      "upstream_total_results": 824
+    },
+    {
+      "query_id": "graph:backward-reference:W1683284848",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Challenge/Skill Balance, Flow, and Performance Anxiety",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "graph:backward-reference:W7212190422",
@@ -157,7 +157,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
@@ -172,7 +172,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
@@ -341,70 +341,25 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W7166715852",
+      "query_id": "graph:forward-citation:W1683284848",
       "api": "openalex",
       "angle": "canon",
-      "term": "Exploring College Students’ AI-Supported Flow during Language Learning Tasks in Virtual Environments",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7166715852",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Exploring College Students’ AI-Supported Flow during Language Learning Tasks in Virtual Environments",
+      "term": "Challenge/Skill Balance, Flow, and Performance Anxiety",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 3,
+      "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W7162533360",
+      "query_id": "graph:backward-reference:W2042314632",
       "api": "openalex",
       "angle": "canon",
-      "term": "Flow as Minimum-Displacement Maximum-Performance: Csikszentmihalyi's Optimal Experience as S⁰ Condition, Skill-Challenge Balance as Basin Geometry, and the Neurochemistry of Return",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7162533360",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Flow as Minimum-Displacement Maximum-Performance: Csikszentmihalyi's Optimal Experience as S⁰ Condition, Skill-Challenge Balance as Basin Geometry, and the Neurochemistry of Return",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7162293062",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)",
+      "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
@@ -416,10 +371,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W7162293062",
+      "query_id": "graph:forward-citation:W2042314632",
       "api": "openalex",
       "angle": "canon",
-      "term": "AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)",
+      "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
@@ -431,85 +386,70 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance",
+      "query_id": "graph:backward-reference:W3046829123",
       "api": "openalex",
-      "angle": "recent",
-      "term": "flow experience challenge skill balance",
-      "bucket": "recency",
-      "kind": "search",
+      "angle": "canon",
+      "term": "Detecting Students’ Flow States and Their Construct Through Electroencephalogram: Reflective Flow Experiences, Balance of Challenge and Skill, and Sense of Control",
+      "bucket": "citation",
+      "kind": "backward-reference",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 23,
+      "returned": 3,
+      "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
-      "upstream_total_results": 824
-    },
-    {
-      "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance",
-      "api": "openalex",
-      "angle": "recent",
-      "term": "flow experience challenge skill balance",
-      "bucket": "citation",
-      "kind": "search",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
-      "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance applied intervention",
+      "query_id": "graph:forward-citation:W3046829123",
       "api": "openalex",
-      "angle": "application",
-      "term": "flow experience challenge skill balance applied intervention",
-      "bucket": "relevance",
-      "kind": "search",
-      "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 37
-    },
-    {
-      "query_id": "search:recency:openalex:application:p1:flow experience challenge skill balance applied intervention",
-      "api": "openalex",
-      "angle": "application",
-      "term": "flow experience challenge skill balance applied intervention",
+      "angle": "canon",
+      "term": "Detecting Students’ Flow States and Their Construct Through Electroencephalogram: Reflective Flow Experiences, Balance of Challenge and Skill, and Sense of Control",
       "bucket": "recency",
-      "kind": "search",
+      "kind": "forward-citation",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 24,
+      "returned": 11,
+      "unique_returned": 11,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
-      "upstream_total_results": 37
-    },
-    {
-      "query_id": "search:citation:openalex:application:p1:flow experience challenge skill balance applied intervention",
-      "api": "openalex",
-      "angle": "application",
-      "term": "flow experience challenge skill balance applied intervention",
-      "bucket": "citation",
-      "kind": "search",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W2905435317",
+      "query_id": "graph:backward-reference:W279868603",
       "api": "openalex",
-      "angle": "application",
-      "term": "Effect of adjusting the challenge–skill balance for occupational therapy: study protocol for a randomised controlled trial",
+      "angle": "canon",
+      "term": "Flow Experience and Challenge-Skill Balance in E-Learning",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W279868603",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Flow Experience and Challenge-Skill Balance in E-Learning",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W4221001939",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
@@ -559,42 +499,24 @@
       {
         "angle": "canon",
         "queries": 3,
-        "returned": 25,
-        "unique_records": 23
-      },
-      {
-        "angle": "recent",
-        "queries": 3,
-        "returned": 50,
-        "unique_records": 46
-      },
-      {
-        "angle": "application",
-        "queries": 3,
-        "returned": 50,
-        "unique_records": 33
+        "returned": 75,
+        "unique_records": 56
       }
     ],
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 8,
-        "returned": 100,
+        "queries": 3,
+        "returned": 75,
         "unique_records": 56
-      },
-      {
-        "api": "semantic-scholar",
-        "queries": 1,
-        "returned": 25,
-        "unique_records": 25
       }
     ],
-    "recent_records": 44,
-    "recency_rate": 0.557,
+    "recent_records": 25,
+    "recency_rate": 0.4464,
     "novelty": {
       "previous_corpus_records": 954,
-      "unique_records": 79,
-      "already_in_corpus": 79,
+      "unique_records": 56,
+      "already_in_corpus": 56,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -607,6 +529,18 @@
     "novelty_curve": [
       {
         "query_index": 1,
+        "query_id": "search:relevance:openalex:canon:p1:flow experience challenge skill balance",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 954
+      },
+      {
+        "query_index": 2,
         "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
         "bucket": "recency",
         "kind": "search",
@@ -618,9 +552,9 @@
         "cumulative_records": 954
       },
       {
-        "query_index": 2,
-        "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance",
-        "bucket": "relevance",
+        "query_index": 3,
+        "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
+        "bucket": "citation",
         "kind": "search",
         "returned": 25,
         "unique_returned": 25,
@@ -630,7 +564,19 @@
         "cumulative_records": 954
       },
       {
-        "query_index": 3,
+        "query_index": 4,
+        "query_id": "graph:backward-reference:W1683284848",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 2,
+        "unique_returned": 2,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 954
+      },
+      {
+        "query_index": 5,
         "query_id": "graph:backward-reference:W7212190422",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -642,7 +588,7 @@
         "cumulative_records": 954
       },
       {
-        "query_index": 4,
+        "query_index": 6,
         "query_id": "graph:forward-citation:W7212190422",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -654,7 +600,7 @@
         "cumulative_records": 954
       },
       {
-        "query_index": 5,
+        "query_index": 7,
         "query_id": "graph:backward-reference:W7204854129",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -666,7 +612,7 @@
         "cumulative_records": 954
       },
       {
-        "query_index": 6,
+        "query_index": 8,
         "query_id": "graph:forward-citation:W7204854129",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -678,7 +624,7 @@
         "cumulative_records": 954
       },
       {
-        "query_index": 7,
+        "query_index": 9,
         "query_id": "graph:backward-reference:W7204641889",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -690,32 +636,8 @@
         "cumulative_records": 954
       },
       {
-        "query_index": 8,
-        "query_id": "graph:forward-citation:W7204641889",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 954
-      },
-      {
-        "query_index": 9,
-        "query_id": "graph:backward-reference:W7204957777",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 954
-      },
-      {
         "query_index": 10,
-        "query_id": "graph:forward-citation:W7204957777",
+        "query_id": "graph:forward-citation:W7204641889",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -727,7 +649,7 @@
       },
       {
         "query_index": 11,
-        "query_id": "graph:backward-reference:W7201969041",
+        "query_id": "graph:backward-reference:W7204957777",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 0,
@@ -739,7 +661,7 @@
       },
       {
         "query_index": 12,
-        "query_id": "graph:forward-citation:W7201969041",
+        "query_id": "graph:forward-citation:W7204957777",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -751,7 +673,7 @@
       },
       {
         "query_index": 13,
-        "query_id": "graph:backward-reference:W7201976895",
+        "query_id": "graph:backward-reference:W7201969041",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 0,
@@ -763,7 +685,7 @@
       },
       {
         "query_index": 14,
-        "query_id": "graph:forward-citation:W7201976895",
+        "query_id": "graph:forward-citation:W7201969041",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -775,7 +697,7 @@
       },
       {
         "query_index": 15,
-        "query_id": "graph:backward-reference:W7202291746",
+        "query_id": "graph:backward-reference:W7201976895",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 0,
@@ -787,7 +709,7 @@
       },
       {
         "query_index": 16,
-        "query_id": "graph:forward-citation:W7202291746",
+        "query_id": "graph:forward-citation:W7201976895",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -799,7 +721,7 @@
       },
       {
         "query_index": 17,
-        "query_id": "graph:backward-reference:W7169557143",
+        "query_id": "graph:backward-reference:W7202291746",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 0,
@@ -811,7 +733,7 @@
       },
       {
         "query_index": 18,
-        "query_id": "graph:forward-citation:W7169557143",
+        "query_id": "graph:forward-citation:W7202291746",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -823,11 +745,11 @@
       },
       {
         "query_index": 19,
-        "query_id": "graph:backward-reference:W7165564922",
+        "query_id": "graph:backward-reference:W7169557143",
         "bucket": "citation",
         "kind": "backward-reference",
-        "returned": 1,
-        "unique_returned": 1,
+        "returned": 0,
+        "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -835,7 +757,7 @@
       },
       {
         "query_index": 20,
-        "query_id": "graph:forward-citation:W7165564922",
+        "query_id": "graph:forward-citation:W7169557143",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -847,11 +769,11 @@
       },
       {
         "query_index": 21,
-        "query_id": "graph:backward-reference:W7166715852",
+        "query_id": "graph:backward-reference:W7165564922",
         "bucket": "citation",
         "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -859,7 +781,7 @@
       },
       {
         "query_index": 22,
-        "query_id": "graph:forward-citation:W7166715852",
+        "query_id": "graph:forward-citation:W7165564922",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -871,11 +793,11 @@
       },
       {
         "query_index": 23,
-        "query_id": "graph:backward-reference:W7162533360",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
+        "query_id": "graph:forward-citation:W1683284848",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 3,
+        "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -883,19 +805,7 @@
       },
       {
         "query_index": 24,
-        "query_id": "graph:forward-citation:W7162533360",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 954
-      },
-      {
-        "query_index": 25,
-        "query_id": "graph:backward-reference:W7162293062",
+        "query_id": "graph:backward-reference:W2042314632",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 6,
@@ -906,8 +816,8 @@
         "cumulative_records": 954
       },
       {
-        "query_index": 26,
-        "query_id": "graph:forward-citation:W7162293062",
+        "query_index": 25,
+        "query_id": "graph:forward-citation:W2042314632",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -918,12 +828,24 @@
         "cumulative_records": 954
       },
       {
+        "query_index": 26,
+        "query_id": "graph:backward-reference:W3046829123",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 954
+      },
+      {
         "query_index": 27,
-        "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance",
+        "query_id": "graph:forward-citation:W3046829123",
         "bucket": "recency",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 23,
+        "kind": "forward-citation",
+        "returned": 11,
+        "unique_returned": 11,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -931,11 +853,11 @@
       },
       {
         "query_index": 28,
-        "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance applied intervention",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
+        "query_id": "graph:backward-reference:W279868603",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 3,
+        "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -943,11 +865,11 @@
       },
       {
         "query_index": 29,
-        "query_id": "search:recency:openalex:application:p1:flow experience challenge skill balance applied intervention",
+        "query_id": "graph:forward-citation:W279868603",
         "bucket": "recency",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 24,
+        "kind": "forward-citation",
+        "returned": 2,
+        "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -955,7 +877,7 @@
       },
       {
         "query_index": 30,
-        "query_id": "graph:backward-reference:W2905435317",
+        "query_id": "graph:backward-reference:W4221001939",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 1,
@@ -970,22 +892,22 @@
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 3,
-      "recency": 3,
-      "citation": 3
+      "relevance": 1,
+      "recency": 1,
+      "citation": 1
     },
-    "topical_candidates": 82,
-    "topical_confirmed": 14,
-    "topical_rejected": 68,
-    "topical_confirmation_rate": 0.1707,
-    "graph_anchors_expanded": 13,
+    "topical_candidates": 42,
+    "topical_confirmed": 20,
+    "topical_rejected": 22,
+    "topical_confirmation_rate": 0.4762,
+    "graph_anchors_expanded": 14,
     "field_union_estimate": {
-      "estimate": 6485,
+      "estimate": 954,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 3,
-      "total_search_queries": 5,
-      "summed_upstream_results": 6649,
-      "observed_sample_multiplicity": 1.0253
+      "measured_queries": 1,
+      "total_search_queries": 3,
+      "summed_upstream_results": 824,
+      "observed_sample_multiplicity": 1
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
