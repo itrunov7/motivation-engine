@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-09-22T00:00:47.043Z",
+  "fetched_at": "2026-09-22T00:18:46.327Z",
   "terms_source": "record",
   "terms": [
     "flow experience challenge skill balance",
@@ -18,12 +18,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 824
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
@@ -33,17 +33,62 @@
       "bucket": "recency",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 23,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 824
+      "upstream_total_results": null
     },
     {
       "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
       "api": "openalex",
       "angle": "canon",
+      "term": "flow experience challenge skill balance",
+      "bucket": "citation",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance",
+      "api": "semantic-scholar",
+      "angle": "recent",
+      "term": "flow experience challenge skill balance",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "search:recency:openalex:recent:p1:flow experience challenge skill balance",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "flow experience challenge skill balance",
+      "bucket": "recency",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance",
+      "api": "openalex",
+      "angle": "recent",
       "term": "flow experience challenge skill balance",
       "bucket": "citation",
       "kind": "search",
@@ -56,9 +101,39 @@
       "upstream_total_results": 824
     },
     {
+      "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance applied intervention",
+      "api": "openalex",
+      "angle": "application",
+      "term": "flow experience challenge skill balance applied intervention",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 25,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": 37
+    },
+    {
+      "query_id": "search:recency:openalex:application:p1:flow experience challenge skill balance applied intervention",
+      "api": "openalex",
+      "angle": "application",
+      "term": "flow experience challenge skill balance applied intervention",
+      "bucket": "recency",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
       "query_id": "graph:backward-reference:W1683284848",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "Challenge/Skill Balance, Flow, and Performance Anxiety",
       "bucket": "citation",
       "kind": "backward-reference",
@@ -71,250 +146,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W7212190422",
+      "query_id": "graph:backward-reference:W2905435317",
       "api": "openalex",
-      "angle": "canon",
-      "term": "Flow Experience in the Chinese Blended Classroom: How Students and Teachers Shape English Success",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7212190422",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Flow Experience in the Chinese Blended Classroom: How Students and Teachers Shape English Success",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7204854129",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Examination of Dispositional Flow State and Self-Esteem of University Students Who Do Sport and Exercise",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 4,
-      "unique_returned": 4,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7204854129",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Examination of Dispositional Flow State and Self-Esteem of University Students Who Do Sport and Exercise",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7204641889",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "In the Zone: A Narrative Review of Flow Theory in Games, from Optimal Experience to Game Design",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7204641889",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "In the Zone: A Narrative Review of Flow Theory in Games, from Optimal Experience to Game Design",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7204957777",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Dynamic Difficulty Adjustment in a Multiplayer Learning Environment: An Exploratory Evaluation of Player Experience",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7204957777",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Dynamic Difficulty Adjustment in a Multiplayer Learning Environment: An Exploratory Evaluation of Player Experience",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7201969041",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Flow-Related Engagement in Children Undergoing Cancer Treatment in China: A Scoping Review of Psychosocial and Digital Interventions",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7201969041",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Flow-Related Engagement in Children Undergoing Cancer Treatment in China: A Scoping Review of Psychosocial and Digital Interventions",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7201976895",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Redefining Digital Education: The Impact of AI-Driven Flow Experience on Learner Satisfaction and Continuous Intention",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7201976895",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Redefining Digital Education: The Impact of AI-Driven Flow Experience on Learner Satisfaction and Continuous Intention",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7202291746",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "The Relationship Between Flow, Task Difficulty, and Performance",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7202291746",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "The Relationship Between Flow, Task Difficulty, and Performance",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7169557143",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Understanding Flow Experience Among College Basketball Players: The Mediating Role of Perceived Skill–Challenge Balance",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7169557143",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Understanding Flow Experience Among College Basketball Players: The Mediating Role of Perceived Skill–Challenge Balance",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7165564922",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "From challenge-skills balance to wellbeing in sports: the role of team identification and flow",
+      "angle": "application",
+      "term": "Effect of adjusting the challenge–skill balance for occupational therapy: study protocol for a randomised controlled trial",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
@@ -322,14 +157,44 @@
       "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W7165564922",
+      "query_id": "graph:forward-citation:W2905435317",
       "api": "openalex",
-      "angle": "canon",
-      "term": "From challenge-skills balance to wellbeing in sports: the role of team identification and flow",
+      "angle": "application",
+      "term": "Effect of adjusting the challenge–skill balance for occupational therapy: study protocol for a randomised controlled trial",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 5,
+      "unique_returned": 5,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W40588719",
+      "api": "openalex",
+      "angle": "application",
+      "term": "Propensity and attainment of flow state",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W40588719",
+      "api": "openalex",
+      "angle": "application",
+      "term": "Propensity and attainment of flow state",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
@@ -337,13 +202,13 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
       "query_id": "graph:forward-citation:W1683284848",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "Challenge/Skill Balance, Flow, and Performance Anxiety",
       "bucket": "recency",
       "kind": "forward-citation",
@@ -352,13 +217,13 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
       "query_id": "graph:backward-reference:W2042314632",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
       "bucket": "citation",
       "kind": "backward-reference",
@@ -367,13 +232,13 @@
       "unique_returned": 6,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
       "query_id": "graph:forward-citation:W2042314632",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "The challenge–skill balance and antecedents of flow: A meta-analytic investigation",
       "bucket": "recency",
       "kind": "forward-citation",
@@ -386,40 +251,40 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W3046829123",
+      "query_id": "graph:backward-reference:W2948469271",
       "api": "openalex",
-      "angle": "canon",
-      "term": "Detecting Students’ Flow States and Their Construct Through Electroencephalogram: Reflective Flow Experiences, Balance of Challenge and Skill, and Sense of Control",
+      "angle": "recent",
+      "term": "Modelling Chinese EFL learners’ flow experiences in digital game-based vocabulary learning: the roles of learner and contextual factors",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
-      "returned": 3,
-      "unique_returned": 3,
+      "returned": 2,
+      "unique_returned": 2,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W3046829123",
+      "query_id": "graph:forward-citation:W2948469271",
       "api": "openalex",
-      "angle": "canon",
-      "term": "Detecting Students’ Flow States and Their Construct Through Electroencephalogram: Reflective Flow Experiences, Balance of Challenge and Skill, and Sense of Control",
+      "angle": "recent",
+      "term": "Modelling Chinese EFL learners’ flow experiences in digital game-based vocabulary learning: the roles of learner and contextual factors",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
-      "returned": 11,
-      "unique_returned": 11,
+      "returned": 3,
+      "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W279868603",
+      "query_id": "graph:backward-reference:W2419624448",
       "api": "openalex",
-      "angle": "canon",
-      "term": "Flow Experience and Challenge-Skill Balance in E-Learning",
+      "angle": "recent",
+      "term": "The experience of flow and subjective well-being of music students",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
@@ -431,10 +296,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W279868603",
+      "query_id": "graph:forward-citation:W2419624448",
       "api": "openalex",
-      "angle": "canon",
-      "term": "Flow Experience and Challenge-Skill Balance in E-Learning",
+      "angle": "recent",
+      "term": "The experience of flow and subjective well-being of music students",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
@@ -448,7 +313,7 @@
     {
       "query_id": "graph:backward-reference:W4221001939",
       "api": "openalex",
-      "angle": "canon",
+      "angle": "recent",
       "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
       "bucket": "citation",
       "kind": "backward-reference",
@@ -459,6 +324,261 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W4221001939",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2100919822",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "Arousal of Flow Experience in a Learning Setting and Its Effects on Exam Performance and Affect",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2100919822",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "Arousal of Flow Experience in a Learning Setting and Its Effects on Exam Performance and Affect",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 5,
+      "unique_returned": 5,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2020443333",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "“I Feel Present. Therefore, I Experience Flow:” A Structural Equation Modeling Approach to Flow and Presence in Video Games",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2020443333",
+      "api": "openalex",
+      "angle": "recent",
+      "term": "“I Feel Present. Therefore, I Experience Flow:” A Structural Equation Modeling Approach to Flow and Presence in Video Games",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "search:citation:openalex:application:p1:flow experience challenge skill balance applied intervention",
+      "api": "openalex",
+      "angle": "application",
+      "term": "flow experience challenge skill balance applied intervention",
+      "bucket": "citation",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 24,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 37
+    },
+    {
+      "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance critique criticism",
+      "api": "semantic-scholar",
+      "angle": "critique",
+      "term": "flow experience challenge skill balance critique criticism",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 25,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 602
+    },
+    {
+      "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance critique criticism",
+      "api": "openalex",
+      "angle": "critique",
+      "term": "flow experience challenge skill balance critique criticism",
+      "bucket": "recency",
+      "kind": "search",
+      "requested": 25,
+      "returned": 8,
+      "unique_returned": 8,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 8
+    },
+    {
+      "query_id": "search:citation:openalex:critique:p1:flow experience challenge skill balance critique criticism",
+      "api": "openalex",
+      "angle": "critique",
+      "term": "flow experience challenge skill balance critique criticism",
+      "bucket": "citation",
+      "kind": "search",
+      "requested": 25,
+      "returned": 8,
+      "unique_returned": 8,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 8
+    },
+    {
+      "query_id": "search:relevance:openalex:replication:p1:flow experience challenge skill balance replication",
+      "api": "openalex",
+      "angle": "replication",
+      "term": "flow experience challenge skill balance replication",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 25,
+      "records_added": 1,
+      "novelty_rate": 0.04,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": 39
+    },
+    {
+      "query_id": "search:recency:openalex:replication:p1:flow experience challenge skill balance replication",
+      "api": "openalex",
+      "angle": "replication",
+      "term": "flow experience challenge skill balance replication",
+      "bucket": "recency",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 24,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": 39
+    },
+    {
+      "query_id": "search:citation:openalex:replication:p1:flow experience challenge skill balance replication",
+      "api": "openalex",
+      "angle": "replication",
+      "term": "flow experience challenge skill balance replication",
+      "bucket": "citation",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2416828686",
+      "api": "openalex",
+      "angle": "replication",
+      "term": "State of Mind in the Flow 4-Channel Model and Play",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2416828686",
+      "api": "openalex",
+      "angle": "replication",
+      "term": "State of Mind in the Flow 4-Channel Model and Play",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "search:relevance:semantic-scholar:boundary:p1:flow experience challenge skill balance boundary conditions moderators",
+      "api": "semantic-scholar",
+      "angle": "boundary",
+      "term": "flow experience challenge skill balance boundary conditions moderators",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 25,
+      "unique_returned": 23,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": 121
+    },
+    {
+      "query_id": "search:recency:openalex:boundary:p1:flow experience challenge skill balance boundary conditions moderators",
+      "api": "openalex",
+      "angle": "boundary",
+      "term": "flow experience challenge skill balance boundary conditions moderators",
+      "bucket": "recency",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "search:citation:openalex:boundary:p1:flow experience challenge skill balance boundary conditions moderators",
+      "api": "openalex",
+      "angle": "boundary",
+      "term": "flow experience challenge skill balance boundary conditions moderators",
+      "bucket": "citation",
+      "kind": "search",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.004,
+      "upstream_total_results": 2
     }
   ],
   "coverage_report": {
@@ -490,7 +610,7 @@
   "category_counts": {
     "foundational": 34,
     "meta-analysis": 26,
-    "replication": 106,
+    "replication": 107,
     "dissent": 166,
     "recent": 581
   },
@@ -499,61 +619,73 @@
       {
         "angle": "canon",
         "queries": 3,
-        "returned": 75,
-        "unique_records": 56
+        "returned": 0,
+        "unique_records": 0
+      },
+      {
+        "angle": "recent",
+        "queries": 3,
+        "returned": 25,
+        "unique_records": 25
+      },
+      {
+        "angle": "application",
+        "queries": 3,
+        "returned": 50,
+        "unique_records": 28
+      },
+      {
+        "angle": "critique",
+        "queries": 3,
+        "returned": 41,
+        "unique_records": 33
+      },
+      {
+        "angle": "replication",
+        "queries": 3,
+        "returned": 50,
+        "unique_records": 34
+      },
+      {
+        "angle": "boundary",
+        "queries": 3,
+        "returned": 27,
+        "unique_records": 25
       }
     ],
     "source_spread": [
       {
         "api": "openalex",
+        "queries": 15,
+        "returned": 143,
+        "unique_records": 87
+      },
+      {
+        "api": "semantic-scholar",
         "queries": 3,
-        "returned": 75,
-        "unique_records": 56
+        "returned": 50,
+        "unique_records": 45
       }
     ],
-    "recent_records": 25,
-    "recency_rate": 0.4464,
+    "recent_records": 57,
+    "recency_rate": 0.4488,
     "novelty": {
       "previous_corpus_records": 953,
-      "unique_records": 56,
-      "already_in_corpus": 56,
-      "new_records": 0,
-      "novelty_rate": 0,
+      "unique_records": 127,
+      "already_in_corpus": 126,
+      "new_records": 1,
+      "novelty_rate": 0.0079,
       "low_novelty": true,
       "known_share_threshold": 0.8
     }
   },
   "saturation_report": {
     "queries_issued": 30,
-    "records_added": 0,
+    "records_added": 1,
     "novelty_curve": [
       {
         "query_index": 1,
-        "query_id": "search:relevance:openalex:canon:p1:flow experience challenge skill balance",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 2,
-        "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
-        "bucket": "recency",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 23,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 3,
-        "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
+        "query_id": "search:citation:openalex:recent:p1:flow experience challenge skill balance",
         "bucket": "citation",
         "kind": "search",
         "returned": 25,
@@ -564,7 +696,19 @@
         "cumulative_records": 953
       },
       {
-        "query_index": 4,
+        "query_index": 2,
+        "query_id": "search:relevance:openalex:application:p1:flow experience challenge skill balance applied intervention",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 3,
         "query_id": "graph:backward-reference:W1683284848",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -576,12 +720,24 @@
         "cumulative_records": 953
       },
       {
-        "query_index": 5,
-        "query_id": "graph:backward-reference:W7212190422",
+        "query_index": 4,
+        "query_id": "graph:backward-reference:W2905435317",
         "bucket": "citation",
         "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 5,
+        "query_id": "graph:forward-citation:W2905435317",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 5,
+        "unique_returned": 5,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -589,11 +745,11 @@
       },
       {
         "query_index": 6,
-        "query_id": "graph:forward-citation:W7212190422",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
+        "query_id": "graph:backward-reference:W40588719",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -601,11 +757,11 @@
       },
       {
         "query_index": 7,
-        "query_id": "graph:backward-reference:W7204854129",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 4,
-        "unique_returned": 4,
+        "query_id": "graph:forward-citation:W40588719",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -613,186 +769,6 @@
       },
       {
         "query_index": 8,
-        "query_id": "graph:forward-citation:W7204854129",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 9,
-        "query_id": "graph:backward-reference:W7204641889",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 10,
-        "query_id": "graph:forward-citation:W7204641889",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 11,
-        "query_id": "graph:backward-reference:W7204957777",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 12,
-        "query_id": "graph:forward-citation:W7204957777",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 13,
-        "query_id": "graph:backward-reference:W7201969041",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 14,
-        "query_id": "graph:forward-citation:W7201969041",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 15,
-        "query_id": "graph:backward-reference:W7201976895",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 16,
-        "query_id": "graph:forward-citation:W7201976895",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 17,
-        "query_id": "graph:backward-reference:W7202291746",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 18,
-        "query_id": "graph:forward-citation:W7202291746",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 19,
-        "query_id": "graph:backward-reference:W7169557143",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 20,
-        "query_id": "graph:forward-citation:W7169557143",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 21,
-        "query_id": "graph:backward-reference:W7165564922",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 22,
-        "query_id": "graph:forward-citation:W7165564922",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 953
-      },
-      {
-        "query_index": 23,
         "query_id": "graph:forward-citation:W1683284848",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -800,11 +776,11 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
+        "rolling_novelty_rate": null,
         "cumulative_records": 953
       },
       {
-        "query_index": 24,
+        "query_index": 9,
         "query_id": "graph:backward-reference:W2042314632",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -812,11 +788,11 @@
         "unique_returned": 6,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
+        "rolling_novelty_rate": null,
         "cumulative_records": 953
       },
       {
-        "query_index": 25,
+        "query_index": 10,
         "query_id": "graph:forward-citation:W2042314632",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -828,32 +804,32 @@
         "cumulative_records": 953
       },
       {
-        "query_index": 26,
-        "query_id": "graph:backward-reference:W3046829123",
+        "query_index": 11,
+        "query_id": "graph:backward-reference:W2948469271",
         "bucket": "citation",
         "kind": "backward-reference",
-        "returned": 3,
-        "unique_returned": 3,
+        "returned": 2,
+        "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
         "cumulative_records": 953
       },
       {
-        "query_index": 27,
-        "query_id": "graph:forward-citation:W3046829123",
+        "query_index": 12,
+        "query_id": "graph:forward-citation:W2948469271",
         "bucket": "recency",
         "kind": "forward-citation",
-        "returned": 11,
-        "unique_returned": 11,
+        "returned": 3,
+        "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
         "cumulative_records": 953
       },
       {
-        "query_index": 28,
-        "query_id": "graph:backward-reference:W279868603",
+        "query_index": 13,
+        "query_id": "graph:backward-reference:W2419624448",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 3,
@@ -864,8 +840,8 @@
         "cumulative_records": 953
       },
       {
-        "query_index": 29,
-        "query_id": "graph:forward-citation:W279868603",
+        "query_index": 14,
+        "query_id": "graph:forward-citation:W2419624448",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 2,
@@ -876,7 +852,7 @@
         "cumulative_records": 953
       },
       {
-        "query_index": 30,
+        "query_index": 15,
         "query_id": "graph:backward-reference:W4221001939",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -886,28 +862,208 @@
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
         "cumulative_records": 953
+      },
+      {
+        "query_index": 16,
+        "query_id": "graph:forward-citation:W4221001939",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 17,
+        "query_id": "graph:backward-reference:W2100919822",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 18,
+        "query_id": "graph:forward-citation:W2100919822",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 5,
+        "unique_returned": 5,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 19,
+        "query_id": "graph:backward-reference:W2020443333",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 20,
+        "query_id": "graph:forward-citation:W2020443333",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 21,
+        "query_id": "search:citation:openalex:application:p1:flow experience challenge skill balance applied intervention",
+        "bucket": "citation",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 24,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 22,
+        "query_id": "search:relevance:semantic-scholar:critique:p1:flow experience challenge skill balance critique criticism",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 23,
+        "query_id": "search:recency:openalex:critique:p1:flow experience challenge skill balance critique criticism",
+        "bucket": "recency",
+        "kind": "search",
+        "returned": 8,
+        "unique_returned": 8,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 24,
+        "query_id": "search:citation:openalex:critique:p1:flow experience challenge skill balance critique criticism",
+        "bucket": "citation",
+        "kind": "search",
+        "returned": 8,
+        "unique_returned": 8,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 953
+      },
+      {
+        "query_index": 25,
+        "query_id": "search:relevance:openalex:replication:p1:flow experience challenge skill balance replication",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 25,
+        "records_added": 1,
+        "novelty_rate": 0.04,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 954
+      },
+      {
+        "query_index": 26,
+        "query_id": "search:recency:openalex:replication:p1:flow experience challenge skill balance replication",
+        "bucket": "recency",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 24,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 954
+      },
+      {
+        "query_index": 27,
+        "query_id": "graph:backward-reference:W2416828686",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 954
+      },
+      {
+        "query_index": 28,
+        "query_id": "graph:forward-citation:W2416828686",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 954
+      },
+      {
+        "query_index": 29,
+        "query_id": "search:relevance:semantic-scholar:boundary:p1:flow experience challenge skill balance boundary conditions moderators",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 25,
+        "unique_returned": 23,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 954
+      },
+      {
+        "query_index": 30,
+        "query_id": "search:citation:openalex:boundary:p1:flow experience challenge skill balance boundary conditions moderators",
+        "bucket": "citation",
+        "kind": "search",
+        "returned": 2,
+        "unique_returned": 2,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.004,
+        "cumulative_records": 954
       }
     ],
     "window_queries": 10,
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 1,
-      "recency": 1,
-      "citation": 1
+      "relevance": 6,
+      "recency": 6,
+      "citation": 6
     },
-    "topical_candidates": 42,
-    "topical_confirmed": 20,
-    "topical_rejected": 22,
-    "topical_confirmation_rate": 0.4762,
-    "graph_anchors_expanded": 14,
+    "topical_candidates": 139,
+    "topical_confirmed": 10,
+    "topical_rejected": 129,
+    "topical_confirmation_rate": 0.0719,
+    "graph_anchors_expanded": 10,
     "field_union_estimate": {
-      "estimate": 953,
+      "estimate": 1430,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 1,
-      "total_search_queries": 3,
-      "summed_upstream_results": 824,
-      "observed_sample_multiplicity": 1
+      "measured_queries": 7,
+      "total_search_queries": 10,
+      "summed_upstream_results": 1633,
+      "observed_sample_multiplicity": 1.1417
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -3691,12 +3847,12 @@
     {
       "title": "The Flow Model of Intrinsic Motivation in Chinese: Cultural and Personal Moderators",
       "authors": [
-        "G. Moneta"
+        "Giovanni B. Moneta"
       ],
       "year": 2004,
       "venue": null,
       "doi": "10.1023/b:johs.0000035916.27782.e4",
-      "citations": 133,
+      "citations": 134,
       "abstract": null,
       "openalex_id": null,
       "openalex_type": null,
@@ -10986,6 +11142,29 @@
       "record_id": "cr_a520a4c5999be2c9b9197537"
     },
     {
+      "title": "Test-Driven Development Benefits Beyond Design Quality: Flow State and Developer Experience",
+      "authors": [
+        "Pedro H. Calais",
+        "L. Franzini"
+      ],
+      "year": 2023,
+      "venue": "2023 IEEE/ACM 45th International Conference on Software Engineering: New Ideas and Emerging Results (ICSE-NIER)",
+      "doi": "10.1109/icse-nier58687.2023.00025",
+      "citations": 7,
+      "abstract": "Test-driven development (TDD) is a coding technique that combines design and testing in an iterative and incremental fashion. It prescribes that tests written before the production code help the developer to find good interfaces and to evolve the design safely and incrementally. Improvements on the design of code produced by the test-driven development approach have been extensively evaluated in the literature; in this research, we focus on seeking explanations on the benefits of TDD in another dimension which we believe has been undervalued – developer experience. We identified that there is a natural connection between the TDD approach and flow state, a well-known mental state characterized by total immersion, focus, and involvement in a task that promotes increased enjoyment and productivity. We present evidence that the continuous stream of mini-scope, short-lived, red-green-refactor cycles of TDD frame the development task as a structure that creates the pre-conditions reported by neuroscience research to produce flow state, namely (1) clear goals, (2) unambiguous feedback, (3) challenge-skill balance and (4) sense of control. Our work contributes to increase the understanding on the reasons why adopting practices such as TDD can benefit the software development process as a whole and can support its adoption in software development projects.",
+      "openalex_id": null,
+      "openalex_type": null,
+      "referenced_works_count": null,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "semantic-scholar",
+      "search_angles": [
+        "boundary"
+      ],
+      "record_id": "cr_0536e24b44ad8be1d831b8bb"
+    },
+    {
       "title": "The new wave of 'hybrid' work: An opportunity to revise assumptions and build theory",
       "authors": [
         "Efpraxia D. Zamani",
@@ -11300,29 +11479,6 @@
         "application"
       ],
       "record_id": "cr_61f0e48cfe401f888166f489"
-    },
-    {
-      "title": "Test-Driven Development Benefits Beyond Design Quality: Flow State and Developer Experience",
-      "authors": [
-        "Pedro H. Calais",
-        "Lissa Franzini"
-      ],
-      "year": 2023,
-      "venue": "2023 IEEE/ACM 45th International Conference on Software Engineering: New Ideas and Emerging Results (ICSE-NIER)",
-      "doi": "10.1109/icse-nier58687.2023.00025",
-      "citations": 6,
-      "abstract": "Test-driven development (TDD) is a coding technique that combines design and testing in an iterative and incremental fashion. It prescribes that tests written before the production code help the developer to find good interfaces and to evolve the design safely and incrementally. Improvements on the design of code produced by the test-driven development approach have been extensively evaluated in the literature; in this research, we focus on seeking explanations on the benefits of TDD in another dimension which we believe has been undervalued – developer experience. We identified that there is a natural connection between the TDD approach and flow state, a well-known mental state characterized by total immersion, focus, and involvement in a task that promotes increased enjoyment and productivity. We present evidence that the continuous stream of mini-scope, short-lived, red-green-refactor cycles of TDD frame the development task as a structure that creates the pre-conditions reported by neuroscience research to produce flow state, namely (1) clear goals, (2) unambiguous feedback, (3) challenge-skill balance and (4) sense of control. Our work contributes to increase the understanding on the reasons why adopting practices such as TDD can benefit the software development process as a whole and can support its adoption in software development projects.",
-      "openalex_id": null,
-      "openalex_type": null,
-      "referenced_works_count": null,
-      "categories": [
-        "recent"
-      ],
-      "source_api": "semantic-scholar",
-      "search_angles": [
-        "boundary"
-      ],
-      "record_id": "cr_0536e24b44ad8be1d831b8bb"
     },
     {
       "title": "The Driving Impact of Digital Innovation Ecosystems on Enterprise Digital Transformation: Based on an Interpretable Machine Learning Model",
@@ -12117,6 +12273,29 @@
       "record_id": "cr_9c766be19e50cb4ada79dddc"
     },
     {
+      "title": "Learning with, rather than through, AI: co-designing science education for critical AI literacy",
+      "authors": [
+        "Ahmet Küçükuncular"
+      ],
+      "year": 2025,
+      "venue": "Frontiers in Education",
+      "doi": "10.3389/feduc.2025.1716353",
+      "citations": 4,
+      "abstract": "The New Classroom Reality: AI at Students' Fingertips Classrooms have entered an era where generative AI tools like ChatGPT are ubiquitous knowledge brokers. In a recent cross-national survey spanning seven countries, researchers found that the use of AI for science-related information searches is widespread and growing (Greussing et al., 2025;Kessler et al., 2025). Young people are especially quick to adopt such tools. Anecdotal evidence and early studies confirm that many students are already using ChatGPT for schoolwork, sometimes extensively (Chow, 2025;Gecker, 2025). This means that beyond textbooks and teachers, students now have a third player in the learning process: a conversational AI that can explain concepts, solve problems, and even write essays on demand. Science communication -by which one means the exchange and discussion of especially scientific ideas and information between educators and learners in a classroom setting -is no longer a one-way flow from teacher to student; it has become a more complex network, with AI as a new node connecting learners to information.From the student's perspective, this seems empowering. AI provides instant answers and personalised explanations at any time. For example, a biology student stuck on a homework question about plant cell organelles can ask ChatGPT for help and receive a tailored explanation within seconds. Indeed, AI's powerful knowledge base and rapid feedback have huge potential for supporting student learning. Studies have begun to document benefits: a recent meta-analysis of 51 research studies concluded that using ChatGPT can significantly improve students' learning performance on average, and even bolster higher-order thinking skills when used with proper guidance (Chow, 2025;Fang et al., 2025 [preprint]). Such findings suggest that, used well, ChatGPT might act as a kind of virtual teaching assistant, providing scaffolding and practice for learners. It is no wonder that many educators see promise in integrating AI into education (Küçükuncular & Ertugan, 2025).Yet this new reality is also disorienting for teachers. Historically, a science teacher was the primary source of expert knowledge in the classroom. Now, that monopoly on information is gone. The challenge is clear: How do teachers maintain their educational impact when ' Google on steroids' is sitting in every student's pocket? Some teachers fear that if answers are always available on-demand, students may stop paying attention in class or doing the hard thinking themselves. In one striking MIT Media Lab study, college-aged participants who used ChatGPT to write essays showed markedly lower brain engagement than those who wrote without AI assistance (Fang et al., 2025 [preprint]). The AI-assisted essays tended to be uniform and characterless, and by the third assignment many students had resorted to simple copy-and-paste usage of ChatGPT (ibid.). Brainwave measurements indicated these students were engaging far less in critical thought, suggesting that overreliance on AI can make learning disturbingly passive (Bennet & Royce, 2025). Although that study focused on older students and is still preliminary, its implications resonate in high school settings as well. If students outsource too much thinking to AI, they risk bypassing the very cognitive processes by which deep learning and scientific reasoning develop.The rise of AI helpers poses several challenges to science communication and teaching. Firstly, educators worry that easy answers from AI could short-circuit students' critical thinking and curiosity. Roughly half of teachers surveyed in the U.S. suspect that student use of AI might decrease teens' ability to think independently and persist through difficult problems (Gecker, 2025). The concern is that if a chemistry student can ask ChatGPT to balance a chemical equation or explain a concept, they might not bother grappling with it themselves. Over time, this 'use it or lose it' effect could weaken their problem-solving muscles. As one report noted, heavy reliance on AI tools can have unintended cognitive consequences for developing brains, potentially weakening memory and reasoning skills if not checked (Zhai, 2022). Science educators thus face the task of ensuring that AI becomes a springboard for thinking, not a replacement for it.Secondly, despite their fluency, AI models are not infallible. ChatGPT can produce answers that sound authoritative but are partially incorrect or even completely fabricated (Chelli et al., 2024). For instance, it might confidently mix real scientific facts with a few wrong details, or generate plausible-sounding references to studies that do not exist. Such hallucinations are a known weakness of large language models (ibid.). Science educators, who prioritise evidence-based explanations, may find this aspect of ChatGPT particularly problematic. A student might receive an answer that is superficially convincing yet subtly wrong, and without guidance, they may not catch the error. The difficulty of science communication now includes an extra layer of fact-checking AIprovided information. Teachers must often play the role of AI misinformation detectors, helping students learn to verify answers against reliable sources (textbooks, scientific articles) instead of taking the AI's word as final.Thirdly, another challenge is the potential bias in AI-generated content. These models are trained on vast datasets from the internet, and they can inadvertently reflect the biases present in those data. OpenAI itself has acknowledged that ChatGPT may produce content that perpetuates harmful biases and stereotypes and is generally skewed toward Western perspectives (Cooper, 2023). This raises important questions for inclusive science communication. If students from historically marginalised communities or non-Western cultures turn to AI for science knowledge, will they see their perspectives reflected? Or will the information subtly prioritise Western examples and viewpoints? Would these voices be amplified or silenced by the algorithm? (ibid.). High school teachers, especially those committed to equity, must be vigilant. They need to help students recognise bias in AI outputs and seek out diverse sources of scientific information. In practice, this might mean discussing why an AI's answer about the history of a discovery only mentioned Western male scientists, or why its explanation of an environmental issue omitted indigenous knowledge. Science communication in the AI era must actively counteract bias to remain inclusive.The ease with which generative AI can produce essays, homework answers, or lab reports creates a cheating dilemma. Teachers are finding that they now have to distinguish a student's original work from AI-generated work (Bennet & Royce, 2025). Although some clues might help, since AI-written text may be surprisingly polished, generic in tone, and devoid of personal voice or errors, detection is not always straightforward. This puts stress on the traditional modes of assessment. If a student can get a perfectly formatted lab summary from ChatGPT, teachers must rethink assignments to emphasise process and understanding over flawless output. It is also important to acknowledge that the growing prevalence of digital and online assessments may further increase students' access to, and dependence on, AI tools; however, an in-depth analysis of this issue lies beyond the scope of this piece. Nevertheless, it remains a challenge to design assessments that reward genuine engagement and cannot be completed by a bot. Many schools responded initially by banning AI tools outright, but outright bans are often unenforceable and may deprive students of learning how to use AI ethically. The trend now is toward finding ways to incorporate AI smartly rather than ignore it, which requires careful thought from educators (Küçükuncular & Ertugan, 2025).These challenges highlight that teaching science has, in some ways, become harder. The presence of an all-knowing bot in the room means teachers must constantly reinforce why learning science matters beyond just getting answers. It also calls for involving students more directly in shaping classroom norms for ethical AI use, ensuring they are not only consumers but also co-designers of responsible learning practices. Likewise, it forces educators to emphasise process, skills, and context -areas where human guidance is still essential -while managing the new pitfalls AI introduces.Even with these difficulties, many educators are cautiously optimistic. The key is to redefine the teacher's role in light of what AI can do. Rather than seeing ChatGPT as a competitor, savvy teachers treat it as a tool, and as such, one that needs a skilled human operator. A recent report found that among U.S. teachers who do use AI, about 80% said it saves them time on tasks like preparing worksheets, quizzes, and lesson plans (Gecker, 2025). Freed from some routine chores, teachers can devote more energy to interacting with students or designing creative activities. In the same report, about 60% of these teachers felt AI tools actually improved the quality of their work when adapting materials or providing feedback to students (ibid.). In other words, AI can augment teacher effectiveness if used properly. For example, a science teacher might use ChatGPT to generate a draft of a quiz, then refine the questions to better suit her class. Or an educator might quickly get a few alternative explanations for a tricky concept and then decide which one best fits their students' level. These uses of AI treat it as an assistant, not a replacement.More importantly, teachers are now tasked with a new pedagogical mission: teaching AI literacy. Just as past generations of educators taught students how to use search engines or discern credible sources online, today's teachers must show students how to interact intelligently with AI. \"If I'm on the soapbox of 'AI is bad and kids are going to get dumb,' well yeah, that'll happen if we don't teach them how to use the tool\", remarked Mary McCarthy, a high school teacher, emphasising that it is \"the responsibility of the adult in the room to help [students] navigate this future\" (as quoted in Gecker, 2025) Rather than forbid AI, she models proper use in her classroom, demonstrating, for instance, how to ask the right questions of ChatGPT and how to cross-check its answers. This perspective is increasingly echoed by educators around the world. Such modelling not only shapes responsible AI but also invites students to co-design classrooms norms for ethical AI use, reinforcing their agency in learning with, rather than though, AI.So, what does critical AI education look like in practice for a science class? It involves pulling back the curtain on tools like ChatGPT and guiding students in their use. A teacher might start by openly discussing how large language models work at an appropriate level of detail, explaining that these AIs predict answers based on patterns in data, and therefore do not know facts in the way humans do (Wang & Fan, 2025). From there, teachers can integrate AI into assignments in a structured way. For example, a high school biology teacher could have students use ChatGPT to get a quick explanation of a concept before a lesson, then spend class time dissecting that AI-generated explanation: Was it accurate? What details were missing? Did use any questionable sources? This kind of exercise turns AI from a shortcut into a subject of critical analysis (Greussing et al., 2025). In one science education study, an educator described modelling this approach, having students prompt ChatGPT for a brief overview of a topic to overcome knowledge gaps, but then critically evaluating the response together (Cooper, 2023). Such practices actually reinforce scientific thinking: students must evaluate evidence, identify errors, and consider alternative explanations, just as a scientist would. Using AI becomes a means to make students' thinking visible and hone their analytical skills, rather than a crutch to avoid thinking. Indeed, many experts assert that using AI is not necessarily about replacing teachers or making the learning of science easier for students. When employed intentionally in the classroom, AI tools can prompt students to ask better questions, consider multiple perspectives, and reflect on their reasoning. For instance, a chemistry teacher might use ChatGPT to generate an incorrect explanation of a concept and ask students to find the flaws in it, a twist on the traditional misconception-based teaching strategy (Henke, 2025). Alternatively, teachers might engage AI as a debate partner: one class activity described by educators is to have students debate an AI on a controversial science topic, forcing the student to fact-check the AI's arguments and respond with evidence (Bennet & Royce, 2025). Such an exercise can make learning interactive and sharpen critical thinking, as students must counter an AI's claims and, in the process, deepen their own understanding. In these ways, the teacher orchestrates learning experiences where AI is a means to an end, the end being engaged, thoughtful students.Crucially, teachers remain the mentors and curators of the learning process. They provide what AI cannot: context, ethical guidance, emotional support, and personalization grounded in genuine understanding of their students (Küçükuncular & Ertugan, 2025). Students consistently report valuing this human empathy, the sense that their teachers can understand, encourage, and relate to their experiences -a dimension that no algorithm (at least for now) can replicate (Ampofo et al., 2025). A chatbot might give a correct formula or definition, but it takes a teacher to observe that Johnny is still confused about why it matters, or that Aisha, who speaks English as a second language, might be taking the AI's text too literally. Educators bring professional judgment to decide when to trust an AI-generated resource and when to override it. \"We want to make sure that AI isn't replacing the judgment of a teacher\", as Maya Israel, a professor of education technology, aptly put it (as quoted in Gecker, 2025). This means, for example, that if a teacher uses an AI to help grade or give feedback, they must review the output, especially for nuanced student work, and make the final call themselves. In a world flooded with automated information, the teacher's role as a wise guide and facilitator is arguably more important than ever. That is, not merely a 'guide on the side', but a reflective mentor who helps students cultivate discernment, curiosity, and critical reasoning in dialogue with technology.And despite the fears, teachers are not obsolete -not even close. \"AI does not replace the expertise of the science teacher (yet),\" writes Cooper (2023, p. 450), reminding colleagues that a teacher's experience and understanding of their students remain key to sound pedagogy. In fact, teachers who embrace AI often find themselves re-energised in their practice. By handing off some tedious tasks to AI and focusing on higher-order skills, they can transform their classrooms into vibrant workshops of inquiry. Some early-career teachers report that AI tools have improved their work-life balance and reduced burnout by cutting on time (Gecker, 2025). The human energy can be in creative like designing guiding or student research which AI cannot do for In this AI as a for the kind of teaching that educators already less more and is a guiding to navigate science communication in the of AI, it to be critical AI for students and teachers. Science educators incorporate into their the skills to use AI and This includes learning how to questions for tools like ChatGPT, how to the answers with a and how to information against scientific sources (Küçükuncular & Ertugan, 2025). It also means grappling with the implications of AI in In a science this could to discussing such as the environmental impact of large that AI or the human in AI content et al., Such help scientific knowledge to responsibility and ensuring that ethical understanding. These science and with and students' understanding of the context in which science By AI itself as a subject of teachers the critical thinking we in how a and what its this must be by taking to AI literacy. is to use rather than banning AI, when and how it may be used for For instance, a teacher might students to use ChatGPT to ideas for but them to document any AI assistance they and reflect on its This norms in where some now ask to any AI tools used in or research 2025). Such students to be of their reliance on AI and to responsibility for their learning. Teachers also emphasise that AI is a not the If a student uses an AI-generated they be to on it, it with their own it, or it with examples from class. The act of or AI can be a powerful learning as it requires understanding the well to what is or educator that it is important for teachers and students to be about the ChatGPT output, that are not and on that (Cooper, p. the AI's as to be This practice not only analytical but also students as of their learning process, reinforcing in digital AI means preparing students for a where AI is Just as we teach lab or the proper way to a we now must teach AI in an This includes questions When is it appropriate to use AI for help, and when is it better to through a without How do we or AI assistance to maintain What biases might an AI and how can we These questions a of ethical that scientific they students with a and a sense of They learn that they are in of the tool, not In fact, by AI's and ethical pitfalls educators can turn AI into a lesson in scientific for evidence, in and of an often aspect of critical AI education is its potential to When students reflect on how they used an AI tool, such as what questions they how they the or where the AI was or they are thinking about their own thinking. This kind of is known to deepen learning et al., 2024). Some teachers integrate or where an AI might suggest questions like the or do and then students respond with their own The AI as a for but the from the this reflective dialogue with helps cultivate students not only what they but how they to know it. In the is to teach students to AI as critical much like we teach them to critically evaluate a source or an design in If they can that, AI from a to an in their learning of AI is the of science but it does not the end of it calls for their Teachers find themselves at the of this between and one they must against the pitfalls of the potential for critical thinking, access or and or environmental with AI the other they have a to AI to make science communication more and inclusive than A student who can get a quick answer from ChatGPT is a student who can also use that answer as a springboard to ask questions, but only if we show them Educators have described as rather than of what the AI era is the need for that When answers are becomes the new and role in takes on this new the science educators will be those who AI's presence and turn it to their They will that is not by a AI that understanding requires and that AI can but not They will also for and that integrate AI ensuring every student the skills to navigate an world. In doing they beyond toward students to have responsibility for how AI is and into learning. of at its has always about more than it is about and the of remain If they become even more important when a can facts on the difficulty of science communication in the of AI is also its It forces to on what matters in AI is not replacing it is A teacher's human the ability to to the to challenge and is but now it can be by AI's By that educators transform AI from a into an in critical and creative inquiry. By that we can students not just to scientific knowledge, but to engage with it and In doing we turn a potentially into a for and that the of teaching science not only but in the AI",
+      "openalex_id": "W4415685327",
+      "openalex_type": "article",
+      "referenced_works_count": 10,
+      "categories": [
+        "replication",
+        "recent"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "replication"
+      ],
+      "record_id": "cr_27cb8c24000232b1f5e83856"
+    },
+    {
       "title": "Motor skills intervention: conceptual and operational model and the determination of fidelity indexes",
       "authors": [
         "Nádia Cristina Valentini"
@@ -12854,29 +13033,6 @@
       "record_id": "cr_e8b6b38e2635188631309f79"
     },
     {
-      "title": "Learning with, rather than through, AI: co-designing science education for critical AI literacy",
-      "authors": [
-        "Ahmet Küçükuncular"
-      ],
-      "year": 2025,
-      "venue": "Frontiers in Education",
-      "doi": "10.3389/feduc.2025.1716353",
-      "citations": 3,
-      "abstract": "The New Classroom Reality: AI at Students' Fingertips Classrooms have entered an era where generative AI tools like ChatGPT are ubiquitous knowledge brokers. In a recent cross-national survey spanning seven countries, researchers found that the use of AI for science-related information searches is widespread and growing (Greussing et al., 2025;Kessler et al., 2025). Young people are especially quick to adopt such tools. Anecdotal evidence and early studies confirm that many students are already using ChatGPT for schoolwork, sometimes extensively (Chow, 2025;Gecker, 2025). This means that beyond textbooks and teachers, students now have a third player in the learning process: a conversational AI that can explain concepts, solve problems, and even write essays on demand. Science communication -by which one means the exchange and discussion of especially scientific ideas and information between educators and learners in a classroom setting -is no longer a one-way flow from teacher to student; it has become a more complex network, with AI as a new node connecting learners to information.From the student's perspective, this seems empowering. AI provides instant answers and personalised explanations at any time. For example, a biology student stuck on a homework question about plant cell organelles can ask ChatGPT for help and receive a tailored explanation within seconds. Indeed, AI's powerful knowledge base and rapid feedback have huge potential for supporting student learning. Studies have begun to document benefits: a recent meta-analysis of 51 research studies concluded that using ChatGPT can significantly improve students' learning performance on average, and even bolster higher-order thinking skills when used with proper guidance (Chow, 2025;Fang et al., 2025 [preprint]). Such findings suggest that, used well, ChatGPT might act as a kind of virtual teaching assistant, providing scaffolding and practice for learners. It is no wonder that many educators see promise in integrating AI into education (Küçükuncular & Ertugan, 2025).Yet this new reality is also disorienting for teachers. Historically, a science teacher was the primary source of expert knowledge in the classroom. Now, that monopoly on information is gone. The challenge is clear: How do teachers maintain their educational impact when ' Google on steroids' is sitting in every student's pocket? Some teachers fear that if answers are always available on-demand, students may stop paying attention in class or doing the hard thinking themselves. In one striking MIT Media Lab study, college-aged participants who used ChatGPT to write essays showed markedly lower brain engagement than those who wrote without AI assistance (Fang et al., 2025 [preprint]). The AI-assisted essays tended to be uniform and characterless, and by the third assignment many students had resorted to simple copy-and-paste usage of ChatGPT (ibid.). Brainwave measurements indicated these students were engaging far less in critical thought, suggesting that overreliance on AI can make learning disturbingly passive (Bennet & Royce, 2025). Although that study focused on older students and is still preliminary, its implications resonate in high school settings as well. If students outsource too much thinking to AI, they risk bypassing the very cognitive processes by which deep learning and scientific reasoning develop.The rise of AI helpers poses several challenges to science communication and teaching. Firstly, educators worry that easy answers from AI could short-circuit students' critical thinking and curiosity. Roughly half of teachers surveyed in the U.S. suspect that student use of AI might decrease teens' ability to think independently and persist through difficult problems (Gecker, 2025). The concern is that if a chemistry student can ask ChatGPT to balance a chemical equation or explain a concept, they might not bother grappling with it themselves. Over time, this 'use it or lose it' effect could weaken their problem-solving muscles. As one report noted, heavy reliance on AI tools can have unintended cognitive consequences for developing brains, potentially weakening memory and reasoning skills if not checked (Zhai, 2022). Science educators thus face the task of ensuring that AI becomes a springboard for thinking, not a replacement for it.Secondly, despite their fluency, AI models are not infallible. ChatGPT can produce answers that sound authoritative but are partially incorrect or even completely fabricated (Chelli et al., 2024). For instance, it might confidently mix real scientific facts with a few wrong details, or generate plausible-sounding references to studies that do not exist. Such hallucinations are a known weakness of large language models (ibid.). Science educators, who prioritise evidence-based explanations, may find this aspect of ChatGPT particularly problematic. A student might receive an answer that is superficially convincing yet subtly wrong, and without guidance, they may not catch the error. The difficulty of science communication now includes an extra layer of fact-checking AIprovided information. Teachers must often play the role of AI misinformation detectors, helping students learn to verify answers against reliable sources (textbooks, scientific articles) instead of taking the AI's word as final.Thirdly, another challenge is the potential bias in AI-generated content. These models are trained on vast datasets from the internet, and they can inadvertently reflect the biases present in those data. OpenAI itself has acknowledged that ChatGPT may produce content that perpetuates harmful biases and stereotypes and is generally skewed toward Western perspectives (Cooper, 2023). This raises important questions for inclusive science communication. If students from historically marginalised communities or non-Western cultures turn to AI for science knowledge, will they see their perspectives reflected? Or will the information subtly prioritise Western examples and viewpoints? Would these voices be amplified or silenced by the algorithm? (ibid.). High school teachers, especially those committed to equity, must be vigilant. They need to help students recognise bias in AI outputs and seek out diverse sources of scientific information. In practice, this might mean discussing why an AI's answer about the history of a discovery only mentioned Western male scientists, or why its explanation of an environmental issue omitted indigenous knowledge. Science communication in the AI era must actively counteract bias to remain inclusive.The ease with which generative AI can produce essays, homework answers, or lab reports creates a cheating dilemma. Teachers are finding that they now have to distinguish a student's original work from AI-generated work (Bennet & Royce, 2025). Although some clues might help, since AI-written text may be surprisingly polished, generic in tone, and devoid of personal voice or errors, detection is not always straightforward. This puts stress on the traditional modes of assessment. If a student can get a perfectly formatted lab summary from ChatGPT, teachers must rethink assignments to emphasise process and understanding over flawless output. It is also important to acknowledge that the growing prevalence of digital and online assessments may further increase students' access to, and dependence on, AI tools; however, an in-depth analysis of this issue lies beyond the scope of this piece. Nevertheless, it remains a challenge to design assessments that reward genuine engagement and cannot be completed by a bot. Many schools responded initially by banning AI tools outright, but outright bans are often unenforceable and may deprive students of learning how to use AI ethically. The trend now is toward finding ways to incorporate AI smartly rather than ignore it, which requires careful thought from educators (Küçükuncular & Ertugan, 2025).These challenges highlight that teaching science has, in some ways, become harder. The presence of an all-knowing bot in the room means teachers must constantly reinforce why learning science matters beyond just getting answers. It also calls for involving students more directly in shaping classroom norms for ethical AI use, ensuring they are not only consumers but also co-designers of responsible learning practices. Likewise, it forces educators to emphasise process, skills, and context -areas where human guidance is still essential -while managing the new pitfalls AI introduces.Even with these difficulties, many educators are cautiously optimistic. The key is to redefine the teacher's role in light of what AI can do. Rather than seeing ChatGPT as a competitor, savvy teachers treat it as a tool, and as such, one that needs a skilled human operator. A recent report found that among U.S. teachers who do use AI, about 80% said it saves them time on tasks like preparing worksheets, quizzes, and lesson plans (Gecker, 2025). Freed from some routine chores, teachers can devote more energy to interacting with students or designing creative activities. In the same report, about 60% of these teachers felt AI tools actually improved the quality of their work when adapting materials or providing feedback to students (ibid.). In other words, AI can augment teacher effectiveness if used properly. For example, a science teacher might use ChatGPT to generate a draft of a quiz, then refine the questions to better suit her class. Or an educator might quickly get a few alternative explanations for a tricky concept and then decide which one best fits their students' level. These uses of AI treat it as an assistant, not a replacement.More importantly, teachers are now tasked with a new pedagogical mission: teaching AI literacy. Just as past generations of educators taught students how to use search engines or discern credible sources online, today's teachers must show students how to interact intelligently with AI. \"If I'm on the soapbox of 'AI is bad and kids are going to get dumb,' well yeah, that'll happen if we don't teach them how to use the tool\", remarked Mary McCarthy, a high school teacher, emphasising that it is \"the responsibility of the adult in the room to help [students] navigate this future\" (as quoted in Gecker, 2025) Rather than forbid AI, she models proper use in her classroom, demonstrating, for instance, how to ask the right questions of ChatGPT and how to cross-check its answers. This perspective is increasingly echoed by educators around the world. Such modelling not only shapes responsible AI but also invites students to co-design classrooms norms for ethical AI use, reinforcing their agency in learning with, rather than though, AI.So, what does critical AI education look like in practice for a science class? It involves pulling back the curtain on tools like ChatGPT and guiding students in their use. A teacher might start by openly discussing how large language models work at an appropriate level of detail, explaining that these AIs predict answers based on patterns in data, and therefore do not know facts in the way humans do (Wang & Fan, 2025). From there, teachers can integrate AI into assignments in a structured way. For example, a high school biology teacher could have students use ChatGPT to get a quick explanation of a concept before a lesson, then spend class time dissecting that AI-generated explanation: Was it accurate? What details were missing? Did use any questionable sources? This kind of exercise turns AI from a shortcut into a subject of critical analysis (Greussing et al., 2025). In one science education study, an educator described modelling this approach, having students prompt ChatGPT for a brief overview of a topic to overcome knowledge gaps, but then critically evaluating the response together (Cooper, 2023). Such practices actually reinforce scientific thinking: students must evaluate evidence, identify errors, and consider alternative explanations, just as a scientist would. Using AI becomes a means to make students' thinking visible and hone their analytical skills, rather than a crutch to avoid thinking. Indeed, many experts assert that using AI is not necessarily about replacing teachers or making the learning of science easier for students. When employed intentionally in the classroom, AI tools can prompt students to ask better questions, consider multiple perspectives, and reflect on their reasoning. For instance, a chemistry teacher might use ChatGPT to generate an incorrect explanation of a concept and ask students to find the flaws in it, a twist on the traditional misconception-based teaching strategy (Henke, 2025). Alternatively, teachers might engage AI as a debate partner: one class activity described by educators is to have students debate an AI on a controversial science topic, forcing the student to fact-check the AI's arguments and respond with evidence (Bennet & Royce, 2025). Such an exercise can make learning interactive and sharpen critical thinking, as students must counter an AI's claims and, in the process, deepen their own understanding. In these ways, the teacher orchestrates learning experiences where AI is a means to an end, the end being engaged, thoughtful students.Crucially, teachers remain the mentors and curators of the learning process. They provide what AI cannot: context, ethical guidance, emotional support, and personalization grounded in genuine understanding of their students (Küçükuncular & Ertugan, 2025). Students consistently report valuing this human empathy, the sense that their teachers can understand, encourage, and relate to their experiences -a dimension that no algorithm (at least for now) can replicate (Ampofo et al., 2025). A chatbot might give a correct formula or definition, but it takes a teacher to observe that Johnny is still confused about why it matters, or that Aisha, who speaks English as a second language, might be taking the AI's text too literally. Educators bring professional judgment to decide when to trust an AI-generated resource and when to override it. \"We want to make sure that AI isn't replacing the judgment of a teacher\", as Maya Israel, a professor of education technology, aptly put it (as quoted in Gecker, 2025). This means, for example, that if a teacher uses an AI to help grade or give feedback, they must review the output, especially for nuanced student work, and make the final call themselves. In a world flooded with automated information, the teacher's role as a wise guide and facilitator is arguably more important than ever. That is, not merely a 'guide on the side', but a reflective mentor who helps students cultivate discernment, curiosity, and critical reasoning in dialogue with technology.And despite the fears, teachers are not obsolete -not even close. \"AI does not replace the expertise of the science teacher (yet),\" writes Cooper (2023, p. 450), reminding colleagues that a teacher's experience and understanding of their students remain key to sound pedagogy. In fact, teachers who embrace AI often find themselves re-energised in their practice. By handing off some tedious tasks to AI and focusing on higher-order skills, they can transform their classrooms into vibrant workshops of inquiry. Some early-career teachers report that AI tools have improved their work-life balance and reduced burnout by cutting on time (Gecker, 2025). The human energy can be in creative like designing guiding or student research which AI cannot do for In this AI as a for the kind of teaching that educators already less more and is a guiding to navigate science communication in the of AI, it to be critical AI for students and teachers. Science educators incorporate into their the skills to use AI and This includes learning how to questions for tools like ChatGPT, how to the answers with a and how to information against scientific sources (Küçükuncular & Ertugan, 2025). It also means grappling with the implications of AI in In a science this could to discussing such as the environmental impact of large that AI or the human in AI content et al., Such help scientific knowledge to responsibility and ensuring that ethical understanding. These science and with and students' understanding of the context in which science By AI itself as a subject of teachers the critical thinking we in how a and what its this must be by taking to AI literacy. is to use rather than banning AI, when and how it may be used for For instance, a teacher might students to use ChatGPT to ideas for but them to document any AI assistance they and reflect on its This norms in where some now ask to any AI tools used in or research 2025). Such students to be of their reliance on AI and to responsibility for their learning. Teachers also emphasise that AI is a not the If a student uses an AI-generated they be to on it, it with their own it, or it with examples from class. The act of or AI can be a powerful learning as it requires understanding the well to what is or educator that it is important for teachers and students to be about the ChatGPT output, that are not and on that (Cooper, p. the AI's as to be This practice not only analytical but also students as of their learning process, reinforcing in digital AI means preparing students for a where AI is Just as we teach lab or the proper way to a we now must teach AI in an This includes questions When is it appropriate to use AI for help, and when is it better to through a without How do we or AI assistance to maintain What biases might an AI and how can we These questions a of ethical that scientific they students with a and a sense of They learn that they are in of the tool, not In fact, by AI's and ethical pitfalls educators can turn AI into a lesson in scientific for evidence, in and of an often aspect of critical AI education is its potential to When students reflect on how they used an AI tool, such as what questions they how they the or where the AI was or they are thinking about their own thinking. This kind of is known to deepen learning et al., 2024). Some teachers integrate or where an AI might suggest questions like the or do and then students respond with their own The AI as a for but the from the this reflective dialogue with helps cultivate students not only what they but how they to know it. In the is to teach students to AI as critical much like we teach them to critically evaluate a source or an design in If they can that, AI from a to an in their learning of AI is the of science but it does not the end of it calls for their Teachers find themselves at the of this between and one they must against the pitfalls of the potential for critical thinking, access or and or environmental with AI the other they have a to AI to make science communication more and inclusive than A student who can get a quick answer from ChatGPT is a student who can also use that answer as a springboard to ask questions, but only if we show them Educators have described as rather than of what the AI era is the need for that When answers are becomes the new and role in takes on this new the science educators will be those who AI's presence and turn it to their They will that is not by a AI that understanding requires and that AI can but not They will also for and that integrate AI ensuring every student the skills to navigate an world. In doing they beyond toward students to have responsibility for how AI is and into learning. of at its has always about more than it is about and the of remain If they become even more important when a can facts on the difficulty of science communication in the of AI is also its It forces to on what matters in AI is not replacing it is A teacher's human the ability to to the to challenge and is but now it can be by AI's By that educators transform AI from a into an in critical and creative inquiry. By that we can students not just to scientific knowledge, but to engage with it and In doing we turn a potentially into a for and that the of teaching science not only but in the AI",
-      "openalex_id": "W4415685327",
-      "openalex_type": "article",
-      "referenced_works_count": 10,
-      "categories": [
-        "replication",
-        "recent"
-      ],
-      "source_api": "openalex",
-      "search_angles": [
-        "replication"
-      ],
-      "record_id": "cr_27cb8c24000232b1f5e83856"
-    },
-    {
       "title": "Leveraging Digital Twin Technology for Traffic Optimization: A Pathway to Sustainable Urban Transportation",
       "authors": [
         "Zaman Basheer",
@@ -13364,6 +13520,30 @@
         "replication"
       ],
       "record_id": "cr_8cdc7bcb21a158def57bee55"
+    },
+    {
+      "title": "Digital platforms and the shifting landscape of transnational cinema",
+      "authors": [
+        "Yugeetha Balan",
+        "Yuan Jiang"
+      ],
+      "year": 2025,
+      "venue": "Frontiers in Communication",
+      "doi": "10.3389/fcomm.2025.1655589",
+      "citations": 2,
+      "abstract": "IntroductionThe rise of digital platforms has significantly transformed the landscape of transnational cinema. Traditionally, international films were distributed through film festivals, arthouse cinemas, and limited theatrical releases. However, the emergence of streaming services such as Netflix, Amazon Prime, and Disney+ has democratised access to global cinema, enabling unprecedented cross-border cultural exchange. Globalisation has played a crucial role in the rise of transnational cinema on digital platforms by breaking down geographical barriers and fostering cultural exchange.Traditionally, the director has been seen as the central creative force behind a film, a view encapsulated by the \"auteur theory.\" Emerging from mid-20th-century French film criticism and later popularised by Andrew Sarris, auteur theory frames the director as the primary author whose recurring stylistic and thematic signatures define a body of work. While filmmaking has always been a collaborative effort involving writers, producers, and others, auteur theory has served as a critical lens to interpret artistic identity within cinema. In the age of digital platforms, however, this perspective is increasingly complicated by collective authorship and data-driven content strategies.This article argues that while digital platforms have expanded access and participation in transnational cinema, they have simultaneously reshaped creative control, distribution equity, and audience agency through algorithmic governance and corporate consolidation. By analysing key dimensions such as authorship, algorithmic curation, and cultural visibility, the paper reveals how platformised transnational cinema is both enabling and constraining new forms of global storytelling.Digital Platforms and the Transformation of Transnational Cinema1.Accessibility and Cultural ExchangeOne of the most profound impacts of digital platforms is their ability to provide instant access to films from different cultural contexts. Streaming services have enabled audiences worldwide to experience diverse narratives, fostering greater cultural exchange and representation. Unlike traditional distribution channels, which were often limited by geographic and financial constraints, digital platforms offer a vast library of international content available on demand (Lobato, 2019).In today's global media landscape, audiences are exposed to a greater variety of cultural representations than ever before. Diasporic communities, in particular, benefit from this accessibility, using platforms like Netflix to reconnect with heritage content such as Bollywood and regional Indian cinema while participating in global media culture. However, this access does not automatically translate to cultural understanding. Superficial consumption, where audiences engage with content merely for entertainment without socio-political awareness, may lead to reductive interpretations of complex cultures. For instance, viewers may appreciate the aesthetics of a foreign film while remaining unaware of the historical, political, or linguistic nuances embedded within it. This highlights the need for both critical engagement and media education to ensure cultural exchange fosters genuine understanding rather than passive consumption2.Algorithmic Curation and VisibilityWhile digital platforms offer access to global content, algorithm-driven curation presents challenges related to visibility and diversity. Recommendation systems often prioritise mainstream or localised preferences, making it difficult for non-Western and independent films to gain exposure. Although many services offer sections for world cinema, these are often buried within the interface or lack strong promotion (Napoli, 2019).Streaming algorithms aim to improve user experience by personalising recommendations. However, they also risk creating filter bubbles, where audiences are repeatedly exposed to similar content. As a result, cultural diversity is undermined, and lesser-known perspectives are marginalised. As Duffy and Poell (2022) argue, platforms exert algorithmic control that not only influences user experience but also shapes the working conditions and visibility of cultural producers within digital economies. This highlights the need for transparent algorithm design and curated features that spotlight underrepresented regions and voices.Additionally, commercial incentives can skew platform algorithms toward content with proven profitability, thereby discouraging experimentation with alternative or avant-garde cinema. Addressing this imbalance requires both technical solutions and ethical content policies.3.Shifting Production Trends and LocalisationDigital platforms are not only distributors but also producers of transnational films. Companies like Netflix and Amazon have invested heavily in local-language productions, collaborating with filmmakers worldwide to create content tailored for diverse audiences. This shift has led to an increase in cross-border co-productions, blurring the lines between national and international cinema (Wayne, 2020). Local people transform global content into something tailored to their tastes. Local people rediscover the value of their own culture (Cho & Chung, 2009). Global companies are compelled to tailor their content to suit local tastes (e.g., production companies like Sony Pictures, which produce international productions). Sony, a Japanese-owned company with a Hollywood presence, produces films across Asia, Europe, and Latin America, while also investing in local film industries in India, China, and Latin America. Other companies collaborate with international filmmakers, secure funding from various regions, and distribute their content worldwide. Examples include StudioCanal, Babelsberg Studio, and Netflix, which have produced notable films such as The Irishman (2019) and The Platform (2019, Spain).4.Disruption of Theatrical DistributionThe challenges that digital technologies pose to traditional media companies exemplify what is commonly referred to as \"disruptive technologies”. Streaming services have transformed the production, distribution, and consumption of transnational films. While this shift has democratised access to international cinema, it has simultaneously introduced significant challenges for traditional media institutions and independent filmmakers.The widespread success of streaming platforms has contributed to a marked decline in traditional theatrical distribution, especially for transnational films. Cinemas, once cultural hubs for international film screenings, have increasingly lost audiences to the convenience of on-demand home viewing. This transformation carries profound implications for the economic sustainability of global cinema. Filmmakers must now navigate new funding and distribution models, including platform-exclusive production deals and crowdfunding initiatives, rather than relying on conventional studio financing (Tryon, 2013).Netflix exemplifies platform-led disruption, bypassing theatrical windows and consolidating distribution power through direct-to-consumer strategies. As Green (2023) explains, Netflix’s business model reflects a form of “disruptive innovation,” where traditional exhibition structures are circumvented in favour of data-driven, global-first streaming. Similarly, Wayne (2020) analyses how Netflix’s vertical integration from production to distribution has reshaped global film economies without relying on conventional cinema infrastructure.Although digital platforms provide global reach, they often retain exclusive distribution rights, limiting filmmakers’ ability to monetise content through alternative markets such as DVD sales, broadcast licensing, or regional syndication (Ulin, 2019). Many international films, such as The Platform (Spain), may gain worldwide exposure via Netflix but still struggle to generate revenue outside the platform ecosystem.As Curtin, Holt, and Samson (2022) observe, the COVID-19 pandemic further accelerated this transition toward digital-first release strategies, intensifying the pressure on theatrical models and reshaping both the economics and cultural significance of film distribution worldwide. What was once a complementary digital space has now become the primary mode of circulation, compelling stakeholders to re-evaluate the role of physical cinemas and the long-term viability of hybrid models in the global film economy.5.Platform Politics and Regional AccessWhile platforms present a façade of open access, their content libraries are curated based on regional licenses, market size, and political considerations. For example, certain films may be geo-blocked in specific countries due to censorship or regulatory concerns (Lobato, 2019; Napoli, 2019). This results in uneven accessibility and raises questions about platform neutrality.Additionally, the dominance of a few global streaming platforms, particularly U.S.-based corporations, has raised concerns about media concentration and cultural imperialism (Miller & Maxwell, 2021). These companies often dictate content priorities, influencing what stories are told, who tells them, and how they are marketed globally (Wayne, 2020).These issues are further reflected in the strategic differences among global platforms. Streaming platforms differ significantly in their content strategies. Netflix invests heavily in international co-productions and local-language originals in markets like South Korea and India. Disney+, by contrast, focuses on franchise-based content with minimal regional adaptation. Amazon Prime combines local productions with international acquisitions, especially in emerging markets. Regional platforms such as Hotstar and TVING serve domestic audiences while exploring global partnerships. These strategic differences highlight the need to analyse platform-specific approaches to content visibility and transnational access.6.Audience Participation and FandomsAudiences today are not mere consumers; they serve as active participants in global cinematic culture. Viewers engage through fan communities, social media, subtitles, reviews, and campaigns to renew shows. This participatory culture has contributed to the global success of many transnational films and series (Waldfogel, 2017).For instance, Money Heist (La Casa de Papel) became the most-watched non-English title on Netflix in 2020, reaching over 65 million households globally within its first month of release (Netflix, 2020). Likewise, The Platform (El Hoyo) ranked in Netflix’s Top 10 in more than 50 countries, demonstrating the global appetite for culturally distinct yet algorithmically boosted content. These examples illustrate how fandoms, social media, and subtitling networks can amplify international visibility for content that might otherwise remain regionally confined.Fan communities bridge linguistic divides and promote grassroots distribution, particularly for niche or non-English media. Subtitling groups play a pivotal role in circulating Asian dramas and Latin American cinema among global audiences. Such practices foster a new form of cultural diplomacy, in which viewers actively participate in transnational exchange.Fan-driven initiatives such as community translations, TikTok reviews, and fan-made trailers now play a crucial role in building anticipation and cultivating loyal international followings. Audience preferences are also increasingly shaped by algorithmic exposure and global taste hierarchies that filter transnational content through the logics of platform visibility (Barker & Mathijs, 2023).7.Regulatory Frameworks and Cultural ProtectionRegulators are beginning to respond to the challenges posed by digital platforms. The European Union, for instance, requires platforms like Netflix to allocate a minimum portion of their content catalogue to European productions. Similar cultural quotas are being considered in countries such as Canada, Australia, and South Korea to protect local film industries (Ulin, 2019).Policy interventions are crucial to ensuring fair visibility for regional cinema and supporting sustainable content ecosystems. Public funding, tax incentives, and fair licensing rules can provide independent filmmakers with the tools to compete in a globalised marketplace.8.Redefining Authorship in the Digital EraThe concept of authorship in cinema is undergoing a fundamental transformation in the age of digital platforms. Traditionally, auteur theory, originating in post-war French film criticism and later developed in Anglo-American film studies by scholars like Andrew Sarris, posited the director as the primary creative force behind a film, whose stylistic and thematic signatures could be traced across a body of work (Truffaut, 1954/1976; Sarris, 1962). While this framework offered a powerful lens for interpreting directorial identity and creative consistency, it has continuously operated more as a critical heuristic than a reflection of production realities.In contrast, authorship is a broader and more fluid concept that encompasses the collaborative and industrial processes through which films are made. As Staiger (2003) argues, authorship must be understood as a site of negotiation, shaped by institutional, economic, and technological conditions. This is particularly true in the streaming era, where platforms such as Netflix, Amazon Prime, and Disney+ have restructured the mechanisms of creative control. Here, content is often developed through writers’ rooms, audience analytics, A/B testing, and algorithmically informed commissioning, decentralising authorship and placing significant creative influence in the hands of corporate decision-makers, data scientists, and marketing teams (Wayne, 2020; Lobato, 2019).This data-driven authorship complicates the auteur model. While streaming services still promote certain showrunners or directors as brands for instance, Ryan Murphy (Hollywood), Hwang Dong-hyuk (Squid Game), or Alex Pina (Money Heist) their creative authority is often circumscribed by platform imperatives such as user engagement metrics, genre targeting, and international marketability (Morris & Powers, 2015). In many cases, creative decisions are pre-emptively guided by algorithms predicting which narratives will perform best with segmented global audiences (Napoli, 2019). As Johnson (2021) highlights, media franchising now central to platform economies further fragments authorship across marketing, production, and data analytics teams, challenging traditional notions of creative ownership and singular artistic vision.This shift necessitates a reframing of authorship that accounts for the hybrid nature of creative agency in the digital economy. Rather than treating data and creativity as mutually exclusive, it is more productive to view authorship as a networked process, where cultural producers, platform infrastructures, and audience behaviours are co-constitutive. As Jenkins, Ford, and Green (2013) suggest in their work on spreadable media, contemporary media authorship is deeply participatory, involving audiences not just in interpretation but also in distribution, remixing, and even creative influence through fan engagement.Therefore, the challenge is not to discard auteur theory entirely, but to critically adapt it, acknowledging its interpretive value while situating it within an industrial context where creative control is distributed, platform-driven, and often commercially optimised. Future scholarship on digital authorship must interrogate how power circulates across these networks and explore the implications for cultural diversity, artistic risk, and creative freedom.9.Digital and Media Literacy in the Age of Platformed CinemaAs digital platforms continue to shape global media consumption, it is increasingly important to develop both digital literacy and media literacy among audiences. While often used interchangeably, these terms refer to distinct but complementary sets of competencies.Digital literacy refers to the technical and cognitive skills required to navigate digital environments. This includes using platforms effectively, managing data privacy, understanding algorithmic content delivery, and exercising informed decision-making in digital contexts (Napoli, 2019).In contrast, media literacy involves the critical interpretation of media messages. It enables individuals to analyse representation, identify ideological bias, question authorship, and understand the sociopolitical context of media texts (Miller & Maxwell, 2021). Both forms of literacy are essential for audiences to engage meaningfully with transnational cinema.For instance, the global accessibility of films such as The White Tiger (India), Parasite (South Korea), Hi, Mom (China), The Worst Person in the World (Norway), Photocopier (Indonesia), and The Power of the Dog (USA/New Zealand) reflects the unprecedented diversity available through streaming platforms. However, without adequate media literacy, audiences may approach these films as mere entertainment products, overlooking their cultural specificity, historical subtext, or social critique. Similarly, a lack of digital literacy may leave viewers unaware of how algorithmic recommendation systems shape the visibility of such films, potentially reinforcing cultural echo chambers.Educational institutions, media regulators, and streaming platforms share the responsibility of fostering these literacies. Schools and universities must integrate critical media studies and digital skills training into curricula. Regulators should develop frameworks that support public media education initiatives, particularly in multicultural and multilingual societies. Streaming platforms themselves should invest in algorithmic transparency, provide curated educational content, and offer users more control over their discovery pathways, such as advanced filtering, opt-out recommendations, or access to contextual film guides.Building these literacies is essential not only for navigating the digital landscape but also for nurturing a more informed, critical, and culturally sensitive global viewership. In an era of transnational media flows, the ability to interpret and interrogate what we watch is just as important as the ability to access it.Discussion: The Future of Transnational Cinema in the Digital Age Figure 1: Impact of Digital Platforms on Transnational CinemaThis table summarises the dual nature of digital platforms’ influence across four critical domains: accessibility, production, distribution, and curation. Each dimension presents both opportunities, such as broader reach and investment in global storytelling, and significant challenges, including algorithmic bias, declining cinemas, and cultural homogenisation. The figure serves as a framework for understanding the complex dynamics shaping transnational cinema in the platform era.Digital platforms have transformed transnational cinema by increasing accessibility, enhancing cultural exchange, and enabling diverse production models. However, these advancements also pose challenges. bias, regional licensing and corporate visibility and (Napoli, 2019; & Maxwell, 2020). commercial with cultural diversity is to the sustainability of global services must transparent recommendation prioritise storytelling, and invest in underrepresented (Waldfogel, Lobato, 2019). and cultural institutions should that protect local content industries and promote more global digital (Ulin, 2019). play a pivotal through their social engagement and they shape the of transnational film culture (Tryon, while digital platforms have significantly access to transnational cinema, they have also introduced challenges that risk global content. such as algorithmic bias, regional and the of power among a few platforms continue to toward genuine cultural diversity. and for more practices (e.g., 2020; & Chung, has been often by regulatory and the commercial of platform the of transnational cinema on a across must cultural algorithmic transparency, and promote licensing frameworks to ensure fair representation. Streaming platforms should greater responsibility by funding underrepresented and curated discovery tools that diverse the audiences through digital and media literacy initiatives is essential to fostering critical engagement and passive these can support a more and cinematic landscape, that cultural specificity, and on a global & Mathijs, and cultural and the global of Cultural & Chung, Local agency and cultural of Cultural & What is Holt, & about the digital of film and of & visibility and platform media and the of Media & Netflix’s complicated role as an in the film Digital & Ford, & value and in a networked culture. Media franchising in the platform Cinema Netflix The of digital & Maxwell, Global Hollywood & Powers, curation and experience in streaming media and the public Media in the on the auteur theory in Authorship In & Staiger Authorship and certain of the French cinema. In and of Digital and the of The business of media film, and content in an Digital What data and economics about the of culture. Netflix, cinema and the new digital economy.",
+      "openalex_id": "W4413803480",
+      "openalex_type": "article",
+      "referenced_works_count": 10,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "critique"
+      ],
+      "record_id": "cr_9c1010800b5be931f103bd59"
     },
     {
       "title": "Editorial: Social Work Practitioner Research in a Globalised Context",
@@ -15641,6 +15821,28 @@
         "W2100919822"
       ],
       "record_id": "cr_818fc25b5f46fafada87c7aa"
+    },
+    {
+      "title": "Working with the Victims and Perpetrators of Child Sexual Abuse and Exploitation",
+      "authors": [
+        "Peter Sidebotham"
+      ],
+      "year": 2017,
+      "venue": "Child Abuse Review",
+      "doi": "10.1002/car.2467",
+      "citations": 1,
+      "abstract": "Working with the victims and perpetrators of child sexual abuse and exploitation is one of the most challenging fields of child protection practice. The nature of some of these cases is such that it challenges our beliefs in the inherent goodness of our fellow human beings and can leave us, as practitioners, feeling emotionally drained and bruised. In the words of a participant in one of the research studies reported in this issue of Child Abuse Review, ‘It's horrible stuff that you are hearing day in and day out’ (Ahern et al., 2017, p. 133). These cases are often complex and their investigation can be protracted. There is a difficult balance to be achieved between the forensic requirements of robust evidence gathering, the therapeutic aspects of caring for the victims, and the public interests of ensuring justice, rehabilitating offenders and preventing reoffending. So how can we best support professionals working in this complex field? What tools and techniques are available to them and how best can they use these? The papers in this issue of Child Abuse Review address some of these topics. ‘One of the most challenging fields of child protection practice’ ‘How can we best support professionals working in this complex field?’ We start with the offenders and a discussion paper by Jamie Walton and colleagues (2017) looking at the properties of the Sex with Children scale. This assessment tool was developed in the 1990s and is widely used within the prison service in England and Wales to measure pro-offending attitudes in offenders who participate in the national Sex Offender Treatment Programme. Reviewing the published literature on the Sex with Children scale, Walton et al. found that it has good reliability compared to other assessment tools, but some recent research suggests that its predictive power for sexual and violent reconviction is no better than chance. This questions the tool's validity and usefulness within the management of child sexual offenders. In order to explore this further, Walton et al. appraised the scale in the light of the Implicit Theories hypothesis. ‘Research suggests that its predictive power for sexual and violent reconviction is no better than chance’ One of the privileges and challenges in editing a journal such as Child Abuse Review is that you are often forced to step beyond your area of expertise and knowledge and embark on a journey of discovery. Such has been the case for me in relation to the Implicit Theories hypothesis (Ward and Keenan, 1999). In essence, this theory was put forward by Tony Ward and colleagues as a way of trying to understand the belief systems of child sex offenders. Ward and colleagues postulated that such offenders may hold one or more ‘implicit theories’ about themselves, other people and their surrounding environments, and it is these inherent belief systems which allow them to sexually abuse children. They proposed five implicit theories that child sexual offenders may hold: children as sexual beings; the nature of harm; the world as dangerous; entitlement; and uncontrollability (Ward and Keenan, 1999). ‘Five implicit theories that child sexual offenders may hold’ The first two of these focus on the victim and can be considered specific to the sexual offences against children. Those offenders holding to the ‘children as sexual beings’ implicit theory perceive children as sexual beings who are able to provoke adults into sexual interaction; offenders who hold this belief may misinterpret innocent childhood behaviours as being sexually inviting. In relation to ‘nature of harm’, offenders see sex as positive and therefore not harmful, and potentially even beneficial to children; offenders may therefore see sexual activity as a child's right and that they are acting in the child's interest in engaging in sexual interaction. One of the difficulties with measuring these two theories is that, while they may hold such beliefs, offenders may also recognise that others hold such beliefs as wrong, and therefore may hide their true beliefs, answering questions in a socially desirable manner. Indeed, Walton et al. (2017) found in their review that offenders rarely agreed with such items outright, but rather disagreed with them less strongly than non-offenders. Two of the implicit theories in Ward's schema focus primarily on the offender. Within the ‘entitlement’ implicit theory, offenders see themselves as somehow superior to others and that they are, therefore, entitled to have sex with whoever they want, whenever they want. ‘Uncontrollability’ refers to the belief that sexual urges are strong and beyond the individual's control. The final implicit theory, like the previous two, is less specifically linked to child sexual offences. This theory relates to how the offender sees the world: as a threatening, dangerous place, in which other people are untrustworthy. Sexual offences can therefore be seen as a reaction to a threatening world, a means of establishing dominance or control, or of feeling safe. In relation to children, this implicit theory may be further developed to portray children as less threatening than adults and therefore a source of security in an otherwise dangerous world. In their paper, Walton et al. (2017) highlight that the Sex with Children scale only measures the first two, sexual offence-specific implicit theories, and, in keeping with most other assessment tools, does not measure the more generic implicit theories. The authors suggest that this limits the utility of the scale as a predictive tool. They argue that ‘Nonsexual schemas may promote a general antisocial orientation which is an important factor predictive of recidivism in some offenders’ and call for further work to update the scale so that it assesses nonsexual as well as sexual implicit theories (p. 99). In their original paper on implicit theories, Ward and Keenan (1999) pointed out that their hypothesis is just one way of trying to understand the cognitive beliefs of child sexual offenders, and that there are numerous other perspectives which are equally important in trying to understand and work with such offenders. They do stress, however, that an understanding of these implicit theories is central to any effective work with offenders, and that treatment is likely to require the challenging and restructuring of these theories. In light of this, Walton and colleagues' call for updating the Sex with Children scale seems particularly apposite. ‘The Sex with Children scale only measures the… sexual offence-specific implicit theories’ ‘An understanding of these implicit theories is central to any effective work with offenders’ Our next papers turn to the child victims of sexual abuse and how we can assess, support and respond to their needs. In Scotland, as in the rest of the UK and elsewhere, best practice in gathering information on alleged sexual abuse is through a joint investigative interview involving specially trained police officers and social workers. Specific guidance exists for such interviews and they depend on a high level of communication skills. In response to concerns that interviewers may not, in fact, be following the guidance, Susanne Goetzold (2017) conducted a well-designed evaluation of joint investigative interview training in Scotland. This included both a self-evaluation by participants and a content analysis of transcribed role-play interviews. Disappointingly, she found that while the participants had a high level of perceived competence in relation to their preparedness to carry out investigative interviews, this was not backed up by the empiric findings from the recorded role-play interviews. Two aspects in particular seemed to be lacking from the role-play interviews: the use of ‘practice interviews’ in helping to establish rapport and prepare the child or young person for the interview; and allowing space for free narrative through the use of open questioning and non-directive prompts. ‘A well-designed evaluation of joint investigative interview training in Scotland’ Although ‘practice interviews’ are stipulated in the Scottish guidance and have been shown to improve the flow of free narrative information from the child, only two interviewers attempted to conduct a practice interview during the role-play. In relation to the use of free narrative, the findings were equally stark: the free narrative phase of these interviews lasted on average just one minute and four seconds (out of an average 22-minute interview). In contrast, specific questioning by the interviewer lasted an average of 14 minutes and 40 seconds. There was considerable evidence of closed questions being used by the interviewers, and none of the interviews provided evidence of the child being encouraged to tell the whole story before being asked specific questions. Typically, interviewers were very directive, tending to follow up each piece of new information provided by the child with specific questions, while questioning styles were ‘often very direct and fast-paced, thus not giving children time to search their memory and formulate responses’ (Goetzold, 2017, p. 124). ‘None of the interviews provided evidence of the child being encouraged to tell the whole story before being asked specific questions’ Whether or not these findings would be replicated in actual practice of joint interviewing would require a further study. Nevertheless, if such approaches are being used in role-play interviews in the context of a training programme specifically focusing on interviewing technique, it suggests that the right approaches are not being well adopted. This could have a significant impact on the quality of evidence obtained during the interviews, on the young person's ability to tell their story, on their perception of the interview and potentially on their recovery from the trauma of the abuse. ‘the use of a protocol that emphasises the use of prompts that elicit free narrative (e.g. ‘tell me about that’) as compared with closed questions (those requiring a yes/no response) has resulted in more detail and more accuracy in children's accounts’ (McElvaney, 2015, p. 162). Building on some of this earlier work, we publish a new study by Rosaleen McElvaney and Maebh Culhane (2017) comparing the information obtained from young people in a direct research interview with that available as a result of the child protection assessment. ‘Comparing the information obtained from young people in a direct research interview with that… of the child protection assessment’ The motivation for this piece of work came from wanting to minimise the harm to children through repeated questioning about traumatic experiences, while still wanting to allow their voice to be heard in research. As Houghton (2015) pointed out in her paper on participatory ethics, young people have a right to participate in research and so contribute to the extension and use of knowledge in ways that affect them. Far too often, however, children and young people are not even given the opportunity to participate in research and so their voices are excluded. McElvaney and Culhane (2017) therefore sought to determine whether the use of information routinely collected during an investigation could replace that obtained through a direct research interview. The authors compared the information contained in assessment reports of 39 children seen in a child sexual abuse unit with direct research interviews of 22 of those children. They found that the assessment reports contained a wealth of data on the nature and duration of the abuse, the children's relationship to the abuser and on factors that influenced their disclosure. Not surprisingly, they found that all these themes were more common in the research interview data, but that many of the assessment reports contained information that was not elicited in the research interviews, and vice versa. A number of important conclusions can be drawn from this research: first, that we owe it to children and young people to include their voices in research about and for them; second, that much useful data can be obtained through the careful and ethical use of routinely collected information, such as case assessments; and third, that routinely collected information cannot replace the depth and breadth of data obtained through well-designed qualitative or quantitative research projects. In seeking to promote evidence-informed research, therefore, we need to explore both avenues and to do so in a way that respects and empowers children and young people. ‘We owe it to children and young people to include their voices in research about and for them’ Our next paper by Elizabeth Ahern and colleagues (2017) explores the experiences of police officers and social workers working with cases of child sexual exploitation. The researchers interviewed 15 practitioners about their experiences. While the practitioners reported that the cases were emotionally taxing and challenging to deal with, almost without exception, they tended to focus on the victims' emotions during interviews, often suppressing or ‘switching off’ their own emotions. Practitioners would make practical and intellectual preparations for interviews, for example, by researching the cases, but would rarely prepare themselves psychologically. Following investigative interviews, practitioners would often rely on informal opportunities for debriefing or support. One of the striking findings of this research was the tendency for practitioners to report withholding their own emotional responses during the interviews for the sake of the young people. However, as the authors point out, many young people want practitioners to be human and interact with them. Such emotional distancing could have a negative impact both on the young people themselves and their ability or willingness to engage with the interview, and also on the wellbeing of the professionals involved. ‘Tendency for practitioners to report withholding their own emotional responses during the interviews for the sake of the young people’ Our final research paper in this issue is a fascinating piece of work by Mariëlle Prevoo and colleagues (2017) from Leiden University. This research team has previously undertaken a meta-analysis of research from across the world on the prevalence of child maltreatment (Stoltenborgh et al., 2015). They had found considerable variation between studies in the reported prevalence of different forms of maltreatment. In the current extension of that work, the researchers have carried out a number of further analyses to examine the influence of different methodological moderators on the findings. They found significant effects on the reported prevalence depending on participant characteristics, the sampling procedures used and the approaches to definition and measurement. The authors provide a helpful diagram summarising some of the key influences on recorded prevalence, however, the overall picture is far more complicated, with the effects and even the direction of effect being different for different types of maltreatment. This paper is important reading for all researchers and policymakers attempting to study or interpret the results of the prevalence of different forms of child maltreatment. As the authors point out, ‘Important reading for all researchers and policymakers attempting to study… the prevalence of different forms of child maltreatment’ ‘the true lifetime prevalence of child maltreatment is hard to estimate, and perhaps impossible to measure, but knowing which factors influence the results of prevalence studies can help us to get as close to the actual lifetime prevalence as possible’ (Prevoo et al., 2017, p. 156). This, in turn, may help in setting the direction and monitoring the impact of safeguarding policies. We finish this issue with two book reviews of relevance to practitioners. William Meredith (2017) reviews Recognition of Child Abuse for the Mandated Reporter by A. P. Giardino and colleagues: ‘a comprehensive literature review on the various types of abuse, how to spot them and how they can be treated/prevented’ (p. 158). Katy Burch (2017) reviews Kim Holt's book, Contemporary Family Justice: Policy and Practice in Complex Child Protection Decisions. Burch comments that the book ‘effectively highlights ways in which the introduction of Public Law Outline processes has, in spite of its laudable goals, impacted negatively on aspects of justice for both parents and children where there are child protection concerns’ and explores other ‘potentially corrosive influences on current family justice and decision-making’ (p. 159). This suggests that the book will be important reading for all those involved in policy and planning around family justice.",
+      "openalex_id": "W2601552566",
+      "openalex_type": "article",
+      "referenced_works_count": 11,
+      "categories": [
+        "replication"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "replication"
+      ],
+      "record_id": "cr_f47762dfe11181ad86c7c6ab"
     },
     {
       "title": "- Construction in Deconstruction, Digitalization, Distruption, Disaster, Development",
@@ -18418,30 +18620,6 @@
         "recent"
       ],
       "record_id": "cr_192c460dc6b336c14a29bbd5"
-    },
-    {
-      "title": "Digital platforms and the shifting landscape of transnational cinema",
-      "authors": [
-        "Yugeetha Balan",
-        "Yuan Jiang"
-      ],
-      "year": 2025,
-      "venue": "Frontiers in Communication",
-      "doi": "10.3389/fcomm.2025.1655589",
-      "citations": 0,
-      "abstract": "IntroductionThe rise of digital platforms has significantly transformed the landscape of transnational cinema. Traditionally, international films were distributed through film festivals, arthouse cinemas, and limited theatrical releases. However, the emergence of streaming services such as Netflix, Amazon Prime, and Disney+ has democratised access to global cinema, enabling unprecedented cross-border cultural exchange. Globalisation has played a crucial role in the rise of transnational cinema on digital platforms by breaking down geographical barriers and fostering cultural exchange.Traditionally, the director has been seen as the central creative force behind a film, a view encapsulated by the \"auteur theory.\" Emerging from mid-20th-century French film criticism and later popularised by Andrew Sarris, auteur theory frames the director as the primary author whose recurring stylistic and thematic signatures define a body of work. While filmmaking has always been a collaborative effort involving writers, producers, and others, auteur theory has served as a critical lens to interpret artistic identity within cinema. In the age of digital platforms, however, this perspective is increasingly complicated by collective authorship and data-driven content strategies.This article argues that while digital platforms have expanded access and participation in transnational cinema, they have simultaneously reshaped creative control, distribution equity, and audience agency through algorithmic governance and corporate consolidation. By analysing key dimensions such as authorship, algorithmic curation, and cultural visibility, the paper reveals how platformised transnational cinema is both enabling and constraining new forms of global storytelling.Digital Platforms and the Transformation of Transnational Cinema1.Accessibility and Cultural ExchangeOne of the most profound impacts of digital platforms is their ability to provide instant access to films from different cultural contexts. Streaming services have enabled audiences worldwide to experience diverse narratives, fostering greater cultural exchange and representation. Unlike traditional distribution channels, which were often limited by geographic and financial constraints, digital platforms offer a vast library of international content available on demand (Lobato, 2019).In today's global media landscape, audiences are exposed to a greater variety of cultural representations than ever before. Diasporic communities, in particular, benefit from this accessibility, using platforms like Netflix to reconnect with heritage content such as Bollywood and regional Indian cinema while participating in global media culture. However, this access does not automatically translate to cultural understanding. Superficial consumption, where audiences engage with content merely for entertainment without socio-political awareness, may lead to reductive interpretations of complex cultures. For instance, viewers may appreciate the aesthetics of a foreign film while remaining unaware of the historical, political, or linguistic nuances embedded within it. This highlights the need for both critical engagement and media education to ensure cultural exchange fosters genuine understanding rather than passive consumption2.Algorithmic Curation and VisibilityWhile digital platforms offer access to global content, algorithm-driven curation presents challenges related to visibility and diversity. Recommendation systems often prioritise mainstream or localised preferences, making it difficult for non-Western and independent films to gain exposure. Although many services offer sections for world cinema, these are often buried within the interface or lack strong promotion (Napoli, 2019).Streaming algorithms aim to improve user experience by personalising recommendations. However, they also risk creating filter bubbles, where audiences are repeatedly exposed to similar content. As a result, cultural diversity is undermined, and lesser-known perspectives are marginalised. As Duffy and Poell (2022) argue, platforms exert algorithmic control that not only influences user experience but also shapes the working conditions and visibility of cultural producers within digital economies. This highlights the need for transparent algorithm design and curated features that spotlight underrepresented regions and voices.Additionally, commercial incentives can skew platform algorithms toward content with proven profitability, thereby discouraging experimentation with alternative or avant-garde cinema. Addressing this imbalance requires both technical solutions and ethical content policies.3.Shifting Production Trends and LocalisationDigital platforms are not only distributors but also producers of transnational films. Companies like Netflix and Amazon have invested heavily in local-language productions, collaborating with filmmakers worldwide to create content tailored for diverse audiences. This shift has led to an increase in cross-border co-productions, blurring the lines between national and international cinema (Wayne, 2020). Local people transform global content into something tailored to their tastes. Local people rediscover the value of their own culture (Cho & Chung, 2009). Global companies are compelled to tailor their content to suit local tastes (e.g., production companies like Sony Pictures, which produce international productions). Sony, a Japanese-owned company with a Hollywood presence, produces films across Asia, Europe, and Latin America, while also investing in local film industries in India, China, and Latin America. Other companies collaborate with international filmmakers, secure funding from various regions, and distribute their content worldwide. Examples include StudioCanal, Babelsberg Studio, and Netflix, which have produced notable films such as The Irishman (2019) and The Platform (2019, Spain).4.Disruption of Theatrical DistributionThe challenges that digital technologies pose to traditional media companies exemplify what is commonly referred to as \"disruptive technologies”. Streaming services have transformed the production, distribution, and consumption of transnational films. While this shift has democratised access to international cinema, it has simultaneously introduced significant challenges for traditional media institutions and independent filmmakers.The widespread success of streaming platforms has contributed to a marked decline in traditional theatrical distribution, especially for transnational films. Cinemas, once cultural hubs for international film screenings, have increasingly lost audiences to the convenience of on-demand home viewing. This transformation carries profound implications for the economic sustainability of global cinema. Filmmakers must now navigate new funding and distribution models, including platform-exclusive production deals and crowdfunding initiatives, rather than relying on conventional studio financing (Tryon, 2013).Netflix exemplifies platform-led disruption, bypassing theatrical windows and consolidating distribution power through direct-to-consumer strategies. As Green (2023) explains, Netflix’s business model reflects a form of “disruptive innovation,” where traditional exhibition structures are circumvented in favour of data-driven, global-first streaming. Similarly, Wayne (2020) analyses how Netflix’s vertical integration from production to distribution has reshaped global film economies without relying on conventional cinema infrastructure.Although digital platforms provide global reach, they often retain exclusive distribution rights, limiting filmmakers’ ability to monetise content through alternative markets such as DVD sales, broadcast licensing, or regional syndication (Ulin, 2019). Many international films, such as The Platform (Spain), may gain worldwide exposure via Netflix but still struggle to generate revenue outside the platform ecosystem.As Curtin, Holt, and Samson (2022) observe, the COVID-19 pandemic further accelerated this transition toward digital-first release strategies, intensifying the pressure on theatrical models and reshaping both the economics and cultural significance of film distribution worldwide. What was once a complementary digital space has now become the primary mode of circulation, compelling stakeholders to re-evaluate the role of physical cinemas and the long-term viability of hybrid models in the global film economy.5.Platform Politics and Regional AccessWhile platforms present a façade of open access, their content libraries are curated based on regional licenses, market size, and political considerations. For example, certain films may be geo-blocked in specific countries due to censorship or regulatory concerns (Lobato, 2019; Napoli, 2019). This results in uneven accessibility and raises questions about platform neutrality.Additionally, the dominance of a few global streaming platforms, particularly U.S.-based corporations, has raised concerns about media concentration and cultural imperialism (Miller & Maxwell, 2021). These companies often dictate content priorities, influencing what stories are told, who tells them, and how they are marketed globally (Wayne, 2020).These issues are further reflected in the strategic differences among global platforms. Streaming platforms differ significantly in their content strategies. Netflix invests heavily in international co-productions and local-language originals in markets like South Korea and India. Disney+, by contrast, focuses on franchise-based content with minimal regional adaptation. Amazon Prime combines local productions with international acquisitions, especially in emerging markets. Regional platforms such as Hotstar and TVING serve domestic audiences while exploring global partnerships. These strategic differences highlight the need to analyse platform-specific approaches to content visibility and transnational access.6.Audience Participation and FandomsAudiences today are not mere consumers; they serve as active participants in global cinematic culture. Viewers engage through fan communities, social media, subtitles, reviews, and campaigns to renew shows. This participatory culture has contributed to the global success of many transnational films and series (Waldfogel, 2017).For instance, Money Heist (La Casa de Papel) became the most-watched non-English title on Netflix in 2020, reaching over 65 million households globally within its first month of release (Netflix, 2020). Likewise, The Platform (El Hoyo) ranked in Netflix’s Top 10 in more than 50 countries, demonstrating the global appetite for culturally distinct yet algorithmically boosted content. These examples illustrate how fandoms, social media, and subtitling networks can amplify international visibility for content that might otherwise remain regionally confined.Fan communities bridge linguistic divides and promote grassroots distribution, particularly for niche or non-English media. Subtitling groups play a pivotal role in circulating Asian dramas and Latin American cinema among global audiences. Such practices foster a new form of cultural diplomacy, in which viewers actively participate in transnational exchange.Fan-driven initiatives such as community translations, TikTok reviews, and fan-made trailers now play a crucial role in building anticipation and cultivating loyal international followings. Audience preferences are also increasingly shaped by algorithmic exposure and global taste hierarchies that filter transnational content through the logics of platform visibility (Barker & Mathijs, 2023).7.Regulatory Frameworks and Cultural ProtectionRegulators are beginning to respond to the challenges posed by digital platforms. The European Union, for instance, requires platforms like Netflix to allocate a minimum portion of their content catalogue to European productions. Similar cultural quotas are being considered in countries such as Canada, Australia, and South Korea to protect local film industries (Ulin, 2019).Policy interventions are crucial to ensuring fair visibility for regional cinema and supporting sustainable content ecosystems. Public funding, tax incentives, and fair licensing rules can provide independent filmmakers with the tools to compete in a globalised marketplace.8.Redefining Authorship in the Digital EraThe concept of authorship in cinema is undergoing a fundamental transformation in the age of digital platforms. Traditionally, auteur theory, originating in post-war French film criticism and later developed in Anglo-American film studies by scholars like Andrew Sarris, posited the director as the primary creative force behind a film, whose stylistic and thematic signatures could be traced across a body of work (Truffaut, 1954/1976; Sarris, 1962). While this framework offered a powerful lens for interpreting directorial identity and creative consistency, it has continuously operated more as a critical heuristic than a reflection of production realities.In contrast, authorship is a broader and more fluid concept that encompasses the collaborative and industrial processes through which films are made. As Staiger (2003) argues, authorship must be understood as a site of negotiation, shaped by institutional, economic, and technological conditions. This is particularly true in the streaming era, where platforms such as Netflix, Amazon Prime, and Disney+ have restructured the mechanisms of creative control. Here, content is often developed through writers’ rooms, audience analytics, A/B testing, and algorithmically informed commissioning, decentralising authorship and placing significant creative influence in the hands of corporate decision-makers, data scientists, and marketing teams (Wayne, 2020; Lobato, 2019).This data-driven authorship complicates the auteur model. While streaming services still promote certain showrunners or directors as brands for instance, Ryan Murphy (Hollywood), Hwang Dong-hyuk (Squid Game), or Alex Pina (Money Heist) their creative authority is often circumscribed by platform imperatives such as user engagement metrics, genre targeting, and international marketability (Morris & Powers, 2015). In many cases, creative decisions are pre-emptively guided by algorithms predicting which narratives will perform best with segmented global audiences (Napoli, 2019). As Johnson (2021) highlights, media franchising now central to platform economies further fragments authorship across marketing, production, and data analytics teams, challenging traditional notions of creative ownership and singular artistic vision.This shift necessitates a reframing of authorship that accounts for the hybrid nature of creative agency in the digital economy. Rather than treating data and creativity as mutually exclusive, it is more productive to view authorship as a networked process, where cultural producers, platform infrastructures, and audience behaviours are co-constitutive. As Jenkins, Ford, and Green (2013) suggest in their work on spreadable media, contemporary media authorship is deeply participatory, involving audiences not just in interpretation but also in distribution, remixing, and even creative influence through fan engagement.Therefore, the challenge is not to discard auteur theory entirely, but to critically adapt it, acknowledging its interpretive value while situating it within an industrial context where creative control is distributed, platform-driven, and often commercially optimised. Future scholarship on digital authorship must interrogate how power circulates across these networks and explore the implications for cultural diversity, artistic risk, and creative freedom.9.Digital and Media Literacy in the Age of Platformed CinemaAs digital platforms continue to shape global media consumption, it is increasingly important to develop both digital literacy and media literacy among audiences. While often used interchangeably, these terms refer to distinct but complementary sets of competencies.Digital literacy refers to the technical and cognitive skills required to navigate digital environments. This includes using platforms effectively, managing data privacy, understanding algorithmic content delivery, and exercising informed decision-making in digital contexts (Napoli, 2019).In contrast, media literacy involves the critical interpretation of media messages. It enables individuals to analyse representation, identify ideological bias, question authorship, and understand the sociopolitical context of media texts (Miller & Maxwell, 2021). Both forms of literacy are essential for audiences to engage meaningfully with transnational cinema.For instance, the global accessibility of films such as The White Tiger (India), Parasite (South Korea), Hi, Mom (China), The Worst Person in the World (Norway), Photocopier (Indonesia), and The Power of the Dog (USA/New Zealand) reflects the unprecedented diversity available through streaming platforms. However, without adequate media literacy, audiences may approach these films as mere entertainment products, overlooking their cultural specificity, historical subtext, or social critique. Similarly, a lack of digital literacy may leave viewers unaware of how algorithmic recommendation systems shape the visibility of such films, potentially reinforcing cultural echo chambers.Educational institutions, media regulators, and streaming platforms share the responsibility of fostering these literacies. Schools and universities must integrate critical media studies and digital skills training into curricula. Regulators should develop frameworks that support public media education initiatives, particularly in multicultural and multilingual societies. Streaming platforms themselves should invest in algorithmic transparency, provide curated educational content, and offer users more control over their discovery pathways, such as advanced filtering, opt-out recommendations, or access to contextual film guides.Building these literacies is essential not only for navigating the digital landscape but also for nurturing a more informed, critical, and culturally sensitive global viewership. In an era of transnational media flows, the ability to interpret and interrogate what we watch is just as important as the ability to access it.Discussion: The Future of Transnational Cinema in the Digital Age Figure 1: Impact of Digital Platforms on Transnational CinemaThis table summarises the dual nature of digital platforms’ influence across four critical domains: accessibility, production, distribution, and curation. Each dimension presents both opportunities, such as broader reach and investment in global storytelling, and significant challenges, including algorithmic bias, declining cinemas, and cultural homogenisation. The figure serves as a framework for understanding the complex dynamics shaping transnational cinema in the platform era.Digital platforms have transformed transnational cinema by increasing accessibility, enhancing cultural exchange, and enabling diverse production models. However, these advancements also pose challenges. bias, regional licensing and corporate visibility and (Napoli, 2019; & Maxwell, 2020). commercial with cultural diversity is to the sustainability of global services must transparent recommendation prioritise storytelling, and invest in underrepresented (Waldfogel, Lobato, 2019). and cultural institutions should that protect local content industries and promote more global digital (Ulin, 2019). play a pivotal through their social engagement and they shape the of transnational film culture (Tryon, while digital platforms have significantly access to transnational cinema, they have also introduced challenges that risk global content. such as algorithmic bias, regional and the of power among a few platforms continue to toward genuine cultural diversity. and for more practices (e.g., 2020; & Chung, has been often by regulatory and the commercial of platform the of transnational cinema on a across must cultural algorithmic transparency, and promote licensing frameworks to ensure fair representation. Streaming platforms should greater responsibility by funding underrepresented and curated discovery tools that diverse the audiences through digital and media literacy initiatives is essential to fostering critical engagement and passive these can support a more and cinematic landscape, that cultural specificity, and on a global & Mathijs, and cultural and the global of Cultural & Chung, Local agency and cultural of Cultural & What is Holt, & about the digital of film and of & visibility and platform media and the of Media & Netflix’s complicated role as an in the film Digital & Ford, & value and in a networked culture. Media franchising in the platform Cinema Netflix The of digital & Maxwell, Global Hollywood & Powers, curation and experience in streaming media and the public Media in the on the auteur theory in Authorship In & Staiger Authorship and certain of the French cinema. In and of Digital and the of The business of media film, and content in an Digital What data and economics about the of culture. Netflix, cinema and the new digital economy.",
-      "openalex_id": "W4413803480",
-      "openalex_type": "article",
-      "referenced_works_count": 10,
-      "categories": [
-        "dissent",
-        "recent"
-      ],
-      "source_api": "openalex",
-      "search_angles": [
-        "critique"
-      ],
-      "record_id": "cr_9c1010800b5be931f103bd59"
     },
     {
       "title": "Digital Platforms for Interaction of Professional Market Participants (B2B Segment)",
