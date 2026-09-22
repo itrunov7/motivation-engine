@@ -6,27 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-09-22T01:59:03.138Z",
-    "status": "success",
+    "timestamp": "2026-09-22T02:00:59.543Z",
+    "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 954,
     "files_written": 1,
-    "duration_s": 44.56,
+    "duration_s": 333.2,
+    "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 45,
-      "duration_s": 44.56,
+      "api_calls": 57,
+      "duration_s": 333.2,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-09-22T02:00:59.543Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 954,
+      "files_written": 1,
+      "duration_s": 333.2,
+      "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 57,
+        "duration_s": 333.2,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-09-22T01:59:03.138Z",
       "status": "success",
@@ -432,27 +455,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-09-22T00:46:43.156Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 954,
-      "files_written": 1,
-      "duration_s": 45.5,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 45,
-        "duration_s": 45.5,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -531,7 +533,7 @@
     {
       "path": "FL-24.json",
       "records": 954,
-      "bytes": 7978783,
+      "bytes": 7980113,
       "categories": {
         "foundational": 34,
         "meta-analysis": 26,
