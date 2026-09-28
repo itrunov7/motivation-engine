@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-09-28T13:32:06.921Z",
+    "timestamp": "2026-09-28T13:34:15.130Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 957,
     "files_written": 1,
-    "duration_s": 44.79,
+    "duration_s": 45.46,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 45,
-      "duration_s": 44.79,
+      "duration_s": 45.46,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-09-28T13:34:15.130Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 957,
+      "files_written": 1,
+      "duration_s": 45.46,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 45,
+        "duration_s": 45.46,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-09-28T13:32:06.921Z",
       "status": "success",
@@ -426,29 +447,6 @@
       "cost": {
         "api_calls": 58,
         "duration_s": 460.9,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-09-28T12:17:26.498Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 957,
-      "files_written": 1,
-      "duration_s": 292,
-      "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search semantic-scholar recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search openalex application \"flow experience challenge skill balance applied intervention\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
-      "warnings": {
-        "s2_throttled": true,
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 59,
-        "duration_s": 292,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
