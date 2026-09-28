@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-09-28T12:43:03.435Z",
+    "timestamp": "2026-09-28T12:47:01.906Z",
     "status": "partial",
     "params": {
       "mechanism": "FL-24",
@@ -14,20 +14,42 @@
     },
     "records_fetched": 957,
     "files_written": 1,
-    "duration_s": 186.77,
+    "duration_s": 230.63,
     "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 50,
-      "duration_s": 186.77,
+      "api_calls": 51,
+      "duration_s": 230.63,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-09-28T12:47:01.906Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 957,
+      "files_written": 1,
+      "duration_s": 230.63,
+      "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 51,
+        "duration_s": 230.63,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-09-28T12:43:03.435Z",
       "status": "partial",
@@ -433,27 +455,6 @@
       "cost": {
         "api_calls": 45,
         "duration_s": 44.41,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-09-22T07:50:02.418Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 954,
-      "files_written": 1,
-      "duration_s": 44.5,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 45,
-        "duration_s": 44.5,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
