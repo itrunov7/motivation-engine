@@ -6,27 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-10-05T13:32:21.236Z",
-    "status": "success",
+    "timestamp": "2026-10-05T13:34:24.939Z",
+    "status": "partial",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 963,
-    "files_written": 1,
-    "duration_s": 47.49,
+    "files_written": 0,
+    "duration_s": 0.25,
+    "error": "upstream API quota requires a later continuation; logical run FL-24-muvak34o checkpointed at query 1/1050",
     "warnings": {
-      "low_novelty": true
+      "resume_required": true
     },
     "cost": {
-      "api_calls": 48,
-      "duration_s": 47.49,
+      "api_calls": 1,
+      "duration_s": 0.25,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-10-05T13:34:24.939Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 963,
+      "files_written": 0,
+      "duration_s": 0.25,
+      "error": "upstream API quota requires a later continuation; logical run FL-24-muvak34o checkpointed at query 1/1050",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.25,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-10-05T13:32:21.236Z",
       "status": "success",
@@ -421,27 +444,6 @@
       "cost": {
         "api_calls": 48,
         "duration_s": 47.5,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-10-05T12:52:59.026Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 963,
-      "files_written": 1,
-      "duration_s": 47.42,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.42,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
