@@ -6,28 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-10-05T13:35:52.281Z",
-    "status": "partial",
+    "timestamp": "2026-10-05T13:37:28.995Z",
+    "status": "success",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
     "records_fetched": 963,
     "files_written": 1,
-    "duration_s": 44.18,
-    "error": "search openalex canon \"flow experience challenge skill balance\": api.openalex.org upstream cooldown is 37535s; checkpoint and resume later",
+    "duration_s": 47.41,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 45,
-      "duration_s": 44.18,
+      "api_calls": 48,
+      "duration_s": 47.41,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-10-05T13:37:28.995Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 963,
+      "files_written": 1,
+      "duration_s": 47.41,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 48,
+        "duration_s": 47.41,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-10-05T13:35:52.281Z",
       "status": "partial",
@@ -428,27 +448,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-10-05T12:56:41.085Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 963,
-      "files_written": 1,
-      "duration_s": 47.42,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.42,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -527,7 +526,7 @@
     {
       "path": "FL-24.json",
       "records": 963,
-      "bytes": 8004345,
+      "bytes": 8003581,
       "categories": {
         "foundational": 34,
         "meta-analysis": 27,
