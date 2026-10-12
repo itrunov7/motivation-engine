@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-10-05T19:16:07.906Z",
+  "fetched_at": "2026-10-12T12:55:50.505Z",
   "terms_source": "record",
   "terms": [
     "flow experience challenge skill balance",
@@ -23,7 +23,7 @@
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 830
+      "upstream_total_results": 820
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
@@ -34,11 +34,11 @@
       "kind": "search",
       "requested": 25,
       "returned": 25,
-      "unique_returned": 23,
+      "unique_returned": 25,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 830
+      "upstream_total_results": 820
     },
     {
       "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
@@ -53,7 +53,7 @@
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 830
+      "upstream_total_results": 820
     },
     {
       "query_id": "graph:backward-reference:W279868603",
@@ -131,7 +131,7 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W7204641889",
+      "query_id": "graph:backward-reference:W7204642546",
       "api": "openalex",
       "angle": "canon",
       "term": "In the Zone: A Narrative Review of Flow Theory in Games, from Optimal Experience to Game Design",
@@ -146,7 +146,7 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W7204641889",
+      "query_id": "graph:forward-citation:W7204642546",
       "api": "openalex",
       "angle": "canon",
       "term": "In the Zone: A Narrative Review of Flow Theory in Games, from Optimal Experience to Game Design",
@@ -479,10 +479,10 @@
         "doi": "10.1080/17439760.2014.967799",
         "openalex_id": "W2042314632",
         "citations": 181,
-        "references_total": 125,
-        "references_resolved": 114,
+        "references_total": 123,
+        "references_resolved": 112,
         "references_in_corpus": 20,
-        "coverage": 0.1754
+        "coverage": 0.1786
       }
     ],
     "snowball_added": 0
@@ -500,7 +500,7 @@
         "angle": "canon",
         "queries": 3,
         "returned": 75,
-        "unique_records": 61
+        "unique_records": 63
       }
     ],
     "source_spread": [
@@ -508,15 +508,15 @@
         "api": "openalex",
         "queries": 3,
         "returned": 75,
-        "unique_records": 61
+        "unique_records": 63
       }
     ],
-    "recent_records": 26,
-    "recency_rate": 0.4262,
+    "recent_records": 28,
+    "recency_rate": 0.4444,
     "novelty": {
       "previous_corpus_records": 963,
-      "unique_records": 61,
-      "already_in_corpus": 61,
+      "unique_records": 63,
+      "already_in_corpus": 63,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -545,7 +545,7 @@
         "bucket": "recency",
         "kind": "search",
         "returned": 25,
-        "unique_returned": 23,
+        "unique_returned": 25,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -625,7 +625,7 @@
       },
       {
         "query_index": 9,
-        "query_id": "graph:backward-reference:W7204641889",
+        "query_id": "graph:backward-reference:W7204642546",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 0,
@@ -637,7 +637,7 @@
       },
       {
         "query_index": 10,
-        "query_id": "graph:forward-citation:W7204641889",
+        "query_id": "graph:forward-citation:W7204642546",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -906,7 +906,7 @@
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 1,
       "total_search_queries": 3,
-      "summed_upstream_results": 830,
+      "summed_upstream_results": 820,
       "observed_sample_multiplicity": 1
     },
     "saturation_reached": true,
@@ -5407,6 +5407,28 @@
       "record_id": "cr_4d6952e6fd89ceb3599f3024"
     },
     {
+      "title": "Measuring flow experience in an immersive virtual environment for collaborative learning",
+      "authors": [
+        "Paul van Schaik",
+        "Stewart Martin",
+        "Michael Vallance"
+      ],
+      "year": 2011,
+      "venue": "Journal of Computer Assisted Learning",
+      "doi": "10.1111/j.1365-2729.2011.00455.x",
+      "citations": 57,
+      "abstract": "Abstract In contexts other than immersive virtual environments, theoretical and empirical work has identified flow experience as a major factor in learning and human–computer interaction. Flow is defined as a ‘holistic sensation that people feel when they act with total involvement’. We applied the concept of flow to modeling the experience of collaborative learning in an immersive virtual environment. The aims were, first, to psychometrically evaluate a measurement model of flow and, second, to test a structural model of flow. Pairs of small teams engaged in collaborative problem‐solving tasks while communicating by way of an immersive virtual environment. Flow was measured after each session, using Guo and Poole's inventory for measuring flow in human–computer interaction. In relation to the first aim, partial‐least‐squares analysis demonstrated strong evidence for the measurement model. In relation to the second aim, the structural model was supported: the effect of learning‐task characteristics on flow experience was mediated by its precursors, with extraneous variables held constant. It is reasoned that the experiment and resultant analysis of this work contributes to the development of measurement models and structural models of flow in immersive virtual environments.",
+      "openalex_id": "W1909969704",
+      "openalex_type": "article",
+      "referenced_works_count": 43,
+      "categories": [],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W279868603"
+      ],
+      "record_id": "cr_2b286ec725e0e7095548f1b7"
+    },
+    {
       "title": "Sociological implications of the flow experience",
       "authors": [
         "Richard G. Mitchell"
@@ -5491,28 +5513,6 @@
         "canon"
       ],
       "record_id": "cr_d35e8c8701e42b7df7c58e74"
-    },
-    {
-      "title": "Measuring flow experience in an immersive virtual environment for collaborative learning",
-      "authors": [
-        "Paul van Schaik",
-        "Stewart Martin",
-        "Michael Vallance"
-      ],
-      "year": 2011,
-      "venue": "Journal of Computer Assisted Learning",
-      "doi": "10.1111/j.1365-2729.2011.00455.x",
-      "citations": 56,
-      "abstract": "Abstract In contexts other than immersive virtual environments, theoretical and empirical work has identified flow experience as a major factor in learning and human–computer interaction. Flow is defined as a ‘holistic sensation that people feel when they act with total involvement’. We applied the concept of flow to modeling the experience of collaborative learning in an immersive virtual environment. The aims were, first, to psychometrically evaluate a measurement model of flow and, second, to test a structural model of flow. Pairs of small teams engaged in collaborative problem‐solving tasks while communicating by way of an immersive virtual environment. Flow was measured after each session, using Guo and Poole's inventory for measuring flow in human–computer interaction. In relation to the first aim, partial‐least‐squares analysis demonstrated strong evidence for the measurement model. In relation to the second aim, the structural model was supported: the effect of learning‐task characteristics on flow experience was mediated by its precursors, with extraneous variables held constant. It is reasoned that the experiment and resultant analysis of this work contributes to the development of measurement models and structural models of flow in immersive virtual environments.",
-      "openalex_id": "W1909969704",
-      "openalex_type": "article",
-      "referenced_works_count": 43,
-      "categories": [],
-      "source_api": "snowball",
-      "snowball_from": [
-        "W2042314632"
-      ],
-      "record_id": "cr_2b286ec725e0e7095548f1b7"
     },
     {
       "title": "The flow of digital labor",
