@@ -6,27 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-10-19T14:24:06.728Z",
+    "timestamp": "2026-10-26T10:52:15.854Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
       "terms": ""
     },
-    "records_fetched": 968,
+    "records_fetched": 969,
     "files_written": 1,
-    "duration_s": 46.46,
+    "duration_s": 46.44,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 47,
-      "duration_s": 46.46,
+      "duration_s": 46.44,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-10-26T10:52:15.854Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 969,
+      "files_written": 1,
+      "duration_s": 46.44,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 47,
+        "duration_s": 46.44,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-10-19T14:24:06.728Z",
       "status": "success",
@@ -425,27 +446,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-10-19T13:46:07.206Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 968,
-      "files_written": 1,
-      "duration_s": 46.42,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 47,
-        "duration_s": 46.42,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -523,14 +523,14 @@
     },
     {
       "path": "FL-24.json",
-      "records": 968,
-      "bytes": 8036125,
+      "records": 969,
+      "bytes": 8039268,
       "categories": {
         "foundational": 35,
         "meta-analysis": 27,
-        "replication": 108,
+        "replication": 109,
         "dissent": 168,
-        "recent": 590
+        "recent": 591
       }
     },
     {
