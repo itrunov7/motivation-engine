@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-10-27T00:53:27.004Z",
+    "timestamp": "2026-10-27T00:56:20.923Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 979,
     "files_written": 1,
-    "duration_s": 86.5,
+    "duration_s": 149.12,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 48,
-      "duration_s": 86.5,
+      "api_calls": 50,
+      "duration_s": 149.12,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-10-27T00:56:20.923Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 979,
+      "files_written": 1,
+      "duration_s": 149.12,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 50,
+        "duration_s": 149.12,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-10-27T00:53:27.004Z",
       "status": "success",
@@ -422,28 +443,6 @@
       "cost": {
         "api_calls": 50,
         "duration_s": 153.88,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-10-27T00:02:58.609Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 969,
-      "files_written": 1,
-      "duration_s": 170.66,
-      "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 503 Service Unavailable for api.openalex.org/works",
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 49,
-        "duration_s": 170.66,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
