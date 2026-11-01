@@ -5,23 +5,36 @@
   ],
   "connector_version": "1.0.0",
   "last_run": {
-    "timestamp": "2026-07-14T11:46:42.061Z",
+    "timestamp": "2026-11-01T12:15:38.122Z",
     "status": "success",
-    "params": {
-      "domains": "duolingo.com;calm.com;notion.so"
-    },
-    "records_fetched": 136,
-    "files_written": 3,
-    "duration_s": 30.04,
+    "params": {},
+    "records_fetched": 423,
+    "files_written": 10,
+    "duration_s": 16.89,
     "cost": {
-      "api_calls": 3,
-      "duration_s": 30.04,
+      "api_calls": 10,
+      "duration_s": 16.89,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-01T12:15:38.122Z",
+      "status": "success",
+      "params": {},
+      "records_fetched": 423,
+      "files_written": 10,
+      "duration_s": 16.89,
+      "cost": {
+        "api_calls": 10,
+        "duration_s": 16.89,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-07-14T11:46:42.061Z",
       "status": "success",
@@ -42,19 +55,54 @@
   ],
   "data_files": [
     {
+      "path": "blinkist.com.json",
+      "records": 43,
+      "bytes": 8074
+    },
+    {
       "path": "calm.com.json",
-      "records": 47,
-      "bytes": 8432
+      "records": 48,
+      "bytes": 8608
+    },
+    {
+      "path": "canva.com.json",
+      "records": 48,
+      "bytes": 8699
+    },
+    {
+      "path": "dropbox.com.json",
+      "records": 48,
+      "bytes": 8897
     },
     {
       "path": "duolingo.com.json",
-      "records": 47,
-      "bytes": 8810
+      "records": 48,
+      "bytes": 8994
+    },
+    {
+      "path": "grammarly.com.json",
+      "records": 48,
+      "bytes": 9091
+    },
+    {
+      "path": "headspace.com.json",
+      "records": 48,
+      "bytes": 9089
     },
     {
       "path": "notion.so.json",
       "records": 42,
       "bytes": 7635
+    },
+    {
+      "path": "spotify.com.json",
+      "records": 2,
+      "bytes": 523
+    },
+    {
+      "path": "strava.com.json",
+      "records": 48,
+      "bytes": 8808
     }
   ]
 }
