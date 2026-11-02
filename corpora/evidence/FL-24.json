@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-10-27T21:30:54.767Z",
+  "fetched_at": "2026-11-02T13:18:59.729Z",
   "terms_source": "record",
   "terms": [
     "flow experience challenge skill balance",
@@ -23,7 +23,7 @@
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 823
+      "upstream_total_results": 834
     },
     {
       "query_id": "search:recency:openalex:canon:p1:flow experience challenge skill balance",
@@ -35,10 +35,10 @@
       "requested": 25,
       "returned": 25,
       "unique_returned": 25,
-      "records_added": 0,
-      "novelty_rate": 0,
+      "records_added": 1,
+      "novelty_rate": 0.04,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 823
+      "upstream_total_results": 834
     },
     {
       "query_id": "search:citation:openalex:canon:p1:flow experience challenge skill balance",
@@ -50,10 +50,10 @@
       "requested": 25,
       "returned": 25,
       "unique_returned": 25,
-      "records_added": 0,
-      "novelty_rate": 0,
+      "records_added": 1,
+      "novelty_rate": 0.04,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 823
+      "upstream_total_results": 834
     },
     {
       "query_id": "graph:backward-reference:W279868603",
@@ -101,6 +101,36 @@
       "upstream_total_results": null
     },
     {
+      "query_id": "graph:backward-reference:W7213979096",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Flow as an Optimal Learning State for Clinical Reasoning in Nurse Practitioner Training: A Concept Analysis",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 1,
+      "novelty_rate": 0.5,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W7213979096",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Flow as an Optimal Learning State for Clinical Reasoning in Nurse Practitioner Training: A Concept Analysis",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
       "query_id": "graph:backward-reference:W7212190422",
       "api": "openalex",
       "angle": "canon",
@@ -127,7 +157,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0.058,
       "upstream_total_results": null
     },
     {
@@ -142,7 +172,7 @@
       "unique_returned": 4,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
+      "rolling_novelty_rate": 0.058,
       "upstream_total_results": null
     },
     {
@@ -157,37 +187,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W7204642546",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "In the Zone: A Narrative Review of Flow Theory in Games, from Optimal Experience to Game Design",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W7204642546",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "In the Zone: A Narrative Review of Flow Theory in Games, from Optimal Experience to Game Design",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.054,
       "upstream_total_results": null
     },
     {
@@ -202,7 +202,7 @@
       "unique_returned": 2,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.05,
       "upstream_total_results": null
     },
     {
@@ -217,7 +217,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.05,
       "upstream_total_results": null
     },
     {
@@ -232,7 +232,7 @@
       "unique_returned": 11,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.05,
       "upstream_total_results": null
     },
     {
@@ -247,7 +247,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.05,
       "upstream_total_results": null
     },
     {
@@ -288,11 +288,11 @@
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
-      "returned": 3,
-      "unique_returned": 3,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "returned": 4,
+      "unique_returned": 4,
+      "records_added": 1,
+      "novelty_rate": 0.25,
+      "rolling_novelty_rate": 0.025,
       "upstream_total_results": null
     },
     {
@@ -307,7 +307,7 @@
       "unique_returned": 6,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.025,
       "upstream_total_results": null
     },
     {
@@ -318,11 +318,11 @@
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 1,
+      "novelty_rate": 0.3333,
+      "rolling_novelty_rate": 0.0583,
       "upstream_total_results": null
     },
     {
@@ -337,7 +337,7 @@
       "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.0583,
       "upstream_total_results": null
     },
     {
@@ -352,7 +352,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.0583,
       "upstream_total_results": null
     },
     {
@@ -367,7 +367,7 @@
       "unique_returned": 3,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.0583,
       "upstream_total_results": null
     },
     {
@@ -378,41 +378,11 @@
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
-      "returned": 5,
-      "unique_returned": 5,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W2804604683",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Challenge in artistic flow experiences: an interdisciplinary intervention",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W2804604683",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Challenge in artistic flow experiences: an interdisciplinary intervention",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "returned": 7,
+      "unique_returned": 7,
+      "records_added": 2,
+      "novelty_rate": 0.2857,
+      "rolling_novelty_rate": 0.0869,
       "upstream_total_results": null
     },
     {
@@ -427,7 +397,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.0869,
       "upstream_total_results": null
     },
     {
@@ -442,7 +412,37 @@
       "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.0869,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2804604683",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Challenge in artistic flow experiences: an interdisciplinary intervention",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.0869,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2804604683",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Challenge in artistic flow experiences: an interdisciplinary intervention",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.0619,
       "upstream_total_results": null
     },
     {
@@ -455,6 +455,171 @@
       "requested": 25,
       "returned": 0,
       "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.0619,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W4221001939",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "The effects of personalized gamification on students’ flow experience, motivation, and enjoyment",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 1,
+      "novelty_rate": 0.5,
+      "rolling_novelty_rate": 0.0786,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W4387332639",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Objective Difficulty-Skill Balance Impacts Perceived Balance but Not Behaviour: A Test of Flow and Self-Determination Theory Predictions",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.0786,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W4387332639",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Objective Difficulty-Skill Balance Impacts Perceived Balance but Not Behaviour: A Test of Flow and Self-Determination Theory Predictions",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.0786,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2419624448",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "The experience of flow and subjective well-being of music students",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.0786,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2419624448",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "The experience of flow and subjective well-being of music students",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.05,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2771535867",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Adjusting Challenge–Skill Balance to Improve Quality of Life in Older Adults: A Randomized Controlled Trial",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 4,
+      "unique_returned": 4,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.05,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2771535867",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Adjusting Challenge–Skill Balance to Improve Quality of Life in Older Adults: A Randomized Controlled Trial",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 10,
+      "unique_returned": 10,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.05,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2991104879",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Sociological implications of the flow experience",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.05,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2991104879",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Sociological implications of the flow experience",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.05,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W2100919822",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Arousal of Flow Experience in a Learning Setting and Its Effects on Exam Performance and Affect",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.05,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2100919822",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Arousal of Flow Experience in a Learning Setting and Its Effects on Exam Performance and Affect",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 5,
+      "unique_returned": 5,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
@@ -488,11 +653,11 @@
     "snowball_added": 0
   },
   "category_counts": {
-    "foundational": 36,
+    "foundational": 37,
     "meta-analysis": 27,
     "replication": 109,
-    "dissent": 170,
-    "recent": 599
+    "dissent": 174,
+    "recent": 606
   },
   "diversity_report": {
     "viewpoint_spread": [
@@ -516,16 +681,16 @@
     "novelty": {
       "previous_corpus_records": 980,
       "unique_records": 64,
-      "already_in_corpus": 64,
-      "new_records": 0,
-      "novelty_rate": 0,
+      "already_in_corpus": 62,
+      "new_records": 2,
+      "novelty_rate": 0.0313,
       "low_novelty": true,
       "known_share_threshold": 0.8
     }
   },
   "saturation_report": {
-    "queries_issued": 30,
-    "records_added": 0,
+    "queries_issued": 41,
+    "records_added": 8,
     "novelty_curve": [
       {
         "query_index": 1,
@@ -546,10 +711,10 @@
         "kind": "search",
         "returned": 25,
         "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
+        "records_added": 1,
+        "novelty_rate": 0.04,
         "rolling_novelty_rate": null,
-        "cumulative_records": 980
+        "cumulative_records": 981
       },
       {
         "query_index": 3,
@@ -558,10 +723,10 @@
         "kind": "search",
         "returned": 25,
         "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
+        "records_added": 1,
+        "novelty_rate": 0.04,
         "rolling_novelty_rate": null,
-        "cumulative_records": 980
+        "cumulative_records": 982
       },
       {
         "query_index": 4,
@@ -573,7 +738,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 980
+        "cumulative_records": 982
       },
       {
         "query_index": 5,
@@ -585,7 +750,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 980
+        "cumulative_records": 982
       },
       {
         "query_index": 6,
@@ -597,10 +762,34 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 980
+        "cumulative_records": 982
       },
       {
         "query_index": 7,
+        "query_id": "graph:backward-reference:W7213979096",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 2,
+        "unique_returned": 2,
+        "records_added": 1,
+        "novelty_rate": 0.5,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 983
+      },
+      {
+        "query_index": 8,
+        "query_id": "graph:forward-citation:W7213979096",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 983
+      },
+      {
+        "query_index": 9,
         "query_id": "graph:backward-reference:W7212190422",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -609,10 +798,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 980
+        "cumulative_records": 983
       },
       {
-        "query_index": 8,
+        "query_index": 10,
         "query_id": "graph:forward-citation:W7212190422",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -620,11 +809,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.058,
+        "cumulative_records": 983
       },
       {
-        "query_index": 9,
+        "query_index": 11,
         "query_id": "graph:backward-reference:W7204854129",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -632,11 +821,11 @@
         "unique_returned": 4,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.058,
+        "cumulative_records": 983
       },
       {
-        "query_index": 10,
+        "query_index": 12,
         "query_id": "graph:forward-citation:W7204854129",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -644,32 +833,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
-      },
-      {
-        "query_index": 11,
-        "query_id": "graph:backward-reference:W7204642546",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
-      },
-      {
-        "query_index": 12,
-        "query_id": "graph:forward-citation:W7204642546",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.054,
+        "cumulative_records": 983
       },
       {
         "query_index": 13,
@@ -680,8 +845,8 @@
         "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.05,
+        "cumulative_records": 983
       },
       {
         "query_index": 14,
@@ -692,8 +857,8 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.05,
+        "cumulative_records": 983
       },
       {
         "query_index": 15,
@@ -704,8 +869,8 @@
         "unique_returned": 11,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.05,
+        "cumulative_records": 983
       },
       {
         "query_index": 16,
@@ -716,8 +881,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.05,
+        "cumulative_records": 983
       },
       {
         "query_index": 17,
@@ -729,7 +894,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "cumulative_records": 983
       },
       {
         "query_index": 18,
@@ -741,19 +906,19 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "cumulative_records": 983
       },
       {
         "query_index": 19,
         "query_id": "graph:forward-citation:W1683284848",
         "bucket": "recency",
         "kind": "forward-citation",
-        "returned": 3,
-        "unique_returned": 3,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "returned": 4,
+        "unique_returned": 4,
+        "records_added": 1,
+        "novelty_rate": 0.25,
+        "rolling_novelty_rate": 0.025,
+        "cumulative_records": 984
       },
       {
         "query_index": 20,
@@ -764,20 +929,20 @@
         "unique_returned": 6,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.025,
+        "cumulative_records": 984
       },
       {
         "query_index": 21,
         "query_id": "graph:forward-citation:W2042314632",
         "bucket": "recency",
         "kind": "forward-citation",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 1,
+        "novelty_rate": 0.3333,
+        "rolling_novelty_rate": 0.0583,
+        "cumulative_records": 985
       },
       {
         "query_index": 22,
@@ -788,8 +953,8 @@
         "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.0583,
+        "cumulative_records": 985
       },
       {
         "query_index": 23,
@@ -800,8 +965,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.0583,
+        "cumulative_records": 985
       },
       {
         "query_index": 24,
@@ -812,47 +977,23 @@
         "unique_returned": 3,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.0583,
+        "cumulative_records": 985
       },
       {
         "query_index": 25,
         "query_id": "graph:forward-citation:W3091919961",
         "bucket": "recency",
         "kind": "forward-citation",
-        "returned": 5,
-        "unique_returned": 5,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "returned": 7,
+        "unique_returned": 7,
+        "records_added": 2,
+        "novelty_rate": 0.2857,
+        "rolling_novelty_rate": 0.0869,
+        "cumulative_records": 987
       },
       {
         "query_index": 26,
-        "query_id": "graph:backward-reference:W2804604683",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
-      },
-      {
-        "query_index": 27,
-        "query_id": "graph:forward-citation:W2804604683",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
-      },
-      {
-        "query_index": 28,
         "query_id": "graph:backward-reference:W311205900",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -860,11 +1001,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.0869,
+        "cumulative_records": 987
       },
       {
-        "query_index": 29,
+        "query_index": 27,
         "query_id": "graph:forward-citation:W311205900",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -872,8 +1013,32 @@
         "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "rolling_novelty_rate": 0.0869,
+        "cumulative_records": 987
+      },
+      {
+        "query_index": 28,
+        "query_id": "graph:backward-reference:W2804604683",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.0869,
+        "cumulative_records": 987
+      },
+      {
+        "query_index": 29,
+        "query_id": "graph:forward-citation:W2804604683",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.0619,
+        "cumulative_records": 987
       },
       {
         "query_index": 30,
@@ -884,8 +1049,140 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
+        "rolling_novelty_rate": 0.0619,
+        "cumulative_records": 987
+      },
+      {
+        "query_index": 31,
+        "query_id": "graph:forward-citation:W4221001939",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 2,
+        "unique_returned": 2,
+        "records_added": 1,
+        "novelty_rate": 0.5,
+        "rolling_novelty_rate": 0.0786,
+        "cumulative_records": 988
+      },
+      {
+        "query_index": 32,
+        "query_id": "graph:backward-reference:W4387332639",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 2,
+        "unique_returned": 2,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.0786,
+        "cumulative_records": 988
+      },
+      {
+        "query_index": 33,
+        "query_id": "graph:forward-citation:W4387332639",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 2,
+        "unique_returned": 2,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.0786,
+        "cumulative_records": 988
+      },
+      {
+        "query_index": 34,
+        "query_id": "graph:backward-reference:W2419624448",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.0786,
+        "cumulative_records": 988
+      },
+      {
+        "query_index": 35,
+        "query_id": "graph:forward-citation:W2419624448",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 2,
+        "unique_returned": 2,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.05,
+        "cumulative_records": 988
+      },
+      {
+        "query_index": 36,
+        "query_id": "graph:backward-reference:W2771535867",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 4,
+        "unique_returned": 4,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.05,
+        "cumulative_records": 988
+      },
+      {
+        "query_index": 37,
+        "query_id": "graph:forward-citation:W2771535867",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 10,
+        "unique_returned": 10,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.05,
+        "cumulative_records": 988
+      },
+      {
+        "query_index": 38,
+        "query_id": "graph:backward-reference:W2991104879",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.05,
+        "cumulative_records": 988
+      },
+      {
+        "query_index": 39,
+        "query_id": "graph:forward-citation:W2991104879",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.05,
+        "cumulative_records": 988
+      },
+      {
+        "query_index": 40,
+        "query_id": "graph:backward-reference:W2100919822",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.05,
+        "cumulative_records": 988
+      },
+      {
+        "query_index": 41,
+        "query_id": "graph:forward-citation:W2100919822",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 5,
+        "unique_returned": 5,
+        "records_added": 0,
+        "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 980
+        "cumulative_records": 988
       }
     ],
     "window_queries": 10,
@@ -896,17 +1193,17 @@
       "recency": 1,
       "citation": 1
     },
-    "topical_candidates": 37,
+    "topical_candidates": 36,
     "topical_confirmed": 20,
-    "topical_rejected": 17,
-    "topical_confirmation_rate": 0.5405,
-    "graph_anchors_expanded": 14,
+    "topical_rejected": 16,
+    "topical_confirmation_rate": 0.5556,
+    "graph_anchors_expanded": 19,
     "field_union_estimate": {
-      "estimate": 980,
+      "estimate": 988,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 1,
       "total_search_queries": 3,
-      "summed_upstream_results": 823,
+      "summed_upstream_results": 834,
       "observed_sample_multiplicity": 1
     },
     "saturation_reached": true,
@@ -1175,6 +1472,29 @@
         "W2020443333"
       ],
       "record_id": "cr_00b0b9124047e1b9dc816e98"
+    },
+    {
+      "title": "Guidelines on myocardial revascularization",
+      "authors": [
+        "The Task Force on Myocardial Revascularization of the European Society of Cardiology (ESC) and the European Association for Cardio-Thoracic Surgery (EACTS)"
+      ],
+      "year": 2010,
+      "venue": "European Journal of Cardio-Thoracic Surgery",
+      "doi": "10.1016/j.ejcts.2010.08.019",
+      "citations": 1007,
+      "abstract": "Guidelines and Expert Consensus Documents summarize and evaluate all available evidence with the aim of assisting physicians in selecting the best management strategy for an individual patient suffering from a given condition, taking into account the impact on outcome and the risk-benefit ratio of diagnostic or therapeutic means. Guidelines are no substitutes for textbooks and their legal implications have been discussed previously. Guidelines and recommendations should help physicians to make decisions in their daily practice. However, the ultimate judgement regarding the care of an individual patient must be made by his/her responsible physician(s). The recommendations for formulating and issuing ESC Guidelines and Expert Consensus Documents can be found on the ESC website (http://www.escardio.org/knowledge/guidelines/rules). Members of this Task Force were selected by the European Society of Cardiology (ESC) and the European Association for Cardio-Thoracic Surgery (EACTS) to represent all physicians involved with the medical and surgical care of patients with coronary artery disease (CAD). A critical evaluation of diagnostic and therapeutic procedures is performed including assessment of the risk-benefit ratio. Estimates of expected health outcomes for society are included, where data exist. The level of evidence and the strength of recommendation of particular treatment options are weighed and graded according to predefined scales, as outlined in Tables 1 and 2 . Classes of recommendations Levels of evidence The members of the Task Force have provided disclosure statements of all relationships that might be perceived as real or potential sources of conflicts of interest. These disclosure forms are kept on file at European Heart House, headquarters of the ESC. Any changes in conflict of interest that arose during the writing period were notified to the ESC. The Task Force report received its entire financial support from the ESC and EACTS, without any involvement of the pharmaceutical, device, or surgical industry. ESC and EACTS Committees for Practice Guidelines are responsible for the endorsement process of these joint Guidelines. The finalized document has been approved by all the experts involved in the Task Force, and was submitted to outside specialists selected by both societies for review. The document is revised, and finally approved by ESC and EACTS and subsequently published simultaneously in the European Heart Journal and the European Journal of Cardio-Thoracic Surgery. After publication, dissemination of the Guidelines is of paramount importance. Pocket-sized versions and personal digital assistant-downloadable versions are useful at the point of care. Some surveys have shown that the intended users are sometimes unaware of the existence of guidelines, or simply do not translate them into practice. Thus, implementation programmes are needed because it has been shown that the outcome of disease may be favourably influenced by the thorough application of clinical recommendations. Myocardial revascularization has been an established mainstay in the treatment of CAD for almost half a century. Coronary artery bypass grafting (CABG), used in clinical practice since the 1960s, is arguably the most intensively studied surgical procedure ever undertaken, while percutaneous coronary intervention (PCI), used for over three decades, has been subjected to more randomized clinical trials (RCTs) than any other interventional procedure. PCI was first introduced in 1977 by Andreas Gruentzig and by the mid-1980s was promoted as an alternative to CABG. While both interventions have witnessed significant technological advances, in particular the use of drug-eluting stents (DES) in PCI and of arterial grafts in CABG, their role in the treatment of patients presenting with stable CAD is being challenged by advances in medical treatment, referred to as optimal medical therapy (OMT), which include intensive lifestyle and pharmacological management. Furthermore, the differences between the two revascularization strategies should be recognized. In CABG, bypass grafts are placed to the mid-coronary vessel beyond the ‘culprit’ lesion(s), providing extra sources of nutrient blood flow to the myocardium and offering protection against the consequences of further proximal obstructive disease. In contrast, coronary stents aim to restore the normal conductance of the native coronary vasculature without offering protection against new disease proximal to the stent. Even with this fundamental difference in the mechanisms of action between the two techniques, myocardial revascularization provides the best on the of In patients presenting with coronary and myocardial myocardial is and coronary are by in the of contrast, in patients with stable CAD and disease in of the or by with by or during the procedure flow stable or can be in including PCI or surgical The advances in that most coronary are to is of the which should clinical of of to medical and of disease by revascularization that are to in and patients and physicians to of the PCI procedure against the of the more surgical of the best revascularization taking into the and between and physicians or other specialists as help in taking decisions their treatment, and the most be provided to them by the Heart the of the between and the of both the ESC and EACTS has given this Task Force, their and the of this document the to practice on myocardial Myocardial revascularization is the expected in of or health outcomes of the expected consequences of the procedure. assessment is an of clinical being of to and the it and the assessment of health while as a for individual and to and have been for and in clinical use are in . of these are because available have individual in patient with outcome at These the to to be used in for percutaneous coronary intervention or coronary artery bypass grafting The to surgical was shown to be an of in with both percutaneous and surgical treatment it can be used to the of revascularization and the of treatment has in optimal The has been shown to be an of in patients with PCI not with it has a role in the of optimal treatment by patients at of The has been in PCI patients and should be used in this The Society of and the and have been in surgical and should be used to surgical is to that no can in an individual with all used to and differences in and can the of are should be used as a while clinical judgement and to be and patient evidence and with legal is the for a particular treatment care the of and is to that health care decisions can no be on and of the taking an role the process have However, most patients or PCI have of their disease and sometimes with to the its or the for patients treatment them to on the and with can this in the of their personal and must have the to on the by the The patient to the and with the and its and use of that the patient are medical should and as as expected and in of of of and the potential for is that any of treatment options for CAD is made to the and should not with the the of patients or for PCI the patient should be to as between diagnostic and intervention to on the of the diagnostic to a as or to the and consequences with or care of a and patient document is provided in the of the patient and of intervention is for regarding and treatment should be is the to is to or and to on the level of of the and the of the In the patient should be all treatment options are available at the and is on or PCI including performed for coronary and should be performed by at that have to support and intensive care treatment, and have on patients with stable CAD and or all data should be by a a and an interventional to the of and revascularization with PCI or this myocardial revascularization should in not be performed at the of diagnostic the Heart to all available a and and the with the may be used for should be discussed to the best for The to patients in a stable can make a without the of an potential are with the expected treatment or is no alternative to treatment, may not be for revascularization should be of the for including and as as other strategies The process for medical and patient is by the to and The process should not be at as a legal should be used as an to that other as and patient which sometimes best may have an impact on the of clinical is The of a Heart the of a process may be needed from or without a surgical or with interventional in an should to in with an interventional and a or their for Consensus on the optimal revascularization treatment should be with the Guidelines may be used to the for of all diagnostic PCI is as a therapeutic interventional procedure performed the patient on the the diagnostic procedure as to a procedure performed during a PCI is for the with and However, in a of patients of patients were in that were as potential for CABG. PCI is for not for and should not be as a by the Heart should be used to and clinical that can or be on and differences can be potential for other in stable including of the or proximal artery and the should be discussed by a Heart a revascularization procedure or the recommendations for and patient for percutaneous coronary intervention revascularization at an for and patient and are used to the of to document in patients with stable to patients with stable and an coronary and to help treatment options and evaluate their In diagnostic and are in than and of the used for In the of disease is on and with an of obstructive CAD while patients with a of CAD are at or of and an is the most used to the of the and to evidence of is in of the patients with an of CAD are into or The of revascularization therapy is myocardial not the coronary disease procedures performed in patients with of between the of a and its on myocardial blood are in stable Thus, or is for of without can be for revascularization is the of myocardial in patients with have myocardium are at not while the of patients without myocardium is not by revascularization The evidence the use of for the of CAD is on and have health outcomes for diagnostic and the available evidence has been from the of the is on and of the can be it is to diagnostic of for the of obstructive coronary artery disease and for the assessment of in without coronary artery any to CAD must into account the with the The of pharmacological and must be weighed against the of disease or In of is are two that can coronary and The and of to CAD have shown that is in significant CAD while were In the two trials was with the of the other half of the as significant by are with that the of coronary In is for significant CAD in patients with stable and and in patients with to of However, the of and decisions for patient management further that coronary has a and is than for the of CAD The are on of or of during or pharmacological The most are and may be used in with or pharmacological include and The to in which two and and are in the both to be performed in a have over including diagnostic the to and of and the to diagnostic in the of or the patient is to these are in patients with PCI or CABG. In patients with coronary evidence of is of is an established diagnostic and is more than in the of The most used is a a pharmacological as and can be The and since it is more than other and of are as and the use of to of and to myocardial These the of the the of is not is an established diagnostic provides a more and of the of CAD than The and of with between and with diagnostic in patient including and patients from a simultaneously performed may further the with pharmacological can be used to by or by has been in clinical practice and data have been published with other established A that from a of and a of in and and at the diagnostic of can be used for data in clinical are with myocardial have diagnostic in the of The of have over of data with and for CAD to myocardial Myocardial blood flow in by further diagnostic in patients with and can be used to the of The of and has because the of and of the may a of coronary and their can be with or with that have two and and the and of have that and or are In patients with or CAD are without is or the of or coronary flow is Even interventional the of most on the of assessment or coronary of PCI or in patients with is and clinical outcome is Thus, is for the assessment of the consequences of coronary is are with while is with for from is The of patients with is advances in assessment of myocardial should patient management. including and have been for assessment of and of clinical outcome myocardial In have a have has a diagnostic to of myocardial its to and of is not to other The differences in of the are and and which is evidence is on or with the of two both to with a of myocardium are to from myocardial revascularization and may in and and on its and stable CAD can be by or with revascularization PCI or CABG. The for revascularization are of the two significant advances in all three treatment have trials to The evidence for and PCI is from and both have individual and their the of However, their to clinical practice is by the that their patient are not of in normal clinical practice most of PCI and in CAD of most of or vessel on an is patients over from medical therapy to revascularization or from PCI to CABG. of the of CABG, which with which may be by In contrast, by data on all may more clinical practice. In the of their fundamental is that account for all which may both the and the outcome of for both and can this this have that an strategy of than PCI in patients with or CAD over a to period by by a to in the for The in and may the differences in the of the two at in patients with the most The impact of on clinical outcome myocardial of has been for over two While patients with no or evidence of have no from patients with a significant of myocardium do in a of the no of PCI over over patients with myocardium a of or with revascularization The of PCI or without has been in and a no and for revascularization with a for PCI over of at an of this patients with and patients in the for PCI of patients ratio The randomized patients with significant CAD and evidence of myocardial to or to a of was no significant difference in the of or for from was by in the PCI at 1 was by by which of the PCI and of the received revascularization The that an strategy of PCI in stable CAD not the of or to The of CAD in at with the of and CAD being and while of patients proximal disease. Furthermore, patients with disease were and most patients normal in an of trials no difference between and in of or the for CABG, an in with of with of and a significant in the for or vessel revascularization with In contrast, in an of patients in of and a significant in and with After the of were and the that at of the clinical of might be to therapy not be In a to patients with advances in PCI were not with in with The of to medical therapy in the management of of CAD was established in a of which is the for CABG. a of in patients with or the proximal coronary artery was were in with and The of these to practice is challenged as medical therapy used in the trials was to However, a a in the for with In the of might be most patients in the trials a of was on an of the medical over to of patients received an artery the most of is the use of or two are two of and both of which no significant difference in or a in and a in with PCI at to of have been of PCI in of PCI patients in these normal with or vessel CAD and without proximal disease. of these that in to a in the for with no or a or a in patients and with The of the of patients that the or in of of PCI and of patients with revascularization of and In to the patient of is a of patients with the most including with were into the or a for two real treatment decisions in a of patients randomized to PCI or and in a of patients of CAD was to be for and PCI patients to be at surgical 1 of and of PCI patients the of or revascularization data at 2 and of in of PCI to the for the at both 1 and 2 that the of care for patients with or CAD the difference in the was by the of in the in the first was or to use of and is not to for that all other are to the of and in patients with the were in of in the of patients with the was no significant difference in between the two is that the and revascularization were in the these patients more all patients with CAD in the and in the it that outcomes at 1 and 2 in patients with of all patients with These are with a and a in the for intervention with in with PCI in patients with more is as the of care for significant disease in patients for and the a of in patients with than While ESC on PCI that for disease should be in the of other revascularization discussed that PCI provides at not to for at at 2 of and can of PCI However, the of that these with is While is a for PCI because of its and proximal in the coronary two may against the of to of disease the to be at of and to of patients have CAD where CABG, as may a The most account of treatment of disease by or PCI is from the of the In randomized the of revascularization and for at a of were and for PCI in the and data at 2 of and and revascularization of and in the two that PCI may be to at 2 the patients with in the or in the for the potential of PCI at in from other In a of including two and the of patients with that was no difference between PCI and in or in the of and to to a in revascularization with These were at in the The two to be for revascularization in stable or for coronary artery bypass grafting percutaneous coronary intervention in stable patients with for both procedures and surgical best evidence that revascularization can be on in patients with or on in of disease or a significant in and significant proximal in the of are for In the most of to a as as a in the for at a of in disease. that to the of on may or the of the use of to more is a significant is not to recommendations for the of revascularization for clinical it has been that are clinical and in outcomes between PCI and CABG, Tables and should the of recommendations by the Heart in patients and the to However, these recommendations must be according to individual patient and clinical a patient has a for CABG, this should be according to individual clinical as or significant is the most of and the of patients advances in medical and interventional the and and to that of patients with the However, patients with a of patients with a is for of medical as as interventional treatment The ultimate of coronary and revascularization are and of in the and of of and potential with and pharmacological should be on treatment have shown that an strategy by and the clinical for and These trials have shown a in and in the while the in in the has been and during the have The most that an strategy and at to of the of patients and the of is to patients at and of and in an strategy with its medical therapy may that is to patients at in and and medical or in may should be clinical and have been The ESC Guidelines for the as the to on and at in daily clinical practice The was for of has been for of outcome the of and for of with procedures A with an strategy has been in patients at The published including the the and the trials a between by a of including and and from an and at to be the most individual of from The role of has to be The of the of has been a of A as to a has been in clinical trials treatment strategies A of data a strategy over a is no evidence that any particular of to intervention with pharmacological treatment, including intensive be to providing medical treatment and as as as as to be and can be with an as to a In patients with a should be performed at were from all that therapy was not patients with and in in with from and should coronary patients with a or of to should be with without or for to myocardial which coronary In of and revascularization can be without should be performed during the of strategy with After the and its a the of intervention can be The in with changes the with and of with clinical and in patients with provides for treatment should be performed for diagnostic in patients at and in the of other clinical is in patients with or in the of diagnostic the of of the is trials that have or medical management have PCI and at the of the has the of of intervention in patients with In patients an of is no to the from the two revascularization in stable The of revascularization should be on the and of the PCI is it should be to the with the help of and with and to on this In of significant or is to use of is in to on the treatment strategy for significant than the has not been in a randomized The optimal of revascularization is for PCI and for CABG. While the from PCI in patients with is to its the from is patients can of medical of patients as and the may be at of are no data the that should be from other patients in A of that a from an strategy to that of However, to have a with an procedure. Thus, procedures should be in is of the most patients a or from procedures the should of and of the recommendations for revascularization in for revascularization in coronary PCI is as percutaneous intervention in the of without or and PCI with therapy in patients in have shown more of vessel and clinical outcome with PCI and from to PCI have a in of Heart Association that PCI should be performed by procedures and at procedures for in with an of and PCI procedures a is by the in and of for PCI for the of providing PCI is not is to make to all the first of by the implementation of a of care in 1 the is of patients to a offering an PCI by a of to without PCI should be to a and no should be the expected between first medical and is the expected is 2 in patients with and of patients to a should and be to a where and PCI should be performed in a of of myocardial patient and management and strategies of first medical its in and as a treatment an alternative to In of patients with a that the or of and Even with an optimal may be PCI is in patients in or or presenting to The of over is on of and or is as use of or with or other In patients PCI PCI has shown no significant over The use of and as therapy was shown to be with with and and a The of with a in at the of has been in the an medical to and with outcome to PCI at and the should the patient to a a a PCI In of as more than half of the in the to a PCI for should be of a of was not shown to be In the of patients are referred for and revascularization as presenting between and and to from and with stable may from coronary and PCI without or presenting between and with coronary artery not from PCI Thus, in patients presenting the with a patients with and in a myocardial are for In of for PCI or PCI in should be a myocardial is in and surgical revascularization can be this in the evidence to an between surgical and since in the of or a period of to be the best with PCI or PCI on the artery and further revascularization with PCI or and are with a surgical is the of for treatment as as support to and of the diagnostic procedures as as the and surgical treatment are discussed in ESC Guidelines should be between of and and revascularization in patients with or not received In these revascularization has been with PCI performed in all coronary should be performed in to and to that may as to or The of these is by a and medical treatment in to and at the The of is the of an should be performed as as than is evidence to support percutaneous at or with of to in and should be by coronary is revascularization in to the the clinical The use of an is in the of The should be in patients with in and with The of an should be against and more in patients patients with arterial disease and should not be used in patients with or other than an can be at with an for therapy the patient to and to 2 should be for support in patients with with potential for revascularization the not the patient should a thorough assessment in the of a or with The patient may be for a surgical or therapy in the of In patients with no for therapy as a to may be In may be as a for and After of therapy including and revascularization to support an should be from the or therapy may be is not that can be have been with The use of percutaneous has not in outcome have in The use of a in A the data from three no difference in and a for more as and in the percutaneous the recommendations for strategies in the recommendations for PCI in and the recommendations for the treatment of patients with in the of for strategies in myocardial patients for percutaneous coronary intervention in myocardial for treatment of patients with in the of myocardial patients represent an of CAD of are with revascularization procedures are at including with patients the of therapy and may as and PCI and CABG. The the of myocardial revascularization in patients with stable CAD The Heart the coronary and the most revascularization be PCI or CABG. The patients were randomized to or revascularization in to patients were for in the of which were was no difference in the of or between and revascularization In the PCI was no outcome difference between PCI and In the surgical of was with than with",
+      "openalex_id": "W2040868595",
+      "openalex_type": "article",
+      "referenced_works_count": 325,
+      "categories": [
+        "foundational",
+        "dissent"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_73742b571b1f5a676c475be0"
     },
     {
       "title": "Self-Assessment in the Health Professions: A Reformulation and Research Agenda",
@@ -2326,7 +2646,7 @@
       "year": 2022,
       "venue": "PEDIATRICS",
       "doi": "10.1542/peds.2022-057010",
-      "citations": 331,
+      "citations": 332,
       "abstract": "This clinical report is designed to assist the pediatrician in caring for the child, adolescent, and family in whom a diagnosis of Down syndrome has been confirmed by chromosome analysis or suspected by prenatal screening. Although a pediatrician’s initial contact with the child is usually during infancy, occasionally the pregnant woman who has been given a prenatal diagnosis of Down syndrome will be referred for review of the condition and genetic counseling; this report offers guidance for this situation, as well. Age-specific guidance for the clinician is provided in Supplemental Fig 1.Pediatricians play an important role in the care of children and adolescents with Down syndrome and their families. Down syndrome is the most common chromosomal cause of intellectual disability, and there has been a significant improvement in quality of life for affected people. Awareness of the issues important to affected children, adolescents, and their caregivers can make a great difference in outcomes across the lifespan.Children with Down syndrome may have many cooccurring medical conditions and cognitive impairment because of the presence of extra genetic material from chromosome 21 (Table 1).1,2 Although the phenotype is variable, there typically are multiple features that enable the experienced clinician to suspect the diagnosis. Among the more common physical findings are hypotonia, small brachycephalic head, epicanthal folds, flat nasal bridge, upward-slanting palpebral fissures, Brushfield spots, small mouth, small ears, excessive skin at the nape of the neck, single transverse palmar crease, short fifth finger with clinodactyly, and wide spacing between the first and second toes, often with a deep plantar groove. The degree of cognitive impairment is variable and may be mild (IQ of 50–70), usually is moderate (IQ of 35–50), or occasionally is severe (IQ of 20–35).Medical conditions common in children with Down syndrome include hearing loss (75%), obstructive sleep apnea (50%–79%), otitis media (50%–70%), eye problems (60%–80%), including cataracts (<1%–3%),3 nasolacrimal duct obstruction (3%–36%), and strabismus and severe refractive errors (36%–80%), congenital heart defects (50%), neurologic dysfunction (1%–13%), gastrointestinal atresia (12%), hip dislocation and hip abnormalities (2%–8%),4,5 symptomatic atlantoaxial instability (1%–2%),6,7 thyroid disease (24%–50%)2,8 and, less commonly, transient abnormal myelopoiesis (4%–10%) and later leukemia (1%), autoimmune diseases,2,8–10 including Hashimoto thyroiditis (13%–39%), with incidence dependent on age, celiac disease (1%–5%), Hirschsprung disease (<1%),3 and autism (7%–19%).11,12People with Down syndrome often function more effectively in social situations than would be predicted based on cognitive assessment results, unless there is presence of cooccurring autism. Although the level of social–emotional functioning may vary, these skills may be improved with early intervention and therapy through early adulthood.In ∼96% of children with Down syndrome, the condition is sporadic because of nonfamilial trisomy 21, in which there are 47 chromosomes with the presence of a free extra chromosome 21. In ∼3% to 4% of people with the Down syndrome phenotype, the extra chromosomal material is the result of an unbalanced translocation between chromosome 21 and another acrocentric chromosome, usually chromosome 14 or 21. Approximately three-quarters of these unbalanced translocations are de novo, and the remainder result from translocation inherited from a parent. If the child has a translocation, the parents should be offered a karyotype to determine whether the translocation is familial or de novo. In the remaining 1% to 2% of people with the Down syndrome phenotype, a mix of 2 cell lines is present: 1 normal and the other with trisomy 21. This condition is called mosaicism. People with mosaicism may be more mildly affected than people with complete trisomy 21 or translocation chromosome 21, but this is not always the case, and their condition may include any of the associated medical problems and may be indistinguishable from trisomy 21. The chance of recurrence for families with an affected child depends on many factors and vary greatly, from 1% in most families to 100% in some circumstances. Table 2 describes the different chromosomal characteristics of Down syndrome.Formal counseling by a clinical geneticist or genetic counselor is recommended for all families.Several areas require ongoing assessment throughout childhood and should be reviewed at every health supervision visit and at least annually. These areas include: personal support available to family;participation in a family-centered medical home;age-specific Down syndrome-related medical and developmental conditions;financial and medical support programs and long-term financial planning for which the child and family may be eligible;injury and abuse prevention, with special consideration of developmental skills and intellectual ability; andnutrition and activity to maintain appropriate weight.The American College of Obstetricians and Gynecologists recommends that all pregnant women, regardless of age or risk status, be offered the option of screening and diagnostic testing for Down syndrome.17,18A wide variety of screening test options exist in the first and second trimester using maternal serum and ultrasonography. Each offers varying levels of sensitivity and specificity. No 1 screening test is superior to other screening tests in all characteristics. In recent years, noninvasive prenatal testing by cell-free DNA (cfDNA) has become available and is the most sensitive method for screening for Down syndrome. cfDNA screening for Down syndrome is significantly more sensitive and specific than conventional screening methods, with a 2017 meta-analysis reporting a detection rate of 99.7%, with a false-positive rate of 0.04% in singleton pregnancies.19 cfDNA uses a maternal blood sample to analyze free-floating small fragments of DNA from the placenta. Because cfDNA is from the placenta and not directly from the fetus, it is a screening test and not diagnostic. cfDNA analysis can be performed as early as 9 to 10 weeks’ gestation depending on the laboratory, and a high-risk result from cfDNA would require confirmation by diagnostic testing with chorionic villus sampling (CVS) or amniocentesis. Screening for trisomy 21 by cfDNA in twin pregnancies can be performed, but total number of reported cases is small.20Other screening tests for Down syndrome include first-trimester screening, which incorporates maternal age, nuchal translucency ultrasonography, and measurement of maternal serum β human chorionic gonadotropin and pregnancy-associated plasma protein A. Second-trimester screening is available for patients who first seek medical care in the second trimester or in locations where first-trimester screening is not available. The second-trimester serum screening, often called the quad screen, incorporates maternal age risk with measurement of maternal serum β human chorionic gonadotropin, unconjugated estriol, α-fetoprotein, and inhibin concentrations. The detection rate of Down syndrome by first-trimester screening is 82% to 87%, by second trimester screening is 80%, and by combined first- and second-trimester screening (referred to as integrated screening) is ∼95%. These screening tests are reported to have a 5% false-positive rate.21–24Ultrasonography is an additional screening tool for Down syndrome because structural changes, including congenital heart defects, increased nuchal skin fold, “double bubble” sign suggestive of duodenal atresia, ventriculomegaly, and short–long bones, may be identified by prenatal imaging. Although ultrasonography is an additional screening tool, it is not diagnostic for Down syndrome.Diagnostic testing for Down syndrome includes CVS or amniocentesis. CVS has the benefit of being performed earlier in pregnancy, between 10 and 14 completed weeks’ gestation. A placental sample is obtained either transabdominally or transcervically, depending on provider preference and placental location. Amniocentesis is a transabdominal procedure to remove a sample of amniotic fluid performed after 15 weeks’ gestational age. Risk for procedure-related loss of pregnancy from CVS or amniocentesis is comparable in recent studies when performed by providers with expertise, 0.22% for amniocentesis and 0.11% for CVS.25,26Pediatricians may be asked to counsel a family whose fetus has been identified with or is at increased chance of having Down syndrome. Families may have a great number of questions during any pregnancy and especially when the child will have Down syndrome. They may have received counseling from a certified genetic counselor, a clinical geneticist, maternal–fetal medicine specialist, obstetrician, or developmental specialist. In addition, parents may have received information and support from a family-led organization such as Parent to Parent USA, a local Down syndrome group, a national Down syndrome organization, social media, or possibly an Internet site with inaccurate information. Pediatricians who often have a previous relationship with the family may be the natural source of support for and guidance in the context of the medical home. The clinician should be prepared to respond to questions, review information the family has received, and assist in the decision-making process.27 When asked, the pediatrician should discuss the following topics with the family: The prenatal laboratory studies and any confirmatory testing that led to the diagnosis and any fetal imaging studies that have been or will be performed. Many families find it important to have the diagnosis confirmed before they can consider what it will mean to their infant and their family.Families benefit from hearing a fair and balanced perspective, including the many positive outcomes of children with Down syndrome and their effects on the family. Families usually have questions about prognosis and phenotypic manifestations, including the wide range of variability seen in infants and children with Down syndrome. The prenatal visit is a good time to offer a connection to a peer-to-peer organization for support (see Family Resources).Discuss any additional studies performed that may refine the estimation of the prognosis (eg, fetal echocardiography, ultrasonography for gastrointestinal tract malformations). Consultation with an appropriate medical subspecialist, such as a pediatric cardiologist or a pediatric surgeon, may occur prenatally if abnormal findings are detected.Discuss currently available treatments and interventions. Families need to hear that they are not alone and that there are supports and services for them after the infant is born. Discuss early intervention resources, parent-support programs, and any appropriate future treatments.Discuss extended life expectancy that has increased from 30 years in 1973 to 60 years in 2002. This increase has resulted from improved medical care, educational options, and enhanced social adaptation. Potential complications and adverse effects, costs and financial supports available, and other challenges associated with comprehensive management and care should also be discussed. The pediatrician can explain that they will be supported best in the context of a patient-centered medical home.There are many issues for the family learning that their child will have Down syndrome to consider. These issues should be discussed using a nondirective approach. In cases of prenatal diagnosis, this may include discussion of pregnancy continuation or termination, raising the child in the family, foster care placement, and adoption.28The mechanism for occurrence of Down syndrome in the fetus and the potential recurrence rate for the family, as provided by genetic counseling, should be shared. Discuss availability of genetic counseling or meeting with a genetics professional.As the pregnancy continues, the pediatrician may: Develop a plan for delivery and neonatal care with the obstetrician and the family. As the pregnancy progresses, additional studies should be performed if available, if recommended by medical subspecialists and/or if desired by the family. These studies (eg, detection of a complex heart defect by fetal echocardiography) may help direct development of a management plan and improve outcome for the mother and infant.29Offer parent-to-parent contact and information about local and national support organizations because communication with experienced parents is often a very helpful resource for caregiver decision-making.Offer referral to a clinical geneticist or genetic counselor for a more extended discussion of clinical outcomes and variability, recurrence rates, future reproductive options, and evaluation of the risks for other family members.It is recognized that the medical needs of newborn infants with Down syndrome vary, and the timing of each intervention depends on the infant’s needs, but that it is important that all interventions are addressed and that careful transfer of care occurs at the time of discharge from the hospital.The first step in evaluating a newborn infant for trisomy 21 is a careful review of the family history and prenatal information, to include: results of prenatal chromosome studies, if performed; andfamily history of previous children born with trisomy 21 or developmental differences or pregnancies that ended in miscarriage. (These may be significant clues that a family may carry a balanced translocation that predisposes them to having children with trisomy 21.)For children who have had the diagnosis made prenatally, a formal copy of the chromosome report from an amniocentesis or CVS should be obtained. This report allows the clinician to confirm the diagnosis, review the results with the family, and add the formal diagnosis to the child’s medical record. If the results of prenatal testing are not available or if cfDNA alone was performed, a sample of cord or peripheral blood should be obtained for postnatal karyotype to confirm the diagnosis and rule out a chromosome translocation.A physical examination is the most sensitive test in the first 24 hours of life to diagnose trisomy 21 in an infant. If the clinician believes that criteria for Down syndrome are present on physical examination, then a blood sample should be sent for a karyotype. The clinician should alert the laboratory and request rapid results. A study that uses fluorescent in situ hybridization (FISH) technology, in addition, should be available within 24 to 48 hours, if necessary, to facilitate diagnosis and parent counseling. A FISH study, however, can only indicate that an extra copy of chromosome 21 is present and does not determine the presence or absence of a translocation. Therefore, a positive FISH result should be confirmed by a karyotype to identify translocations that may have implications for further reproductive counseling for the parents and possibly other family members. A chromosomal microarray analysis is not appropriate because it will not differentiate trisomy 21 caused by nondisjunction versus an unbalanced translocation.When delivering a diagnosis of Trisomy 21 (Table 3): the mother should be allowed to recover from the immediate delivery of the infant and have her partner or support person present before the diagnosis is given;the information should be relayed in a private setting by the physicians involved, optimally by the primary care provider for the infant and the delivering physician30; andit is recommended that hospitals coordinate the delivery of the information and offer a private hospital room pending confirmation of the diagnosis.When providing information about Down syndrome to families, the physician should first congratulate parents on the birth of their infant. Obstetricians and pediatricians should coordinate their messaging and inform parents of their suspicion immediately, in a private setting, and when appropriate, with both parents together. Physicians should use their experience and expertise in providing support and guidance for families. Clinicians should ensure a balanced approach that reflects the variability and broad range of current outcomes, rather than their personal opinions or experience, give current printed materials, and offer access to other families who have children with Down syndrome and support organizations if locally available. It is important that clinicians be cognizant of the realities and possibilities for people with Down syndrome to have healthy, productive lives.30The laboratory diagnosis of Down syndrome should be confirmed, and the karyotype should be reviewed with the parents when the final result is available. The specific findings should be discussed with both parents whenever possible, including the potential clinical manifestations associated with the syndrome. These topics should be reviewed again at a subsequent meeting. Families should be offered referral for genetic counseling if it was not conducted prenatally.Newborn care is often provided in a hospital setting by a physician who will not be the primary care pediatrician. If the physician providing newborn care will not be the primary care pediatrician, he or she should ensure that there is a smooth transition by transferring medical records and ensuring that an early newborn follow-up appointment is scheduled.Characteristics attributable to Down syndrome, as well as those that are familial, should be discussed.Follow Bright Futures schedule or more frequently if indicated. Obtain a history and perform a physical examination.Monitor weight and follow weight-for-length trends at each health care visit. Review the infant’s growth and plot it on the Down syndrome-specific charts for weight, length, weight for length, and head circumference (available at www.cdc.gov).57,58Review feeding at every health supervision visit, ensure adequate iron intake, and inquire about any changes in respiratory symptoms with feeding (see “Health Supervision From Birth to 1 Month” for discussion).Review the previous hearing evaluation (brainstem auditory evoked response [BAER] or otoacoustic emission). If the infant passed the newborn screening study, rescreen at 6 months of age for confirmation.Risk of otitis media with effusion is 50% to 75%.43 Middle-ear disease should be treated immediately when diagnosed. As soon as a clear ear is established, a diagnostic BAER should be performed to accurately establish hearing status.In children with stenotic canals in which the tympanic membranes cannot be seen, refer to an otolaryngologist as soon as possible for examination under an office microscope. Interval ear examinations should be performed by the otolaryngologist every 3 to 6 months until the tympanic membrane can be visualized by the pediatrician and tympanometry can be performed reliably.43A behavioral audiogram may be attempted at 1 year of age, but many children will not be able to complete the study. If unable to complete a behavioral audiogram, additional testing by BAER should be performed at 1 year.Ear anomalies also place child at risk for sensorineural hearing loss and vestibular problems that may the assessment the first 6 months of refer to a pediatric or with expertise and experience with infants with to for nasolacrimal duct refractive and the infant’s at each visit and use appropriate and If duct obstruction is refer for evaluation for of if not by 9 to months of results of newborn if not Because of increased risk of thyroid measurement of at 6 and months of age and then (see Supervision From Birth to 1 for infants with defects at all typically or defects that cause for symptoms and of heart as and blood feeding and weight may indicate heart including may be until the infant is in condition to to the defects to the potential for development of and associated and children with Down syndrome are also at increased risk of in the absence of structural of care between the primary care physician and the is important for these Obtain a complete blood cell with and either a of and protein or a of serum iron and total at 1 year of age and with Down syndrome have been to have a risk for as the but it may be because of may and also can have long-term neurologic with increased mean is present in to of patients with Down a mean is not a for the of iron or in children with Down syndrome. Screening by iron but iron the of an with or or serum iron by to 100% sensitivity in iron iron or is an and is not if is present or is subsequent evaluation with iron and may be to confirm diagnosis. Although not to children with Down syndrome, is also associated with sleep and iron may be in for children with sleep A physician may iron for children with sleep problems and a should be alert to the and symptoms of leukemia discussed in Supervision From Birth to 1 and an extra with if symptoms with Down syndrome who leukemia can be treated with leukemia therapy or leukemia with outcomes superior to other with complete neurologic history and examination and with as for of neurologic dysfunction that may with Down syndrome have an increased risk of including and other including and such as including respiratory for infants with cooccurring and other recommended for all children, unless there are specific for findings and parents that and are least during the first 6 months of discuss with family symptoms of obstructive sleep including sleep and problems that be associated with to a physician with expertise in pediatric sleep for examination and further evaluation of a possible sleep if any of the symptoms each visit, discuss with parents the of the in a during any or procedure to the risk of cord and review the and symptoms of which include of and, on examination, increased deep Obtain history and perform a physical examination, for and Bright Futures schedule or more frequently if Bright Futures schedule or more frequently as indicated. Obtain a history and perform a physical examination.Monitor weight and follow trends at each health care visit. Review the child’s growth and plot it on the Down syndrome-specific charts for weight, and head These charts should be in with the Down syndrome-specific for children to age 10 and with the from the for and which is a of for children with Down syndrome the age of about any changes in respiratory symptoms with feeding and ensure adequate iron (see Supervision From Birth to 1 for and for evaluation (see Supervision From 1 to 1 for If ear disease appropriate hearing evaluation after evaluation by if available, at every health supervision visit or by a pediatric or with expertise in children with every 2 (see Supervision From 1 to 1 for the risk of with age “Health Supervision From 1 to for every 6 months if have been follow-up on the of history of a and either a of and or a of serum iron and at 1 year of age and (see Supervision From 1 to 1 for physician may iron for children with sleep problems and a (see Supervision From 1 to for at each health supervision visit (see Supervision From 1 to for children on a that review for symptoms to celiac disease at every health visit and if (see Supervision From 1 to for each visit, discuss with family the of for of the during any or careful history and physical examination, with to and should also be to contact their physician immediately for of symptoms of (see Supervision From 1 to for and care at each health care visit and refer to if (see Supervision From 1 to for caregivers to skills and appropriate in the home. for problems that with function in the or and are some of the common typically children may also for medical problems that can be associated with changes, including thyroid celiac and on the child’s age, the of the and the setting in which the When symptoms with refer to programs, services for care, or behavioral experienced in with children with special patients who have behavioral problems or in function for evaluation and (see Supervision From 1 to for that children with Down syndrome are frequently more sensitive to for the should be discussed between the primary care physician and in the child’s Although there has been to directly the use of children with Down syndrome, indicate that these children may in their response to has led to the to at the recommended and increase or the to the child’s symptoms of neurologic including and perform a neurologic symptoms to at every visit, including and abnormal sleep to a physician with expertise in pediatric or a pediatric sleep medicine any child with or symptoms of or abnormal results. with sleep problems and a may benefit from iron Discuss as a risk of sleep apnea and review need to and activity in affected patients (see Supervision From 1 to for Bright Futures schedule or more frequently as issues to the development and health of people with Down syndrome to be and for both health and topics have been in topics of great to the care of children with Down syndrome be enhanced through A review of screening and of atlantoaxial for is and is for the care for outcomes of people with Down A. A. A. American College of A. of and American College of Obstetricians and Gynecologists A. and and for and",
       "openalex_id": "W4223962902",
       "openalex_type": "article",
@@ -2378,7 +2698,7 @@
       "year": 2003,
       "venue": "Modern Language Journal",
       "doi": "10.1111/1540-4781.00204",
-      "citations": 320,
+      "citations": 322,
       "abstract": "This article focuses on the relationship between flow experiences and language learning. Flow Theory suggests that flow experiences (characterized by a balance between challenge and skills and by a person's interest, control, and focused attention during a task) can lead to optimal learning. This theory has not yet been tested in the area of foreign or second language learning. The purpose of the present study is twofold: first, to establish the foundation for a research stream addressing flow in language learning, and second, to investigate whether flow exists in foreign language (FL) classrooms. Findings suggest that flow does exist in the FL classroom and that Flow Theory offers an interesting and useful framework for conceptualizing and evaluating language learning activities.",
       "openalex_id": "W2150483465",
       "openalex_type": "article",
@@ -6891,6 +7211,33 @@
       "record_id": "cr_cbfd219714f3e0094c1f7ecb"
     },
     {
+      "title": "The role of recreational flow experience and well-being on re-participation intention: recreational sport participants",
+      "authors": [
+        "Alican Bayram",
+        "İlimdar Yalçın",
+        "Enis Sahin",
+        "Nurullah Emir Ekinci",
+        "Laurenţiu-Gabriel Talaghir",
+        "Teodora Mihaela Iconomescu"
+      ],
+      "year": 2025,
+      "venue": "Frontiers in Psychology",
+      "doi": "10.3389/fpsyg.2025.1574337",
+      "citations": 34,
+      "abstract": "Introduction Recreational sports activities can offer participants many physical, psychological, and social benefits. The flow state they feel during participation can give them a sense of satisfaction and positively change their attitudes toward participation in recreational sports activities. This study aimed to determine the role of recreational flow experience and well-being on the re-participation intention in recreational sport participants. Method A personal information form, the “Recreational Flow Experience Scale,” the “Recreational Sport Well-being Scale,” and the “Re-participation Intention Scale” were used as data collection tools. The sample group consisted of a total of 402 voluntary recreational sport participants including 191 women (47.5%) and 211 men (52.5%), who were selected by purposive sampling method in recreational parks and areas in Bingöl, Türkiye. The SPSS software was used to analyze data. Independent Samples t-test, One-Way ANOVA, Pearson Correlation analysis, and Regression analysis methods were used in the analysis process. Result Statistically significant differences were observed between re-participation intention and the variables of gender, years of participation in sportive recreational activities, and frequency of participation. Statistically significant differences were also found between the frequency of participation in sportive recreational activities and life satisfaction and positive feelings subscales. There was also a statistically significant difference between the years of participation in sportive recreational activities and the recreational flow experience. A moderate positive correlation was found between recreational flow experience, recreational sport well-being, and re-participation intention variables. Discussion Family flourishing and positive feelings have a significant relationship on individuals’ intention to re-participate in recreational activities. This suggests that emotional and social well-being may play an important role in the sustainability of participation in recreational sports. As the experience and frequency of participation in recreational sports activities increased, the levels of well-being elevated. Moreover, as the recreational flow experience and recreational well-being level elevated, the intention to re-participate in recreational sport activities increased. For this reason, organizing programs and studies to encourage continuous participation in recreational activities can benefit the well-being level of the society.",
+      "openalex_id": "W4409957830",
+      "openalex_type": "article",
+      "referenced_works_count": 91,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W7204854129"
+      ],
+      "record_id": "cr_9049b90deb5c03b167c509bf"
+    },
+    {
       "title": "Exploring Web users' on-line optimal flow experiences",
       "authors": [
         "Hsiang Chen"
@@ -6959,33 +7306,6 @@
         "W2049388144"
       ],
       "record_id": "cr_dac062b32f4802927f335013"
-    },
-    {
-      "title": "The role of recreational flow experience and well-being on re-participation intention: recreational sport participants",
-      "authors": [
-        "Alican Bayram",
-        "İlimdar Yalçın",
-        "Ebubekir Şahin",
-        "Nurullah Emir Ekinci",
-        "Laurenţiu-Gabriel Talaghir",
-        "Teodora Mihaela Iconomescu"
-      ],
-      "year": 2025,
-      "venue": "Frontiers in Psychology",
-      "doi": "10.3389/fpsyg.2025.1574337",
-      "citations": 33,
-      "abstract": "Introduction Recreational sports activities can offer participants many physical, psychological, and social benefits. The flow state they feel during participation can give them a sense of satisfaction and positively change their attitudes toward participation in recreational sports activities. This study aimed to determine the role of recreational flow experience and well-being on the re-participation intention in recreational sport participants. Method A personal information form, the “Recreational Flow Experience Scale,” the “Recreational Sport Well-being Scale,” and the “Re-participation Intention Scale” were used as data collection tools. The sample group consisted of a total of 402 voluntary recreational sport participants including 191 women (47.5%) and 211 men (52.5%), who were selected by purposive sampling method in recreational parks and areas in Bingöl, Türkiye. The SPSS software was used to analyze data. Independent Samples t-test, One-Way ANOVA, Pearson Correlation analysis, and Regression analysis methods were used in the analysis process. Result Statistically significant differences were observed between re-participation intention and the variables of gender, years of participation in sportive recreational activities, and frequency of participation. Statistically significant differences were also found between the frequency of participation in sportive recreational activities and life satisfaction and positive feelings subscales. There was also a statistically significant difference between the years of participation in sportive recreational activities and the recreational flow experience. A moderate positive correlation was found between recreational flow experience, recreational sport well-being, and re-participation intention variables. Discussion Family flourishing and positive feelings have a significant relationship on individuals’ intention to re-participate in recreational activities. This suggests that emotional and social well-being may play an important role in the sustainability of participation in recreational sports. As the experience and frequency of participation in recreational sports activities increased, the levels of well-being elevated. Moreover, as the recreational flow experience and recreational well-being level elevated, the intention to re-participate in recreational sport activities increased. For this reason, organizing programs and studies to encourage continuous participation in recreational activities can benefit the well-being level of the society.",
-      "openalex_id": "W4409957830",
-      "openalex_type": "article",
-      "referenced_works_count": 96,
-      "categories": [
-        "recent"
-      ],
-      "source_api": "snowball",
-      "snowball_from": [
-        "W7204854129"
-      ],
-      "record_id": "cr_9049b90deb5c03b167c509bf"
     },
     {
       "title": "Experiences of Japanese aged care: the pursuit of optimal health and cultural engagement",
@@ -10369,6 +10689,28 @@
         "application"
       ],
       "record_id": "cr_e70dcaf9c59db59027b99443"
+    },
+    {
+      "title": "Effects of Immersive Straight Catheterization Virtual Reality Simulation on Skills, Confidence, and Flow State in Nursing Students",
+      "authors": [
+        "Hyeongyeong Yoon"
+      ],
+      "year": 2024,
+      "venue": "CIN Computers Informatics Nursing",
+      "doi": "10.1097/cin.0000000000001141",
+      "citations": 10,
+      "abstract": "Core nursing procedures are essential for nursing students to master because of their high frequency in nursing practice. However, the experience of performing procedures in actual hospital settings decreased during the coronavirus disease 2019 pandemic, necessitating the development of various contents to supplement procedural training. This study investigated the effects of a straight catheterization program utilizing an immersive virtual reality simulation on nursing students' procedural performance, self-confidence, and immersion. The study employed a nonequivalent control group pretest-posttest design with 29 participants in the experimental group and 25 in the control group. The experimental group received training through a computer-based immersive virtual reality program installed in a virtual reality hospital, with three weekly sessions over 3 weeks. The control group underwent straight catheterization using manikin models. The research findings validated that virtual reality-based straight catheterization education significantly improved students' procedural skills, self-confidence, and flow state. Therefore, limited practical training can be effectively supplemented by immersive virtual reality programs.",
+      "openalex_id": "W4399325479",
+      "openalex_type": "article",
+      "referenced_works_count": 26,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W7213979096"
+      ],
+      "record_id": "cr_c888148aa24574b25aff0656"
     },
     {
       "title": "Flow Experience and Innovative Behavior of University Teachers: Model Development and Empirical Testing",
@@ -15543,6 +15885,41 @@
       "record_id": "cr_14e4cdd0969bef4cf3612a2c"
     },
     {
+      "title": "Perceived stress and mobile phone addiction among China Nursing Students: The chain-mediating role of anxiety and flow experience",
+      "authors": [
+        "Shuiqing Rong",
+        "Zhaonan Yang",
+        "Lida Yang",
+        "Yuanbo Li",
+        "Jiawei Zhou",
+        "Xiaomeng Hu",
+        "Siyuan Ke",
+        "Qiongyi Wang",
+        "Qinghe Fan",
+        "Wei Duan",
+        "Yizhi Wang",
+        "Junling Liu",
+        "Yanjie Yang",
+        "Xiuxian Yang"
+      ],
+      "year": 2024,
+      "venue": "Research Square",
+      "doi": "10.21203/rs.3.rs-4373381/v1",
+      "citations": 1,
+      "abstract": "Abstract Background: The relationship between perceived stress and mobile phone addiction among nursing students requires elucidation, alongside the clarification of potential explanatory pathways for associated risks. Methods: 4179 freshmen and sophomore students participated in this investigation. Several assessment tools were employed, including the Chinese Perceived Stress Scale, Generalized Anxiety Disorder-7 scale, Flow State Scale, and Mobile Phone Addiction Tendency Scale. Data analysis encompassed descriptive statistics, independent sample T-tests, Pearson correlation analysis, and Hayes' PROCESS 3.5 for chain-mediated modeling. Results: Pearson correlation analysis unveiled positive associations between perceived stress and anxiety (r=0.507, p<0.01), flow experience (r=0.657, p<0.01), and mobile phone addiction (r=0.578, p<0.01). Anxiety exhibited positive correlations with flow experience (r=0.490, p<0.01) and mobile phone addiction (r=0.564, p<0.01). Additionally, flow experience showed a positive relationship with mobile phone addiction (r=0.579, p<0.01). Chain mediation analysis revealed that anxiety [mediated effect: 26.62%, SE=0.014, 95% CI= (0.182,0.237)] and flow experience [mediated effect: 25.05%, SE=0.014, 95% CI= (0.169,0.225)] partially mediated the link between perceived stress and mobile phone addiction, respectively. Perceived stress exerted its influence on mobile phone addiction through the chain-mediated effects of anxiety and flow experience [mediating effect: 4.98%, SE=0.039, 95% CI= (0.031, 0.047)]. Conclusion: Perceived stress not only directly impacts the mobile phone addiction tendencies of nursing students but also exerts indirect effects via the independent mediation of anxiety and flow experience. Moreover, perceived stress affects mobile phone addiction through the chain-mediated pathway involving both anxiety and flow experience.",
+      "openalex_id": "W4399532676",
+      "openalex_type": "preprint",
+      "referenced_works_count": 44,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W3091919961"
+      ],
+      "record_id": "cr_31a29f446acf321e072cfdcc"
+    },
+    {
       "title": "Personal memory and distant reading can complement each other: a reply to Gillon",
       "authors": [
         "V. Dranseika",
@@ -17023,6 +17400,32 @@
         "recent"
       ],
       "record_id": "cr_1bd22d7c6f14fef7ec322549"
+    },
+    {
+      "title": "AI-Adaptive Learning Paths and Task-Difficulty Synchronization: A Longitudinal Study of Student Persistence and Engagement",
+      "authors": [
+        "Swead Yahya Alzahrani",
+        "Mohammed Ahmed Elhossiny",
+        "Mohamed Abdellatif",
+        "Aida AbdElaal Elagamy",
+        "Mohamed Mekheimer"
+      ],
+      "year": 2026,
+      "venue": "Research Square",
+      "doi": "10.21203/rs.3.rs-11115298/v1",
+      "citations": 0,
+      "abstract": "Abstract This longitudinal mixed-methods quasi-experimental study examined how AI-adaptive learning paths and task-difficulty synchronization influenced student persistence and engagement among 79 undergraduate pre-service English teachers enrolled in the “Teaching People with Disabilities” course at the Faculty of Education, Beni-Suef University. The study was conducted across three academic phases from Semester 2 of 2025 to Semester 2 of 2026. Quantitative data were collected using the Student Engagement Scale for AI-Adaptive Learning, platform log data, and twice-weekly experience sampling micro-surveys. Qualitative data were gathered through semi-structured interviews with 20 students selected according to high and low persistence patterns. Latent growth curve modeling showed significant growth in engagement over time, and AI-adaptive path quality significantly predicted steeper engagement growth. Cox regression indicated that students in synchronized difficulty states were less likely to disengage. Polynomial regression confirmed a curvilinear “flow” relationship, with engagement highest when tasks were optimally challenging and lower when tasks were boring or anxiety-inducing. Mediation and moderation analyses showed that engagement mediated the relationship between adaptive path quality and persistence, while perceived competence mediated the relationship between synchronization and engagement. Interview findings further revealed that difficulty synchronization functioned as an affective regulator by reducing frustration, supporting competence, and strengthening professional passion for inclusive teaching. However, low-persisters reported concerns about algorithmic rigidity, reduced autonomy, and technical friction. The findings suggest that AI-adaptive learning systems can support persistence when they combine personalized sequencing with transparent, flexible, and pedagogically grounded difficulty regulation.",
+      "openalex_id": "W7223186042",
+      "openalex_type": "preprint",
+      "referenced_works_count": 23,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2042314632"
+      ],
+      "record_id": "cr_1705936b1a8801fae70046cc"
     },
     {
       "title": "AI-Supported Remote Life Goal Support With Challenge-Skill Balance Adjustment for Mental Well-Being in Community-Dwelling Older Adults: Protocol for a Randomized Controlled Trial (Preprint)",
@@ -20159,7 +20562,7 @@
       "venue": "Research Square",
       "doi": "10.21203/rs.3.rs-10170661/v1",
       "citations": 0,
-      "abstract": null,
+      "abstract": "Abstract Background Nurse practitioner (NP) clinical training requires learners to integrate advanced knowledge, role transition, clinical reasoning and performance under uncertainty. Flow has been described as an optimal state of absorption, challenge-skill balance and intrinsic motivation, but its meaning in NP clinical training remains unclear. This concept analysis aimed to clarify flow state in NP clinical training and provide a foundation for curriculum, simulation and assessment design. Methods Walker and Avant's eight-step concept analysis approach guided a purposive review of literature on flow theory, flow measurement, nursing work-related flow, clinical simulation, NP role transition, cognitive load and technology-supported OSCEs. PubMed/MEDLINE, CINAHL, Scopus, PsycINFO and Google Scholar were searched for English-language sources published from 1990 to 2026. Results Flow state in NP clinical training was defined as a transient, task-bound optimal learning state in which an NP learner perceives a fit between evolving clinical challenge and developing capability, becomes absorbed in patient-centred clinical reasoning, uses goals and feedback to regulate action in real time and experiences intrinsic motivation to continue deliberate practice. Four defining attributes were identified: dynamic challenge-capability fit, absorptive clinical reasoning, goal-feedback-action coupling and autotelic professional agency. Antecedents included foundational knowledge, graduated authentic challenge, psychological safety, clear goals, timely feedback and protected attention. Consequences included efficient cognitive engagement, self-directed deliberate practice, confidence calibration and professional identity formation. Conclusions Flow offers a theory-informed learning-process indicator for NP clinical training. Future research should validate NP-specific flow measures and test whether adaptive simulation and AI-supported feedback increase flow while preserving assessment validity, psychological safety and clinical competence standards.",
       "openalex_id": "W7213979096",
       "openalex_type": "preprint",
       "referenced_works_count": 17,
@@ -20638,6 +21041,57 @@
       "record_id": "cr_8675bf53dd2f5b4fc5413877"
     },
     {
+      "title": "From Culturally Grounded Virtual Games to Real-World Destination Engagement: Flow, Cultural Identity and Behavioral Intention Conversion",
+      "authors": [
+        "Xiaoyu He",
+        "Yushi Zhou",
+        "Jing Zhang",
+        "Youxian Yu",
+        "Wenjia Li"
+      ],
+      "year": 2026,
+      "venue": "International Journal of Human-Computer Interaction",
+      "doi": "10.1080/10447318.2026.2752468",
+      "citations": 0,
+      "abstract": "Culturally embedded virtual games increasingly shape digital design, cultural communication, and place experience, yet how immersion translates into real-world engagement remains unclear. Drawing on the cognition–affect–conation model and flow theory, this study analyzes survey data from 458 young players. Presence, perceived realism, and curiosity significantly enhance emotional interaction and flow, while challenge improves flow but not emotional interaction. Flow mediates the relationship between virtual cultural experience and intention to visit real-world places; emotional interaction has no direct effect. Cultural identity strengthens the flow–participation relationship, highlighting its role in converting virtual immersion into cultural engagement. Culturally grounded games therefore function as destination pre-experience and cultural design platforms, through which digital scenes, cultural symbols, and interaction shape players’ imagination, identification, and willingness to participate in real-world cultural spaces. Findings inform game design, heritage communication, and place-experience design.",
+      "openalex_id": "W7224110970",
+      "openalex_type": "article",
+      "referenced_works_count": 56,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W3091919961"
+      ],
+      "record_id": "cr_be5d82812c17561a2bc6d2d3"
+    },
+    {
+      "title": "From flexibility to flow: psychological selection and the maintenance of values-based therapeutic skills",
+      "authors": [
+        "Cedomir Ignjatovic",
+        "Antonella Delle Fave",
+        "Margaret L. Kern"
+      ],
+      "year": 2026,
+      "venue": "Frontiers in Psychology",
+      "doi": "10.3389/fpsyg.2026.1967544",
+      "citations": 0,
+      "abstract": "Psychological flexibility, the ability to stay present, remain open to difficult thoughts and feelings, and act on personal values, is a well-established transdiagnostic process in contextual behavioural science (CBS) and the principal target of Acceptance and Commitment Therapy (ACT). Yet flexibility skills learned in session often do not last. Homework is frequently left incomplete, skills fail to transfer to the settings where they matter, and a sizeable proportion of clients return to earlier patterns once treatment ends. CBS accounts explain how a flexible repertoire becomes available across settings, but they say less about why a person keeps returning to a specific repertoire rather than another over months and years. To address that gap, this conceptual paper introduces psychological selection, referring to the process by which people tend to preferentially cultivate a subset of the activities available in their daily context, based on the flow experiences that those activities reliably afford. We treat flow as a measurable experiential signal of engagement and absorption elicited by perceived challenge/skill balance and maintained by consequences intrinsic to the activity, and we propose that it can support the sustained practice and refinement of specific flexibility skills after therapy. Whereas psychological flexibility describes the capacity for adaptive responding, psychological selection describes the cultivation of related actions over longer periods of time. We develop an integration model at individual, sociocultural, and therapeutic levels, set out its boundary conditions, including valued action persisting without flow and flow-like absorption that serves no value, and state propositions designed to test whether flow adds predictive value beyond flexibility, values, and reinforcement. Set against habit and rule-governed persistence, our account predicts action retention with growth, repertoires that become more complex as skills rise and individuals search for higher challenge, and it specifies the clinical situations in which the framework does or does not apply. The contribution is a process-level account of how therapeutic gains can be maintained by considering the associated quality of experience.",
+      "openalex_id": "W7224809415",
+      "openalex_type": "article",
+      "referenced_works_count": 77,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "openalex",
+      "search_angles": [
+        "canon"
+      ],
+      "record_id": "cr_f5dc97e8166bbabc30d89e82"
+    },
+    {
       "title": "From molecule to bedside and back: the integration of computational and experimental physiology in the digital age",
       "authors": [
         "Viviane Timmermann",
@@ -21016,6 +21470,33 @@
         "canon"
       ],
       "record_id": "cr_de3f176fd7fe50d7d64a0049"
+    },
+    {
+      "title": "How Far Does Flow Get You? Disentangling the Within-Person, Between-Person, and Directional Relationship Between Flow, Task Difficulty, and Performance",
+      "authors": [
+        "Birte A. K. Thissen",
+        "Mark Lustig",
+        "Bumin Ko",
+        "Moritz Burghardt",
+        "Gabriele Oettingen"
+      ],
+      "year": 2026,
+      "venue": "Research Square",
+      "doi": "10.21203/rs.3.rs-11059958/v1",
+      "citations": 0,
+      "abstract": "Abstract Flow is defined as an intrinsically rewarding state of complete task engagement and is thus often assumed to also enhance task performance. To examine the nature of the flow-performance relationship, we conducted a controlled lab study in which students ( N = 257) played two sessions of the computer game Tetris . Participants were randomized into a balance condition with matching task difficulty or an overload condition with high task difficulty. After each session, they reported their flow and gave a rating of how well they had played (subjective performance), while their point score was also being recorded (objective performance). Multilevel models showed that flow positively predicted both subjective and objective performance beyond practice effects, task difficulty, and interindividual differences. Experiencing more flow than usual as well as experiencing more flow than others were each linked to better subjective and objective performance. Multilevel mediation models suggested that flow may be one pathway through which task difficulty affects performance, as flow partially mediated its effect on objective performance and had an indirect effect on subjective performance. However, we found no evidence for a directional relationship, as flow in the first session did not predict performance in the second session when controlling for baseline and task difficulty, nor vice versa. Across analyses, flow was more strongly associated with subjective than with objective performance. Together, these findings suggest that flow and performance are positively related during immediate task execution, and that this relationship may reflect a coupling of shared task engagement processes.",
+      "openalex_id": "W7221770982",
+      "openalex_type": "preprint",
+      "referenced_works_count": 40,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W1683284848"
+      ],
+      "record_id": "cr_b334b61a5a2050705e6859f9"
     },
     {
       "title": "How modified flipped learning affects pre-service teachers’ learning motivation, flow experience and collaborative problem solving process",
@@ -23688,6 +24169,30 @@
         "recent"
       ],
       "record_id": "cr_7867bfdc834f072dbe8979d4"
+    },
+    {
+      "title": "The Impact of Gamification on Achievement, Flow Experience, and Emotional State",
+      "authors": [
+        "Sebahat Sevgi Uygur",
+        "Yasemin Kahyaoğlu Erdoğmuş"
+      ],
+      "year": 2026,
+      "venue": "Kuramsal Eğitimbilim",
+      "doi": "10.30831/akukeg.1861499",
+      "citations": 0,
+      "abstract": "The research aimed to examine the effects of gamification environments on university students' achievement, flow experiences, and emotional states. This study utilized a mixed-methods design, incorporating a quasi-experimental approach for the quantitative phase and a phenomenological approach for the qualitative phase. The study group consisted of 80 students (Quizizz, n = 32; Quizlet, n = 48) enrolled in the Educational Psychology course at a state university. Data were collected through the Achievement Test, Flow Experience Scale, and Positive and Negative Affect Scale. Both groups showed significant pre-test to post-test gains in achievement, with no significant difference between the two groups. Flow experience was positively correlated with positive emotion in both groups, but with achievement only in the Quizlet group. In the Quizizz group, achievement was moderately and negatively correlated with negative emotion, whereas no such relationship was found in the Quizlet group. No significant relationship was found between achievement and positive emotion in either group. Qualitative findings revealed that students actively engaged in both environments, reported higher motivation, and found learning more enjoyable. However, they experienced the platforms differently. Quizizz users emphasized excitement through competition and scoring, whereas Quizlet users highlighted confidence gained from repetition and individual progress. Overall, these results indicate that gamification tools led to similar achievement gains, but through different flow and emotional processes.",
+      "openalex_id": "W7224231635",
+      "openalex_type": "article",
+      "referenced_works_count": 47,
+      "categories": [
+        "dissent",
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W4221001939"
+      ],
+      "record_id": "cr_2b2a32103831b895374eec07"
     },
     {
       "title": "The Impact of Payment Risk Management on the Performance of Korean SME Exporters in the Digital Trade Environment: The Moderating Effect of Trading Partnership Orientation",
