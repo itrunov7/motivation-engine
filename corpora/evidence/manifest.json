@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-02T14:45:36.365Z",
+    "timestamp": "2026-11-02T14:50:18.986Z",
     "status": "partial",
     "params": {
       "mechanism": "FL-24",
@@ -14,20 +14,42 @@
     },
     "records_fetched": 988,
     "files_written": 1,
-    "duration_s": 186.51,
-    "error": "forward-citation openalex canon \"Profiles of Flow Experience Among Chinese College Basketball Players: A Latent Profile Analysis\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · backward-reference openalex canon \"Flow as an Optimal Learning State for Clinical Reasoning in Nurse Practitioner Training: A Concept Analysis\": Request failed after 3 attempts: HTTP 500 Internal Server Error for api.openalex.org/works · forward-citation openalex canon \"Flow as an Optimal Learning State for Clinical Reasoning in Nurse Practitioner Training: A Concept Analysis\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works · backward-reference openalex canon \"Flow Experience in the Chinese Blended Classroom: How Students and Teachers Shape English Success\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works/W7212190422 · forward-citation openalex canon \"Flow Experience in the Chinese Blended Classroom: How Students and Teachers Shape English Success\": Request failed after 3 attempts: HTTP 504 Gateway Timeout for api.openalex.org/works",
+    "duration_s": 240.03,
+    "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 66,
-      "duration_s": 186.51,
+      "api_calls": 55,
+      "duration_s": 240.03,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-02T14:50:18.986Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 988,
+      "files_written": 1,
+      "duration_s": 240.03,
+      "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 55,
+        "duration_s": 240.03,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-02T14:45:36.365Z",
       "status": "partial",
@@ -427,27 +449,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-02T14:02:53.459Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 988,
-      "files_written": 1,
-      "duration_s": 47.49,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.49,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -526,7 +527,7 @@
     {
       "path": "FL-24.json",
       "records": 988,
-      "bytes": 8139487,
+      "bytes": 8137591,
       "categories": {
         "foundational": 37,
         "meta-analysis": 27,
