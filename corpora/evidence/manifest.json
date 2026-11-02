@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-02T18:44:29.162Z",
+    "timestamp": "2026-11-02T18:46:51.742Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 988,
     "files_written": 1,
-    "duration_s": 47.46,
+    "duration_s": 47.53,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 48,
-      "duration_s": 47.46,
+      "duration_s": 47.53,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-02T18:46:51.742Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 988,
+      "files_written": 1,
+      "duration_s": 47.53,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 48,
+        "duration_s": 47.53,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-02T18:44:29.162Z",
       "status": "success",
@@ -421,28 +442,6 @@
       "cost": {
         "api_calls": 48,
         "duration_s": 47.92,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-02T17:54:58.329Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 988,
-      "files_written": 1,
-      "duration_s": 47.41,
-      "error": "search openalex canon \"flow experience challenge skill balance\": api.openalex.org upstream cooldown is 22002s; checkpoint and resume later",
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 47,
-        "duration_s": 47.41,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
