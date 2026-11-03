@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-03T13:07:46.049Z",
+    "timestamp": "2026-11-03T13:09:40.708Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 988,
     "files_written": 1,
-    "duration_s": 50.09,
+    "duration_s": 73.61,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 48,
-      "duration_s": 50.09,
+      "api_calls": 50,
+      "duration_s": 73.61,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-03T13:09:40.708Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 988,
+      "files_written": 1,
+      "duration_s": 73.61,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 50,
+        "duration_s": 73.61,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-03T13:07:46.049Z",
       "status": "success",
@@ -421,27 +442,6 @@
       "cost": {
         "api_calls": 48,
         "duration_s": 47.43,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-03T12:21:26.401Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 988,
-      "files_written": 1,
-      "duration_s": 47.4,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 48,
-        "duration_s": 47.4,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
