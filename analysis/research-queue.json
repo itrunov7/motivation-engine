@@ -1,69 +1,21 @@
 {
   "version": "0.1.0",
-  "generated_at": "2026-08-31T14:41:01.959Z",
+  "generated_at": "2026-11-09T17:04:13.706Z",
   "config_version": "0.3.0",
-  "matrix_generated_at": "2026-08-31T14:41:01.592Z",
+  "matrix_generated_at": "2026-11-09T17:04:13.222Z",
   "budget": {
-    "month": "2026-08",
-    "monthly_remaining_calls": 18491,
+    "month": "2026-11",
+    "monthly_remaining_calls": 19813,
     "monthly_budget_share": 0.5,
     "estimated_calls_per_task": 150,
-    "budget_max_tasks": 61,
+    "budget_max_tasks": 66,
     "config_max_tasks": 12,
     "effective_max_tasks": 12
   },
   "candidate_count": 390,
-  "low_novelty_skipped": 0,
+  "low_novelty_skipped": 2,
   "evidence_exhausted_skipped": 0,
   "tasks": [
-    {
-      "gap_cell": {
-        "pack": "core-ux",
-        "segment": "b2b",
-        "status": "red",
-        "gaps": [
-          "saturation_reached",
-          "corpus_size_vs_field_estimate",
-          "source_diversity",
-          "recency_balance",
-          "realization_density"
-        ],
-        "segment_evidence": "general_only"
-      },
-      "mechanism": "AE-26",
-      "segment": "b2b",
-      "importance": 4.35,
-      "suggested_evidence_terms": [
-        "aesthetic usability effect b2b enterprise",
-        "what is beautiful is usable b2b enterprise",
-        "visual aesthetics perceived usability b2b enterprise"
-      ],
-      "reason": "red cell core-ux×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed); member mechanism AE-26 is a candidate — no evidence yet"
-    },
-    {
-      "gap_cell": {
-        "pack": "core-ux",
-        "segment": "b2b",
-        "status": "red",
-        "gaps": [
-          "saturation_reached",
-          "corpus_size_vs_field_estimate",
-          "source_diversity",
-          "recency_balance",
-          "realization_density"
-        ],
-        "segment_evidence": "general_only"
-      },
-      "mechanism": "AU-20",
-      "segment": "b2b",
-      "importance": 4.35,
-      "suggested_evidence_terms": [
-        "autonomy need satisfaction technology b2b enterprise",
-        "perceived control user interface b2b enterprise",
-        "user control reversibility undo b2b enterprise"
-      ],
-      "reason": "red cell core-ux×b2b: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed); member mechanism AU-20 is a candidate — no evidence yet"
-    },
     {
       "gap_cell": {
         "pack": "core-ux",
@@ -303,6 +255,54 @@
         "effort reduction friction conversion subscription retention"
       ],
       "reason": "red cell core-ux×subscription: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed); member mechanism DE-23 is a candidate — no evidence yet"
+    },
+    {
+      "gap_cell": {
+        "pack": "core-ux",
+        "segment": "subscription",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "realization_density"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "ER-22",
+      "segment": "subscription",
+      "importance": 4.06,
+      "suggested_evidence_terms": [
+        "error recovery user interface subscription retention",
+        "undo reversibility interaction design subscription retention",
+        "error message comprehension usability subscription retention"
+      ],
+      "reason": "red cell core-ux×subscription: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed); member mechanism ER-22 is a candidate — no evidence yet"
+    },
+    {
+      "gap_cell": {
+        "pack": "core-ux",
+        "segment": "subscription",
+        "status": "red",
+        "gaps": [
+          "saturation_reached",
+          "corpus_size_vs_field_estimate",
+          "source_diversity",
+          "recency_balance",
+          "realization_density"
+        ],
+        "segment_evidence": "general_only"
+      },
+      "mechanism": "FB-21",
+      "segment": "subscription",
+      "importance": 4.06,
+      "suggested_evidence_terms": [
+        "response time human computer interaction subscription retention",
+        "system feedback latency user perception subscription retention",
+        "interaction latency tolerance thresholds subscription retention"
+      ],
+      "reason": "red cell core-ux×subscription: saturation_reached unmeasured (needs ≥0.80), corpus_size_vs_field_estimate unmeasured (needs ≥0.20), source_diversity unmeasured (needs ≥0.75), recency_balance unmeasured (needs ≥0.15); segment evidence general_only (segment-specific harvest needed); member mechanism FB-21 is a candidate — no evidence yet"
     }
   ]
 }

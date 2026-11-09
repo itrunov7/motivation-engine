@@ -9,7 +9,7 @@
     "effort reduction friction conversion subscription retention"
   ],
   "fingerprint": "5218e49873ef794a94c5c6c24a17940023b7c1eefcb0b9f3a7a4d30c0d955354",
-  "cursor": 1,
+  "cursor": 2,
   "tasks": [
     {
       "id": "search:relevance:openalex:canon:p1:default effect decision making subscription retention",
@@ -66,7 +66,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search openalex canon \"default effect decision making subscription retention\": api.openalex.org upstream cooldown is 24950s; checkpoint and resume later"
     },
     {
       "id": "search:citation:openalex:canon:p1:default effect decision making subscription retention",
@@ -17554,6 +17555,6 @@
   "topical_confirmed": 0,
   "topical_rejected": 0,
   "s2_throttled": false,
-  "api_calls_spent": 1,
+  "api_calls_spent": 2,
   "slice_stop_reason": "upstream_quota"
 }

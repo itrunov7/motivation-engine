@@ -9,7 +9,7 @@
     "error message comprehension usability b2b enterprise"
   ],
   "fingerprint": "f922200189b8bd25de80d1760a4e85ae8b3b105a5fe17da75cf0829e005391d1",
-  "cursor": 1,
+  "cursor": 2,
   "tasks": [
     {
       "id": "search:relevance:openalex:canon:p1:error recovery user interface b2b enterprise",
@@ -66,7 +66,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search openalex canon \"error recovery user interface b2b enterprise\": api.openalex.org upstream cooldown is 24956s; checkpoint and resume later"
     },
     {
       "id": "search:citation:openalex:canon:p1:error recovery user interface b2b enterprise",
@@ -17554,6 +17555,6 @@
   "topical_confirmed": 0,
   "topical_rejected": 0,
   "s2_throttled": false,
-  "api_calls_spent": 1,
+  "api_calls_spent": 2,
   "slice_stop_reason": "upstream_quota"
 }
