@@ -1,6 +1,6 @@
 {
   "mechanism_id": "FL-24",
-  "fetched_at": "2026-11-09T14:10:34.814Z",
+  "fetched_at": "2026-11-09T14:14:02.389Z",
   "terms_source": "record",
   "terms": [
     "flow experience challenge skill balance",
@@ -63,12 +63,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 5939
+      "upstream_total_results": null
     },
     {
       "query_id": "graph:backward-reference:W7221445703",
@@ -108,10 +108,10 @@
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
-      "returned": 4,
-      "unique_returned": 4,
-      "records_added": 0,
-      "novelty_rate": 0,
+      "returned": 5,
+      "unique_returned": 5,
+      "records_added": 1,
+      "novelty_rate": 0.2,
       "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
@@ -172,7 +172,7 @@
       "unique_returned": 4,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
@@ -187,7 +187,7 @@
       "unique_returned": 2,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": 0.02,
       "upstream_total_results": null
     },
     {
@@ -200,9 +200,9 @@
       "requested": 25,
       "returned": 4,
       "unique_returned": 4,
-      "records_added": 1,
-      "novelty_rate": 0.25,
-      "rolling_novelty_rate": 0.025,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.02,
       "upstream_total_results": null
     },
     {
@@ -217,7 +217,7 @@
       "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.025,
+      "rolling_novelty_rate": 0.02,
       "upstream_total_results": null
     },
     {
@@ -230,9 +230,9 @@
       "requested": 25,
       "returned": 4,
       "unique_returned": 4,
-      "records_added": 1,
-      "novelty_rate": 0.25,
-      "rolling_novelty_rate": 0.05,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.02,
       "upstream_total_results": null
     },
     {
@@ -247,7 +247,7 @@
       "unique_returned": 2,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.05,
+      "rolling_novelty_rate": 0.02,
       "upstream_total_results": null
     },
     {
@@ -262,7 +262,7 @@
       "unique_returned": 2,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.05,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
@@ -277,7 +277,7 @@
       "unique_returned": 4,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.05,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
@@ -292,7 +292,7 @@
       "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.05,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
@@ -307,7 +307,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.05,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
@@ -322,7 +322,7 @@
       "unique_returned": 2,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.05,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
@@ -337,7 +337,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.05,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
@@ -352,7 +352,7 @@
       "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.025,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
@@ -367,7 +367,7 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0.025,
+      "rolling_novelty_rate": 0,
       "upstream_total_results": null
     },
     {
@@ -474,6 +474,21 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W7201969041",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Flow-Related Engagement in Children Undergoing Cancer Treatment in China: A Scoping Review of Psychosocial and Digital Interventions",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
     }
   ],
   "coverage_report": {
@@ -507,7 +522,7 @@
     "meta-analysis": 28,
     "replication": 109,
     "dissent": 174,
-    "recent": 612
+    "recent": 613
   },
   "diversity_report": {
     "viewpoint_spread": [
@@ -520,8 +535,8 @@
       {
         "angle": "recent",
         "queries": 1,
-        "returned": 25,
-        "unique_records": 25
+        "returned": 0,
+        "unique_records": 0
       }
     ],
     "source_spread": [
@@ -534,16 +549,16 @@
       {
         "api": "semantic-scholar",
         "queries": 1,
-        "returned": 25,
-        "unique_records": 25
+        "returned": 0,
+        "unique_records": 0
       }
     ],
-    "recent_records": 37,
-    "recency_rate": 0.5362,
+    "recent_records": 27,
+    "recency_rate": 0.54,
     "novelty": {
-      "previous_corpus_records": 995,
-      "unique_records": 69,
-      "already_in_corpus": 69,
+      "previous_corpus_records": 997,
+      "unique_records": 50,
+      "already_in_corpus": 50,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -552,7 +567,7 @@
   },
   "saturation_report": {
     "queries_issued": 30,
-    "records_added": 2,
+    "records_added": 1,
     "novelty_curve": [
       {
         "query_index": 1,
@@ -564,7 +579,7 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 995
+        "cumulative_records": 997
       },
       {
         "query_index": 2,
@@ -576,22 +591,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 995
+        "cumulative_records": 997
       },
       {
         "query_index": 3,
-        "query_id": "search:relevance:semantic-scholar:recent:p1:flow experience challenge skill balance",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 995
-      },
-      {
-        "query_index": 4,
         "query_id": "graph:backward-reference:W7221445703",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -600,10 +603,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 995
+        "cumulative_records": 997
       },
       {
-        "query_index": 5,
+        "query_index": 4,
         "query_id": "graph:backward-reference:W1683284848",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -612,22 +615,22 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 995
+        "cumulative_records": 997
       },
       {
-        "query_index": 6,
+        "query_index": 5,
         "query_id": "graph:forward-citation:W1683284848",
         "bucket": "recency",
         "kind": "forward-citation",
-        "returned": 4,
-        "unique_returned": 4,
-        "records_added": 0,
-        "novelty_rate": 0,
+        "returned": 5,
+        "unique_returned": 5,
+        "records_added": 1,
+        "novelty_rate": 0.2,
         "rolling_novelty_rate": null,
-        "cumulative_records": 995
+        "cumulative_records": 998
       },
       {
-        "query_index": 7,
+        "query_index": 6,
         "query_id": "graph:backward-reference:W4221001939",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -636,10 +639,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 995
+        "cumulative_records": 998
       },
       {
-        "query_index": 8,
+        "query_index": 7,
         "query_id": "graph:forward-citation:W4221001939",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -648,10 +651,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 995
+        "cumulative_records": 998
       },
       {
-        "query_index": 9,
+        "query_index": 8,
         "query_id": "graph:backward-reference:W2042314632",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -660,10 +663,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "cumulative_records": 995
+        "cumulative_records": 998
       },
       {
-        "query_index": 10,
+        "query_index": 9,
         "query_id": "graph:forward-citation:W2042314632",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -671,11 +674,11 @@
         "unique_returned": 4,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 995
+        "rolling_novelty_rate": null,
+        "cumulative_records": 998
       },
       {
-        "query_index": 11,
+        "query_index": 10,
         "query_id": "graph:backward-reference:W2948469271",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -683,23 +686,23 @@
         "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 995
+        "rolling_novelty_rate": 0.02,
+        "cumulative_records": 998
       },
       {
-        "query_index": 12,
+        "query_index": 11,
         "query_id": "graph:forward-citation:W2948469271",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 4,
         "unique_returned": 4,
-        "records_added": 1,
-        "novelty_rate": 0.25,
-        "rolling_novelty_rate": 0.025,
-        "cumulative_records": 996
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.02,
+        "cumulative_records": 998
       },
       {
-        "query_index": 13,
+        "query_index": 12,
         "query_id": "graph:backward-reference:W2100919822",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -707,23 +710,23 @@
         "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.025,
-        "cumulative_records": 996
+        "rolling_novelty_rate": 0.02,
+        "cumulative_records": 998
       },
       {
-        "query_index": 14,
+        "query_index": 13,
         "query_id": "graph:forward-citation:W2100919822",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 4,
         "unique_returned": 4,
-        "records_added": 1,
-        "novelty_rate": 0.25,
-        "rolling_novelty_rate": 0.05,
-        "cumulative_records": 997
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0.02,
+        "cumulative_records": 998
       },
       {
-        "query_index": 15,
+        "query_index": 14,
         "query_id": "graph:backward-reference:W2419624448",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -731,11 +734,11 @@
         "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.05,
-        "cumulative_records": 997
+        "rolling_novelty_rate": 0.02,
+        "cumulative_records": 998
       },
       {
-        "query_index": 16,
+        "query_index": 15,
         "query_id": "graph:forward-citation:W2419624448",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -743,11 +746,11 @@
         "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.05,
-        "cumulative_records": 997
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 998
       },
       {
-        "query_index": 17,
+        "query_index": 16,
         "query_id": "graph:backward-reference:W2020443333",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -755,11 +758,11 @@
         "unique_returned": 4,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.05,
-        "cumulative_records": 997
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 998
       },
       {
-        "query_index": 18,
+        "query_index": 17,
         "query_id": "graph:forward-citation:W2020443333",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -767,11 +770,11 @@
         "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.05,
-        "cumulative_records": 997
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 998
       },
       {
-        "query_index": 19,
+        "query_index": 18,
         "query_id": "graph:forward-citation:W7221445703",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -779,11 +782,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.05,
-        "cumulative_records": 997
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 998
       },
       {
-        "query_index": 20,
+        "query_index": 19,
         "query_id": "graph:backward-reference:W7213979096",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -791,11 +794,11 @@
         "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.05,
-        "cumulative_records": 997
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 998
       },
       {
-        "query_index": 21,
+        "query_index": 20,
         "query_id": "graph:forward-citation:W7213979096",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -803,11 +806,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.05,
-        "cumulative_records": 997
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 998
       },
       {
-        "query_index": 22,
+        "query_index": 21,
         "query_id": "graph:backward-reference:W7212190422",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -815,11 +818,11 @@
         "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.025,
-        "cumulative_records": 997
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 998
       },
       {
-        "query_index": 23,
+        "query_index": 22,
         "query_id": "graph:forward-citation:W7212190422",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -827,11 +830,11 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0.025,
-        "cumulative_records": 997
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 998
       },
       {
-        "query_index": 24,
+        "query_index": 23,
         "query_id": "graph:backward-reference:W7204854129",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -840,10 +843,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 997
+        "cumulative_records": 998
       },
       {
-        "query_index": 25,
+        "query_index": 24,
         "query_id": "graph:forward-citation:W7204854129",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -852,10 +855,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 997
+        "cumulative_records": 998
       },
       {
-        "query_index": 26,
+        "query_index": 25,
         "query_id": "graph:backward-reference:W7204642546",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -864,10 +867,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 997
+        "cumulative_records": 998
       },
       {
-        "query_index": 27,
+        "query_index": 26,
         "query_id": "graph:forward-citation:W7204642546",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -876,10 +879,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 997
+        "cumulative_records": 998
       },
       {
-        "query_index": 28,
+        "query_index": 27,
         "query_id": "graph:backward-reference:W7204957777",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -888,10 +891,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 997
+        "cumulative_records": 998
       },
       {
-        "query_index": 29,
+        "query_index": 28,
         "query_id": "graph:forward-citation:W7204957777",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -900,10 +903,10 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 997
+        "cumulative_records": 998
       },
       {
-        "query_index": 30,
+        "query_index": 29,
         "query_id": "graph:backward-reference:W7201969041",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -912,7 +915,19 @@
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
-        "cumulative_records": 997
+        "cumulative_records": 998
+      },
+      {
+        "query_index": 30,
+        "query_id": "graph:forward-citation:W7201969041",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 998
       }
     ],
     "window_queries": 10,
@@ -929,12 +944,12 @@
     "topical_confirmation_rate": 0.34,
     "graph_anchors_expanded": 14,
     "field_union_estimate": {
-      "estimate": 6215,
+      "estimate": 998,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 2,
-      "total_search_queries": 3,
-      "summed_upstream_results": 6755,
-      "observed_sample_multiplicity": 1.087
+      "measured_queries": 1,
+      "total_search_queries": 2,
+      "summed_upstream_results": 816,
+      "observed_sample_multiplicity": 1
     },
     "saturation_reached": true,
     "stop_reason": "saturation",
@@ -1263,7 +1278,7 @@
       "year": 2008,
       "venue": "Motivation and Emotion",
       "doi": "10.1007/s11031-008-9102-4",
-      "citations": 955,
+      "citations": 956,
       "abstract": null,
       "openalex_id": "W1984683739",
       "openalex_type": "article",
@@ -2260,7 +2275,7 @@
       "year": 2022,
       "venue": "PEDIATRICS",
       "doi": "10.1542/peds.2022-057010",
-      "citations": 373,
+      "citations": 374,
       "abstract": "This clinical report is designed to assist the pediatrician in caring for the child, adolescent, and family in whom a diagnosis of Down syndrome has been confirmed by chromosome analysis or suspected by prenatal screening. Although a pediatrician’s initial contact with the child is usually during infancy, occasionally the pregnant woman who has been given a prenatal diagnosis of Down syndrome will be referred for review of the condition and genetic counseling; this report offers guidance for this situation, as well. Age-specific guidance for the clinician is provided in Supplemental Fig 1.Pediatricians play an important role in the care of children and adolescents with Down syndrome and their families. Down syndrome is the most common chromosomal cause of intellectual disability, and there has been a significant improvement in quality of life for affected people. Awareness of the issues important to affected children, adolescents, and their caregivers can make a great difference in outcomes across the lifespan.Children with Down syndrome may have many cooccurring medical conditions and cognitive impairment because of the presence of extra genetic material from chromosome 21 (Table 1).1,2 Although the phenotype is variable, there typically are multiple features that enable the experienced clinician to suspect the diagnosis. Among the more common physical findings are hypotonia, small brachycephalic head, epicanthal folds, flat nasal bridge, upward-slanting palpebral fissures, Brushfield spots, small mouth, small ears, excessive skin at the nape of the neck, single transverse palmar crease, short fifth finger with clinodactyly, and wide spacing between the first and second toes, often with a deep plantar groove. The degree of cognitive impairment is variable and may be mild (IQ of 50–70), usually is moderate (IQ of 35–50), or occasionally is severe (IQ of 20–35).Medical conditions common in children with Down syndrome include hearing loss (75%), obstructive sleep apnea (50%–79%), otitis media (50%–70%), eye problems (60%–80%), including cataracts (<1%–3%),3 nasolacrimal duct obstruction (3%–36%), and strabismus and severe refractive errors (36%–80%), congenital heart defects (50%), neurologic dysfunction (1%–13%), gastrointestinal atresia (12%), hip dislocation and hip abnormalities (2%–8%),4,5 symptomatic atlantoaxial instability (1%–2%),6,7 thyroid disease (24%–50%)2,8 and, less commonly, transient abnormal myelopoiesis (4%–10%) and later leukemia (1%), autoimmune diseases,2,8–10 including Hashimoto thyroiditis (13%–39%), with incidence dependent on age, celiac disease (1%–5%), Hirschsprung disease (<1%),3 and autism (7%–19%).11,12People with Down syndrome often function more effectively in social situations than would be predicted based on cognitive assessment results, unless there is presence of cooccurring autism. Although the level of social–emotional functioning may vary, these skills may be improved with early intervention and therapy through early adulthood.In ∼96% of children with Down syndrome, the condition is sporadic because of nonfamilial trisomy 21, in which there are 47 chromosomes with the presence of a free extra chromosome 21. In ∼3% to 4% of people with the Down syndrome phenotype, the extra chromosomal material is the result of an unbalanced translocation between chromosome 21 and another acrocentric chromosome, usually chromosome 14 or 21. Approximately three-quarters of these unbalanced translocations are de novo, and the remainder result from translocation inherited from a parent. If the child has a translocation, the parents should be offered a karyotype to determine whether the translocation is familial or de novo. In the remaining 1% to 2% of people with the Down syndrome phenotype, a mix of 2 cell lines is present: 1 normal and the other with trisomy 21. This condition is called mosaicism. People with mosaicism may be more mildly affected than people with complete trisomy 21 or translocation chromosome 21, but this is not always the case, and their condition may include any of the associated medical problems and may be indistinguishable from trisomy 21. The chance of recurrence for families with an affected child depends on many factors and vary greatly, from 1% in most families to 100% in some circumstances. Table 2 describes the different chromosomal characteristics of Down syndrome.Formal counseling by a clinical geneticist or genetic counselor is recommended for all families.Several areas require ongoing assessment throughout childhood and should be reviewed at every health supervision visit and at least annually. These areas include: personal support available to family;participation in a family-centered medical home;age-specific Down syndrome-related medical and developmental conditions;financial and medical support programs and long-term financial planning for which the child and family may be eligible;injury and abuse prevention, with special consideration of developmental skills and intellectual ability; andnutrition and activity to maintain appropriate weight.The American College of Obstetricians and Gynecologists recommends that all pregnant women, regardless of age or risk status, be offered the option of screening and diagnostic testing for Down syndrome.17,18A wide variety of screening test options exist in the first and second trimester using maternal serum and ultrasonography. Each offers varying levels of sensitivity and specificity. No 1 screening test is superior to other screening tests in all characteristics. In recent years, noninvasive prenatal testing by cell-free DNA (cfDNA) has become available and is the most sensitive method for screening for Down syndrome. cfDNA screening for Down syndrome is significantly more sensitive and specific than conventional screening methods, with a 2017 meta-analysis reporting a detection rate of 99.7%, with a false-positive rate of 0.04% in singleton pregnancies.19 cfDNA uses a maternal blood sample to analyze free-floating small fragments of DNA from the placenta. Because cfDNA is from the placenta and not directly from the fetus, it is a screening test and not diagnostic. cfDNA analysis can be performed as early as 9 to 10 weeks’ gestation depending on the laboratory, and a high-risk result from cfDNA would require confirmation by diagnostic testing with chorionic villus sampling (CVS) or amniocentesis. Screening for trisomy 21 by cfDNA in twin pregnancies can be performed, but total number of reported cases is small.20Other screening tests for Down syndrome include first-trimester screening, which incorporates maternal age, nuchal translucency ultrasonography, and measurement of maternal serum β human chorionic gonadotropin and pregnancy-associated plasma protein A. Second-trimester screening is available for patients who first seek medical care in the second trimester or in locations where first-trimester screening is not available. The second-trimester serum screening, often called the quad screen, incorporates maternal age risk with measurement of maternal serum β human chorionic gonadotropin, unconjugated estriol, α-fetoprotein, and inhibin concentrations. The detection rate of Down syndrome by first-trimester screening is 82% to 87%, by second trimester screening is 80%, and by combined first- and second-trimester screening (referred to as integrated screening) is ∼95%. These screening tests are reported to have a 5% false-positive rate.21–24Ultrasonography is an additional screening tool for Down syndrome because structural changes, including congenital heart defects, increased nuchal skin fold, “double bubble” sign suggestive of duodenal atresia, ventriculomegaly, and short–long bones, may be identified by prenatal imaging. Although ultrasonography is an additional screening tool, it is not diagnostic for Down syndrome.Diagnostic testing for Down syndrome includes CVS or amniocentesis. CVS has the benefit of being performed earlier in pregnancy, between 10 and 14 completed weeks’ gestation. A placental sample is obtained either transabdominally or transcervically, depending on provider preference and placental location. Amniocentesis is a transabdominal procedure to remove a sample of amniotic fluid performed after 15 weeks’ gestational age. Risk for procedure-related loss of pregnancy from CVS or amniocentesis is comparable in recent studies when performed by providers with expertise, 0.22% for amniocentesis and 0.11% for CVS.25,26Pediatricians may be asked to counsel a family whose fetus has been identified with or is at increased chance of having Down syndrome. Families may have a great number of questions during any pregnancy and especially when the child will have Down syndrome. They may have received counseling from a certified genetic counselor, a clinical geneticist, maternal–fetal medicine specialist, obstetrician, or developmental specialist. In addition, parents may have received information and support from a family-led organization such as Parent to Parent USA, a local Down syndrome group, a national Down syndrome organization, social media, or possibly an Internet site with inaccurate information. Pediatricians who often have a previous relationship with the family may be the natural source of support for and guidance in the context of the medical home. The clinician should be prepared to respond to questions, review information the family has received, and assist in the decision-making process.27 When asked, the pediatrician should discuss the following topics with the family: The prenatal laboratory studies and any confirmatory testing that led to the diagnosis and any fetal imaging studies that have been or will be performed. Many families find it important to have the diagnosis confirmed before they can consider what it will mean to their infant and their family.Families benefit from hearing a fair and balanced perspective, including the many positive outcomes of children with Down syndrome and their effects on the family. Families usually have questions about prognosis and phenotypic manifestations, including the wide range of variability seen in infants and children with Down syndrome. The prenatal visit is a good time to offer a connection to a peer-to-peer organization for support (see Family Resources).Discuss any additional studies performed that may refine the estimation of the prognosis (eg, fetal echocardiography, ultrasonography for gastrointestinal tract malformations). Consultation with an appropriate medical subspecialist, such as a pediatric cardiologist or a pediatric surgeon, may occur prenatally if abnormal findings are detected.Discuss currently available treatments and interventions. Families need to hear that they are not alone and that there are supports and services for them after the infant is born. Discuss early intervention resources, parent-support programs, and any appropriate future treatments.Discuss extended life expectancy that has increased from 30 years in 1973 to 60 years in 2002. This increase has resulted from improved medical care, educational options, and enhanced social adaptation. Potential complications and adverse effects, costs and financial supports available, and other challenges associated with comprehensive management and care should also be discussed. The pediatrician can explain that they will be supported best in the context of a patient-centered medical home.There are many issues for the family learning that their child will have Down syndrome to consider. These issues should be discussed using a nondirective approach. In cases of prenatal diagnosis, this may include discussion of pregnancy continuation or termination, raising the child in the family, foster care placement, and adoption.28The mechanism for occurrence of Down syndrome in the fetus and the potential recurrence rate for the family, as provided by genetic counseling, should be shared. Discuss availability of genetic counseling or meeting with a genetics professional.As the pregnancy continues, the pediatrician may: Develop a plan for delivery and neonatal care with the obstetrician and the family. As the pregnancy progresses, additional studies should be performed if available, if recommended by medical subspecialists and/or if desired by the family. These studies (eg, detection of a complex heart defect by fetal echocardiography) may help direct development of a management plan and improve outcome for the mother and infant.29Offer parent-to-parent contact and information about local and national support organizations because communication with experienced parents is often a very helpful resource for caregiver decision-making.Offer referral to a clinical geneticist or genetic counselor for a more extended discussion of clinical outcomes and variability, recurrence rates, future reproductive options, and evaluation of the risks for other family members.It is recognized that the medical needs of newborn infants with Down syndrome vary, and the timing of each intervention depends on the infant’s needs, but that it is important that all interventions are addressed and that careful transfer of care occurs at the time of discharge from the hospital.The first step in evaluating a newborn infant for trisomy 21 is a careful review of the family history and prenatal information, to include: results of prenatal chromosome studies, if performed; andfamily history of previous children born with trisomy 21 or developmental differences or pregnancies that ended in miscarriage. (These may be significant clues that a family may carry a balanced translocation that predisposes them to having children with trisomy 21.)For children who have had the diagnosis made prenatally, a formal copy of the chromosome report from an amniocentesis or CVS should be obtained. This report allows the clinician to confirm the diagnosis, review the results with the family, and add the formal diagnosis to the child’s medical record. If the results of prenatal testing are not available or if cfDNA alone was performed, a sample of cord or peripheral blood should be obtained for postnatal karyotype to confirm the diagnosis and rule out a chromosome translocation.A physical examination is the most sensitive test in the first 24 hours of life to diagnose trisomy 21 in an infant. If the clinician believes that criteria for Down syndrome are present on physical examination, then a blood sample should be sent for a karyotype. The clinician should alert the laboratory and request rapid results. A study that uses fluorescent in situ hybridization (FISH) technology, in addition, should be available within 24 to 48 hours, if necessary, to facilitate diagnosis and parent counseling. A FISH study, however, can only indicate that an extra copy of chromosome 21 is present and does not determine the presence or absence of a translocation. Therefore, a positive FISH result should be confirmed by a karyotype to identify translocations that may have implications for further reproductive counseling for the parents and possibly other family members. A chromosomal microarray analysis is not appropriate because it will not differentiate trisomy 21 caused by nondisjunction versus an unbalanced translocation.When delivering a diagnosis of Trisomy 21 (Table 3): the mother should be allowed to recover from the immediate delivery of the infant and have her partner or support person present before the diagnosis is given;the information should be relayed in a private setting by the physicians involved, optimally by the primary care provider for the infant and the delivering physician30; andit is recommended that hospitals coordinate the delivery of the information and offer a private hospital room pending confirmation of the diagnosis.When providing information about Down syndrome to families, the physician should first congratulate parents on the birth of their infant. Obstetricians and pediatricians should coordinate their messaging and inform parents of their suspicion immediately, in a private setting, and when appropriate, with both parents together. Physicians should use their experience and expertise in providing support and guidance for families. Clinicians should ensure a balanced approach that reflects the variability and broad range of current outcomes, rather than their personal opinions or experience, give current printed materials, and offer access to other families who have children with Down syndrome and support organizations if locally available. It is important that clinicians be cognizant of the realities and possibilities for people with Down syndrome to have healthy, productive lives.30The laboratory diagnosis of Down syndrome should be confirmed, and the karyotype should be reviewed with the parents when the final result is available. The specific findings should be discussed with both parents whenever possible, including the potential clinical manifestations associated with the syndrome. These topics should be reviewed again at a subsequent meeting. Families should be offered referral for genetic counseling if it was not conducted prenatally.Newborn care is often provided in a hospital setting by a physician who will not be the primary care pediatrician. If the physician providing newborn care will not be the primary care pediatrician, he or she should ensure that there is a smooth transition by transferring medical records and ensuring that an early newborn follow-up appointment is scheduled.Characteristics attributable to Down syndrome, as well as those that are familial, should be discussed.Follow Bright Futures schedule or more frequently if indicated. Obtain a history and perform a physical examination.Monitor weight and follow weight-for-length trends at each health care visit. Review the infant’s growth and plot it on the Down syndrome-specific charts for weight, length, weight for length, and head circumference (available at www.cdc.gov).57,58Review feeding at every health supervision visit, ensure adequate iron intake, and inquire about any changes in respiratory symptoms with feeding (see “Health Supervision From Birth to 1 Month” for discussion).Review the previous hearing evaluation (brainstem auditory evoked response [BAER] or otoacoustic emission). If the infant passed the newborn screening study, rescreen at 6 months of age for confirmation.Risk of otitis media with effusion is 50% to 75%.43 Middle-ear disease should be treated immediately when diagnosed. As soon as a clear ear is established, a diagnostic BAER should be performed to accurately establish hearing status.In children with stenotic canals in which the tympanic membranes cannot be seen, refer to an otolaryngologist as soon as possible for examination under an office microscope. Interval ear examinations should be performed by the otolaryngologist every 3 to 6 months until the tympanic membrane can be visualized by the pediatrician and tympanometry can be performed reliably.43A behavioral audiogram may be attempted at 1 year of age, but many children will not be able to complete the study. If unable to complete a behavioral audiogram, additional testing by BAER should be performed at 1 year.Ear anomalies also place child at risk for sensorineural hearing loss and vestibular problems that may the assessment the first 6 months of refer to a pediatric or with expertise and experience with infants with to for nasolacrimal duct refractive and the infant’s at each visit and use appropriate and If duct obstruction is refer for evaluation for of if not by 9 to months of results of newborn if not Because of increased risk of thyroid measurement of at 6 and months of age and then (see Supervision From Birth to 1 for infants with defects at all typically or defects that cause for symptoms and of heart as and blood feeding and weight may indicate heart including may be until the infant is in condition to to the defects to the potential for development of and associated and children with Down syndrome are also at increased risk of in the absence of structural of care between the primary care physician and the is important for these Obtain a complete blood cell with and either a of and protein or a of serum iron and total at 1 year of age and with Down syndrome have been to have a risk for as the but it may be because of may and also can have long-term neurologic with increased mean is present in to of patients with Down a mean is not a for the of iron or in children with Down syndrome. Screening by iron but iron the of an with or or serum iron by to 100% sensitivity in iron iron or is an and is not if is present or is subsequent evaluation with iron and may be to confirm diagnosis. Although not to children with Down syndrome, is also associated with sleep and iron may be in for children with sleep A physician may iron for children with sleep problems and a should be alert to the and symptoms of leukemia discussed in Supervision From Birth to 1 and an extra with if symptoms with Down syndrome who leukemia can be treated with leukemia therapy or leukemia with outcomes superior to other with complete neurologic history and examination and with as for of neurologic dysfunction that may with Down syndrome have an increased risk of including and other including and such as including respiratory for infants with cooccurring and other recommended for all children, unless there are specific for findings and parents that and are least during the first 6 months of discuss with family symptoms of obstructive sleep including sleep and problems that be associated with to a physician with expertise in pediatric sleep for examination and further evaluation of a possible sleep if any of the symptoms each visit, discuss with parents the of the in a during any or procedure to the risk of cord and review the and symptoms of which include of and, on examination, increased deep Obtain history and perform a physical examination, for and Bright Futures schedule or more frequently if Bright Futures schedule or more frequently as indicated. Obtain a history and perform a physical examination.Monitor weight and follow trends at each health care visit. Review the child’s growth and plot it on the Down syndrome-specific charts for weight, and head These charts should be in with the Down syndrome-specific for children to age 10 and with the from the for and which is a of for children with Down syndrome the age of about any changes in respiratory symptoms with feeding and ensure adequate iron (see Supervision From Birth to 1 for and for evaluation (see Supervision From 1 to 1 for If ear disease appropriate hearing evaluation after evaluation by if available, at every health supervision visit or by a pediatric or with expertise in children with every 2 (see Supervision From 1 to 1 for the risk of with age “Health Supervision From 1 to for every 6 months if have been follow-up on the of history of a and either a of and or a of serum iron and at 1 year of age and (see Supervision From 1 to 1 for physician may iron for children with sleep problems and a (see Supervision From 1 to for at each health supervision visit (see Supervision From 1 to for children on a that review for symptoms to celiac disease at every health visit and if (see Supervision From 1 to for each visit, discuss with family the of for of the during any or careful history and physical examination, with to and should also be to contact their physician immediately for of symptoms of (see Supervision From 1 to for and care at each health care visit and refer to if (see Supervision From 1 to for caregivers to skills and appropriate in the home. for problems that with function in the or and are some of the common typically children may also for medical problems that can be associated with changes, including thyroid celiac and on the child’s age, the of the and the setting in which the When symptoms with refer to programs, services for care, or behavioral experienced in with children with special patients who have behavioral problems or in function for evaluation and (see Supervision From 1 to for that children with Down syndrome are frequently more sensitive to for the should be discussed between the primary care physician and in the child’s Although there has been to directly the use of children with Down syndrome, indicate that these children may in their response to has led to the to at the recommended and increase or the to the child’s symptoms of neurologic including and perform a neurologic symptoms to at every visit, including and abnormal sleep to a physician with expertise in pediatric or a pediatric sleep medicine any child with or symptoms of or abnormal results. with sleep problems and a may benefit from iron Discuss as a risk of sleep apnea and review need to and activity in affected patients (see Supervision From 1 to for Bright Futures schedule or more frequently as issues to the development and health of people with Down syndrome to be and for both health and topics have been in topics of great to the care of children with Down syndrome be enhanced through A review of screening and of atlantoaxial for is and is for the care for outcomes of people with Down A. A. A. American College of A. of and American College of Obstetricians and Gynecologists A. and and for and",
       "openalex_id": "W4223962902",
       "openalex_type": "article",
@@ -2842,7 +2857,7 @@
       "year": 2009,
       "venue": "Communication Theory",
       "doi": "10.1111/j.1468-2885.2009.01352.x",
-      "citations": 216,
+      "citations": 217,
       "abstract": "This article reconceptualizes the psychological concept of “flow” as it pertains to media entertainment. Our goal is to advance flow theory in ways that highlight the necessity of reliable and valid operationalization. We posit flow as a discrete, energetically optimized, and gratifying experience resulting from a cognitive synchronization of specific attentional and reward networks under condition of balance between challenge and skill. We identify video-game play as a context in which flow is likely to occur, and where we can observe our neurophysiological conceptualization of flow using measurement techniques (functional magnetic resonance imaging [fMRI]) without disrupting the experiential state. After presenting preliminary evidence consistent with our synchronization theory of flow, we suggest ways to advance this research.",
       "openalex_id": "W2037379985",
       "openalex_type": "article",
@@ -2967,7 +2982,7 @@
       "year": 2020,
       "venue": "Frontiers in Psychology",
       "doi": "10.3389/fpsyg.2020.00158",
-      "citations": 197,
+      "citations": 198,
       "abstract": "The \"flow\" experience (Csikszentmihalyi, 1975) has been the focus of a large body of empirical work spanning more than four decades. Nevertheless, advancement in understanding - beyond what Csikszentmihalyi uncovered during his initial breakthrough in 1975 - has been modest. In this conceptual analysis, it is argued that progress within the field has been impeded by a lack of consistency in how flow is operationalized, and that this inconsistency in part reflects an underlying confusion regarding what flow is. Flow operationalizations from papers published within the past 5 years are reviewed. Across the 42 reviewed studies, flow was operationalized in 24 distinct ways. Three specific points of inconsistency are then highlighted: (1) inconsistences in operationalizing flow as a continuous versus discrete construct, (2) inconsistencies in operationalizing flow as inherently enjoyable (i.e., \"autotelic\") or not, and (3) inconsistencies in operationalizing flow as dependent on versus distinct from the task characteristics proposed to elicit it (i.e., the conditions/antecedents). After tracing the origins of these discrepancies, the author argues that, in the interest of conceptual intelligibility, flow should be conceptualized and operationalized exclusively as a discrete, highly enjoyable, \"optimal\" state of consciousness, and that this state should be clearly distinguished from the conditions proposed to elicit it. He suggests that more mundane instances of goal-directed engagement are better conceived and operationalized as variations in task involvement rather than variations in flow. Additional ways to achieve greater conceptual and operational consistency within the field are suggested.",
       "openalex_id": "W3006267446",
       "openalex_type": "article",
@@ -3474,6 +3489,27 @@
       "record_id": "cr_a59821bb87c94e1c50aa9eea"
     },
     {
+      "title": "Arousal of Flow Experience in a Learning Setting and Its Effects on Exam Performance and Affect",
+      "authors": [
+        "Julia Schüler"
+      ],
+      "year": 2007,
+      "venue": "Zeitschrift für Pädagogische Psychologie",
+      "doi": "10.1024/1010-0652.21.3.217",
+      "citations": 157,
+      "abstract": "Abstract. Flow experience is associated with learning motivation, performance and positive affect. Therefore it is important to analyze its antecedents. An important antecedent for experiencing flow is the balance between the person's skill and how challenging the situation is ( Csikszentmihalyi, 1990 ). According to Atkinson's (1957) risk-taking model, only individuals with high hope-of-success prefer situations in which a balance of challenge and skill is given while individuals with high fear-of-failure try to avoid such situations. Integration of these two lines of research leads to the suggestion that the achievement motive might moderate the relationship between the challenge-skill balance and flow experience. This notion could be confirmed in two studies with undergraduate students (N = 57/N = 395). Additionally, flow experience was found to be a significant predictor of affect (Study 1 and 2) and exam performance (Study 2). I discuss these findings and their practical implications for academic learning settings.",
+      "openalex_id": "W2100919822",
+      "openalex_type": "article",
+      "referenced_works_count": 34,
+      "categories": [],
+      "source_api": "openalex",
+      "search_angles": [
+        "canon",
+        "recent"
+      ],
+      "record_id": "cr_d1c17f5872556fa6a908ce98"
+    },
+    {
       "title": "Artificial intelligence and blockchain technology for secure smart grid and power distribution Automation: A State-of-the-Art Review",
       "authors": [
         "Abdullah Ayub Khan",
@@ -3499,27 +3535,6 @@
         "recent"
       ],
       "record_id": "cr_6352b6188b10590b3365d41c"
-    },
-    {
-      "title": "Arousal of Flow Experience in a Learning Setting and Its Effects on Exam Performance and Affect",
-      "authors": [
-        "Julia Schüler"
-      ],
-      "year": 2007,
-      "venue": "Zeitschrift für Pädagogische Psychologie",
-      "doi": "10.1024/1010-0652.21.3.217",
-      "citations": 155,
-      "abstract": "Abstract. Flow experience is associated with learning motivation, performance and positive affect. Therefore it is important to analyze its antecedents. An important antecedent for experiencing flow is the balance between the person's skill and how challenging the situation is ( Csikszentmihalyi, 1990 ). According to Atkinson's (1957) risk-taking model, only individuals with high hope-of-success prefer situations in which a balance of challenge and skill is given while individuals with high fear-of-failure try to avoid such situations. Integration of these two lines of research leads to the suggestion that the achievement motive might moderate the relationship between the challenge-skill balance and flow experience. This notion could be confirmed in two studies with undergraduate students (N = 57/N = 395). Additionally, flow experience was found to be a significant predictor of affect (Study 1 and 2) and exam performance (Study 2). I discuss these findings and their practical implications for academic learning settings.",
-      "openalex_id": "W2100919822",
-      "openalex_type": "article",
-      "referenced_works_count": 34,
-      "categories": [],
-      "source_api": "openalex",
-      "search_angles": [
-        "canon",
-        "recent"
-      ],
-      "record_id": "cr_d1c17f5872556fa6a908ce98"
     },
     {
       "title": "The Concept of Mental Pain",
@@ -20428,6 +20443,28 @@
         "replication"
       ],
       "record_id": "cr_216f5cbafeaf8aecb5d54303"
+    },
+    {
+      "title": "Flow as a metastable brain state: evidence from EEG microstates, entropy-based complexity, and electromagnetic modulation",
+      "authors": [
+        "Anthony S. Zanetti"
+      ],
+      "year": 2026,
+      "venue": "Lu Zone Ul (Laurentian University)",
+      "doi": null,
+      "citations": 0,
+      "abstract": "Flow is an optimal state of consciousness characterized by deep absorption, effortless control, and intrinsic reward, yet it’s neurophysiological mechanisms remain incompletely understood. This thesis integrates psychological theory, electrophysiology, and electromagnetic field (EMF) models of brain function to conceptualize flow as a metastable neural state emerging from dynamic coordination across large-scale brain networks. Theoretical chapters synthesize research on flow phenomenology, transient hypofrontality, neural synchronization, neural complexity, and electromagnetic theories of consciousness, proposing that flow reflects a critical balance between neural integration and flexibility that may be influenced by endogenous and exogenous electromagnetic dynamics. First, a neurophenomenological investigation examined the relationship between subjective flow and temporal complexity in brain activity, using electroencephalography (EEG) microstate entropy during a structured video game task. Results indicated that higher absorption and automaticity were associated with increased long-time-scale entropy, while short-time-scale entropy differentiated high-flow experiences from moderate and low-flow states, suggesting that flow is marked by nuanced modulation of neural complexity rather than uniform changes. Second, a neuromodulation study examined the effects of physiologically patterned, electromagnetic fields on flow experience and neural organization during task engagement. Results indicated that exposure to patterned EMFs produced measurable differences in electrophysiological activity and flow-related measures, relative to control conditions. The findings lend support to the plausibility of electromagnetic modulation as a mechanism capable of biasing brain states toward configurations associated with the flow state. Together, these findings support a view of flow as a metastable brain state characterized by efficient, flexible neural coordination that can be both measured through entropy-based indices and influenced through targeted electromagnetic stimulation. This work advances the neurophenomenology of flow and highlights entropy and EMF-based approaches as promising tools for investigating and modulating optimal cognitive states.",
+      "openalex_id": "W7225487232",
+      "openalex_type": "dissertation",
+      "referenced_works_count": 113,
+      "categories": [
+        "recent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W1683284848"
+      ],
+      "record_id": "cr_73c28abde9361414cd47596b"
     },
     {
       "title": "Flow as a positive affective state with optimal activation: converging physiological and self-report evidence in video games",
