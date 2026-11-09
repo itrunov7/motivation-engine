@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-09T15:39:35.541Z",
+    "timestamp": "2026-11-09T15:41:02.490Z",
     "status": "success",
     "params": {
       "mechanism": "FL-24",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 1000,
     "files_written": 1,
-    "duration_s": 4.65,
+    "duration_s": 4.93,
     "warnings": {
       "capped": true
     },
     "cost": {
       "api_calls": 5,
-      "duration_s": 4.65,
+      "duration_s": 4.93,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-09T15:41:02.490Z",
+      "status": "success",
+      "params": {
+        "mechanism": "FL-24",
+        "terms": ""
+      },
+      "records_fetched": 1000,
+      "files_written": 1,
+      "duration_s": 4.93,
+      "warnings": {
+        "capped": true
+      },
+      "cost": {
+        "api_calls": 5,
+        "duration_s": 4.93,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-09T15:39:35.541Z",
       "status": "success",
@@ -421,29 +442,6 @@
       "cost": {
         "api_calls": 5,
         "duration_s": 4.8,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-09T15:01:38.662Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 1000,
-      "files_written": 1,
-      "duration_s": 387.6,
-      "error": "search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex canon \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex recent \"flow experience challenge skill balance\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
-      "warnings": {
-        "low_novelty": true,
-        "capped": true
-      },
-      "cost": {
-        "api_calls": 50,
-        "duration_s": 387.6,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
