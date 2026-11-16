@@ -6,28 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T13:28:15.564Z",
-    "status": "partial",
+    "timestamp": "2026-11-16T13:32:02.467Z",
+    "status": "success",
     "params": {
       "mechanism": "RR-25",
       "terms": ""
     },
     "records_fetched": 313,
     "files_written": 1,
-    "duration_s": 136.36,
-    "error": "search semantic-scholar application \"recognition memory advantage retrieval applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar cross-domain \"recognition memory advantage retrieval cross-domain generalization\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar recent \"menu selection versus command recall\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar critique \"menu selection versus command recall critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "duration_s": 45.91,
     "warnings": {
-      "s2_throttled": true
+      "low_novelty": true
     },
     "cost": {
-      "api_calls": 126,
-      "duration_s": 136.36,
+      "api_calls": 46,
+      "duration_s": 45.91,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T13:32:02.467Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 313,
+      "files_written": 1,
+      "duration_s": 45.91,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 46,
+        "duration_s": 45.91,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T13:28:15.564Z",
       "status": "partial",
@@ -438,27 +458,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-09T16:48:58.246Z",
-      "status": "success",
-      "params": {
-        "mechanism": "FL-24",
-        "terms": ""
-      },
-      "records_fetched": 1000,
-      "files_written": 1,
-      "duration_s": 4.54,
-      "warnings": {
-        "capped": true
-      },
-      "cost": {
-        "api_calls": 5,
-        "duration_s": 4.54,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -693,7 +692,7 @@
     {
       "path": "RR-25.json",
       "records": 313,
-      "bytes": 1656774,
+      "bytes": 1600152,
       "categories": {
         "foundational": 11,
         "meta-analysis": 12,
