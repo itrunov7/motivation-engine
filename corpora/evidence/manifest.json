@@ -6,28 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T14:03:01.513Z",
-    "status": "partial",
+    "timestamp": "2026-11-16T14:08:51.176Z",
+    "status": "success",
     "params": {
       "mechanism": "RR-25",
       "terms": ""
     },
     "records_fetched": 321,
     "files_written": 1,
-    "duration_s": 250.88,
-    "error": "search openalex canon \"recognition versus recall memory\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex canon \"recognition versus recall memory\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
+    "duration_s": 118.45,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 60,
-      "duration_s": 250.88,
+      "api_calls": 48,
+      "duration_s": 118.45,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T14:08:51.176Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 321,
+      "files_written": 1,
+      "duration_s": 118.45,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 48,
+        "duration_s": 118.45,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T14:03:01.513Z",
       "status": "partial",
@@ -431,28 +451,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-09T17:04:09.044Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "AE-26",
-        "terms": "aesthetic usability effect subscription retention;what is beautiful is usable subscription retention;visual aesthetics perceived usability subscription retention"
-      },
-      "records_fetched": 76,
-      "files_written": 0,
-      "duration_s": 0.11,
-      "error": "upstream API quota requires a later continuation; logical run AE-26-mw9igme0 checkpointed at query 1/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 1,
-        "duration_s": 0.11,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -687,7 +685,7 @@
     {
       "path": "RR-25.json",
       "records": 321,
-      "bytes": 1620822,
+      "bytes": 1616239,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
