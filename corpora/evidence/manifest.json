@@ -6,28 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T16:53:51.415Z",
+    "timestamp": "2026-11-16T16:55:27.393Z",
     "status": "partial",
     "params": {
-      "mechanism": "FB-21",
-      "terms": "response time human computer interaction subscription retention;system feedback latency user perception subscription retention;interaction latency tolerance thresholds subscription retention"
+      "mechanism": "RR-25",
+      "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
     },
-    "records_fetched": 0,
-    "files_written": 0,
-    "duration_s": 0.17,
-    "error": "upstream API quota requires a later continuation; logical run FB-21-mwji6chk checkpointed at query 1/630",
+    "records_fetched": 323,
+    "files_written": 1,
+    "duration_s": 34.26,
+    "error": "search openalex canon \"recognition versus recall memory b2b enterprise\": api.openalex.org upstream cooldown is 25571s; checkpoint and resume later",
     "warnings": {
-      "resume_required": true
+      "low_novelty": true
     },
     "cost": {
-      "api_calls": 1,
-      "duration_s": 0.17,
+      "api_calls": 38,
+      "duration_s": 34.26,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T16:55:27.393Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 323,
+      "files_written": 1,
+      "duration_s": 34.26,
+      "error": "search openalex canon \"recognition versus recall memory b2b enterprise\": api.openalex.org upstream cooldown is 25571s; checkpoint and resume later",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 38,
+        "duration_s": 34.26,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T16:53:51.415Z",
       "status": "partial",
@@ -434,27 +456,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-16T15:24:51.600Z",
-      "status": "success",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": ""
-      },
-      "records_fetched": 323,
-      "files_written": 1,
-      "duration_s": 49.69,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 46,
-        "duration_s": 49.69,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -713,7 +714,7 @@
     {
       "path": "RR-25.json",
       "records": 323,
-      "bytes": 1619005,
+      "bytes": 1622628,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
