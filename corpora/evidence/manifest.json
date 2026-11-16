@@ -6,27 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T14:00:05.353Z",
-    "status": "success",
+    "timestamp": "2026-11-16T14:03:01.513Z",
+    "status": "partial",
     "params": {
       "mechanism": "RR-25",
       "terms": ""
     },
-    "records_fetched": 313,
+    "records_fetched": 321,
     "files_written": 1,
-    "duration_s": 76.17,
+    "duration_s": 250.88,
+    "error": "search openalex canon \"recognition versus recall memory\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex canon \"recognition versus recall memory\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 46,
-      "duration_s": 76.17,
+      "api_calls": 60,
+      "duration_s": 250.88,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T14:03:01.513Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 321,
+      "files_written": 1,
+      "duration_s": 250.88,
+      "error": "search openalex canon \"recognition versus recall memory\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search openalex canon \"recognition versus recall memory\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 60,
+        "duration_s": 250.88,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T14:00:05.353Z",
       "status": "success",
@@ -430,28 +453,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-09T17:04:08.598Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 71,
-      "files_written": 0,
-      "duration_s": 0.11,
-      "error": "upstream API quota requires a later continuation; logical run RR-25-mw9igm1l checkpointed at query 1/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 1,
-        "duration_s": 0.11,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -685,13 +686,13 @@
     },
     {
       "path": "RR-25.json",
-      "records": 313,
-      "bytes": 1600152,
+      "records": 321,
+      "bytes": 1620822,
       "categories": {
-        "foundational": 11,
+        "foundational": 13,
         "meta-analysis": 12,
-        "replication": 61,
-        "dissent": 76,
+        "replication": 62,
+        "dissent": 78,
         "recent": 135
       }
     },
