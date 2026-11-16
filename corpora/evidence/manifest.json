@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T17:06:21.369Z",
+    "timestamp": "2026-11-16T17:08:13.745Z",
     "status": "success",
     "params": {
       "mechanism": "RR-25",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 323,
     "files_written": 1,
-    "duration_s": 44.01,
+    "duration_s": 53.44,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 41,
-      "duration_s": 44.01,
+      "api_calls": 44,
+      "duration_s": 53.44,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T17:08:13.745Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 323,
+      "files_written": 1,
+      "duration_s": 53.44,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 44,
+        "duration_s": 53.44,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T17:06:21.369Z",
       "status": "success",
@@ -434,27 +455,6 @@
       "cost": {
         "api_calls": 46,
         "duration_s": 45.4,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-16T15:39:56.889Z",
-      "status": "success",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": ""
-      },
-      "records_fetched": 323,
-      "files_written": 1,
-      "duration_s": 45.52,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 46,
-        "duration_s": 45.52,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
