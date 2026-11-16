@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T14:23:58.395Z",
+    "timestamp": "2026-11-16T14:25:50.201Z",
     "status": "success",
     "params": {
       "mechanism": "RR-25",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 323,
     "files_written": 1,
-    "duration_s": 45.37,
+    "duration_s": 45.35,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 46,
-      "duration_s": 45.37,
+      "duration_s": 45.35,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T14:25:50.201Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 323,
+      "files_written": 1,
+      "duration_s": 45.35,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 46,
+        "duration_s": 45.35,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T14:23:58.395Z",
       "status": "success",
@@ -424,28 +445,6 @@
       "cost": {
         "api_calls": 46,
         "duration_s": 45.91,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-16T13:28:15.564Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": ""
-      },
-      "records_fetched": 313,
-      "files_written": 1,
-      "duration_s": 136.36,
-      "error": "search semantic-scholar application \"recognition memory advantage retrieval applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar cross-domain \"recognition memory advantage retrieval cross-domain generalization\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar recent \"menu selection versus command recall\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar critique \"menu selection versus command recall critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 126,
-        "duration_s": 136.36,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
