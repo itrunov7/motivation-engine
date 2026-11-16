@@ -6,28 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T23:52:38.524Z",
+    "timestamp": "2026-11-16T23:53:58.900Z",
     "status": "partial",
     "params": {
       "mechanism": "RR-25",
       "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
     },
-    "records_fetched": 327,
+    "records_fetched": 344,
     "files_written": 0,
-    "duration_s": 0.27,
-    "error": "upstream API quota requires a later continuation; logical run RR-25-mwjv2gz6 checkpointed at query 63/630",
+    "duration_s": 1.69,
+    "error": "upstream API quota requires a later continuation; logical run RR-25-mwjv2gz6 checkpointed at query 65/630",
     "warnings": {
       "resume_required": true
     },
     "cost": {
-      "api_calls": 1,
-      "duration_s": 0.27,
+      "api_calls": 2,
+      "duration_s": 1.69,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T23:53:58.900Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 344,
+      "files_written": 0,
+      "duration_s": 1.69,
+      "error": "upstream API quota requires a later continuation; logical run RR-25-mwjv2gz6 checkpointed at query 65/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 2,
+        "duration_s": 1.69,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T23:52:38.524Z",
       "status": "partial",
@@ -441,28 +463,6 @@
       "cost": {
         "api_calls": 1,
         "duration_s": 0.33,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-16T23:24:06.311Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 326,
-      "files_written": 0,
-      "duration_s": 4.01,
-      "error": "upstream API quota requires a later continuation; logical run RR-25-mwjv2gz6 checkpointed at query 41/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 3,
-        "duration_s": 4.01,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
