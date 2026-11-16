@@ -6,29 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T20:29:01.290Z",
-    "status": "partial",
+    "timestamp": "2026-11-16T20:30:41.939Z",
+    "status": "success",
     "params": {
       "mechanism": "RR-25",
       "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
     },
     "records_fetched": 326,
     "files_written": 1,
-    "duration_s": 39.02,
-    "error": "search semantic-scholar boundary \"recognition versus recall memory b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "duration_s": 36.68,
     "warnings": {
-      "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 40,
-      "duration_s": 39.02,
+      "api_calls": 38,
+      "duration_s": 36.68,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T20:30:41.939Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 326,
+      "files_written": 1,
+      "duration_s": 36.68,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 38,
+        "duration_s": 36.68,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T20:29:01.290Z",
       "status": "partial",
@@ -445,27 +464,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-16T17:54:27.336Z",
-      "status": "success",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 326,
-      "files_written": 1,
-      "duration_s": 36.78,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 38,
-        "duration_s": 36.78,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -724,7 +722,7 @@
     {
       "path": "RR-25.json",
       "records": 326,
-      "bytes": 1624302,
+      "bytes": 1623780,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
