@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T17:28:17.825Z",
+    "timestamp": "2026-11-16T17:30:45.924Z",
     "status": "success",
     "params": {
       "mechanism": "RR-25",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 323,
     "files_written": 1,
-    "duration_s": 45.66,
+    "duration_s": 36.82,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 42,
-      "duration_s": 45.66,
+      "api_calls": 38,
+      "duration_s": 36.82,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T17:30:45.924Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 323,
+      "files_written": 1,
+      "duration_s": 36.82,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 38,
+        "duration_s": 36.82,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T17:28:17.825Z",
       "status": "success",
@@ -442,28 +463,6 @@
       "cost": {
         "api_calls": 1,
         "duration_s": 0.21,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-16T16:53:49.793Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "AU-20",
-        "terms": "autonomy need satisfaction technology subscription retention;perceived control user interface subscription retention;user control reversibility undo subscription retention"
-      },
-      "records_fetched": 107,
-      "files_written": 0,
-      "duration_s": 0.22,
-      "error": "upstream API quota requires a later continuation; logical run AU-20-mw9igmqs checkpointed at query 2/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 1,
-        "duration_s": 0.22,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
