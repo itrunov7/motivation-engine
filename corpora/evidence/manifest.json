@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T17:19:20.630Z",
+    "timestamp": "2026-11-16T17:21:44.816Z",
     "status": "partial",
     "params": {
       "mechanism": "RR-25",
@@ -14,21 +14,44 @@
     },
     "records_fetched": 323,
     "files_written": 1,
-    "duration_s": 44.91,
-    "error": "search semantic-scholar boundary \"recognition versus recall memory b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "duration_s": 42.43,
+    "error": "search semantic-scholar critique \"recognition versus recall memory b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
     "warnings": {
       "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
       "api_calls": 42,
-      "duration_s": 44.91,
+      "duration_s": 42.43,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T17:21:44.816Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 323,
+      "files_written": 1,
+      "duration_s": 42.43,
+      "error": "search semantic-scholar critique \"recognition versus recall memory b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true,
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 42,
+        "duration_s": 42.43,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T17:19:20.630Z",
       "status": "partial",
@@ -445,28 +468,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-16T16:53:10.469Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "FB-21",
-        "terms": "response time human computer interaction b2b enterprise;system feedback latency user perception b2b enterprise;interaction latency tolerance thresholds b2b enterprise"
-      },
-      "records_fetched": 58,
-      "files_written": 0,
-      "duration_s": 33.55,
-      "error": "upstream API quota requires a later continuation; logical run FB-21-msd3i3h2 checkpointed at query 32/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 34,
-        "duration_s": 33.55,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -725,7 +726,7 @@
     {
       "path": "RR-25.json",
       "records": 323,
-      "bytes": 1622586,
+      "bytes": 1622598,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,

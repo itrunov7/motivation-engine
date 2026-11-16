@@ -1,6 +1,6 @@
 {
   "mechanism_id": "RR-25",
-  "fetched_at": "2026-11-16T17:20:05.524Z",
+  "fetched_at": "2026-11-16T17:22:27.233Z",
   "terms_source": "param",
   "terms": [
     "recognition versus recall memory b2b enterprise",
@@ -155,8 +155,8 @@
       "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 0
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:critique:p1:recognition versus recall memory b2b enterprise critique criticism",
@@ -241,12 +241,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 1,
+      "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 1
     },
     {
       "query_id": "search:recency:openalex:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
@@ -542,8 +542,8 @@
       {
         "angle": "boundary",
         "queries": 3,
-        "returned": 0,
-        "unique_records": 0
+        "returned": 1,
+        "unique_records": 1
       },
       {
         "angle": "cross-domain",
@@ -562,16 +562,16 @@
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 52,
-        "unique_records": 52
+        "returned": 53,
+        "unique_records": 53
       }
     ],
-    "recent_records": 34,
-    "recency_rate": 0.6538,
+    "recent_records": 35,
+    "recency_rate": 0.6604,
     "novelty": {
       "previous_corpus_records": 323,
-      "unique_records": 52,
-      "already_in_corpus": 52,
+      "unique_records": 53,
+      "already_in_corpus": 53,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -692,18 +692,6 @@
       },
       {
         "query_index": 10,
-        "query_id": "search:relevance:semantic-scholar:critique:p1:recognition versus recall memory b2b enterprise critique criticism",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 323
-      },
-      {
-        "query_index": 11,
         "query_id": "search:recency:openalex:critique:p1:recognition versus recall memory b2b enterprise critique criticism",
         "bucket": "recency",
         "kind": "search",
@@ -715,7 +703,7 @@
         "cumulative_records": 323
       },
       {
-        "query_index": 12,
+        "query_index": 11,
         "query_id": "search:citation:openalex:critique:p1:recognition versus recall memory b2b enterprise critique criticism",
         "bucket": "citation",
         "kind": "search",
@@ -727,7 +715,7 @@
         "cumulative_records": 323
       },
       {
-        "query_index": 13,
+        "query_index": 12,
         "query_id": "search:relevance:openalex:replication:p1:recognition versus recall memory b2b enterprise replication",
         "bucket": "relevance",
         "kind": "search",
@@ -739,7 +727,7 @@
         "cumulative_records": 323
       },
       {
-        "query_index": 14,
+        "query_index": 13,
         "query_id": "search:recency:openalex:replication:p1:recognition versus recall memory b2b enterprise replication",
         "bucket": "recency",
         "kind": "search",
@@ -751,12 +739,24 @@
         "cumulative_records": 323
       },
       {
-        "query_index": 15,
+        "query_index": 14,
         "query_id": "search:citation:openalex:replication:p1:recognition versus recall memory b2b enterprise replication",
         "bucket": "citation",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 323
+      },
+      {
+        "query_index": 15,
+        "query_id": "search:relevance:semantic-scholar:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -957,11 +957,11 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 876,
+      "estimate": 877,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 13,
       "total_search_queries": 30,
-      "summed_upstream_results": 876,
+      "summed_upstream_results": 877,
       "observed_sample_multiplicity": 1
     },
     "saturation_reached": true,
