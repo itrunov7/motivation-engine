@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T21:05:30.003Z",
+    "timestamp": "2026-11-16T21:07:26.816Z",
     "status": "success",
     "params": {
       "mechanism": "RR-25",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 326,
     "files_written": 1,
-    "duration_s": 47.04,
+    "duration_s": 73.81,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 40,
-      "duration_s": 47.04,
+      "api_calls": 41,
+      "duration_s": 73.81,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T21:07:26.816Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 326,
+      "files_written": 1,
+      "duration_s": 73.81,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 41,
+        "duration_s": 73.81,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T21:05:30.003Z",
       "status": "success",
@@ -435,29 +456,6 @@
       "cost": {
         "api_calls": 37,
         "duration_s": 32.31,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-16T20:25:05.402Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 326,
-      "files_written": 1,
-      "duration_s": 40.4,
-      "error": "search semantic-scholar application \"recognition memory advantage retrieval b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true,
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 41,
-        "duration_s": 40.4,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
