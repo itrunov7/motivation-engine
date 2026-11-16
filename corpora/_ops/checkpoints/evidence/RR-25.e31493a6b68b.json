@@ -9,7 +9,7 @@
     "menu selection versus command recall b2b enterprise"
   ],
   "fingerprint": "e31493a6b68b0d2e380b8543712c7562bb7fc3b3df523351f97533678dc0c330",
-  "cursor": 51,
+  "cursor": 53,
   "tasks": [
     {
       "id": "search:relevance:openalex:canon:p1:recognition versus recall memory b2b enterprise",
@@ -2687,8 +2687,8 @@
         "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "upstream_total_results": null
+        "rolling_novelty_rate": 0.05,
+        "upstream_total_results": 0
       },
       "records": []
     },
@@ -2718,7 +2718,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search openalex critique \"menu selection versus command recall b2b enterprise critique criticism\": api.openalex.org upstream cooldown is 1258s; checkpoint and resume later"
     },
     {
       "id": "search:citation:openalex:critique:p1:menu selection versus command recall b2b enterprise critique criticism",
@@ -19045,6 +19046,18 @@
       "novelty_rate": 0.5,
       "rolling_novelty_rate": 0.05,
       "cumulative_records": 327
+    },
+    {
+      "query_index": 23,
+      "query_id": "search:relevance:semantic-scholar:critique:p1:menu selection versus command recall b2b enterprise critique criticism",
+      "bucket": "relevance",
+      "kind": "search",
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0.05,
+      "cumulative_records": 327
     }
   ],
   "expanded_anchor_ids": [],
@@ -19052,6 +19065,6 @@
   "topical_confirmed": 0,
   "topical_rejected": 0,
   "s2_throttled": true,
-  "api_calls_spent": 58,
+  "api_calls_spent": 60,
   "slice_stop_reason": "upstream_quota"
 }
