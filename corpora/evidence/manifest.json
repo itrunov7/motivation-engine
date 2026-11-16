@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T21:56:29.851Z",
+    "timestamp": "2026-11-16T21:58:51.293Z",
     "status": "success",
     "params": {
       "mechanism": "RR-25",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 326,
     "files_written": 1,
-    "duration_s": 38.69,
+    "duration_s": 43.37,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 39,
-      "duration_s": 38.69,
+      "api_calls": 42,
+      "duration_s": 43.37,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T21:58:51.293Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 326,
+      "files_written": 1,
+      "duration_s": 43.37,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 42,
+        "duration_s": 43.37,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T21:56:29.851Z",
       "status": "success",
@@ -440,27 +461,6 @@
       "cost": {
         "api_calls": 40,
         "duration_s": 40.13,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-16T21:01:50.144Z",
-      "status": "success",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 326,
-      "files_written": 1,
-      "duration_s": 44.09,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 41,
-        "duration_s": 44.09,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
