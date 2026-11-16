@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T17:24:20.578Z",
+    "timestamp": "2026-11-16T17:26:14.722Z",
     "status": "partial",
     "params": {
       "mechanism": "RR-25",
@@ -14,21 +14,44 @@
     },
     "records_fetched": 323,
     "files_written": 1,
-    "duration_s": 49.57,
-    "error": "search semantic-scholar canon \"recognition memory advantage retrieval b2b enterprise\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "duration_s": 45.77,
+    "error": "search semantic-scholar boundary \"recognition versus recall memory b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar application \"recognition memory advantage retrieval b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
     "warnings": {
       "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
       "api_calls": 43,
-      "duration_s": 49.57,
+      "duration_s": 45.77,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T17:26:14.722Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 323,
+      "files_written": 1,
+      "duration_s": 45.77,
+      "error": "search semantic-scholar boundary \"recognition versus recall memory b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar application \"recognition memory advantage retrieval b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true,
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 43,
+        "duration_s": 45.77,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T17:24:20.578Z",
       "status": "partial",
@@ -448,28 +471,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-16T16:53:48.899Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 323,
-      "files_written": 0,
-      "duration_s": 0.24,
-      "error": "upstream API quota requires a later continuation; logical run RR-25-mwji6aju checkpointed at query 1/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 1,
-        "duration_s": 0.24,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -728,7 +729,7 @@
     {
       "path": "RR-25.json",
       "records": 323,
-      "bytes": 1622606,
+      "bytes": 1623099,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
