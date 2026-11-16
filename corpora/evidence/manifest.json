@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T22:08:14.534Z",
+    "timestamp": "2026-11-16T22:10:21.487Z",
     "status": "partial",
     "params": {
       "mechanism": "RR-25",
@@ -14,21 +14,44 @@
     },
     "records_fetched": 326,
     "files_written": 1,
-    "duration_s": 44.99,
-    "error": "search openalex canon \"recognition versus recall memory b2b enterprise\": api.openalex.org upstream cooldown is 6789s; checkpoint and resume later · search semantic-scholar recent \"recognition versus recall memory b2b enterprise\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "duration_s": 52.2,
+    "error": "search semantic-scholar critique \"recognition versus recall memory b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar canon \"recognition memory advantage retrieval b2b enterprise\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
     "warnings": {
       "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 42,
-      "duration_s": 44.99,
+      "api_calls": 45,
+      "duration_s": 52.2,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T22:10:21.487Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 326,
+      "files_written": 1,
+      "duration_s": 52.2,
+      "error": "search semantic-scholar critique \"recognition versus recall memory b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar canon \"recognition memory advantage retrieval b2b enterprise\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true,
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 45,
+        "duration_s": 52.2,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T22:08:14.534Z",
       "status": "partial",
@@ -447,29 +470,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-16T21:14:31.293Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 326,
-      "files_written": 1,
-      "duration_s": 38.98,
-      "error": "search semantic-scholar canon \"recognition memory advantage retrieval b2b enterprise\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true,
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 40,
-        "duration_s": 38.98,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -728,7 +728,7 @@
     {
       "path": "RR-25.json",
       "records": 326,
-      "bytes": 1624883,
+      "bytes": 1624848,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
