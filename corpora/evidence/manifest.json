@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T13:50:46.770Z",
+    "timestamp": "2026-11-16T13:53:12.467Z",
     "status": "success",
     "params": {
       "mechanism": "RR-25",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 313,
     "files_written": 1,
-    "duration_s": 45.92,
+    "duration_s": 45.36,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 46,
-      "duration_s": 45.92,
+      "duration_s": 45.36,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T13:53:12.467Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 313,
+      "files_written": 1,
+      "duration_s": 45.36,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 46,
+        "duration_s": 45.36,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T13:50:46.770Z",
       "status": "success",
@@ -429,28 +450,6 @@
       "cost": {
         "api_calls": 1,
         "duration_s": 0.12,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-09T17:03:38.447Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "DE-23",
-        "terms": "default effect decision making b2b enterprise;default option organ donation policy b2b enterprise;effort reduction friction conversion b2b enterprise"
-      },
-      "records_fetched": 62,
-      "files_written": 0,
-      "duration_s": 25.22,
-      "error": "upstream API quota requires a later continuation; logical run DE-23-msd3i2rw checkpointed at query 32/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 31,
-        "duration_s": 25.22,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
