@@ -6,28 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T16:55:27.393Z",
-    "status": "partial",
+    "timestamp": "2026-11-16T16:57:43.885Z",
+    "status": "success",
     "params": {
       "mechanism": "RR-25",
       "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
     },
     "records_fetched": 323,
     "files_written": 1,
-    "duration_s": 34.26,
-    "error": "search openalex canon \"recognition versus recall memory b2b enterprise\": api.openalex.org upstream cooldown is 25571s; checkpoint and resume later",
+    "duration_s": 35.71,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 38,
-      "duration_s": 34.26,
+      "api_calls": 39,
+      "duration_s": 35.71,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T16:57:43.885Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 323,
+      "files_written": 1,
+      "duration_s": 35.71,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 39,
+        "duration_s": 35.71,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T16:55:27.393Z",
       "status": "partial",
@@ -435,27 +455,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-16T15:27:22.295Z",
-      "status": "success",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": ""
-      },
-      "records_fetched": 323,
-      "files_written": 1,
-      "duration_s": 59.51,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 47,
-        "duration_s": 59.51,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -714,7 +713,7 @@
     {
       "path": "RR-25.json",
       "records": 323,
-      "bytes": 1622628,
+      "bytes": 1622064,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
