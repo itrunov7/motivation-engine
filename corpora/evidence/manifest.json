@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-16T13:48:55.340Z",
+    "timestamp": "2026-11-16T13:50:46.770Z",
     "status": "success",
     "params": {
       "mechanism": "RR-25",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 313,
     "files_written": 1,
-    "duration_s": 45.34,
+    "duration_s": 45.92,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 46,
-      "duration_s": 45.34,
+      "duration_s": 45.92,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-16T13:50:46.770Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 313,
+      "files_written": 1,
+      "duration_s": 45.92,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 46,
+        "duration_s": 45.92,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-16T13:48:55.340Z",
       "status": "success",
@@ -430,28 +451,6 @@
       "cost": {
         "api_calls": 31,
         "duration_s": 25.22,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-09T17:03:17.787Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "CO-19",
-        "terms": "competence need satisfaction self-determination b2b enterprise;perceived competence technology use b2b enterprise;self-efficacy interface use b2b enterprise"
-      },
-      "records_fetched": 78,
-      "files_written": 1,
-      "duration_s": 20.36,
-      "error": "search semantic-scholar recent \"competence need satisfaction self-determination b2b enterprise\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar boundary \"competence need satisfaction self-determination b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar application \"perceived competence technology use b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search openalex canon \"self-efficacy interface use b2b enterprise\": api.openalex.org upstream cooldown is 48143s; checkpoint and resume later · search semantic-scholar critique \"self-efficacy interface use b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true
-      },
-      "cost": {
-        "api_calls": 17,
-        "duration_s": 20.36,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
