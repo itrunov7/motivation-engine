@@ -1,6 +1,6 @@
 {
   "mechanism_id": "RR-25",
-  "fetched_at": "2026-11-16T22:41:26.479Z",
+  "fetched_at": "2026-11-16T22:43:53.263Z",
   "terms_source": "param",
   "terms": [
     "recognition versus recall memory b2b enterprise",
@@ -331,12 +331,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 337
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:canon:p1:recognition memory advantage retrieval b2b enterprise",
@@ -472,6 +472,21 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
       "upstream_total_results": 0
+    },
+    {
+      "query_id": "search:recency:openalex:critique:p1:recognition memory advantage retrieval b2b enterprise critique criticism",
+      "api": "openalex",
+      "angle": "critique",
+      "term": "recognition memory advantage retrieval b2b enterprise critique criticism",
+      "bucket": "recency",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 0
     }
   ],
   "coverage_report": {
@@ -512,8 +527,8 @@
       {
         "angle": "canon",
         "queries": 6,
-        "returned": 25,
-        "unique_records": 25
+        "returned": 0,
+        "unique_records": 0
       },
       {
         "angle": "recent",
@@ -529,7 +544,7 @@
       },
       {
         "angle": "critique",
-        "queries": 4,
+        "queries": 5,
         "returned": 0,
         "unique_records": 0
       },
@@ -555,23 +570,23 @@
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 26,
+        "queries": 27,
         "returned": 0,
         "unique_records": 0
       },
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 53,
-        "unique_records": 53
+        "returned": 28,
+        "unique_records": 28
       }
     ],
-    "recent_records": 35,
-    "recency_rate": 0.6604,
+    "recent_records": 16,
+    "recency_rate": 0.5714,
     "novelty": {
       "previous_corpus_records": 326,
-      "unique_records": 53,
-      "already_in_corpus": 53,
+      "unique_records": 28,
+      "already_in_corpus": 28,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -824,18 +839,6 @@
       },
       {
         "query_index": 21,
-        "query_id": "search:relevance:semantic-scholar:canon:p1:recognition memory advantage retrieval b2b enterprise",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 326
-      },
-      {
-        "query_index": 22,
         "query_id": "search:recency:openalex:canon:p1:recognition memory advantage retrieval b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -847,7 +850,7 @@
         "cumulative_records": 326
       },
       {
-        "query_index": 23,
+        "query_index": 22,
         "query_id": "search:citation:openalex:canon:p1:recognition memory advantage retrieval b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -859,7 +862,7 @@
         "cumulative_records": 326
       },
       {
-        "query_index": 24,
+        "query_index": 23,
         "query_id": "search:relevance:openalex:recent:p1:recognition memory advantage retrieval b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -871,7 +874,7 @@
         "cumulative_records": 326
       },
       {
-        "query_index": 25,
+        "query_index": 24,
         "query_id": "search:recency:openalex:recent:p1:recognition memory advantage retrieval b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -883,7 +886,7 @@
         "cumulative_records": 326
       },
       {
-        "query_index": 26,
+        "query_index": 25,
         "query_id": "search:citation:openalex:recent:p1:recognition memory advantage retrieval b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -895,7 +898,7 @@
         "cumulative_records": 326
       },
       {
-        "query_index": 27,
+        "query_index": 26,
         "query_id": "search:relevance:semantic-scholar:application:p1:recognition memory advantage retrieval b2b enterprise applied intervention",
         "bucket": "relevance",
         "kind": "search",
@@ -907,7 +910,7 @@
         "cumulative_records": 326
       },
       {
-        "query_index": 28,
+        "query_index": 27,
         "query_id": "search:recency:openalex:application:p1:recognition memory advantage retrieval b2b enterprise applied intervention",
         "bucket": "recency",
         "kind": "search",
@@ -919,7 +922,7 @@
         "cumulative_records": 326
       },
       {
-        "query_index": 29,
+        "query_index": 28,
         "query_id": "search:citation:openalex:application:p1:recognition memory advantage retrieval b2b enterprise applied intervention",
         "bucket": "citation",
         "kind": "search",
@@ -931,9 +934,21 @@
         "cumulative_records": 326
       },
       {
-        "query_index": 30,
+        "query_index": 29,
         "query_id": "search:relevance:openalex:critique:p1:recognition memory advantage retrieval b2b enterprise critique criticism",
         "bucket": "relevance",
+        "kind": "search",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 326
+      },
+      {
+        "query_index": 30,
+        "query_id": "search:recency:openalex:critique:p1:recognition memory advantage retrieval b2b enterprise critique criticism",
+        "bucket": "recency",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
@@ -948,7 +963,7 @@
     "minimum_queries": 30,
     "retrieval_counts": {
       "relevance": 11,
-      "recency": 10,
+      "recency": 11,
       "citation": 10
     },
     "topical_candidates": 0,
@@ -957,11 +972,11 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 877,
+      "estimate": 540,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 13,
+      "measured_queries": 12,
       "total_search_queries": 30,
-      "summed_upstream_results": 877,
+      "summed_upstream_results": 540,
       "observed_sample_multiplicity": 1
     },
     "saturation_reached": true,
