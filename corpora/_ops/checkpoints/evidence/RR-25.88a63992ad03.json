@@ -9,7 +9,7 @@
     "menu selection versus command recall b2b enterprise"
   ],
   "fingerprint": "88a63992ad03a6bf86450d6035470e2742d1be11cfdf517ab92ea9d0e3f7a387",
-  "cursor": 15,
+  "cursor": 17,
   "tasks": [
     {
       "id": "search:relevance:openalex:canon:p1:recognition versus recall memory b2b enterprise",
@@ -1009,14 +1009,34 @@
         "bucket": "relevance",
         "kind": "search",
         "requested": 25,
-        "returned": 0,
-        "unique_returned": 0,
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "upstream_total_results": null
+        "upstream_total_results": 1
       },
-      "records": []
+      "records": [
+        {
+          "title": "Retrieval-Enhanced Suggestibility in Forensic Contexts: A meta-analysis of practice effects on eyewitness memory contamination",
+          "authors": [
+            "Alberto Barea Ver"
+          ],
+          "year": 2026,
+          "venue": "Universitas Psychologica",
+          "doi": "10.11144/javeriana.upsy25.resf",
+          "citations": 0,
+          "abstract": "Retrieval practice can paradoxically increase vulnerability to subsequent misinformation, a phenomenon termed retrieval-enhanced suggestibility (RES), with implications for forensic interviewing protocols involving multiple recall attempts. This meta-analysis examines RES in forensic-relevant contexts and identifies boundary conditions moderating the effect. A systematic search identified 26 studies (k = 72 comparisons, N = 4 218) in simulated forensic contexts. Random-effects meta-analyses compared misinformation susceptibility following retrieval practice versus no practice, with moderator analyses (test format, misinformation source, detail type, retention interval, warning). Retrieval practice was associated with increased misinformation acceptance, d = 0.34, 95 % CI [0.23, 0.45], p < 0.001, I² = 56.4 %. Recognition-format tests showed larger RES (d = 0.66) than free recall (d = 0.17); narrative misinformation showed stronger RES (d = 0.48) than decontextualized question-based misinformation (d = -0.19); explicit warnings were associated with no detectable RES (d = -0.07, p = 0.41). In forensic-relevant experimental contexts, initial retrieval practice was associated with greater misinformation vulnerability, whereas free-recall formats, temporal separation, and explicit warnings were associated with reduced or absent effects. These findings inform the evidence base for forensic interview protocols.",
+          "openalex_id": null,
+          "openalex_type": null,
+          "referenced_works_count": null,
+          "categories": [],
+          "source_api": "semantic-scholar",
+          "search_angles": [
+            "boundary"
+          ]
+        }
+      ]
     },
     {
       "id": "search:recency:openalex:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
@@ -1044,7 +1064,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search openalex boundary \"recognition versus recall memory b2b enterprise boundary conditions moderators\": api.openalex.org upstream cooldown is 61223s; checkpoint and resume later"
     },
     {
       "id": "search:citation:openalex:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
@@ -18121,6 +18142,18 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
       "cumulative_records": 362
+    },
+    {
+      "query_index": 2,
+      "query_id": "search:relevance:semantic-scholar:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
+      "bucket": "relevance",
+      "kind": "search",
+      "returned": 1,
+      "unique_returned": 1,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "cumulative_records": 362
     }
   ],
   "expanded_anchor_ids": [],
@@ -18128,6 +18161,6 @@
   "topical_confirmed": 0,
   "topical_rejected": 0,
   "s2_throttled": true,
-  "api_calls_spent": 19,
+  "api_calls_spent": 22,
   "slice_stop_reason": "upstream_quota"
 }
