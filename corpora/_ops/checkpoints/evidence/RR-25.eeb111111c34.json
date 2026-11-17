@@ -9,7 +9,7 @@
     "menu selection versus command recall b2b enterprise"
   ],
   "fingerprint": "eeb111111c3405c756eeee21d6b00bf44312fd4241f9e8a925a4dc65be687816",
-  "cursor": 9,
+  "cursor": 11,
   "tasks": [
     {
       "id": "search:relevance:openalex:canon:p1:recognition versus recall memory b2b enterprise",
@@ -840,7 +840,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search semantic-scholar critique \"recognition versus recall memory b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
     },
     {
       "id": "search:recency:openalex:critique:p1:recognition versus recall memory b2b enterprise critique criticism",
@@ -868,7 +869,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search openalex critique \"recognition versus recall memory b2b enterprise critique criticism\": api.openalex.org upstream cooldown is 80809s; checkpoint and resume later"
     },
     {
       "id": "search:citation:openalex:critique:p1:recognition versus recall memory b2b enterprise critique criticism",
@@ -18154,7 +18156,7 @@
   "topical_candidates": 0,
   "topical_confirmed": 0,
   "topical_rejected": 0,
-  "s2_throttled": false,
-  "api_calls_spent": 10,
+  "s2_throttled": true,
+  "api_calls_spent": 14,
   "slice_stop_reason": "upstream_quota"
 }
