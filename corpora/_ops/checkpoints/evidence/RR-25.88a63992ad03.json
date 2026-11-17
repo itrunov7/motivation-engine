@@ -9,7 +9,7 @@
     "menu selection versus command recall b2b enterprise"
   ],
   "fingerprint": "88a63992ad03a6bf86450d6035470e2742d1be11cfdf517ab92ea9d0e3f7a387",
-  "cursor": 15,
+  "cursor": 17,
   "tasks": [
     {
       "id": "search:relevance:openalex:canon:p1:recognition versus recall memory b2b enterprise",
@@ -1015,7 +1015,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search semantic-scholar boundary \"recognition versus recall memory b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
     },
     {
       "id": "search:recency:openalex:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
@@ -1043,7 +1044,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search openalex boundary \"recognition versus recall memory b2b enterprise boundary conditions moderators\": api.openalex.org upstream cooldown is 70923s; checkpoint and resume later"
     },
     {
       "id": "search:citation:openalex:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
@@ -18138,7 +18140,7 @@
   "topical_candidates": 0,
   "topical_confirmed": 0,
   "topical_rejected": 0,
-  "s2_throttled": false,
-  "api_calls_spent": 15,
+  "s2_throttled": true,
+  "api_calls_spent": 19,
   "slice_stop_reason": "upstream_quota"
 }
