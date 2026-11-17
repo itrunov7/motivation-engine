@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-17T00:30:20.937Z",
+    "timestamp": "2026-11-17T00:34:27.472Z",
     "status": "partial",
     "params": {
       "mechanism": "RR-25",
@@ -14,21 +14,44 @@
     },
     "records_fetched": 348,
     "files_written": 1,
-    "duration_s": 159.67,
-    "error": "search semantic-scholar canon \"recognition memory advantage retrieval b2b enterprise\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar application \"recognition memory advantage retrieval b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "duration_s": 194.91,
+    "error": "search openalex recent \"recognition versus recall memory b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search semantic-scholar boundary \"recognition versus recall memory b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar canon \"recognition memory advantage retrieval b2b enterprise\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
     "warnings": {
       "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 48,
-      "duration_s": 159.67,
+      "api_calls": 49,
+      "duration_s": 194.91,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-17T00:34:27.472Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 348,
+      "files_written": 1,
+      "duration_s": 194.91,
+      "error": "search openalex recent \"recognition versus recall memory b2b enterprise\": Request failed after 3 attempts: HTTP 429 Too Many Requests for api.openalex.org/works · search semantic-scholar boundary \"recognition versus recall memory b2b enterprise boundary conditions moderators\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search · search semantic-scholar canon \"recognition memory advantage retrieval b2b enterprise\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true,
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 49,
+        "duration_s": 194.91,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-17T00:30:20.937Z",
       "status": "partial",
@@ -454,28 +477,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-16T23:52:38.524Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 327,
-      "files_written": 0,
-      "duration_s": 0.27,
-      "error": "upstream API quota requires a later continuation; logical run RR-25-mwjv2gz6 checkpointed at query 63/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 1,
-        "duration_s": 0.27,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -734,7 +735,7 @@
     {
       "path": "RR-25.json",
       "records": 348,
-      "bytes": 1668239,
+      "bytes": 1668801,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
