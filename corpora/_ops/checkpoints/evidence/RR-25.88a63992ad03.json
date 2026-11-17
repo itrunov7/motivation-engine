@@ -9,7 +9,7 @@
     "menu selection versus command recall b2b enterprise"
   ],
   "fingerprint": "88a63992ad03a6bf86450d6035470e2742d1be11cfdf517ab92ea9d0e3f7a387",
-  "cursor": 27,
+  "cursor": 29,
   "tasks": [
     {
       "id": "search:relevance:openalex:canon:p1:recognition versus recall memory b2b enterprise",
@@ -1381,7 +1381,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search semantic-scholar application \"recognition memory advantage retrieval b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search"
     },
     {
       "id": "search:recency:openalex:application:p1:recognition memory advantage retrieval b2b enterprise applied intervention",
@@ -1409,7 +1410,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search openalex application \"recognition memory advantage retrieval b2b enterprise applied intervention\": api.openalex.org upstream cooldown is 50992s; checkpoint and resume later"
     },
     {
       "id": "search:citation:openalex:application:p1:recognition memory advantage retrieval b2b enterprise applied intervention",
@@ -18171,6 +18173,6 @@
   "topical_confirmed": 0,
   "topical_rejected": 0,
   "s2_throttled": true,
-  "api_calls_spent": 32,
+  "api_calls_spent": 36,
   "slice_stop_reason": "upstream_quota"
 }
