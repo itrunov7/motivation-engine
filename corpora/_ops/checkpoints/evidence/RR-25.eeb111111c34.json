@@ -9,7 +9,7 @@
     "menu selection versus command recall b2b enterprise"
   ],
   "fingerprint": "eeb111111c3405c756eeee21d6b00bf44312fd4241f9e8a925a4dc65be687816",
-  "cursor": 27,
+  "cursor": 29,
   "tasks": [
     {
       "id": "search:relevance:openalex:canon:p1:recognition versus recall memory b2b enterprise",
@@ -1912,14 +1912,56 @@
         "bucket": "relevance",
         "kind": "search",
         "requested": 25,
-        "returned": 0,
-        "unique_returned": 0,
+        "returned": 2,
+        "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "upstream_total_results": null
+        "upstream_total_results": 2
       },
-      "records": []
+      "records": [
+        {
+          "title": "Prospective Memory: An Overview and Synthesis of an Emerging Field",
+          "authors": [
+            "M. McDaniel",
+            "G. Einstein"
+          ],
+          "year": 2007,
+          "venue": null,
+          "doi": "10.4135/9781452225913",
+          "citations": 735,
+          "abstract": null,
+          "openalex_id": null,
+          "openalex_type": null,
+          "referenced_works_count": null,
+          "categories": [],
+          "source_api": "semantic-scholar",
+          "search_angles": [
+            "application"
+          ]
+        },
+        {
+          "title": "EurAsia-ICT 2002: Information and Communication Technology : First EurAsian Conference Shiraz, Iran, October 29-31, 2002 Proceedings",
+          "authors": [
+            "EurAsia-ICT",
+            "Hassan Shafazand",
+            "A. Tjoa"
+          ],
+          "year": 2002,
+          "venue": null,
+          "doi": null,
+          "citations": 1,
+          "abstract": null,
+          "openalex_id": null,
+          "openalex_type": null,
+          "referenced_works_count": null,
+          "categories": [],
+          "source_api": "semantic-scholar",
+          "search_angles": [
+            "application"
+          ]
+        }
+      ]
     },
     {
       "id": "search:recency:openalex:application:p1:recognition memory advantage retrieval b2b enterprise applied intervention",
@@ -1947,7 +1989,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search openalex application \"recognition memory advantage retrieval b2b enterprise applied intervention\": api.openalex.org upstream cooldown is 79472s; checkpoint and resume later"
     },
     {
       "id": "search:citation:openalex:application:p1:recognition memory advantage retrieval b2b enterprise applied intervention",
@@ -18750,6 +18793,18 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
       "cumulative_records": 348
+    },
+    {
+      "query_index": 7,
+      "query_id": "search:relevance:semantic-scholar:application:p1:recognition memory advantage retrieval b2b enterprise applied intervention",
+      "bucket": "relevance",
+      "kind": "search",
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "cumulative_records": 348
     }
   ],
   "expanded_anchor_ids": [],
@@ -18757,6 +18812,6 @@
   "topical_confirmed": 0,
   "topical_rejected": 0,
   "s2_throttled": true,
-  "api_calls_spent": 31,
+  "api_calls_spent": 35,
   "slice_stop_reason": "upstream_quota"
 }
