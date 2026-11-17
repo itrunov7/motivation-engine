@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-17T00:06:35.913Z",
+    "timestamp": "2026-11-17T00:08:23.755Z",
     "status": "partial",
     "params": {
       "mechanism": "RR-25",
@@ -14,21 +14,44 @@
     },
     "records_fetched": 348,
     "files_written": 1,
-    "duration_s": 46.46,
-    "error": "search semantic-scholar application \"recognition memory advantage retrieval b2b enterprise applied intervention\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+    "duration_s": 39.46,
+    "error": "search semantic-scholar critique \"recognition versus recall memory b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
     "warnings": {
       "s2_throttled": true,
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 42,
-      "duration_s": 46.46,
+      "api_calls": 40,
+      "duration_s": 39.46,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-17T00:08:23.755Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 348,
+      "files_written": 1,
+      "duration_s": 39.46,
+      "error": "search semantic-scholar critique \"recognition versus recall memory b2b enterprise critique criticism\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
+      "warnings": {
+        "s2_throttled": true,
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 40,
+        "duration_s": 39.46,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-17T00:06:35.913Z",
       "status": "partial",
@@ -449,28 +472,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-16T23:36:03.591Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 327,
-      "files_written": 0,
-      "duration_s": 0.34,
-      "error": "upstream API quota requires a later continuation; logical run RR-25-mwjv2gz6 checkpointed at query 50/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 1,
-        "duration_s": 0.34,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -729,7 +730,7 @@
     {
       "path": "RR-25.json",
       "records": 348,
-      "bytes": 1667705,
+      "bytes": 1667716,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
