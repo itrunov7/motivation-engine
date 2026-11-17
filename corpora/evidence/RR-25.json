@@ -1,6 +1,6 @@
 {
   "mechanism_id": "RR-25",
-  "fetched_at": "2026-11-17T06:39:06.277Z",
+  "fetched_at": "2026-11-17T09:14:44.640Z",
   "terms_source": "param",
   "terms": [
     "recognition versus recall memory b2b enterprise",
@@ -156,7 +156,7 @@
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 0
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:critique:p1:recognition versus recall memory b2b enterprise critique criticism",
@@ -241,12 +241,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 1,
+      "unique_returned": 1,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "upstream_total_results": 1
     },
     {
       "query_id": "search:recency:openalex:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
@@ -511,12 +511,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 24,
-      "unique_returned": 23,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 24
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:replication:p1:recognition memory advantage retrieval b2b enterprise replication",
@@ -601,12 +601,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 2,
+      "unique_returned": 2,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "upstream_total_results": 2
     },
     {
       "query_id": "search:recency:openalex:cross-domain:p1:recognition memory advantage retrieval b2b enterprise cross-domain generalization",
@@ -876,7 +876,7 @@
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 0
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:boundary:p1:menu selection versus command recall b2b enterprise boundary conditions moderators",
@@ -1145,7 +1145,7 @@
       "unique_returned": 7,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
+      "rolling_novelty_rate": null,
       "upstream_total_results": 32
     },
     {
@@ -1897,69 +1897,24 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
       "upstream_total_results": null
-    },
-    {
-      "query_id": "search:relevance:openalex:canon:p3:recognition versus recall memory b2b enterprise",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "recognition versus recall memory b2b enterprise",
-      "bucket": "relevance",
-      "kind": "search",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "search:recency:openalex:canon:p3:recognition versus recall memory b2b enterprise",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "recognition versus recall memory b2b enterprise",
-      "bucket": "recency",
-      "kind": "search",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "search:citation:openalex:canon:p3:recognition versus recall memory b2b enterprise",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "recognition versus recall memory b2b enterprise",
-      "bucket": "citation",
-      "kind": "search",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
     }
   ],
   "coverage_report": {
     "review_found": true,
     "reviews": [
       {
-        "title": "Retrieval-Enhanced Suggestibility in Forensic Contexts: A meta-analysis of practice effects on eyewitness memory contamination",
-        "doi": "10.11144/javeriana.upsy25.resf",
-        "openalex_id": "W7204470447",
-        "citations": 0,
-        "references_total": 48,
-        "references_resolved": 48,
-        "references_in_corpus": 4,
-        "coverage": 0.0833
+        "title": "The effect of testing versus restudy on retention: A meta-analytic review of the testing effect.",
+        "doi": "10.1037/a0037559",
+        "openalex_id": "W2050255700",
+        "citations": 1195,
+        "references_total": 139,
+        "references_resolved": 138,
+        "references_in_corpus": 2,
+        "coverage": 0.0145
       }
     ],
     "snowball_added": 0,
-    "note": "review \"The effect of testing versus restudy on retention: A meta-analytic review of the testing effect.\" skipped — api.openalex.org upstream cooldown is 62457s; checkpoint and resume later"
+    "note": "review \"Retrieval-Enhanced Suggestibility in Forensic Contexts: A meta-analysis of practice effects on eyewitness memory contamination\" skipped — api.openalex.org upstream cooldown is 53116s; checkpoint and resume later"
   },
   "category_counts": {
     "foundational": 13,
@@ -1972,7 +1927,7 @@
     "viewpoint_spread": [
       {
         "angle": "canon",
-        "queries": 21,
+        "queries": 18,
         "returned": 50,
         "unique_records": 50
       },
@@ -1997,42 +1952,42 @@
       {
         "angle": "replication",
         "queries": 18,
-        "returned": 31,
-        "unique_records": 29
+        "returned": 7,
+        "unique_records": 7
       },
       {
         "angle": "boundary",
         "queries": 18,
-        "returned": 0,
-        "unique_records": 0
+        "returned": 1,
+        "unique_records": 1
       },
       {
         "angle": "cross-domain",
         "queries": 18,
-        "returned": 0,
-        "unique_records": 0
+        "returned": 2,
+        "unique_records": 2
       }
     ],
     "source_spread": [
       {
         "api": "openalex",
-        "queries": 108,
+        "queries": 105,
         "returned": 0,
         "unique_records": 0
       },
       {
         "api": "semantic-scholar",
         "queries": 21,
-        "returned": 135,
-        "unique_records": 131
+        "returned": 114,
+        "unique_records": 111
       }
     ],
-    "recent_records": 66,
-    "recency_rate": 0.5038,
+    "recent_records": 65,
+    "recency_rate": 0.5856,
     "novelty": {
       "previous_corpus_records": 362,
-      "unique_records": 131,
-      "already_in_corpus": 131,
+      "unique_records": 111,
+      "already_in_corpus": 111,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -2040,7 +1995,7 @@
     }
   },
   "saturation_report": {
-    "queries_issued": 11,
+    "queries_issued": 10,
     "records_added": 0,
     "novelty_curve": [
       {
@@ -2057,11 +2012,11 @@
       },
       {
         "query_index": 2,
-        "query_id": "search:relevance:semantic-scholar:critique:p1:recognition versus recall memory b2b enterprise critique criticism",
+        "query_id": "search:relevance:semantic-scholar:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
         "bucket": "relevance",
         "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -2093,11 +2048,11 @@
       },
       {
         "query_index": 5,
-        "query_id": "search:relevance:semantic-scholar:replication:p1:recognition memory advantage retrieval b2b enterprise replication",
+        "query_id": "search:relevance:semantic-scholar:cross-domain:p1:recognition memory advantage retrieval b2b enterprise cross-domain generalization",
         "bucket": "relevance",
         "kind": "search",
-        "returned": 24,
-        "unique_returned": 23,
+        "returned": 2,
+        "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -2129,18 +2084,6 @@
       },
       {
         "query_index": 8,
-        "query_id": "search:relevance:semantic-scholar:boundary:p1:menu selection versus command recall b2b enterprise boundary conditions moderators",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 362
-      },
-      {
-        "query_index": 9,
         "query_id": "search:relevance:semantic-scholar:canon:p2:recognition versus recall memory b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -2152,7 +2095,7 @@
         "cumulative_records": 362
       },
       {
-        "query_index": 10,
+        "query_index": 9,
         "query_id": "search:relevance:semantic-scholar:replication:p2:recognition versus recall memory b2b enterprise replication",
         "bucket": "relevance",
         "kind": "search",
@@ -2160,11 +2103,11 @@
         "unique_returned": 7,
         "records_added": 0,
         "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
+        "rolling_novelty_rate": null,
         "cumulative_records": 362
       },
       {
-        "query_index": 11,
+        "query_index": 10,
         "query_id": "search:relevance:semantic-scholar:recent:p2:recognition memory advantage retrieval b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -2180,9 +2123,9 @@
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 43,
-      "recency": 43,
-      "citation": 43
+      "relevance": 42,
+      "recency": 42,
+      "citation": 42
     },
     "topical_candidates": 0,
     "topical_confirmed": 0,
@@ -2190,12 +2133,12 @@
     "topical_confirmation_rate": 0,
     "graph_anchors_expanded": 0,
     "field_union_estimate": {
-      "estimate": 913,
+      "estimate": 889,
       "method": "sample_overlap_adjusted_union",
-      "measured_queries": 9,
-      "total_search_queries": 11,
-      "summed_upstream_results": 934,
-      "observed_sample_multiplicity": 1.0229
+      "measured_queries": 8,
+      "total_search_queries": 10,
+      "summed_upstream_results": 913,
+      "observed_sample_multiplicity": 1.027
     },
     "saturation_reached": false,
     "stop_reason": "call_cap",
