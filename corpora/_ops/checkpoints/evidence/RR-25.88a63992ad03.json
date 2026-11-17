@@ -9,7 +9,7 @@
     "menu selection versus command recall b2b enterprise"
   ],
   "fingerprint": "88a63992ad03a6bf86450d6035470e2742d1be11cfdf517ab92ea9d0e3f7a387",
-  "cursor": 45,
+  "cursor": 47,
   "tasks": [
     {
       "id": "search:relevance:openalex:canon:p1:recognition versus recall memory b2b enterprise",
@@ -2515,14 +2515,56 @@
         "bucket": "relevance",
         "kind": "search",
         "requested": 25,
-        "returned": 0,
-        "unique_returned": 0,
+        "returned": 2,
+        "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
-        "upstream_total_results": null
+        "upstream_total_results": 2
       },
-      "records": []
+      "records": [
+        {
+          "title": "Command memorization: spatial positions versus directional gestures",
+          "authors": [
+            "Bruno Fruchard",
+            "É. Lecolinet",
+            "O. Chapuis"
+          ],
+          "year": 2018,
+          "venue": "Interaction Homme-Machine",
+          "doi": "10.1145/3286689.3286700",
+          "citations": 1,
+          "abstract": "To execute a command, a user can make a selection in a menu using pointing actions, or, for example, use shortcuts such as gestures. To go faster, she can learn the positions to point or gestures to perform. In this paper, we present a study comparing learning of positions or directions to select commands. The results obtained reveal similar recall rates, with a slight advantage for positions. The qualitative results suggest an advantage of positions over directions for physical and mental demands. Finally, the study of memorization strategies developed by the subjects provides mnemonic methods that can be useful for designers and users.",
+          "openalex_id": null,
+          "openalex_type": null,
+          "referenced_works_count": null,
+          "categories": [],
+          "source_api": "semantic-scholar",
+          "search_angles": [
+            "recent"
+          ]
+        },
+        {
+          "title": "Multifactor statistical analysis of order success as a tool for optimization of automated resource planning and control systems",
+          "authors": [
+            "S. Miroshnychenko",
+            "O. Vovna"
+          ],
+          "year": 2025,
+          "venue": "Technical Sciences",
+          "doi": "10.31498/2225-6733.50.2025.336372",
+          "citations": 0,
+          "abstract": "Effective resource management remains a critical challenge in automated enterprise systems. This study addresses predicting order success in B2B segments through multifactor statistical analysis methodology for optimizing automated resource management systems based on historical ERP data. The methodology encompasses automatic selection of statistical tests based on data distribution characteristics. Data preprocessing includes outlier detection using interquartile range methods, missing value imputation, and stratified splitting. Normality assessment uses Shapiro-Wilk, D'Agostino-Pearson, and Anderson-Darling tests, with parametric t-tests for normal distributions and Mann-Whitney U tests for non-normal data. The study analyzed historical B2B order data examining 19 predictor variables across order characteristics, partner metrics, communication patterns, and temporal factors. Statistical significance was evaluated at α≤0,05, with effect sizes calculated using Cohen's d and Area Under Curve. The predictive model employs weighted voting where significant features contribute to probability calculation based on statistical weight. Results identified seventeen statistically significant predictors. Most influential factors include order message count, partner success rate, and order changes. The model achieved accuracy of 65,57%, precision of 76,94%, recall of 64,89%, F1-score of 70,40%, and ROC AUC of 0,7224, indicating satisfactory performance for business applications. Communication factors emerge as strongest predictors, with successful orders averaging 10,08 messages versus 6,09 for unsuccessful orders. Partner historical success rates show substantial predictive power, with successful orders associated with 67,46% partner success rates versus 45,90% for unsuccessful orders. The theoretical contribution involves developing adaptive statistical methodology maintaining interpretability while adjusting to data characteristics. Practical applications include inventory optimization, order prioritization, and partnership development. Future directions include machine learning integration and semantic analysis of communication data",
+          "openalex_id": null,
+          "openalex_type": null,
+          "referenced_works_count": null,
+          "categories": [],
+          "source_api": "semantic-scholar",
+          "search_angles": [
+            "recent"
+          ]
+        }
+      ]
     },
     {
       "id": "search:recency:openalex:recent:p1:menu selection versus command recall b2b enterprise",
@@ -2550,7 +2592,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search openalex recent \"menu selection versus command recall b2b enterprise\": api.openalex.org upstream cooldown is 59051s; checkpoint and resume later"
     },
     {
       "id": "search:citation:openalex:recent:p1:menu selection versus command recall b2b enterprise",
@@ -18840,6 +18883,18 @@
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
       "cumulative_records": 362
+    },
+    {
+      "query_index": 6,
+      "query_id": "search:relevance:semantic-scholar:recent:p1:menu selection versus command recall b2b enterprise",
+      "bucket": "relevance",
+      "kind": "search",
+      "returned": 2,
+      "unique_returned": 2,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "cumulative_records": 362
     }
   ],
   "expanded_anchor_ids": [],
@@ -18847,6 +18902,6 @@
   "topical_confirmed": 0,
   "topical_rejected": 0,
   "s2_throttled": true,
-  "api_calls_spent": 54,
+  "api_calls_spent": 57,
   "slice_stop_reason": "upstream_quota"
 }
