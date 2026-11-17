@@ -1,6 +1,6 @@
 {
   "mechanism_id": "RR-25",
-  "fetched_at": "2026-11-17T01:18:15.389Z",
+  "fetched_at": "2026-11-17T01:20:11.155Z",
   "terms_source": "param",
   "terms": [
     "recognition versus recall memory b2b enterprise",
@@ -241,12 +241,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": 1
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
@@ -421,12 +421,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
+      "returned": 2,
+      "unique_returned": 2,
       "records_added": 0,
       "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": 2
     },
     {
       "query_id": "search:recency:openalex:application:p1:recognition memory advantage retrieval b2b enterprise applied intervention",
@@ -539,8 +539,8 @@
       {
         "angle": "application",
         "queries": 6,
-        "returned": 0,
-        "unique_records": 0
+        "returned": 2,
+        "unique_records": 2
       },
       {
         "angle": "critique",
@@ -557,8 +557,8 @@
       {
         "angle": "boundary",
         "queries": 3,
-        "returned": 1,
-        "unique_records": 1
+        "returned": 0,
+        "unique_records": 0
       },
       {
         "angle": "cross-domain",
@@ -577,16 +577,16 @@
       {
         "api": "semantic-scholar",
         "queries": 5,
-        "returned": 26,
-        "unique_records": 26
+        "returned": 27,
+        "unique_records": 27
       }
     ],
-    "recent_records": 20,
-    "recency_rate": 0.7692,
+    "recent_records": 19,
+    "recency_rate": 0.7037,
     "novelty": {
       "previous_corpus_records": 348,
-      "unique_records": 26,
-      "already_in_corpus": 26,
+      "unique_records": 27,
+      "already_in_corpus": 27,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -767,18 +767,6 @@
       },
       {
         "query_index": 15,
-        "query_id": "search:relevance:semantic-scholar:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 348
-      },
-      {
-        "query_index": 16,
         "query_id": "search:recency:openalex:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
         "bucket": "recency",
         "kind": "search",
@@ -790,7 +778,7 @@
         "cumulative_records": 348
       },
       {
-        "query_index": 17,
+        "query_index": 16,
         "query_id": "search:citation:openalex:boundary:p1:recognition versus recall memory b2b enterprise boundary conditions moderators",
         "bucket": "citation",
         "kind": "search",
@@ -802,7 +790,7 @@
         "cumulative_records": 348
       },
       {
-        "query_index": 18,
+        "query_index": 17,
         "query_id": "search:relevance:openalex:cross-domain:p1:recognition versus recall memory b2b enterprise cross-domain generalization",
         "bucket": "relevance",
         "kind": "search",
@@ -814,7 +802,7 @@
         "cumulative_records": 348
       },
       {
-        "query_index": 19,
+        "query_index": 18,
         "query_id": "search:recency:openalex:cross-domain:p1:recognition versus recall memory b2b enterprise cross-domain generalization",
         "bucket": "recency",
         "kind": "search",
@@ -826,7 +814,7 @@
         "cumulative_records": 348
       },
       {
-        "query_index": 20,
+        "query_index": 19,
         "query_id": "search:citation:openalex:cross-domain:p1:recognition versus recall memory b2b enterprise cross-domain generalization",
         "bucket": "citation",
         "kind": "search",
@@ -838,7 +826,7 @@
         "cumulative_records": 348
       },
       {
-        "query_index": 21,
+        "query_index": 20,
         "query_id": "search:relevance:semantic-scholar:canon:p1:recognition memory advantage retrieval b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -850,7 +838,7 @@
         "cumulative_records": 348
       },
       {
-        "query_index": 22,
+        "query_index": 21,
         "query_id": "search:recency:openalex:canon:p1:recognition memory advantage retrieval b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -862,7 +850,7 @@
         "cumulative_records": 348
       },
       {
-        "query_index": 23,
+        "query_index": 22,
         "query_id": "search:citation:openalex:canon:p1:recognition memory advantage retrieval b2b enterprise",
         "bucket": "citation",
         "kind": "search",
@@ -874,7 +862,7 @@
         "cumulative_records": 348
       },
       {
-        "query_index": 24,
+        "query_index": 23,
         "query_id": "search:relevance:openalex:recent:p1:recognition memory advantage retrieval b2b enterprise",
         "bucket": "relevance",
         "kind": "search",
@@ -886,7 +874,7 @@
         "cumulative_records": 348
       },
       {
-        "query_index": 25,
+        "query_index": 24,
         "query_id": "search:recency:openalex:recent:p1:recognition memory advantage retrieval b2b enterprise",
         "bucket": "recency",
         "kind": "search",
@@ -898,12 +886,24 @@
         "cumulative_records": 348
       },
       {
-        "query_index": 26,
+        "query_index": 25,
         "query_id": "search:citation:openalex:recent:p1:recognition memory advantage retrieval b2b enterprise",
         "bucket": "citation",
         "kind": "search",
         "returned": 0,
         "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 348
+      },
+      {
+        "query_index": 26,
+        "query_id": "search:relevance:semantic-scholar:application:p1:recognition memory advantage retrieval b2b enterprise applied intervention",
+        "bucket": "relevance",
+        "kind": "search",
+        "returned": 2,
+        "unique_returned": 2,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -976,7 +976,7 @@
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 12,
       "total_search_queries": 30,
-      "summed_upstream_results": 338,
+      "summed_upstream_results": 339,
       "observed_sample_multiplicity": 1
     },
     "saturation_reached": true,
