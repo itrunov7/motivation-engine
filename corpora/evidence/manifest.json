@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-17T01:52:03.225Z",
+    "timestamp": "2026-11-17T01:53:02.652Z",
     "status": "partial",
     "params": {
       "mechanism": "RR-25",
@@ -15,7 +15,7 @@
     "records_fetched": 348,
     "files_written": 0,
     "duration_s": 0.4,
-    "error": "upstream API quota requires a later continuation; logical run RR-25-mwk0hdox checkpointed at query 25/630",
+    "error": "upstream API quota requires a later continuation; logical run RR-25-mwk0hdox checkpointed at query 26/630",
     "warnings": {
       "resume_required": true
     },
@@ -28,6 +28,28 @@
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-17T01:53:02.652Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 348,
+      "files_written": 0,
+      "duration_s": 0.4,
+      "error": "upstream API quota requires a later continuation; logical run RR-25-mwk0hdox checkpointed at query 26/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.4,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-17T01:52:03.225Z",
       "status": "partial",
@@ -440,27 +462,6 @@
       "cost": {
         "api_calls": 38,
         "duration_s": 34.02,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-17T01:21:48.907Z",
-      "status": "success",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 348,
-      "files_written": 1,
-      "duration_s": 43.56,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 42,
-        "duration_s": 43.56,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
