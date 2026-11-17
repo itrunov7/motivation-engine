@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-17T04:41:18.495Z",
+    "timestamp": "2026-11-17T04:42:59.133Z",
     "status": "partial",
     "params": {
       "mechanism": "RR-25",
@@ -15,7 +15,7 @@
     "records_fetched": 362,
     "files_written": 0,
     "duration_s": 0.32,
-    "error": "upstream API quota requires a later continuation; logical run RR-25-mwk5zlao checkpointed at query 36/630",
+    "error": "upstream API quota requires a later continuation; logical run RR-25-mwk5zlao checkpointed at query 37/630",
     "warnings": {
       "resume_required": true
     },
@@ -28,6 +28,28 @@
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-17T04:42:59.133Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      },
+      "records_fetched": 362,
+      "files_written": 0,
+      "duration_s": 0.32,
+      "error": "upstream API quota requires a later continuation; logical run RR-25-mwk5zlao checkpointed at query 37/630",
+      "warnings": {
+        "resume_required": true
+      },
+      "cost": {
+        "api_calls": 1,
+        "duration_s": 0.32,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-17T04:41:18.495Z",
       "status": "partial",
@@ -441,28 +463,6 @@
       "cost": {
         "api_calls": 1,
         "duration_s": 0.12,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-17T04:14:08.923Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 362,
-      "files_written": 0,
-      "duration_s": 0.28,
-      "error": "upstream API quota requires a later continuation; logical run RR-25-mwk5zlao checkpointed at query 13/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 1,
-        "duration_s": 0.28,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
