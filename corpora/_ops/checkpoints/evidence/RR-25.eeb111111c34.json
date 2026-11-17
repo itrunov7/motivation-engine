@@ -9,7 +9,7 @@
     "menu selection versus command recall b2b enterprise"
   ],
   "fingerprint": "eeb111111c3405c756eeee21d6b00bf44312fd4241f9e8a925a4dc65be687816",
-  "cursor": 111,
+  "cursor": 113,
   "tasks": [
     {
       "id": "search:relevance:openalex:canon:p1:recognition versus recall memory b2b enterprise",
@@ -6211,7 +6211,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search semantic-scholar application \"menu selection versus command recall b2b enterprise applied intervention\": HTTP 400 Bad Request for api.semanticscholar.org/graph/v1/paper/search"
     },
     {
       "id": "search:recency:openalex:application:p2:menu selection versus command recall b2b enterprise applied intervention",
@@ -6239,7 +6240,8 @@
         "rolling_novelty_rate": null,
         "upstream_total_results": null
       },
-      "records": []
+      "records": [],
+      "error": "search openalex application \"menu selection versus command recall b2b enterprise applied intervention\": api.openalex.org upstream cooldown is 73214s; checkpoint and resume later"
     },
     {
       "id": "search:citation:openalex:application:p2:menu selection versus command recall b2b enterprise applied intervention",
@@ -20819,6 +20821,6 @@
   "topical_confirmed": 0,
   "topical_rejected": 0,
   "s2_throttled": true,
-  "api_calls_spent": 125,
+  "api_calls_spent": 127,
   "slice_stop_reason": "upstream_quota"
 }
