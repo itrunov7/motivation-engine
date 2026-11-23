@@ -6,28 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-23T20:25:35.835Z",
-    "status": "partial",
+    "timestamp": "2026-11-23T20:28:07.429Z",
+    "status": "success",
     "params": {
       "mechanism": "RR-25",
       "terms": ""
     },
     "records_fetched": 365,
     "files_written": 1,
-    "duration_s": 45.79,
-    "error": "search openalex canon \"recognition versus recall memory\": api.openalex.org upstream cooldown is 12955s; checkpoint and resume later",
+    "duration_s": 45.32,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 47,
-      "duration_s": 45.79,
+      "api_calls": 46,
+      "duration_s": 45.32,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-23T20:28:07.429Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 365,
+      "files_written": 1,
+      "duration_s": 45.32,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 46,
+        "duration_s": 45.32,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-23T20:25:35.835Z",
       "status": "partial",
@@ -432,29 +452,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-23T19:46:05.456Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": ""
-      },
-      "records_fetched": 365,
-      "files_written": 1,
-      "duration_s": 52.27,
-      "error": "search openalex canon \"recognition versus recall memory\": api.openalex.org upstream cooldown is 15349s; checkpoint and resume later · search semantic-scholar recent \"recognition versus recall memory\": Request failed after 3 attempts: HTTP 429  for api.semanticscholar.org/graph/v1/paper/search",
-      "warnings": {
-        "s2_throttled": true,
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 50,
-        "duration_s": 52.27,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -713,7 +710,7 @@
     {
       "path": "RR-25.json",
       "records": 365,
-      "bytes": 1723869,
+      "bytes": 1722689,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
