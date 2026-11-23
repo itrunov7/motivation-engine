@@ -6,28 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-23T20:45:53.808Z",
-    "status": "partial",
+    "timestamp": "2026-11-23T20:48:10.925Z",
+    "status": "success",
     "params": {
       "mechanism": "RR-25",
       "terms": ""
     },
     "records_fetched": 365,
     "files_written": 1,
-    "duration_s": 45.68,
-    "error": "search openalex canon \"recognition versus recall memory\": api.openalex.org upstream cooldown is 11736s; checkpoint and resume later",
+    "duration_s": 45.62,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
-      "api_calls": 47,
-      "duration_s": 45.68,
+      "api_calls": 46,
+      "duration_s": 45.62,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-23T20:48:10.925Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 365,
+      "files_written": 1,
+      "duration_s": 45.62,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 46,
+        "duration_s": 45.62,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-23T20:45:53.808Z",
       "status": "partial",
@@ -432,27 +452,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-23T20:05:08.526Z",
-      "status": "success",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": ""
-      },
-      "records_fetched": 365,
-      "files_written": 1,
-      "duration_s": 45.35,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 46,
-        "duration_s": 45.35,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -711,7 +710,7 @@
     {
       "path": "RR-25.json",
       "records": 365,
-      "bytes": 1723869,
+      "bytes": 1722689,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
