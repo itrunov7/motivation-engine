@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-23T20:34:56.008Z",
+    "timestamp": "2026-11-23T20:37:10.461Z",
     "status": "success",
     "params": {
       "mechanism": "RR-25",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 365,
     "files_written": 1,
-    "duration_s": 45.44,
+    "duration_s": 45.63,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 46,
-      "duration_s": 45.44,
+      "duration_s": 45.63,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-23T20:37:10.461Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 365,
+      "files_written": 1,
+      "duration_s": 45.63,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 46,
+        "duration_s": 45.63,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-23T20:34:56.008Z",
       "status": "success",
@@ -426,28 +447,6 @@
       "cost": {
         "api_calls": 44,
         "duration_s": 43.32,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-23T19:54:28.749Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": ""
-      },
-      "records_fetched": 365,
-      "files_written": 0,
-      "duration_s": 2.07,
-      "error": "upstream API quota requires a later continuation; logical run RR-25-mwtoplat checkpointed at query 3/1090",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 3,
-        "duration_s": 2.07,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
