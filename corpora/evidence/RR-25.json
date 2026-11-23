@@ -1,6 +1,6 @@
 {
   "mechanism_id": "RR-25",
-  "fetched_at": "2026-11-23T19:42:47.128Z",
+  "fetched_at": "2026-11-23T19:46:57.709Z",
   "terms_source": "record",
   "terms": [
     "recognition versus recall memory",
@@ -18,12 +18,12 @@
       "bucket": "relevance",
       "kind": "search",
       "requested": 25,
-      "returned": 25,
-      "unique_returned": 25,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
-      "upstream_total_results": 613
+      "upstream_total_results": null
     },
     {
       "query_id": "search:recency:openalex:canon:p1:recognition versus recall memory",
@@ -56,10 +56,25 @@
       "upstream_total_results": 613
     },
     {
-      "query_id": "graph:backward-reference:W2169424774",
+      "query_id": "search:relevance:semantic-scholar:recent:p1:recognition versus recall memory",
+      "api": "semantic-scholar",
+      "angle": "recent",
+      "term": "recognition versus recall memory",
+      "bucket": "relevance",
+      "kind": "search",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W7238075441",
       "api": "openalex",
       "angle": "canon",
-      "term": "Visual Memory in Unilateral Spatial Neglect: Immediate Recall versus Delayed Recognition",
+      "term": "Non-Random Memory Recall, Selective Interpersonal Attraction, Reciprocal Devotee Synchronization, and Social-Media Visibility Governed by Hormonal Release Algorithms (V9)",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
@@ -71,27 +86,27 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W2169424774",
+      "query_id": "graph:backward-reference:W2100377190",
       "api": "openalex",
       "angle": "canon",
-      "term": "Visual Memory in Unilateral Spatial Neglect: Immediate Recall versus Delayed Recognition",
+      "term": "Modeling hippocampal and neocortical contributions to recognition memory: A complementary-learning-systems approach.",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2100377190",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Modeling hippocampal and neocortical contributions to recognition memory: A complementary-learning-systems approach.",
       "bucket": "recency",
       "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": null,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W2162062761",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Effects of repeated collaborative retrieval on individual memory vary as a function of recall versus recognition tasks",
-      "bucket": "citation",
-      "kind": "backward-reference",
       "requested": 25,
       "returned": 2,
       "unique_returned": 2,
@@ -101,10 +116,25 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W2162062761",
+      "query_id": "graph:backward-reference:W2132361590",
       "api": "openalex",
       "angle": "canon",
-      "term": "Effects of repeated collaborative retrieval on individual memory vary as a function of recall versus recognition tasks",
+      "term": "Age-Related Differences in Neural Activity during Memory Encoding and Retrieval: A Positron Emission Tomography Study",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": null,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W2132361590",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Age-Related Differences in Neural Activity during Memory Encoding and Retrieval: A Positron Emission Tomography Study",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
@@ -116,10 +146,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W2068424080",
+      "query_id": "graph:backward-reference:W2163072248",
       "api": "openalex",
       "angle": "canon",
-      "term": "Children's Memory for Picture versus Word Responses in Paired Associates: Recall and Recognition Tests",
+      "term": "Increased Positive Versus Negative Affective Perception and Memory in Healthy Volunteers Following Selective Serotonin and Norepinephrine Reuptake Inhibition",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
@@ -131,25 +161,25 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W2068424080",
+      "query_id": "graph:forward-citation:W2163072248",
       "api": "openalex",
       "angle": "canon",
-      "term": "Children's Memory for Picture versus Word Responses in Paired Associates: Recall and Recognition Tests",
+      "term": "Increased Positive Versus Negative Affective Perception and Memory in Healthy Volunteers Following Selective Serotonin and Norepinephrine Reuptake Inhibition",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": null,
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W4380893782",
+      "query_id": "graph:backward-reference:W2047226578",
       "api": "openalex",
       "angle": "canon",
-      "term": "Free recall versus combined cued recall and recognition to detect true memory impairment on the Montreal Cognitive Assessment",
+      "term": "The nature of memory impairments in multiple sclerosis: Acquisition versus retrieval",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
@@ -161,10 +191,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W4380893782",
+      "query_id": "graph:forward-citation:W2047226578",
       "api": "openalex",
       "angle": "canon",
-      "term": "Free recall versus combined cued recall and recognition to detect true memory impairment on the Montreal Cognitive Assessment",
+      "term": "The nature of memory impairments in multiple sclerosis: Acquisition versus retrieval",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
@@ -176,10 +206,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W3107744300",
+      "query_id": "graph:backward-reference:W2114174143",
       "api": "openalex",
       "angle": "canon",
-      "term": "Enhanced memory for sentences read aloud conversationally versus clearly: Evidence from sentence recognition memory and recall",
+      "term": "User Control and Structural Isomorphism or Disorientation and Cognitive Load? Learning From the Web Versus Print",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
@@ -191,10 +221,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W3107744300",
+      "query_id": "graph:forward-citation:W2114174143",
       "api": "openalex",
       "angle": "canon",
-      "term": "Enhanced memory for sentences read aloud conversationally versus clearly: Evidence from sentence recognition memory and recall",
+      "term": "User Control and Structural Isomorphism or Disorientation and Cognitive Load? Learning From the Web Versus Print",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
@@ -206,70 +236,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W3119756513",
+      "query_id": "graph:backward-reference:W2063581074",
       "api": "openalex",
       "angle": "canon",
-      "term": "A Comparative Analysis of Psychometric Properties of Memory Tasks and Their Relationships with Higher-Order Thinking Skills: Recognition Versus Recall",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W3119756513",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "A Comparative Analysis of Psychometric Properties of Memory Tasks and Their Relationships with Higher-Order Thinking Skills: Recognition Versus Recall",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W4313312338",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Clinical value of the Montreal Cognitive Assessment free recall condition alone versus cued recall and recognition conditions to detect true memory impairment",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 4,
-      "unique_returned": 4,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W4313312338",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Clinical value of the Montreal Cognitive Assessment free recall condition alone versus cued recall and recognition conditions to detect true memory impairment",
-      "bucket": "recency",
-      "kind": "forward-citation",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W176103531",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Recognition versus Recall",
+      "term": "When does testing enhance retention? A distribution-based interpretation of retrieval as a memory modifier.",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
@@ -281,10 +251,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W176103531",
+      "query_id": "graph:forward-citation:W2063581074",
       "api": "openalex",
       "angle": "canon",
-      "term": "Recognition versus Recall",
+      "term": "When does testing enhance retention? A distribution-based interpretation of retrieval as a memory modifier.",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
@@ -326,25 +296,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W4387440511",
+      "query_id": "graph:forward-citation:W7238075441",
       "api": "openalex",
       "angle": "canon",
-      "term": "B - 75 Recall Versus Recognition? A Systematic Review and Meta-Analysis of Recall Versus Recognition Testing to Differentiate Diagnostic Groups",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W4387440511",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "B - 75 Recall Versus Recognition? A Systematic Review and Meta-Analysis of Recall Versus Recognition Testing to Differentiate Diagnostic Groups",
+      "term": "Non-Random Memory Recall, Selective Interpersonal Attraction, Reciprocal Devotee Synchronization, and Social-Media Visibility Governed by Hormonal Release Algorithms (V9)",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
@@ -356,10 +311,40 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W1980554723",
+      "query_id": "graph:backward-reference:W7223168660",
       "api": "openalex",
       "angle": "canon",
-      "term": "BRIEF REPORT Bilinguals' recall and recognition of emotion words",
+      "term": "Patterns of attentional and recognition-memory processing of emotional information among Chinese middle school students with different exercise volumes",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W7223168660",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Patterns of attentional and recognition-memory processing of emotional information among Chinese middle school students with different exercise volumes",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W7214710613",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Misinformation resistance in memory reports of one instance of a repeated event: Post-warnings reduce misinformation endorsement in recognition",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
@@ -371,12 +356,87 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W1980554723",
+      "query_id": "graph:forward-citation:W7214710613",
       "api": "openalex",
       "angle": "canon",
-      "term": "BRIEF REPORT Bilinguals' recall and recognition of emotion words",
+      "term": "Misinformation resistance in memory reports of one instance of a repeated event: Post-warnings reduce misinformation endorsement in recognition",
       "bucket": "recency",
       "kind": "forward-citation",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W7204470447",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Retrieval-Enhanced Suggestibility in Forensic Contexts: A meta-analysis of practice effects on eyewitness memory contamination",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 3,
+      "unique_returned": 3,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W7204470447",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Retrieval-Enhanced Suggestibility in Forensic Contexts: A meta-analysis of practice effects on eyewitness memory contamination",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W7169851714",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Memory performance, hippocampal volumes and memory fMRI in frontal versus temporal lobe epilepsy",
+      "bucket": "citation",
+      "kind": "backward-reference",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:forward-citation:W7169851714",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Memory performance, hippocampal volumes and memory fMRI in frontal versus temporal lobe epilepsy",
+      "bucket": "recency",
+      "kind": "forward-citation",
+      "requested": 25,
+      "returned": 0,
+      "unique_returned": 0,
+      "records_added": 0,
+      "novelty_rate": 0,
+      "rolling_novelty_rate": 0,
+      "upstream_total_results": null
+    },
+    {
+      "query_id": "graph:backward-reference:W7167808384",
+      "api": "openalex",
+      "angle": "canon",
+      "term": "Examination of Retention and Recall of Polytheistic Versus Monotheistic Religious Concepts",
+      "bucket": "citation",
+      "kind": "backward-reference",
       "requested": 25,
       "returned": 1,
       "unique_returned": 1,
@@ -386,25 +446,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W2103896122",
+      "query_id": "graph:forward-citation:W7167808384",
       "api": "openalex",
       "angle": "canon",
-      "term": "Involvement With the Media: Recall Versus Recognition of Election Information",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 0,
-      "unique_returned": 0,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:forward-citation:W2103896122",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Involvement With the Media: Recall Versus Recognition of Election Information",
+      "term": "Examination of Retention and Recall of Polytheistic Versus Monotheistic Religious Concepts",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
@@ -416,10 +461,10 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:backward-reference:W2100377190",
+      "query_id": "graph:backward-reference:W7161240542",
       "api": "openalex",
       "angle": "canon",
-      "term": "Modeling hippocampal and neocortical contributions to recognition memory: A complementary-learning-systems approach.",
+      "term": "The Problem of Common False-Alarm Rates and the Informational Asymmetry When Comparing Pure and Mixed Lists in Recognition Memory: Reconsidering the List-Strength Effect",
       "bucket": "citation",
       "kind": "backward-reference",
       "requested": 25,
@@ -431,30 +476,15 @@
       "upstream_total_results": null
     },
     {
-      "query_id": "graph:forward-citation:W2100377190",
+      "query_id": "graph:forward-citation:W7161240542",
       "api": "openalex",
       "angle": "canon",
-      "term": "Modeling hippocampal and neocortical contributions to recognition memory: A complementary-learning-systems approach.",
+      "term": "The Problem of Common False-Alarm Rates and the Informational Asymmetry When Comparing Pure and Mixed Lists in Recognition Memory: Reconsidering the List-Strength Effect",
       "bucket": "recency",
       "kind": "forward-citation",
       "requested": 25,
-      "returned": 2,
-      "unique_returned": 2,
-      "records_added": 0,
-      "novelty_rate": 0,
-      "rolling_novelty_rate": 0,
-      "upstream_total_results": null
-    },
-    {
-      "query_id": "graph:backward-reference:W2028280316",
-      "api": "openalex",
-      "angle": "canon",
-      "term": "Recall and recognition of brand names: A comparison of word and nonword name types",
-      "bucket": "citation",
-      "kind": "backward-reference",
-      "requested": 25,
-      "returned": 1,
-      "unique_returned": 1,
+      "returned": 0,
+      "unique_returned": 0,
       "records_added": 0,
       "novelty_rate": 0,
       "rolling_novelty_rate": 0,
@@ -499,24 +529,36 @@
       {
         "angle": "canon",
         "queries": 3,
-        "returned": 75,
-        "unique_records": 71
+        "returned": 50,
+        "unique_records": 49
+      },
+      {
+        "angle": "recent",
+        "queries": 1,
+        "returned": 0,
+        "unique_records": 0
       }
     ],
     "source_spread": [
       {
         "api": "openalex",
         "queries": 3,
-        "returned": 75,
-        "unique_records": 71
+        "returned": 50,
+        "unique_records": 49
+      },
+      {
+        "api": "semantic-scholar",
+        "queries": 1,
+        "returned": 0,
+        "unique_records": 0
       }
     ],
-    "recent_records": 29,
-    "recency_rate": 0.4085,
+    "recent_records": 24,
+    "recency_rate": 0.4898,
     "novelty": {
       "previous_corpus_records": 365,
-      "unique_records": 71,
-      "already_in_corpus": 71,
+      "unique_records": 49,
+      "already_in_corpus": 49,
       "new_records": 0,
       "novelty_rate": 0,
       "low_novelty": true,
@@ -529,18 +571,6 @@
     "novelty_curve": [
       {
         "query_index": 1,
-        "query_id": "search:relevance:openalex:canon:p1:recognition versus recall memory",
-        "bucket": "relevance",
-        "kind": "search",
-        "returned": 25,
-        "unique_returned": 25,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 365
-      },
-      {
-        "query_index": 2,
         "query_id": "search:recency:openalex:canon:p1:recognition versus recall memory",
         "bucket": "recency",
         "kind": "search",
@@ -552,7 +582,7 @@
         "cumulative_records": 365
       },
       {
-        "query_index": 3,
+        "query_index": 2,
         "query_id": "search:citation:openalex:canon:p1:recognition versus recall memory",
         "bucket": "citation",
         "kind": "search",
@@ -564,8 +594,20 @@
         "cumulative_records": 365
       },
       {
+        "query_index": 3,
+        "query_id": "graph:backward-reference:W7238075441",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 365
+      },
+      {
         "query_index": 4,
-        "query_id": "graph:backward-reference:W2169424774",
+        "query_id": "graph:backward-reference:W2100377190",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 0,
@@ -577,21 +619,9 @@
       },
       {
         "query_index": 5,
-        "query_id": "graph:forward-citation:W2169424774",
+        "query_id": "graph:forward-citation:W2100377190",
         "bucket": "recency",
         "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": null,
-        "cumulative_records": 365
-      },
-      {
-        "query_index": 6,
-        "query_id": "graph:backward-reference:W2162062761",
-        "bucket": "citation",
-        "kind": "backward-reference",
         "returned": 2,
         "unique_returned": 2,
         "records_added": 0,
@@ -600,8 +630,20 @@
         "cumulative_records": 365
       },
       {
+        "query_index": 6,
+        "query_id": "graph:backward-reference:W2132361590",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": null,
+        "cumulative_records": 365
+      },
+      {
         "query_index": 7,
-        "query_id": "graph:forward-citation:W2162062761",
+        "query_id": "graph:forward-citation:W2132361590",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -613,7 +655,7 @@
       },
       {
         "query_index": 8,
-        "query_id": "graph:backward-reference:W2068424080",
+        "query_id": "graph:backward-reference:W2163072248",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 0,
@@ -625,11 +667,11 @@
       },
       {
         "query_index": 9,
-        "query_id": "graph:forward-citation:W2068424080",
+        "query_id": "graph:forward-citation:W2163072248",
         "bucket": "recency",
         "kind": "forward-citation",
-        "returned": 1,
-        "unique_returned": 1,
+        "returned": 0,
+        "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": null,
@@ -637,7 +679,7 @@
       },
       {
         "query_index": 10,
-        "query_id": "graph:backward-reference:W4380893782",
+        "query_id": "graph:backward-reference:W2047226578",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 0,
@@ -649,7 +691,7 @@
       },
       {
         "query_index": 11,
-        "query_id": "graph:forward-citation:W4380893782",
+        "query_id": "graph:forward-citation:W2047226578",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -661,7 +703,7 @@
       },
       {
         "query_index": 12,
-        "query_id": "graph:backward-reference:W3107744300",
+        "query_id": "graph:backward-reference:W2114174143",
         "bucket": "citation",
         "kind": "backward-reference",
         "returned": 0,
@@ -673,7 +715,7 @@
       },
       {
         "query_index": 13,
-        "query_id": "graph:forward-citation:W3107744300",
+        "query_id": "graph:forward-citation:W2114174143",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -685,11 +727,11 @@
       },
       {
         "query_index": 14,
-        "query_id": "graph:backward-reference:W3119756513",
+        "query_id": "graph:backward-reference:W2063581074",
         "bucket": "citation",
         "kind": "backward-reference",
-        "returned": 1,
-        "unique_returned": 1,
+        "returned": 0,
+        "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -697,55 +739,7 @@
       },
       {
         "query_index": 15,
-        "query_id": "graph:forward-citation:W3119756513",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 365
-      },
-      {
-        "query_index": 16,
-        "query_id": "graph:backward-reference:W4313312338",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 4,
-        "unique_returned": 4,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 365
-      },
-      {
-        "query_index": 17,
-        "query_id": "graph:forward-citation:W4313312338",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 365
-      },
-      {
-        "query_index": 18,
-        "query_id": "graph:backward-reference:W176103531",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 0,
-        "unique_returned": 0,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 365
-      },
-      {
-        "query_index": 19,
-        "query_id": "graph:forward-citation:W176103531",
+        "query_id": "graph:forward-citation:W2063581074",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 1,
@@ -756,7 +750,7 @@
         "cumulative_records": 365
       },
       {
-        "query_index": 20,
+        "query_index": 16,
         "query_id": "graph:backward-reference:W2178637311",
         "bucket": "citation",
         "kind": "backward-reference",
@@ -768,7 +762,7 @@
         "cumulative_records": 365
       },
       {
-        "query_index": 21,
+        "query_index": 17,
         "query_id": "graph:forward-citation:W2178637311",
         "bucket": "recency",
         "kind": "forward-citation",
@@ -780,10 +774,58 @@
         "cumulative_records": 365
       },
       {
-        "query_index": 22,
-        "query_id": "graph:backward-reference:W4387440511",
+        "query_index": 18,
+        "query_id": "graph:forward-citation:W7238075441",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 365
+      },
+      {
+        "query_index": 19,
+        "query_id": "graph:backward-reference:W7223168660",
         "bucket": "citation",
         "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 365
+      },
+      {
+        "query_index": 20,
+        "query_id": "graph:forward-citation:W7223168660",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 365
+      },
+      {
+        "query_index": 21,
+        "query_id": "graph:backward-reference:W7214710613",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 1,
+        "unique_returned": 1,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 365
+      },
+      {
+        "query_index": 22,
+        "query_id": "graph:forward-citation:W7214710613",
+        "bucket": "recency",
+        "kind": "forward-citation",
         "returned": 0,
         "unique_returned": 0,
         "records_added": 0,
@@ -793,7 +835,19 @@
       },
       {
         "query_index": 23,
-        "query_id": "graph:forward-citation:W4387440511",
+        "query_id": "graph:backward-reference:W7204470447",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 3,
+        "unique_returned": 3,
+        "records_added": 0,
+        "novelty_rate": 0,
+        "rolling_novelty_rate": 0,
+        "cumulative_records": 365
+      },
+      {
+        "query_index": 24,
+        "query_id": "graph:forward-citation:W7204470447",
         "bucket": "recency",
         "kind": "forward-citation",
         "returned": 0,
@@ -804,24 +858,12 @@
         "cumulative_records": 365
       },
       {
-        "query_index": 24,
-        "query_id": "graph:backward-reference:W1980554723",
+        "query_index": 25,
+        "query_id": "graph:backward-reference:W7169851714",
         "bucket": "citation",
         "kind": "backward-reference",
-        "returned": 1,
-        "unique_returned": 1,
-        "records_added": 0,
-        "novelty_rate": 0,
-        "rolling_novelty_rate": 0,
-        "cumulative_records": 365
-      },
-      {
-        "query_index": 25,
-        "query_id": "graph:forward-citation:W1980554723",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 1,
-        "unique_returned": 1,
+        "returned": 0,
+        "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -829,9 +871,9 @@
       },
       {
         "query_index": 26,
-        "query_id": "graph:backward-reference:W2103896122",
-        "bucket": "citation",
-        "kind": "backward-reference",
+        "query_id": "graph:forward-citation:W7169851714",
+        "bucket": "recency",
+        "kind": "forward-citation",
         "returned": 0,
         "unique_returned": 0,
         "records_added": 0,
@@ -841,11 +883,11 @@
       },
       {
         "query_index": 27,
-        "query_id": "graph:forward-citation:W2103896122",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 0,
-        "unique_returned": 0,
+        "query_id": "graph:backward-reference:W7167808384",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 1,
+        "unique_returned": 1,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -853,9 +895,9 @@
       },
       {
         "query_index": 28,
-        "query_id": "graph:backward-reference:W2100377190",
-        "bucket": "citation",
-        "kind": "backward-reference",
+        "query_id": "graph:forward-citation:W7167808384",
+        "bucket": "recency",
+        "kind": "forward-citation",
         "returned": 0,
         "unique_returned": 0,
         "records_added": 0,
@@ -865,11 +907,11 @@
       },
       {
         "query_index": 29,
-        "query_id": "graph:forward-citation:W2100377190",
-        "bucket": "recency",
-        "kind": "forward-citation",
-        "returned": 2,
-        "unique_returned": 2,
+        "query_id": "graph:backward-reference:W7161240542",
+        "bucket": "citation",
+        "kind": "backward-reference",
+        "returned": 0,
+        "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -877,11 +919,11 @@
       },
       {
         "query_index": 30,
-        "query_id": "graph:backward-reference:W2028280316",
-        "bucket": "citation",
-        "kind": "backward-reference",
-        "returned": 1,
-        "unique_returned": 1,
+        "query_id": "graph:forward-citation:W7161240542",
+        "bucket": "recency",
+        "kind": "forward-citation",
+        "returned": 0,
+        "unique_returned": 0,
         "records_added": 0,
         "novelty_rate": 0,
         "rolling_novelty_rate": 0,
@@ -892,20 +934,20 @@
     "novelty_threshold": 0.05,
     "minimum_queries": 30,
     "retrieval_counts": {
-      "relevance": 1,
+      "relevance": 2,
       "recency": 1,
       "citation": 1
     },
-    "topical_candidates": 23,
-    "topical_confirmed": 20,
-    "topical_rejected": 3,
-    "topical_confirmation_rate": 0.8696,
+    "topical_candidates": 49,
+    "topical_confirmed": 14,
+    "topical_rejected": 35,
+    "topical_confirmation_rate": 0.2857,
     "graph_anchors_expanded": 14,
     "field_union_estimate": {
       "estimate": 613,
       "method": "sample_overlap_adjusted_union",
       "measured_queries": 1,
-      "total_search_queries": 3,
+      "total_search_queries": 2,
       "summed_upstream_results": 613,
       "observed_sample_multiplicity": 1
     },
@@ -1029,7 +1071,7 @@
       "year": 1995,
       "venue": "Psychological Review",
       "doi": "10.1037/0033-295x.102.1.68",
-      "citations": 826,
+      "citations": 921,
       "abstract": "Theories of cognition frequently assume the existence of inhibitory mechanisms that deactivate mental representations. Justifying this assumption is difficult because cognitive effects thought to reflect inhibition can often be explained without recourse to inhibitory processes. This article addresses the uncertain status of cognitive inhibitory mechanisms, focusing on their function in memory retrieval. On the basis of a novel form of forgetting reported herein, it is shown that classical associative theories of interference are insufficient as accounts of forgetting and that inhibitory processes must be at work. It is argued that inhibitory processes are used to resolve computational problems of selection common to memory retrieval and selective attention and that retrieval is best regarded as conceptually focused selective attention.",
       "openalex_id": "W1978015585",
       "openalex_type": "article",
@@ -1142,6 +1184,33 @@
       "record_id": "cr_7b0a317af22253a2c66ab095"
     },
     {
+      "title": "Functional anatomical studies of explicit and implicit memory retrieval tasks",
+      "authors": [
+        "Randy L. Buckner",
+        "SE Petersen",
+        "Jeffrey G. Ojemann",
+        "Francis M. Miezin",
+        "LR Squire",
+        "M. E. Raichle"
+      ],
+      "year": 1995,
+      "venue": "Journal of Neuroscience",
+      "doi": "10.1523/jneurosci.15-01-00012.1995",
+      "citations": 724,
+      "abstract": "Across three experiments, PET scans were obtained while subjects performed different word-stem completion and FIXATION control tasks designed to study the functional anatomy of memory retrieval. During each of three different word-stem completion scans, word-stem cues were visually presented in uppercase letters. The RECALL task required explicit retrieval of study words presented prior to the PET scan. The PRIMING task addressed the implicit effects of the prior study words without requiring intentional recall. The BASELINE task encouraged retrieval of information from a general knowledge store. Across experiments, the similarity between study words and word stems was manipulated by presenting prescan study words in either uppercase letters identical to the stems, in lowercase letters, or auditorily. The PRIMING task was not studied with auditory presentation. Many activations were consistent across experiments. The BASELINE task activated several regions in response to the reading and verbal-response demands of the task (visual, motor, and premotor cortices, cerebellum), as well as a left prefrontal region. The RECALL task additionally activated regions in anterior right prefrontal cortex. Bilateral occipitotemporal regions showed blood flow reductions during the PRIMING task as compared to the BASELINE task. Activation in the right hippocampal/parahippocampal region was observed only in one experiment, and no experiment showed activation in the left medial temporal lobe. These experiments suggest that areas of frontal cortex play a role in explicit recall and that an effect of priming may be to require less activation of perceptual regions for the processing of recently presented information.",
+      "openalex_id": "W1920237903",
+      "openalex_type": "article",
+      "referenced_works_count": 59,
+      "categories": [
+        "foundational"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2132361590"
+      ],
+      "record_id": "cr_43c379a18a1e59964e92d422"
+    },
+    {
       "title": "The pharmacology, neuroanatomy and neurogenetics of one-trial object recognition in rodents",
       "authors": [
         "Ekrem Dere",
@@ -1166,33 +1235,6 @@
         "recent"
       ],
       "record_id": "cr_959a2f87bbc7f916835ff3ce"
-    },
-    {
-      "title": "Functional anatomical studies of explicit and implicit memory retrieval tasks",
-      "authors": [
-        "Randy L. Buckner",
-        "SE Petersen",
-        "Jeffrey G. Ojemann",
-        "Francis M. Miezin",
-        "LR Squire",
-        "M. E. Raichle"
-      ],
-      "year": 1995,
-      "venue": "Journal of Neuroscience",
-      "doi": "10.1523/jneurosci.15-01-00012.1995",
-      "citations": 677,
-      "abstract": "Across three experiments, PET scans were obtained while subjects performed different word-stem completion and FIXATION control tasks designed to study the functional anatomy of memory retrieval. During each of three different word-stem completion scans, word-stem cues were visually presented in uppercase letters. The RECALL task required explicit retrieval of study words presented prior to the PET scan. The PRIMING task addressed the implicit effects of the prior study words without requiring intentional recall. The BASELINE task encouraged retrieval of information from a general knowledge store. Across experiments, the similarity between study words and word stems was manipulated by presenting prescan study words in either uppercase letters identical to the stems, in lowercase letters, or auditorily. The PRIMING task was not studied with auditory presentation. Many activations were consistent across experiments. The BASELINE task activated several regions in response to the reading and verbal-response demands of the task (visual, motor, and premotor cortices, cerebellum), as well as a left prefrontal region. The RECALL task additionally activated regions in anterior right prefrontal cortex. Bilateral occipitotemporal regions showed blood flow reductions during the PRIMING task as compared to the BASELINE task. Activation in the right hippocampal/parahippocampal region was observed only in one experiment, and no experiment showed activation in the left medial temporal lobe. These experiments suggest that areas of frontal cortex play a role in explicit recall and that an effect of priming may be to require less activation of perceptual regions for the processing of recently presented information.",
-      "openalex_id": "W1920237903",
-      "openalex_type": "article",
-      "referenced_works_count": 43,
-      "categories": [
-        "foundational"
-      ],
-      "source_api": "snowball",
-      "snowball_from": [
-        "W2132361590"
-      ],
-      "record_id": "cr_43c379a18a1e59964e92d422"
     },
     {
       "title": "Episodic memory, perceptual memory, and their interaction: Foundations for a theory of posttraumatic stress disorder.",
@@ -1562,6 +1604,33 @@
       "record_id": "cr_28bfaf6224ef0eea94247471"
     },
     {
+      "title": "Functional Neuroanatomy of Recall and Recognition: A PET Study of Episodic Memory",
+      "authors": [
+        "Roberto Eduardo Luis Cabeza",
+        "Shitij Kapur",
+        "Fergus I. M. Craik",
+        "Anthony Randal McIntosh",
+        "Sylvain Houle",
+        "Endel Tulving"
+      ],
+      "year": 1997,
+      "venue": "Journal of Cognitive Neuroscience",
+      "doi": "10.1162/jocn.1997.9.2.254",
+      "citations": 298,
+      "abstract": "The purpose of this study was to directly compare the brain regions involved in episodic-memory recall and recognition. Changes in regional cerebral blood flow were measured by positron emission tomography while young healthy test persons were either recognizing or recalling previously studied word pairs. Reading of previously nonstudied pairs served as a reference task for subtractive comparisons. Compared to reading, both recall and recognition were associated with higher blood flow (activation) at identical sites in the right prefrontal cortex (areas 47, 45, and 10) and the anterior cingulate. Compared to recognition, recall was associated with higher activation in the anterior cingulate, globus pallidus, thalamus, and cerebellum, suggesting that these components of the cerebello-frontal pathway play a role in recall processes that they do not in recognition. Compared to recall, recognition was associated with higher activation in the right inferior parietal cortex (areas 39, 40, and 19), suggesting a larger perceptual component in recognition than in recall. Contrary to the expectations based on lesion data, the activations of the frontal regions were indistinguishable in recall and recognition. This finding is consistent with the notion that frontal activations in explicit memory tasks are related to the general episodic retrieval mode or retrieval attempt, rather than to specific mechanisms of ecphory (recovery of stored information).",
+      "openalex_id": "W2028675229",
+      "openalex_type": "article",
+      "referenced_works_count": 77,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2132361590"
+      ],
+      "record_id": "cr_59a42b868efa62eee96a90fc"
+    },
+    {
       "title": "Summary and Agreement Statement of the 2nd International Conference on Concussion in Sport, Prague 2004",
       "authors": [
         "Paul Robert McCrory",
@@ -1616,33 +1685,6 @@
         "replication"
       ],
       "record_id": "cr_62c6a69f421c90c115b69f3d"
-    },
-    {
-      "title": "Functional Neuroanatomy of Recall and Recognition: A PET Study of Episodic Memory",
-      "authors": [
-        "Roberto Eduardo Luis Cabeza",
-        "Shitij Kapur",
-        "Fergus I. M. Craik",
-        "Anthony Randal McIntosh",
-        "Sylvain Houle",
-        "Endel Tulving"
-      ],
-      "year": 1997,
-      "venue": "Journal of Cognitive Neuroscience",
-      "doi": "10.1162/jocn.1997.9.2.254",
-      "citations": 269,
-      "abstract": "The purpose of this study was to directly compare the brain regions involved in episodic-memory recall and recognition. Changes in regional cerebral blood flow were measured by positron emission tomography while young healthy test persons were either recognizing or recalling previously studied word pairs. Reading of previously nonstudied pairs served as a reference task for subtractive comparisons. Compared to reading, both recall and recognition were associated with higher blood flow (activation) at identical sites in the right prefrontal cortex (areas 47, 45, and 10) and the anterior cingulate. Compared to recognition, recall was associated with higher activation in the anterior cingulate, globus pallidus, thalamus, and cerebellum, suggesting that these components of the cerebello-frontal pathway play a role in recall processes that they do not in recognition. Compared to recall, recognition was associated with higher activation in the right inferior parietal cortex (areas 39, 40, and 19), suggesting a larger perceptual component in recognition than in recall. Contrary to the expectations based on lesion data, the activations of the frontal regions were indistinguishable in recall and recognition. This finding is consistent with the notion that frontal activations in explicit memory tasks are related to the general episodic retrieval mode or retrieval attempt, rather than to specific mechanisms of ecphory (recovery of stored information).",
-      "openalex_id": "W2028675229",
-      "openalex_type": "article",
-      "referenced_works_count": 77,
-      "categories": [
-        "dissent"
-      ],
-      "source_api": "snowball",
-      "snowball_from": [
-        "W2132361590"
-      ],
-      "record_id": "cr_59a42b868efa62eee96a90fc"
     },
     {
       "title": "Memory for emotional events: differential effects of centrally versus peripherally acting β-blocking agents",
@@ -2088,6 +2130,32 @@
       "record_id": "cr_5481aaf03ea019899fc75284"
     },
     {
+      "title": "Network Analysis of Positron Emission Tomography Regional Cerebral Blood Flow Data: Ensemble Inhibition during Episodic Memory Retrieval",
+      "authors": [
+        "Lars H Nyberg",
+        "Anthony Randal McIntosh",
+        "Roberto Eduardo Luis Cabeza",
+        "Lars‐Göran Nilsson",
+        "Sylvain Houle",
+        "R. Habib",
+        "Endel Tulving"
+      ],
+      "year": 1996,
+      "venue": "Journal of Neuroscience",
+      "doi": "10.1523/jneurosci.16-11-03753.1996",
+      "citations": 167,
+      "abstract": "Two important objectives in the neuroscience of memory are (1) identification of neural pathways involved in memory processes; and (2) characterization of the pattern of interactions between these pathways. Functional neuroimaging can contribute to both of these goals. Using image subtraction analysis of regional cerebral blood flow data measured with positron emission tomography, we identified brain regions that changed activity during episodic memory retrieval (visual work recognition). Relative to a baseline reading task, decreased activity was observed in bilateral prefrontal, bilateral anterior and posterior temporal, and posterior cingulate cortices. Brain regions showing increased activity were the right prefrontal (different from deactivated regions), left anterior cingulate, and left occipital cortices, and vermis of cerebellum. We then performed a network analysis with structural equation modeling to test the hypothesis that regional decreases came about through active inhibition by regions showing increased activity during retrieval. This analysis demonstrated that the influence of activated regions on deactivated regions was more negative during retrieval than during reading, confirming the inhibition hypothesis. Such confirmation could not have been made from the subtraction analysis alone because decreases can come about, at the very least, through reduction of functional influences as well as by active inhibition. The concepts of ensemble excitation and inhibition, as defined through network analysis, are introduced. We argue that is is critical to examine the combined pattern of excitatory and inhibitory influences to fully appreciate the neural basis of episodic memory.",
+      "openalex_id": "W1841106173",
+      "openalex_type": "article",
+      "referenced_works_count": 48,
+      "categories": [],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W2132361590"
+      ],
+      "record_id": "cr_431ded0d7144a2c4d8630420"
+    },
+    {
       "title": "Word frequency effects on recall, recognition, and word fragment completion tests.",
       "authors": [
         "Colin M. MacLeod",
@@ -2184,32 +2252,6 @@
       "record_id": "cr_f6f5c77e232df44ab3df7948"
     },
     {
-      "title": "Network Analysis of Positron Emission Tomography Regional Cerebral Blood Flow Data: Ensemble Inhibition during Episodic Memory Retrieval",
-      "authors": [
-        "Lars H Nyberg",
-        "Anthony Randal McIntosh",
-        "Roberto Eduardo Luis Cabeza",
-        "Lars‐Göran Nilsson",
-        "Sylvain Houle",
-        "R. Habib",
-        "Endel Tulving"
-      ],
-      "year": 1996,
-      "venue": "Journal of Neuroscience",
-      "doi": "10.1523/jneurosci.16-11-03753.1996",
-      "citations": 154,
-      "abstract": "Two important objectives in the neuroscience of memory are (1) identification of neural pathways involved in memory processes; and (2) characterization of the pattern of interactions between these pathways. Functional neuroimaging can contribute to both of these goals. Using image subtraction analysis of regional cerebral blood flow data measured with positron emission tomography, we identified brain regions that changed activity during episodic memory retrieval (visual work recognition). Relative to a baseline reading task, decreased activity was observed in bilateral prefrontal, bilateral anterior and posterior temporal, and posterior cingulate cortices. Brain regions showing increased activity were the right prefrontal (different from deactivated regions), left anterior cingulate, and left occipital cortices, and vermis of cerebellum. We then performed a network analysis with structural equation modeling to test the hypothesis that regional decreases came about through active inhibition by regions showing increased activity during retrieval. This analysis demonstrated that the influence of activated regions on deactivated regions was more negative during retrieval than during reading, confirming the inhibition hypothesis. Such confirmation could not have been made from the subtraction analysis alone because decreases can come about, at the very least, through reduction of functional influences as well as by active inhibition. The concepts of ensemble excitation and inhibition, as defined through network analysis, are introduced. We argue that is is critical to examine the combined pattern of excitatory and inhibitory influences to fully appreciate the neural basis of episodic memory.",
-      "openalex_id": "W1841106173",
-      "openalex_type": "article",
-      "referenced_works_count": 46,
-      "categories": [],
-      "source_api": "snowball",
-      "snowball_from": [
-        "W2132361590"
-      ],
-      "record_id": "cr_431ded0d7144a2c4d8630420"
-    },
-    {
       "title": "Top-Down and Bottom-Up Attention to Memory Are Dissociated in Posterior Parietal Cortex: Neuroimaging and Neuropsychological Evidence",
       "authors": [
         "Elisa Ciaramelli",
@@ -2235,6 +2277,29 @@
         "recent"
       ],
       "record_id": "cr_f5ea57ba03184188a485c18a"
+    },
+    {
+      "title": "New evidence on the suggestibility of memory: The role of retrieval-induced forgetting in misinformation effects.",
+      "authors": [
+        "Jo Saunders",
+        "Malcolm D. MacLeod"
+      ],
+      "year": 2002,
+      "venue": "Journal of Experimental Psychology Applied",
+      "doi": "10.1037/1076-898x.8.2.127",
+      "citations": 140,
+      "abstract": "Extending recent work that has demonstrated that the act of remembering can result in the inhibition of related items in memory, the present research examined whether retrieval-induced forgetting could provide a mechanism for explaining misinformation effects. Specifically, the authors found in their first study that the inhibition of critical items rendered the recollection of postevent information more likely in a subsequent test of memory. The authors established in their second study that when guided retrieval practice and final recall tests were separated by 24 hr, retrieval-induced forgetting failed to emerge and misinformation effects were absent. In contrast, a delay of 24 hr between initial encoding and guided retrieval practice produced not only retrieval-induced forgetting but also misinformation effects.",
+      "openalex_id": "W2124383359",
+      "openalex_type": "article",
+      "referenced_works_count": 60,
+      "categories": [
+        "dissent"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W7204470447"
+      ],
+      "record_id": "cr_9b3b40e390d8fad1ce900a09"
     },
     {
       "title": "Retrieval processes in recognition and cued recall.",
@@ -2424,29 +2489,6 @@
         "recent"
       ],
       "record_id": "cr_2d505819149201f3832e8d87"
-    },
-    {
-      "title": "New evidence on the suggestibility of memory: The role of retrieval-induced forgetting in misinformation effects.",
-      "authors": [
-        "Jo Saunders",
-        "Malcolm D. MacLeod"
-      ],
-      "year": 2002,
-      "venue": "Journal of Experimental Psychology Applied",
-      "doi": "10.1037/1076-898x.8.2.127",
-      "citations": 117,
-      "abstract": "Extending recent work that has demonstrated that the act of remembering can result in the inhibition of related items in memory, the present research examined whether retrieval-induced forgetting could provide a mechanism for explaining misinformation effects. Specifically, the authors found in their first study that the inhibition of critical items rendered the recollection of postevent information more likely in a subsequent test of memory. The authors established in their second study that when guided retrieval practice and final recall tests were separated by 24 hr, retrieval-induced forgetting failed to emerge and misinformation effects were absent. In contrast, a delay of 24 hr between initial encoding and guided retrieval practice produced not only retrieval-induced forgetting but also misinformation effects.",
-      "openalex_id": "W2124383359",
-      "openalex_type": "article",
-      "referenced_works_count": 61,
-      "categories": [
-        "dissent"
-      ],
-      "source_api": "snowball",
-      "snowball_from": [
-        "W7204470447"
-      ],
-      "record_id": "cr_9b3b40e390d8fad1ce900a09"
     },
     {
       "title": "False Recall Is Reduced by Damage to the Ventromedial Prefrontal Cortex: Implications for Understanding the Neural Correlates of Schematic Memory",
@@ -2832,6 +2874,27 @@
       "record_id": "cr_14ed2186905782b93a5bc355"
     },
     {
+      "title": "Paradoxical effects of testing: Retrieval enhances both accurate recall and suggestibility in eyewitnesses.",
+      "authors": [
+        "Jason C. K. Chan",
+        "Moses Michael Langley"
+      ],
+      "year": 2011,
+      "venue": "Journal of Experimental Psychology Learning Memory and Cognition",
+      "doi": "10.1037/a0021204",
+      "citations": 75,
+      "abstract": "Although retrieval practice typically enhances memory retention, it can also impair subsequent eyewitness memory accuracy (Chan, Thomas, & Bulevich, 2009). Specifically, participants who had taken an initial test about a witnessed event were more likely than nontested participants to recall subsequently encountered misinformation—an effect we called retrieval-enhanced suggestibility (RES). Here, we sought to test the generality of RES and to further elucidate its underlying mechanisms. To that end, we tested a dual mechanism account, which suggests that RES occurs because initial testing (a) enhances learning of the later misinformation by reducing proactive interference and (b) causes the reactivated memory trace to be more susceptible to later interference (i.e., a reconsolidation account). Three major findings emerged. First, RES was found after a 1-week delay, where a robust testing benefit occurred for event details that were not contradicted by later misinformation. Second, blockage of reconsolidation was unnecessary for RES to occur. Third, initial testing enhanced learning of the misinformation even when proactive interference played a minimal role.",
+      "openalex_id": "W2048007018",
+      "openalex_type": "article",
+      "referenced_works_count": 34,
+      "categories": [],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W7204470447"
+      ],
+      "record_id": "cr_94b774b74ce2bf66fc5daa38"
+    },
+    {
       "title": "Language familiarity effects in short-term memory: The role of output delay and long-term knowledge",
       "authors": [
         "Annabel S. C. Thorn",
@@ -2946,27 +3009,6 @@
       "record_id": "cr_7b2e193777b405ead60748b1"
     },
     {
-      "title": "Paradoxical effects of testing: Retrieval enhances both accurate recall and suggestibility in eyewitnesses.",
-      "authors": [
-        "Jason C. K. Chan",
-        "Moses Michael Langley"
-      ],
-      "year": 2010,
-      "venue": "Journal of Experimental Psychology Learning Memory and Cognition",
-      "doi": "10.1037/a0021204",
-      "citations": 67,
-      "abstract": "Although retrieval practice typically enhances memory retention, it can also impair subsequent eyewitness memory accuracy (Chan, Thomas, & Bulevich, 2009). Specifically, participants who had taken an initial test about a witnessed event were more likely than nontested participants to recall subsequently encountered misinformation—an effect we called retrieval-enhanced suggestibility (RES). Here, we sought to test the generality of RES and to further elucidate its underlying mechanisms. To that end, we tested a dual mechanism account, which suggests that RES occurs because initial testing (a) enhances learning of the later misinformation by reducing proactive interference and (b) causes the reactivated memory trace to be more susceptible to later interference (i.e., a reconsolidation account). Three major findings emerged. First, RES was found after a 1-week delay, where a robust testing benefit occurred for event details that were not contradicted by later misinformation. Second, blockage of reconsolidation was unnecessary for RES to occur. Third, initial testing enhanced learning of the misinformation even when proactive interference played a minimal role.",
-      "openalex_id": "W2048007018",
-      "openalex_type": "article",
-      "referenced_works_count": 34,
-      "categories": [],
-      "source_api": "snowball",
-      "snowball_from": [
-        "W7204470447"
-      ],
-      "record_id": "cr_94b774b74ce2bf66fc5daa38"
-    },
-    {
       "title": "Lexical and semantic influences on item and order memory in immediate serial recognition: Evidence from a novel task",
       "authors": [
         "Elizabeth Jefferies",
@@ -2989,6 +3031,33 @@
         "W2058249424"
       ],
       "record_id": "cr_ccabf4c984e3f662fb4662bf"
+    },
+    {
+      "title": "ERPs and Neural Oscillations during Volitional Suppression of Memory Retrieval",
+      "authors": [
+        "Brendan Eliot Depue",
+        "Nick Ketz",
+        "Matthew V. Mollison",
+        "Erika Nyhus",
+        "Marie T. Banich",
+        "Tim Curran"
+      ],
+      "year": 2013,
+      "venue": "Journal of Cognitive Neuroscience",
+      "doi": "10.1162/jocn_a_00418",
+      "citations": 61,
+      "abstract": "Although investigations of memory and the dynamics of ERP components and neural oscillations as assessed through EEG have been well utilized, little research into the volitional nature of suppression over memory retrieval have used these methods. Oscillation analyses conducted on the Think/No-Think (TNT) task and volitional suppression of retrieval are of interest to broaden our knowledge of neural oscillations associated not only during successful memory retrieval but also when retrieval is unwanted or suppressed. In the current study, we measured EEG during a TNT task and performed ERP and EEG spectral power band analyses. ERP results replicated other researchers' observations of increases in 500-800 msec parietal effects for items where retrieval was instructed to be elaborated compared with being suppressed. Furthermore, EEG analyses indicated increased alpha (8-12 Hz) and theta (3-8 Hz) oscillations across parietal electrodes for items that were instructed to be suppressed versus those to be elaborated. Additionally, during the second half of the experiment (after repeated attempts at control), increases in theta oscillations were found across both frontal and parietal electrodes for items that were instructed to be suppressed and that were ultimately forgotten versus those ultimately remembered. Increased alpha power for items that were instructed to be suppressed versus elaborated may indicate reductions of retrieval attempts or lack of retrieval success. Increased theta power for items that were instructed to be suppressed versus elaborated may indicate increased or prolonged cognitive control to monitor retrieval events.",
+      "openalex_id": "W2086488340",
+      "openalex_type": "article",
+      "referenced_works_count": 58,
+      "categories": [
+        "replication"
+      ],
+      "source_api": "snowball",
+      "snowball_from": [
+        "W7167808384"
+      ],
+      "record_id": "cr_b674b390ce9ca95c2e3d7e16"
     },
     {
       "title": "Recall and Recognition in Motor Learning",
@@ -3057,31 +3126,24 @@
       "record_id": "cr_85218cca9da48ff4cd933e6c"
     },
     {
-      "title": "ERPs and Neural Oscillations during Volitional Suppression of Memory Retrieval",
+      "title": "Comparison of recognition and recall in a continuous memory task.",
       "authors": [
-        "Brendan Eliot Depue",
-        "Nick Ketz",
-        "Matthew V. Mollison",
-        "Erika Nyhus",
-        "Marie T. Banich",
-        "Tim Curran"
+        "Geoffrey R. Loftus"
       ],
-      "year": 2013,
-      "venue": "Journal of Cognitive Neuroscience",
-      "doi": "10.1162/jocn_a_00418",
-      "citations": 52,
-      "abstract": "Although investigations of memory and the dynamics of ERP components and neural oscillations as assessed through EEG have been well utilized, little research into the volitional nature of suppression over memory retrieval have used these methods. Oscillation analyses conducted on the Think/No-Think (TNT) task and volitional suppression of retrieval are of interest to broaden our knowledge of neural oscillations associated not only during successful memory retrieval but also when retrieval is unwanted or suppressed. In the current study, we measured EEG during a TNT task and performed ERP and EEG spectral power band analyses. ERP results replicated other researchers' observations of increases in 500-800 msec parietal effects for items where retrieval was instructed to be elaborated compared with being suppressed. Furthermore, EEG analyses indicated increased alpha (8-12 Hz) and theta (3-8 Hz) oscillations across parietal electrodes for items that were instructed to be suppressed versus those to be elaborated. Additionally, during the second half of the experiment (after repeated attempts at control), increases in theta oscillations were found across both frontal and parietal electrodes for items that were instructed to be suppressed and that were ultimately forgotten versus those ultimately remembered. Increased alpha power for items that were instructed to be suppressed versus elaborated may indicate reductions of retrieval attempts or lack of retrieval success. Increased theta power for items that were instructed to be suppressed versus elaborated may indicate increased or prolonged cognitive control to monitor retrieval events.",
-      "openalex_id": "W2086488340",
+      "year": 1971,
+      "venue": "Journal of Experimental Psychology",
+      "doi": "10.1037/h0031841",
+      "citations": 53,
+      "abstract": "Differences between recall and recognition performance may be due at least in part to differences in the way information is stored. This possibility was ex-plored in a paired-associate learning task by varying 6\"s knowledge at the time of study of how he would be tested on a particular stimulus-response pair. It was found that when 5 knew how he would be tested, his performance was better on recall but worse on recognition than when he did not know how he would be tested. These results were interpreted as support for the assertion that differences in storage processes partially account for recall-recognition perform-ance differences. A model which postulates a distinction between short-term and long-term memory provided an excellent fit to the data and suggested possible storage strategies for recall and recognition. Studies comparing recognition and recall have found performance differences be-tween the two. When raw scores are con-sidered, recognition is generally superior to",
+      "openalex_id": "W1995529614",
       "openalex_type": "article",
-      "referenced_works_count": 58,
-      "categories": [
-        "replication"
-      ],
+      "referenced_works_count": 11,
+      "categories": [],
       "source_api": "snowball",
       "snowball_from": [
-        "W7167808384"
+        "W7214710613"
       ],
-      "record_id": "cr_b674b390ce9ca95c2e3d7e16"
+      "record_id": "cr_e9faf3f2e3485578e36a2c99"
     },
     {
       "title": "Animal-sourced foods for improved cognitive development",
@@ -3182,26 +3244,6 @@
         "recent"
       ],
       "record_id": "cr_799398a2384f25dd942019b0"
-    },
-    {
-      "title": "Comparison of recognition and recall in a continuous memory task.",
-      "authors": [
-        "Geoffrey R. Loftus"
-      ],
-      "year": 1971,
-      "venue": "Journal of Experimental Psychology",
-      "doi": "10.1037/h0031841",
-      "citations": 46,
-      "abstract": "Differences between recall and recognition performance may be due at least in part to differences in the way information is stored. This possibility was ex-plored in a paired-associate learning task by varying 6\"s knowledge at the time of study of how he would be tested on a particular stimulus-response pair. It was found that when 5 knew how he would be tested, his performance was better on recall but worse on recognition than when he did not know how he would be tested. These results were interpreted as support for the assertion that differences in storage processes partially account for recall-recognition perform-ance differences. A model which postulates a distinction between short-term and long-term memory provided an excellent fit to the data and suggested possible storage strategies for recall and recognition. Studies comparing recognition and recall have found performance differences be-tween the two. When raw scores are con-sidered, recognition is generally superior to",
-      "openalex_id": "W1995529614",
-      "openalex_type": "article",
-      "referenced_works_count": 11,
-      "categories": [],
-      "source_api": "snowball",
-      "snowball_from": [
-        "W7214710613"
-      ],
-      "record_id": "cr_e9faf3f2e3485578e36a2c99"
     },
     {
       "title": "Running Head : Short-term Visual Memory Serial Position Effects in Short-term Visual Memory : A SIMPLE Explanation ?",
