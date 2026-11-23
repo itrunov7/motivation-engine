@@ -6,28 +6,50 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-23T20:18:18.449Z",
+    "timestamp": "2026-11-23T20:20:00.406Z",
     "status": "partial",
     "params": {
       "mechanism": "RR-25",
       "terms": ""
     },
     "records_fetched": 365,
-    "files_written": 0,
-    "duration_s": 0.22,
-    "error": "upstream API quota requires a later continuation; logical run RR-25-mwtpk8gp checkpointed at query 1/1050",
+    "files_written": 1,
+    "duration_s": 45.31,
+    "error": "search openalex canon \"recognition versus recall memory\": api.openalex.org upstream cooldown is 13302s; checkpoint and resume later",
     "warnings": {
-      "resume_required": true
+      "low_novelty": true
     },
     "cost": {
-      "api_calls": 1,
-      "duration_s": 0.22,
+      "api_calls": 47,
+      "duration_s": 45.31,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-23T20:20:00.406Z",
+      "status": "partial",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 365,
+      "files_written": 1,
+      "duration_s": 45.31,
+      "error": "search openalex canon \"recognition versus recall memory\": api.openalex.org upstream cooldown is 13302s; checkpoint and resume later",
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 47,
+        "duration_s": 45.31,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-23T20:18:18.449Z",
       "status": "partial",
@@ -432,27 +454,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-23T19:36:56.159Z",
-      "status": "success",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": ""
-      },
-      "records_fetched": 365,
-      "files_written": 1,
-      "duration_s": 45.27,
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 46,
-        "duration_s": 45.27,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -711,7 +712,7 @@
     {
       "path": "RR-25.json",
       "records": 365,
-      "bytes": 1722689,
+      "bytes": 1723869,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
