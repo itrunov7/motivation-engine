@@ -6,7 +6,7 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-23T21:01:34.300Z",
+    "timestamp": "2026-11-23T21:03:44.734Z",
     "status": "success",
     "params": {
       "mechanism": "RR-25",
@@ -14,19 +14,40 @@
     },
     "records_fetched": 365,
     "files_written": 1,
-    "duration_s": 45.28,
+    "duration_s": 45.27,
     "warnings": {
       "low_novelty": true
     },
     "cost": {
       "api_calls": 46,
-      "duration_s": 45.28,
+      "duration_s": 45.27,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-23T21:03:44.734Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 365,
+      "files_written": 1,
+      "duration_s": 45.27,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 46,
+        "duration_s": 45.27,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-23T21:01:34.300Z",
       "status": "success",
@@ -425,28 +446,6 @@
       "cost": {
         "api_calls": 46,
         "duration_s": 45.48,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
-    },
-    {
-      "timestamp": "2026-11-23T20:20:00.406Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": ""
-      },
-      "records_fetched": 365,
-      "files_written": 1,
-      "duration_s": 45.31,
-      "error": "search openalex canon \"recognition versus recall memory\": api.openalex.org upstream cooldown is 13302s; checkpoint and resume later",
-      "warnings": {
-        "low_novelty": true
-      },
-      "cost": {
-        "api_calls": 47,
-        "duration_s": 45.31,
         "tokens_in": null,
         "tokens_out": null,
         "estimated_usd": 0
