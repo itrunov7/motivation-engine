@@ -6,28 +6,48 @@
   ],
   "connector_version": "3.0.0",
   "last_run": {
-    "timestamp": "2026-11-17T09:53:15.950Z",
-    "status": "partial",
+    "timestamp": "2026-11-23T15:49:00.126Z",
+    "status": "success",
     "params": {
       "mechanism": "RR-25",
-      "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
+      "terms": ""
     },
-    "records_fetched": 362,
-    "files_written": 0,
-    "duration_s": 0.11,
-    "error": "upstream API quota requires a later continuation; logical run RR-25-mwkh974q checkpointed at query 31/630",
+    "records_fetched": 365,
+    "files_written": 1,
+    "duration_s": 58.29,
     "warnings": {
-      "resume_required": true
+      "low_novelty": true
     },
     "cost": {
-      "api_calls": 1,
-      "duration_s": 0.11,
+      "api_calls": 59,
+      "duration_s": 58.29,
       "tokens_in": null,
       "tokens_out": null,
       "estimated_usd": 0
     }
   },
   "run_history": [
+    {
+      "timestamp": "2026-11-23T15:49:00.126Z",
+      "status": "success",
+      "params": {
+        "mechanism": "RR-25",
+        "terms": ""
+      },
+      "records_fetched": 365,
+      "files_written": 1,
+      "duration_s": 58.29,
+      "warnings": {
+        "low_novelty": true
+      },
+      "cost": {
+        "api_calls": 59,
+        "duration_s": 58.29,
+        "tokens_in": null,
+        "tokens_out": null,
+        "estimated_usd": 0
+      }
+    },
     {
       "timestamp": "2026-11-17T09:53:15.950Z",
       "status": "partial",
@@ -445,28 +465,6 @@
         "tokens_out": null,
         "estimated_usd": 0
       }
-    },
-    {
-      "timestamp": "2026-11-17T09:24:29.441Z",
-      "status": "partial",
-      "params": {
-        "mechanism": "RR-25",
-        "terms": "recognition versus recall memory b2b enterprise;recognition memory advantage retrieval b2b enterprise;menu selection versus command recall b2b enterprise"
-      },
-      "records_fetched": 362,
-      "files_written": 0,
-      "duration_s": 0.38,
-      "error": "upstream API quota requires a later continuation; logical run RR-25-mwkh974q checkpointed at query 8/630",
-      "warnings": {
-        "resume_required": true
-      },
-      "cost": {
-        "api_calls": 1,
-        "duration_s": 0.38,
-        "tokens_in": null,
-        "tokens_out": null,
-        "estimated_usd": 0
-      }
     }
   ],
   "data_files": [
@@ -724,14 +722,14 @@
     },
     {
       "path": "RR-25.json",
-      "records": 362,
-      "bytes": 1739405,
+      "records": 365,
+      "bytes": 1730210,
       "categories": {
         "foundational": 13,
         "meta-analysis": 12,
-        "replication": 62,
-        "dissent": 84,
-        "recent": 156
+        "replication": 63,
+        "dissent": 85,
+        "recent": 158
       }
     },
     {
